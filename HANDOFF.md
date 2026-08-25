@@ -8,7 +8,9 @@ Compete seriously for a **top-10 prize** in Kaggle's Kaggriculture simulation co
 
 ## Source of truth
 
-This repository is authoritative for public-safe project state, decisions, laboratory tooling, experiments, submissions, tournament results, and frozen artifacts. Competitive candidate source must remain private during active development unless deliberate publication is chosen and Kaggle code-sharing requirements are satisfied.
+This repository is authoritative for project state, decisions, laboratory tooling, competitive candidate code, experiments, submissions, tournament results, and frozen artifacts.
+
+The repository intentionally remains **public** during active development. This is a deliberate project decision recorded in `docs/DECISION_PUBLIC_DEVELOPMENT.md`: the discovery/copying risk is accepted in exchange for unrestricted GitHub Actions capacity.
 
 ## Required first reads
 
@@ -20,13 +22,14 @@ This repository is authoritative for public-safe project state, decisions, labor
 6. `official/UPSTREAM_LOCK.md`
 7. `docs/OFFICIAL_MECHANICS_SNAPSHOT.md`
 8. `research/PUBLIC_BENCHMARKS.md`
+9. `docs/DECISION_PUBLIC_DEVELOPMENT.md`
 
-Then inspect the current repository tree, latest commits, and latest GitHub Actions runs before changing anything.
+Then inspect the repository tree, latest commits, and latest GitHub Actions runs before changing anything.
 
 ## Working rules
 
 - Treat official mechanics as facts and strategic ideas as hypotheses until measured.
-- Freeze upstream environment/package/hash provenance for every promoted experiment.
+- Freeze environment/package/hash provenance for every promoted experiment.
 - Preserve seeds, opponent versions, configs, both-seat outcomes, and full episode metrics.
 - Never tune against held-out seeds; use them only for promotion/final selection.
 - Fresh-load file-based agents per episode so global state cannot leak between games.
@@ -34,35 +37,36 @@ Then inspect the current repository tree, latest commits, and latest GitHub Acti
 - Keep champion/archive/public benchmark opponents so every new agent must beat past strong versions.
 - Record every Kaggle submission and the exact source/config/hash that produced it.
 - Use the final two tracked submission slots as a strategic portfolio rather than redundant copies.
-- Do not commit private competitive policy source to this public repository while the competition is active.
+- Public third-party competition code may be used only with preserved license, source, commit, path, and SHA-256 provenance.
+- Never commit credentials, private/unpublished competitor code, or redistribution-restricted private replay payloads.
 - Advance as far as possible without unnecessary user micromanagement; surface only meaningful blockers, decisions, or results.
 
 ## Current phase
 
 - **R1 PASS** — official starter reproduced exactly.
 - **R2 PASS** — deterministic tournament laboratory closed on 2026-08-25.
-- **R3 pending** — first hosted ladder submission requires Kaggle account-side entry confirmation.
-- **R4 preparation** — serious economic candidate development is gated on private source storage because `pmartins87/Kculture` is public.
+- **R3 pending** — first hosted ladder submission still requires account-side Kaggle entry confirmation.
+- **R4 ACTIVE** — strong public licensed architectures are being screened on frozen engine 1.32.7 to select the first economic base before Kculture-specific improvements.
 
 ## R2 closure evidence
 
 Experiment: `experiments/KEXP-20260825-003-r2-closure/`.
 
-Key evidence from GitHub Actions run `32859938870` on `kaggle-environments==1.32.7`:
+GitHub Actions run `32859938870` established:
 
 - 64 disjoint seeds: 16 dev / 16 validation / 32 held-out;
 - 7 deterministic reference opponents;
 - fresh-module isolation;
 - zero closure-smoke runtime errors;
-- strong public COK V8 artifact hash verified;
+- hash-pinned strong public benchmark acquisition;
 - frozen carrot reference vs COK V8 at dev seed `150614441`: 4389–148019 from seat 0 and 3665–151384 from seat 1.
 
-The ~145.7k mean cash gap is the current calibration target: R4 requires a different production architecture, not starter micro-tuning.
+The ~145.7k mean cash gap proves that R4 needs a scaled multi-worker, multi-resource architecture rather than starter micro-tuning.
 
 ## Immediate continuation
 
-1. Check `STATUS.md` for whether private candidate storage and Kaggle entry have been resolved.
-2. If private storage is available, implement R4 candidate work there while keeping only safe metrics/provenance in this repository.
-3. Build multi-worker/multi-resource economics with explicit land/hire payback, livestock/crop mix, shop-demand routing, market-aware sales, failure recovery, and terminal liquidation.
-4. Iterate only on development seeds; freeze experiment before validation; reserve held-out for promotion.
-5. Package/submit the first hosted candidate when account access is confirmed, then reconcile hosted episodes against local behavior for R3.
+1. Finish `KEXP-20260825-004-r4-public-base-screen` and freeze the winning public architecture as `R4A-public-base`.
+2. Make one auditable Kculture change at a time against that frozen base, using development seeds only during iteration.
+3. Expand the opponent panel with independent strong public policies and archived promoted Kculture agents.
+4. Use validation only after an experiment design is frozen; reserve held-out for promotion gates.
+5. Confirm Kaggle competition entry, package the first strong hosted candidate, and reconcile hosted behavior for R3.

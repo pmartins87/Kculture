@@ -4,9 +4,10 @@ Last updated: 2026-08-25
 
 ## Mission status
 
-**Technical phase: R2 PASS; R3/R4 preparation.**  
+**Technical phase: R4 ACTIVE.**  
 **R1: PASS (2026-08-25).**  
 **R2: PASS (2026-08-25).**  
+**R3: pending first hosted ladder submission.**  
 **R0 account-side confirmation still pending:** competition rule acceptance / entered status cannot be independently verified from this repository.
 
 Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 10 positions pays US$5,000.
@@ -38,81 +39,65 @@ Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 
 
 Experiment: `KEXP-20260825-001-official-starter-parity`.
 
-GitHub Actions run `32858531629` proved that root `main.py` reproduces the official deterministic carrot starter on fixed seeds and completes 720-turn self-play:
-
-- seed 101: parity PASS, reward 3620;
-- seed 202: parity PASS, reward 3601;
-- seed 303: parity PASS, reward 3643;
-- self-play seed 404: `DONE/DONE`, 3771–3771.
-
-The root starter is a frozen legal/reference baseline, not the intended competitive policy.
+GitHub Actions run `32858531629` proved exact starter parity on seeds 101/202/303 and full 720-turn self-play on seed 404. Root `main.py` remains the frozen legal/reference starter until a strong candidate is formally promoted.
 
 ## R2 PASS — deterministic tournament laboratory
 
 Closure experiment: `KEXP-20260825-003-r2-closure`.
 
-GitHub Actions run `32859938870` passed every R2 closure stage on `kaggle-environments==1.32.7`:
+GitHub Actions run `32859938870` established:
 
-- fresh-module agent loading per episode prevents global-state leakage between games;
-- 64 disjoint deterministic seeds frozen: 16 development / 16 validation / 32 held-out;
-- 7 deterministic reference opponents frozen in `configs/opponent_pool.json`;
-- raw W/L/T, terminal cash, money delta, errors, seat, seed, environment version, git SHA, and replay/summary artifacts are preserved;
-- hash-pinned public benchmark acquisition and provenance validation pass;
-- both candidate seats are exercised by default;
+- fresh-module loading per episode;
+- 64 disjoint deterministic seeds: 16 development / 16 validation / 32 held-out;
+- 7 deterministic reference opponents;
+- both-seat evaluation by default;
+- raw W/L/T, terminal bank, money delta, runtime errors and provenance preserved;
+- hash-pinned public-agent acquisition;
 - zero runtime errors in closure smoke.
 
-Reference-pool smoke on development seed `150614441`, both seats: 14 games, 4W/4T/6L, mean delta -289. This is expected for the intentionally weak carrot reference and confirms that the pool distinguishes simple strategies.
+Strong calibration on dev seed `150614441`: frozen carrot reference vs COK V8 produced deltas -143630 and -147719 from the two seats. This makes scaled multi-worker/multi-resource economics the R4 starting point.
 
-### Strong public calibration benchmark
+## Public-development decision
 
-Hash-pinned public V8 from `COK-ZhangZiliang/Kaggriculture`:
+`pmartins87/Kculture` intentionally remains **public** during the active competition. The owner explicitly accepts the discovery/copying risk in exchange for unrestricted GitHub Actions. This decision is recorded in `docs/DECISION_PUBLIC_DEVELOPMENT.md` and is **not a blocker** for R4-R9.
 
-- source commit: `779caaec88a441345871e2d62eb5de93606b7b52`;
-- Apache-2.0;
-- SHA-256: `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`;
-- exact frozen artifact downloaded and verified successfully.
+Competitive code may therefore be committed here. Imported public policies must preserve repository, commit, file path, SHA-256 and license provenance. Credentials, private/unpublished competitor code and redistribution-restricted private replay payloads remain prohibited.
 
-On development seed `150614441`, our frozen carrot reference lost from both seats:
+## R4 ACTIVE — strong economic baseline
 
-- seat 0: 4389 vs 148019, delta -143630;
-- seat 1: 3665 vs 151384, delta -147719;
-- mean delta: -145674.5;
-- both games `DONE/DONE`.
+Current experiment: `KEXP-20260825-004-r4-public-base-screen`.
 
-This establishes the scale of R4: competitive work requires a qualitatively different multi-worker, multi-resource economic policy rather than incremental starter tuning.
+The first R4 step is deliberately not a hand-written rewrite from the starter. We are screening two independent, public, attributed strong architectures on the frozen 1.32.7 engine:
 
-R2 closure artifact: GitHub Actions artifact `9567787169`, ZIP SHA-256 `4dd229326eb1b5874817e45137f274ffee1ebd2387d3683bc1d15ea50c9b4af7`.
+- COK V8 — `COK-ZhangZiliang/Kaggriculture`, commit `779caaec...`, SHA-256 `faf57412...`, Apache-2.0.
+- Seyamalam V21 — `Seyamalam/Kaggriculture`, commit `8b8c421e...`, SHA-256 `0cd14b65...`, Apache-2.0 derivative with preserved attribution.
 
-## Strategic source-exposure gate
+Protocol uses development seeds only. Each policy is tested against the frozen simple pool and they then play a direct both-seat head-to-head. The winner becomes `R4A-public-base`; Kculture-specific changes then proceed one audited delta at a time.
 
-`pmartins87/Kculture` is currently a **public GitHub repository**. Do not commit the next competitive candidate source here while the competition is active unless we deliberately intend to publish it and have confirmed compliance with Kaggle's competition-code sharing requirements. Publishing the policy would also make direct copying by competitors trivial.
-
-Public-safe material may continue here: official mechanics/version locks, laboratory tooling, experiment protocols, results that do not reveal the private policy, and already-public external benchmark provenance.
-
-**Preferred unblock:** make the authoritative competitive-development repository private, or provide a separate private repository for candidate source while keeping public-safe research/tooling here.
+GitHub Actions workflow: `r4-public-base-screen.yml`, run `32868407585`.
 
 ## R3 status
 
 R3 requires the first valid hosted ladder submission and local↔hosted reconciliation. It is not yet PASS.
 
-Account-side prerequisite still pending: confirm Kaggle `Join Competition` / entered status before first submission. Official verification command: `kaggle competitions list --group entered`.
+Account-side prerequisite still pending: confirm Kaggle `Join Competition` / entered status before first submission. Verification can be done through Kaggle UI or `kaggle competitions list --group entered`.
 
 ## Immediate next actions
 
-1. Resolve private storage for competitive candidate source before implementing the serious R4 policy.
-2. Confirm Kaggle competition entry/account-side acceptance before hosted submission.
-3. In the private candidate workspace, create the first economically strong policy family with movement scheduling, land expansion, daily hiring, livestock/crop production, town-demand routing, market-aware selling, recovery logic, and terminal liquidation.
-4. Use the frozen R2 development seeds for iteration; validation only after an experiment design is frozen; held-out only for promotion gates.
-5. Promote a candidate to R3 only after legal self-play and local tournament sanity checks; record exact submission ID/source/config in `docs/SUBMISSION_LEDGER.md`.
-6. Require R4 candidates to dominate the simple reference pool and close a material fraction of the ~145k cash gap to the strong public V8 benchmark before broader planner/search work.
+1. Finish R4 public-base screen and freeze `R4A-public-base`.
+2. Compare action prefixes and failure modes of the screened bases to determine whether expert-selection/portfolio routing is feasible or whether the first improvement should stay base-local.
+3. Add independent strong public opponents so no policy is optimized against one benchmark family.
+4. Develop R4 changes on development seeds only; use validation after design freeze and held-out only for promotion.
+5. Confirm Kaggle entered status and submit the first strong candidate when local safety/robustness gates pass.
+6. Record exact submission ID, source SHA/config and hosted reconciliation in `docs/SUBMISSION_LEDGER.md`.
 
 ## Promotion gates
 
-- **R0 PASS:** official mechanics, environment, submission contract, evaluation, and account entry captured/confirmed. Technical acquisition complete; account entry confirmation pending.
-- **R1 PASS:** official/simple baseline reproduced locally with deterministic diagnostics. **PASS 2026-08-25.**
-- **R2 PASS:** reliable simulator/runner, deterministic seed partitions, opponent pool, state isolation, provenance checks, and episode/tournament logging established. **PASS 2026-08-25.**
+- **R0 PASS:** technical intake complete; account entry confirmation remains pending.
+- **R1 PASS:** official/simple baseline reproduced with deterministic diagnostics. **PASS 2026-08-25.**
+- **R2 PASS:** reliable simulator/runner, seed partitions, opponent pool, state isolation, provenance checks and tournament logging. **PASS 2026-08-25.**
 - **R3 PASS:** first valid ladder submission with local↔hosted behavior reconciled.
-- **R4 PASS:** economically strong deterministic baseline robustly beats simple strategy pool.
+- **R4 PASS:** economically strong deterministic policy robustly beats the simple pool and survives strong-public-opponent validation without runtime instability.
 - **R5 PASS:** planning/resource-allocation agent beats R4 across diverse opponents/seeds.
 - **R6 PASS:** market/opponent-aware adaptations produce robust incremental value.
 - **R7 PASS:** automated strategy search/tuning produces held-out gains.
@@ -122,7 +107,7 @@ Account-side prerequisite still pending: confirm Kaggle `Join Competition` / ent
 ## Known strategic risks
 
 - Ladder rating is adaptive/noisy; controlled local evidence remains primary.
-- Final evaluation rewards head-to-head robustness, so bank-maximization evidence must be paired with W/L matchup evidence.
+- Final evaluation rewards head-to-head outcomes; raw bank maximization alone is insufficient.
 - Environment drift can invalidate economic calibration.
-- Fixed/open-loop routes can be copied or overfit to shop sequences; strategic diversity and closed-loop state adaptation matter.
-- Public source exposure can surrender competitive advantage and create competition-rule obligations.
+- Fixed/open-loop routes can be copied or overfit; public-state adaptation and portfolio diversity matter.
+- Public development exposes our work, a risk explicitly accepted for this project.
