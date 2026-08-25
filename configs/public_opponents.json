@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "artifacts": [
     {
       "id": "cok-v8-779caae",
@@ -9,10 +9,22 @@
       "download_url": "https://raw.githubusercontent.com/COK-ZhangZiliang/Kaggriculture/779caaec88a441345871e2d62eb5de93606b7b52/main.py",
       "sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
       "license": "Apache-2.0",
-      "license_url": "https://github.com/COK-ZhangZiliang/Kaggriculture/blob/c3e2e89a06c9f7874f3ecf73163b07e00e3517e8/LICENSE",
+      "license_url": "https://github.com/COK-ZhangZiliang/Kaggriculture/blob/779caaec88a441345871e2d62eb5de93606b7b52/LICENSES/Apache-2.0.txt",
       "local_filename": "cok_v8_779caae.py",
-      "role": "strong current public benchmark; upstream README reports verification on kaggle-environments 1.32.7"
+      "role": "strong public benchmark/base candidate; verified upstream on kaggle-environments 1.32.7"
+    },
+    {
+      "id": "seyamalam-v21-8b8c421",
+      "repository": "Seyamalam/Kaggriculture",
+      "commit": "8b8c421eb10634c756583ce10c75189f50c83a72",
+      "path": "agents/candidate_v21_capital_latch.py",
+      "download_url": "https://raw.githubusercontent.com/Seyamalam/Kaggriculture/8b8c421eb10634c756583ce10c75189f50c83a72/agents/candidate_v21_capital_latch.py",
+      "sha256": "0cd14b653102d276c4f902fa3b8c6bd81d869b8ab64c422cb881b9d2346ec639",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/Seyamalam/Kaggriculture/blob/8b8c421eb10634c756583ce10c75189f50c83a72/THIRD_PARTY_NOTICES.md",
+      "local_filename": "seyamalam_v21_8b8c421.py",
+      "role": "independent strong public architecture: 3 quadrants, 12 hands, mixed livestock/crops, capital latch"
     }
   ],
-  "policy": "Third-party files are fetched into ignored artifacts/ only, hash-verified, and used as opponents. They are not copied into Kculture main.py. Preserve source/license provenance for every artifact."
+  "policy": "Public competition code may be used as an attributed, hash-pinned base or opponent. Kculture intentionally remains public during active development. Never use unpublished/private competitor code or redistributed private replays. Preserve source, commit, license and SHA-256 for every imported artifact."
 }
