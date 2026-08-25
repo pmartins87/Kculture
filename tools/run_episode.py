@@ -1,16 +1,20 @@
 """Deterministic single-episode runner and replay logger for Kculture.
 
-Example:
-    python tools/run_episode.py --agent0 main:agent --agent1 starter --seed 123
+Examples:
+    python tools/run_episode.py --agent0 file:main.py:agent --agent1 starter --seed 123
+    python tools/run_episode.py --agent0 file:main.py:agent --agent1 file:artifacts/public_opponents/cok_v8_779caae.py:agent --seed 123
 
 Built-in Kaggle agents may be named directly: pass, random, starter.
-Python callables use MODULE:FUNCTION syntax.
+File agents use file:PATH.py:FUNCTION and are loaded into fresh module state.
+Python module callables may also use MODULE:FUNCTION syntax.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib
+import importlib.util
 import json
 import os
 import subprocess
@@ -29,11 +33,39 @@ if str(ROOT) not in sys.path:
 BUILT_INS = {"pass", "random", "starter"}
 
 
+def _load_file_agent(spec: str):
+    body = spec[len("file:") :]
+    if ":" not in body:
+        raise ValueError(f"File agent '{spec}' must use file:PATH.py:FUNCTION")
+    path_text, function_name = body.rsplit(":", 1)
+    path = Path(path_text)
+    if not path.is_absolute():
+        path = ROOT / path
+    path = path.resolve()
+    if not path.is_file():
+        raise FileNotFoundError(path)
+
+    unique = hashlib.sha256(f"{path}:{time.time_ns()}".encode()).hexdigest()[:16]
+    module_spec = importlib.util.spec_from_file_location(f"kculture_episode_{unique}", path)
+    if module_spec is None or module_spec.loader is None:
+        raise ImportError(f"Unable to load {path}")
+    module = importlib.util.module_from_spec(module_spec)
+    module_spec.loader.exec_module(module)
+    fn = getattr(module, function_name)
+    if not callable(fn):
+        raise TypeError(f"{spec} is not callable")
+    return fn
+
+
 def resolve_agent(spec: str):
     if spec in BUILT_INS:
         return spec
+    if spec.startswith("file:"):
+        return _load_file_agent(spec)
     if ":" not in spec:
-        raise ValueError(f"Agent '{spec}' must be a built-in name or MODULE:FUNCTION")
+        raise ValueError(
+            f"Agent '{spec}' must be a built-in, file:PATH.py:FUNCTION, or MODULE:FUNCTION"
+        )
     module_name, function_name = spec.split(":", 1)
     module = importlib.import_module(module_name)
     fn = getattr(module, function_name)
@@ -93,7 +125,7 @@ def action_counts(replay: dict, player: int) -> dict:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--agent0", default="main:agent")
+    parser.add_argument("--agent0", default="file:main.py:agent")
     parser.add_argument("--agent1", default="starter")
     parser.add_argument("--seed", type=int, required=True)
     parser.add_argument("--episode-steps", type=int, default=720)
@@ -117,17 +149,21 @@ def main():
     rewards = [final[i].get("reward") for i in range(2)]
     statuses = [final[i].get("status") for i in range(2)]
 
-    if rewards[0] > rewards[1]:
-        winner = 0
-    elif rewards[1] > rewards[0]:
-        winner = 1
+    if statuses == ["DONE", "DONE"] and all(isinstance(v, (int, float)) for v in rewards):
+        if rewards[0] > rewards[1]:
+            winner = 0
+        elif rewards[1] > rewards[0]:
+            winner = 1
+        else:
+            winner = "tie"
+        delta = rewards[0] - rewards[1]
     else:
-        winner = "tie"
+        winner = "error"
+        delta = None
 
-    episode_id = (
-        f"seed-{args.seed}__{args.agent0.replace(':', '-')}_vs_"
-        f"{args.agent1.replace(':', '-')}"
-    ).replace("/", "-")
+    safe_a0 = args.agent0.replace(":", "-").replace("/", "-")
+    safe_a1 = args.agent1.replace(":", "-").replace("/", "-")
+    episode_id = f"seed-{args.seed}__{safe_a0}_vs_{safe_a1}"
     out_dir = ROOT / args.output_root / episode_id
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -140,7 +176,7 @@ def main():
         "agents": [args.agent0, args.agent1],
         "statuses": statuses,
         "rewards": rewards,
-        "money_delta_p0_minus_p1": rewards[0] - rewards[1],
+        "money_delta_p0_minus_p1": delta,
         "winner": winner,
         "wall_seconds": elapsed,
         "action_counts": [action_counts(replay, 0), action_counts(replay, 1)],

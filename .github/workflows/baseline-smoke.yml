@@ -9,7 +9,7 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
 
@@ -24,11 +24,20 @@ jobs:
       - name: Verify starter parity and 720-turn completion
         run: python tools/smoke_baseline.py
 
-      - name: Exercise deterministic episode logger
-        run: python tools/run_episode.py --agent0 main:agent --agent1 starter --seed 505
+      - name: Validate R2 seed, pool, and provenance configs
+        run: python tools/validate_r2_configs.py
 
-      - name: Exercise seed-and-seat tournament harness
-        run: python tools/run_tournament.py --candidate main:agent --opponents pass starter --seeds 501 502
+      - name: Exercise fresh-module episode logger
+        run: python tools/run_episode.py --agent0 file:main.py:agent --agent1 starter --seed 505
+
+      - name: Exercise frozen reference opponent pool
+        run: python tools/run_tournament.py --candidate file:main.py:agent --opponent-pool configs/opponent_pool.json --seed-partition development --limit-seeds 1
+
+      - name: Fetch hash-pinned public opponents
+        run: python tools/fetch_public_opponents.py
+
+      - name: Exercise strong public benchmark from both seats
+        run: python tools/run_tournament.py --candidate file:main.py:agent --opponents file:artifacts/public_opponents/cok_v8_779caae.py:agent --seed-partition development --limit-seeds 1
 
       - name: Preserve lab smoke artifacts
         uses: actions/upload-artifact@v4
@@ -38,3 +47,4 @@ jobs:
             artifacts/baseline_smoke.json
             artifacts/episodes/**/summary.json
             artifacts/tournaments/**/tournament.json
+            artifacts/public_opponents/fetch_receipt.json

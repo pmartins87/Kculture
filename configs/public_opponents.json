@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "artifacts": [
+    {
+      "id": "cok-v8-779caae",
+      "repository": "COK-ZhangZiliang/Kaggriculture",
+      "commit": "779caaec88a441345871e2d62eb5de93606b7b52",
+      "path": "main.py",
+      "download_url": "https://raw.githubusercontent.com/COK-ZhangZiliang/Kaggriculture/779caaec88a441345871e2d62eb5de93606b7b52/main.py",
+      "sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/COK-ZhangZiliang/Kaggriculture/blob/c3e2e89a06c9f7874f3ecf73163b07e00e3517e8/LICENSE",
+      "local_filename": "cok_v8_779caae.py",
+      "role": "strong current public benchmark; upstream README reports verification on kaggle-environments 1.32.7"
+    }
+  ],
+  "policy": "Third-party files are fetched into ignored artifacts/ only, hash-verified, and used as opponents. They are not copied into Kculture main.py. Preserve source/license provenance for every artifact."
+}

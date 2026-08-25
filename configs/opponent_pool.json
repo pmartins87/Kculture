@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "pool_id": "r2-reference-v1",
+  "deterministic_only": true,
+  "opponents": [
+    {
+      "id": "pass",
+      "spec": "pass",
+      "family": "inert",
+      "role": "legality and minimum-performance floor"
+    },
+    {
+      "id": "official-starter",
+      "spec": "starter",
+      "family": "official-reference",
+      "role": "frozen official carrot baseline"
+    },
+    {
+      "id": "simple-wheat-v1",
+      "spec": "file:opponents/simple_crop.py:wheat_agent",
+      "family": "single-tile-crop",
+      "role": "wheat market/crop lifecycle coverage"
+    },
+    {
+      "id": "simple-carrot-v1",
+      "spec": "file:opponents/simple_crop.py:carrot_agent",
+      "family": "single-tile-crop",
+      "role": "carrot market/crop lifecycle coverage"
+    },
+    {
+      "id": "simple-tomato-v1",
+      "spec": "file:opponents/simple_crop.py:tomato_agent",
+      "family": "single-tile-crop",
+      "role": "ongoing tomato lifecycle and hinge-demand coverage"
+    },
+    {
+      "id": "simple-strawberry-v1",
+      "spec": "file:opponents/simple_crop.py:strawberry_agent",
+      "family": "single-tile-crop",
+      "role": "ongoing strawberry lifecycle and premium-glut coverage"
+    },
+    {
+      "id": "simple-melon-v1",
+      "spec": "file:opponents/simple_crop.py:melon_agent",
+      "family": "single-tile-crop",
+      "role": "long-horizon melon lifecycle and premium-glut coverage"
+    }
+  ],
+  "excluded_from_promotion": [
+    {
+      "spec": "random",
+      "reason": "official random agent instantiates an unseeded RNG and is not reproducible enough for deterministic promotion gates"
+    }
+  ]
+}
