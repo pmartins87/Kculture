@@ -1,0 +1,2 @@
+# R0/R1 reproducibility lock.
+kaggle-environments==1.32.7

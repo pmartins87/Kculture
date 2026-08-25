@@ -1,0 +1,31 @@
+name: baseline-smoke
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install frozen environment
+        run: python -m pip install -r requirements.txt
+
+      - name: Verify starter parity and 720-turn completion
+        run: python tools/smoke_baseline.py
+
+      - name: Preserve smoke artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: baseline-smoke
+          path: artifacts/baseline_smoke.json
