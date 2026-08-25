@@ -1,0 +1,49 @@
+{
+  "experiment_id": "KEXP-20260825-003-r2-closure",
+  "decision": "R2_PASS",
+  "environment": "kaggriculture",
+  "kaggle_environments_version": "1.32.7",
+  "kculture_git_sha": "70c93cfb3c436612c10385267fbc99aa27815efb",
+  "github_actions": {
+    "run_id": 32859938870,
+    "job_id": 97841124028,
+    "artifact_id": 9567787169,
+    "artifact_digest": "sha256:4dd229326eb1b5874817e45137f274ffee1ebd2387d3683bc1d15ea50c9b4af7"
+  },
+  "seed_partitions": {
+    "development": 16,
+    "validation": 16,
+    "held_out": 32,
+    "total": 64,
+    "overlap": 0
+  },
+  "reference_pool": {
+    "opponents": 7,
+    "smoke_seed": 150614441,
+    "both_seats": true,
+    "episodes": 14,
+    "wins": 4,
+    "ties": 4,
+    "losses": 6,
+    "errors": 0,
+    "score_rate_tie_half": 0.42857142857142855,
+    "mean_money_delta": -289.0,
+    "median_money_delta": 0.0,
+    "min_money_delta": -2505.0,
+    "max_money_delta": 544.0
+  },
+  "strong_public_benchmark": {
+    "id": "cok-v8-779caae",
+    "source_commit": "779caaec88a441345871e2d62eb5de93606b7b52",
+    "sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+    "license": "Apache-2.0",
+    "bytes": 158056,
+    "seed": 150614441,
+    "episodes": 2,
+    "candidate_rewards": [4389.0, 3665.0],
+    "opponent_rewards": [148019.0, 151384.0],
+    "money_deltas": [-143630.0, -147719.0],
+    "mean_money_delta": -145674.5,
+    "errors": 0
+  }
+}
