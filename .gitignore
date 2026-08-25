@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Secrets / local environment
+.env
+.env.*
+*.key
+*.pem
+
+# Local competition data and generated artifacts
+data/
+artifacts/
+outputs/
+logs/
+episodes/
+*.zip
+*.tar.gz
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
