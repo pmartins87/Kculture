@@ -1,0 +1,56 @@
+name: r4-acquire-kaggle-public
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/r4-acquire-kaggle-public.yml"
+  workflow_dispatch:
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install official Kaggle CLI
+        run: python -m pip install kaggle
+
+      - name: Pull exact public notebook versions
+        run: |
+          mkdir -p artifacts/kaggle_public/flexonafft_v59
+          mkdir -p artifacts/kaggle_public/andrewsokolovsky_v10
+          kaggle kernels pull flexonafft/kaggriculture-multi-route-farming-agent/59 -p artifacts/kaggle_public/flexonafft_v59 -m
+          kaggle kernels pull andrewsokolovsky/kaggriculture/10 -p artifacts/kaggle_public/andrewsokolovsky_v10 -m
+
+      - name: Hash acquisition
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('artifacts/kaggle_public')
+          rows = []
+          for p in sorted(root.rglob('*')):
+              if p.is_file():
+                  data = p.read_bytes()
+                  rows.append({
+                      'path': p.as_posix(),
+                      'bytes': len(data),
+                      'sha256': hashlib.sha256(data).hexdigest(),
+                  })
+          receipt = {'result': 'PASS', 'files': rows}
+          (root / 'receipt.json').write_text(json.dumps(receipt, indent=2, sort_keys=True), encoding='utf-8')
+          print(json.dumps(receipt, indent=2, sort_keys=True))
+          PY
+
+      - name: Preserve exact public sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4-kaggle-public-sources
+          path: artifacts/kaggle_public/**
