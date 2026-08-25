@@ -1,4 +1,4 @@
-name: baseline-smoke
+name: local-lab-smoke
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   smoke:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
 
@@ -24,8 +24,17 @@ jobs:
       - name: Verify starter parity and 720-turn completion
         run: python tools/smoke_baseline.py
 
-      - name: Preserve smoke artifact
+      - name: Exercise deterministic episode logger
+        run: python tools/run_episode.py --agent0 main:agent --agent1 starter --seed 505
+
+      - name: Exercise seed-and-seat tournament harness
+        run: python tools/run_tournament.py --candidate main:agent --opponents pass starter --seeds 501 502
+
+      - name: Preserve lab smoke artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: baseline-smoke
-          path: artifacts/baseline_smoke.json
+          name: local-lab-smoke
+          path: |
+            artifacts/baseline_smoke.json
+            artifacts/episodes/**/summary.json
+            artifacts/tournaments/**/tournament.json

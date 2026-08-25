@@ -4,7 +4,9 @@ Last updated: 2026-08-25
 
 ## Mission status
 
-**Phase: R0 active; R1 baseline reproduction and R2 runner scaffolded**
+**Technical phase: R2 — local tournament laboratory.**  
+**R1: PASS.**  
+**R0 account-side confirmation still pending:** competition rule acceptance cannot be independently verified from the repository.
 
 Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 10 positions pays US$5,000.
 
@@ -31,33 +33,47 @@ Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 
 - Current official mechanics/market snapshot captured in `docs/OFFICIAL_MECHANICS_SNAPSHOT.md`.
 - Official built-in `starter_agent` behavior captured.
 
-## R1/R2 bootstrap completed
+## R1 PASS evidence
 
-- Root `main.py` contains a self-contained reference port of the official deterministic carrot starter.
-- Automated 720-turn/parity smoke test added at `tools/smoke_baseline.py`.
-- GitHub Actions smoke workflow added at `.github/workflows/baseline-smoke.yml`.
-- Deterministic single-episode runner added at `tools/run_episode.py`; it records package version, git SHA, seed, agents, statuses, rewards, money delta, action counts, summary JSON, and full replay JSON.
+Experiment: `KEXP-20260825-001-official-starter-parity`.
+
+Kculture `main.py` is a self-contained port of the official deterministic carrot starter. On GitHub Actions run `32858531629`:
+
+- seed 101: full terminal-state parity PASS; reward 3620;
+- seed 202: full terminal-state parity PASS; reward 3601;
+- seed 303: full terminal-state parity PASS; reward 3643;
+- self-play seed 404: both agents `DONE`, 3771–3771;
+- all workflow steps passed;
+- smoke artifact ID `9567214356`, digest `sha256:734f1eed2211d8439da10b8c7414a36f2bc36f2e9f946aa3fe826a2075c54e67`.
+
+The official starter is now frozen as the legal/reference baseline and should not be strategically modified in place.
+
+## R2 infrastructure
+
+- `tools/run_episode.py`: deterministic single-episode runner/logging with environment version, git SHA, seed, agents, terminal statuses/rewards, money delta, action counts, compact summary, and full replay.
+- `tools/run_tournament.py`: multi-seed tournament harness; runs the candidate from both player seats by default, preserves raw episode outcomes, and aggregates W/L/T, score rate, money delta mean/median/dispersion/tails, and errors.
+- Built-in `random` is explicitly unsuitable for deterministic promotion gates because the upstream random agent creates an unseeded RNG.
+- CI is being expanded to exercise both the episode logger and seed-and-seat tournament harness after baseline parity.
 
 ## Remaining R0 blocker
 
-Competition rule acceptance is account-side and is not yet independently verified in this repository. Confirm via Kaggle UI (`Join Competition` already accepted) or `kaggle competitions list --group entered`.
+Competition rule acceptance is account-side and is not yet independently verified in this repository. Confirm via Kaggle UI (`Join Competition` accepted) or `kaggle competitions list --group entered` before the first hosted submission.
 
 ## Immediate next actions
 
-1. Observe the baseline smoke workflow produced by the R0/R1 bootstrap commit.
-2. If parity passes, record **R1 PASS**: Kculture reference baseline matches the official built-in starter on fixed seeds and completes full self-play.
-3. Exercise `tools/run_episode.py` in CI and freeze its output schema; then expand toward multi-seed/multi-opponent tournament execution for **R2**.
-4. Add controlled mechanics tests for crop yields/decay, animal feed/care, fertilizer, land unlocking, hire cost/placement, shed capacity, market order limits, market-price curves, and town demand.
-5. Establish the first local opponent pool (`pass`, official `starter`, scripted crop loops, expansion/livestock variants).
-6. Add tournament summaries with raw W/L/T, money delta, variance/tails, crash/no-op diagnostics, and optional Elo/Bradley-Terry summaries.
-7. Submit the first ladder agent only after local validation and account-rule confirmation.
-8. Track all ladder submissions and episodes in `docs/SUBMISSION_LEDGER.md`.
+1. Validate `tools/run_episode.py` and `tools/run_tournament.py` in a clean GitHub Actions run.
+2. Freeze the R2 output schema and establish deterministic development/validation/held-out seed partitions.
+3. Add controlled mechanics regression tests for crop yields/decay, animal feed/care, fertilizer, land unlocking, hire cost/placement, shed capacity, market order limits, market-price curves, and town demand.
+4. Establish the first versioned local opponent pool: `pass`, official `starter`, scripted crop loops, expansion-heavy, livestock-heavy, and market-responsive variants.
+5. Add matchup matrix and tournament summaries while keeping raw W/L/T and money deltas primary; Elo/Bradley-Terry remain secondary summaries.
+6. Build the first economically competent deterministic strategy family only after the lab is reliable.
+7. Submit the first ladder agent after local validation and account-rule confirmation; record it in `docs/SUBMISSION_LEDGER.md`.
 
 ## Promotion gates
 
-- **R0 PASS:** official mechanics, environment, submission contract, evaluation, and account entry captured/confirmed.
-- **R1 PASS:** official/simple baseline reproduced locally with deterministic diagnostics.
-- **R2 PASS:** reliable simulator/runner and episode logging established.
+- **R0 PASS:** official mechanics, environment, submission contract, evaluation, and account entry captured/confirmed. Technical acquisition complete; account entry confirmation pending.
+- **R1 PASS:** official/simple baseline reproduced locally with deterministic diagnostics. **PASS on 2026-08-25.**
+- **R2 PASS:** reliable simulator/runner, deterministic seed partitions, opponent pool, and episode/tournament logging established.
 - **R3 PASS:** first valid ladder submission with local↔hosted behavior reconciled.
 - **R4 PASS:** economically strong deterministic baseline beats simple strategy pool.
 - **R5 PASS:** planning/resource-allocation agent beats R4 across diverse opponents/seeds.
@@ -70,4 +86,4 @@ Competition rule acceptance is account-side and is not yet independently verifie
 
 The ladder is adaptive and noisy. A high displayed rating can reflect matchup composition, recency, or metagame exploitation. Final promotion must therefore rely on controlled local tournaments, episode-level diagnostics, strategic diversity, and robustness rather than leaderboard rating alone.
 
-A second risk is environment drift: the engine changed materially on 2026-08-15 to make underused resources (notably carrot, tomato, goose/egg) situational through demand-curve changes. Every promoted agent must be regression-tested whenever Kaggle updates the environment.
+Environment drift is also material: the engine changed on 2026-08-15 to make underused resources (notably carrot, tomato, goose/egg) situational through demand-curve changes. Every promoted agent must be regression-tested whenever Kaggle updates the environment.

@@ -1,0 +1,26 @@
+{
+  "experiment_id": "KEXP-20260825-001-official-starter-parity",
+  "environment": "kaggriculture",
+  "kaggle_environments_version": "1.32.7",
+  "kculture_git_sha": "ecb9839ef8937496144a92289062f121c5d80210",
+  "upstream_engine_commit": "28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c",
+  "episode_steps": 720,
+  "parity_runs": [
+    {"seed": 101, "reward": 3620.0, "status": "DONE", "parity": "PASS"},
+    {"seed": 202, "reward": 3601.0, "status": "DONE", "parity": "PASS"},
+    {"seed": 303, "reward": 3643.0, "status": "DONE", "parity": "PASS"}
+  ],
+  "self_play": {
+    "seed": 404,
+    "p0_reward": 3771.0,
+    "p1_reward": 3771.0,
+    "p0_status": "DONE",
+    "p1_status": "DONE"
+  },
+  "github_actions": {
+    "run_id": 32858531629,
+    "artifact_id": 9567214356,
+    "artifact_digest": "sha256:734f1eed2211d8439da10b8c7414a36f2bc36f2e9f946aa3fe826a2075c54e67"
+  },
+  "decision": "R1_PASS"
+}
