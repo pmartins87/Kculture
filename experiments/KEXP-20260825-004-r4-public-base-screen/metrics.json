@@ -1,0 +1,59 @@
+{
+  "schema_version": "r4-public-base-screen-1",
+  "experiment": "KEXP-20260825-004-r4-public-base-screen",
+  "engine": "kaggle-environments==1.32.7",
+  "workflow_run_id": 32868407585,
+  "artifact_id": 9571507013,
+  "artifact_sha256": "a376eced29b8595c39356436043fcddd407664e883b33535e506d0b1c170bcf6",
+  "development_seeds_simple_pool": [150614441, 583180324, 1369296235, 1743398262],
+  "development_seeds_head_to_head": [150614441, 583180324, 1369296235, 1743398262, 393297156, 1743757108, 724229404, 1765490084],
+  "cok_v8_simple_pool": {
+    "games": 56,
+    "wins": 56,
+    "losses": 0,
+    "ties": 0,
+    "errors": 0,
+    "score_rate": 1.0,
+    "mean_money_delta": 136298.44642857142,
+    "median_money_delta": 144905.0,
+    "min_money_delta": 86736.0,
+    "max_money_delta": 181866.0,
+    "pstdev_money_delta": 26471.2545994435
+  },
+  "seyamalam_v21_simple_pool": {
+    "games": 56,
+    "wins": 56,
+    "losses": 0,
+    "ties": 0,
+    "errors": 0,
+    "score_rate": 1.0,
+    "mean_money_delta": 151034.8392857143,
+    "median_money_delta": 153663.5,
+    "min_money_delta": 88302.0,
+    "max_money_delta": 168390.0,
+    "pstdev_money_delta": 15400.5115264962
+  },
+  "cok_v8_vs_seyamalam_v21": {
+    "games": 16,
+    "wins": 14,
+    "losses": 2,
+    "ties": 0,
+    "errors": 0,
+    "score_rate": 0.875,
+    "mean_money_delta": 21063.875,
+    "median_money_delta": 21797.0,
+    "min_money_delta": -1365.0,
+    "max_money_delta": 38860.0,
+    "pstdev_money_delta": 11458.590226741464,
+    "losses": [
+      {"seed": 583180324, "candidate_seat": 0, "money_delta": -1365.0},
+      {"seed": 583180324, "candidate_seat": 1, "money_delta": -1335.0}
+    ]
+  },
+  "promotion": {
+    "id": "R4A-public-base-v1",
+    "artifact": "cok-v8-779caae",
+    "sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+    "reason": "Both candidates were runtime-clean; COK V8 won the pre-registered direct head-to-head gate 14-2."
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "R4A-public-base-v1",
+  "artifact_id": "cok-v8-779caae",
+  "repository": "COK-ZhangZiliang/Kaggriculture",
+  "commit": "779caaec88a441345871e2d62eb5de93606b7b52",
+  "path": "main.py",
+  "sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+  "license": "Apache-2.0",
+  "engine": "kaggle-environments==1.32.7",
+  "promoted_by_experiment": "KEXP-20260825-004-r4-public-base-screen",
+  "promotion_workflow_run": 32868407585,
+  "status": "FROZEN_ENGINEERING_BASE",
+  "claim_boundary": "First frozen R4 engineering base selected from the initial two-policy public screen. It is not assumed to be the strongest available public Kaggriculture policy and is not yet an R4 PASS champion."
+}
