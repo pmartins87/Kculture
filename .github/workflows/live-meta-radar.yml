@@ -13,12 +13,12 @@ on:
       top:
         description: "Number of highest-average-Elo episodes"
         required: false
-        default: "5"
+        default: "20"
 
 jobs:
   radar:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,7 +36,7 @@ jobs:
           INPUT_TOP: "${{ github.event.inputs.top }}"
         run: |
           set -euo pipefail
-          TOP="${INPUT_TOP:-5}"
+          TOP="${INPUT_TOP:-20}"
           if [ -n "${INPUT_DATE:-}" ]; then
             python tools/live_meta_radar.py --date "$INPUT_DATE" --top "$TOP" --output artifacts/live-meta/report.json
           else
@@ -44,5 +44,5 @@ jobs:
           fi
       - uses: actions/upload-artifact@v4
         with:
-          name: kexp018-live-meta-radar
+          name: kexp018-live-meta-radar-top20
           path: artifacts/live-meta/report.json
