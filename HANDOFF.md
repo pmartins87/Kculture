@@ -4,15 +4,9 @@ Use this file as the first read in a dedicated Kculture chat.
 
 ## Mission
 
-Compete seriously for a **top-10 prize** in Kaggle's Kaggriculture simulation competition. Final submission deadline: 2026-09-30 23:59 UTC.
+Compete seriously for a **top-10 prize** in Kaggle's Kaggriculture simulation. Final submission deadline: 2026-09-30 23:59 UTC. The repository `pmartins87/Kculture` is the source of truth and intentionally remains public during development.
 
-## Source of truth
-
-This repository is authoritative for project state, decisions, laboratory tooling, competitive candidate code, experiments, submissions, tournament results, and frozen artifacts.
-
-The repository intentionally remains **public** during active development. This is a deliberate project decision recorded in `docs/DECISION_PUBLIC_DEVELOPMENT.md`: the discovery/copying risk is accepted in exchange for unrestricted GitHub Actions capacity.
-
-## Required first reads
+## First reads
 
 1. `STATUS.md`
 2. `ROADMAP.md`
@@ -20,53 +14,57 @@ The repository intentionally remains **public** during active development. This 
 4. `docs/EXPERIMENT_PROTOCOL.md`
 5. `docs/SUBMISSION_LEDGER.md`
 6. `official/UPSTREAM_LOCK.md`
-7. `docs/OFFICIAL_MECHANICS_SNAPSHOT.md`
-8. `research/PUBLIC_BENCHMARKS.md`
-9. `docs/DECISION_PUBLIC_DEVELOPMENT.md`
+7. `research/PUBLIC_BENCHMARK_SNAPSHOT_20260825.md`
 
-Then inspect the repository tree, latest commits, and latest GitHub Actions runs before changing anything.
+Then inspect latest commits and GitHub Actions before changing anything.
 
 ## Working rules
 
-- Treat official mechanics as facts and strategic ideas as hypotheses until measured.
-- Freeze environment/package/hash provenance for every promoted experiment.
-- Preserve seeds, opponent versions, configs, both-seat outcomes, and full episode metrics.
-- Never tune against held-out seeds; use them only for promotion/final selection.
-- Fresh-load file-based agents per episode so global state cannot leak between games.
-- Do not promote from a single ladder rating or a few favorable matches.
-- Keep champion/archive/public benchmark opponents so every new agent must beat past strong versions.
-- Record every Kaggle submission and the exact source/config/hash that produced it.
-- Use the final two tracked submission slots as a strategic portfolio rather than redundant copies.
-- Public third-party competition code may be used only with preserved license, source, commit, path, and SHA-256 provenance.
-- Never commit credentials, private/unpublished competitor code, or redistribution-restricted private replay payloads.
-- Advance as far as possible without unnecessary user micromanagement; surface only meaningful blockers, decisions, or results.
+- Facts from the official engine outrank assumptions.
+- Preserve source/commit/path/hash/license for third-party public agents.
+- Fresh-load file agents per episode.
+- Compare both seats and deterministic seeds.
+- Development is for iteration; validation is only for frozen candidates; held-out is reserved for later promotion/final selection.
+- Never tune a changed candidate on results from a validation run belonging to an earlier frozen candidate.
+- Do not promote from a few ladder games alone.
+- Record every hosted submission and exact source/config/hash.
+- Never commit credentials or private/unpublished competitor code.
+- Advance autonomously and surface only meaningful blockers/results.
 
-## Current phase
+## Current state
 
-- **R1 PASS** — official starter reproduced exactly.
-- **R2 PASS** — deterministic tournament laboratory closed on 2026-08-25.
-- **R3 pending** — first hosted ladder submission still requires account-side Kaggle entry confirmation.
-- **R4 ACTIVE** — strong public licensed architectures are being screened on frozen engine 1.32.7 to select the first economic base before Kculture-specific improvements.
+- **R1 PASS** — official starter parity.
+- **R2 PASS** — deterministic lab with 16 dev / 16 validation / 32 held-out seeds.
+- **R3 pending** — first hosted ladder submission/account-side Kaggle confirmation.
+- **R4 ACTIVE**.
+- **R4A frozen:** COK V8 (`779caae...`, SHA-256 `faf57412...`, Apache-2.0), selected 14-2 over Seyamalam V21 on first 8 dev seeds × both seats.
+- **Full terminal R4B rejected:** 16-0 vs Seyamalam but only 5-11 vs R4A, mean -1.625; failed predeclared direct gate.
+- **Market-only terminal candidate frozen for validation:** 16-0 vs Seyamalam and 5-3-8 vs R4A, mean +12 on development. Frozen Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
+- **KEXP-007 validation running:** Actions run `32918640409`, all 16 validation seeds, both seats, 3 matchup blocks.
+- **Held-out remains sealed.**
 
-## R2 closure evidence
+## Exact active validation gate
 
-Experiment: `experiments/KEXP-20260825-003-r2-closure/`.
+`experiments/KEXP-20260825-007-r4b-market-only-validation/README.md`
 
-GitHub Actions run `32859938870` established:
+PASS requires:
 
-- 64 disjoint seeds: 16 dev / 16 validation / 32 held-out;
-- 7 deterministic reference opponents;
-- fresh-module isolation;
-- zero closure-smoke runtime errors;
-- hash-pinned strong public benchmark acquisition;
-- frozen carrot reference vs COK V8 at dev seed `150614441`: 4389–148019 from seat 0 and 3665–151384 from seat 1.
+1. zero runtime errors;
+2. market-only direct score vs R4A >= 0.50;
+3. direct mean money delta vs R4A >= 0;
+4. market-only wins vs Seyamalam >= R4A-control wins;
+5. market-only mean delta vs Seyamalam >= R4A-control mean.
 
-The ~145.7k mean cash gap proves that R4 needs a scaled multi-worker, multi-resource architecture rather than starter micro-tuning.
+Do not alter the candidate after seeing validation results and then claim the old validation applies to the new code.
 
-## Immediate continuation
+## Packaging
 
-1. Finish `KEXP-20260825-004-r4-public-base-screen` and freeze the winning public architecture as `R4A-public-base`.
-2. Make one auditable Kculture change at a time against that frozen base, using development seeds only during iteration.
-3. Expand the opponent panel with independent strong public policies and archived promoted Kculture agents.
-4. Use validation only after an experiment design is frozen; reserve held-out for promotion gates.
-5. Confirm Kaggle competition entry, package the first strong hosted candidate, and reconcile hosted behavior for R3.
+`tools/build_r4b_market_only_submission.py` prepares a self-contained archive from the hash-pinned COK V8 source plus the Kculture market-only overlay. If KEXP-007 passes, require full-trajectory action parity between the laboratory wrapper and packaged root `main.py` before hosted submission.
+
+## Next independent development hypothesis
+
+`KEXP-20260825-008-r4c-guarded-ninth-cow` is prepared but not executed. It is development-only and toggles one already-implemented guarded ninth-cow branch. It must not use validation or held-out seeds.
+
+## External benchmark targets
+
+High-priority dated public targets: Kaito V27 V4 (~3090.1 snapshot), Rayk V11 (~2990.4 best snapshot), Andrew V12 (~2915.2), Flexona V59 (~2767.3). Exact Kaggle notebook pull requires `KAGGLE_API_TOKEN` and is prepared as a manual, secret-only workflow.
