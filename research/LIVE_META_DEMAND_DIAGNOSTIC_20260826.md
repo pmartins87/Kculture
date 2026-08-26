@@ -8,6 +8,8 @@ The highest-value new evidence comes from the **official public ladder episode d
 
 This finding is strong enough to justify a bounded R4D development experiment. It is **not** strong enough to justify a second hosted submission or validation access yet.
 
+> Experiment-ID note: the demand studies were initially drafted under IDs that collided with an earlier KEXP-019. Their canonical IDs are now **KEXP-021** (same-day demand response) and **KEXP-022** (longitudinal replication). The original duplicate paths are historical aliases only.
+
 ## 1. Hosted/local contradiction
 
 Frozen hosted champion:
@@ -106,7 +108,7 @@ Second-Yarn route:
 
 The route therefore already contains many late planting/movement slots that can support a bounded crop substitution without rewriting the spatial plan.
 
-## 5. KEXP-019 — same-day demand response
+## 5. KEXP-021 — same-day demand response
 
 Run `33019276166` — SUCCESS.
 Artifact `9625868747`, ZIP SHA-256 `0a0c9028ce33b177b61a41fe4da691f6de6b7740c4729a0108ad4991e33dd821`.
@@ -127,7 +129,9 @@ Across 40 top-20 Aug-25 player-games:
 
 However, the sample was only Crop Dusta vs Ryo Hasegawa, so team identity was a severe confounder. No candidate was promoted.
 
-## 6. KEXP-020 — longitudinal replication
+Canonical record: `experiments/KEXP-20260826-021-live-meta-demand-response/README.md`.
+
+## 6. KEXP-022 — longitudinal replication
 
 Run `33019559986` — SUCCESS.
 Artifact `9625961691`, ZIP SHA-256 `76ddbf8e2d453cdb357143002646e14c59fdbed054240089ef19968ce26a3963`.
@@ -148,6 +152,8 @@ It does **not** demonstrate that CARROT should always replace WHEAT. Winner mean
 > use the complete late economic state to decide crop rotation; CARROT is a fast-response option in high-CARROT-demand regimes.
 
 A deployable policy likely needs demand plus current prices/economics, not a raw demand threshold.
+
+Canonical record: `experiments/KEXP-20260826-022-live-meta-demand-longitudinal/README.md`.
 
 ## 7. Why CARROT is mechanically plausible
 
