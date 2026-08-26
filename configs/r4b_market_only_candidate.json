@@ -1,6 +1,6 @@
 {
-  "id": "R4B-market-only-validation-v1",
-  "status": "FROZEN_VALIDATION_CANDIDATE",
+  "id": "R4B-market-only-validated-v1",
+  "status": "FROZEN_VALIDATED_SUBMISSION_CANDIDATE",
   "candidate_path": "candidates/r4b_ablation_market_only.py",
   "freeze_source_commit": "148cc81fed390fd75c0cba00ceb779efaa17a46f",
   "candidate_git_blob": "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37",
@@ -9,6 +9,12 @@
     "vs_seyamalam": {"wins": 16, "losses": 0, "ties": 0, "score_rate": 1.0, "mean_money_delta": 22541.5},
     "vs_r4a": {"wins": 5, "losses": 3, "ties": 8, "score_rate": 0.5625, "mean_money_delta": 12.0}
   },
+  "validation_run": 32918640409,
+  "validation_evidence": {
+    "control_r4a_vs_seyamalam": {"wins": 30, "losses": 2, "ties": 0, "score_rate": 0.9375, "mean_money_delta": 18053.625, "errors": 0},
+    "candidate_vs_seyamalam": {"wins": 32, "losses": 0, "ties": 0, "score_rate": 1.0, "mean_money_delta": 18885.875, "errors": 0},
+    "candidate_vs_r4a": {"wins": 8, "losses": 6, "ties": 18, "score_rate": 0.53125, "mean_money_delta": 165.03125, "errors": 0}
+  },
   "base": {
     "id": "R4A-public-base-v1",
     "repository": "COK-ZhangZiliang/Kaggriculture",
@@ -16,5 +22,6 @@
     "source_sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
     "license": "Apache-2.0"
   },
-  "claim_boundary": "Frozen from development evidence only. Not promoted to R4 and not yet a Kaggle submission. Validation may be opened; held-out remains sealed."
+  "held_out_status": "SEALED_32_OF_32",
+  "claim_boundary": "Passed the predeclared development and validation gates and is frozen for package parity / first hosted ladder submission. R4 overall is still active; this is not a top-10 claim. Held-out remains sealed."
 }
