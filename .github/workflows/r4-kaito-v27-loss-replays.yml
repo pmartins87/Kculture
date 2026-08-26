@@ -1,0 +1,107 @@
+name: r4-kaito-v27-loss-replays
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-kaito-v27-loss-replays.yml"
+  workflow_dispatch:
+
+jobs:
+  seed-150614441:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps: &common
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Fetch exact Kaito V27 V4
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+          --filename main.py
+          --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8
+          --output-dir artifacts/public_kaggle/kaito_v27_v4
+          --receipt artifacts/v27-loss-replays/kaito_receipt.json
+      - name: Both seats seed 150614441
+        run: |
+          python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --seed 150614441 --output-root artifacts/v27-loss-replays/seed-150614441
+          python tools/run_episode.py --agent0 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed 150614441 --output-root artifacts/v27-loss-replays/seed-150614441
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v27-loss-replays-seed-150614441
+          path: artifacts/v27-loss-replays/**
+
+  seed-1743398262:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Fetch exact Kaito V27 V4
+        env: {KAGGLE_USERNAME: "", KAGGLE_KEY: "", KAGGLE_API_TOKEN: ""}
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4 --filename main.py --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8 --output-dir artifacts/public_kaggle/kaito_v27_v4 --receipt artifacts/v27-loss-replays/kaito_receipt.json
+      - run: |
+          python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --seed 1743398262 --output-root artifacts/v27-loss-replays/seed-1743398262
+          python tools/run_episode.py --agent0 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed 1743398262 --output-root artifacts/v27-loss-replays/seed-1743398262
+      - uses: actions/upload-artifact@v4
+        with: {name: v27-loss-replays-seed-1743398262, path: "artifacts/v27-loss-replays/**"}
+
+  seed-163219477:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Fetch exact Kaito V27 V4
+        env: {KAGGLE_USERNAME: "", KAGGLE_KEY: "", KAGGLE_API_TOKEN: ""}
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4 --filename main.py --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8 --output-dir artifacts/public_kaggle/kaito_v27_v4 --receipt artifacts/v27-loss-replays/kaito_receipt.json
+      - run: |
+          python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --seed 163219477 --output-root artifacts/v27-loss-replays/seed-163219477
+          python tools/run_episode.py --agent0 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed 163219477 --output-root artifacts/v27-loss-replays/seed-163219477
+      - uses: actions/upload-artifact@v4
+        with: {name: v27-loss-replays-seed-163219477, path: "artifacts/v27-loss-replays/**"}
+
+  seed-598340816:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Fetch exact Kaito V27 V4
+        env: {KAGGLE_USERNAME: "", KAGGLE_KEY: "", KAGGLE_API_TOKEN: ""}
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4 --filename main.py --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8 --output-dir artifacts/public_kaggle/kaito_v27_v4 --receipt artifacts/v27-loss-replays/kaito_receipt.json
+      - run: |
+          python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --seed 598340816 --output-root artifacts/v27-loss-replays/seed-598340816
+          python tools/run_episode.py --agent0 file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed 598340816 --output-root artifacts/v27-loss-replays/seed-598340816
+      - uses: actions/upload-artifact@v4
+        with: {name: v27-loss-replays-seed-598340816, path: "artifacts/v27-loss-replays/**"}
