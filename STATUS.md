@@ -15,90 +15,89 @@ Repository `pmartins87/Kculture` is the source of truth for strategy, code, expe
 - Cheap falsification before expensive implementation.
 - W/L/T generalization and hosted relevance outrank money-margin improvements.
 - Kill/deprioritize avenues whose measured ceiling is small.
-- Local public benchmarks are models of the competition; the hosted ladder is real evidence and contradictions must be investigated.
-- Do not pivot architecture because an idea was merely mentioned in conversation.
+- Local public benchmarks are models of the competition; hosted/live-ladder evidence is calibration truth when they conflict.
+- Never pivot architecture merely because a technique was mentioned.
 
 See `docs/PRIZE_FIRST_DECISION_POLICY.md`.
 
 ## Gate summary
 
-- **R0 COMPLETE** — competition entry user-confirmed.
-- **R1 PASS** — exact official starter parity / 720-turn reproduction.
+- **R0 COMPLETE** — competition entry confirmed.
+- **R1 PASS** — exact official starter/environment reproduction.
 - **R2 PASS** — deterministic laboratory; 16 development / 16 validation / 32 held-out seeds.
-- **R3 PASS for delivery/hosted validation** — exact R4B package is `Complete` with green Kaggle check and live evaluation.
-- **R4 ACTIVE** — hosted champion remains frozen R4B market-only while development searches for a materially better replacement.
-- **R4B market-only VALIDATION PASS** — `R4B-market-only-validated-v1`.
-- **R4C ninth-cow NO PROMOTION** — neutral.
-- **KEXP-014 COMPLETE** — late-collapse mechanism exists; generic weed/lifecycle patch rejected. The weak 8C/6S label there is an *observed step-672 physical state*, not automatically COK's internal route label.
-- **KEXP-015 COMPLETE / NO PROMOTION** — fixed default→10C/4S kept 81-15 but only improved money; fixed default→6C/8S regressed to 78-18.
-- **KEXP-016 COMPLETE** — corrected public-context diagnostic, run `32968422225`, all three jobs PASS.
-- **KEXP-017 COMPLETE / SOLVER BRANCH DEPRIORITIZED** — perfect ex-post selection among three existing macro branches improves only 81-15 → **83-13**; cannot fix any Kaito or Andrew losses.
+- **R3 DELIVERY PASS / HOSTED CALIBRATION FAILING** — first exact R4B package is `Complete` with green Kaggle check, but visible rating fell **161.6 → 135.7**.
+- **R4 ACTIVE** — hosted champion remains frozen R4B while R4D searches for a materially better replacement.
+- **R4B VALIDATION PASS** — `R4B-market-only-validated-v1`.
+- **R4C NO PROMOTION** — guarded ninth cow neutral.
+- **KEXP-015 NO PROMOTION** — fixed route overrides fail to improve W/L.
+- **KEXP-017 COMPLETE / SOLVER ROUTE BRANCH DEPRIORITIZED** — perfect ex-post choice among current three macro branches improves only 81-15 → **83-13**.
+- **KEXP-018 COMPLETE** — official live-meta radar established; fixed public notebooks are no longer the only meta source.
+- **KEXP-021 COMPLETE** — same-day live-meta demand response found strong late CARROT signal but a two-team confound.
+- **KEXP-022 COMPLETE** — four-day longitudinal replication confirms strong agents systematically react to full late CARROT demand; unconditional CARROT rule rejected.
+- **R4D late demand-response candidate is the current highest-priority controlled implementation.**
 - **Held-out sealed 32/32.**
 
-## Hosted reality checkpoint
-
-Current submission: `R4B-market-only-validated-v1`.
-
-Observed Kaggle score sequence:
-
-- **161.6** first snapshot;
-- **135.7** later 2026-08-26 snapshot;
-- status remains **Complete** / green check.
-
-This continuing decline is a **high-priority hosted/local calibration contradiction**, not evidence of package failure. Local modern public panel is 81-15, so the current local opponent/state distribution is clearly not sufficient to predict hosted performance.
-
-Do not assume automatic recovery. Do not spend submission #2 on a weak reaction. Highest-value missing evidence remains hosted Episodes/replays: submission ID, episode count, opponent distribution, W/L/T and execution anomalies.
-
-## Frozen environment / evaluation facts
-
-- `kaggle-environments==1.32.7`.
-- official engine intake commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
-- 720 recorded turns; step 718 is final executable action.
-- terminal reward is exactly `farm.money`.
-- positive-price SELL orders execute after unit actions; leftover inventory itself has no terminal reward.
-- ladder rating depends on win/loss/tie, not coin margin.
-- valid simulation submissions initialize around rating mean 600 before ongoing matched episodes.
-- latest two submissions remain tracked for final evaluation.
-- final submission deadline: 2026-09-30 23:59 UTC; games continue approximately to 2026-10-15 before final Bradley-Terry evaluation.
-
-## Seed discipline
-
-- development: 16 frozen seeds — open for iteration.
-- validation: 16 frozen seeds — R4B validation already opened; changed code needs a fresh exact validation gate.
-- held-out: 32 frozen seeds — **never opened**; reserve for later promotion/final selection.
-- New exploratory development seeds may be generated as a separate, documented pool; they must never be confused with frozen validation/held-out.
-
-## Current hosted champion provenance
+## Current hosted champion
 
 `R4B-market-only-validated-v1`
 
-- candidate: `candidates/r4b_ablation_market_only.py`;
-- frozen Git blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
+- candidate `candidates/r4b_ablation_market_only.py`;
+- frozen Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
 - validation run `32918640409`: 32-0 vs Seyamalam; direct vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors;
 - package parity run `32919305800`: 4/4 full trajectories identical;
 - archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
 - packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`;
 - Kaggle filename `Kculture_R4B_market_only_validated_v1_submission.tar.gz`;
-- Kaggle status `Complete`; latest observed score **135.7**.
+- Kaggle status `Complete`, green check;
+- observed live score **161.6 → 135.7**.
 
-## R4A base
+The declining hosted rating is a serious local/online contradiction, not evidence of packaging failure. Do not assume automatic recovery and do not spend submission #2 on a weak reaction.
+
+## Frozen environment / evaluation facts
+
+- `kaggle-environments==1.32.7`.
+- official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
+- 720 recorded states; step 718 is the final executable action.
+- terminal reward is exactly `farm.money`.
+- positive-price SELL executes after unit actions; leftover inventory has no terminal reward.
+- ladder rating depends on W/L/T, not coin margin.
+- latest two submissions remain tracked for final evaluation.
+- final submission deadline: 2026-09-30 23:59 UTC; games continue approximately to 2026-10-15 before final Bradley-Terry evaluation.
+
+Current rebalance is already included in the frozen engine:
+
+- shop draws with replacement, up to eight instances;
+- CARROT/TOMATO/EGG use scarcity-sensitive `hinge` price curves;
+- CARROT first yield in 2 days / max yield in 3;
+- PET_CAFE consumes CARROT at double per-tick rate because it is a single-product shop;
+- FARMERS_MARKET also consumes CARROT.
+
+## Data discipline
+
+Frozen partitions:
+
+- development: 16 seeds — open for iteration;
+- validation: 16 seeds — R4B gate already opened; changed code needs a fresh exact validation gate;
+- held-out: 32 seeds — **never opened**.
+
+New exploratory pool:
+
+- `configs/exploratory_live_meta_seeds_20260825.json`;
+- 20 environmental seeds reproduced from the official Aug-25 top-20 high-Elo episode set;
+- development/diagnostic only;
+- seed, episode and team identities are forbidden strategy features;
+- never merge into validation/held-out.
+
+## Frozen R4A base
 
 COK V8:
 
 - upstream commit `779caaec88a441345871e2d62eb5de93606b7b52`;
-- SHA-256 `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`;
+- source SHA-256 `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`;
 - Apache-2.0;
 - frozen as `R4A-public-base-v1`.
 
-Full R4B physical-DROP optimizer was rejected because it regressed directly vs R4A.
-
-## Modern public benchmark panel
-
-Exact frozen public outputs:
-
-- Kaito V27 V4 — score snapshot 3090.1, SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`, Apache-2.0.
-- Rayk V11 — score snapshot 2990.4, SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`, benchmark-only until license independently verified.
-- Andrew V12 — score snapshot 2915.2, SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`, Apache-2.0.
+## Controlled modern public benchmark panel
 
 Frozen R4B on all 16 development seeds × both seats:
 
@@ -109,67 +108,135 @@ Frozen R4B on all 16 development seeds × both seats:
 | Andrew V12 | 26-6-0 | 0.81250 | +5,287.43750 |
 | **Combined** | **81-15-0** | **0.84375** | **+5,720.5** |
 
-These are useful controlled benchmarks, but the hosted 135.7 proves they cannot be treated as a calibrated proxy for the live field.
+These remain regression controls, **not a calibrated proxy for the hosted field**.
 
-## KEXP-014 — late lifecycle panel
+## Closed/deprioritized route branch
 
-Actions run `32931921583`, 96 games, zero errors, development only.
+### KEXP-015 — fixed route replacements
 
-Repeated hard-loss mechanism: several games are still ahead around step 672 and reverse during the final ~47 turns. Generic weed/expiry cleanup did not generalize.
+- baseline 81-15;
+- default→10C/4S 81-15, money higher only;
+- default→6C/8S 78-18.
 
-Observed step-672 physical-state split:
+No promotion.
 
-| Observed state | Games | W-L | Score | Mean terminal delta | Mean 672→terminal swing |
-|---|---:|---:|---:|---:|---:|
-| 6C/12S | 24 | 22-2 | 0.91667 | +8,174.333 | -2,120.875 |
-| 10C/4S | 51 | 45-6 | 0.88235 | +6,301.647 | -1,718.686 |
-| **8C/6S** | **19** | **12-7** | **0.63158** | **+1,143.000** | **-3,820.421** |
+### KEXP-016 — legal public context
 
-Important correction: this classification is **physical state at step 672**, not proof of the COK hidden route label that produced it.
+Corrected run `32968422225`, all jobs PASS. It fixed the earlier physical-state/internal-route conflation. Context evidence was too opponent-correlated for a deployable selector.
 
-## KEXP-015 — fixed route counterfactual: COMPLETE / NO PROMOTION
+### KEXP-017 — three-branch macro oracle
 
-Actions run `32966913616`.
+Run `32972566807`, 288 development games.
 
-- R4B baseline: **81-15**, mean +5,720.5.
-- default→10C/4S: **81-15**, mean +5,908.542.
-- default→6C/8S: **78-18**, mean +5,700.260.
+Perfect ex-post branch choice:
 
-10C/4S raises money but not W/L overall; 6C/8S regresses. On seed `163219477`, 10C/4S fixes both Rayk losses but creates two Andrew losses. Universal reroute is rejected.
+- Kaito 25-7 → 25-7;
+- Rayk 30-2 → 32-0;
+- Andrew 26-6 → 26-6;
+- aggregate **81-15 → 83-13**.
 
-## KEXP-016 — public context: COMPLETE
+A solver over the existing route library has low prize-value headroom and is **deprioritized**. Search/optimization remains available only for higher-ceiling bounded subproblems.
 
-Corrected run `32968422225`, all three jobs SUCCESS; development only.
+## Official live-meta intelligence — current frontier
 
-Artifacts:
+### KEXP-018 — radar
 
-- Kaito `9606674181`, digest `928e1377e4b219e89ba498c22da46ad1cff75bd7a1d57017d6c2e2a86ea7f5f5`;
-- Rayk `9606672044`, digest `436c092faeaab12d36391bed39e61f02e35f892b0a52bf541c3b8b17b07a277c`;
-- Andrew `9606666107`, digest `d455a05223fc9c2a2adf50eb8086634f02da0deb15a14ea1e4ae5a1698b9f587`.
+Official public sources:
 
-The diagnostic corrected the earlier route/state conflation. Public third-shop snapshots show opponent-family differences (including money divergence), but the corpus is too small and too opponent-correlated to justify a hardcoded selector. No policy promotion.
+- `kaggle/kaggriculture-episodes-index`;
+- `kaggle/kaggriculture-episodes-YYYY-MM-DD`.
 
-## KEXP-017 — three-branch macro oracle: COMPLETE / DEPRIORITIZED
+Expanded Aug-25 top-20 run `32977177944`:
 
-Actions run `32972566807`, 288 complete development games.
+- 688 daily episodes;
+- median episode avg Elo ~2761.31;
+- selected top band ~3056.61–3069.55;
+- artifact `9609951191`, ZIP SHA-256 `ec15ee2b2d5827e517af85e7018a7dcfe79a0b94f78ec574c17f30893b5b6964`.
 
-| Opponent | Baseline | Perfect ex-post choice among baseline/10C4S/6C8S |
-|---|---:|---:|
-| Kaito V27 | 25-7 | **25-7** |
-| Rayk V11 | 30-2 | **32-0** |
-| Andrew V12 | 26-6 | **26-6** |
-| **Combined** | **81-15** | **83-13** |
+The live top band is strategically heterogeneous. Winners rotate crops and herds instead of converging to one fixed final farm.
 
-Perfect knowledge among the three existing macro routes gains only **2 wins out of 96**, all against Rayk. It cannot fix any Kaito or Andrew loss. Therefore a solver/selector over the current route set is **not a priority architecture**. New strategic actions and better hosted calibration have higher expected value.
+### Hosted episode forensics
 
-See `experiments/KEXP-20260826-017-r4d-macro-oracle/README.md`.
+Run `33018633680` confirmed official episode JSON contains `info.seed`, `Agents`, and `TeamNames`; daily manifest itself has no identity fields.
+
+Once the Aug-26 daily dataset or Kculture Episode IDs are available, locate our hosted games and reproduce their environmental seeds exactly.
+
+### Static COK live-meta gap
+
+Latest exact audit run `33019622974` — SUCCESS.
+Artifact `9625980030`, ZIP SHA-256 `09ceabc082093af71ceb46a8fa9f50fd567dac3a5b2c6683a154166f22b65afe`.
+
+Rejected hypothesis: COK does **not** waste final-day actions on CARE/FEED; it also has zero CARE/FEED during 696-718.
+
+More important gap: COK remains extremely WHEAT-heavy late and largely commits strategy from the first three shops. Representative routes during 600-671 plant roughly **28-32 WHEAT versus 0-3 CARROT**, even though the complete eight-shop multiset is already public.
+
+## KEXP-021 — same-day full-demand response
+
+Canonical record:
+`experiments/KEXP-20260826-021-live-meta-demand-response/README.md`
+
+Run `33019276166` — SUCCESS; artifact `9625868747`; ZIP SHA-256 `0a0c9028ce33b177b61a41fe4da691f6de6b7740c4729a0108ad4991e33dd821`.
+
+Top-20 Aug-25, 40 player-games:
+
+- CARROT-demand weight → CARROT seed buy 600-671 Pearson **+0.46156**;
+- winners mean late CARROT seeds **14.20**, losers **2.95**;
+- winners final-day CARROT sales **50.95**, losers **4.85**.
+
+Because all selected games were Crop Dusta vs Ryo Hasegawa, no policy was promoted.
+
+## KEXP-022 — longitudinal demand response
+
+Canonical record:
+`experiments/KEXP-20260826-022-live-meta-demand-longitudinal/README.md`
+
+Run `33019559986` — SUCCESS; artifact `9625961691`; ZIP SHA-256 `76ddbf8e2d453cdb357143002646e14c59fdbed054240089ef19968ce26a3963`.
+
+Demand→late CARROT seed-buy Pearson by day:
+
+- Aug-22 **+0.49505**;
+- Aug-23 **+0.52212**;
+- Aug-24 **+0.53413**;
+- Aug-25 **+0.50326**.
+
+This establishes a robust multi-day mechanism: strong live agents systematically use the complete public late demand state to alter crop allocation.
+
+Important negative result: “more CARROT always wins” is false. Winner/loser CARROT quantities reverse on some days and demand levels. Therefore any Kculture candidate must be **state-aware and conservative**, not a fixed CARROT quota copied from one leader.
+
+Distinct top families (`Subramanya + Aakarsh`, `Crop Dusta`, `Ryo Hasegawa`) demonstrate different responses, reducing the risk that this is a one-team artifact.
+
+## Current R4D hypothesis
+
+Highest-value bounded intervention:
+
+> after all eight shop instances are visible, use legal public demand/economic state to redirect a bounded subset of existing late WHEAT seed/plant slots to short-horizon CARROT when scarcity opportunity is strong.
+
+Design invariants:
+
+1. preserve frozen R4B/COK behavior outside this crop mechanism;
+2. preserve movement, labor, animals, recovery controllers and step-718 terminal liquidation;
+3. use only legal public shops/prices plus own state;
+4. no seed/team/opponent identity features;
+5. W/L primary;
+6. first test on canonical modern development panel and separately on 20 live-meta environmental seeds;
+7. candidate must show cross-panel improvement with no severe family regression;
+8. exact freeze before fresh validation;
+9. no second Kaggle submission until validation earns it;
+10. held-out remains sealed 32/32.
+
+See `research/LIVE_META_DEMAND_DIAGNOSTIC_20260826.md`.
+
+## Experiment numbering note
+
+A temporary ID collision occurred because an earlier animal-lifecycle study already occupied `KEXP-019`. The new demand studies were canonicalized as **KEXP-021** and **KEXP-022**. Their original `019/020` demand paths are historical aliases only and must not be counted as separate experiments.
 
 ## Immediate continuation — prize-first
 
-1. **Hosted/local mismatch first:** obtain and analyze hosted Episodes/replays as soon as exposed by Kaggle; determine opponent distribution, W/L, execution anomalies and whether public benchmarks are unrepresentative.
-2. **Broaden development distribution:** add new documented exploratory seeds and more current/diverse opponent families; stop repeatedly optimizing only the original 16×3 panel.
-3. **Attack mechanisms no route selector can fix:** especially Kaito/Andrew late reversals; compare action throughput, labor, production, drop/shed flow, sales timing and stop-investment horizon.
-4. **Search new action families:** cheap counterfactuals / parameter search / evolutionary or model-based search are allowed when bounded and empirically justified. Method name does not matter.
-5. Freeze only candidates with cross-family W/L improvement; then run a fresh validation gate.
-6. Do not submit a second agent until it materially earns promotion.
-7. Keep all 32 held-out seeds sealed.
+1. Implement one or two **conservative late demand-response candidates**, changing only existing late WHEAT seed/plant slots.
+2. Predeclare triggers before seeing candidate results; prefer demand + market/economic evidence over raw demand threshold.
+3. Establish paired R4B baselines on the 20 exploratory live-meta seeds.
+4. Screen candidates on both canonical 16×3 modern development panel and live-meta environmental pool, both seats.
+5. Kill variants that improve money without W/L or collapse against any family.
+6. Continue hosted-episode forensics when Aug-26 data appears.
+7. Freeze only a materially better candidate; then open a fresh validation gate.
+8. Keep the hosted R4B immutable and all 32 held-out seeds sealed until justified.
