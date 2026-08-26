@@ -4,63 +4,89 @@ Last updated: 2026-08-26
 
 ## Mission
 
-**Goal: top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
+**Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
 Repository `pmartins87/Kculture` is the source of truth for strategy, code, experiments, Actions evidence, hashes, roadmap and handoff state.
 
+## Prize-first decision rule
+
+- User suggestions, assistant suggestions and public strategies are **hypotheses, not directives**.
+- Prefer expected prize value over elegance, novelty or architectural purity.
+- Cheap falsification before expensive implementation.
+- W/L/T generalization and hosted relevance outrank money-margin improvements.
+- Kill/deprioritize avenues whose measured ceiling is small.
+- Local public benchmarks are models of the competition; the hosted ladder is real evidence and contradictions must be investigated.
+- Do not pivot architecture because an idea was merely mentioned in conversation.
+
+See `docs/PRIZE_FIRST_DECISION_POLICY.md`.
+
 ## Gate summary
 
-- **R0 COMPLETE for working purposes** — competition entry user-confirmed.
+- **R0 COMPLETE** — competition entry user-confirmed.
 - **R1 PASS** — exact official starter parity / 720-turn reproduction.
 - **R2 PASS** — deterministic laboratory; 16 development / 16 validation / 32 held-out seeds.
-- **R3 PASS for delivery/hosted validation** — first exact R4B package is `Complete` with a green Kaggle validation check and joined live evaluation. First observed live score: **161.6**. This is a serious online-calibration signal, not evidence of package failure.
-- **R4 ACTIVE** — frozen hosted champion remains R4B market-only while R4D is development-only.
+- **R3 PASS for delivery/hosted validation** — exact R4B package is `Complete` with green Kaggle check and live evaluation.
+- **R4 ACTIVE** — hosted champion remains frozen R4B market-only while development searches for a materially better replacement.
 - **R4B market-only VALIDATION PASS** — `R4B-market-only-validated-v1`.
 - **R4C ninth-cow NO PROMOTION** — neutral.
-- **KEXP-014 COMPLETE** — full 96-game current-meta lifecycle panel; generic weed/lifecycle patch rejected; default 8C/6S route isolated as the strongest structural weakness.
-- **KEXP-015 RUNNING** — fixed route counterfactuals default 8C/6S→10C/4S and default 8C/6S→6C/8S on all development seeds against Kaito V27, Rayk V11 and Andrew V12. Actions run `32966913616`.
+- **KEXP-014 COMPLETE** — late-collapse mechanism exists; generic weed/lifecycle patch rejected. The weak 8C/6S label there is an *observed step-672 physical state*, not automatically COK's internal route label.
+- **KEXP-015 COMPLETE / NO PROMOTION** — fixed default→10C/4S kept 81-15 but only improved money; fixed default→6C/8S regressed to 78-18.
+- **KEXP-016 COMPLETE** — corrected public-context diagnostic, run `32968422225`, all three jobs PASS.
+- **KEXP-017 COMPLETE / SOLVER BRANCH DEPRIORITIZED** — perfect ex-post selection among three existing macro branches improves only 81-15 → **83-13**; cannot fix any Kaito or Andrew losses.
 - **Held-out sealed 32/32.**
+
+## Hosted reality checkpoint
+
+Current submission: `R4B-market-only-validated-v1`.
+
+Observed Kaggle score sequence:
+
+- **161.6** first snapshot;
+- **135.7** later 2026-08-26 snapshot;
+- status remains **Complete** / green check.
+
+This continuing decline is a **high-priority hosted/local calibration contradiction**, not evidence of package failure. Local modern public panel is 81-15, so the current local opponent/state distribution is clearly not sufficient to predict hosted performance.
+
+Do not assume automatic recovery. Do not spend submission #2 on a weak reaction. Highest-value missing evidence remains hosted Episodes/replays: submission ID, episode count, opponent distribution, W/L/T and execution anomalies.
 
 ## Frozen environment / evaluation facts
 
 - `kaggle-environments==1.32.7`.
 - official engine intake commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
-- 720 recorded turns; step 718 is the final executable action.
+- 720 recorded turns; step 718 is final executable action.
 - terminal reward is exactly `farm.money`.
 - positive-price SELL orders execute after unit actions; leftover inventory itself has no terminal reward.
 - ladder rating depends on win/loss/tie, not coin margin.
-- valid simulation submissions initialize at rating mean 600 before ongoing matched episodes.
+- valid simulation submissions initialize around rating mean 600 before ongoing matched episodes.
 - latest two submissions remain tracked for final evaluation.
 - final submission deadline: 2026-09-30 23:59 UTC; games continue approximately to 2026-10-15 before final Bradley-Terry evaluation.
 
 ## Seed discipline
 
-- development: 16 seeds — open for iteration.
-- validation: 16 seeds — previously opened for exact frozen R4B validation; any changed candidate needs a fresh exact validation gate.
-- held-out: 32 seeds — **never opened so far**; reserve for later formal promotion/final selection.
+- development: 16 frozen seeds — open for iteration.
+- validation: 16 frozen seeds — R4B validation already opened; changed code needs a fresh exact validation gate.
+- held-out: 32 frozen seeds — **never opened**; reserve for later promotion/final selection.
+- New exploratory development seeds may be generated as a separate, documented pool; they must never be confused with frozen validation/held-out.
 
-## Current hosted champion
+## Current hosted champion provenance
 
 `R4B-market-only-validated-v1`
 
-- path: `candidates/r4b_ablation_market_only.py`
-- frozen Git blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`
-- behavior: preserves every physical COK V8 action; completes terminal market liquidation at step 718.
-- validation run `32918640409`: 32-0 vs Seyamalam; direct vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors.
-- package parity run `32919305800`: 4/4 full trajectories identical.
-- hosted archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`.
-- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`.
-- Kaggle filename `Kculture_R4B_market_only_validated_v1_submission.tar.gz`.
-- Kaggle status **Complete**, green check; first displayed score **161.6**.
-
-The ~2900–3100 figures used in research are mature public benchmark ratings, not the starting rating of a new submission. The 161.6 display therefore means substantial negative hosted rating movement and must remain part of calibration. Do not burn a new submission merely to react to the number.
+- candidate: `candidates/r4b_ablation_market_only.py`;
+- frozen Git blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
+- validation run `32918640409`: 32-0 vs Seyamalam; direct vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors;
+- package parity run `32919305800`: 4/4 full trajectories identical;
+- archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
+- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`;
+- Kaggle filename `Kculture_R4B_market_only_validated_v1_submission.tar.gz`;
+- Kaggle status `Complete`; latest observed score **135.7**.
 
 ## R4A base
 
 COK V8:
 
 - upstream commit `779caaec88a441345871e2d62eb5de93606b7b52`;
-- local SHA-256 `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`;
+- SHA-256 `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`;
 - Apache-2.0;
 - frozen as `R4A-public-base-v1`.
 
@@ -68,13 +94,13 @@ Full R4B physical-DROP optimizer was rejected because it regressed directly vs R
 
 ## Modern public benchmark panel
 
-Frozen exact public outputs used for development screening:
+Exact frozen public outputs:
 
-- Kaito V27 V4 — public/best snapshot 3090.1, source SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`, Apache-2.0.
-- Rayk V11 — public/best snapshot 2990.4, source SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`, benchmark-only until license independently verified.
-- Andrew V12 — public/best snapshot 2915.2, source SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`, Apache-2.0.
+- Kaito V27 V4 — score snapshot 3090.1, SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`, Apache-2.0.
+- Rayk V11 — score snapshot 2990.4, SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`, benchmark-only until license independently verified.
+- Andrew V12 — score snapshot 2915.2, SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`, Apache-2.0.
 
-Frozen R4B scores on all 16 development seeds × both seats:
+Frozen R4B on all 16 development seeds × both seats:
 
 | Opponent | W-L-T | Score | Mean delta |
 |---|---:|---:|---:|
@@ -83,56 +109,67 @@ Frozen R4B scores on all 16 development seeds × both seats:
 | Andrew V12 | 26-6-0 | 0.81250 | +5,287.43750 |
 | **Combined** | **81-15-0** | **0.84375** | **+5,720.5** |
 
-## KEXP-014 — lifecycle full panel: COMPLETE
+These are useful controlled benchmarks, but the hosted 135.7 proves they cannot be treated as a calibrated proxy for the live field.
 
-Actions run `32931921583` — SUCCESS, 96 games, zero errors, development only.
+## KEXP-014 — late lifecycle panel
 
-Artifacts:
+Actions run `32931921583`, 96 games, zero errors, development only.
 
-- Kaito `9593617801`, ZIP SHA-256 `0c74411cc73a4e5c42e60a4d1104ee7206e7eaaf96b95d0635c497f55ef0e61c`;
-- Rayk `9593617367`, ZIP SHA-256 `e77fb0b89064b8c25b4e87c219773a68ffedc20e97933b647a91ab454b2202ba`;
-- Andrew `9593614809`, ZIP SHA-256 `cc8a00bdcfa999a5c6bf1b142614e687c14b0391260c8c679e1fb82ffd5db814`.
+Repeated hard-loss mechanism: several games are still ahead around step 672 and reverse during the final ~47 turns. Generic weed/expiry cleanup did not generalize.
 
-The late-collapse effect exists, but generic crop-expiry/weed cleanup failed its causal-generalization test: losses did not consistently exhibit more weeds and less productive acreage than wins.
+Observed step-672 physical-state split:
 
-A much stronger separator emerged from step-672 production regimes:
-
-| Regime | Games | W-L | Score | Mean terminal delta | Mean 672→terminal swing |
+| Observed state | Games | W-L | Score | Mean terminal delta | Mean 672→terminal swing |
 |---|---:|---:|---:|---:|---:|
 | 6C/12S | 24 | 22-2 | 0.91667 | +8,174.333 | -2,120.875 |
 | 10C/4S | 51 | 45-6 | 0.88235 | +6,301.647 | -1,718.686 |
 | **8C/6S** | **19** | **12-7** | **0.63158** | **+1,143.000** | **-3,820.421** |
 
-8C/6S is weak across every modern opponent family:
+Important correction: this classification is **physical state at step 672**, not proof of the COK hidden route label that produced it.
 
-- Kaito: 5-3, mean +630.625, late swing -4,367.625;
-- Rayk: 4-2, mean +2,635.167, late swing -4,250.0;
-- Andrew: 3-2, mean +172.2, late swing -2,429.4.
+## KEXP-015 — fixed route counterfactual: COMPLETE / NO PROMOTION
 
-Frozen COK V8 source inspection shows that final 8C/6S is the **default no-Yarn/no-early-milk-support route** after the first three public shop unlocks. COK already has bounded weed replay and passive-weed repair, so generic weed repair is not the next intervention.
+Actions run `32966913616`.
 
-See `experiments/KEXP-20260826-014-r4-late-lifecycle-full-panel/README.md`.
+- R4B baseline: **81-15**, mean +5,720.5.
+- default→10C/4S: **81-15**, mean +5,908.542.
+- default→6C/8S: **78-18**, mean +5,700.260.
 
-## KEXP-015 — R4D default-route counterfactual: RUNNING
+10C/4S raises money but not W/L overall; 6C/8S regresses. On seed `163219477`, 10C/4S fixes both Rayk losses but creates two Andrew losses. Universal reroute is rejected.
 
-Predeclared experiment: `experiments/KEXP-20260826-015-r4d-default-route-counterfactual/README.md`.
+## KEXP-016 — public context: COMPLETE
 
-Candidates:
+Corrected run `32968422225`, all three jobs SUCCESS; development only.
 
-- R4D-A: `candidates/r4d_default_to_10c4s.py`, blob `a125e878ef262141cd2fd452a9f4edab42dfbae5`;
-- R4D-B: `candidates/r4d_default_to_6c8s.py`, blob `34b66bc18471ffbb7d35f24f2ac39451bc8cb851`.
+Artifacts:
 
-Both preserve the base opening until at least three shops are visible, change only the fully observed final-default 8C/6S selector, and retain the validated R4B terminal market-only controller.
+- Kaito `9606674181`, digest `928e1377e4b219e89ba498c22da46ad1cff75bd7a1d57017d6c2e2a86ea7f5f5`;
+- Rayk `9606672044`, digest `436c092faeaab12d36391bed39e61f02e35f892b0a52bf541c3b8b17b07a277c`;
+- Andrew `9606666107`, digest `d455a05223fc9c2a2adf50eb8086634f02da0deb15a14ea1e4ae5a1698b9f587`.
 
-Actions run: **32966913616**. Six modern-panel jobs (2 candidates × 3 opponents), development only. No validation or held-out access.
+The diagnostic corrected the earlier route/state conflation. Public third-shop snapshots show opponent-family differences (including money divergence), but the corpus is too small and too opponent-correlated to justify a hardcoded selector. No policy promotion.
 
-Primary baseline to beat: 81-15-0 / score 0.84375 / mean +5,720.5 overall, plus the baseline-defined 8C/6S exposure result 12-7.
+## KEXP-017 — three-branch macro oracle: COMPLETE / DEPRIORITIZED
 
-## Immediate continuation
+Actions run `32972566807`, 288 complete development games.
 
-1. Finish KEXP-015 and compare both fixed overrides against the exact KEXP-014 baseline, with W/L primary.
-2. If one fixed override passes the predeclared gate, freeze it before any fresh validation use.
-3. If both fail, build a contextual default-route selector from legal public state instead of universal rerouting.
-4. Continue hosted episode diagnosis when Kaggle exposes the submission episode details; reconcile them against the exact packaged agent.
-5. Keep the hosted R4B package immutable until a replacement earns promotion.
-6. Keep held-out sealed until later formal promotion/final selection.
+| Opponent | Baseline | Perfect ex-post choice among baseline/10C4S/6C8S |
+|---|---:|---:|
+| Kaito V27 | 25-7 | **25-7** |
+| Rayk V11 | 30-2 | **32-0** |
+| Andrew V12 | 26-6 | **26-6** |
+| **Combined** | **81-15** | **83-13** |
+
+Perfect knowledge among the three existing macro routes gains only **2 wins out of 96**, all against Rayk. It cannot fix any Kaito or Andrew loss. Therefore a solver/selector over the current route set is **not a priority architecture**. New strategic actions and better hosted calibration have higher expected value.
+
+See `experiments/KEXP-20260826-017-r4d-macro-oracle/README.md`.
+
+## Immediate continuation — prize-first
+
+1. **Hosted/local mismatch first:** obtain and analyze hosted Episodes/replays as soon as exposed by Kaggle; determine opponent distribution, W/L, execution anomalies and whether public benchmarks are unrepresentative.
+2. **Broaden development distribution:** add new documented exploratory seeds and more current/diverse opponent families; stop repeatedly optimizing only the original 16×3 panel.
+3. **Attack mechanisms no route selector can fix:** especially Kaito/Andrew late reversals; compare action throughput, labor, production, drop/shed flow, sales timing and stop-investment horizon.
+4. **Search new action families:** cheap counterfactuals / parameter search / evolutionary or model-based search are allowed when bounded and empirically justified. Method name does not matter.
+5. Freeze only candidates with cross-family W/L improvement; then run a fresh validation gate.
+6. Do not submit a second agent until it materially earns promotion.
+7. Keep all 32 held-out seeds sealed.
