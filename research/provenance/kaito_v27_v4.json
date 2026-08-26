@@ -1,0 +1,28 @@
+{
+  "id": "kaito-v27-v4-exact-public",
+  "author": "Kaito Fukami",
+  "kaggle_notebook": "kaitofukami/25-27-strict-future-v27-midgame-meta-reset",
+  "version": 4,
+  "notebook_url": "https://www.kaggle.com/code/kaitofukami/25-27-strict-future-v27-midgame-meta-reset",
+  "public_score_snapshot": 3090.1,
+  "best_score_snapshot": 3090.1,
+  "best_score_version": 4,
+  "license_observed_on_version_page": "Apache-2.0",
+  "main_py": {
+    "bytes": 20813,
+    "sha256": "f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8"
+  },
+  "submission_tar_gz": {
+    "bytes": 12148,
+    "sha256": "9a158d0b251d18d042386d33fb31a4f4096005637c80953162e329d2eb7ff072"
+  },
+  "acquisition": {
+    "date_utc": "2026-08-26",
+    "method": "kagglehub.notebook_output_download with KAGGLE_USERNAME/KAGGLE_KEY/KAGGLE_API_TOKEN explicitly blank",
+    "actions_run": 32920859121,
+    "artifact_id": 9589807795,
+    "artifact_zip_sha256": "789fa07916aef511f957379c334c0232a92ae874f4c29a0af77fe96bb9185a58",
+    "result": "PASS_EXACT_HASH_MATCH"
+  },
+  "policy": "Use as an attributed public benchmark/base candidate only under the recorded public Apache-2.0 version boundary. Re-fetch via KaggleHub and reject any main.py whose SHA-256 differs from the pinned digest."
+}
