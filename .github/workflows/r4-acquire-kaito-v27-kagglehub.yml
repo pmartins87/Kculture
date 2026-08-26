@@ -1,0 +1,90 @@
+name: r4-acquire-kaito-v27-kagglehub
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-acquire-kaito-v27-kagglehub.yml"
+  workflow_dispatch:
+
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install KaggleHub
+        run: python -m pip install -U kagglehub
+
+      - name: Download exact public Kaito V27 Version 4 output without credentials
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+          import kagglehub
+
+          handle = "kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4"
+          out = Path("artifacts/public_kaggle/kaito_v27_v4")
+          out.mkdir(parents=True, exist_ok=True)
+
+          result = kagglehub.notebook_output_download(
+              handle,
+              output_dir=str(out),
+              force_download=True,
+          )
+          print("download_result=", result)
+
+          files = []
+          for p in sorted(out.rglob("*")):
+              if p.is_file():
+                  data = p.read_bytes()
+                  files.append({
+                      "path": str(p.relative_to(out)),
+                      "bytes": len(data),
+                      "sha256": hashlib.sha256(data).hexdigest(),
+                  })
+          print(json.dumps(files, indent=2))
+
+          expected = "f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8"
+          matches = [f for f in files if f["sha256"] == expected]
+          if len(matches) != 1:
+              raise SystemExit(f"Expected exactly one file with published V27 main.py hash {expected}; got {matches}")
+
+          matched_path = out / matches[0]["path"]
+          if matched_path.name != "main.py":
+              raise SystemExit(f"Published hash matched unexpected filename: {matched_path}")
+
+          receipt = {
+              "status": "PASS",
+              "notebook_handle": handle,
+              "notebook_url": "https://www.kaggle.com/code/kaitofukami/25-27-strict-future-v27-midgame-meta-reset",
+              "version": 4,
+              "public_score_snapshot": 3090.1,
+              "license_observed_on_version_4_page": "Apache-2.0",
+              "expected_main_py_sha256": expected,
+              "matched_file": matches[0],
+              "all_files": files,
+              "acquisition_method": "kagglehub.notebook_output_download unauthenticated public output",
+          }
+          Path("artifacts/public_kaggle/kaito_v27_v4_receipt.json").write_text(
+              json.dumps(receipt, indent=2, sort_keys=True), encoding="utf-8"
+          )
+          print(json.dumps(receipt, indent=2, sort_keys=True))
+          PY
+
+      - name: Preserve exact public output and receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaito-v27-v4-public-output
+          path: |
+            artifacts/public_kaggle/kaito_v27_v4/main.py
+            artifacts/public_kaggle/kaito_v27_v4_receipt.json
