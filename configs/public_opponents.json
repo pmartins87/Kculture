@@ -24,6 +24,18 @@
       "license_url": "https://github.com/Seyamalam/Kaggriculture/blob/8b8c421eb10634c756583ce10c75189f50c83a72/THIRD_PARTY_NOTICES.md",
       "local_filename": "seyamalam_v21_8b8c421.py",
       "role": "independent strong public architecture: 3 quadrants, 12 hands, mixed livestock/crops, capital latch"
+    },
+    {
+      "id": "kaito-v18-public-8b8c421",
+      "repository": "Seyamalam/Kaggriculture",
+      "commit": "8b8c421eb10634c756583ce10c75189f50c83a72",
+      "path": "agents/candidate_v7_public_v18.py",
+      "download_url": "https://raw.githubusercontent.com/Seyamalam/Kaggriculture/8b8c421eb10634c756583ce10c75189f50c83a72/agents/candidate_v7_public_v18.py",
+      "sha256": "603175d39f2857cbd618dc8f5ac9411e9fd234e3142777ec203342172f05a50e",
+      "license": "Apache-2.0",
+      "license_url": "https://github.com/Seyamalam/Kaggriculture/blob/8b8c421eb10634c756583ce10c75189f50c83a72/THIRD_PARTY_NOTICES.md",
+      "local_filename": "kaito_v18_public_8b8c421.py",
+      "role": "third strong public family; exact public V18/C20 control attributed to Kaito Fukami, used only as an older structural benchmark"
     }
   ],
   "policy": "Public competition code may be used as an attributed, hash-pinned base or opponent. Kculture intentionally remains public during active development. Never use unpublished/private competitor code or redistributed private replays. Preserve source, commit, license and SHA-256 for every imported artifact."
