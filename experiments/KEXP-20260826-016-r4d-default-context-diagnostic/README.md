@@ -1,77 +1,87 @@
-# KEXP-20260826-016 — R4D default-route public-context diagnostic
+# KEXP-20260826-016 — R4D public-context diagnostic
 
-Status: **PREDECLARED / DEVELOPMENT ONLY**
+Status: **COMPLETE / DEVELOPMENT DISCOVERY ONLY**
+
+Actions run: **32968422225** — SUCCESS for Kaito V27, Rayk V11 and Andrew V12.
 
 ## Why this experiment exists
 
-KEXP-015 proved that a universal default-route mutation is the wrong abstraction.
+KEXP-015 showed that a universal route mutation is too crude.
 
 On the exact 96-game modern development panel:
 
 - frozen R4B baseline: 81-15, score 0.84375, mean +5720.5;
-- default 8C/6S→10C/4S: 81-15, score 0.84375, mean +5908.542;
-- default 8C/6S→6C/8S: 78-18, score 0.81250, mean +5700.260.
+- default→10C/4S: 81-15, score 0.84375, mean +5908.542;
+- default→6C/8S: 78-18, score 0.81250, mean +5700.260.
 
-Within the 19 baseline-defined default 8C/6S exposure rows, 10C/4S improves mean margin from +1143.0 to +2093.105 but remains 12-7. On seed `163219477`, it flips both Rayk losses to wins while simultaneously flipping both Andrew wins to losses. This is direct evidence that the useful selector must react to legal public in-game context rather than apply one route to every default shop regime.
+On seed `163219477`, default→10C/4S flips both Rayk losses to wins while simultaneously flipping two Andrew wins to losses. A useful selector therefore needs public in-game context rather than a universal reroute.
 
-## Question
+## Important correction discovered by this diagnostic
 
-At the exact first state where the third shop is visible and frozen COK V8 would be in its default no-Yarn/no-milk branch, which small **public-state** features distinguish cases where 10C/4S is useful from cases where retaining 8C/6S is safer?
+KEXP-014's "8C/6S" group classified the **physical farm composition observed at step 672**. It was not a direct read of COK V8's internal route label.
 
-Opponent identity, seed identity, replay ID and hidden state are forbidden policy features.
+The first version of KEXP-016 incorrectly treated every sampled row as the static no-Yarn/no-milk default branch. The fail-closed diagnostic caught a counterexample containing `SMOOTHIE_SHOP`. The tool was corrected before using its output for policy design.
 
-## Diagnostic corpus
+The final report now records both:
 
-Use only the development seeds that produced baseline 8C/6S exposure in KEXP-014:
+- the public physical state;
+- the static first-three-shop COK route signal.
 
-- `150614441`
-- `1369296235`
-- `393297156`
-- `163219477`
+No validation or held-out seed was touched by the correction.
 
-Run both seats against each exact modern opponent family:
+## Corpus and result
 
-- Kaito V27 V4;
-- Rayk V11;
-- Andrew V12.
+Four already-open development seeds × both seats × three exact modern opponents = **24 complete baseline episodes**, zero runtime failures.
 
-This is 4 seeds × 2 seats × 3 opponents = **24 baseline episodes**.
+Static `8c6s_3q` default rows among the eight sampled rows per opponent:
 
-These seed IDs are an analysis sampling device only. No eventual agent may inspect them.
+- Kaito V27: **8/8**;
+- Rayk V11: **6/8**;
+- Andrew V12: **5/8**.
 
-## Public snapshot to capture
+This confirms that the late observed 8C/6S production shape can arise even when the earlier shop-prefix selector did not choose the static default route. Future selector work must distinguish route intent from late physical state.
 
-At the first replay state where at least three shops are unlocked, record:
+## Most informative conflict: seed 163219477
 
-- exact first-three shop prefix;
-- step/day/hour;
-- both public farm tile-count vectors;
-- COK-style L1 layout distance over cow, sheep, wheat, melon, strawberry and empty pasture;
-- public money and labor counts;
-- public actor positions/counts;
-- shared town state;
-- shared market state/prices.
+For both seats on `163219477`, all three opponent families expose the same first-three shops:
 
-The baseline episode continues normally to terminal only so the snapshot can be tied to its W/L/margin. KEXP-015 already provides paired terminal utility for the fixed route counterfactuals.
+`BRUNCH_SPOT, BAKERY, FARMERS_MARKET`
 
-## Analysis rule
+and the same static COK route signal `8c6s_3q`.
 
-Join each `(opponent family, seed, candidate seat)` snapshot to the frozen KEXP-014/KEXP-015 paired outcomes.
+At the first three-shop boundary, the public **our-money minus opponent-money** gap is:
 
-Prefer the **smallest interpretable rule** that explains the direction of 10C/4S benefit without identity features. Candidate feature families, in priority order:
+- Rayk V11: **+1047**;
+- Kaito V27: **+831**;
+- Andrew V12: **+670**.
 
-1. COK-style public production-layout distance;
-2. simple signed differences in already-committed cow/sheep/crop tiles;
-3. public money/labor divergence;
-4. shared market-price or town-state terms only if simpler layout features cannot separate the interaction.
+COK-style public layout L1 distance is much less discriminative there:
 
-Do not fit a high-capacity classifier to 24 rows. This corpus is for causal feature discovery, not leaderboard-style training.
+- Rayk: 35;
+- Kaito: 35;
+- Andrew: 36.
 
-## Promotion boundary
+KEXP-015 outcome response on this seed:
 
-KEXP-016 itself cannot promote a policy. It may only define a small contextual R4D rule.
+- Rayk baseline: two losses at -1188; default→10C/4S: two wins at +1833;
+- Andrew baseline: two narrow wins (+392, +204); default→10C/4S: two losses (-2449, -4077);
+- Kaito baseline: two losses at -3516; default→10C/4S improves both to -829 but does not flip the outcome.
 
-Any contextual R4D candidate must then be tested from scratch on the full 16-development-seed × both-seat × Kaito/Rayk/Andrew panel. Only a full-panel development improvement can freeze a candidate for fresh validation.
+So **public economic divergence is a plausible selector feature**, while raw layout distance alone cannot explain the conflict. This is still discovery evidence, not permission to hard-code a threshold: opponent family and money gap are highly correlated in this tiny 24-row sample.
+
+## Artifacts
+
+Run `32968422225`:
+
+- Kaito artifact `9606674181`, ZIP SHA-256 `928e1377e4b219e89ba498c22da46ad1cff75bd7a1d57017d6c2e2a86ea7f5f5`;
+- Rayk artifact `9606672044`, ZIP SHA-256 `436c092faeaab12d36391bed39e61f02e35f892b0a52bf541c3b8b17b07a277c`;
+- Andrew artifact `9606666107`, ZIP SHA-256 `d455a05223fc9c2a2adf50eb8086634f02da0deb15a14ea1e4ae5a1698b9f587`.
+
+## Next step
+
+KEXP-017 replaces threshold guessing with a solver-inspired **macro-policy oracle** over all 16 development seeds, both seats and all three modern opponent families. For every context it evaluates frozen R4B, default→10C/4S and default→6C/8S with the exact engine, labels the ex-post best macro branch, and then asks whether that expensive oracle can be distilled into a compact policy using only legal public features.
+
+Seed ID, opponent identity, future outcome/actions and opponent private inventory are forbidden deployment features.
 
 ## Leakage policy
 
