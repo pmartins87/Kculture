@@ -1,0 +1,48 @@
+name: live-meta-radar
+
+on:
+  push:
+    paths:
+      - ".github/workflows/live-meta-radar.yml"
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "Optional YYYY-MM-DD; blank uses latest official index date"
+        required: false
+        default: ""
+      top:
+        description: "Number of highest-average-Elo episodes"
+        required: false
+        default: "5"
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install public dataset client
+        run: python -m pip install -U kagglehub
+      - name: Fetch and profile official live meta
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+          INPUT_DATE: "${{ github.event.inputs.date }}"
+          INPUT_TOP: "${{ github.event.inputs.top }}"
+        run: |
+          set -euo pipefail
+          TOP="${INPUT_TOP:-5}"
+          if [ -n "${INPUT_DATE:-}" ]; then
+            python tools/live_meta_radar.py --date "$INPUT_DATE" --top "$TOP" --output artifacts/live-meta/report.json
+          else
+            python tools/live_meta_radar.py --top "$TOP" --output artifacts/live-meta/report.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp018-live-meta-radar
+          path: artifacts/live-meta/report.json
