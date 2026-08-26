@@ -1,0 +1,55 @@
+name: r4b-market-only-package-parity
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - name: Fetch hash-pinned COK V8 base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen laboratory candidate blob
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Build deterministic self-contained submission
+        run: python tools/build_r4b_market_only_submission.py
+      - name: Extract package for parity test
+        run: |
+          mkdir -p artifacts/package_extract
+          tar -xzf artifacts/submissions/r4b_market_only_v1.tar.gz -C artifacts/package_extract
+      - name: Compare wrapper and packaged main.py trajectories
+        run: >-
+          python tools/compare_agent_prefix.py
+          --agent-a file:candidates/r4b_ablation_market_only.py:agent
+          --agent-b file:artifacts/package_extract/main.py:agent
+          --seed-partition development
+          --limit-seeds 2
+          --output artifacts/package_parity.json
+      - name: Enforce full action/reward parity
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('artifacts/package_parity.json').read_text())
+          s = p['summary']
+          if s['identical_full_trajectory_actions'] != s['comparisons']:
+              raise SystemExit(f"action parity failed: {s}")
+          for row in p['rows']:
+              if row['agent_a_terminal'] != row['agent_b_terminal']:
+                  raise SystemExit(f"terminal parity failed: {row}")
+          print('PACKAGE_PARITY_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4b-market-only-submission-package
+          path: |
+            artifacts/submissions/r4b_market_only_v1.tar.gz
+            artifacts/submissions/r4b_market_only_v1/BUILD_MANIFEST.json
+            artifacts/package_parity.json
