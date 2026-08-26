@@ -1,0 +1,125 @@
+name: r4-late-lifecycle-full-panel
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-late-lifecycle-full-panel.yml"
+  workflow_dispatch:
+
+jobs:
+  kaito-v27:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment and public fetch client
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Verify frozen candidate identity
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact Kaito V27 V4
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+          --filename main.py
+          --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8
+          --output-dir artifacts/public_kaggle/kaito_v27
+          --receipt artifacts/r4-late-lifecycle/kaito/receipt.json
+      - name: Run 16-seed both-seat lifecycle panel
+        run: >-
+          python tools/run_late_lifecycle_panel.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponent file:artifacts/public_kaggle/kaito_v27/main.py:agent
+          --partition development
+          --output artifacts/r4-late-lifecycle/kaito/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4-late-lifecycle-kaito-v27
+          path: artifacts/r4-late-lifecycle/kaito/**
+
+  rayk-v11:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment and public fetch client
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Verify frozen candidate identity
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact Rayk V11
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/11
+          --filename main.py
+          --sha256 adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f
+          --output-dir artifacts/public_kaggle/rayk_v11
+          --receipt artifacts/r4-late-lifecycle/rayk/receipt.json
+      - name: Run 16-seed both-seat lifecycle panel
+        run: >-
+          python tools/run_late_lifecycle_panel.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponent file:artifacts/public_kaggle/rayk_v11/main.py:agent
+          --partition development
+          --output artifacts/r4-late-lifecycle/rayk/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4-late-lifecycle-rayk-v11
+          path: artifacts/r4-late-lifecycle/rayk/**
+
+  andrew-v12:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment and public fetch client
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Verify frozen candidate identity
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact Andrew V12
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+          --filename main.py
+          --sha256 df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5
+          --output-dir artifacts/public_kaggle/andrew_v12
+          --receipt artifacts/r4-late-lifecycle/andrew/receipt.json
+      - name: Run 16-seed both-seat lifecycle panel
+        run: >-
+          python tools/run_late_lifecycle_panel.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponent file:artifacts/public_kaggle/andrew_v12/main.py:agent
+          --partition development
+          --output artifacts/r4-late-lifecycle/andrew/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4-late-lifecycle-andrew-v12
+          path: artifacts/r4-late-lifecycle/andrew/**
