@@ -1,0 +1,59 @@
+name: r4-current-meta-acquisition
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-current-meta-acquisition.yml"
+      - "tools/probe_public_kaggle_notebook.py"
+  workflow_dispatch:
+
+jobs:
+  rayk-v11:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -U kagglehub
+      - name: Probe exact Rayk V11 output without credentials
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/probe_public_kaggle_notebook.py
+          --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/11
+          --output-dir artifacts/meta_probe/rayk_v11
+          --receipt artifacts/meta_probe/rayk_v11_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rayk-v11-public-output-probe
+          path: artifacts/meta_probe/rayk_v11/**
+
+  andrew-v12:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -U kagglehub
+      - name: Probe exact Andrew V12 output without credentials
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/probe_public_kaggle_notebook.py
+          --handle andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+          --output-dir artifacts/meta_probe/andrew_v12
+          --receipt artifacts/meta_probe/andrew_v12_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: andrew-v12-public-output-probe
+          path: artifacts/meta_probe/andrew_v12/**
