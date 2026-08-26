@@ -1,24 +1,27 @@
 # KEXP-20260826-019 — live-meta late demand response
 
-Status: **PREDECLARED / OBSERVATIONAL / NO POLICY PROMOTION**
+Status: **COMPLETE / STRONG OBSERVATIONAL SUPPORT / NO POLICY PROMOTION YET**
 
 ## Prize-first question
 
-The first hosted Kculture agent is valid but has fallen to a displayed rating of 135.7, while the frozen local panel is 81-15. KEXP-018 showed that the current high-Elo live meta is much more diverse than the three fixed public benchmarks and that top winners visibly rotate into carrots/tomatoes under the rebalanced scarcity market.
+The first hosted Kculture agent is valid but has fallen to a displayed rating of 135.7, while the frozen local panel is 81-15. KEXP-018 showed that the current high-Elo live meta is much more diverse than the three fixed public benchmarks and that top winners visibly rotate crops under the rebalanced scarcity market.
 
-This study asks a narrow question before any R4D implementation:
+This study asked:
 
 > Once all eight public shop instances are visible, is late crop allocation strongly associated with public demand intensity and winning behavior in the current high-Elo ladder?
 
-## Source
+## Source / run
 
 Official public Kaggle datasets only:
 
 - `kaggle/kaggriculture-episodes-index`;
-- latest available daily episode dataset unless an exact date is passed;
-- top 20 episodes by `avg_score` for this first study.
+- daily dataset `kaggle/kaggriculture-episodes-2026-08-25`;
+- top 20 episodes by `avg_score` = 40 player-games.
 
-No competition credentials, private code, validation seeds or held-out seeds are used.
+Actions run: **`33019276166` — SUCCESS**.
+Artifact: **`9625868747`**, ZIP SHA-256 `0a0c9028ce33b177b61a41fe4da691f6de6b7740c4729a0108ad4991e33dd821`.
+
+No competition credentials, private code, validation seeds or held-out seeds were used.
 
 ## Measurement boundary
 
@@ -32,30 +35,69 @@ At step 600 / day 25, record the complete public shop multiset and compute per-p
 
 The deployment policy, if one is later tested, may use only legal public state such as unlocked shops and current prices. Team identity, episode ID and seed ID are forbidden deployment features.
 
-## Why this is higher priority than the macro solver
+## Main result — CARROT is the standout late-horizon signal
 
-KEXP-017 proved that perfect ex-post selection among the three existing COK route branches moves 81-15 only to 83-13. The current route set therefore has low solver headroom.
+Across all 40 player-games, CARROT demand weight versus CARROT seed purchases during 600-671 had Pearson correlation **+0.46156**.
 
-KEXP-018 and the frozen engine instead expose a structural opportunity that the fixed COK route family largely misses:
+Overall:
 
-- CARROT has a 2-day first yield / 3-day max-yield horizon, making it suitable for a day-24/25 late pivot;
-- CARROT and TOMATO now use the official `hinge` scarcity curve;
-- COK largely commits its strategic route from the first three shops, while eight shop instances are public by late season;
-- top live winners buy substantially more late CARROT seed than top live losers in the initial KEXP-018 sample.
+| Group | Mean CARROT seed buy 600-671 | Mean final-day CARROT sell 696-718 |
+|---|---:|---:|
+| Winners | **14.20** | **50.95** |
+| Losers | **2.95** | **4.85** |
 
-## Decision rule
+By public carrot-demand weight (`2 × PET_CAFE + FARMERS_MARKET`):
 
-This study does **not** promote code. It can only justify a bounded development candidate if:
+| Demand weight | Player-games | Winner mean seed buy | Loser mean seed buy | Winner mean final-day sell | Loser mean final-day sell |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 2 | 0 | 0 | 0 | 0 |
+| 1 | 10 | 4.4 | 0 | 7.8 | 0 |
+| 2 | 8 | 11.75 | 1.75 | 36.0 | 4.75 |
+| 3 | 4 | 12.0 | 4.5 | 64.5 | 7.0 |
+| 4 | 10 | 21.0 | 5.0 | 73.6 | 2.8 |
+| 5 | 2 | 31.0 | 4.0 | 78.0 | 11.0 |
+| 7 | 2 | 24.0 | 8.0 | 144.0 | 30.0 |
+| 10 | 2 | 31.0 | 6.0 | 117.0 | 9.0 |
 
-1. the demand→crop-response relationship is mechanically coherent with the frozen engine;
-2. the signal is not merely one team identity proxy;
-3. a proposed candidate can be expressed using legal public observables;
-4. it can be tested on development across multiple opponent families before any fresh validation access.
+The relationship is striking and mechanically coherent: CARROT has a 2-day first-yield horizon, its current scarcity curve is `hinge`, and by this point the full eight-shop multiset is public.
 
-If the relationship is weak/confounded, reject the late crop-pivot hypothesis and continue searching.
+## Important confounder
+
+The Aug-25 top-20 set contains only two teams:
+
+- **Crop Dusta:** 20 games, 14 wins, mean CARROT seed buy 600-671 = **15.3**, WHEAT = 9.65;
+- **Ryo Hasegawa:** 20 games, 6 wins, CARROT = **1.85**, WHEAT = 23.05.
+
+Thus the same-day winner relationship is also strongly team-correlated. This prevents direct policy promotion from this sample alone.
+
+## Secondary results
+
+WHEAT shows the opposite descriptive pattern:
+
+- demand→late-seed-buy Pearson only **+0.065**;
+- winners buy mean **11.25** WHEAT seeds during 600-671;
+- losers buy **21.45**;
+- winners sell mean **72.05** WHEAT on the final day;
+- losers sell **96.45**.
+
+This is consistent with a possible late overcommitment to static wheat production while current winners pivot toward short-horizon carrot in carrot-demand regimes.
+
+No player bought TOMATO, STRAWBERRY or MELON seeds during 600-671 in this sample. That is mechanically sensible: those crops have much longer first-yield horizons than CARROT and are poor candidates for a day-25 pivot. TOMATO final-day sales therefore come from earlier planting decisions and need a separate earlier-horizon study.
+
+## Relationship to COK/R4B
+
+The exact COK V8 route audit shows the base typically buys only **0-3 CARROT seeds** during 600-671 while buying roughly **28-32 WHEAT seeds**, depending on route. COK route choice is largely committed from the first three shop observations, so it does not explicitly exploit the complete eight-shop late demand state.
+
+This is a larger structural gap than the previously tested terminal-sale completeness and existing-route macro selector.
+
+## Decision
+
+**Do not promote code yet.** KEXP-019 gives strong observational/mechanical support for a late public-demand-responsive CARROT pivot, but the two-team confounder is too large to ignore.
+
+Next exact test is KEXP-020: repeat the same analysis over several preceding daily ladder datasets. A candidate is justified only if the signal survives the longitudinal/multi-team check.
 
 ## Reproducibility
 
 Tool: `tools/live_meta_demand_response.py`
 Workflow: `.github/workflows/live-meta-demand-response.yml`
-Actions run: `33019276166` (first run, pending at predeclaration time).
+Actions run: `33019276166`.
