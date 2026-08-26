@@ -1,0 +1,59 @@
+name: r4-strong-panel-kaito-v18
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/r4-strong-panel-kaito-v18.yml"
+  workflow_dispatch:
+
+jobs:
+  r4a-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python tools/fetch_public_opponents.py
+      - name: R4A vs Kaito public V18
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:artifacts/public_opponents/cok_v8_779caae.py:agent
+          --opponents file:artifacts/public_opponents/kaito_v18_public_8b8c421.py:agent
+          --seed-partition development
+          --limit-seeds 8
+          --output-root artifacts/kaito_v18/r4a
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4a-vs-kaito-v18
+          path: artifacts/kaito_v18/r4a/**/tournament.json
+
+  market-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python tools/fetch_public_opponents.py
+      - name: Verify frozen validated candidate blob
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Market-only vs Kaito public V18
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponents file:artifacts/public_opponents/kaito_v18_public_8b8c421.py:agent
+          --seed-partition development
+          --limit-seeds 8
+          --output-root artifacts/kaito_v18/market_only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: market-only-vs-kaito-v18
+          path: artifacts/kaito_v18/market_only/**/tournament.json
