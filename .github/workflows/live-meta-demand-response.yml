@@ -1,0 +1,40 @@
+name: live-meta-demand-response
+
+on:
+  push:
+    paths:
+      - 'tools/live_meta_demand_response.py'
+      - '.github/workflows/live-meta-demand-response.yml'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'YYYY-MM-DD; blank = latest official index day'
+        required: false
+        type: string
+
+jobs:
+  study:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install public dataset client
+        run: python -m pip install -U kagglehub
+      - name: Analyze top-20 late demand response
+        env:
+          INPUT_DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/live-meta-demand-response
+          if [ -n "${INPUT_DATE:-}" ]; then
+            python tools/live_meta_demand_response.py --date "$INPUT_DATE" --top 20 --output artifacts/live-meta-demand-response/report.json
+          else
+            python tools/live_meta_demand_response.py --top 20 --output artifacts/live-meta-demand-response/report.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-meta-demand-response
+          path: artifacts/live-meta-demand-response/report.json
