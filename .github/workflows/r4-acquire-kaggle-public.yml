@@ -1,16 +1,14 @@
 name: r4-acquire-kaggle-public
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/r4-acquire-kaggle-public.yml"
   workflow_dispatch:
 
 jobs:
   acquire:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
     steps:
       - uses: actions/checkout@v4
 
@@ -19,15 +17,37 @@ jobs:
           python-version: "3.11"
           cache: pip
 
+      - name: Require Kaggle API token
+        shell: bash
+        run: |
+          if [ -z "${KAGGLE_API_TOKEN}" ]; then
+            echo "KAGGLE_API_TOKEN secret is not configured."
+            echo "Add a Kaggle API token as a GitHub Actions repository secret, then dispatch this workflow again."
+            exit 2
+          fi
+
       - name: Install official Kaggle CLI
-        run: python -m pip install kaggle
+        run: python -m pip install 'kaggle==2.2.4'
 
       - name: Pull exact public notebook versions
+        shell: bash
         run: |
-          mkdir -p artifacts/kaggle_public/flexonafft_v59
-          mkdir -p artifacts/kaggle_public/andrewsokolovsky_v10
-          kaggle kernels pull flexonafft/kaggriculture-multi-route-farming-agent/59 -p artifacts/kaggle_public/flexonafft_v59 -m
-          kaggle kernels pull andrewsokolovsky/kaggriculture/10 -p artifacts/kaggle_public/andrewsokolovsky_v10 -m
+          python - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+
+          cfg = json.loads(Path('configs/kaggle_public_targets.json').read_text(encoding='utf-8'))
+          root = Path('artifacts/kaggle_public')
+          root.mkdir(parents=True, exist_ok=True)
+          for target in cfg['targets']:
+              dest = root / target['id']
+              dest.mkdir(parents=True, exist_ok=True)
+              print(f"Pulling {target['kernel']} -> {dest}", flush=True)
+              subprocess.run([
+                  'kaggle', 'kernels', 'pull', target['kernel'],
+                  '-p', str(dest), '-m'
+              ], check=True)
+          PY
 
       - name: Hash acquisition
         run: |

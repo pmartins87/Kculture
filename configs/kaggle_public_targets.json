@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "snapshot_date": "2026-08-25",
+  "targets": [
+    {
+      "id": "kaito-v27-v4",
+      "kernel": "kaitofukami/25-27-strict-future-v27-midgame-meta-reset/4",
+      "public_score_snapshot": 3090.1,
+      "best_score_snapshot": 3090.1,
+      "license": "Apache-2.0",
+      "priority": 1,
+      "purpose": "current public ceiling reference and strong local opponent"
+    },
+    {
+      "id": "rayk-rank-v11",
+      "kernel": "raykkretzschmar/kaggriculture-rank-your-agent/11",
+      "public_score_snapshot": null,
+      "best_score_snapshot": 2990.4,
+      "license": "public notebook; verify license on acquired artifact/page before derivative use",
+      "priority": 2,
+      "purpose": "second independent near-ceiling reference"
+    },
+    {
+      "id": "flexonafft-v59",
+      "kernel": "flexonafft/kaggriculture-multi-route-farming-agent/59",
+      "public_score_snapshot": null,
+      "best_score_snapshot": 2767.3,
+      "license": "Apache-2.0 at inspected public notebook snapshot",
+      "priority": 3,
+      "purpose": "older high-score multi-route architecture"
+    },
+    {
+      "id": "andrewsokolovsky-v10",
+      "kernel": "andrewsokolovsky/kaggriculture/10",
+      "public_score_snapshot": null,
+      "best_score_snapshot": 2671.3,
+      "license": "Apache-2.0 at inspected public notebook snapshot",
+      "priority": 4,
+      "purpose": "older independent high-score reference"
+    }
+  ],
+  "policy": {
+    "authentication": "Kaggle CLI requires authentication even for public kernel pulls; use GitHub secret KAGGLE_API_TOKEN.",
+    "provenance": "Every acquired file must be hashed. Verify the notebook-page license for the exact version before using code as a derivative base.",
+    "scores": "Scores are dated discovery snapshots, not permanent ceilings or promotion metrics."
+  }
+}
