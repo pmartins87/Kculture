@@ -1,0 +1,60 @@
+name: r4-current-meta-hard-replays
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-current-meta-hard-replays.yml"
+  workflow_dispatch:
+
+jobs:
+  rayk-v11-hard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact Rayk V11
+        env: {KAGGLE_USERNAME: "", KAGGLE_KEY: "", KAGGLE_API_TOKEN: ""}
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/11 --filename main.py --sha256 adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f --output-dir artifacts/public_kaggle/rayk_v11 --receipt artifacts/current-meta-hard-replays/rayk_v11_receipt.json
+      - name: Capture Rayk seed 163219477 both orientations
+        run: |
+          python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/rayk_v11/main.py:agent --seed 163219477 --output-root artifacts/current-meta-hard-replays/rayk/seed-163219477
+          python tools/run_episode.py --agent0 file:artifacts/public_kaggle/rayk_v11/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed 163219477 --output-root artifacts/current-meta-hard-replays/rayk/seed-163219477
+      - uses: actions/upload-artifact@v4
+        with:
+          name: current-meta-hard-replays-rayk-v11
+          path: artifacts/current-meta-hard-replays/**
+
+  andrew-v12-hard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11", cache: pip}
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact Andrew V12
+        env: {KAGGLE_USERNAME: "", KAGGLE_KEY: "", KAGGLE_API_TOKEN: ""}
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py --handle andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12 --filename main.py --sha256 df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5 --output-dir artifacts/public_kaggle/andrew_v12 --receipt artifacts/current-meta-hard-replays/andrew_v12_receipt.json
+      - name: Capture Andrew hard seeds both orientations
+        run: |
+          for seed in 150614441 393297156 598340816 1422177419; do
+            python tools/run_episode.py --agent0 file:candidates/r4b_ablation_market_only.py:agent --agent1 file:artifacts/public_kaggle/andrew_v12/main.py:agent --seed "$seed" --output-root "artifacts/current-meta-hard-replays/andrew/seed-$seed"
+            python tools/run_episode.py --agent0 file:artifacts/public_kaggle/andrew_v12/main.py:agent --agent1 file:candidates/r4b_ablation_market_only.py:agent --seed "$seed" --output-root "artifacts/current-meta-hard-replays/andrew/seed-$seed"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: current-meta-hard-replays-andrew-v12
+          path: artifacts/current-meta-hard-replays/**
