@@ -1,0 +1,51 @@
+name: r4b-terminal-liquidation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "candidates/r4b_terminal_liquidation.py"
+      - "experiments/KEXP-20260825-005-r4b-terminal-liquidation/**"
+      - ".github/workflows/r4b-terminal-liquidation.yml"
+  workflow_dispatch:
+
+jobs:
+  development:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment
+        run: python -m pip install -r requirements.txt
+      - name: Fetch hash-pinned public agents
+        run: python tools/fetch_public_opponents.py
+      - name: Control R4A versus Seyamalam V21
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:artifacts/public_opponents/cok_v8_779caae.py:agent
+          --opponents file:artifacts/public_opponents/seyamalam_v21_8b8c421.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - name: R4B versus Seyamalam V21
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_terminal_liquidation.py:agent
+          --opponents file:artifacts/public_opponents/seyamalam_v21_8b8c421.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - name: R4B versus R4A
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_terminal_liquidation.py:agent
+          --opponents file:artifacts/public_opponents/cok_v8_779caae.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - name: Preserve R4B development evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4b-terminal-liquidation
+          path: artifacts/tournaments/**/tournament.json
