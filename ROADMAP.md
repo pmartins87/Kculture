@@ -2,147 +2,153 @@
 
 ## Objective
 
-Maximize the probability of a **top-10 final finish** by combining accurate mechanics, strong long-horizon planning, opponent-aware adaptation, automated local tournaments, and disciplined final-agent selection.
+Maximize the probability of a **top-10 final finish** by combining accurate mechanics, strong long-horizon planning, opponent-aware adaptation, automated local tournaments, disciplined public-meta benchmarking and controlled final-agent selection.
 
 ## Current gate summary
 
-- **R0: working intake complete** — technical intake complete; competition entry is user-confirmed and will be API-reconciled on first authenticated submission.
+- **R0: COMPLETE for working purposes.** Competition entry user-confirmed.
 - **R1: PASS — 2026-08-25.**
 - **R2: PASS — 2026-08-25.**
-- **R3: READY TO SUBMIT** — validated deterministic package exists; first authenticated hosted upload/reconciliation remains.
-- **R4: ACTIVE** — `R4B-market-only-validated-v1` is the first validated Kculture engineering candidate; further development continues on development-only evidence.
+- **R3: HOSTED UPLOAD IN PROGRESS.** Exact validated package is being manually uploaded by the user; hosted validation/submission ID/ladder entry are still required for PASS.
+- **R4: ACTIVE.** `R4B-market-only-validated-v1` remains the frozen engineering/hosted candidate while frontier diagnostics continue on development only.
 
-Public repository development is a deliberate decision, not a blocker. See `docs/DECISION_PUBLIC_DEVELOPMENT.md`.
+Public repository development is deliberate. See `docs/DECISION_PUBLIC_DEVELOPMENT.md`.
 
 ## R0 — Intake and freeze official facts
 
-- Capture rules, mechanics, timeline, action API, validation behavior, submission packaging, ladder behavior, and prize structure.
-- Preserve versions/hashes of official starter assets where permitted.
-- Separate documented mechanics from inferred behavior.
+Capture rules, mechanics, timeline, action API, validation behavior, submission packaging, ladder behavior and prize structure.
 
-**Exit:** all competition-critical facts are traceable/current and competition entry is confirmed.
+**Exit:** competition-critical facts traceable/current and competition entry confirmed.
 
-**Status:** **COMPLETE FOR WORKING PURPOSES.** Technical intake is frozen and the user confirmed competition enrollment. API-side entered-status evidence will be preserved during R3.
+**Status:** **COMPLETE FOR WORKING PURPOSES.**
 
 ## R1 — Baseline reproduction
 
-- Run official/simple baseline locally.
-- Verify legal action handling, 720-turn episode completion, observations, state transitions, and terminal scoring.
-- Log action counts and terminal behavior.
+Run official/simple baseline and verify legal actions, 720-turn completion, observations, state transitions and terminal scoring.
 
-**Exit:** repeatable legal baseline with deterministic diagnostics.
-
-**Status:** **PASS.** `KEXP-20260825-001-official-starter-parity` established exact starter parity.
+**Status:** **PASS.** `KEXP-20260825-001-official-starter-parity`.
 
 ## R2 — Local tournament laboratory
 
-- Run fixed seeds and both player seats.
-- Maintain deterministic development/validation/held-out partitions.
-- Maintain passive/simple/strong-public/archive opponents.
-- Fresh-load file agents per episode to prevent state leakage.
-- Preserve raw outcomes, bank deltas, errors, replay/summary artifacts and provenance.
+- deterministic seeds and both seats;
+- development / validation / held-out separation;
+- fresh module loading;
+- raw outcomes, money deltas, errors, summaries/replays and provenance.
 
-**Exit:** strategy changes can be compared reliably before Kaggle submission.
-
-**Status:** **PASS.** `KEXP-20260825-003-r2-closure`: 64 disjoint seeds, 7 deterministic references, hash-pinned public benchmark, both-seat execution and zero closure-smoke errors.
+**Status:** **PASS.** `KEXP-20260825-003-r2-closure` froze 16 development / 16 validation / 32 held-out seeds.
 
 ## R3 — First ladder submission
 
-- Confirm entered status through authenticated Kaggle API evidence.
-- Submit the exact validated package.
-- Pass hosted self-play validation.
-- Reconcile hosted logs/behavior with local execution.
-- Record ladder rating/episodes and exact submission ID/source/hash.
-- Establish a disciplined cadence inside the 5-submission/day allowance.
+- submit the exact validated package;
+- pass hosted self-play validation;
+- capture submission ID/status;
+- reconcile hosted behavior with local execution;
+- record rating/episodes and exact hash/source;
+- establish disciplined submission cadence.
 
-**Exit:** first valid ladder agent and documented local↔hosted deltas.
+Exact package:
 
-**Status:** **READY TO SUBMIT.** `R4B-market-only-validated-v1` passed development, predeclared validation, deterministic packaging, and full-trajectory package parity. Archive SHA-256: `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`. `.github/workflows/r3-first-hosted-submission.yml` performs the authenticated upload after rebuilding/verifying the exact artifact.
+- candidate `R4B-market-only-validated-v1`;
+- archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
+- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`;
+- package parity run `32919305800`, 4/4 full trajectories identical.
 
-## R4 — Strong economic baseline
+**Status:** **HOSTED UPLOAD IN PROGRESS (user-reported).** Do not mark PASS until Kaggle reports a valid submission and ladder entry.
 
-### R4A — select a strong public engineering base
+## R4 — Strong economic baseline and evidence-driven refinements
 
-COK V8 is frozen as `R4A-public-base-v1` after a 14-2 same-seed development result over Seyamalam V21, with public source/license/hash provenance preserved.
+### R4A — frozen strong public base
+
+COK V8 is `R4A-public-base-v1`.
 
 **Status:** **COMPLETE / FROZEN BASE.**
 
 ### R4B — terminal market completeness
 
-A broad terminal-capacity version was rejected because its physical `DROP` replacement regressed directly against R4A. Ablation isolated the useful component: preserve all physical COK behavior and only make final-step market liquidation complete.
+Broad physical-DROP terminal optimizer was rejected. Ablation retained only complete final-step market liquidation while preserving every physical COK action.
 
-`R4B-market-only-validated-v1` then passed the predeclared validation gate:
+Validation run `32918640409`:
 
-- 32-0 vs Seyamalam on 16 validation seeds × both seats;
-- 8-6-18 vs R4A, score 0.53125, mean +165.03125;
-- zero runtime errors;
-- deterministic hosted package parity PASS.
+- 32-0 vs Seyamalam on validation;
+- 8-6-18 direct vs R4A, score 0.53125, mean +165.03125;
+- zero errors.
 
-A third public-family development check against Kaito V18 improved the same-seed R4A control from 14-2 / +20,732.75 to 16-0 / +22,210.375.
-
-**Status:** **VALIDATED ENGINEERING CANDIDATE / HOSTED_SUBMISSION_READY.**
+**Status:** **VALIDATED ENGINEERING CANDIDATE / HOSTED CANDIDATE.**
 
 ### R4C — guarded ninth cow
 
-The dormant upstream ninth-cow flag was tested as a one-switch development hypothesis.
+Development result was neutral.
 
-- vs Seyamalam: exactly matched R4A at 14-2 / +21,063.875;
-- direct vs R4A: 4-4-8 / mean 0.
+**Status:** **NO PROMOTION.**
 
-**Status:** **NO PROMOTION / NEUTRAL.**
+### KEXP-010 — full development failure atlas
 
-### R4D+ — evidence-driven improvements
+160 development games completed. R4B reached **32-0 vs Seyamalam V21** and **32-0 vs Kaito V18** across all 16 development seeds × both seats. Direct R4B vs R4A paired-seat aggregate was non-negative on all 16 seeds.
 
-- Build a full development failure atlas before another strategy mutation.
-- Use all 16 development seeds and both seats against COK/Seyamalam/Kaito.
-- Change one auditable mechanism at a time from recurring failure patterns.
-- Continue improving movement/action efficiency, daily work scheduling, expansion, labor, crop/livestock mix, fertilizer, inventory flow, market timing, recovery, and route decisions only when matched controls justify the change.
-- Preserve final liquidation behavior because only bank cash has terminal value.
-- Add newer strong public agents and prior Kculture champions to the opponent archive.
+**Conclusion:** older panel saturated; stop tuning to it.
 
-Current diagnostic: `KEXP-20260825-010-r4-development-failure-atlas`, 160 development games. It has no promotion gate; it exists to generate the next hypothesis.
+### KEXP-011 — exact Kaito V27 frontier screen
 
-**R4 exit:** one deterministic Kculture policy robustly beats diverse strong-public controls on predeclared validation without runtime instability, with a hosted ladder result consistent enough to justify moving deeper into planner/search work.
+Exact V27 V4 (public/best 3090.1, Apache-2.0, SHA `f48c2116...`) was acquired without Kaggle credentials and hash-verified.
+
+Development result, all 16 seeds × both seats:
+
+- R4A vs V27: **25-7**, mean +4382.03125;
+- R4B vs V27: **25-7**, mean +4396.84375.
+
+Seven losses are concentrated in four seeds: `150614441` (seat-sensitive), `1743398262`, `163219477`, `598340816`.
+
+**Decision:** no migration to V27; retain R4B/COK lineage and diagnose frontier regimes.
+
+### R4D — next frontier continuation candidate
+
+R4D must not be created from a single opponent or a single losing seed. Before mutation:
+
+1. capture full V27 frontier replays for the four loss seeds in both seats;
+2. benchmark exact Rayk V11 (best 2990.4) and Andrew V12 (best 2915.2) on all 16 development seeds × both seats;
+3. identify a recurring mechanism across modern families;
+4. propose one auditable midgame/continuation change compatible with COK's opening/state assumptions;
+5. preserve R4B terminal liquidation unchanged unless new evidence directly targets it.
+
+Current exact artifacts:
+
+- Rayk V11 `main.py` SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f` — benchmark-only until license independently verified;
+- Andrew V12 `main.py` SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5` — Apache-2.0.
+
+Current Actions:
+
+- V27 loss-replay capture: `32926648674`;
+- Rayk/Andrew exact strong screen: `32926727240`.
+
+**R4 exit:** a deterministic Kculture policy robustly beats diverse strong-current public controls on a predeclared validation protocol, with hosted ladder behavior consistent enough to justify planner work.
 
 ## R5 — Long-horizon planner
 
-- Add state-value approximations for future cashflow and action scarcity.
-- Optimize planting, harvest, expansion, labor, inventory movement and sales timing.
-- Introduce tactical replanning when expected value changes materially.
+- state-value approximations for future cashflow/action scarcity;
+- planning over planting, harvest, expansion, labor, inventory and sales timing;
+- tactical replanning when expected value changes materially;
+- coherent board/economic-state model rather than unrelated route switching.
 
-**Exit:** planner beats R4 across a newly frozen validation protocol and later held-out evidence.
+**Exit:** planner beats the R4 champion on a newly frozen validation protocol and later held-out evidence.
 
 ## R6 — Dynamic market and opponent awareness
 
-- Track observable market and opponent farm state.
-- Detect opponent strategy archetypes from early behavior.
-- Test adaptive selling/production/expansion responses.
-- Stress adaptations against deceptive and mixed opponents.
-
-**Exit:** adaptation adds robust value without destabilizing baseline play.
+Track observable market/opponent state, infer archetypes and test adaptive production/selling/expansion responses without destabilizing baseline play.
 
 ## R7 — Automated strategy search
 
-- Parameter sweeps, evolutionary search, Bayesian/heuristic tuning, or policy search over compact strategy parameters.
-- Multi-objective promotion: W/L/T, bank delta, low variance, robustness and matchup coverage.
-- Maintain strict development/validation/held-out separation.
-
-**Exit:** searched policies outperform the hand-tuned champion on a formal final-selection evaluation.
+Parameter sweeps/evolutionary/Bayesian/heuristic search over compact strategy parameters with strict development/validation/held-out separation.
 
 ## R8 — Metagame and final pair construction
 
-- Analyze ladder episodes and public metagame without blindly fitting displayed rating.
-- Build two final candidates with complementary matchup profiles.
-- Avoid two nearly identical agents: the latest two submissions are strategic portfolio slots.
-- Stress against champion archive and adversarially selected opponents.
-
-**Exit:** final pair selected from controlled evidence across diverse matchups.
+Use hosted episodes and current public meta to build two complementary final candidates. Latest two submissions are strategic portfolio slots.
 
 ## R9 — Final freeze
 
-- Reproduce both final agents from a clean environment.
-- Verify packaging, imports, action legality, time/memory behavior, deterministic fallbacks and zero-crash self-play.
-- Freeze source/config/hashes and submission IDs.
-- Submit both final tracked agents before 2026-09-30 23:59 UTC.
+Reproduce final agents cleanly; verify imports, legality, timeout/memory behavior, deterministic fallbacks; freeze hashes and submission IDs; submit both before 2026-09-30 23:59 UTC.
 
-**Exit:** two robust final ladder agents accepted and preserved.
+## Data-separation invariant
+
+- development: open for iteration;
+- validation: candidate-specific formal gates only;
+- held-out: **32/32 still sealed** until later promotion/final-selection.
