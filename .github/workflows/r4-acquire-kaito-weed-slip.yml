@@ -1,0 +1,33 @@
+name: r4-acquire-kaito-weed-slip
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4-acquire-kaito-weed-slip.yml"
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -U kagglehub
+      - name: Probe current public WEED-Slip Recovery notebook
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/probe_public_kaggle_notebook.py
+          --handle kaitofukami/159-160-vs-frontier-v20-weed-slip-recovery
+          --output-dir artifacts/meta_probe/kaito_weed_slip
+          --receipt artifacts/meta_probe/kaito_weed_slip_receipt.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaito-weed-slip-current-public-output
+          path: artifacts/meta_probe/kaito_weed_slip/**
