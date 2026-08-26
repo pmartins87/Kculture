@@ -1,0 +1,31 @@
+name: r4a-terminal-inspection
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "tools/inspect_r4a_terminal.py"
+      - ".github/workflows/r4a-terminal-inspection.yml"
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment
+        run: python -m pip install -r requirements.txt
+      - name: Fetch hash-pinned public agents
+        run: python tools/fetch_public_opponents.py
+      - name: Inspect R4A route tails
+        run: python tools/inspect_r4a_terminal.py
+      - name: Preserve inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: r4a-terminal-inspection
+          path: artifacts/r4a_terminal_inspection.json
