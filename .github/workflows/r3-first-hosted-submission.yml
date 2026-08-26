@@ -1,6 +1,9 @@
 name: r3-first-hosted-submission
 
 on:
+  push:
+    paths:
+      - ".github/workflows/r3-first-hosted-submission.yml"
   workflow_dispatch:
 
 jobs:
@@ -12,46 +15,72 @@ jobs:
       EXPECTED_ARCHIVE_SHA256: 19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117
     steps:
       - uses: actions/checkout@v4
+
+      - name: Detect Kaggle authentication
+        id: auth
+        shell: bash
+        run: |
+          if [ -n "$KAGGLE_API_TOKEN" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "Kaggle authentication is configured. Proceeding with the exact frozen submission."
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "KAGGLE_API_TOKEN is not configured. No Kaggle submission will be attempted."
+          fi
+
+      - name: Explain auth-only stop
+        if: steps.auth.outputs.present != 'true'
+        run: echo "R3 package remains HOSTED_SUBMISSION_READY; configure repository secret KAGGLE_API_TOKEN or upload the exact tar.gz manually."
+
       - uses: actions/setup-python@v5
+        if: steps.auth.outputs.present == 'true'
         with:
           python-version: "3.11"
           cache: pip
-      - name: Require Kaggle token secret
-        run: |
-          if [ -z "$KAGGLE_API_TOKEN" ]; then
-            echo "KAGGLE_API_TOKEN repository secret is not configured." >&2
-            exit 2
-          fi
+
       - name: Install frozen environment and Kaggle CLI
+        if: steps.auth.outputs.present == 'true'
         run: |
           python -m pip install -r requirements.txt
           python -m pip install -U kaggle
+
       - name: Verify competition rules were accepted
+        if: steps.auth.outputs.present == 'true'
         run: |
           kaggle competitions list --group entered -v > entered.csv
           cat entered.csv
           if ! grep -qi 'kaggriculture' entered.csv; then
-            echo "Kaggriculture is not listed as entered. Accept the competition rules / Join Competition first." >&2
+            echo "Kaggriculture is not listed as entered through the authenticated API." >&2
             exit 3
           fi
+
       - name: Fetch exact base and rebuild validated package
+        if: steps.auth.outputs.present == 'true'
         run: |
           python tools/fetch_public_opponents.py
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
           python tools/build_r4b_market_only_submission.py
+
       - name: Verify exact submission archive identity
+        if: steps.auth.outputs.present == 'true'
         run: |
           ACTUAL=$(sha256sum artifacts/submissions/r4b_market_only_v1.tar.gz | awk '{print $1}')
           echo "archive sha256=$ACTUAL"
           test "$ACTUAL" = "$EXPECTED_ARCHIVE_SHA256"
+
       - name: Submit first Kculture agent
+        if: steps.auth.outputs.present == 'true'
         run: >-
           kaggle competitions submit kaggriculture
           -f artifacts/submissions/r4b_market_only_v1.tar.gz
           -m "Kculture R4B market-only validated v1"
+
       - name: Record hosted submission list
+        if: steps.auth.outputs.present == 'true'
         run: kaggle competitions submissions kaggriculture -v | tee hosted_submissions.csv
+
       - uses: actions/upload-artifact@v4
+        if: steps.auth.outputs.present == 'true'
         with:
           name: r3-first-hosted-submission-evidence
           path: |
