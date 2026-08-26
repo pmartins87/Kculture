@@ -1,0 +1,41 @@
+{
+  "schema_version": "exploratory-live-meta-seeds-v1",
+  "purpose": "Development-only environmental regimes reproduced from official public high-Elo Kaggriculture episodes. Never treat as validation or held-out.",
+  "source": {
+    "index": "kaggle/kaggriculture-episodes-index",
+    "daily_dataset": "kaggle/kaggriculture-episodes-2026-08-25",
+    "selection": "top 20 episodes by manifest avg_score",
+    "source_run": 33019276166,
+    "source_artifact_id": 9625868747,
+    "source_artifact_zip_sha256": "0a0c9028ce33b177b61a41fe4da691f6de6b7740c4729a0108ad4991e33dd821"
+  },
+  "rules": [
+    "development and diagnostics only",
+    "never merge into frozen validation or held_out partitions",
+    "episode_id/team identity are research provenance only and forbidden strategy features",
+    "seed may be used only to reproduce the public environment, never as a strategy feature"
+  ],
+  "episodes": [
+    {"episode_id": 99288626, "seed": 1987272187, "avg_score": 3069.552857, "carrot_demand_weight": 1},
+    {"episode_id": 99625995, "seed": 1551885668, "avg_score": 3068.856674, "carrot_demand_weight": 4},
+    {"episode_id": 99594187, "seed": 1898530410, "avg_score": 3068.856674, "carrot_demand_weight": 1},
+    {"episode_id": 99373065, "seed": 1226622853, "avg_score": 3068.579401, "carrot_demand_weight": 7},
+    {"episode_id": 99443787, "seed": 2005675203, "avg_score": 3066.290712, "carrot_demand_weight": 2},
+    {"episode_id": 99505242, "seed": 1393636059, "avg_score": 3066.290712, "carrot_demand_weight": 5},
+    {"episode_id": 99443785, "seed": 734589694, "avg_score": 3066.290712, "carrot_demand_weight": 0},
+    {"episode_id": 99226955, "seed": 1846809709, "avg_score": 3065.184458, "carrot_demand_weight": 1},
+    {"episode_id": 98951023, "seed": 1246078352, "avg_score": 3064.349377, "carrot_demand_weight": 2},
+    {"episode_id": 99555424, "seed": 1510701944, "avg_score": 3064.167880, "carrot_demand_weight": 4},
+    {"episode_id": 98852918, "seed": 1130251579, "avg_score": 3062.692085, "carrot_demand_weight": 3},
+    {"episode_id": 99003469, "seed": 486174945, "avg_score": 3061.829594, "carrot_demand_weight": 2},
+    {"episode_id": 99003470, "seed": 4069062, "avg_score": 3061.829594, "carrot_demand_weight": 4},
+    {"episode_id": 98898505, "seed": 991243572, "avg_score": 3061.812997, "carrot_demand_weight": 3},
+    {"episode_id": 99058164, "seed": 1192301511, "avg_score": 3061.038595, "carrot_demand_weight": 1},
+    {"episode_id": 98898510, "seed": 2081711183, "avg_score": 3059.054458, "carrot_demand_weight": 10},
+    {"episode_id": 98898507, "seed": 1649367674, "avg_score": 3059.054458, "carrot_demand_weight": 4},
+    {"episode_id": 99115197, "seed": 1934403043, "avg_score": 3057.616386, "carrot_demand_weight": 2},
+    {"episode_id": 99058162, "seed": 2088141405, "avg_score": 3056.613226, "carrot_demand_weight": 1},
+    {"episode_id": 99115180, "seed": 1480098778, "avg_score": 3056.613226, "carrot_demand_weight": 4}
+  ],
+  "seeds": [1987272187, 1551885668, 1898530410, 1226622853, 2005675203, 1393636059, 734589694, 1846809709, 1246078352, 1510701944, 1130251579, 486174945, 4069062, 991243572, 1192301511, 2081711183, 1649367674, 1934403043, 2088141405, 1480098778]
+}
