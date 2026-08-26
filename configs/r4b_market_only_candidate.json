@@ -1,0 +1,20 @@
+{
+  "id": "R4B-market-only-validation-v1",
+  "status": "FROZEN_VALIDATION_CANDIDATE",
+  "candidate_path": "candidates/r4b_ablation_market_only.py",
+  "freeze_source_commit": "148cc81fed390fd75c0cba00ceb779efaa17a46f",
+  "candidate_git_blob": "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37",
+  "development_run": 32915111893,
+  "development_evidence": {
+    "vs_seyamalam": {"wins": 16, "losses": 0, "ties": 0, "score_rate": 1.0, "mean_money_delta": 22541.5},
+    "vs_r4a": {"wins": 5, "losses": 3, "ties": 8, "score_rate": 0.5625, "mean_money_delta": 12.0}
+  },
+  "base": {
+    "id": "R4A-public-base-v1",
+    "repository": "COK-ZhangZiliang/Kaggriculture",
+    "source_commit": "779caaec88a441345871e2d62eb5de93606b7b52",
+    "source_sha256": "faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3",
+    "license": "Apache-2.0"
+  },
+  "claim_boundary": "Frozen from development evidence only. Not promoted to R4 and not yet a Kaggle submission. Validation may be opened; held-out remains sealed."
+}
