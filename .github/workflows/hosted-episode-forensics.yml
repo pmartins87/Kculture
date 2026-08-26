@@ -1,0 +1,40 @@
+name: hosted-episode-forensics
+
+on:
+  push:
+    paths:
+      - 'tools/hosted_episode_forensics.py'
+      - '.github/workflows/hosted-episode-forensics.yml'
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'YYYY-MM-DD; blank = latest official index day'
+        required: false
+        type: string
+
+jobs:
+  forensics:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install public dataset client
+        run: python -m pip install -U kagglehub
+      - name: Probe official episode metadata
+        env:
+          INPUT_DATE: ${{ inputs.date }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/hosted-forensics
+          if [ -n "${INPUT_DATE:-}" ]; then
+            python tools/hosted_episode_forensics.py --date "$INPUT_DATE" --sample 3 --output artifacts/hosted-forensics/report.json
+          else
+            python tools/hosted_episode_forensics.py --sample 3 --output artifacts/hosted-forensics/report.json
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hosted-episode-forensics
+          path: artifacts/hosted-forensics/report.json
