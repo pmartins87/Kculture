@@ -43,6 +43,41 @@ R4C may advance only if all are true:
 
 This experiment was initially prepared under `KEXP-20260825-006`, which collided with the market-only terminal ablation. It was never executed under that identifier. It is renumbered to `KEXP-20260825-008`; `KEXP-007` is reserved for the frozen market-only validation gate.
 
-## Status
+## Execution
 
-**PREPARED, NOT EXECUTED.** Do not use validation or held-out seeds for this hypothesis.
+GitHub Actions run `32919545606`, first 8 frozen development seeds, both seats, `kaggle-environments==1.32.7`.
+
+### R4A control vs Seyamalam V21
+
+- 14 wins / 2 losses / 0 ties
+- score rate: 0.875
+- mean money delta: +21,063.875
+- errors: 0
+
+### R4C vs Seyamalam V21
+
+- **14 wins / 2 losses / 0 ties**
+- score rate: **0.875**
+- mean money delta: **+21,063.875**
+- errors: 0
+
+The external matchup is exactly unchanged on all tested seeds/seats.
+
+### R4C direct vs R4A
+
+- 4 wins / 4 losses / 8 ties
+- score rate: 0.500
+- mean money delta: 0.000
+- min delta: -218
+- max delta: +218
+- errors: 0
+
+The switch can activate and create small differences, but the paired-seat effect cancels and produces no demonstrated external advantage.
+
+## Decision
+
+**NO PROMOTION / NEUTRAL.**
+
+R4C meets the non-regression boundaries but provides no positive evidence: it leaves the Seyamalam matchup exactly unchanged and is exactly neutral against R4A in paired aggregate. The ninth-cow flag remains excluded from the validated hosted-submission candidate.
+
+No validation or held-out seed was opened. Held-out remains sealed 32/32.
