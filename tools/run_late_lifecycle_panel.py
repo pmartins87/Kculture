@@ -253,15 +253,15 @@ def _aggregate(rows: list[dict]) -> dict:
 
     return {
         "n": len(rows),
-        "wins": len(wins),
-        "losses": len(losses),
-        "ties": len(ties),
-        "errors": len(errors),
+        "win_count": len(wins),
+        "loss_count": len(losses),
+        "tie_count": len(ties),
+        "error_count": len(errors),
         "score_rate_tie_half": (len(wins) + 0.5 * len(ties)) / len(valid) if valid else None,
         "all": _group_summary(valid),
-        "wins": _group_summary(wins),
-        "losses": _group_summary(losses),
-        "ties": _group_summary(ties),
+        "win_group": _group_summary(wins),
+        "loss_group": _group_summary(losses),
+        "tie_group": _group_summary(ties),
         "feature_correlations": correlations,
     }
 
@@ -380,7 +380,7 @@ def main() -> None:
     output.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
     print(json.dumps(report["aggregate"], indent=2, sort_keys=True))
 
-    if report["aggregate"]["errors"]:
+    if report["aggregate"]["error_count"]:
         raise SystemExit(2)
 
 
