@@ -1,0 +1,85 @@
+name: r4-kaito-v27-strong-screen
+
+on:
+  workflow_dispatch:
+
+jobs:
+  r4a-control:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Fetch exact public Kaito V27 V4
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+          --filename main.py
+          --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8
+          --output-dir artifacts/public_kaggle/kaito_v27_v4
+          --receipt artifacts/public_kaggle/kaito_v27_v4_control_receipt.json
+      - name: R4A versus exact Kaito V27
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:artifacts/public_opponents/cok_v8_779caae.py:agent
+          --opponents file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent
+          --seed-partition development
+          --output-root artifacts/kaito-v27/r4a-control
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaito-v27-r4a-control
+          path: |
+            artifacts/public_kaggle/kaito_v27_v4_control_receipt.json
+            artifacts/kaito-v27/r4a-control/**/tournament.json
+
+  r4b-market-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - run: python tools/fetch_public_opponents.py
+      - name: Verify frozen validated R4B candidate
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact public Kaito V27 V4
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+          --filename main.py
+          --sha256 f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8
+          --output-dir artifacts/public_kaggle/kaito_v27_v4
+          --receipt artifacts/public_kaggle/kaito_v27_v4_r4b_receipt.json
+      - name: R4B versus exact Kaito V27
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponents file:artifacts/public_kaggle/kaito_v27_v4/main.py:agent
+          --seed-partition development
+          --output-root artifacts/kaito-v27/r4b-market-only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaito-v27-r4b-market-only
+          path: |
+            artifacts/public_kaggle/kaito_v27_v4_r4b_receipt.json
+            artifacts/kaito-v27/r4b-market-only/**/tournament.json
