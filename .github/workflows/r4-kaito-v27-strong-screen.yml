@@ -1,6 +1,9 @@
 name: r4-kaito-v27-strong-screen
 
 on:
+  push:
+    paths:
+      - ".github/workflows/r4-kaito-v27-strong-screen.yml"
   workflow_dispatch:
 
 jobs:
