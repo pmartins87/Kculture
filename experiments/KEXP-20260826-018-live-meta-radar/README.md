@@ -1,6 +1,6 @@
 # KEXP-20260826-018 — official live-meta radar
 
-Status: **FIRST SCREEN COMPLETE / EXPANSION ACTIVE / OBSERVATIONAL**
+Status: **TOP-20 SCREEN COMPLETE / OBSERVATIONAL**
 
 ## Motivation
 
@@ -8,79 +8,92 @@ The hosted R4B submission is valid (`Complete`) but its visible rating moved **1
 
 The official Kaggriculture ecosystem publishes a daily Episodes index and per-day replay datasets. Those replays sample agents that are **actually playing in the current ladder**, including strategies whose source code may be private. This is a more direct calibration source than repeatedly tuning only against Kaito V27, Rayk V11 and Andrew V12.
 
-## First screen execution
+## First screen — top 5
 
-GitHub Actions run **`32976184254`** — SUCCESS.
+GitHub Actions run `32976184254` — SUCCESS.
 
-Compact artifact:
-
-- artifact ID `9609551447`;
+- artifact `9609551447`;
 - ZIP SHA-256 `a1862766f900b0c0591d64751db069c8f6e1d394b336bb2f28ed29771bfeec69`.
 
 Latest official index date at execution: **2026-08-25**.
 
 - daily episode count: **688**;
 - median `avg_score`: **2761.313513**;
-- top `avg_score`: **3069.552857**;
-- selected top-five episode scores: `3069.552857`, `3068.856674`, `3068.856674`, `3068.579401`, `3066.290712`.
+- top `avg_score`: **3069.552857**.
 
-## First top-five result
+The first five episodes exposed two high-performing families, `Crop Dusta` and `Ryo Hasegawa`, and suggested aggressive late herd reduction in the former. Because five episodes were too small to promote any mechanism, the screen was expanded before policy work.
 
-The five winners came from two distinct high-performing strategy families, represented in replay metadata by `Crop Dusta` and `Ryo Hasegawa`.
+## Expanded top-20 screen
 
-Winner aggregate across the five episodes:
+GitHub Actions run **`32977177944`** — SUCCESS.
 
-- mean terminal money: **118,244**;
-- mean movement share: **52.47%**;
-- mean PASS share: **4.94%**;
-- mean productive-action share: **42.58%**;
-- all five final winner farms used **3 quadrants**;
-- mean seed buys included wheat 122.4, strawberry 30.2, carrot 21.4, melon 15.2, tomato 3.6;
-- mean sales included wheat 1630.8, fertilizer 226.8, wool 219.0, strawberry 205.6, milk 185.2, melon 89.6, carrot 52.2 and tomato 23.6.
+- artifact `9609951191`;
+- ZIP SHA-256 `ec15ee2b2d5827e517af85e7018a7dcfe79a0b94f78ec574c17f30893b5b6964`;
+- selection: 20 highest-`avg_score` episodes from the 2026-08-25 official manifest;
+- score range: **3069.552857 → 3056.613226**;
+- 40 player-games total;
+- exactly two team labels in this top band: `Crop Dusta` and `Ryo Hasegawa`, 20 player-games each;
+- winners: **Crop Dusta 14**, **Ryo Hasegawa 6**.
 
-The five winner terminal animal/crop compositions were heterogeneous rather than one fixed terminal farm:
+Winner aggregate:
 
-- `2C/7S/0G`;
-- `7C/2S/0G`;
-- `14C/4S/0G`;
-- `1C/6S/0G`;
-- `10C/2S/0G`.
+- mean terminal money: **105,459.2**;
+- movement: **53.97%** of unit actions;
+- PASS: **4.22%**;
+- productive actions: **41.81%**;
+- all winners used 3 quadrants;
+- mean seed buys: wheat 114.6, strawberry 33.25, carrot 23.2, melon 16.65, tomato 5.25;
+- mean sales: wheat 1709.45, fertilizer 205.9, strawberry 219.3, milk 182.7, wool 171.9, melon 91.35, carrot 64.1, tomato 34.75, egg 8.65.
 
-This is evidence that the current high-Elo meta contains materially adaptive economic strategies and that our fixed three-opponent panel is too narrow to serve as a calibrated proxy for the live field.
+Terminal farms are highly heterogeneous rather than one fixed farm template. That is evidence for adaptive economics rather than a single universally dominant cow/sheep layout.
 
-## Late-herd-exit observation — hypothesis only
+## Strong late-horizon signal
 
-A striking pattern appears in one top family (`Crop Dusta`): in several episodes it carries a large cow/sheep herd around step 672 and aggressively reduces it by terminal time.
+Across all 20 top episodes:
 
-Observed winner herd-count changes (`COW + SHEEP`) from step 672 to 719 in the five top episodes:
+- **winner mean herd reduction, step 672→719: 5.8 animals**;
+- **loser mean herd reduction: 1.25 animals**.
 
-- episode `99288626`: 20 → 9 (**-11**);
-- episode `99625995`: 18 → 9 (**-9**);
-- episode `99594187`: 18 → 18 (**0**) for the winning Ryo family;
-- episode `99373065`: 20 → 7 (**-13**);
-- episode `99443787`: 12 → 12 (**0**) for the winning Ryo family.
+The effect is concentrated in `Crop Dusta`, not universal across all successful strategies. `Ryo Hasegawa` often maintains a smaller/stable herd. Within the Crop Dusta family itself, winning trajectories reduce substantially more herd than losing trajectories, so the signal is stronger than a simple between-team correlation, but it remains observational.
 
-Mean across winners: **-6.6 animals**, but the mixture is bimodal: Crop Dusta often exits aggressively while Ryo often maintains a smaller/stable herd.
+Most of Crop Dusta's reduction occurs by step 696. Species-level inspection of winning trajectories indicates a mix of cow and sheep exit, with sheep reduction larger on average. The official engine has no animal resale action: a placed animal disappears only through the starvation/escape path, leaving its pasture/coop. Therefore this pattern represents deliberate late cessation of maintenance rather than selling livestock.
 
-Comparison with the frozen KEXP-014 public benchmark replays shows that R4B and Kaito/Rayk/Andrew almost never exhibit an exit of this magnitude. Across R4B's 96 public-panel games, candidate herd reduction from 672→719 averages roughly **0.84 animals in wins and 0.4 in losses**; public opponents are essentially 0 in those same reports.
+## Action-window mismatch versus Kculture
 
-This observation is especially relevant because multiple Kculture hard losses are still ahead around step 672 and reverse during the final ~47 turns. However, **correlation is not a policy recommendation**. The mechanism must be checked against official animal pickup/sale economics and a broader live sample before any candidate is changed.
+Top-20 **winner** means:
+
+| Window | FEED | CARE | HARVEST | DROP | PASS | movement | sell qty |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 600-671 | 37.55 | 30.15 | 65.9 | 4.8 | 16.05 | 460.0 | 193.5 |
+| **672-695** | **3.85** | **0.05** | **21.15** | **4.3** | **21.35** | **163.75** | **75.4** |
+| **696-718** | **0** | **0** | **21.85** | **15.7** | **30.05** | **165.7** | **168.25** |
+
+By contrast, across R4B's 96 KEXP-014 public-panel games, the candidate averages approximately **9.75 FEED + 8.75 CARE actions during 672-695**, with almost no herd exit; it also stops FEED/CARE entirely during 696-718. Thus the key mismatch is not the final day itself. It is the **penultimate-day maintenance/exit decision**.
+
+This is consistent with our independent late-collapse observation: several Kculture losses are still ahead at step 672 and reverse during the final ~47 turns.
+
+## Exact engine interpretation
+
+Frozen official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c` establishes:
+
+- animals escape after two successive end-of-day refreshes without feed;
+- FEED consumes one wheat;
+- CARE only banks a bonus that can be paid on a later scheduled production if that animal is fed;
+- the end-of-day refresh after step 695 is the **last end-of-day refresh of the season**;
+- steps 696-718 have no subsequent end-of-day production cycle before terminal reward;
+- terminal reward is bank money.
+
+Important implication: CARE performed during steps 672-695 can only bank a bonus for a production cycle that never occurs after that last refresh. Such CARE has no direct terminal-production value. FEED during 672-695 is more nuanced because it may protect an already-starving animal and may unlock an existing pending CARE bonus on the step-695 scheduled production. A future candidate must therefore be state-aware rather than blindly deleting all FEED.
 
 ## Policy-use boundary
 
 Opponent/team identity is **never** a deployable feature. Episode IDs are never policy features. The dataset is for discovering general strategic patterns and calibrating our lab to the actual live meta.
 
-## Next falsification steps
+## Disposition
 
-1. Expand from top 5 to a broader high-Elo band before concluding that late herd exit is generally valuable.
-2. Inspect exact official mechanics and top-replay actions used to reduce herds: pickup, market sale, replacement/redeployment and timing.
-3. Compare live winners/losers within matched episodes so strategy-family effects are separated from simple outcome correlation.
-4. If the mechanism remains strong, create a **development-only late-exit counterfactual** with one narrow intervention; do not modify hosted R4B yet.
-5. Add new exploratory development seeds and more current strategy families so the same original 16×3 panel cannot dominate decisions.
-6. Any changed policy still needs full cross-family W/L evidence, exact freeze and fresh validation before a second submission.
-
-## Data separation
-
-- does not consume frozen validation seeds;
-- does not consume held-out seeds;
-- all 32 held-out remain sealed.
+1. Keep hosted R4B immutable.
+2. Do **not** promote late herd exit from one day's sample.
+3. Open KEXP-019: longitudinal official-meta falsification across multiple recent dates.
+4. If the late stop-investment/exit signal survives across days/families, create a narrow development-only state-aware counterfactual.
+5. Any changed policy must then beat diverse controls in W/L, freeze exactly, and pass a fresh validation gate before submission #2.
+6. Validation and all 32 held-out seeds remain untouched by this observational work.
