@@ -4,16 +4,18 @@ Record every Kaggle agent submission here. The ordering matters because only the
 
 | ID | UTC timestamp | Git SHA | Agent/version | Local win rate | Ladder rating | Episodes | Tracked slot | Notes |
 |---|---|---|---|---:|---:|---:|---|---|
-| unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **161.6** | unknown | latest / yes | Kaggle UI shows green check and `Complete`; filename `Kculture_R4B_market_only_validated_v1_submission.tar.gz`; first hosted rating snapshot is far below the simulation default initialization of 600 and is treated as a live-score anomaly requiring episode-level diagnosis, not as a normal ~3000 starting value. |
+| unknown | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **135.7** | unknown | latest / yes | User-visible Kaggle screenshot, status `Complete` / green check. Rating declined further from the earlier 161.6 snapshot, strengthening the conclusion that hosted calibration/matchups materially disagree with the local public-agent panel. |
+| unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **161.6** | unknown | latest / yes | First observed hosted rating snapshot. |
 
 ## Submission 1 identity
 
-User-visible Kaggle evidence captured at approximately **2026-08-26 04:37 UTC** (phone local time 2026-08-25 23:37 -05:00):
+User-visible Kaggle evidence:
 
 - status: **Complete** / green validation check;
 - filename: `Kculture_R4B_market_only_validated_v1_submission.tar.gz`;
 - description: `Kculture R4B market-only validated v1`;
-- displayed score: **161.6**;
+- displayed score progression observed so far: **161.6 → 135.7**;
+- latest screenshot: phone time 2026-08-26 07:00 at UTC-05:00, approximately **2026-08-26 12:00 UTC**;
 - submission ID: not yet observed;
 - hosted episode count: not yet observed.
 
@@ -28,9 +30,9 @@ Exact package provenance:
 
 ### Interpretation checkpoint
 
-Kaggle simulation submissions are initialized at a default rating of **600** after the validation episode. Ratings then move with win/loss/tie outcomes; coin margin does not determine rating movement. Therefore **161.6 is a real post-initialization downward movement**, not an expected first display value and not directly comparable to the ~2900–3100 mature public-agent benchmark scores as though all submissions start there.
+Kaggle simulation submissions initialize around rating **600** after validation and then move with win/loss/tie outcomes; terminal coin margin does not directly determine rating movement. The sequence **161.6 → 135.7** is therefore meaningful evidence of continued poor hosted results, not a package-validation error and not a harmless difference in score scale.
 
-The first hosted contradiction is now a first-class research signal. Do not assume the agent will automatically climb to ~3000. Diagnose hosted W/L/replays as soon as submission ID/episode access is available, while continuing reproducible local development.
+This makes hosted calibration a first-class research signal. We should not assume automatic recovery and should not spend a second submission slot on an unvalidated reaction. Continue exact local development while seeking episode-level hosted evidence.
 
 ## Required notes per submission
 
