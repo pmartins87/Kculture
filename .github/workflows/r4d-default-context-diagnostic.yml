@@ -35,8 +35,10 @@ jobs:
           python -m pip install -U kagglehub
       - name: Fetch frozen R4A dependency
         run: python tools/fetch_public_opponents.py
-      - name: Verify frozen R4B diagnostic candidate
-        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Verify frozen diagnostic identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:tools/inspect_r4d_default_context.py)" = "5033a14040acac1556ac85e5e89ca7ad1f1cca2b"
       - name: Fetch exact public opponent
         env:
           KAGGLE_USERNAME: ""
