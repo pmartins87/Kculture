@@ -27,46 +27,130 @@ This is **diagnostic-only**. No code is promoted from this experiment and no val
 - `main.py` SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`
 - Apache-2.0.
 
-Every replay job must reacquire the exact notebook version and fail closed on the hash above.
+Every replay job reacquired the exact notebook version and failed closed on the hash above.
 
-## Predeclared hard-regime set
+## Protocol and evidence
 
-Rayk:
+Actions run: `32927303182` — **SUCCESS**.
 
-- `163219477`, both orientations — the only Rayk loss and also a symmetric Kaito V27 loss.
+Rayk artifact:
 
-Andrew:
+- artifact ID `9591994623`
+- artifact ZIP SHA-256 `f78a3f400b698749ce60d1664bce3315c702e10bedd3f91690400474834d343a`.
 
-- `150614441`, both orientations — one Andrew seat loss / one win, and also seat-sensitive under V27;
-- `393297156`, both orientations — symmetric Andrew loss;
-- `598340816`, both orientations — one Andrew seat loss / one win, and symmetric V27 loss;
-- `1422177419`, both orientations — symmetric Andrew loss.
+Andrew artifact:
 
-Total: **10 complete development replays**.
+- artifact ID `9592011224`
+- artifact ZIP SHA-256 `343e2dce16452dc0cb2e57b2da933253b5402a44e1a656624b0ed03127feb103`.
 
-## Diagnostic questions fixed before replay inspection
+Captured exactly the predeclared set:
 
-For each candidate-vs-opponent orientation, extract at minimum:
+- Rayk `163219477`, both orientations;
+- Andrew `150614441`, `393297156`, `598340816`, `1422177419`, both orientations.
 
-1. money delta at steps 120, 160, 192, 240, 360, 480, 600, 672, 700, 718 and terminal;
-2. first checkpoint at which a lead that existed after step 480 is lost;
-3. cows, sheep, hands and owned land at late checkpoints;
-4. crop-board composition and shed inventory around 600/672/700/718;
-5. late market quantities by product and HIRE activity;
-6. whether the terminal result is already determined before the step-718 market-only controller can matter.
+Total: **10 complete development replays**, eight losses and two wins for R4B. No validation or held-out seed opened.
 
-## Interpretation boundary
+## Main result: multi-family late collapse confirmed
 
-A mechanism is eligible to become an R4D hypothesis only if it is:
+Every one of the **eight captured loss orientations** is still an R4B money lead at step 672.
 
-- observable from legal game state;
-- not keyed to seed ID or opponent identity;
-- present in more than one current public family or supported by an engine-economic theorem;
-- expressible as one auditable change layered over R4B/COK;
-- testable on the full 16-seed development panel before any new validation.
+| Opponent | Seed | R4B seat | delta @672 | first non-positive step | terminal delta | 672→terminal swing |
+|---|---:|---:|---:|---:|---:|---:|
+| Rayk V11 | 163219477 | 0 | +3,097 | 717 | -1,188 | -4,285 |
+| Rayk V11 | 163219477 | 1 | +3,097 | 717 | -1,188 | -4,285 |
+| Andrew V12 | 1422177419 | 0 | +2,152 | 681 | -1,678 | -3,830 |
+| Andrew V12 | 1422177419 | 1 | +1,705 | 681 | -2,328 | -4,033 |
+| Andrew V12 | 150614441 | 0 | +2,980 | 719 | -224 | -3,204 |
+| Andrew V12 | 393297156 | 0 | +856 | 681 | -2,533 | -3,389 |
+| Andrew V12 | 393297156 | 1 | +856 | 681 | -2,533 | -3,389 |
+| Andrew V12 | 598340816 | 1 | +1,317 | 673 | -2,590 | -3,907 |
 
-If hard regimes are architecturally different, do not force a universal patch. Prefer a state-dependent late-phase controller with explicit guard conditions or keep R4B frozen while moving toward R5 planning.
+Across these eight losses:
+
+- mean step-672 lead: **+2,007.5**;
+- mean terminal result: **-1,782.75**;
+- mean relative collapse from step 672 to terminal: **-3,790.25**.
+
+Split by in-game day:
+
+- step 672→696 (day 28): mean relative swing **-2,123.5**;
+- step 696→terminal (day 29): mean relative swing **-1,666.75**.
+
+Therefore the loss mechanism is not confined to the final action, final hour, one seat, one seed, or one opponent family.
+
+## Throughput observations
+
+These are descriptive, not causal proof.
+
+Across the eight losing orientations during **day 28 (steps 672–695)**:
+
+| Action/market quantity | R4B avg | opponent avg |
+|---|---:|---:|
+| HIRE | 10.0 | 10.0 |
+| HARVEST actions | 30.5 | 17.25 |
+| DROP actions | **0.0** | 2.75 |
+| PASS actions | 49.5 | 22.0 |
+| WATER actions | 25.75 | 39.25 |
+| WHEAT sold | 26.0 | 61.0 |
+| MILK sold | 21.0 | 16.375 |
+| FERTILIZER sold | 13.5 | 26.75 |
+
+At step 695, immediately before the day-28 end-of-day auto-drop, R4B carries on average **92.5 total shed+actor items** versus **54.25** for the opponent in these losses. R4B shed itself is generally empty at this point; most stock is still carried by farmer/hands and becomes available for market sale only after end-of-day auto-drop.
+
+During **day 29 (steps 696–718)**:
+
+| Action/market quantity | R4B avg | opponent avg |
+|---|---:|---:|
+| HIRE | 8.0 | 9.75 |
+| HARVEST actions | 18.5 | 29.75 |
+| DROP actions | 8.0 | 13.75 |
+| PASS actions | **70.25** | 14.0 |
+| WATER actions | 9.5 | 24.75 |
+| WHEAT sold | 78.5 | 142.5 |
+| MILK sold | 25.5 | 47.0 |
+| FERTILIZER sold | 9.0 | 16.75 |
+
+Again, these comparisons do not mean copying opponent action counts is optimal. They identify a recurring structural difference: R4B harvests aggressively during day 28 but realizes less of that production through shed/market before the horizon closes, then uses materially less active labor/harvest/drop throughput on the final day.
+
+## Engine constraints that matter
+
+From the frozen official engine:
+
+- unit actions execute before market orders;
+- SELL can access shed stock, not arbitrary actor inventory;
+- end-of-day actor inventories auto-drop to the shed **after** the day's final market phase;
+- shed capacity is 100 and DROP silently discards actor inventory that cannot fit;
+- farm hands reset each day and must be rehired;
+- hire costs follow the low Fibonacci sequence `1,1,2,3,5,8,13,...`;
+- step 718 terminal market sales affect final money; leftover inventory has no terminal value.
+
+This makes late **harvest → carry → shed → sell** throughput and final-day labor utilization economically meaningful independent of any opponent code.
+
+## Interpretation
+
+KEXP-013 confirms the V27 diagnosis across two additional current public families:
+
+1. **late-phase continuation is a real multi-family weakness** of the current R4B/COK route family;
+2. the problem begins during day 28, before the terminal market-only controller;
+3. final-day under-utilization amplifies it;
+4. the strong midgame remains valuable — wholesale route replacement is still unsupported;
+5. the next candidate should improve cash conversion late while preserving the successful opening/midgame.
+
+The two captured wins (`150614441` Andrew seat 1 and `598340816` Andrew seat 0) also show large structural differences from the opponent, so raw action-count matching is explicitly rejected as a design method.
+
+## R4D eligibility decision
+
+**R4D IS NOW ELIGIBLE FOR A DEVELOPMENT PROTOTYPE**, subject to these constraints:
+
+- no seed-ID or opponent-ID logic;
+- legal-state observable only;
+- preserve frozen R4B terminal market completeness;
+- target the late cash-conversion/continuation pipeline, not the opening;
+- begin with the smallest mechanically justified intervention;
+- test on all 16 development seeds, both seats, against a diverse current-meta panel before any validation.
+
+The first prototype should prioritize a low-risk late conversion mechanism before attempting a full new planner.
 
 ## Status
 
-**PRE-REGISTERED — REPLAY CAPTURE PENDING.**
+**COMPLETE — MULTI-FAMILY LATE-COLLAPSE HYPOTHESIS CONFIRMED.**
