@@ -1,0 +1,39 @@
+name: live-meta-longitudinal
+
+on:
+  push:
+    paths:
+      - ".github/workflows/live-meta-longitudinal.yml"
+  workflow_dispatch:
+
+jobs:
+  radar:
+    strategy:
+      fail-fast: false
+      matrix:
+        date: ["2026-08-23", "2026-08-24", "2026-08-25"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install public dataset client
+        run: python -m pip install -U kagglehub
+      - name: Profile official top-10 for date
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: |
+          set -euo pipefail
+          python tools/live_meta_radar.py \
+            --date "${{ matrix.date }}" \
+            --top 10 \
+            --output "artifacts/live-meta/${{ matrix.date }}/report.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp019-live-meta-${{ matrix.date }}
+          path: artifacts/live-meta/${{ matrix.date }}/report.json
