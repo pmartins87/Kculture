@@ -1,19 +1,23 @@
 # STATUS — Kculture
 
-Last updated: 2026-08-25
+Last updated: 2026-08-25/26
 
 ## Mission status
 
 **Goal: top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
+- **R0 complete for working purposes** — technical intake complete and competition entry is user-confirmed; API-side reconciliation will occur with the first authenticated submission.
 - **R1 PASS** — official starter parity and 720-turn reproduction.
 - **R2 PASS** — deterministic tournament laboratory and frozen seed partitions.
-- **R3 pending** — first hosted ladder submission / account-side Kaggle confirmation.
+- **R3 READY TO SUBMIT** — first hosted ladder package is validated and deterministic; authenticated Kaggle upload remains.
 - **R4 ACTIVE** — strong economic baseline and Kculture improvements.
 - **R4A frozen** — COK V8 selected as `R4A-public-base-v1`.
 - **Full R4B REJECTED** — terminal physical-DROP optimizer failed direct development gate.
 - **R4B market-only VALIDATION PASS** — frozen as `R4B-market-only-validated-v1` and selected as first hosted-submission candidate.
-- **Package parity running** — Actions run `32919305800`.
+- **Package parity PASS** — exact self-contained hosted package reproduced the frozen wrapper action-for-action.
+- **Kaito V18 generalization support** — market-only improved the same-seed development result from 14-2 to 16-0.
+- **R4C ninth-cow NO PROMOTION** — neutral external result and zero paired aggregate advantage.
+- **KEXP-010 failure atlas running** — 160 development games across COK/Seyamalam/Kaito.
 - **Held-out sealed** — all 32 held-out seeds remain unopened.
 
 ## Competition constraints
@@ -52,7 +56,7 @@ Run `32913752287`:
 - full R4B vs Seyamalam: **16-0**, mean `+22,541.500`.
 - full R4B vs R4A: **5-11**, score `0.3125`, mean `-1.625`.
 
-Extra terminal physical `DROP` replacement was therefore rejected before validation.
+Extra terminal physical `DROP` replacement was rejected before validation.
 
 ## KEXP-006 — market-only development screen: PASS
 
@@ -76,28 +80,63 @@ Run `32918640409`, exact frozen candidate verified before every matchup, all 16 
 | Market-only vs Seyamalam | 32-0-0 | 1.0000 | +18,885.875 | 0 |
 | Market-only vs R4A | 8-6-18 | 0.53125 | +165.03125 | 0 |
 
-Every predeclared validation condition passed. Evidence and artifact hashes are preserved in `experiments/KEXP-20260825-007-r4b-market-only-validation/README.md`.
+Every predeclared validation condition passed. Evidence is preserved in `experiments/KEXP-20260825-007-r4b-market-only-validation/README.md`.
 
-The exact artifact is now `R4B-market-only-validated-v1`: a **validated engineering / first hosted-submission candidate**, not yet a top-10 claim and not yet R4 overall PASS.
+The exact artifact is `R4B-market-only-validated-v1`: a **validated engineering / first hosted-submission candidate**, not a top-10 claim and not yet R4 overall PASS.
 
-## Package parity
+## Package parity: PASS
 
-`tools/build_r4b_market_only_submission.py` embeds the exact hash-pinned COK V8 source plus only the validated Kculture market-only overlay into a deterministic self-contained archive with root `main.py`, Apache-2.0 license and notices.
+Actions run `32919305800`:
 
-Actions run `32919305800` is currently enforcing complete action-trajectory and terminal-result parity between the frozen laboratory wrapper and packaged agent on development seeds. A mismatch rejects the package.
+- exact frozen candidate Git blob verified;
+- exact COK V8 source hash verified;
+- deterministic self-contained archive built;
+- 4/4 tested full trajectories had identical actions from start to finish;
+- terminal statuses/rewards matched exactly.
+
+Hosted package:
+
+- archive SHA-256: `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
+- size: `101557` bytes;
+- packaged `main.py` SHA-256: `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`.
+
+`.github/workflows/r3-first-hosted-submission.yml` rebuilds and hash-checks this exact archive before sending it. Competition entry is user-confirmed; authenticated Kaggle access is the remaining R3 execution dependency.
+
+## KEXP-008 — guarded ninth cow: NO PROMOTION
+
+Run `32919545606`, first 8 development seeds × both seats:
+
+- R4A vs Seyamalam: **14-2**, mean `+21,063.875`.
+- R4C vs Seyamalam: **14-2**, mean `+21,063.875` — exact non-improvement.
+- R4C vs R4A: **4-4-8**, score `0.500`, mean `0.000`.
+
+The dormant switch can create small differences but showed no external advantage. It is not part of the hosted candidate.
+
+## KEXP-009 — Kaito V18 strong-panel preservation: GENERALIZATION SUPPORT
+
+Public Kaito V18/C20 exact-replication mirror is hash-pinned at SHA-256 `603175d39f2857cbd618dc8f5ac9411e9fd234e3142777ec203342172f05a50e`, Apache-2.0.
+
+Run `32919635267`, first 8 development seeds × both seats:
+
+| Matchup | W-L-T | Score | Mean delta | Errors |
+|---|---:|---:|---:|---:|
+| R4A vs Kaito V18 | 14-2-0 | 0.875 | +20,732.750 | 0 |
+| Market-only vs Kaito V18 | **16-0-0** | **1.000** | **+22,210.375** | 0 |
+
+The market-only change flipped both R4A losses on seed `583180324` into wins while preserving the other wins. This is development-only generalization evidence, not a new validation claim.
+
+## KEXP-010 — development failure atlas: RUNNING
+
+Actions run `32920250892` uses all 16 development seeds, both seats, across five blocks: market-only vs R4A/Seyamalam/Kaito and same-seed R4A controls vs Seyamalam/Kaito. Total 160 games. Its purpose is failure localization and next-hypothesis generation only.
 
 ## Strong public targets
 
-Dated benchmark targets currently include Kaito V27 V4 (~3090.1 snapshot), Rayk V11 (~2990.4), Andrew V12 (~2915.2), and Flexona V59 (~2767.3). Exact Kaggle kernel acquisition remains authentication-gated through the prepared secret-only `KAGGLE_API_TOKEN` workflow.
-
-## R4C / later development
-
-`KEXP-20260825-008-r4c-guarded-ninth-cow` is prepared but not executed and remains development-only. Validation results from R4B must not be used to tune changed candidates.
+Dated benchmark targets include Kaito V27/V42+, Rayk V11, Andrew V12, and Flexona V59. Exact newer Kaggle kernel acquisition remains authentication-gated through the prepared secret-only `KAGGLE_API_TOKEN` workflow.
 
 ## Immediate continuation
 
-1. Finish package parity run `32919305800`.
-2. If PASS, preserve the deterministic `.tar.gz` and manifest as hosted-submission-ready.
-3. Confirm Kaggle account entered status / authenticated access and make the first ladder submission, completing R3 once hosted behavior is reconciled.
-4. Continue development-only R4/R5 work against stronger public opponents.
+1. Complete and interpret `KEXP-010` strictly as development diagnostics.
+2. Form the next one-change candidate only from a recurring failure pattern in that atlas.
+3. Make the first authenticated hosted submission of the frozen R4B package and reconcile hosted behavior/rating, completing R3.
+4. Acquire newer strong public agents once authenticated Kaggle API access is available.
 5. Keep all 32 held-out seeds sealed until a later formal promotion/final-selection gate.
