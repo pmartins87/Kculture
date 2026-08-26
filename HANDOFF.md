@@ -1,72 +1,88 @@
 # HANDOFF — Kculture
 
-Use this file as the first read in a dedicated Kculture chat.
+Use this file as the first read in any new Kculture chat.
 
 ## Mission
 
-Compete seriously for a **top-10 prize** in Kaggle's Kaggriculture simulation. Final submission deadline: 2026-09-30 23:59 UTC. `pmartins87/Kculture` is the source of truth and intentionally remains public during development.
+Compete seriously for a **top-10 Kaggriculture prize**. Final submission deadline: 2026-09-30 23:59 UTC. `pmartins87/Kculture` is the source of truth and intentionally public.
 
-## First reads
+## Mandatory first reads
 
 1. `STATUS.md`
 2. `ROADMAP.md`
 3. `experiments/KEXP-20260825-007-r4b-market-only-validation/README.md`
-4. `research/R4B_MARKET_ONLY_PACKAGE_20260825.md`
-5. `experiments/KEXP-20260825-010-r4-development-failure-atlas/README.md`
-6. `docs/SUBMISSION_LEDGER.md`
-7. `official/UPSTREAM_LOCK.md`
+4. `experiments/KEXP-20260825-010-r4-development-failure-atlas/README.md`
+5. `experiments/KEXP-20260825-011-r4-kaito-v27-strong-screen/README.md`
+6. `research/CURRENT_META_ACQUISITION_20260826.md`
+7. `research/R4B_MARKET_ONLY_PACKAGE_20260825.md`
+8. `docs/SUBMISSION_LEDGER.md`
+9. `official/UPSTREAM_LOCK.md`
 
-Then inspect latest commits and GitHub Actions before changing anything.
+Then inspect latest commits and GitHub Actions before changing code.
 
 ## Working rules
 
 - Official engine facts outrank assumptions.
-- Preserve source/commit/path/hash/license for public agents.
+- Preserve public-agent source/version/path/hash/license provenance.
 - Fresh-load file agents per episode.
-- Compare both seats and deterministic seeds.
-- Development is for iteration; validation only for frozen candidates; held-out is reserved for later promotion/final selection.
-- Never tune changed code on an earlier candidate's validation and then reuse that validation claim.
-- Do not promote from a few ladder games alone.
-- Record every hosted submission and exact source/config/hash.
+- Compare deterministic seeds in both seats.
+- Development is for iteration; validation only for an exact frozen candidate; held-out is reserved for later promotion/final selection.
+- Never transfer an old validation claim onto changed code.
+- Never promote from a few ladder games alone.
+- Record every hosted submission and exact source/hash/package.
 - Never commit credentials/private competitor code.
-- Advance autonomously and surface only meaningful blockers/results.
+- Change one auditable strategic mechanism at a time.
+- Advance autonomously; surface only material blockers/results.
 
 ## Current state
 
-- **R0 working intake complete:** competition entry is user-confirmed; API reconciliation will occur on authenticated submission.
+- **R0 COMPLETE for working purposes** — competition enrollment user-confirmed.
 - **R1 PASS** — official starter parity.
-- **R2 PASS** — deterministic lab with 16 dev / 16 validation / 32 held-out seeds.
-- **R3 READY TO SUBMIT:** only the authenticated Kaggle upload/hosted reconciliation remains.
+- **R2 PASS** — deterministic 16 dev / 16 validation / 32 held-out laboratory.
+- **R3 USER UPLOAD IN PROGRESS** — user reports manual Kaggle upload of the exact validated package has started. Do not mark PASS until hosted validation/submission ID/ladder entry are observed.
 - **R4 ACTIVE.**
 - **R4A frozen:** COK V8 (`779caae...`, SHA-256 `faf57412...`, Apache-2.0).
-- **Full R4B rejected:** 16-0 vs Seyamalam but 5-11 vs R4A; extra physical terminal DROP replacement was harmful.
-- **R4B market-only VALIDATION PASS:** exact Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
-- Validation run `32918640409`: R4A control vs Sey 30-2; market-only vs Sey 32-0; market-only vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors.
-- **Package parity PASS:** run `32919305800`, 4/4 full trajectories identical.
-- Submission archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`, 101557 bytes; packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`.
-- `R4B-market-only-validated-v1` is **HOSTED_SUBMISSION_READY**.
-- **KEXP-008 ninth cow:** NO PROMOTION. 14-2 vs Seyamalam exactly matched R4A; direct vs R4A 4-4-8, mean zero.
-- **KEXP-009 Kaito V18:** generalization support. R4A 14-2 / +20,732.75; market-only 16-0 / +22,210.375 on the same first 8 dev seeds × both seats.
-- **KEXP-010 failure atlas:** running all 16 development seeds across R4A/Seyamalam/Kaito, 160 games total.
+- **Full R4B rejected:** extra terminal physical DROP optimizer regressed directly vs R4A.
+- **R4B market-only VALIDATION PASS:** frozen Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
+- Validation run `32918640409`: 32-0 vs Seyamalam; direct vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors.
+- Package parity run `32919305800`: 4/4 full trajectories identical.
+- Hosted archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`, 101557 bytes; packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`.
+- **R4C ninth-cow:** NO PROMOTION.
+- **KEXP-010 COMPLETE:** R4B 32-0 vs Seyamalam V21 and 32-0 vs Kaito V18 on all 16 development seeds × both seats; older panel is saturated.
+- **KEXP-011 COMPLETE:** exact Kaito V27 V4 (public best 3090.1, `main.py` SHA `f48c2116...`) is a frontier opponent. R4A and R4B both 25-7; R4B mean +4396.84375 vs +4382.03125 for R4A. Do not migrate base.
+- V27 loss seeds: `150614441` seat1 only; `1743398262`, `163219477`, `598340816` both seats.
+- **Current-meta acquisition complete:** exact Rayk V11 `main.py` SHA `adc61ab1...` (best 2990.4 V11) and Andrew V12 SHA `df4e899a...` (best 2915.2 V12, Apache-2.0) acquired through public KaggleHub with no credentials.
+- Strong screen run `32926727240`: R4A/R4B vs Rayk V11 and Andrew V12, all 16 dev seeds × both seats — running at last update.
+- V27 frontier replay run `32926648674`: four frontier seeds × both seats — running/capturing at last update.
 - **Held-out remains sealed 32/32.**
 
-## R3 next step
+## Hosted submission checkpoint
 
-`.github/workflows/r3-first-hosted-submission.yml` is manual-only. It:
+The exact package the user is uploading must correspond to:
 
-1. requires repository secret `KAGGLE_API_TOKEN`;
-2. verifies Kaggriculture appears under entered competitions;
-3. rebuilds the exact deterministic archive;
-4. rejects any archive hash other than `19cc08d2...c53117`;
-5. submits the agent;
-6. preserves the hosted submission list for the ledger.
+- archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
+- `R4B-market-only-validated-v1`;
+- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`.
 
-The user has confirmed competition enrollment. Do not expose credentials in source or chat. If API auth is not configured, the same exact tar.gz may be uploaded manually in the Kaggle UI.
+When Kaggle finishes processing:
+
+1. record accepted/error state;
+2. record submission ID and message;
+3. preserve hosted validation/log evidence;
+4. if accepted, record initial rating and later episodes;
+5. reconcile hosted behavior with local assumptions;
+6. update `docs/SUBMISSION_LEDGER.md`, `STATUS.md`, `ROADMAP.md`.
 
 ## Development continuation
 
-`KEXP-20260825-010-r4-development-failure-atlas` is the current development diagnostic. It must be interpreted before creating another physical/economic strategy mutation. Use only recurring patterns from development evidence, change one mechanism at a time, and give every changed candidate a new experiment identity.
+Do not modify the frozen R4B candidate while the first hosted submission is being established.
 
-## External benchmark targets
+Next engineering decision must use **multi-family frontier evidence**:
 
-High-priority newer targets remain Kaito V27/V42+, Rayk V11, Andrew V12 and Flexona V59. Exact Kaggle notebook pull requires authenticated `KAGGLE_API_TOKEN`; the acquisition workflow is manual/secret-only.
+1. finish exact Rayk V11 / Andrew V12 strong screen (`32926727240`);
+2. analyze complete V27 frontier replays (`32926648674`);
+3. determine whether a common midgame/continuation/labor/market mechanism explains losses across more than one modern family;
+4. only then create a separately named R4D development candidate;
+5. R4D gets development evidence first and its own future validation if frozen.
+
+Rayk V11 is benchmark-only until its license is independently verified; do not derive/redistribute its source. Andrew V12 is Apache-2.0 per public Kaggle page.
