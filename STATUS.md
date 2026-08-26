@@ -8,6 +8,8 @@ Last updated: 2026-08-25
 **R1: PASS (2026-08-25).**  
 **R2: PASS (2026-08-25).**  
 **R3: pending first hosted ladder submission.**  
+**R4A: frozen public base selected.**  
+**R4B: development experiment pending GitHub Actions execution.**  
 **R0 account-side confirmation still pending:** competition rule acceptance / entered status cannot be independently verified from this repository.
 
 Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 10 positions pays US$5,000.
@@ -63,31 +65,72 @@ Strong calibration on dev seed `150614441`: frozen carrot reference vs COK V8 pr
 
 Competitive code may therefore be committed here. Imported public policies must preserve repository, commit, file path, SHA-256 and license provenance. Credentials, private/unpublished competitor code and redistribution-restricted private replay payloads remain prohibited.
 
-## R4 ACTIVE — strong economic baseline
+## R4A frozen — first strong public base
 
-Current experiment: `KEXP-20260825-004-r4-public-base-screen`.
+Experiment: `KEXP-20260825-004-r4-public-base-screen`.
 
-The first R4 step is deliberately not a hand-written rewrite from the starter. We are screening two independent, public, attributed strong architectures on the frozen 1.32.7 engine:
+Two attributed public architectures were screened on the frozen 1.32.7 engine:
 
 - COK V8 — `COK-ZhangZiliang/Kaggriculture`, commit `779caaec...`, SHA-256 `faf57412...`, Apache-2.0.
 - Seyamalam V21 — `Seyamalam/Kaggriculture`, commit `8b8c421e...`, SHA-256 `0cd14b65...`, Apache-2.0 derivative with preserved attribution.
 
-Protocol uses development seeds only. Each policy is tested against the frozen simple pool and they then play a direct both-seat head-to-head. The winner becomes `R4A-public-base`; Kculture-specific changes then proceed one audited delta at a time.
+Direct first-8-development-seed both-seat result: **COK V8 14–2 Seyamalam V21**, mean COK money delta approximately **+21,064**, zero runtime errors. COK V8 is therefore frozen as `R4A-public-base-v1` in `configs/r4a_public_base.json`.
 
-GitHub Actions workflow: `r4-public-base-screen.yml`, run `32868407585`.
+Seyamalam remains an important independent opponent because it generated more money against the simple pool than COK in the same screen. Prefix-divergence analysis also established that COK and Seyamalam diverge at state index 1, so a late shop-reveal switch between the full policies is not a valid composition strategy.
+
+## R4B active — terminal-capacity liquidation
+
+Experiment: `KEXP-20260825-005-r4b-terminal-liquidation`.
+
+COK's published V8 failure analysis reports a terminal-sale revenue deficit in **57 of 59** recorded losses. The worst route loss cluster is `current:6c8s_3q`; important revenue deficits include WHEAT, MILK and TOMATO.
+
+`candidates/r4b_terminal_liquidation.py` therefore changes **only executable step 718** of the frozen R4A base. It:
+
+1. inspects current shed and shed-adjacent actor inventories;
+2. solves an actor-level 0/1 knapsack under the 100-item shed capacity using visible sale value;
+3. selects terminal `DROP` actions without allowing lower-value inventory to crowd out higher-value stock;
+4. projects same-turn shed state using the upstream execution model;
+5. sells every projected sellable product within the market-order cap.
+
+All earlier actions are delegated to the frozen COK V8 policy unchanged.
+
+Development gate uses the first 8 development seeds, both seats:
+
+- R4A vs Seyamalam control;
+- R4B vs Seyamalam;
+- R4B vs R4A direct.
+
+Required before any validation seed is opened: zero runtime errors, R4B >= same-seed R4A control against Seyamalam, direct score rate vs R4A >= 0.50, and direct mean money delta vs R4A >= 0.
+
+GitHub Actions run `32913752287` is currently queued; **no R4B performance conclusion exists yet**.
+
+## Current public benchmark targets
+
+Discovery snapshot: `research/PUBLIC_BENCHMARK_SNAPSHOT_20260825.md` and `configs/kaggle_public_targets.json`.
+
+Highest-priority exact public versions currently identified:
+
+- Kaito Fukami V27 V4 — public score snapshot **3090.1**, Apache-2.0.
+- Rayk Kretzschmar V11 — best score snapshot **2990.4**.
+- FlexonaFFt V59 — best score snapshot **2767.3**.
+- Andrew Sokolovsky V10 — best score snapshot **2671.3**.
+
+These scores are dated discovery metadata, not permanent ceilings. The current COK R4A is an engineering/reproducibility base, not assumed to be leaderboard-optimal.
+
+Exact-version acquisition is prepared in `r4-acquire-kaggle-public.yml`. Kaggle requires authentication even for public kernel pulls, so the workflow is manual and reads only the GitHub repository secret `KAGGLE_API_TOKEN`; no credential belongs in source control.
 
 ## R3 status
 
 R3 requires the first valid hosted ladder submission and local↔hosted reconciliation. It is not yet PASS.
 
-Account-side prerequisite still pending: confirm Kaggle `Join Competition` / entered status before first submission. Verification can be done through Kaggle UI or `kaggle competitions list --group entered`.
+Account-side prerequisite still pending: confirm Kaggle `Join Competition` / entered status before first submission. Verification can be done through Kaggle UI or authenticated Kaggle CLI.
 
 ## Immediate next actions
 
-1. Finish R4 public-base screen and freeze `R4A-public-base`.
-2. Compare action prefixes and failure modes of the screened bases to determine whether expert-selection/portfolio routing is feasible or whether the first improvement should stay base-local.
-3. Add independent strong public opponents so no policy is optimized against one benchmark family.
-4. Develop R4 changes on development seeds only; use validation after design freeze and held-out only for promotion.
+1. Complete the queued R4A terminal inspection and R4B development tournament.
+2. If R4B passes its predeclared development gates, freeze the exact candidate before opening validation seeds; if it fails, record rejection and move to the `6c8s_3q` / midgame route weakness.
+3. Acquire Kaito V27 V4 and Rayk V11 through the authenticated, hash-preserving workflow once `KAGGLE_API_TOKEN` is configured, then add them to the strong-opponent panel.
+4. Keep validation unopened until a development candidate is frozen and held-out unopened until a formal promotion gate.
 5. Confirm Kaggle entered status and submit the first strong candidate when local safety/robustness gates pass.
 6. Record exact submission ID, source SHA/config and hosted reconciliation in `docs/SUBMISSION_LEDGER.md`.
 
