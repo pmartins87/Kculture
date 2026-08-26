@@ -1,10 +1,10 @@
 # KEXP-20260826-014 — R4 late-lifecycle full-panel diagnostic
 
+Status: **COMPLETE — generic weed/lifecycle patch rejected; route-selector lead promoted**
+
 ## Purpose
 
-Test whether the crop-lifecycle signal discovered in loss-focused KEXP-013 generalizes across **wins and losses** before any R4D policy mutation.
-
-This experiment is diagnostic-only. It changes no agent behavior and opens **development seeds only**.
+Test whether the loss-focused late crop-lifecycle signal from KEXP-013 generalizes across wins and losses before mutating policy. Diagnostic only; development seeds only.
 
 ## Frozen candidate
 
@@ -14,104 +14,74 @@ This experiment is diagnostic-only. It changes no agent behavior and opens **dev
 - Git blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`
 - hosted package remains immutable.
 
-## Exact opponent panel
+## Exact panel
 
-Run all 16 frozen development seeds in both orientations against each independent current-meta family:
+- `kaggle-environments==1.32.7`;
+- exact 16-seed development partition;
+- both seats;
+- Kaito V27 V4, SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`;
+- Rayk V11, SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`;
+- Andrew V12, SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`;
+- 96 total episodes;
+- zero validation seeds;
+- zero held-out seeds.
 
-1. **Kaito V27 V4**
-   - `kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4`
-   - `main.py` SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`
-   - public/best score snapshot 3090.1
-   - Apache-2.0.
-2. **Rayk V11**
-   - `raykkretzschmar/kaggriculture-rank-your-agent/versions/11`
-   - `main.py` SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`
-   - best-score snapshot 2990.4
-   - benchmark-only until license independently verified.
-3. **Andrew V12**
-   - `andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12`
-   - `main.py` SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`
-   - best-score snapshot 2915.2
-   - Apache-2.0.
+Actions run: **32931921583** — SUCCESS.
 
-Each job must reacquire the exact public notebook output and fail closed if the expected SHA-256 does not match.
+Artifacts:
 
-## Protocol
+- Kaito V27: artifact `9593617801`, ZIP SHA-256 `0c74411cc73a4e5c42e60a4d1104ee7206e7eaaf96b95d0635c497f55ef0e61c`;
+- Rayk V11: artifact `9593617367`, ZIP SHA-256 `e77fb0b89064b8c25b4e87c219773a68ffedc20e97933b647a91ab454b2202ba`;
+- Andrew V12: artifact `9593614809`, ZIP SHA-256 `cc8a00bdcfa999a5c6bf1b142614e687c14b0391260c8c679e1fb82ffd5db814`.
 
-- environment: `kaggle-environments==1.32.7`;
-- partition: exact `development` list from `configs/seed_partitions.json`;
-- 16 seeds × 2 candidate seats × 3 opponents = **96 games**;
-- fresh-load both file agents for every episode;
-- no validation seed;
-- no held-out seed;
-- checkpoints: 600, 648, 672, 696, 708, 717, 718, 719;
-- action windows: 672–695 and 696–718.
+## Exact outcome
 
-The diagnostic records, for candidate and opponent:
+| Opponent | W-L-T | Score | Mean terminal delta | Mean 672→terminal swing |
+|---|---:|---:|---:|---:|
+| Kaito V27 | 25-7-0 | 0.78125 | +4,396.84375 | -2,565.84375 |
+| Rayk V11 | 30-2-0 | 0.93750 | +7,477.21875 | -2,165.59375 |
+| Andrew V12 | 26-6-0 | 0.81250 | +5,287.43750 | -1,947.28125 |
+| **Combined** | **81-15-0** | **0.84375** | **+5,720.5** | **-2,226.2396** |
 
-- money trajectory;
-- strawberries expiring at step 672 and by step 696;
-- weeds and productive crop tiles at step 696;
-- hands at step 708;
-- carried/shed inventory;
-- final-day PASS, HARVEST, DROP and requested SELL quantities;
-- terminal result and 672→terminal relative swing.
+The late-collapse phenomenon is real, but the predeclared generic crop-lifecycle/weed explanation did **not** generalize in the required direction. Losses did not consistently have more weeds and less productive acreage than wins. A generic weed-cleanup mutation is therefore rejected.
 
-Tool: `tools/run_late_lifecycle_panel.py`.
+## Stronger structural result: production-route split
 
-## Predeclared hypotheses
+The candidate checkpoint at step 672 exposed a much cleaner cross-family separator:
 
-The loss-focused KEXP-013 observation is **not** accepted as causal evidence unless it separates wins from losses on the full panel.
+| Production regime | Games | W-L | Score | Mean terminal delta | Mean 672→terminal swing |
+|---|---:|---:|---:|---:|---:|
+| 6C/12S | 24 | 22-2 | 0.91667 | +8,174.333 | -2,120.875 |
+| 10C/4S | 51 | 45-6 | 0.88235 | +6,301.647 | -1,718.686 |
+| **8C/6S** | **19** | **12-7** | **0.63158** | **+1,143.000** | **-3,820.421** |
+| 9C/4S observed recovery state | 2 | 2-0 | 1.00000 | +4,941.5 | descriptive |
 
-### H1 — lifecycle load
+The weak 8C/6S regime reproduced across all three modern families:
 
-In at least **two independent opponent families**, loss games should show a worse late crop-lifecycle state than win games in the same directional sense:
+- Kaito: 5-3, mean delta +630.625, late swing -4,367.625;
+- Rayk: 4-2, mean delta +2,635.167, late swing -4,250.0;
+- Andrew: 3-2, mean delta +172.2, late swing -2,429.4.
 
-- greater candidate/relative strawberry-expiry load at step 672 or by 696; and/or
-- greater relative weeds at 696; and
-- lower relative productive crop acreage at 696.
+The baseline-defined 8C/6S exposures occur primarily on development seeds `150614441`, `1369296235`, `393297156`, and `163219477`, in both-seat combinations depending on opponent. These seed identities are used only to audit paired outcomes; no policy may inspect seed or opponent identity.
 
-### H2 — economic consequence
+## Source-level interpretation
 
-Across the combined panel, worse lifecycle state should move in the mechanically expected direction with 672→terminal relative swing:
+Frozen COK V8 route logic establishes that final 8C/6S is the **default no-Yarn/no-milk-support regime** after the first three public shop unlocks:
 
-- more weeds / more candidate expiry: negative relationship with late swing;
-- more productive acreage: positive relationship with late swing.
+- first Yarn → 6C/12S;
+- Yarn in first two → 6C/12S;
+- Yarn in first three → 6C/8S, with V8's milk-support/distance override possibly promoting to 10C/4S;
+- no Yarn + early milk support → 10C/4S;
+- otherwise → **8C/6S**.
 
-Pearson correlation is descriptive because features are discrete and opponent-family mixtures are heterogeneous; signs and win/loss group separation matter more than one arbitrary magnitude cutoff.
+COK V8 already contains bounded weed replay and passive-weed repair controllers. A separate probe of Kaito's recent public weed-slip-recovery agent did not reveal a stronger generic weed mechanism worth copying.
 
-### H3 — residual throughput
+## Disposition
 
-After examining lifecycle separation, final-day labor/throughput variables are treated as a **separate residual mechanism**:
-
-- hands;
-- HARVEST;
-- DROP;
-- requested SELL quantity;
-- PASS.
-
-They must not be bundled automatically into the first lifecycle intervention.
-
-## Decision rule
-
-**Allow R4D crop-lifecycle prototype** only if H1 is directionally reproduced across at least two families and the combined H2 evidence is compatible with the same mechanism.
-
-If lifecycle separation is weak/inconsistent, reject crop-lifecycle targeting and move the next causal experiment to labor/harvest/drop/market conversion instead.
-
-If lifecycle is confirmed, R4D must still obey:
-
-- legal-state-observable logic only;
-- no seed ID;
-- no opponent ID;
-- preserve successful opening/midgame unless the tested state trigger fires;
-- preserve frozen terminal market completeness;
-- one narrow mechanism first;
-- all 16 development seeds/current-meta panel before any new validation gate.
-
-## Hosted-score context
-
-The first exact R4B submission is now `Complete` on Kaggle but its first observed live score is **161.6**, far below the 600 initialization documented for valid simulation submissions and far below mature public benchmarks around 2900–3100. KEXP-014 therefore serves both R4D engineering and local-vs-hosted calibration: it tests a mechanism already seen across three public families rather than reacting to the ladder score with an ungrounded patch.
-
-## Status
-
-**PREDECLARED — NOT YET RUN.**
+1. **Reject** generic late weed cleanup as R4D.
+2. **Promote** the default 8C/6S route selector as the next causal target.
+3. Run KEXP-015 fixed-route counterfactuals on development only:
+   - default 8C/6S → 10C/4S;
+   - default 8C/6S → 6C/8S.
+4. If neither universal override passes, build a contextual selector from legal public state rather than broad rerouting.
+5. Validation remains sealed for changed code; held-out remains sealed.
