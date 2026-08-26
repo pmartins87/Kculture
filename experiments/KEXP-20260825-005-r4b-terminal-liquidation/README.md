@@ -6,7 +6,11 @@ Can a route-independent terminal liquidation layer improve the frozen `R4A-publi
 
 ## Motivation
 
-The upstream V8 failure analysis shows terminal-sale revenue deficit in 57 of 59 recorded losses. The weakest route cluster is `current:6c8s_3q`, and large product revenue gaps include WHEAT, MILK, and TOMATO. R4B therefore tests a deliberately narrow hypothesis rather than changing the full economic route.
+The upstream V8 failure analysis reports that 57 of 59 recorded losses had **less realized sale revenue after step 672** than the opponent. This is an observational late-game revenue deficit; it does **not** establish that inventory was stranded at the final action or that terminal liquidation is the causal fix. The weakest route loss cluster is `current:6c8s_3q`, and important product-revenue deficits include WHEAT, MILK, and TOMATO.
+
+A separate static inspection in GitHub Actions run `32913552498` confirmed that the frozen route tapes use strongly route-dependent, fixed-quantity terminal actions. Current 3-quadrant routes share a fixed four-product sale bundle at step 718, while several legacy routes are substantially sparser at 718 and some perform their cleanup on step 717. See `research/R4A_TERMINAL_INSPECTION_20260825.md`.
+
+R4B therefore tests one deliberately narrow **causal hypothesis**: given the actual state reached after 718 earlier actions, does replacing only the final static route action with current-state, capacity-aware liquidation improve outcomes? A failure means the next hypothesis should move upstream into supply/midgame adaptation rather than repeatedly tuning the terminal step.
 
 ## Candidate
 
@@ -45,4 +49,4 @@ COK V8 remains third-party Apache-2.0 code and is fetched by commit/hash. The te
 
 ## Status
 
-PENDING CI at experiment creation.
+GitHub Actions run `32913752287` is executing the predeclared development protocol. No performance conclusion is recorded until all three tournament blocks complete.
