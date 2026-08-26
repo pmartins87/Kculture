@@ -1,6 +1,10 @@
 name: r4c-guarded-ninth-cow
 
 on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/r4c-guarded-ninth-cow.yml"
   workflow_dispatch:
 
 jobs:
@@ -9,18 +13,14 @@ jobs:
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
           cache: pip
-
       - name: Install frozen environment
         run: python -m pip install -r requirements.txt
-
       - name: Fetch hash-pinned public agents
         run: python tools/fetch_public_opponents.py
-
       - name: R4A control versus Seyamalam V21
         run: >-
           python tools/run_tournament.py
@@ -29,7 +29,6 @@ jobs:
           --seed-partition development
           --limit-seeds 8
           --output-root artifacts/r4c/control
-
       - name: R4C versus Seyamalam V21
         run: >-
           python tools/run_tournament.py
@@ -38,7 +37,6 @@ jobs:
           --seed-partition development
           --limit-seeds 8
           --output-root artifacts/r4c/candidate_vs_seyamalam
-
       - name: R4C direct versus R4A
         run: >-
           python tools/run_tournament.py
@@ -47,7 +45,6 @@ jobs:
           --seed-partition development
           --limit-seeds 8
           --output-root artifacts/r4c/candidate_vs_r4a
-
       - name: Preserve R4C evidence
         uses: actions/upload-artifact@v4
         with:
