@@ -1,83 +1,73 @@
-# KEXP-20260826-017 — R4D macro-oracle solver
+# KEXP-20260826-017 — R4D macro-oracle value-of-information test
 
-Status: **PREDECLARED / DEVELOPMENT ONLY**
+Status: **COMPLETE / NO PROMOTION / SOLVER BRANCH DEPRIORITIZED**
 
 ## Why this experiment exists
 
-The first hosted Kculture submission is valid and complete, but its live Kaggle rating continued downward from the first observed 161.6 to **135.7** in the user-visible snapshot around 2026-08-26 12:00 UTC. Local current-meta screening is therefore not sufficient as our only strategy-development mechanism.
+The first hosted Kculture submission is valid and complete, but its live Kaggle rating fell from the first observed 161.6 to **135.7** in the user-visible 2026-08-26 snapshot. Local public-agent screening is therefore not sufficient as our only calibration mechanism.
 
-KEXP-015 also showed that a universal default-route replacement is too crude: default→10C/4S preserved the aggregate 81-15 development record and improved mean money, but the same change flipped the two Rayk losses on seed `163219477` into wins while turning two Andrew wins on that seed into losses. The required decision is contextual.
+KEXP-015 also showed that a universal default-route replacement is too crude. The user then asked whether Kaggriculture could be attacked like poker with a solver. That question was treated too quickly as a proposed direction. KEXP-017 is retained only as a **cheap value-of-information test** of that idea, not as a roadmap pivot.
 
-The user asked whether Kaggriculture can be attacked like poker with a solver. The answer is **yes in solver-inspired form**, but an exact full-game equilibrium solver is impractical because the game has 720 recorded turns, multiple mobile actors, board construction, simultaneous market interaction, stochastic future weeds/shop unlocks, hidden opponent inventory, and a large combinatorial action space.
+An exact full-game equilibrium solver remains impractical for the current project: 720 recorded turns, multiple mobile actors, board construction, simultaneous market interaction, stochastic events, hidden opponent inventory and a very large combinatorial action space.
 
-This experiment starts the useful version of a solver: an **offline macro-policy oracle** that uses the exact frozen engine to exhaustively compare a small set of audited strategic continuations from the same state distribution, then distills the winning choice into a compact public-state policy.
+## Tested oracle branches
 
-## Oracle branches
-
-For every development seed, both seats, and each exact modern public opponent, compare:
+For every development seed, both seats, and each exact modern public opponent, the exact engine compared:
 
 1. frozen `R4B-market-only-validated-v1`;
 2. `R4D-A default→10C/4S`;
 3. `R4D-B default→6C/8S`.
 
-The competition objective is lexicographic:
+Competition-aligned oracle objective:
 
 1. WIN > TIE > LOSS;
-2. terminal money delta breaks ties among branches with the same outcome class.
+2. terminal money delta only breaks ties among branches with the same outcome class.
 
-The oracle's ex-post choice is an **upper bound for this three-branch macro action set**, not a deployable policy. It is allowed to use future outcome only to create training labels.
+This is an ex-post upper bound over **only these three existing macro policies**. It is not a deployable solver and it is not evidence that a larger solver would share the same bound.
 
-## Public feature snapshot
+## Frozen execution
 
-At the first state where three shops are unlocked, capture only public/legal observables:
+GitHub Actions run: **`32972566807`** — SUCCESS, development only.
 
-- first three shops and static COK route signal;
-- our and opponent public money;
-- public farm composition and signed layout differences;
-- L1 layout distance;
-- worker counts/positions;
-- market prices;
-- public town state.
+96 contexts × 3 branches = **288 complete games**, zero reported execution errors. Validation and all 32 held-out seeds remained untouched.
 
-Forbidden deployment features:
+Artifacts/digests:
 
-- seed ID;
-- opponent identity;
-- future result/actions;
-- opponent private inventory;
-- replay/submission IDs.
+- Kaito V27 artifact `9608766243`, ZIP SHA-256 `a6cfc86f4b00cb54fdb758ee666cfd4a7a341ad58b9b44424fef7597f589a5f4`;
+- Rayk V11 artifact `9608750232`, ZIP SHA-256 `b4c07e4292ac8ae0c66e152401f9560bd5c447c6b5e7b8fcae9ea8435488ca0a`;
+- Andrew V12 artifact `9608601559`, ZIP SHA-256 `81b8c44242bd7770028ab43cd6acf6a76af5518eef9b10154c16a611370a21ee`.
 
-## Panel
+## Results
 
-Development only:
+| Opponent | R4B baseline | fixed 10C/4S | fixed 6C/8S | perfect 3-branch oracle |
+|---|---:|---:|---:|---:|
+| Kaito V27 | 25-7 | 25-7 | 24-8 | **25-7** |
+| Rayk V11 | 30-2 | **32-0** | 30-2 | **32-0** |
+| Andrew V12 | **26-6** | 24-8 | 24-8 | **26-6** |
+| **Combined** | **81-15** | **81-15** | **78-18** | **83-13** |
 
-- 16 frozen development seeds;
-- both seats;
-- exact Kaito V27 V4;
-- exact Rayk V11;
-- exact Andrew V12.
+Mean terminal delta of the perfect three-branch oracle across the equally sized families is approximately **+6,182.22**, versus baseline +5,720.5. The competition-relevant gain is much smaller: only **two extra wins in 96 games**, both coming from the Rayk family.
 
-Total: 96 state contexts × 3 macro branches = **288 complete games**.
+Key facts:
 
-Validation and all 32 held-out seeds remain closed to this oracle-building stage.
+- against Kaito, even perfect ex-post selection among the three branches cannot fix any of the seven losses;
+- against Andrew, it cannot fix any of the six losses;
+- against Rayk, the simple fixed 10C/4S branch already achieves the oracle's 32-0, so sophisticated selection is unnecessary for that gain;
+- therefore the majority of current public-panel losses require **new strategic action families**, not a better selector among these three routes.
 
-## Decision path
+## Decision
 
-1. Measure the three-branch oracle upper bound over the 96 contexts.
-2. Quantify how often each branch is optimal and where outcome flips occur.
-3. Fit/search the smallest selector using only public observables.
-4. Evaluate selector with grouped cross-validation by seed and, critically, leave-one-opponent-family-out tests so it cannot simply memorize public agents.
-5. Only an auditable selector that beats the frozen 81-15 baseline on development without family collapse may become an R4D candidate.
-6. Freeze exact code before any new validation access.
+**Do not pivot Kculture to a solver project.**
 
-## Relationship to a future stronger solver
+The experiment falsified the high-value version of the immediate solver hypothesis: perfect selection among our existing macro branches has only a 2/96 W/L ceiling on the current panel. That is too small to justify making solver construction the main use of engineering time while the hosted score is 135.7 and thirteen public-panel losses remain outside this action set.
 
-If the macro-oracle shows meaningful headroom, extend in stages:
+Solver/search methods remain permitted as tools when they have a specific, cheap, testable role (for example, optimizing a bounded late-game subproblem). They receive no architectural privilege and must compete against simpler alternatives on expected prize value, evidence, engineering cost and hosted relevance.
 
-- route-choice oracle;
-- late-horizon production/harvest/sale macro search;
-- receding-horizon model-predictive planning;
-- opponent-belief ensemble for hidden inventory/action uncertainty;
-- distillation of expensive offline search into a cheap submitted policy.
+## Prize-first continuation
 
-This preserves the best poker-solver idea: **do expensive optimization offline, deploy a compact strategy online**.
+1. Treat the **hosted/local mismatch** as the highest-priority calibration problem.
+2. Diagnose mechanisms shared by Kaito/Andrew hard losses that no route choice fixes, especially the repeated late-horizon reversals.
+3. Expand the modern opponent/state distribution rather than overfit the same 16 development seeds and three families.
+4. Search new strategic action families with cheap falsification experiments first.
+5. Require W/L improvement and cross-family robustness before validation or another Kaggle submission.
+6. Keep all 32 held-out seeds sealed.
