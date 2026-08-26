@@ -1,0 +1,60 @@
+name: r4d-default-context-diagnostic
+
+on:
+  push:
+    paths:
+      - ".github/workflows/r4d-default-context-diagnostic.yml"
+  workflow_dispatch:
+
+jobs:
+  context-panel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent:
+          - id: kaito-v27
+            handle: kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+            sha256: f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8
+          - id: rayk-v11
+            handle: raykkretzschmar/kaggriculture-rank-your-agent/versions/11
+            sha256: adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f
+          - id: andrew-v12
+            handle: andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+            sha256: df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install frozen environment and public fetch client
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen R4A dependency
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen R4B diagnostic candidate
+        run: test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Fetch exact public opponent
+        env:
+          KAGGLE_USERNAME: ""
+          KAGGLE_KEY: ""
+          KAGGLE_API_TOKEN: ""
+        run: >-
+          python tools/fetch_public_kaggle_notebook.py
+          --handle "${{ matrix.opponent.handle }}"
+          --filename main.py
+          --sha256 "${{ matrix.opponent.sha256 }}"
+          --output-dir "artifacts/r4d-context/${{ matrix.opponent.id }}/opponent"
+          --receipt "artifacts/r4d-context/${{ matrix.opponent.id }}/receipt.json"
+      - name: Capture first-three-shop public context
+        run: >-
+          python tools/inspect_r4d_default_context.py
+          --opponent "file:artifacts/r4d-context/${{ matrix.opponent.id }}/opponent/main.py:agent"
+          --output "artifacts/r4d-context/${{ matrix.opponent.id }}/report.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4d-default-context-${{ matrix.opponent.id }}
+          path: artifacts/r4d-context/${{ matrix.opponent.id }}/**
