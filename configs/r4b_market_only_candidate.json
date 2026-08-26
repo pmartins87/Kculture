@@ -1,6 +1,6 @@
 {
   "id": "R4B-market-only-validated-v1",
-  "status": "FROZEN_VALIDATED_SUBMISSION_CANDIDATE",
+  "status": "HOSTED_SUBMISSION_READY",
   "candidate_path": "candidates/r4b_ablation_market_only.py",
   "freeze_source_commit": "148cc81fed390fd75c0cba00ceb779efaa17a46f",
   "candidate_git_blob": "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37",
@@ -15,6 +15,17 @@
     "candidate_vs_seyamalam": {"wins": 32, "losses": 0, "ties": 0, "score_rate": 1.0, "mean_money_delta": 18885.875, "errors": 0},
     "candidate_vs_r4a": {"wins": 8, "losses": 6, "ties": 18, "score_rate": 0.53125, "mean_money_delta": 165.03125, "errors": 0}
   },
+  "package_parity": {
+    "run": 32919305800,
+    "result": "PASS",
+    "comparisons": 4,
+    "identical_full_trajectory_actions": 4,
+    "artifact_id": 9589293098,
+    "artifact_zip_sha256": "2e07e216847ad919ec85347038e365a4eb43c2b6645d8d18691092aab1a09fc1",
+    "submission_archive_bytes": 101557,
+    "submission_archive_sha256": "19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117",
+    "main_py_sha256": "07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1"
+  },
   "base": {
     "id": "R4A-public-base-v1",
     "repository": "COK-ZhangZiliang/Kaggriculture",
@@ -23,5 +34,5 @@
     "license": "Apache-2.0"
   },
   "held_out_status": "SEALED_32_OF_32",
-  "claim_boundary": "Passed the predeclared development and validation gates and is frozen for package parity / first hosted ladder submission. R4 overall is still active; this is not a top-10 claim. Held-out remains sealed."
+  "claim_boundary": "Passed development, predeclared validation, and self-contained package parity. Ready for first hosted ladder submission once Kaggle account authentication/entered status is available. R4 overall remains active and this is not a top-10 claim. Held-out remains sealed."
 }
