@@ -1,9 +1,6 @@
 name: r4-acquire-kaito-v27-kagglehub
 
 on:
-  push:
-    paths:
-      - ".github/workflows/r4-acquire-kaito-v27-kagglehub.yml"
   workflow_dispatch:
 
 jobs:
