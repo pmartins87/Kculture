@@ -1,0 +1,30 @@
+name: live-meta-demand-longitudinal
+
+on:
+  push:
+    paths:
+      - '.github/workflows/live-meta-demand-longitudinal.yml'
+  workflow_dispatch:
+
+jobs:
+  study:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install public dataset client
+        run: python -m pip install -U kagglehub
+      - name: Analyze four recent ladder days
+        run: |
+          set -euo pipefail
+          for d in 2026-08-22 2026-08-23 2026-08-24 2026-08-25; do
+            mkdir -p "artifacts/live-meta-demand-$d"
+            python tools/live_meta_demand_response.py --date "$d" --top 10 --output "artifacts/live-meta-demand-$d/report.json"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: live-meta-demand-longitudinal
+          path: artifacts/live-meta-demand-*/report.json
