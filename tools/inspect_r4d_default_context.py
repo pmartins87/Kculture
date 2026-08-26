@@ -1,13 +1,16 @@
-"""Inspect public state at the first fully observed default-route boundary.
+"""Inspect public state at the first fully observed three-shop boundary.
 
-Development-only diagnostic for KEXP-20260826-016.  It runs the frozen R4B
+Development-only diagnostic for KEXP-20260826-016. It runs the frozen R4B
 market-only candidate against one exact public opponent on the four development
-seeds that produced final 8C/6S exposure in KEXP-014, both seats, then captures
-only information publicly observable to both players at the first state where
-three shops are unlocked.
+seeds implicated by KEXP-014's weak late 8C/6S *observed farm state*, both
+seats, then captures only information publicly observable to both players at
+the first state where three shops are unlocked.
 
-Seed IDs are used only to sample the already-open development corpus.  They are
-never intended as policy features.  Validation/held-out partitions are refused.
+Important: KEXP-014 classified the physical farm at step 672, not COK's hidden
+route label. Therefore this diagnostic records the static shop-prefix route
+signal but does not assume every sampled row is the COK default route.
+Seed IDs are only an analysis sampling device and are never policy features.
+Validation/held-out partitions are refused.
 """
 from __future__ import annotations
 
@@ -79,6 +82,18 @@ def _actor_summary(farm: dict) -> dict:
     }
 
 
+def _static_v7_route(first3: list[str]) -> str:
+    if first3[:1] == ["YARN_STORE"]:
+        return "6c12s_4q_first_yarn"
+    if "YARN_STORE" in first3[:2]:
+        return "6c12s_4q_second_yarn"
+    if "YARN_STORE" in first3[:3]:
+        return "6c8s_3q"
+    if MILK_SUPPORT.intersection(first3[:3]):
+        return "10c4s_3q"
+    return "8c6s_3q"
+
+
 def _first_three_boundary(replay: dict, candidate_seat: int) -> tuple[int, dict]:
     for step, frame in enumerate(replay.get("steps", [])):
         obs = frame[candidate_seat].get("observation", {})
@@ -103,23 +118,18 @@ def _snapshot(replay: dict, candidate_seat: int) -> dict:
     market = obs.get("market", {}) or {}
     shops = list(town.get("unlocked_shops", []) or [])
     first3 = shops[:3]
-
-    # The sampled corpus is specifically the frozen COK default branch.  Fail
-    # closed if a future engine/source change invalidates that assumption.
-    is_default = (
-        len(first3) == 3
-        and "YARN_STORE" not in first3
-        and not any(s in MILK_SUPPORT for s in first3)
-    )
-    if not is_default:
-        raise RuntimeError(f"Expected default no-Yarn/no-milk prefix, got {first3!r}")
-
+    static_route = _static_v7_route(first3)
     prices = market.get("prices", {}) if isinstance(market, dict) else {}
+
     return {
         "boundary_step": step,
         "day": obs.get("day"),
         "hour": obs.get("hour"),
         "first_three_shops": first3,
+        "static_v7_route": static_route,
+        "static_default_8c6s": static_route == "8c6s_3q",
+        "yarn_in_first_three": "YARN_STORE" in first3,
+        "milk_support_in_first_three": bool(MILK_SUPPORT.intersection(first3)),
         "candidate_money": float(ours.get("money", 0) or 0),
         "opponent_money": float(opp.get("money", 0) or 0),
         "money_diff": float(ours.get("money", 0) or 0) - float(opp.get("money", 0) or 0),
@@ -189,9 +199,10 @@ def main() -> None:
             rows.append(_run(args.candidate, args.opponent, seed, seat))
 
     report = {
-        "schema_version": "r4d-default-context-v1",
+        "schema_version": "r4d-default-context-v2",
         "experiment": "KEXP-20260826-016",
-        "environment": package_version("kaggle-environments"),
+        "environment": "kaggriculture",
+        "kaggle_environments_version": package_version(),
         "git_sha": git_sha(),
         "candidate": args.candidate,
         "opponent": args.opponent,
@@ -206,6 +217,7 @@ def main() -> None:
         "episodes": len(rows),
         "wins": sum(r["outcome"] == "WIN" for r in rows),
         "losses": sum(r["outcome"] == "LOSS" for r in rows),
+        "static_default_rows": sum(r["static_default_8c6s"] for r in rows),
         "mean_layout_l1": sum(r["layout_l1_distance"] for r in rows) / len(rows),
         "output": str(out),
     }, sort_keys=True))
