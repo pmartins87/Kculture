@@ -1,0 +1,80 @@
+name: r4b-market-only-ablation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "candidates/r4b_ablation_market_only.py"
+      - "experiments/KEXP-20260825-006-r4b-market-only-ablation/**"
+      - ".github/workflows/r4b-market-only-ablation.yml"
+  workflow_dispatch:
+
+jobs:
+  vs-seyamalam:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python tools/fetch_public_opponents.py
+      - name: Market-only versus Seyamalam V21
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponents file:artifacts/public_opponents/seyamalam_v21_8b8c421.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4b-market-only-vs-seyamalam
+          path: artifacts/tournaments/**/tournament.json
+
+  vs-r4a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python tools/fetch_public_opponents.py
+      - name: Market-only versus R4A
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_ablation_market_only.py:agent
+          --opponents file:artifacts/public_opponents/cok_v8_779caae.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4b-market-only-vs-r4a
+          path: artifacts/tournaments/**/tournament.json
+
+  full-r4b-vs-market-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -r requirements.txt
+      - run: python tools/fetch_public_opponents.py
+      - name: Full R4B versus market-only ablation
+        run: >-
+          python tools/run_tournament.py
+          --candidate file:candidates/r4b_terminal_liquidation.py:agent
+          --opponents file:candidates/r4b_ablation_market_only.py:agent
+          --seed-partition development
+          --limit-seeds 8
+      - uses: actions/upload-artifact@v4
+        with:
+          name: r4b-full-vs-market-only
+          path: artifacts/tournaments/**/tournament.json
