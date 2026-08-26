@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "snapshot_date": "2026-08-25",
   "targets": [
     {
@@ -16,9 +16,18 @@
       "kernel": "raykkretzschmar/kaggriculture-rank-your-agent/11",
       "public_score_snapshot": null,
       "best_score_snapshot": 2990.4,
-      "license": "public notebook; verify license on acquired artifact/page before derivative use",
+      "license": "public notebook; verify license on exact acquired version before derivative use",
       "priority": 2,
-      "purpose": "second independent near-ceiling reference"
+      "purpose": "independent near-ceiling reference"
+    },
+    {
+      "id": "andrew-breaking-tie-v12",
+      "kernel": "andrewsokolovsky/kaggriculture-breaking-the-tie/12",
+      "public_score_snapshot": null,
+      "best_score_snapshot": 2915.2,
+      "license": "Apache-2.0 on inspected public notebook page",
+      "priority": 3,
+      "purpose": "independent high-score reference with explicit same-turn DROP validation in public build logs"
     },
     {
       "id": "flexonafft-v59",
@@ -26,17 +35,8 @@
       "public_score_snapshot": null,
       "best_score_snapshot": 2767.3,
       "license": "Apache-2.0 at inspected public notebook snapshot",
-      "priority": 3,
-      "purpose": "older high-score multi-route architecture"
-    },
-    {
-      "id": "andrewsokolovsky-v10",
-      "kernel": "andrewsokolovsky/kaggriculture/10",
-      "public_score_snapshot": null,
-      "best_score_snapshot": 2671.3,
-      "license": "Apache-2.0 at inspected public notebook snapshot",
       "priority": 4,
-      "purpose": "older independent high-score reference"
+      "purpose": "older high-score multi-route architecture"
     }
   ],
   "policy": {
