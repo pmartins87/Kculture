@@ -81,44 +81,75 @@ Development result was neutral.
 
 **Status:** **NO PROMOTION.**
 
-### KEXP-010 — full development failure atlas
+### KEXP-010 — older-panel saturation
 
-160 development games completed. R4B reached **32-0 vs Seyamalam V21** and **32-0 vs Kaito V18** across all 16 development seeds × both seats. Direct R4B vs R4A paired-seat aggregate was non-negative on all 16 seeds.
+R4B reached 32-0 vs Seyamalam V21 and 32-0 vs Kaito V18 across all 16 development seeds × both seats.
 
-**Conclusion:** older panel saturated; stop tuning to it.
+**Conclusion:** old panel saturated; stop tuning to it.
 
 ### KEXP-011 — exact Kaito V27 frontier screen
 
-Exact V27 V4 (public/best 3090.1, Apache-2.0, SHA `f48c2116...`) was acquired without Kaggle credentials and hash-verified.
+Exact V27 V4 (public/best 3090.1, Apache-2.0, SHA `f48c2116...`) acquired without Kaggle credentials and hash-verified.
 
-Development result, all 16 seeds × both seats:
+All 16 development seeds × both seats:
 
 - R4A vs V27: **25-7**, mean +4382.03125;
 - R4B vs V27: **25-7**, mean +4396.84375.
 
-Seven losses are concentrated in four seeds: `150614441` (seat-sensitive), `1743398262`, `163219477`, `598340816`.
+**Decision:** no migration to V27.
 
-**Decision:** no migration to V27; retain R4B/COK lineage and diagnose frontier regimes.
+Full frontier replays then showed a critical pattern: on the three symmetric V27 loss seeds, R4B is still **ahead at step 672** but loses 2.7k–4.5k of relative value during the final ~47 turns. See `research/V27_FRONTIER_REPLAY_DIAGNOSTIC_20260826.md`.
+
+### KEXP-012 — exact current-meta multi-family screen
+
+Exact hash-pinned public outputs:
+
+- Rayk V11, best score snapshot **2990.4**, SHA `adc61ab1...`;
+- Andrew V12, best score snapshot **2915.2**, SHA `df4e899a...`.
+
+Actions run `32926727240`, all 16 development seeds × both seats, zero errors:
+
+- R4B vs Rayk V11: **30-2**, mean +7477.21875;
+- R4B vs Andrew V12: **26-6**, mean +5287.43750.
+
+Together with exact Kaito V27, frozen R4B is **81-15-0 across 96 current-meta development games**. This is descriptive rather than an independent statistical sample because the same seed panel is reused.
+
+Rayk's only loss regime is `163219477`, both seats; the same seed loses both seats to V27. Andrew exposes different regimes (`150614441`, `393297156`, `598340816`, `1422177419`).
+
+**Conclusion:** R4B/COK remains locally competitive against all three modern public families; failures are state/regime dependent rather than evidence for wholesale architecture replacement.
+
+### KEXP-013 — current-meta hard replay diagnosis
+
+Pre-registered diagnostic run `32927303182` captures:
+
+- Rayk `163219477`, both orientations;
+- Andrew `150614441`, `393297156`, `598340816`, `1422177419`, both orientations.
+
+Exact notebook version/hash is checked in each job. Development only.
+
+**Status:** **RUNNING.**
 
 ### R4D — next frontier continuation candidate
 
-R4D must not be created from a single opponent or a single losing seed. Before mutation:
+Do not create R4D from a single opponent or seed. R4D becomes eligible only after KEXP-013 determines whether a repeated legal-state mechanism exists across current families.
 
-1. capture full V27 frontier replays for the four loss seeds in both seats;
-2. benchmark exact Rayk V11 (best 2990.4) and Andrew V12 (best 2915.2) on all 16 development seeds × both seats;
-3. identify a recurring mechanism across modern families;
-4. propose one auditable midgame/continuation change compatible with COK's opening/state assumptions;
-5. preserve R4B terminal liquidation unchanged unless new evidence directly targets it.
+Current strongest search region is **late-phase continuation**, approximately after step 600/672, coupling:
 
-Current exact artifacts:
+1. remaining production horizon;
+2. cow/sheep/crop mix;
+3. available workers and whether extra HIRE still pays back;
+4. harvest/drop throughput into shed;
+5. sale timing/product mix;
+6. stopping production early enough to realize terminal cash.
 
-- Rayk V11 `main.py` SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f` — benchmark-only until license independently verified;
-- Andrew V12 `main.py` SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5` — Apache-2.0.
+Constraints:
 
-Current Actions:
-
-- V27 loss-replay capture: `32926648674`;
-- Rayk/Andrew exact strong screen: `32926727240`.
+- no seed-ID rules;
+- no opponent-identity rules;
+- preserve frozen R4B step-718 market liquidation unless evidence directly contradicts it;
+- one auditable mechanism per candidate;
+- first test across all 16 development seeds, both seats, against a diverse strong panel;
+- any frozen R4D requires its own future validation gate; old R4B validation cannot be inherited.
 
 **R4 exit:** a deterministic Kculture policy robustly beats diverse strong-current public controls on a predeclared validation protocol, with hosted ladder behavior consistent enough to justify planner work.
 
