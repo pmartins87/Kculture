@@ -50,15 +50,57 @@ Every job independently downloads Version 4 via KaggleHub and rejects the run un
 
 No validation or held-out seed is opened.
 
-## Interpretation rule
+## Results
 
-This is a **strength/failure screen**, not a promotion gate.
+| Candidate | W-L-T | Score rate | Mean delta | Median | Min | Max | Errors |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| R4A / COK V8 | **25-7-0** | **0.78125** | **+4,382.03125** | +2,821.5 | -5,603 | +17,468 | 0 |
+| R4B market-only | **25-7-0** | **0.78125** | **+4,396.84375** | +2,821.5 | -5,603 | +17,468 | 0 |
 
-- If R4B performs materially better than R4A, preserve that evidence but do not extend the old validation claim to any changed future code.
-- If both struggle, use exact losing seeds/seats and route/economic traces to define the next R4D continuation hypothesis.
-- If the panel is again saturated, add another independent current-meta public family before tuning.
-- Do not alter the validated hosted candidate because of this run; every changed policy receives a new development experiment identity.
+R4B increases mean money delta by **+14.8125 per game** while leaving the W/L pattern unchanged.
+
+### Exact loss pattern
+
+Both R4A and R4B lose the same seven games:
+
+- seed `150614441`, seat 1: `-5,603`;
+- seed `1743398262`, seat 0: `-2,896`;
+- seed `1743398262`, seat 1: `-2,488`;
+- seed `163219477`, seat 0: `-3,516`;
+- seed `163219477`, seat 1: `-3,516`;
+- seed `598340816`, seat 0: `-539`;
+- seed `598340816`, seat 1: `-539`.
+
+The market-only terminal intervention therefore preserves its small economic gain against V27 but **does not flip any frontier matchup outcome**. The difficult cases are driven by earlier economic/continuation differences rather than the final liquidation edge.
+
+## Interpretation
+
+**FRONTIER ADVERSARY CONFIRMED; NO BASE MIGRATION.**
+
+1. Exact Kaito V27 is materially stronger than the older V18/Seyamalam panel because it creates seven losses where those opponents create none.
+2. Nevertheless, both R4A and R4B beat V27 decisively on this frozen development partition: **25-7**, score rate `0.78125`, with positive mean delta above `+4.3k`.
+3. A public Kaggle score of 3090.1 is therefore valuable meta evidence but not proof that V27 is a superior local engineering base to COK/R4B.
+4. R4B remains preferable to R4A because it preserves all 25 wins / 7 losses while adding a small positive mean-delta edge, consistent with its prior validation/generalization evidence.
+5. The seven V27 losses identify a real frontier failure family. Their recurrence in both seats for seeds `1743398262`, `163219477`, and `598340816` shows genuine seed-level weaknesses rather than only seat-order noise. Seed `150614441` is seat-sensitive.
+6. The next strategy mutation should not copy V27 wholesale. First add at least one additional independent current-meta public family around the ~2900–3000 range, then determine whether the same failure seeds/economic regimes recur.
+7. If a recurring frontier pattern is confirmed, prioritize a single auditable midgame/continuation mechanism; the market-only terminal layer is retained unchanged.
+
+## Decision
+
+- **Keep `R4B-market-only-validated-v1` as the frozen hosted-submission candidate.**
+- **Keep COK/R4B as the active engineering lineage.**
+- Add exact current-meta opponents (Rayk/Andrew where version/provenance can be verified) before R4D mutation.
+- Use V27 as a frontier opponent and diagnose the seven exact losses.
+- Do not reopen validation for exploratory work.
+- Held-out remains sealed **32/32**.
+
+## Evidence
+
+- acquisition run: `32920859121`;
+- strong-screen run: `32921007864`;
+- R4A artifact: `9589959331`, ZIP SHA-256 `580cfc4994e00c268ebc33b113087de1a239a62aa8b71d52df1c2d23a0a4dd30`;
+- R4B artifact: `9589962626`, ZIP SHA-256 `f5d4fc97a605068d1dedf7c62e0e6012b5e1b22051f01bc53c4332b1172703b1`.
 
 ## Status
 
-**RUNNING.**
+**COMPLETE — FRONTIER SCREEN PASS AS DIAGNOSTIC; NO BASE MIGRATION.**
