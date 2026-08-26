@@ -4,153 +4,110 @@ Last updated: 2026-08-25
 
 ## Mission status
 
-**Technical phase: R4 ACTIVE.**  
-**R1: PASS (2026-08-25).**  
-**R2: PASS (2026-08-25).**  
-**R3: pending first hosted ladder submission.**  
-**R4A: frozen public base selected.**  
-**R4B: development experiment pending GitHub Actions execution.**  
-**R0 account-side confirmation still pending:** competition rule acceptance / entered status cannot be independently verified from this repository.
+**Goal: top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
-Goal: produce a **top-10 final result** in Kaggriculture, where each of the top 10 positions pays US$5,000.
+- **R1 PASS** — official starter parity and 720-turn reproduction.
+- **R2 PASS** — deterministic tournament laboratory, frozen seed partitions and public-opponent provenance.
+- **R3 pending** — first hosted ladder submission/account-side entry confirmation.
+- **R4 ACTIVE** — strong economic baseline and Kculture improvements.
+- **R4A frozen** — COK V8 selected as `R4A-public-base-v1`.
+- **Full R4B REJECTED** — extra terminal `DROP` optimizer failed its direct development gate.
+- **Market-only R4B frozen for validation** — development screen passed; `KEXP-20260825-007` validation is running.
+- **Held-out remains sealed** — none of the 32 held-out seeds has been opened for the active candidate.
 
-## Confirmed competition constraints
+## Competition constraints
 
 - Entry/team-merger deadline: 2026-09-23 23:59 UTC.
 - Final submission deadline: 2026-09-30 23:59 UTC.
-- Games continue after close until convergence, approximately through 2026-10-15.
-- One match spans 30 in-game days × 24 turns = 720 turns.
-- Submission must expose an `agent` function from `main.py` at the archive root.
-- Up to 5 agents may be submitted per day.
-- Only the latest 2 submissions remain tracked and are used for final leaderboard evaluation.
-- Validation episode runs the agent against itself before ladder entry.
-- Default hosted action timeout is 1 second.
-- Submission resources documented by Kaggle: 6.5 GiB RAM, 1.6 vCPU, 8 GiB disk, 100 MiB submission limit.
+- Final games continue approximately through 2026-10-15.
+- 720 turns = 30 in-game days × 24 turns.
+- Submission exposes `agent` from root `main.py`.
+- Up to 5 submissions/day; latest 2 remain tracked for final evaluation.
+- Hosted self-play validation occurs before ladder entry.
+- Default hosted action timeout: 1 second.
 
 ## Official environment freeze
 
-- Official source: `Kaggle/kaggle-environments`.
-- Frozen package: `kaggle-environments==1.32.7` (released 2026-08-15).
-- Frozen latest engine-changing commit at intake: `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
-- Upstream file hashes: `official/UPSTREAM_LOCK.md`.
-- Official advanced environment specification version: `0.1.0`.
-- Current mechanics/market snapshot: `docs/OFFICIAL_MECHANICS_SNAPSHOT.md`.
-- The 2026-08-15 engine change materially altered demand curves for previously underused resources; every promoted candidate must regression-test against environment drift.
+- `kaggle-environments==1.32.7`, released 2026-08-15.
+- engine-changing intake commit: `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
+- official hashes: `official/UPSTREAM_LOCK.md`.
+- mechanics snapshot: `docs/OFFICIAL_MECHANICS_SNAPSHOT.md`.
 
-## R1 PASS — official reference baseline
+Important verified terminal mechanics: final reward is `farm.money`; step 718 is the last executable action; market sales are processed unit-by-unit and every valid sale has positive price with floor $1. Inventory has no direct residual terminal reward.
 
-Experiment: `KEXP-20260825-001-official-starter-parity`.
+## R1/R2 evidence
 
-GitHub Actions run `32858531629` proved exact starter parity on seeds 101/202/303 and full 720-turn self-play on seed 404. Root `main.py` remains the frozen legal/reference starter until a strong candidate is formally promoted.
+- R1 Actions run `32858531629`: exact starter parity on seeds 101/202/303 and 720-turn self-play on 404.
+- R2 Actions run `32859938870`: 64 disjoint seeds (16 development / 16 validation / 32 held-out), both-seat evaluation, 7 deterministic references, fresh module loading and zero closure-smoke errors.
 
-## R2 PASS — deterministic tournament laboratory
+## R4A — frozen public base
 
-Closure experiment: `KEXP-20260825-003-r2-closure`.
+`KEXP-20260825-004-r4-public-base-screen` screened two attributed Apache-2.0 public architectures:
 
-GitHub Actions run `32859938870` established:
+- COK V8 — `COK-ZhangZiliang/Kaggriculture`, commit `779caaec88a441345871e2d62eb5de93606b7b52`, SHA-256 `faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3`.
+- Seyamalam V21 — commit `8b8c421eb10634c756583ce10c75189f50c83a72`, SHA-256 `0cd14b653102d276c4f902fa3b8c6bd81d869b8ab64c422cb881b9d2346ec639`.
 
-- fresh-module loading per episode;
-- 64 disjoint deterministic seeds: 16 development / 16 validation / 32 held-out;
-- 7 deterministic reference opponents;
-- both-seat evaluation by default;
-- raw W/L/T, terminal bank, money delta, runtime errors and provenance preserved;
-- hash-pinned public-agent acquisition;
-- zero runtime errors in closure smoke.
+First 8 development seeds × both seats: COK V8 **14-2**, mean delta **+21,063.875**, zero errors. COK became `R4A-public-base-v1`.
 
-Strong calibration on dev seed `150614441`: frozen carrot reference vs COK V8 produced deltas -143630 and -147719 from the two seats. This makes scaled multi-worker/multi-resource economics the R4 starting point.
+## KEXP-005 — full terminal-capacity R4B: REJECTED
 
-## Public-development decision
+The full candidate changed only step 718 but additionally replaced selected physical actions with capacity-aware `DROP`s.
 
-`pmartins87/Kculture` intentionally remains **public** during the active competition. The owner explicitly accepts the discovery/copying risk in exchange for unrestricted GitHub Actions. This decision is recorded in `docs/DECISION_PUBLIC_DEVELOPMENT.md` and is **not a blocker** for R4-R9.
+Actions run `32913752287`:
 
-Competitive code may therefore be committed here. Imported public policies must preserve repository, commit, file path, SHA-256 and license provenance. Credentials, private/unpublished competitor code and redistribution-restricted private replay payloads remain prohibited.
+- R4A control vs Seyamalam: **14-2**, mean `+21,063.875`.
+- full R4B vs Seyamalam: **16-0**, mean `+22,541.500`.
+- full R4B vs R4A: **5-11**, score `0.3125`, mean `-1.625`.
 
-## R4A frozen — first strong public base
+It failed the predeclared direct score and direct mean gates, so it was rejected before validation. Artifact `9587959717`, SHA-256 `949e6bdf94c6356aae6af398c6bce17769997255f04a18c59eb5ba2c58245dcf`.
 
-Experiment: `KEXP-20260825-004-r4-public-base-screen`.
+## KEXP-006 — market-only ablation: DEVELOPMENT SCREEN PASS
 
-Two attributed public architectures were screened on the frozen 1.32.7 engine:
+`candidates/r4b_ablation_market_only.py` preserves every physical COK action and changes only final-step market liquidation.
 
-- COK V8 — `COK-ZhangZiliang/Kaggriculture`, commit `779caaec...`, SHA-256 `faf57412...`, Apache-2.0.
-- Seyamalam V21 — `Seyamalam/Kaggriculture`, commit `8b8c421e...`, SHA-256 `0cd14b65...`, Apache-2.0 derivative with preserved attribution.
+Actions run `32915111893`, source commit `148cc81fed390fd75c0cba00ceb779efaa17a46f`, candidate Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`:
 
-Direct first-8-development-seed both-seat result: **COK V8 14–2 Seyamalam V21**, mean COK money delta approximately **+21,064**, zero runtime errors. COK V8 is therefore frozen as `R4A-public-base-v1` in `configs/r4a_public_base.json`.
+- market-only vs Seyamalam: **16-0**, mean `+22,541.500`.
+- market-only vs R4A: **5-3-8**, score `0.5625`, mean `+12.000`.
+- full R4B vs market-only: full R4B **5-11**, mean `-3.125`.
 
-Seyamalam remains an important independent opponent because it generated more money against the simple pool than COK in the same screen. Prefix-divergence analysis also established that COK and Seyamalam diverge at state index 1, so a late shop-reveal switch between the full policies is not a valid composition strategy.
+Conclusion: final sale completeness is the useful component; extra physical `DROP` replacement was harmful on development. Exact freeze metadata is in `configs/r4b_market_only_candidate.json`.
 
-## R4B active — terminal-capacity liquidation
+## KEXP-007 — frozen market-only validation: RUNNING
 
-Experiment: `KEXP-20260825-005-r4b-terminal-liquidation`.
+GitHub Actions run `32918640409` is the predeclared validation gate. It opens all 16 validation seeds for this exact frozen candidate, both seats, in three independent blocks:
 
-COK's published V8 failure analysis reports a terminal-sale revenue deficit in **57 of 59** recorded losses. The worst route loss cluster is `current:6c8s_3q`; important revenue deficits include WHEAT, MILK and TOMATO.
+1. R4A vs Seyamalam validation control;
+2. market-only vs Seyamalam;
+3. market-only vs R4A.
 
-`candidates/r4b_terminal_liquidation.py` therefore changes **only executable step 718** of the frozen R4A base. It:
+PASS requires zero errors, direct score vs R4A >= 0.50, direct mean >= 0, and no regression versus the R4A control against Seyamalam in either wins or mean delta.
 
-1. inspects current shed and shed-adjacent actor inventories;
-2. solves an actor-level 0/1 knapsack under the 100-item shed capacity using visible sale value;
-3. selects terminal `DROP` actions without allowing lower-value inventory to crowd out higher-value stock;
-4. projects same-turn shed state using the upstream execution model;
-5. sells every projected sellable product within the market-order cap.
+**No validation result has been interpreted yet. Held-out remains sealed.**
 
-All earlier actions are delegated to the frozen COK V8 policy unchanged.
+## Packaging readiness
 
-Development gate uses the first 8 development seeds, both seats:
+`tools/build_r4b_market_only_submission.py` is prepared to turn the laboratory wrapper into a self-contained deterministic archive with root `main.py`, Apache-2.0 license and upstream notices. If validation passes, packaged-vs-wrapper trajectory parity must pass before any hosted submission.
 
-- R4A vs Seyamalam control;
-- R4B vs Seyamalam;
-- R4B vs R4A direct.
+## Strong public targets
 
-Required before any validation seed is opened: zero runtime errors, R4B >= same-seed R4A control against Seyamalam, direct score rate vs R4A >= 0.50, and direct mean money delta vs R4A >= 0.
+Current dated benchmark targets include:
 
-GitHub Actions run `32913752287` is currently queued; **no R4B performance conclusion exists yet**.
+- Kaito Fukami V27 V4 — score snapshot 3090.1, Apache-2.0.
+- Rayk V11 — best snapshot 2990.4.
+- Andrew Breaking the Tie V12 — best snapshot 2915.2.
+- FlexonaFFt V59 — best snapshot 2767.3.
 
-## Current public benchmark targets
+Exact Kaggle kernel acquisition is auth-gated and prepared via the manual workflow using repository secret `KAGGLE_API_TOKEN`; credentials are never committed.
 
-Discovery snapshot: `research/PUBLIC_BENCHMARK_SNAPSHOT_20260825.md` and `configs/kaggle_public_targets.json`.
+## R4C prepared, not executed
 
-Highest-priority exact public versions currently identified:
+`KEXP-20260825-008-r4c-guarded-ninth-cow` is a separate development-only hypothesis enabling one dormant guarded ninth-cow branch. It was renumbered from a duplicate KEXP-006 identifier and has not been executed. It must not use validation or held-out seeds.
 
-- Kaito Fukami V27 V4 — public score snapshot **3090.1**, Apache-2.0.
-- Rayk Kretzschmar V11 — best score snapshot **2990.4**.
-- FlexonaFFt V59 — best score snapshot **2767.3**.
-- Andrew Sokolovsky V10 — best score snapshot **2671.3**.
+## Immediate continuation
 
-These scores are dated discovery metadata, not permanent ceilings. The current COK R4A is an engineering/reproducibility base, not assumed to be leaderboard-optimal.
-
-Exact-version acquisition is prepared in `r4-acquire-kaggle-public.yml`. Kaggle requires authentication even for public kernel pulls, so the workflow is manual and reads only the GitHub repository secret `KAGGLE_API_TOKEN`; no credential belongs in source control.
-
-## R3 status
-
-R3 requires the first valid hosted ladder submission and local↔hosted reconciliation. It is not yet PASS.
-
-Account-side prerequisite still pending: confirm Kaggle `Join Competition` / entered status before first submission. Verification can be done through Kaggle UI or authenticated Kaggle CLI.
-
-## Immediate next actions
-
-1. Complete the queued R4A terminal inspection and R4B development tournament.
-2. If R4B passes its predeclared development gates, freeze the exact candidate before opening validation seeds; if it fails, record rejection and move to the `6c8s_3q` / midgame route weakness.
-3. Acquire Kaito V27 V4 and Rayk V11 through the authenticated, hash-preserving workflow once `KAGGLE_API_TOKEN` is configured, then add them to the strong-opponent panel.
-4. Keep validation unopened until a development candidate is frozen and held-out unopened until a formal promotion gate.
-5. Confirm Kaggle entered status and submit the first strong candidate when local safety/robustness gates pass.
-6. Record exact submission ID, source SHA/config and hosted reconciliation in `docs/SUBMISSION_LEDGER.md`.
-
-## Promotion gates
-
-- **R0 PASS:** technical intake complete; account entry confirmation remains pending.
-- **R1 PASS:** official/simple baseline reproduced with deterministic diagnostics. **PASS 2026-08-25.**
-- **R2 PASS:** reliable simulator/runner, seed partitions, opponent pool, state isolation, provenance checks and tournament logging. **PASS 2026-08-25.**
-- **R3 PASS:** first valid ladder submission with local↔hosted behavior reconciled.
-- **R4 PASS:** economically strong deterministic policy robustly beats the simple pool and survives strong-public-opponent validation without runtime instability.
-- **R5 PASS:** planning/resource-allocation agent beats R4 across diverse opponents/seeds.
-- **R6 PASS:** market/opponent-aware adaptations produce robust incremental value.
-- **R7 PASS:** automated strategy search/tuning produces held-out gains.
-- **R8 PASS:** candidate pair selected for strategic diversity and final robustness.
-- **R9 PASS:** final two submissions frozen, independently reproduced, and submitted.
-
-## Known strategic risks
-
-- Ladder rating is adaptive/noisy; controlled local evidence remains primary.
-- Final evaluation rewards head-to-head outcomes; raw bank maximization alone is insufficient.
-- Environment drift can invalidate economic calibration.
-- Fixed/open-loop routes can be copied or overfit; public-state adaptation and portfolio diversity matter.
-- Public development exposes our work, a risk explicitly accepted for this project.
+1. Finish and interpret `KEXP-007` strictly against its predeclared gate.
+2. If PASS, preserve evidence and prove packaged `main.py` parity with the frozen wrapper.
+3. Prepare the first hosted ladder submission and complete R3 once account-side Kaggle access is confirmed.
+4. Continue development-only R4/R5 improvements against stronger opponents; do not tune on validation results.
+5. Keep all 32 held-out seeds sealed until a later formal promotion/final-selection gate.
