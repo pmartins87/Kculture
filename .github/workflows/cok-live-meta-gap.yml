@@ -1,0 +1,39 @@
+name: cok-live-meta-gap
+
+on:
+  push:
+    paths:
+      - 'tools/inspect_cok_live_meta_gap.py'
+      - '.github/workflows/cok-live-meta-gap.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Fetch exact frozen public opponents
+        run: python tools/fetch_public_opponents.py
+      - name: Verify COK identity and audit late route tapes
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          p = Path('artifacts/public_opponents/cok_v8_779caae.py')
+          h = hashlib.sha256(p.read_bytes()).hexdigest()
+          expected = 'faf57412e2c56dcc669043865a185324bab9952d865abccc2203284e854eceb3'
+          assert h == expected, (h, expected)
+          print('COK_SHA256_PASS', h)
+          PY
+          mkdir -p artifacts/cok-live-meta-gap
+          python tools/inspect_cok_live_meta_gap.py \
+            --source artifacts/public_opponents/cok_v8_779caae.py \
+            --output artifacts/cok-live-meta-gap/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cok-live-meta-gap
+          path: artifacts/cok-live-meta-gap/report.json
