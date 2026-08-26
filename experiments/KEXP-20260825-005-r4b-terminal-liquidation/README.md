@@ -43,7 +43,7 @@ Primary gates:
 
 ## Result — REJECTED
 
-GitHub Actions run `32913752287` completed the predeclared panel with zero runtime errors.
+GitHub Actions run `32913752287` completed the predeclared panel with zero runtime errors. The exact tested source commit was `76e631b6780e8650b94f9ce08cce1c5b8fc646e1`.
 
 | Matchup | W-L-T | Score rate | Mean money delta |
 |---|---:|---:|---:|
