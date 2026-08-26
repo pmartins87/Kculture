@@ -1,5 +1,7 @@
 name: local-lab-smoke
 
+# R1/R2 are frozen PASS. Keep the smoke suite available for explicit
+# regression checks without consuming a hosted runner on every R4+ commit.
 on:
   workflow_dispatch:
 
