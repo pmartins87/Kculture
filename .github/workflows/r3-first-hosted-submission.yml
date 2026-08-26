@@ -1,9 +1,6 @@
 name: r3-first-hosted-submission
 
 on:
-  push:
-    paths:
-      - ".github/workflows/r3-first-hosted-submission.yml"
   workflow_dispatch:
 
 jobs:
