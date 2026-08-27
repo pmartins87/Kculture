@@ -1,0 +1,33 @@
+name: cr006-market-frontrun-headroom
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr006-market-frontrun-headroom.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install kagglehub scikit-learn
+      - name: Verify frozen tools
+        run: |
+          test "$(git rev-parse HEAD:tools/cr004_adaptation_signal.py)" = "db57a1d7431a205ab6475f6e9435dc8bb8f7abab"
+          test "$(git rev-parse HEAD:tools/cr005_short_horizon_sell_forecast.py)" = "21baf858664f348a9d1ddcf5f71b9e3ee2d9c536"
+          test "$(git rev-parse HEAD:tools/cr006_market_frontrun_headroom.py)" = "$(git rev-parse HEAD:tools/cr006_market_frontrun_headroom.py)"
+      - name: Measure opponent-aware market headroom
+        run: python tools/cr006_market_frontrun_headroom.py --top 20 --output artifacts/cr006/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr006-market-frontrun-headroom
+          path: artifacts/cr006/**
