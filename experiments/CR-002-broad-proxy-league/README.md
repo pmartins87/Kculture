@@ -1,6 +1,6 @@
 # CR-002 — Broad proxy league calibration
 
-Status: **FROZEN / READY TO RUN**
+Status: **FROZEN / RUNNING — ATTEMPT 2**
 
 ## Why this exists
 
@@ -38,6 +38,22 @@ Predeclared calibration gate:
 If the gate fails, CR-002 is diagnostic only. We must expand/reweight the field or episode design before using it for candidate promotion.
 
 If the gate passes, this league becomes the first promotion-grade local strength proxy of the Competitive Reset. Candidate development then targets broad BT/coverage improvement rather than isolated wins versus Kaito/Rayk/Andrew.
+
+## Attempt history
+
+### Attempt 1 — run `33083452488`: MECHANICAL NULL
+
+The preparation stage succeeded and verified all ten exact public packages. Pair jobs then failed before environment creation with:
+
+`ModuleNotFoundError: No module named 'tools'`
+
+Cause: `tools/run_cr002_pair.py` imported `tools.run_tournament` before adding repository root to `sys.path` when executed as a script. No episode outcome was observed, so this attempt contains no league evidence.
+
+Fix commit: `08d242366037b19e20ee906e06dbe2bc6b760242`. The only change bootstraps the repository import path. Entrants, hashes, pair matrix, seed master, seats and calibration gate are unchanged.
+
+### Attempt 2 — run `33083761765`: QUEUED/RUNNING
+
+Workflow relaunch commit: `de88b83fae7dc1ebd2c59c21ca61ebef7bcf4352`.
 
 ## Important interpretation
 
