@@ -1,0 +1,32 @@
+name: kexp041-execution-audit
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp041-execution-audit.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen audit and candidate
+        run: |
+          test "$(git rev-parse HEAD:tools/audit_kexp041_execution.py)" = "229c5f826d7e37fae2d26f0841da00f394ea16f6"
+          test "$(git rev-parse HEAD:candidates/r4d_jit_carrot_one.py)" = "97e102933f96a85fcc586ec4a96500069902f035"
+      - name: Audit exact execution
+        run: python tools/audit_kexp041_execution.py --output artifacts/kexp041-execution/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp041-execution-audit
+          path: artifacts/kexp041-execution/report.json
