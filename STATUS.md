@@ -6,193 +6,150 @@ Last updated: 2026-08-27
 
 **Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
-Repository `pmartins87/Kculture` is the source of truth. R4B is now a reproducible hosted baseline, not a likely final candidate.
+Repository `pmartins87/Kculture` is the source of truth for code, experiments, hashes, Actions evidence, validation discipline, hosted submissions and continuation state.
 
 ## Competition / hosted baseline
 
 - R0 COMPLETE; R1 PASS; R2 PASS.
-- R3 DELIVERY PASS / HOSTED CALIBRATION FAIL.
-- Hosted champion: `R4B-market-only-validated-v1`.
-- Frozen candidate: `candidates/r4b_ablation_market_only.py`, blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
-- Modern public development panel: Kaito 25-7, Rayk 30-2, Andrew 26-6 = **81-15 / 96**.
-- Kaggle package valid / Complete / green check.
-- visible hosted rating progression: **161.6 → 135.7 → 110.5**.
-- Package parity run `32919305800`: 4/4 exact trajectories.
-- **Held-out 32/32 sealed.** Validation is still unopened for the current R4D branch.
+- R3 DELIVERY PASS / HOSTED CALIBRATION FAIL for the original R4B submission.
+- Current hosted baseline: `R4B-market-only-validated-v1`.
+- R4B candidate: `candidates/r4b_ablation_market_only.py`, blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
+- Visible hosted rating progression: **161.6 → 135.7 → 110.5**.
+- R4B package itself is valid; package parity was exact. Hosted weakness is therefore treated as real strategic/calibration evidence.
+- **Held-out remains 32/32 sealed.**
 
-Hosted weakness is treated as a real strategic/architecture failure. Recent official high-Elo replays are strongly state-adaptive, while COK/R4B remains route/tape dominated.
+## Current promoted R4D calibration candidate — KEXP-050
 
-## Replay / laboratory correctness
+Candidate: `candidates/r4d_reallocate_614_carrot.py`  
+Frozen blob: `61b77be136836328917441cb03f89bc6665c4c27`.
 
-- Replay convention is frozen: action selected from state `t` is stored on replay frame `t+1`.
-- KEXP-026 corrected CARROT seed ledger: **0/36** episodes contain truly unreserved spare CARROT stock.
-- KEXP-028: **10/10** sampled top tapes replay exact terminal rewards after alignment correction.
-- Fixed replay tapes are not valid counterfactual opponents because changed market state makes the tape non-adaptive.
-- Official daily high-Elo episode datasets remain primary live-meta evidence.
+Mechanism: at state 614, only when public market value satisfies
 
-## Closed / deprioritized branches
+`3 * (CARROT_price - WHEAT_price) - 10 > 0`
 
-- KEXP-017 route oracle: perfect ex-post route selection only improves 81-15 → 83-13; route-selector solver deprioritized.
-- KEXP-024 terminal CARE: neutral vs R4B.
-- KEXP-027 exact step-695 FEED: zero ceiling.
-- KEXP-030 blanket late FEED suppression: rejected.
-- KEXP-032 post-695 WATER suppression: rejected; WATER can create immediate yield.
-- KEXP-033 naive terminal collector: 2-30 vs R4B; rejected.
-- KEXP-035: 371/374 final WATER actions create immediate yield; most are valuable.
-- KEXP-036 terminal SELL ordering: no promotion.
-- KEXP-043 found large PASS headroom, but KEXP-044 showed lower PASS is not itself associated with winning. Generic dispatcher remains secondary.
-- KEXP-049: 3,132 midgame HIREs audited; even hires costing >=89 average ~7.26 productive actions. Simple “remove expensive last hire” is rejected.
+and frozen R4B itself submits a one-unit WHEAT seed buy, replace that same market slot with one CARROT seed. At state 615, convert exactly one actual R4B WHEAT plant to CARROT only if observed seed stock proves the substituted CARROT purchase arrived. Incremental seed cost is +10; no seed/team/opponent identity is used.
 
-## Small replicated component — KEXP-037 terminal non-input liquidation
+### Open-data evidence
 
-Candidate `candidates/r4d_early_terminal_noninput_sell.py`.
+- mechanical execution: **10/10** intended reallocations and conversions exact, zero errors;
+- development modern public panel: exact R4B preservation **81-15**;
+- development direct vs R4B: **21-11**, score **0.65625**, mean +103.97;
+- exploratory live-meta direct: **15-11-14**, score **0.55**, mean +11.85;
+- KEXP-052 fresh independent stress, 96 unseen exploratory seeds × both seats: **87-47-58 / 192**, score **0.6041667**, mean +41.24, seat scores 0.59896 / 0.60938, zero errors.
 
-- development direct vs R4B: **13-11-8**, score 0.53125;
-- exploratory live-meta: **12-8-20**, score **0.55**, mean delta **+32.2**;
-- zero errors;
-- modern public panel preserved.
+KEXP-045 tied KEXP-050 at exactly 0.6041667 in KEXP-052. The predeclared tie-break selected KEXP-050 because it changes fewer actions and has lower incremental capital cost.
 
-Keep as a small independent component for later combination. It is not sufficient alone for hosted submission.
+## KEXP-054 — FRESH VALIDATION PASS
 
-## Primary R4D line — state-adaptive crop value
+Frozen validation experiment: `experiments/KEXP-20260827-054-kexp050-fresh-validation/README.md`.
 
-### KEXP-038 — PASS
+First run `33073158744` was a **mechanical null**: a development-only runner refused `partition=validation` before any episode ran; no validation outcome was observed.
 
-Equal-route WHEAT/CARROT mechanics support a public-state value rule. Across diagnostics, **234/234** sign-positive purchase states remained positive at later plant/harvest-price checkpoints.
+Correct validation run: **`33073517302`**, using the repository's approved `tools/run_tournament.py` with exactly the frozen 16 validation seeds × both seats.
 
-### KEXP-040 — PASS
+Direct KEXP-050 vs R4B:
 
-JIT extra-seed rule using current state only:
-
-`q * (CARROT_price - WHEAT_price) - 20 > 0`
-
-passed its support/stability diagnostics.
-
-### KEXP-041 — DEVELOPMENT PASS / EXPLORATORY FAIL
-
-Candidate `candidates/r4d_jit_carrot_one.py`, blob `97e102933f96a85fcc586ec4a96500069902f035`.
-
-- mechanical execution: 14/14 intended conversions exact;
-- modern development panel preserved at 81-15;
-- direct development vs R4B: **20-12**, score **0.625**, mean +53.53;
-- exploratory live-meta: **14-14-12**, score **0.50**, mean **-21.35**.
-
-KEXP-046 paired-world causal audit explains the failure: on triggered development cases, mean own reward +89.5 / relative +77.9; on triggered live-meta cases, mean own reward **-49.6** / relative **-61.0**. The mutation itself fails to generalize. **NO VALIDATION / NO PROMOTION.**
-
-### KEXP-045 — CROSS-DISTRIBUTION W/L PASS / HOLD
-
-Candidate `candidates/r4d_jit_carrot_two.py`, blob `9d199b3c263254805c64f122367afe180027afeb`.
-
-Two bounded JIT pairs: 614→615 and 619→620.
-
-Mechanical KEXP-048 audit:
-
-- 14/36 episodes trigger both pairs;
-- 28/28 buy→plant handshakes exact;
-- zero errors/state leakage.
-
-Development:
-
-- Kaito 25-7;
-- Rayk 30-2;
-- Andrew 26-6;
-- combined **81-15**;
-- direct vs R4B **22-10**, score **0.6875**, mean **+165.5**.
-
-Exploratory live-meta, 20 seeds × both seats:
-
-- **17-11-12**;
-- score **0.575**;
-- mean terminal delta **-1.05**;
-- seat0 11-3-6; seat1 6-8-6;
+- **14-8-10 / 32**;
+- score **0.59375**;
+- mean money delta **+31.0625**;
 - zero errors.
 
-KEXP-051 paired-world causal audit shows the two conversions are strongly positive on development (triggered mean relative +240.73) but nearly neutral on live-meta (triggered mean relative -3.0). Therefore the positive live-meta W/L may contain substantial matchup variance. Candidate is held pending larger fresh-seed stress, not yet validation-frozen.
+Validation public-opponent regression panel:
 
-### KEXP-050 — CROSS-DISTRIBUTION POSITIVE / HOLD
+| Family | KEXP-050 | R4B control |
+|---|---:|---:|
+| Kaito V27 | 25-7 | 25-7 |
+| Rayk V11 | 32-0 | 32-0 |
+| Andrew V12 | 21-11 | 21-11 |
+| Combined | **78-18** | **78-18** |
 
-Candidate `candidates/r4d_reallocate_614_carrot.py`, blob `61b77be136836328917441cb03f89bc6665c4c27`.
+Predeclared gate: direct score >=0.53125, positive direct mean delta, zero errors, combined public panel not worse than R4B, no family down >1 win. **Every clause PASS.**
 
-Instead of buying an extra CARROT for +20, replace one existing one-unit WHEAT seed buy at state 614 with CARROT in the same market slot. Incremental seed cost = +10.
+Validation is now consumed evidence for this frozen KEXP-050. Do not tune KEXP-050 against individual validation outcomes.
 
-Mechanical audit:
+## Formal self-contained package — PASS
 
-- development 4/16 exact reallocations;
-- live-meta 6/20 exact reallocations;
-- 10/10 conversions executed exactly;
-- zero status errors.
+Preparation parity run `33073890448`:
 
-Development:
+- 8/8 development seat/seed comparisons have identical full action trajectories;
+- all terminal rewards/statuses identical;
+- deterministic archive SHA-256 `59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`.
 
-- modern public panel exactly **81-15**;
-- direct vs R4B **21-11**, score **0.65625**, mean **+103.97**.
+Formal post-validation package run: **`33074434495`**.
 
-Exploratory live-meta:
+Formal filename:
 
-- **15-11-14**;
-- score **0.55**;
-- mean **+11.85**;
-- zero errors.
+`Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz`
 
-050 has slightly weaker W/L than 045 in the small exploratory pool but positive mean value and lower intervention/cost. It remains a serious candidate pending KEXP-052.
+Frozen identities:
 
-## KEXP-052 — RUNNING / current promotion discriminator
+- archive bytes: **102524**;
+- archive SHA-256: **`59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`**;
+- packaged `main.py` SHA-256: **`10b904ef9c26c7e87462e1f033c8e6d92bee5984e96a23e67a18804f3034e2d9`**.
 
-Run `33069453972`.
+The formal workflow independently rechecks candidate/source hashes, KEXP-054 promotion record, deterministic archive identity and exact full-trajectory package parity before upload.
 
-Fresh deterministic exploratory distribution:
+**Next hosted action: submit this exact archive to Kaggle as a calibration candidate.** It is not declared the final champion. Its purpose is to test whether a disciplined state-adaptive improvement that generalizes locally also improves the real hosted field, where R4B calibration failed severely.
 
-- 96 new seeds generated from master `202608270052`;
-- excludes every frozen development, validation, held-out seed and the prior live-meta exploratory pool;
-- both seats;
-- **192 games for KEXP-045 and 192 games for KEXP-050** in parallel.
+## Architecture diagnosis
 
-Predeclared gate per candidate:
+The central gap remains strategic adaptivity. Official recent high-Elo episodes show state-dependent production/capital allocation, while R4B remains strongly route/tape based. A one-step CARROT reallocation passing local validation does not erase the enormous R4B hosted gap; hosted KEXP-050 evidence is now essential.
 
-- zero errors;
-- overall W/L/T score >= **0.53**;
-- mean terminal delta > 0;
-- each seat score >= **0.48**.
+Important closed/falsified simplifications:
 
-If both pass and overall score differs by <0.01, prefer KEXP-050 for lower intervention/cost. Passing authorizes exact freeze + fresh validation. Held-out remains sealed.
+- route-oracle over existing variants has low ceiling (KEXP-017);
+- terminal CARE neutral (KEXP-024);
+- exact step-695 FEED zero ceiling (KEXP-027);
+- blanket late FEED suppression rejected (KEXP-030);
+- post-695 WATER suppression false; WATER creates immediate yield (KEXP-032/035);
+- naive terminal collector rejected (KEXP-033);
+- generic PASS elimination unsupported by winner-vs-loser data (KEXP-043/044);
+- deleting expensive HIREs unsupported: KEXP-049 audited 3,132 hires and high-cost hands still performed substantial productive work.
 
-## Live-meta architecture signals beyond CARROT
+Small independent KEXP-037 terminal non-input liquidation remains replicated but not yet combined with the frozen KEXP-050 package.
 
-KEXP-047 same-episode winner-vs-loser radar across Aug-24/25/26 found temporally consistent patterns:
+## Next-generation branch — TOMATO / portfolio allocation
 
-- winners have much more money by checkpoints 576/648/696;
-- winners SELL more WHEAT during 192-575 but less WHEAT late;
-- winners BUY fewer WHEAT seeds in 384-647;
-- winners BUY more CARROT in 576-647;
-- winners BUY more TOMATO seed in 384-575 and hold more TOMATO at checkpoints 576/648/696;
-- winners buy/hold more SHEEP in early/midgame;
-- winners HIRE fewer hands in 192-383, but KEXP-049 shows simply deleting expensive hires from R4B is not justified.
+KEXP-047 live winner-vs-loser radar showed consistent broader portfolio differences: winners use less late WHEAT, more late CARROT, more TOMATO in midgame, more SHEEP in early/midgame, and different capital/labor allocation.
 
-Interpretation: the likely prize-grade architecture is a dynamic capital/production allocator, not merely a larger fixed tape.
+### KEXP-053 — physical TOMATO feasibility PASS
 
-## KEXP-053 — RUNNING / TOMATO physical feasibility
+Across 2,128 R4B midgame plant events, 32 WHEAT slots had a same-tile HARVEST >=192 turns later, enough for TOMATO's first production. These occurred in 4/16 development and 6/20 exploratory episodes.
 
-Run `33069678715`.
+Recurring long slots:
 
-TOMATO needs ~192 turns before first yield. Audit every R4B WHEAT/CARROT plant in states 240-527 across 16 development + 20 exploratory seeds, pairing it with next same-tile HARVEST and maintenance.
+- state 262 `(0,4)`, delay 281;
+- state 310 `(9,7)`, delay 398;
+- state 334 `(5,9)`, delay 356;
+- state 381 `(0,2)`, delay 213;
+- state 451 `(7,3)`, delay 229;
+- state 477 `(0,9)`, delay 211.
 
-Gate: at least 4 development and 5 exploratory episodes must contain a >=192-turn natural slot before a wrapper-style TOMATO candidate is allowed. If gate fails, TOMATO requires physical-route/planning architecture rather than another local substitution wrapper.
+### KEXP-055 — succession audit PASS for bounded route
+
+Run `33073812783`, artifact `9647111604`.
+
+- 26/32 long slots have **no future same-tile PLANT** after the audited HARVEST;
+- 6/32 conflict, all the exact same structural slot: state 381 `(0,2)`, HARVEST 594 → WHEAT PLANT 595;
+- conflict fraction 18.75%, below the predeclared 25% routing threshold.
+
+Decision: a bounded TOMATO development experiment may use the five non-conflicting slot families. Exclude state381 `(0,2)` unless explicit tile-release logic is added.
 
 ## Exact continuation
 
-1. Poll KEXP-052 first. Apply its predeclared gate exactly.
-2. If one candidate passes decisively, freeze it and open a **fresh exact validation**. If neither passes, do not spend validation.
-3. If 045 and 050 are effectively tied, prefer 050 by predeclared lower-intervention rule.
-4. Poll KEXP-053 and classify TOMATO as wrapper-feasible vs planner-required.
-5. Only after crop-candidate selection, test combination with independent KEXP-037 terminal liquidation.
-6. New hosted submission is allowed after exact fresh validation + package parity; it is a calibration submission of a materially different state-adaptive policy.
-7. Keep all **32/32 held-out sealed** until later promotion/final selection.
+1. User submits the exact formal KEXP-050 archive to Kaggle.
+2. Record submission timestamp/description and hosted score/episodes in `docs/SUBMISSION_LEDGER.md` as they appear.
+3. Treat KEXP-050 hosted performance as calibration evidence; do not declare success from local validation alone.
+4. While hosted episodes accumulate, continue R4D development on bounded TOMATO/portfolio allocation using only development + exploratory evidence.
+5. Do not combine KEXP-037 or alter KEXP-050 under the already-consumed validation result; any changed candidate must earn its own fresh validation decision.
+6. Keep all **32/32 held-out sealed** for later promotion/final selection.
+7. Continue monitoring official live-meta episodes; prioritize value/allocation mechanisms that can explain both hosted and local behavior.
 
 ## Frozen environment facts
 
 - `kaggle-environments==1.32.7`;
 - official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`;
-- 720 recorded states; state 718 is the final executable action;
+- 720 recorded states; state 718 final executable action;
 - terminal reward is farm money;
-- state/action replay alignment: `state t -> frame t+1 action`;
-- W/L/T is primary for ladder/final tournament relevance; money margin is diagnostic/secondary.
+- replay alignment: `state t -> action frame t+1`;
+- W/L/T is primary for leaderboard/final Bradley-Terry relevance; money margin is diagnostic/secondary.
