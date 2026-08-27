@@ -8,247 +8,146 @@ Last updated: 2026-08-27
 
 Repository `pmartins87/Kculture` is the source of truth for strategy, code, experiments, Actions evidence, hashes, roadmap and handoff state.
 
-## Prize-first decision rule
+## Current strategic position
 
-- User suggestions, assistant suggestions and public strategies are **hypotheses, not directives**.
-- Prefer expected prize value over elegance, novelty or architectural purity.
-- Cheap falsification before expensive implementation.
-- W/L/T generalization and hosted relevance outrank money-margin improvements.
-- Kill/deprioritize avenues whose measured ceiling is small.
-- Local public benchmarks are models; official hosted/live-ladder evidence is calibration truth when they conflict.
-- Never pivot architecture merely because a technique was mentioned.
-
-See `docs/PRIZE_FIRST_DECISION_POLICY.md`.
-
-## Gate summary
-
-- **R0 COMPLETE** — competition entry confirmed.
+- **R0 COMPLETE** — competition entry/facts frozen.
 - **R1 PASS** — exact official starter/environment reproduction.
-- **R2 PASS** — deterministic laboratory; 16 development / 16 validation / 32 held-out seeds.
-- **R3 DELIVERY PASS / HOSTED CALIBRATION FAILING** — first exact R4B package is `Complete` with green Kaggle check, but visible rating fell **161.6 → 135.7**.
-- **R4 ACTIVE** — hosted champion remains frozen R4B while R4D searches for a materially better replacement.
-- **R4B VALIDATION PASS** — `R4B-market-only-validated-v1`.
-- **KEXP-015 NO PROMOTION** — fixed route overrides do not improve W/L.
-- **KEXP-017 COMPLETE / route-solver branch DEPRIORITIZED** — perfect ex-post choice among current three macro branches improves only 81-15 → 83-13.
-- **KEXP-018 COMPLETE / OPERATING INFRASTRUCTURE** — official live-meta radar now tracks actual top-ladder episodes and is scheduled twice daily.
-- **KEXP-019 COMPLETE / SUPPORTS late stop-investment** — across Aug-23/24/25 top episodes, winners almost eliminate CARE in 672-695 and reduce herd more than losers.
-- **KEXP-021 COMPLETE** — same-day CARROT demand-response signal found.
-- **KEXP-022 COMPLETE** — four-day longitudinal replication confirms strong agents adapt late crop allocation to full shop demand; unconditional CARROT rule rejected.
-- **KEXP-023 RUNNING (rerun after import-only fix)** — audit whether existing late WHEAT physical cycles can safely host CARROT substitution.
-- **KEXP-024 RUNNING** — mechanics-based terminal CARE→HARVEST/COLLECT/PASS ablation on development only.
-- **Held-out sealed 32/32.**
+- **R2 PASS** — deterministic laboratory and partition discipline.
+- **R3 DELIVERY PASS / HOSTED CALIBRATION FAIL** — R4B package is valid/Complete, but visible hosted rating deteriorated **161.6 → 135.7 → 110.5**.
+- **R4 ACTIVE** — frozen hosted champion remains R4B while R4D builds a materially different state-adaptive replacement.
+- **Held-out 32/32 sealed.**
+- Validation is also closed for the current R4D line until exploratory replication is complete.
 
-## Current hosted champion
+The hosted weakness is treated as real. R4B is now a reproducible baseline, not a likely prize candidate.
+
+## Frozen hosted baseline — R4B
 
 `R4B-market-only-validated-v1`
 
-- candidate `candidates/r4b_ablation_market_only.py`;
-- frozen Git blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
-- validation run `32918640409`: 32-0 vs Seyamalam; direct vs R4A 8-6-18, score 0.53125, mean +165.03125, zero errors;
-- package parity run `32919305800`: 4/4 full trajectories identical;
-- archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
-- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`;
-- Kaggle status `Complete`, green check;
-- observed live score **161.6 → 135.7**.
+- candidate: `candidates/r4b_ablation_market_only.py`;
+- blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
+- controlled modern public panel on development: Kaito 25-7, Rayk 30-2, Andrew 26-6, combined **81-15 / 96**;
+- validation run `32918640409`;
+- package parity run `32919305800`, 4/4 exact trajectories;
+- Kaggle status Complete / green check;
+- visible hosted rating: **110.5** latest observed.
 
-The declining hosted rating is a serious local/online contradiction, not evidence of packaging failure. Do not spend submission #2 without a materially stronger, freshly validated candidate.
+Local 81-15 is a regression control only; it is not a calibrated model of the live field.
 
-## Frozen environment / evaluation facts
+## Architecture diagnosis
 
-- `kaggle-environments==1.32.7`.
-- official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`.
-- 720 recorded states; step 718 is the final executable action.
-- terminal reward is exactly `farm.money`.
-- positive-price SELL executes after unit actions; leftover inventory has no terminal reward.
-- ladder rating depends on W/L/T, not coin margin.
-- latest two submissions remain tracked for final evaluation.
-- final submission deadline: 2026-09-30 23:59 UTC; games continue approximately to 2026-10-15 before final Bradley-Terry evaluation.
-- current CARROT/TOMATO/EGG scarcity rebalance is already included in the frozen engine; it does **not** explain the hosted mismatch.
+Official recent top-agent replays show highly state-adaptive behavior. Exact action agreement within dominant high-Elo families is very low; COK/R4B remains strongly route/tape oriented. Hosted failure is therefore treated primarily as a strategic/architectural gap, not a rules or packaging problem.
+
+KEXP-042 full-game atlas found major differences in labor/action mix and production composition. R4B generates far more PASS in midgame, but KEXP-044 winner-vs-loser analysis showed lower PASS is **not** itself a winning signal. KEXP-043 found large mechanical PASS headroom, but a generic dispatcher is deprioritized until value evidence supports it.
+
+## Closed / deprioritized avenues
+
+- **KEXP-015 NO PROMOTION:** fixed route replacements do not improve W/L.
+- **KEXP-017 COMPLETE / route-oracle DEPRIORITIZED:** perfect ex-post selector among current route variants only moves 81-15 → 83-13.
+- **KEXP-024 NO PROMOTION:** terminal CARE reallocation is exactly neutral vs R4B (12-12-8, mean delta 0).
+- **KEXP-027 ZERO-CEILING:** no FEED intents at exact final executable step 695.
+- **KEXP-030 NO PROMOTION:** only 35/331 late FEED actions lacked terminal value; blanket suppression rejected.
+- **KEXP-032 REJECTED:** assumption that WATER after 695 is useless was false; engine gives immediate yield increments in the valid window.
+- **KEXP-033 REJECTED:** naive terminal collector increased DROP but went 2-30 vs R4B.
+- **KEXP-035 COMPLETE:** 371/374 audited terminal WATER actions create immediate yield; 365 retain a complete harvest/drop path.
+- **KEXP-036 NO PROMOTION:** terminal SELL impact ordering did not meet direct edge gate.
+
+## Live-meta calibration and replay correctness
+
+- **KEXP-026 COMPLETE:** corrected state/action alignment gives exact seed ledger; **0/36** episodes contain truly unreserved CARROT seed for a free stock-only substitution.
+- **KEXP-028 COMPLETE:** corrected replay convention `state t -> action frame t+1`; **10/10** sampled official top tapes reproduce exact terminal rewards. Fixed tape is not a valid counterfactual opponent benchmark because market changes break the tape.
+- **KEXP-039 COMPLETE:** step-717 terminal selling exists in current top-agent behavior; it is supporting evidence only.
+- **KEXP-042 COMPLETE:** full-game phase atlas against recent official winners.
+- **KEXP-043 COMPLETE:** 10,150 R4B PASS intents in states 96-287; ~66% have some same-tile task and ~90% are within two moves of a task. This is headroom, not proof of value.
+- **KEXP-044 COMPLETE:** winners do not systematically reduce PASS versus losers, preventing a premature labor-dispatcher pivot.
+
+## Mechanism A — terminal non-input liquidation
+
+**KEXP-037 passed development and exploratory replication.**
+
+Mechanism: sell already-available non-input products at state 717, after the last town-consumption tick and before the terminal dump.
+
+Development direct vs R4B: **13-11-8**, score 0.53125, positive mean delta; modern public panel preserved.
+
+Exploratory live-meta environmental pool (20 seeds × both seats) direct vs R4B: **12-8-20**, score **0.55**, mean delta **+32.2**, zero errors.
+
+Interpretation: small, replicated, independent component. Keep for later combination; insufficient alone to justify hosted submission.
+
+Candidate: `candidates/r4d_early_terminal_noninput_sell.py`.
+
+## Mechanism B — state-adaptive late crop value
+
+This is the current primary R4D line.
+
+### KEXP-038 — PASS
+
+Mechanics-derived purchase-time rule for equal-route WHEAT/CARROT yield:
+
+`q * (CARROT_price - WHEAT_price) - 10 > 0`
+
+Across development + exploratory live-meta diagnostics, all **234/234** sign-positive purchase states remained positive at plant and harvest-price oracle checkpoints. This established that current public market state carries a stable crop-value signal.
+
+### KEXP-040 — PASS
+
+One-step JIT fallback treating existing WHEAT seed as sunk cost:
+
+`q * (CARROT_price - WHEAT_price) - 20 > 0`
+
+Passed predeclared support/stability gate in both pools.
+
+### KEXP-041 — DEVELOPMENT PASS
+
+Candidate: `candidates/r4d_jit_carrot_one.py`, blob `97e102933f96a85fcc586ec4a96500069902f035`.
+
+Only mutation:
+
+- state 614: if `3*(Pc-Pw)-20 > 0`, buy exactly one CARROT seed;
+- state 615: only if extra stock is observed, convert exactly one actual R4B `PLANT WHEAT` to `PLANT CARROT`.
+
+Independent execution audit: mutation triggered in **14/36** episodes (6/16 development, 8/20 exploratory); **14/14** purchases committed and **14/14** produced exactly +1 CARROT / -1 WHEAT; zero false mutations/errors.
+
+Development W/L:
+
+- Kaito 25-7;
+- Rayk 30-2;
+- Andrew 26-6;
+- combined **81-15** — exact baseline preservation;
+- direct vs R4B **20-12**, score **0.625**, mean terminal delta **+53.53**, zero errors.
+
+**Decision:** first R4D state-adaptive candidate to pass a material direct W/L gate. Exploratory direct replication on 20 live-meta environmental seeds × both seats is currently running as run `33045892841`.
+
+### KEXP-045 — RUNNING
+
+Candidate: `candidates/r4d_jit_carrot_two.py`, blob `9d199b3c263254805c64f122367afe180027afeb`.
+
+Extends KEXP-041 to two bounded safe pairs: 614→615 and 619→620, each with q=3 and the same legal JIT value rule. Development screen run `33046361583` is in progress.
+
+Predeclared direct gate: score >=0.5625, positive mean delta, zero errors, modern public panel preserved.
+
+## Current exact continuation
+
+1. Poll KEXP-041 exploratory run `33045892841`.
+2. Poll KEXP-045 development run `33046361583`.
+3. If KEXP-041 replicates with score >0.50 and positive mean delta, it becomes eligible for an exact fresh validation after deciding whether KEXP-045 is stronger.
+4. If KEXP-045 passes and is at least as convincing as KEXP-041, replicate KEXP-045 on exploratory live-meta environmental seeds before validation.
+5. Combine KEXP-037 only after selecting the stronger crop controller; test combination directly versus its crop-only parent.
+6. Open fresh validation only for the frozen candidate selected by those gates.
+7. Keep all 32 held-out sealed.
+8. Prepare a new hosted submission only after fresh validation and exact package parity. Hosted submission should be used as calibration of a materially different policy, not as a reaction to the 110.5 score.
+
+## Frozen environment facts
+
+- `kaggle-environments==1.32.7`;
+- official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`;
+- 720 recorded states; state 718 is final executable action;
+- terminal reward is farm money;
+- replay alignment: action chosen at state `t` is stored on frame `t+1`;
+- W/L/T drives ladder/final tournament relevance; terminal money margin is secondary.
 
 ## Data discipline
 
-- development: 16 frozen seeds — open for iteration;
-- validation: 16 seeds — opened only for exact frozen R4B; changed code needs a fresh exact validation gate;
-- held-out: **32/32 never opened**;
-- exploratory live-meta pool: 20 environmental seeds reconstructed from official Aug-25 top episodes, development/diagnostic only. Seed/team/episode identity is forbidden as strategy input.
-
-## Controlled modern public panel
-
-Frozen R4B, all 16 development seeds × both seats:
-
-| Opponent | W-L-T | Score | Mean delta |
-|---|---:|---:|---:|
-| Kaito V27 | 25-7-0 | 0.78125 | +4,396.84375 |
-| Rayk V11 | 30-2-0 | 0.93750 | +7,477.21875 |
-| Andrew V12 | 26-6-0 | 0.81250 | +5,287.43750 |
-| **Combined** | **81-15-0** | **0.84375** | **+5,720.5** |
-
-These are regression controls, **not a calibrated proxy for the hosted field**.
-
-## Closed/deprioritized route branch
-
-### KEXP-015
-
-- baseline 81-15;
-- default→10C/4S 81-15, money higher only;
-- default→6C/8S 78-18.
-
-No promotion.
-
-### KEXP-017
-
-Run `32972566807`, 288 development games. Perfect ex-post branch choice among baseline/10C4S/6C8S yields only:
-
-- Kaito 25-7 → 25-7;
-- Rayk 30-2 → 32-0;
-- Andrew 26-6 → 26-6;
-- aggregate **81-15 → 83-13**.
-
-A solver over the existing route library has low prize-value headroom and is **deprioritized**. Search/optimization remains available for bounded high-ceiling subproblems only.
-
-## Official live-meta intelligence — primary frontier source
-
-### KEXP-018 live radar
-
-Public sources:
-
-- `kaggle/kaggriculture-episodes-index`;
-- `kaggle/kaggriculture-episodes-YYYY-MM-DD`.
-
-`tools/live_meta_radar.py` now records checkpoints 600/648/672/696/708/717/719, late-window physical/market actions, crops, herd, hands, shop prefixes and winner/loser aggregates. Workflow `live-meta-radar` is scheduled at 00:17 and 12:17 UTC daily; scheduled runs use top-10 episodes, manual runs default top-20.
-
-Latest top-20 run `33036951875` (official date **2026-08-26**) — SUCCESS:
-
-- daily episodes: 687;
-- median avg score: **2752.948115**;
-- top avg score: **3075.180535**;
-- selected top20 range: **3075.180535 → 3057.712986**;
-- 40 player-games / 20 winners;
-- top band dominated by Crop Dusta and Ryo Hasegawa;
-- artifact `9632352609`, ZIP SHA-256 `a0dc50e382ede83378b3c3c73c8b1479ec31d2101b484f339b5818d7d2a5dafd`.
-
-Aug-26 winner means:
-
-- reward 112,307.2;
-- productive actions 43.03%, movement 52.91%, PASS 4.06%;
-- step-672 herd 16.25 → final herd 12.05: **4.2-animal reduction**;
-- losers reduce only **1.95** animals;
-- 672-695: CARE 0.6, FEED 5.4, HARVEST 21.25, DROP 3.9, SELL qty 86.2;
-- 696-718: CARE 0.5, FEED 0, HARVEST 21.35, DROP 14.1, SELL qty 158.25.
-
-### Live policy fingerprint — architecture warning
-
-Run `33019862336` — SUCCESS.
-
-The two dominant high-Elo families are **not fixed tapes**:
-
-- ~20 sampled trajectories per family, all complete trajectories unique;
-- mean exact action agreement during steps 216-599:
-  - Crop Dusta ~**1.36%**;
-  - Ryo Hasegawa ~**0.88%**;
-- modal exact action per step appears only around 7% of samples.
-
-This is strong evidence that the hosted frontier is state-adaptive. It helps explain why COK/R4B can dominate fixed public notebooks locally yet rate poorly against the live field. Do not interpret it as proof that one specific adaptive architecture is optimal.
-
-## Late animal stop-investment evidence
-
-### Exact engine theorem
-
-See `research/LATE_ANIMAL_TERMINAL_VALUE_20260826.md`.
-
-- end-of-day after step 695 is the final plant/animal production refresh;
-- CARE issued during 672-695 creates a pending care bonus only **after** that final production check, so it has zero direct terminal-production value;
-- FEED in 672-695 can still prevent escape and/or gate an already-existing pending bonus, so it is not blanket-removable;
-- HARVEST on an animal tile moves all held `yield_units` into the acting unit's inventory and resets tile yield to zero, potentially freeing `max_held` capacity before the step-695 refresh;
-- COK routes still schedule roughly 8–10 CARE during 672-695.
-
-### KEXP-019 longitudinal live evidence — COMPLETE
-
-Run `33019193497` — SUCCESS, top-10 official episodes on Aug-23/24/25.
-
-Winner herd reduction 672→719 versus losers:
-
-- Aug-23: **2.2 vs 1.3**;
-- Aug-24: **2.6 vs 0.4**;
-- Aug-25: **6.7 vs 1.1**.
-
-Winner CARE 672-695:
-
-- Aug-23 **0.1**;
-- Aug-24 **0.0**;
-- Aug-25 **0.0**.
-
-Thus the stop-investment mechanism survives temporal replication and is eligible for a controlled candidate. The deployable rule must still come from engine state, not team identity.
-
-### KEXP-024 — terminal CARE reallocation: RUNNING
-
-Candidate: `candidates/r4d_terminal_care_reallocate.py`, blob `daab48a896535cd514e725affef6e8568e6b0a21`.
-
-Only steps 672-695 and only when base action is CARE:
-
-1. HARVEST if current animal has product;
-2. else COLLECT_FERTILIZER if available;
-3. else PASS.
-
-FEED, movement, routes, crops, market and step-718 R4B liquidation are unchanged.
-
-Predeclared primary gate on modern development panel:
-
-- zero errors;
-- no family win-count regression;
-- combined W/L must improve beyond **81-15**;
-- direct candidate-vs-R4B score >=0.50 and mean delta >=0.
-
-Run `33037860772` in progress. Validation/held-out closed.
-
-## Live crop demand-response evidence
-
-### KEXP-021
-
-Aug-25 top20:
-
-- CARROT demand-weight → late CARROT seed buy Pearson **+0.46156**;
-- winners late CARROT seeds 14.20 vs losers 2.95;
-- winner final-day CARROT sales 50.95 vs losers 4.85.
-
-Same-day two-family confound prevented promotion.
-
-### KEXP-022 — longitudinal replication
-
-Run `33019559986` — SUCCESS.
-
-CARROT demand→late CARROT seed-buy Pearson:
-
-- Aug-22 **+0.49505**;
-- Aug-23 **+0.52212**;
-- Aug-24 **+0.53413**;
-- Aug-25 **+0.50326**.
-
-Strong live agents systematically use complete public late shop demand to alter crop allocation. “More CARROT always” is false; winner/loser quantities reverse on some dates/demand regimes. Any candidate must be contextual and conservative.
-
-### Static COK gap
-
-COK/R4B remains highly WHEAT-heavy after all eight shop instances are known. Representative route tapes during 600-671 plant ~28–32 WHEAT vs 0–3 CARROT. This is a concrete adaptation gap.
-
-### KEXP-023 — late crop-cycle audit: RUNNING
-
-Purpose: before changing WHEAT→CARROT, measure whether the existing physical tape harvests late WHEAT tiles on a horizon compatible with CARROT's shorter lifecycle.
-
-- all 16 development seeds + 20 exploratory live-meta environmental seeds;
-- unchanged R4B vs deterministic starter;
-- inspect every `PLANT WHEAT` during 576-647 and next same-tile HARVEST;
-- no strategy mutation and no validation/held-out.
-
-First run `33037518259` failed before any game due only to direct-script Python import path. Import fixed without changing protocol. Rerun `33037701080` in progress.
-
-## Immediate continuation — prize-first
-
-1. Finish KEXP-023 and KEXP-024 without altering their gates after seeing outcomes.
-2. If KEXP-024 improves W/L cross-family, broaden on exploratory live-meta environmental seeds before any validation.
-3. If KEXP-024 is money-only or neutral in W/L, record NO PROMOTION despite clean mechanics.
-4. If KEXP-023 shows most intended crop slots are mechanically CARROT-compatible, prototype one conservative shop-demand + current-price crop substitution; otherwise require a real crop lifecycle controller instead of blind substitution.
-5. Keep the live-meta radar operating twice daily and use it to find mechanisms shared across dates/families rather than copy final farm templates.
-6. Continue hosted-episode forensics once Kculture episode IDs/identities become available.
-7. Freeze only a materially stronger candidate, then open a fresh candidate-specific validation gate.
-8. Do not submit a second Kaggle agent before that gate.
-9. Keep hosted R4B immutable and all **32 held-out seeds sealed**.
+- development: 16 frozen seeds — open;
+- exploratory live-meta environmental seeds: development/calibration only;
+- validation: closed until candidate freeze;
+- held-out: **32/32 sealed**;
+- team/episode/seed identity forbidden as deployable policy input.
