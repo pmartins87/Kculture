@@ -1,70 +1,61 @@
 # KEXP-20260827-031 — richer late-crop public-state tree
 
-Status: **RUNNING / DIAGNOSTIC ONLY**
+Status: **COMPLETE / SHALLOW IMITATION TREE REJECTED**
 
-## Why this follows KEXP-029
+## Why this followed KEXP-029
 
-KEXP-029 deliberately tested the smallest plausible rule family: CARROT demand plus current CARROT/WHEAT price relation. It failed the predeclared temporal gate: the selected rule was perfect on its training positives (58/58) but only 10/15 = 66.7% precise on Aug-26 winners.
+KEXP-029 showed that CARROT demand plus current CARROT/WHEAT price carried signal but did not generalize strongly enough. KEXP-031 added legal economic/productive context while deliberately restricting model capacity to shallow, auditable trees.
 
-That failure says the top-meta decision depends on more state than demand + price alone. This experiment adds legally observable economic and productive context while keeping the learned policy intentionally small and interpretable.
+## Frozen protocol
 
-## Frozen data protocol
+Official public top-20 episodes per day. Winner seed-buy events in states 600..647, with exact observation frame `t` → action frame `t+1` alignment.
 
-Official public top-20 episodes per day.
+Training/model-selection: Aug-22..25 using leave-one-day-out validation.
+Strict temporal test: Aug-26, untouched until hyperparameters were selected.
 
-Training/model-selection days: 2026-08-22, 23, 24, 25.
-Strict temporal test: 2026-08-26.
+Legal features included step, own/opponent public money, relative money, workers/quadrants, own private WHEAT/CARROT seed and shed stock, public market prices/inventories, complete shop demand, public crop/animal counts and weeds. No team/episode/seed identity entered the model.
 
-At winner seed-buy events during states 600..647, pair observation frame `t` with action frame `t+1` and classify whether the action buys any CARROT seed rather than WHEAT-only.
+Tree family: depth 2..4, minimum leaf 10/20/30/40, Gini/entropy.
 
-No team, episode or seed identity enters the feature matrix.
+Predeclared CV eligibility required worst held-out-day precision >=0.60, mean precision >=0.70, mean recall >=0.10 and >=3 predicted positives every held-out day. Final Aug-26 gate additionally required support >=10, precision >=0.75 and recall >=0.15.
 
-## Legal public-state feature families
+## Canonical result
 
-- step/horizon;
-- own and opponent public money;
-- relative money;
-- own/opponent farm-hand count and unlocked quadrants;
-- own private WHEAT/CARROT seed stock and shed stock;
-- public WHEAT/CARROT prices and market inventories;
-- complete-shop WHEAT/CARROT demand weights and derived ratios;
-- own/opponent public crop counts, animal counts and weeds.
+Actions run **`33041559384` — SUCCESS**.
+Artifact **`9634097003`**, ZIP digest **SHA-256 `c1d4ddd807d8191276772a6fc4c9da9fa1b359b300e40c939e3ce564ddfb9e78`**.
 
-Opponent private seeds/shed are never used.
+Best selected configuration under the frozen ordering:
 
-## Model family and temporal selection
+- Gini;
+- max depth 2;
+- min leaf 10.
 
-Only shallow decision trees are considered:
+Leave-one-day-out precision / recall:
 
-- depth 2, 3 or 4;
-- minimum leaf size 10, 20, 30 or 40;
-- Gini or entropy criterion.
+- Aug-22: **0.5542 / 0.7419**;
+- Aug-23: **0.8800 / 0.7416**;
+- Aug-24: **0.6429 / 0.4286**;
+- Aug-25: **0.9355 / 0.7296**.
 
-Hyperparameters are selected using leave-one-day-out validation across Aug-22..25. Aug-26 is untouched until the single configuration is selected.
+Mean precision **0.7531**, mean recall **0.6604**, but worst-day precision **0.5542 < 0.60**. Therefore the configuration is **not CV-eligible**.
 
-A configuration is CV-eligible only if:
+Strict Aug-26 temporal test was strong descriptively:
 
-- worst held-out-day precision >= 0.60;
-- mean held-out precision >= 0.70;
-- mean held-out recall >= 0.10;
-- at least 3 predicted-positive events on every held-out training day.
+- support 72 predictions;
+- TP 68 / FP 4;
+- precision **0.9444**;
+- recall **0.6602**.
 
-Selection prioritizes worst-day precision, then mean precision, then mean recall, with simpler trees preferred on ties.
+The fitted depth-2 tree mostly used CARROT/WHEAT price ratio, own weeds and public WHEAT market inventory. This is informative but cannot override the predeclared cross-day failure.
 
-## Predeclared gate
+## Decision
 
-A tree becomes eligible to be distilled into one bounded R4D crop-response candidate only if:
+**NO POLICY PROTOTYPE from the shallow imitation tree.**
 
-- it passed the cross-day CV eligibility above;
-- Aug-26 predicted-positive support >= 10;
-- Aug-26 precision >= **0.75**;
-- Aug-26 recall >= **0.15**.
+Do not reinterpret the excellent Aug-26 result after the fact. The cross-day instability means a rule that imitates observed winner seed purchases is not robust enough to become our crop controller.
 
-Passing does not authorize validation or Kaggle submission. It authorizes only a controlled development candidate that converts a bounded amount of late WHEAT seed purchasing/planting inside KEXP-023's mechanically clean windows.
+The crop branch now leaves threshold/tree imitation and moves to an **explicit value model / bounded lookahead**: estimate the terminal economic consequence of changing a WHEAT seed purchase/plant into CARROT under the actual current state, rather than predicting what a named high-Elo policy happened to do.
 
-If this richer shallow tree fails, stop threshold/tree tinkering and move the crop branch to an explicit value model / bounded lookahead controller.
+No validation or held-out seeds were accessed.
 
-No validation or held-out seeds are accessed.
-
-Tool: `tools/late_crop_state_tree.py`
-Frozen tool blob: `661a78aa75648592f7aa291052afff9fadd1837d`
+Tool blob: `661a78aa75648592f7aa291052afff9fadd1837d`.
