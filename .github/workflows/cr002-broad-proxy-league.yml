@@ -1,0 +1,95 @@
+name: cr002-broad-proxy-league
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr002-broad-proxy-league.yml
+  workflow_dispatch:
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install preparation dependencies
+        run: python -m pip install -U kagglehub
+      - id: matrix
+        name: Freeze complete pair matrix
+        run: echo "matrix=$(python tools/cr002_matrix.py --github)" >> "$GITHUB_OUTPUT"
+      - name: Download and verify exact public scored packages
+        run: python tools/prepare_cr002_agents.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr002-prepared-agents
+          path: |
+            artifacts/cr002/agents
+            artifacts/cr002/prepared_agents_manifest.json
+
+  match:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 24
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install environment
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen R4B dependency
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen local identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:candidates/r4d_reallocate_614_carrot.py)" = "61b77be136836328917441cb03f89bc6665c4c27"
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr002-prepared-agents
+          path: artifacts/cr002
+      - name: Run frozen pair
+        run: >-
+          python tools/run_cr002_pair.py
+          --a "${{ matrix.a }}"
+          --b "${{ matrix.b }}"
+          --output "artifacts/cr002/reports/${{ matrix.pair }}.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr002-pair-${{ matrix.pair }}
+          path: artifacts/cr002/reports/${{ matrix.pair }}.json
+
+  aggregate:
+    if: always()
+    needs: [prepare, match]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install analysis dependencies
+        run: python -m pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr002-pair-*
+          path: artifacts/cr002/reports
+          merge-multiple: true
+      - name: Fit local Bradley-Terry and apply calibration gate
+        run: python tools/fit_cr002_bradley_terry.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr002-league-result
+          path: artifacts/cr002/league_result.json
