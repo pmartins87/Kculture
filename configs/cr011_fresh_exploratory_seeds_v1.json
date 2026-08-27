@@ -1,0 +1,29 @@
+{
+  "schema_version": "cr011-fresh-exploratory-seeds-v1",
+  "generator": {
+    "algorithm": "python-random.Random randint",
+    "master_seed": 2026082711,
+    "population": [1, 2147483646]
+  },
+  "seeds": [
+    2040863483,
+    1341050293,
+    222964045,
+    1920365363,
+    457516619,
+    186689196,
+    1207245764,
+    1666346625,
+    87730384,
+    779705770,
+    1095155839,
+    702603614
+  ],
+  "exclusions": [
+    "development",
+    "validation",
+    "held_out",
+    "cr008_fresh_exploratory_seeds_v1"
+  ],
+  "purpose": "CR-011 causal exploratory evaluation only; independent of CR-008 field and sealed partitions."
+}
