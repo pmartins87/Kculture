@@ -1,56 +1,54 @@
 # KEXP-20260827-030 — late FEED marginal terminal-value audit
 
-Status: **RUNNING / DIAGNOSTIC ONLY**
+Status: **COMPLETE / NARROW FEED SUPPRESSION REJECTED**
 
-## Prize-first question
+## Question
 
-KEXP-027 showed that the ultra-narrow step-695 FEED suppression has zero ceiling because frozen R4B issues no FEED at step 695. That does not answer whether some FEED actions earlier in the final day (steps 672..695) spend scarce WHEAT without changing terminal animal output.
-
-This experiment measures the exact marginal terminal-production value of every frozen-R4B FEED intent in that window.
-
-## Mechanics basis
-
-Under the frozen official engine:
-
-- the end-of-day refresh after step 695 is the final animal-production refresh;
-- an animal escapes at refresh when `consecutive_unfed` reaches 2;
-- a surviving animal can produce its base unit on a scheduled production day even when unfed;
-- FEED is required to consume an already-existing `pending_care_bonus` on a production day;
-- CARE issued during the final day creates new pending bonus only after that day's production check and therefore cannot pay before terminal scoring;
-- animal product capacity (`max_held`) can cap the incremental benefit.
+KEXP-027 showed zero FEED at step 695, but did not answer whether some FEED earlier in the final production day (672..695) spends scarce WHEAT without changing terminal animal output. KEXP-030 measures the exact marginal terminal-production value of every frozen-R4B FEED intent in that window.
 
 Replay alignment is exact: observation/state frame `t` is paired with submitted action frame `t+1`.
 
 ## Frozen protocol
 
-Run unchanged `R4B-market-only-validated-v1` against deterministic `starter` on:
+Unchanged R4B vs deterministic `starter` on all 16 development and 20 exploratory-live-meta environmental seeds. For every FEED intent, compute whether FEED can add any terminal product through the final refresh by preventing escape and/or unlocking already-existing pending CARE bonus, respecting production schedule and `max_held` capacity.
 
-- all 16 development seeds;
-- all 20 exploratory live-meta environmental seeds.
+Predeclared candidate gate required:
 
-For every FEED intent during steps 672..695, inspect the acting animal and actor inventory before the action. Compute whether FEED can add any terminal product units through the final refresh by:
+- zero-value FEED holding WHEAT in >=4/16 development episodes;
+- >=5/20 exploratory episodes;
+- zero-value FEED >=20% of all valid FEED intents.
 
-1. preventing an escape that would otherwise occur before a due production;
-2. unlocking an already-existing pending care bonus on a due production;
-3. respecting current `yield_units` and `max_held` capacity.
+## Canonical result
 
-A FEED with zero incremental terminal product is separately counted when the acting unit actually holds WHEAT, because only then would suppressing the FEED save a real scarce unit.
+Actions run **`33041367389` — SUCCESS**.
+Artifact **`9634066492`**, ZIP digest **SHA-256 `a308f6af34624a4fc63583f93bae4656d21bdcfe85ce6d5d4cd595f7b640648b`**.
 
-No action is changed by this experiment.
+Combined 36 episodes:
 
-## Predeclared gate
+- valid FEED intents: **331**;
+- zero-terminal-production-value FEED: **35**;
+- zero-value fraction: **10.574%**;
+- episodes with such FEED while actor holds WHEAT: **35/36**.
 
-A narrow state-aware late-FEED suppression candidate becomes eligible only if all are true:
+By mechanism:
 
-- at least **4/16 development episodes** contain a zero-terminal-value FEED whose actor holds WHEAT;
-- at least **5/20 exploratory-live-meta episodes** contain one;
-- at least **20% of all valid FEED intents** in the combined pools have zero terminal-production value.
+- **287** FEED unlock an already-existing pending CARE bonus;
+- **9** preserve survival for a due final production;
+- **35** occur when no final production is due and therefore have zero terminal-production value.
 
-Passing only authorizes a controlled development candidate. It does not authorize validation or Kaggle submission.
+Development: 16/16 episodes contain a zero-value FEED, but only 16/154 = 10.39% of FEED intents are zero-value.
+Exploratory live-meta: 19/20 episodes contain one, but only 19/177 = 10.73% of FEED intents are zero-value.
 
-If the gate fails, close FEED suppression as a small-ceiling branch and move late-game work toward broader harvest/drop/sale/labor planning.
+## Decision
 
-No validation or held-out seeds are accessed.
+**NO CANDIDATE under the predeclared gate.**
 
-Tool: `tools/audit_late_feed_marginal_value.py`
-Frozen tool blob: `9aa2951b7aa315334d5201a5c10eaaa38c6c3292`
+The episode-coverage condition passes strongly, but the 20% action-share condition fails by roughly half. The narrow rule saves approximately one WHEAT per typical episode and has lower expected prize-value than the much larger terminal throughput leak found in final-day WATER.
+
+This result also rules out blanket late FEED suppression: 296/331 FEED intents have a mechanically identifiable terminal role under the model, overwhelmingly through pending CARE bonus.
+
+Late-game engineering priority moves to harvest/drop/sale/labor throughput, beginning with KEXP-032 terminal WATER reallocation.
+
+No validation or held-out seeds were accessed.
+
+Tool blob: `9aa2951b7aa315334d5201a5c10eaaa38c6c3292`.
