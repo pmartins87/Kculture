@@ -6,144 +6,119 @@ Last updated: 2026-08-27
 
 **Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
-Repository `pmartins87/Kculture` is the source of truth for code, experiments, hashes, Actions evidence, validation discipline, hosted submissions and continuation state.
+Repository `pmartins87/Kculture` is the source of truth for code, experiments, public-package provenance, Actions evidence, hosted submissions and continuation state.
 
-## Competition / hosted baseline
+## Hosted reality — reset trigger
 
-- R0 COMPLETE; R1 PASS; R2 PASS.
-- R3 DELIVERY PASS / HOSTED CALIBRATION FAIL for the original R4B submission.
-- Current hosted baseline: `R4B-market-only-validated-v1`.
-- R4B candidate: `candidates/r4b_ablation_market_only.py`, blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
-- Visible hosted rating progression: **161.6 → 135.7 → 110.5**.
-- R4B package itself is valid; package parity was exact. Hosted weakness is therefore treated as real strategic/calibration evidence.
-- **Held-out remains 32/32 sealed.**
+Current user-visible Kaggle snapshot:
 
-## Current promoted R4D calibration candidate — KEXP-050
+- `Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz`: **145.1**, Complete / green check;
+- `Kculture_R4B_market_only_validated_v1_submission.tar.gz`: **142.0**, Complete / green check.
 
-Candidate: `candidates/r4d_reallocate_614_carrot.py`  
-Frozen blob: `61b77be136836328917441cb03f89bc6665c4c27`.
+KEXP-050 had passed development, exploratory live-meta, a fresh 192-game stress, fresh validation and exact package parity. A +3.1 hosted separation is far below prize-scale progress. Therefore the R4B → micro-overlay promotion program is **frozen as calibration history**, not continued as the main development strategy.
 
-Mechanism: at state 614, only when public market value satisfies
+Earlier R4B rating snapshots: **161.6 → 135.7 → 110.5 → 142.0**. Rating is dynamic; exact current values are evidence snapshots, not permanent scores.
 
-`3 * (CARROT_price - WHEAT_price) - 10 > 0`
+**Held-out remains 32/32 sealed.**
 
-and frozen R4B itself submits a one-unit WHEAT seed buy, replace that same market slot with one CARROT seed. At state 615, convert exactly one actual R4B WHEAT plant to CARROT only if observed seed stock proves the substituted CARROT purchase arrived. Incremental seed cost is +10; no seed/team/opponent identity is used.
+## Frozen hosted references
 
-### Open-data evidence
+### R4B
 
-- mechanical execution: **10/10** intended reallocations and conversions exact, zero errors;
-- development modern public panel: exact R4B preservation **81-15**;
-- development direct vs R4B: **21-11**, score **0.65625**, mean +103.97;
-- exploratory live-meta direct: **15-11-14**, score **0.55**, mean +11.85;
-- KEXP-052 fresh independent stress, 96 unseen exploratory seeds × both seats: **87-47-58 / 192**, score **0.6041667**, mean +41.24, seat scores 0.59896 / 0.60938, zero errors.
+- candidate: `candidates/r4b_ablation_market_only.py`;
+- blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
+- package parity proven;
+- current role: weak hosted calibration reference, not likely final candidate.
 
-KEXP-045 tied KEXP-050 at exactly 0.6041667 in KEXP-052. The predeclared tie-break selected KEXP-050 because it changes fewer actions and has lower incremental capital cost.
+### KEXP-050
 
-## KEXP-054 — FRESH VALIDATION PASS
+- candidate: `candidates/r4d_reallocate_614_carrot.py`;
+- blob: `61b77be136836328917441cb03f89bc6665c4c27`;
+- KEXP-054 validation run `33073517302`: direct **14-8-10**, score 0.59375, mean +31.06, zero errors;
+- validation public controls unchanged: Kaito 25-7, Rayk 32-0, Andrew 21-11;
+- formal package run `33074434495`, exact package parity;
+- archive SHA-256 `59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`;
+- hosted first snapshot **145.1**;
+- current role: evidence that a carefully validated local micro-improvement did not close the hosted gap.
 
-Frozen validation experiment: `experiments/KEXP-20260827-054-kexp050-fresh-validation/README.md`.
+## Competitive Reset — ACTIVE
 
-First run `33073158744` was a **mechanical null**: a development-only runner refused `partition=validation` before any episode ran; no validation outcome was observed.
+Research record: `research/COMPETITIVE_RESET_20260827.md`.
 
-Correct validation run: **`33073517302`**, using the repository's approved `tools/run_tournament.py` with exactly the frozen 16 validation seeds × both seats.
+### CR-001 — exact scored-package identity: CLOSED
 
-Direct KEXP-050 vs R4B:
+The hypothesis that Kculture had benchmarked the wrong public files was largely falsified.
 
-- **14-8-10 / 32**;
-- score **0.59375**;
-- mean money delta **+31.0625**;
-- zero errors.
+Exact package identity:
 
-Validation public-opponent regression panel:
+- **Kaito V27 V4, historical 3090.1**: package `main.py` == old benchmark file, SHA `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`;
+- **Rayk V11, historical 2990.4**: package `main.py` == old benchmark file, SHA `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`;
+- **Andrew V12, historical 2883.0**: package `submission.py` is byte-identical to old benchmark `main.py`, SHA `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`.
 
-| Family | KEXP-050 | R4B control |
-|---|---:|---:|
-| Kaito V27 | 25-7 | 25-7 |
-| Rayk V11 | 32-0 | 32-0 |
-| Andrew V12 | 21-11 | 21-11 |
-| Combined | **78-18** | **78-18** |
+Therefore R4B really did beat exact historically high-scoring code locally. The old three-agent 81-15 panel is retired as a promotion metric because it has poor field calibration. **Non-transitivity / matchup coverage is now the dominant explanation.**
 
-Predeclared gate: direct score >=0.53125, positive direct mean delta, zero errors, combined public panel not worse than R4B, no family down >1 win. **Every clause PASS.**
+### CR-001B — broad public reference acquisition: COMPLETE ENOUGH FOR V1
 
-Validation is now consumed evidence for this frozen KEXP-050. Do not tune KEXP-050 against individual validation outcomes.
+Identity-proven exact packages now span approximately:
 
-## Formal self-contained package — PASS
+3090 Kaito; 2990 Rayk; 2883 Andrew; 2799 Prvsiyan Frontier; 2767 Flex; 2755 Bruce; 2391 Roman; 2214 Anas; 2124 Prvsiyan Baseline; 1771 Renji.
 
-Preparation parity run `33073890448`:
+Third-party sources stay in Actions artifacts; they are not committed into this public repository. Attribution/license/provenance remain mandatory for any derivative use.
 
-- 8/8 development seat/seed comparisons have identical full action trajectories;
-- all terminal rewards/statuses identical;
-- deterministic archive SHA-256 `59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`.
+### CR-002 — broad Bradley–Terry proxy league: RUNNING
 
-Formal post-validation package run: **`33074434495`**.
+Workflow: `.github/workflows/cr002-broad-proxy-league.yml`  
+Run: **`33083452488`**  
+Protocol: `experiments/CR-002-broad-proxy-league/README.md`  
+Config: `configs/competitive_reset_league_v1.json`.
 
-Formal filename:
+Frozen design:
 
-`Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz`
+- 10 identity-proven public references + R4B + KEXP-050;
+- all **66** unordered pairs;
+- 6 common fresh seeds per pair;
+- both seats;
+- **792 games** total;
+- fit one local Bradley–Terry model;
+- test Spearman/local-order correlation against historical public Kaggle scores.
 
-Frozen identities:
+Predeclared calibration gate:
 
-- archive bytes: **102524**;
-- archive SHA-256: **`59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`**;
-- packaged `main.py` SHA-256: **`10b904ef9c26c7e87462e1f033c8e6d92bee5984e96a23e67a18804f3034e2d9`**.
+- complete 66/66 pair matrix;
+- zero runtime errors;
+- public Spearman >= **0.60**;
+- public BT ordering accuracy >= **0.65**.
 
-The formal workflow independently rechecks candidate/source hashes, KEXP-054 promotion record, deterministic archive identity and exact full-trajectory package parity before upload.
+The prepare stage already passed: all 10 exact public packages were downloaded and hash-verified. Pair jobs are queued/running in GitHub Actions.
 
-**Next hosted action: submit this exact archive to Kaggle as a calibration candidate.** It is not declared the final champion. Its purpose is to test whether a disciplined state-adaptive improvement that generalizes locally also improves the real hosted field, where R4B calibration failed severely.
+If CR-002 passes, it becomes the first promotion-grade local strength proxy of the reset. If it fails, do **not** optimize candidates against it; expand/reweight the field or episode model first.
 
-## Architecture diagnosis
+## CR-003 — next strategic milestone
 
-The central gap remains strategic adaptivity. Official recent high-Elo episodes show state-dependent production/capital allocation, while R4B remains strongly route/tape based. A one-step CARROT reallocation passing local validation does not erase the enormous R4B hosted gap; hosted KEXP-050 evidence is now essential.
+The target is no longer “145 → 170”. The target is to start from/reproduce a legitimate **2000–3000-class public baseline** and then improve broad tournament coverage.
 
-Important closed/falsified simplifications:
+Only after CR-002 calibration do we choose the derivative architecture. Current candidate directions:
 
-- route-oracle over existing variants has low ceiling (KEXP-017);
-- terminal CARE neutral (KEXP-024);
-- exact step-695 FEED zero ceiling (KEXP-027);
-- blanket late FEED suppression rejected (KEXP-030);
-- post-695 WATER suppression false; WATER creates immediate yield (KEXP-032/035);
-- naive terminal collector rejected (KEXP-033);
-- generic PASS elimination unsupported by winner-vs-loser data (KEXP-043/044);
-- deleting expensive HIREs unsupported: KEXP-049 audited 3,132 hires and high-cost hands still performed substantial productive work.
+- dynamic production/capital allocation;
+- market-aware crop/animal portfolio control;
+- high-level behavioral cloning from strong trajectories;
+- bounded search/value models for high-leverage decisions;
+- policy mixtures/meta diversification against non-transitivity.
 
-Small independent KEXP-037 terminal non-input liquidation remains replicated but not yet combined with the frozen KEXP-050 package.
+Do not start end-to-end PPO as the first reset move.
 
-## Next-generation branch — TOMATO / portfolio allocation
+## Paused branches
 
-KEXP-047 live winner-vs-loser radar showed consistent broader portfolio differences: winners use less late WHEAT, more late CARROT, more TOMATO in midgame, more SHEEP in early/midgame, and different capital/labor allocation.
-
-### KEXP-053 — physical TOMATO feasibility PASS
-
-Across 2,128 R4B midgame plant events, 32 WHEAT slots had a same-tile HARVEST >=192 turns later, enough for TOMATO's first production. These occurred in 4/16 development and 6/20 exploratory episodes.
-
-Recurring long slots:
-
-- state 262 `(0,4)`, delay 281;
-- state 310 `(9,7)`, delay 398;
-- state 334 `(5,9)`, delay 356;
-- state 381 `(0,2)`, delay 213;
-- state 451 `(7,3)`, delay 229;
-- state 477 `(0,9)`, delay 211.
-
-### KEXP-055 — succession audit PASS for bounded route
-
-Run `33073812783`, artifact `9647111604`.
-
-- 26/32 long slots have **no future same-tile PLANT** after the audited HARVEST;
-- 6/32 conflict, all the exact same structural slot: state 381 `(0,2)`, HARVEST 594 → WHEAT PLANT 595;
-- conflict fraction 18.75%, below the predeclared 25% routing threshold.
-
-Decision: a bounded TOMATO development experiment may use the five non-conflicting slot families. Exclude state381 `(0,2)` unless explicit tile-release logic is added.
+CARROT/TOMATO micro-overlay work is paused. KEXP-053/055 remain useful mechanics research, but KEXP-056 must not delay CR-002/CR-003. KEXP-037 is also held.
 
 ## Exact continuation
 
-1. User submits the exact formal KEXP-050 archive to Kaggle.
-2. Record submission timestamp/description and hosted score/episodes in `docs/SUBMISSION_LEDGER.md` as they appear.
-3. Treat KEXP-050 hosted performance as calibration evidence; do not declare success from local validation alone.
-4. While hosted episodes accumulate, continue R4D development on bounded TOMATO/portfolio allocation using only development + exploratory evidence.
-5. Do not combine KEXP-037 or alter KEXP-050 under the already-consumed validation result; any changed candidate must earn its own fresh validation decision.
-6. Keep all **32/32 held-out sealed** for later promotion/final selection.
-7. Continue monitoring official live-meta episodes; prioritize value/allocation mechanisms that can explain both hosted and local behavior.
+1. Poll CR-002 run `33083452488`.
+2. If any pair job fails mechanically, repair execution without changing frozen entrants/seeds/gate.
+3. When all pair artifacts exist, inspect `cr002-league-result` and apply the predeclared calibration gate exactly.
+4. If calibrated, inspect where R4B/KEXP-050 rank in the broad local BT league and identify which public baseline gives the best legal/provenance-safe starting point for CR-003.
+5. If uncalibrated, diagnose rank reversals/non-transitive cycles and broaden/reweight the reference population before developing another candidate.
+6. Keep all **32/32 held-out sealed**.
 
 ## Frozen environment facts
 
@@ -152,4 +127,4 @@ Decision: a bounded TOMATO development experiment may use the five non-conflicti
 - 720 recorded states; state 718 final executable action;
 - terminal reward is farm money;
 - replay alignment: `state t -> action frame t+1`;
-- W/L/T is primary for leaderboard/final Bradley-Terry relevance; money margin is diagnostic/secondary.
+- final competition relevance is Bradley–Terry / matchup strength, so broad coverage matters more than isolated head-to-head exploits.
