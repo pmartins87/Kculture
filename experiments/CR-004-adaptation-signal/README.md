@@ -1,6 +1,6 @@
 # CR-004 — Identity-free opponent adaptation signal
 
-Status: **FROZEN / READY TO RUN**
+Status: **COMPLETE / ADAPTATION_SIGNAL_PASS**
 
 ## Prize-first question
 
@@ -81,9 +81,47 @@ Secondary metric: ROC-AUC when defined.
 3. at least **4 eligible targets** improve Brier by >= **5%**;
 4. fewer than 25% of eligible targets worsen Brier by > **5%**.
 
-If the gate fails, do not build a broad opponent model from these features. Revisit temporal resolution/history encoding or focus adaptation only on a narrower market subproblem.
+## Canonical result
 
-If the gate passes, proceed to CR-005: a bounded best-response controller that converts the most predictable opponent events into counterfactual value tests (initial priority: market sale ordering/front-running, labor allocation, and production-mix response).
+GitHub Actions run **`33089536803` — SUCCESS**.  
+Artifact **`9653789496`**, ZIP SHA-256 **`249f407625a35e45036c6a15a7936aad74a2747e720846c8a6bf0424bfc835ba`**.
+
+All frozen gates passed:
+
+- eligible targets: **16**;
+- median relative Brier improvement from opponent-public features: **+7.10%**;
+- targets improving Brier by >=5%: **9/16**;
+- targets worsening by >5%: **1/16 (6.25%)**.
+
+Largest strict-test improvements:
+
+| Target | Relative Brier improvement |
+|---|---:|
+| `SELL_CARROT` | **+53.14%** |
+| `SELL_TOMATO` | **+37.71%** |
+| `BUY_SEED_CARROT` | **+32.41%** |
+| `BUY_LAND` | **+26.08%** |
+| `SELL_STRAWBERRY` | **+22.29%** |
+| `BUY_SEED_TOMATO` | **+18.47%** |
+| `BUY_SEED_STRAWBERRY` | **+16.48%** |
+| `BUY_ANIMAL_COW` | **+8.90%** |
+| `SELL_MELON` | **+5.30%** |
+
+For `SELL_CARROT`, the adaptive test model reached ROC-AUC ~**0.989**; its dominant features were opponent CARROT acreage and the recent change in opponent CARROT acreage. `SELL_TOMATO` reached ROC-AUC ~**0.974**, with opponent TOMATO acreage as the dominant feature. `BUY_LAND` reached ROC-AUC ~**0.984**, with recent opponent WHEAT change, opponent money and money gap among the major opponent-aware features.
+
+The result is not simply “state helps.” The baseline already had step, market/town state and our own public state. The measured gain comes from adding **opponent-public information** under an unchanged model family and a later-day test.
+
+## Decision
+
+**Proceed to adaptive best-response work.**
+
+CR-004 proves that deployable public observations of the opponent contain meaningful forward-looking signal. It does **not** prove that reacting to every predicted event increases reward. CR-005 must convert the strongest signals into exact value tests.
+
+Initial priority:
+
+1. same-turn / very-short-horizon opponent SELL forecast for CARROT/TOMATO/STRAWBERRY;
+2. opponent-aware market order timing/front-running under the official lockstep market engine;
+3. opponent-aware expansion/crop allocation only after market responses show positive realized value.
 
 ## Deployment principle
 
@@ -95,4 +133,5 @@ The eventual agent must adapt to **observed state**, never to opponent identity.
 4. choose the response with the highest estimated value under that forecast;
 5. keep a strong fallback policy whenever confidence is low.
 
-Tool: `tools/cr004_adaptation_signal.py`.
+Tool: `tools/cr004_adaptation_signal.py`.  
+Frozen tool blob: `db57a1d7431a205ab6475f6e9435dc8bb8f7abab`.
