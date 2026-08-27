@@ -1,0 +1,30 @@
+name: cr004-adaptation-signal
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr004-adaptation-signal.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Verify frozen audit
+        run: test "$(git rev-parse HEAD:tools/cr004_adaptation_signal.py)" = "db57a1d7431a205ab6475f6e9435dc8bb8f7abab"
+      - name: Measure identity-free opponent predictive signal
+        run: python tools/cr004_adaptation_signal.py --top 20 --output artifacts/cr004/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr004-adaptation-signal
+          path: artifacts/cr004/report.json
