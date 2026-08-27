@@ -1,0 +1,32 @@
+name: live-meta-action-tape-benchmark
+
+on:
+  push:
+    paths:
+      - .github/workflows/live-meta-action-tape-benchmark.yml
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen R4B base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify identities
+        run: |
+          test "$(git rev-parse HEAD:tools/live_meta_action_tape_benchmark.py)" = "f3bb56f9984c54c67c3538cb5cfc12db49199e03"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Replay Aug-26 top-10 tapes and benchmark R4B
+        run: python tools/live_meta_action_tape_benchmark.py --date 2026-08-26 --top 10 --output artifacts/kexp028/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp028-live-meta-action-tape-benchmark
+          path: artifacts/kexp028/**
