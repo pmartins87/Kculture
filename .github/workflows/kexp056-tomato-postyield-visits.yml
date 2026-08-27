@@ -1,0 +1,35 @@
+name: kexp056-tomato-postyield-visits
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp056-tomato-postyield-visits.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen R4B base dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen audit identities
+        run: |
+          test "$(git rev-parse HEAD:tools/audit_tomato_postyield_visits.py)" = "7fac12db95af91c120cd880d5a5c2f45b00a3c9e"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Run open-distribution postyield visit audit
+        run: |
+          mkdir -p artifacts/kexp056
+          python tools/audit_tomato_postyield_visits.py --output artifacts/kexp056/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kexp056-tomato-postyield-visits
+          path: artifacts/kexp056/**
