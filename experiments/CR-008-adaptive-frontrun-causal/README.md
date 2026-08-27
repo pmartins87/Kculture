@@ -1,6 +1,6 @@
 # CR-008 — High-confidence identity-free adaptive front-run
 
-Status: **FROZEN / PRE-RESULT**
+Status: **FROZEN / PRE-STRATEGY-RESULT**
 
 ## Question
 
@@ -8,7 +8,7 @@ Do the high-confidence opponent forecasts proved in CR-004/005/007 improve an ac
 
 ## Frozen candidate
 
-`candidates/cr008_adaptive_frontrun.py` blob `609eff6a78aaa1dad070268c020d191fb905cfa0`.
+Corrected deployable candidate: `candidates/cr008_adaptive_frontrun.py` blob `8e1c26202c3101c19668bf61edf2ae51d4329d5d`.
 
 Frozen base: `candidates/r4b_ablation_market_only.py` blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
 
@@ -22,6 +22,17 @@ Adaptive behavior is deliberately narrow:
 - STRAWBERRY trigger threshold 0.85;
 - if triggered and current own shed stock exists, append a same-turn SELL only when the frozen base is not already selling that product and a market slot is free;
 - all physical actions and all other market decisions remain frozen R4B behavior.
+
+## Mechanical-null run 1
+
+GitHub Actions run **33099779694** never reached any strategic episode. Candidate/base/model identity checks passed, then the mandatory deployed feature-parity gate failed on exactly the player-1 half of the replay samples: 3000/6000 value mismatches, zero key mismatches. The frozen training encoder treats missing player-1 replay `step` as zero, while the first wrapper reconstructed it from day/hour. Its cache clock reconstruction was also 24 turns low because Kaggriculture `day` is zero-based.
+
+This was corrected **before observing any CR-008 W/L** by separating:
+
+- feature clock: exact CR-004 semantics (`obs.step` or zero when absent);
+- memory clock: `obs.step` when available, otherwise `day*24 + hour`.
+
+No seeds, opponents, thresholds, models or strategic response rules changed. Run 1 is therefore recorded as **MECHANICAL_NULL**, not a strategic FAIL.
 
 ## Mandatory deployability gates
 
