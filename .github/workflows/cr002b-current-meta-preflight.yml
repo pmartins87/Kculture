@@ -39,9 +39,9 @@ jobs:
           - id: andrew-kaggriculture-v11
             handle: andrewsokolovsky/kaggriculture/versions/11
             score: 2441.2
-          - id: flex-current-v84
-            handle: flexonafft/kaggriculture-adaptive-replay-agent/versions/84
-            score: 1961.6
+          - id: tetsu-town-v2-current
+            handle: tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2
+            score: 1896.6
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -52,7 +52,7 @@ jobs:
         run: python -m pip install -U kagglehub
       - name: Verify frozen config and audit tool
         run: |
-          test "$(git rev-parse HEAD:configs/competitive_reset_current_meta_v1.json)" = "$(git rev-parse HEAD:configs/competitive_reset_current_meta_v1.json)"
+          test "$(git rev-parse HEAD:configs/competitive_reset_current_meta_v1.json)" = "1249fcb4d55e744cc0dfff40dddf4c4b3c648fb9"
           test "$(git rev-parse HEAD:tools/audit_public_submission_package.py)" = "10db75da51c0654f669b75946d2fa0c4196eae18"
       - name: Audit exact current-meta notebook package
         run: >-
