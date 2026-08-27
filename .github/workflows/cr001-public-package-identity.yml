@@ -1,0 +1,68 @@
+name: cr001-public-package-identity
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr001-public-package-identity.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: kaito-v27-v4
+            handle: kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4
+            score: 3090.1
+          - id: rayk-rank-v11
+            handle: raykkretzschmar/kaggriculture-rank-your-agent/versions/11
+            score: 2990.4
+          - id: andrew-breaking-v12
+            handle: andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+            score: 2883.0
+          - id: flex-v59
+            handle: flexonafft/kaggriculture-adaptive-replay-agent/versions/59
+            score: 2767.3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install KaggleHub
+        run: python -m pip install -U kagglehub
+      - name: Audit exact notebook output and submission package
+        run: >-
+          python tools/audit_public_submission_package.py
+          --target-id "${{ matrix.id }}"
+          --handle "${{ matrix.handle }}"
+          --reported-score "${{ matrix.score }}"
+          --output-dir "artifacts/cr001/${{ matrix.id }}/notebook_output"
+          --manifest "artifacts/cr001/${{ matrix.id }}/manifest.json"
+      - name: Print identity classification
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('artifacts/cr001/${{ matrix.id }}/manifest.json')
+          d = json.loads(p.read_text())
+          print('TARGET', d['target_id'])
+          print('HISTORICAL_SCORE', d['reported_historical_score'])
+          print('IDENTITY', d['identity_classification'])
+          print('TOP_LEVEL_MAIN', d['top_level_main_candidates'])
+          print('PACKAGED_MAIN', d['packaged_main_candidates'])
+          print('PACKAGE_PYTHON_FILES', d['packaged_python_files'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr001-${{ matrix.id }}
+          path: |
+            artifacts/cr001/${{ matrix.id }}/manifest.json
+            artifacts/cr001/${{ matrix.id }}/notebook_output/*.tar.gz
+            artifacts/cr001/${{ matrix.id }}/notebook_output/*.tgz
+            artifacts/cr001/${{ matrix.id }}/notebook_output/*.tar
+            artifacts/cr001/${{ matrix.id }}/notebook_output/*.zip
+          if-no-files-found: warn
