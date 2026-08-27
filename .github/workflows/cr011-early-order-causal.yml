@@ -1,0 +1,90 @@
+name: cr011-early-order-causal
+on:
+  push:
+    paths:
+      - '.github/workflows/cr011-early-order-causal.yml'
+  workflow_dispatch:
+
+jobs:
+  causal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Fetch frozen R4B physical base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen CR-011 identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
+          test "$(git rev-parse HEAD:configs/cr011_fresh_exploratory_seeds_v1.json)" = "1833dcc168da09b39c95fd4a734d97a4845a36db"
+          test "$(git rev-parse HEAD:tools/audit_cr011_order_only.py)" = "180a596bb52bf1c1b124ebe9a0cfa1dcbe3834a3"
+          test "$(git rev-parse HEAD:tools/compare_cr011_triplet_field.py)" = "e7f3d7d7651a226b4aa35e62127179b1fec6e8ee"
+      - name: Prove order-only action equivalence
+        run: python tools/audit_cr011_order_only.py
+      - name: Fetch exact Kaito Sparse V13 package
+        run: python tools/fetch_exact_package_main.py --handle kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13 --output artifacts/cr011/opponents/kaito/main.py --receipt artifacts/cr011/opponents/kaito/receipt.json
+      - name: Fetch exact Prvsiyan Frontier V10 package
+        run: python tools/fetch_exact_package_main.py --handle prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10 --output artifacts/cr011/opponents/prvsiyan/main.py --receipt artifacts/cr011/opponents/prvsiyan/receipt.json
+      - name: Fetch exact Tactical Memory V1 package
+        run: python tools/fetch_exact_package_main.py --handle web3cainiao/kaggriculture-v21-tactical-memory/versions/1 --output artifacts/cr011/opponents/tactical/main.py --receipt artifacts/cr011/opponents/tactical/receipt.json
+      - name: Fetch exact Andrew V11 package
+        run: python tools/fetch_exact_package_main.py --handle andrewsokolovsky/kaggriculture/versions/11 --output artifacts/cr011/opponents/andrew/main.py --receipt artifacts/cr011/opponents/andrew/receipt.json
+      - name: Run CR-011 current-meta field
+        run: |
+          SEEDS=$(python -c 'import json; print(" ".join(map(str,json.load(open("configs/cr011_fresh_exploratory_seeds_v1.json"))["seeds"])))')
+          python tools/run_tournament.py \
+            --candidate file:candidates/cr011_adaptive_early_order.py:agent \
+            --opponents \
+              file:artifacts/cr011/opponents/kaito/main.py:agent \
+              file:artifacts/cr011/opponents/prvsiyan/main.py:agent \
+              file:artifacts/cr011/opponents/tactical/main.py:agent \
+              file:artifacts/cr011/opponents/andrew/main.py:agent \
+            --seeds $SEEDS \
+            --output-root artifacts/cr011/cr011-field
+      - name: Run CR-008 paired field
+        run: |
+          SEEDS=$(python -c 'import json; print(" ".join(map(str,json.load(open("configs/cr011_fresh_exploratory_seeds_v1.json"))["seeds"])))')
+          python tools/run_tournament.py \
+            --candidate file:candidates/cr008_adaptive_frontrun.py:agent \
+            --opponents \
+              file:artifacts/cr011/opponents/kaito/main.py:agent \
+              file:artifacts/cr011/opponents/prvsiyan/main.py:agent \
+              file:artifacts/cr011/opponents/tactical/main.py:agent \
+              file:artifacts/cr011/opponents/andrew/main.py:agent \
+            --seeds $SEEDS \
+            --output-root artifacts/cr011/cr008-field
+      - name: Run R4B paired field
+        run: |
+          SEEDS=$(python -c 'import json; print(" ".join(map(str,json.load(open("configs/cr011_fresh_exploratory_seeds_v1.json"))["seeds"])))')
+          python tools/run_tournament.py \
+            --candidate file:candidates/r4b_ablation_market_only.py:agent \
+            --opponents \
+              file:artifacts/cr011/opponents/kaito/main.py:agent \
+              file:artifacts/cr011/opponents/prvsiyan/main.py:agent \
+              file:artifacts/cr011/opponents/tactical/main.py:agent \
+              file:artifacts/cr011/opponents/andrew/main.py:agent \
+            --seeds $SEEDS \
+            --output-root artifacts/cr011/r4b-field
+      - name: Apply frozen CR-011 causal gate
+        run: |
+          python tools/compare_cr011_triplet_field.py \
+            --cr011-root artifacts/cr011/cr011-field \
+            --cr008-root artifacts/cr011/cr008-field \
+            --r4b-root artifacts/cr011/r4b-field \
+            --output artifacts/cr011/paired-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr011-early-order-causal
+          path: artifacts/cr011/**
