@@ -1,0 +1,20 @@
+name: probe-hosted-observation-schema
+on:
+  push:
+    paths:
+      - 'tools/probe_hosted_observation_schema.py'
+      - '.github/workflows/probe-hosted-observation-schema.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install environment
+        run: python -m pip install -U kaggle-environments
+      - name: Probe observation schema
+        run: python tools/probe_hosted_observation_schema.py
