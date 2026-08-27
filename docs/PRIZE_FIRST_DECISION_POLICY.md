@@ -63,6 +63,21 @@ When conflict exists:
 - verify environment/package parity;
 - prioritize mechanisms that explain both local and hosted observations.
 
+### Hosted calibration submissions
+
+When the laboratory is demonstrably miscalibrated, hosted submissions are themselves experiments and should not be hoarded as though every submission must already be a final candidate.
+
+A **calibration submission** is justified when all are true:
+
+1. it is mechanically valid and package-parity checked;
+2. it represents a materially different strategic hypothesis, not a cosmetic/money-only tweak;
+3. the expected information from hosted W/L behavior is important enough to change the roadmap;
+4. current competition submission limits allow the experiment without jeopardizing later final entries.
+
+Calibration submission and promotion are separate concepts. A policy may be worth submitting to learn about the real field even before it is worthy of replacing the frozen champion in a formal local gate. Conversely, a locally prettier candidate that tests essentially the same behavior may not be worth a hosted slot.
+
+Current official Kaggle simulation documentation says submitted agents continue to play evaluation episodes and the leaderboard displays the team's best scoring agent. Kaggriculture staff also state that after the submission deadline agents continue playing for two weeks before a single final Bradley-Terry tournament. The repository previously treated “only the latest two submissions remain tracked” as a hard invariant; that claim is now **UNVERIFIED and must not drive decisions** until a current Kaggriculture-specific official source confirms it.
+
 ## Architecture policy
 
 There is no preferred architecture.
