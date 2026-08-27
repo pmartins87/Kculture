@@ -2,13 +2,15 @@
 Development and exploratory public-meta seeds only; no strategy mutation.
 """
 from __future__ import annotations
-import argparse, json, statistics
+import argparse, json, statistics, sys
 from collections import Counter
 from pathlib import Path
 from kaggle_environments import make
-from tools.run_episode import resolve_agent
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+from tools.run_episode import resolve_agent
 
 
 def farm_at(steps, i):
