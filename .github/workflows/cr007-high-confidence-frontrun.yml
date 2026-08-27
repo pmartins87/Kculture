@@ -1,0 +1,32 @@
+name: cr007-high-confidence-frontrun
+
+on:
+  push:
+    paths:
+      - 'tools/cr007_high_confidence_frontrun.py'
+      - 'experiments/CR-007-high-confidence-frontrun/README.md'
+      - '.github/workflows/cr007-high-confidence-frontrun.yml'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Run high-confidence calibration
+        run: |
+          mkdir -p artifacts/cr007
+          python tools/cr007_high_confidence_frontrun.py --top 20 --output artifacts/cr007/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr007-high-confidence-frontrun
+          path: artifacts/cr007/**
