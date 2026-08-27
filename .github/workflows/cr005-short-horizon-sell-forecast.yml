@@ -1,0 +1,32 @@
+name: cr005-short-horizon-sell-forecast
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr005-short-horizon-sell-forecast.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Verify frozen tools
+        run: |
+          test "$(git rev-parse HEAD:tools/cr004_adaptation_signal.py)" = "db57a1d7431a205ab6475f6e9435dc8bb8f7abab"
+          test "$(git rev-parse HEAD:tools/cr005_short_horizon_sell_forecast.py)" = "21baf858664f348a9d1ddcf5f71b9e3ee2d9c536"
+      - name: Measure short-horizon opponent SELL signal
+        run: python tools/cr005_short_horizon_sell_forecast.py --top 20 --output artifacts/cr005/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr005-short-horizon-sell-forecast
+          path: artifacts/cr005/report.json
