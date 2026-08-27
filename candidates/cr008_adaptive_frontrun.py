@@ -49,14 +49,27 @@ def _num(d,key):
     except Exception: return 0.0
 
 
-def _step(obs):
+def _feature_step(obs):
+    """Reproduce the frozen CR-004/007 feature encoder exactly.
+
+    Official replay/player-1 observations omit `step`; the training encoder
+    therefore used zero for that feature. Do not repair it here, or deployed
+    features no longer match the trained tree.
+    """
+    try: return float(_get(obs,"step",0) or 0)
+    except Exception: return 0.0
+
+
+def _clock_step(obs):
+    """Reliable episode clock used only for 24-turn state memory."""
     raw=_get(obs,"step",None)
     try:
         if raw is not None: return max(0,int(raw))
     except Exception: pass
     try:
-        day=max(1,int(_get(obs,"day",1) or 1)); hour=max(0,int(_get(obs,"hour",0) or 0))
-        return (day-1)*24+hour
+        # Kaggriculture observation day is zero-based; UI display is day+1.
+        day=max(0,int(_get(obs,"day",0) or 0)); hour=max(0,int(_get(obs,"hour",0) or 0))
+        return day*24+hour
     except Exception: return 0
 
 
@@ -100,7 +113,7 @@ def _public_features(obs,prev,player):
     prices=_get(market,"prices",{}) or {}; inv=_get(market,"inventory",{}) or {}
     prices0=_get(market0,"prices",{}) or {}; inv0=_get(market0,"inventory",{}) or {}
     shops=set(_get(_get(obs,"town",{}) or {},"unlocked_shops",[]) or [])
-    st=float(_step(obs)); f={"step":st,"day":st/24.0,"shop_count":float(len(shops))}
+    st=_feature_step(obs); f={"step":st,"day":st/24.0,"shop_count":float(len(shops))}
     f.update(own); f.update(other)
     for k,v in own.items(): f[f"d{k}"]=v-own0.get(k,0.0)
     for k,v in other.items(): f[f"d{k}"]=v-other0.get(k,0.0)
@@ -131,7 +144,7 @@ def _tree_prob(model,features,names):
 
 def _snapshot(obs):
     return {
-        "step":_step(obs), "day":_get(obs,"day",None), "hour":_get(obs,"hour",None),
+        "step":_get(obs,"step",None), "day":_get(obs,"day",None), "hour":_get(obs,"hour",None),
         "farms":copy.deepcopy(_get(obs,"farms",[]) or []),
         "market":copy.deepcopy(_get(obs,"market",{}) or {}),
         "town":copy.deepcopy(_get(obs,"town",{}) or {}),
@@ -176,7 +189,7 @@ def _append_adaptive_sales(obs,action,player,step):
 
 def agent(obs,config=None):
     player=int(_get(obs,"player",0) or 0)
-    step=_step(obs)
+    step=_clock_step(obs)
     _reset_if_needed(player,step)
     action=_BASE.agent(obs,config)
     action=_append_adaptive_sales(obs,action,player,step)
