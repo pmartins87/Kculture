@@ -1,6 +1,6 @@
 # KEXP-20260827-045 — double JIT CARROT candidate
 
-Status: **DEVELOPMENT PASS / EXPLORATORY REPLICATION RUNNING**
+Status: **CROSS-DISTRIBUTION W/L PASS / HOLD FOR KEXP-050+051**
 
 ## Mechanism
 
@@ -55,12 +55,30 @@ Direct candidate vs frozen R4B:
 
 The predeclared direct gate was >=0.5625 with positive mean delta. KEXP-045 materially passes and improves on KEXP-041's development 20-12 / 0.625 result.
 
+## Exploratory live-meta W/L — REPLICATED
+
+Run `33047810903`, artifact `9636510840`, digest `sha256:52ee9adf5722d10cc5d1d0c45473510ef49862524a70196981878c694112c23c`.
+
+20 independently sourced live-meta environmental seeds × both seats, direct against frozen R4B:
+
+- **17 wins / 11 losses / 12 ties**;
+- score rate **0.575**;
+- mean terminal delta **-1.05** (essentially neutral money margin);
+- seat 0: **11-3-6**;
+- seat 1: **6-8-6**;
+- zero errors.
+
+This is materially stronger cross-distribution evidence than KEXP-041, which fell to score 0.50 on the same exploratory pool. The W/L signal replicated, but seat asymmetry and neutral mean money keep confidence below validation-ready freeze by themselves.
+
 ## Current decision
 
-Development alone is insufficient because KEXP-041 failed exploratory replication despite a strong local result. KEXP-045 is therefore being replicated immediately on the 20 exploratory live-meta environmental seeds × both seats.
+**Cross-distribution W/L PASS, validation temporarily held.**
 
-Exploratory run is launched from `.github/workflows/kexp045-exploratory-direct.yml`.
+Before opening validation, compare two already-running diagnostics/candidates:
 
-A robust positive result in the second distribution is required before fresh validation. Held-out remains sealed.
+1. KEXP-051 paired-world causal audit of the two conversions, to determine whether the replicated W/L comes from own-farm value or market interaction and to inspect the seat asymmetry;
+2. KEXP-050 same-slot WHEAT→CARROT reallocation, which pays only +10 incremental seed cost instead of KEXP-045's +20 extra purchase and is evaluated on both open distributions in one protocol.
+
+If neither produces a clearly safer/stronger alternative, KEXP-045 is currently eligible to become the first R4D candidate considered for a fresh validation gate. Held-out remains 32/32 sealed.
 
 No seed, episode, opponent or team identity is a policy feature.
