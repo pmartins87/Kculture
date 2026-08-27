@@ -26,15 +26,15 @@ jobs:
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
       - name: Validation direct KEXP-050 vs R4B
         run: >-
-          python tools/run_late_lifecycle_panel.py
+          python tools/run_tournament.py
           --candidate file:candidates/r4d_reallocate_614_carrot.py:agent
-          --opponent file:candidates/r4b_ablation_market_only.py:agent
-          --partition validation
-          --output artifacts/kexp054/direct/report.json
+          --opponents file:candidates/r4b_ablation_market_only.py:agent
+          --seed-partition validation
+          --output-root artifacts/kexp054/direct
       - uses: actions/upload-artifact@v4
         with:
           name: kexp054-direct
-          path: artifacts/kexp054/direct/report.json
+          path: artifacts/kexp054/direct/**/tournament.json
 
   public-panel:
     runs-on: ubuntu-latest
@@ -83,14 +83,14 @@ jobs:
           --receipt "artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/receipt.json"
       - name: Validation public-panel block
         run: >-
-          python tools/run_late_lifecycle_panel.py
+          python tools/run_tournament.py
           --candidate "${{ matrix.candidate.ref }}"
-          --opponent "file:artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/opponent/main.py:agent"
-          --partition validation
-          --output "artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/report.json"
+          --opponents "file:artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/opponent/main.py:agent"
+          --seed-partition validation
+          --output-root "artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/tournament"
       - uses: actions/upload-artifact@v4
         with:
           name: kexp054-${{ matrix.candidate.id }}-${{ matrix.opponent.id }}
           path: |
-            artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/report.json
+            artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/tournament/**/tournament.json
             artifacts/kexp054/${{ matrix.candidate.id }}-${{ matrix.opponent.id }}/receipt.json
