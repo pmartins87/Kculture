@@ -1,78 +1,72 @@
 # KEXP-20260827-034 — mechanics-first late crop value margin
 
-Status: **RUNNING / DIAGNOSTIC ONLY**
+Status: **COMPLETE / FROZEN TRIGGER REJECTED / ROUTE-VALUE STRUCTURE FOUND**
 
 ## Why this follows KEXP-029/031
 
-KEXP-029 and KEXP-031 showed that action imitation is not temporally stable enough to justify a deployable CARROT rule. The crop branch therefore moves from **predicting what a top agent buys** to **estimating whether a WHEAT slot has positive counterfactual economic value if converted to CARROT**.
+KEXP-029 and KEXP-031 showed that action imitation is not temporally stable enough to justify a deployable CARROT rule. KEXP-034 moved the crop branch from predicting what a top agent buys to estimating whether a WHEAT slot has positive counterfactual economic value if converted to CARROT.
 
-This experiment uses no top-player action labels.
+No top-player action labels are used.
 
 ## Frozen protocol
 
-Run unchanged `R4B-market-only-validated-v1` against deterministic `starter` on:
+Unchanged `R4B-market-only-validated-v1` vs deterministic `starter` on all 16 development seeds and 20 exploratory live-meta environmental seeds, with corrected replay alignment (`state t -> action frame t+1`).
 
-- all 16 development seeds;
-- all 20 exploratory live-meta environmental seeds.
+Only KEXP-023 mechanically clean WHEAT plant windows are audited: 614–618, 620–623 and 636–647.
 
-Use the corrected replay convention: observation/state frame `t` is paired with submitted action frame `t+1`.
+For each observed WHEAT plant, the same same-tile WATER/FERTILIZE/HARVEST schedule is replayed on a counterfactual CARROT tile using exact frozen engine mechanics. Actual R4B WHEAT `yield_units` immediately before HARVEST are retained as baseline.
 
-Only R4B WHEAT plants in KEXP-023's mechanically clean windows are audited:
+## Canonical result
 
-- 614–618;
-- 620–623;
-- 636–647.
+Actions run **`33042783455` — SUCCESS**.  
+Artifact **`9634572686`**, ZIP digest **SHA-256 `f6fc9726e0a5b85d71190f38cd4128e856b8351f94b02fb1384d7a4a40848b7a`**.
 
-For each such WHEAT plant, replay the **same same-tile physical schedule** on a counterfactual CARROT tile:
+Total audited safe WHEAT slots: **616**.
 
-- identical WATER timing;
-- identical FERTILIZE timing;
-- identical HARVEST timing;
-- exact official carrot watering bonus window, fertilizer duration, cap, and two-missed-days death rule.
+Development:
 
-The observed R4B WHEAT `yield_units` immediately before its actual HARVEST are retained as the baseline route yield.
+- 272 events across 16 episodes;
+- fixed `+20` simple-proxy trigger: **0 events / 0 episodes**;
+- median R4B WHEAT seed buys during 600–635: **13**.
 
-## Value measurements
+Exploratory live-meta:
 
-Three distinct quantities are kept separate.
+- 344 events across 20 episodes;
+- fixed `+20` trigger: **19 events, all in one episode**;
+- all 19 had positive future-price oracle margin;
+- mean oracle margin **+345**, median **+380**;
+- median R4B WHEAT seed buys during 600–635: **13**.
 
-1. **Deployable simple current-price proxy**
+Combined, the trigger appeared in only **1/36 episodes**. The predeclared support gate therefore fails decisively.
 
-   `3 * CARROT_price_now - 20 - (4 * WHEAT_price_now - 10)`
+### Stronger mechanics finding
 
-   This assumes ordinary unfertilized maxima and uses only current legal public prices.
+The counterfactual simulation exposed a much more useful structural fact than the failed trigger:
 
-2. **Same-route current-price diagnostic**
+- in the earlier safe-route events, actual WHEAT and same-route CARROT yield were **3 vs 3**;
+- in the later safe-route events, they were **2 vs 2**;
+- CARROT survived the copied route in **616/616 events**.
 
-   Uses the exact simulated carrot yield and observed R4B wheat yield, but still prices both at the plant-time market.
+Across the observed safe-route support, WHEAT and CARROT therefore have equal same-route unit yield. The relevant current-price economic comparison is not the deliberately pessimistic original proxy `3*CARROT - 20 - (4*WHEAT - 10)`. For an audited route with equal yield `q`, it reduces mechanically to:
 
-3. **Future-price oracle diagnostic**
+`q * (CARROT_price - WHEAT_price) - 10`
 
-   Uses those same route yields but prices both at R4B's later harvest state. This is forbidden as a deployable feature; it exists only to test whether current-price triggers preserve the sign of later comparative economics.
+where `10` is the additional CARROT seed cost.
 
-Seed cost difference is included in every comparison.
+The exact same-route current-price margin was strongly aligned with the later harvest-price oracle in this audit; this is a diagnostic observation, not permission to tune a new threshold on the same data.
 
-The audit also measures R4B WHEAT seed purchases during 600–635, because KEXP-026 proved that there is no idle CARROT stock: any future candidate must fund CARROT by deliberately reallocating existing WHEAT seed purchases.
+## Decision
 
-## Frozen trigger and predeclared gate
+The **predeclared +20 trigger is rejected**. Do not tune that threshold after seeing the result.
 
-No threshold search is allowed. The fixed candidate trigger being tested is:
+The crop branch remains active because KEXP-034 discovered a simpler exact route-value structure. The next step should be a bounded value/rollout controller that:
 
-`simple current-price margin >= +20 coins`.
+1. uses exact mechanically expected route yield rather than generic crop maxima;
+2. prices WHEAT vs CARROT from legal current public state;
+3. explicitly reallocates existing WHEAT seed purchases because KEXP-026 proved no idle CARROT stock exists;
+4. caps substitutions and evaluates actual W/L rather than action-imitation accuracy.
 
-A bounded seed-reallocation candidate becomes eligible only if all are true:
-
-- development: trigger occurs in >=4/16 episodes and >=8 events;
-- exploratory live-meta: trigger occurs in >=5/20 episodes and >=10 events;
-- in **each pool**, >=70% of triggered events have positive future-price oracle margin;
-- mean future-price oracle margin among triggered events is positive in each pool;
-- median R4B WHEAT seed purchases during 600–635 are >=4 in each pool.
-
-Passing authorizes only a tightly capped development candidate, initially at most two one-for-one WHEAT-seed→CARROT-seed reallocations per episode followed by safe-window plant conversion. It does not authorize validation or hosted submission.
-
-If the gate fails, stop fixed margin tuning and move the crop branch to a bounded rollout/value controller.
-
-No validation or held-out seeds are accessed. Opponent/team/episode/seed identity is forbidden as a deployable feature.
+No validation or held-out seeds were accessed. Opponent/team/episode/seed identity remains forbidden as a deployable feature.
 
 Tool: `tools/audit_late_crop_value_margin.py`  
 Frozen tool blob: `bdb99ef47251f9d3a8d46bb923d4eea0f13c38d1`
