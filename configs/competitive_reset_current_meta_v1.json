@@ -2,7 +2,7 @@
   "schema_version": "cr002b-current-meta-v1",
   "snapshot_date": "2026-08-27",
   "purpose": "Temporal current-meta calibration after CR-002 historical-public CALIBRATION_FAIL.",
-  "selection_rule": "Public Kaggriculture notebook snapshots discoverable on 2026-08-27, biased toward recent/high public score plus architectural diversity. Exact notebook version and observed public score frozen before local pair results.",
+  "selection_rule": "Public Kaggriculture notebook snapshots discoverable on 2026-08-27, biased toward recent/high public score plus architectural diversity. Exact notebook version and observed public score frozen before local pair results. One inaccessible Flex V84 KaggleHub identifier was replaced during package preflight, before any league episode, by the reproducible Tetsu V2 lower-score anchor.",
   "public_agents": [
     {
       "id": "kaito-sparse-v13",
@@ -61,11 +61,19 @@
       "reuse": "Apache-2.0 page evidence; benchmark reference"
     },
     {
-      "id": "flex-current-v84",
-      "handle": "flexonafft/kaggriculture-adaptive-replay-agent/versions/84",
-      "observed_public_score": 1961.6,
-      "score_evidence": "Current Version 84/84 page showed Public Score 1961.6",
-      "reuse": "Apache-2.0 page evidence; lower current-score anchor"
+      "id": "tetsu-town-v2-current",
+      "handle": "tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2",
+      "observed_public_score": 1896.6,
+      "score_evidence": "Public Score 1896.6, Version 2/2; output exposes submission.tar.gz",
+      "reuse": "benchmark reference; lower current-score anchor"
+    }
+  ],
+  "preflight_replacements": [
+    {
+      "removed_id": "flex-current-v84",
+      "removed_handle": "flexonafft/kaggriculture-adaptive-replay-agent/versions/84",
+      "reason": "KaggleHub returned 404 for the exact public-page version identifier during preflight; no local league episode had run.",
+      "replacement_id": "tetsu-town-v2-current"
     }
   ],
   "local_agents": [
@@ -86,7 +94,7 @@
   "seeds_per_pair": 8,
   "both_seats": true,
   "preflight_rule": "No league until every exact public version has a reproducible runnable package entry point and a frozen content hash.",
-  "calibration_gate_draft": {
+  "calibration_gate": {
     "complete_pair_matrix": true,
     "zero_runtime_errors": true,
     "public_spearman_min": 0.65,
