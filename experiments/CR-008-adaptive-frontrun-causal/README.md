@@ -1,6 +1,6 @@
 # CR-008 — High-confidence identity-free adaptive front-run
 
-Status: **FROZEN / PRE-STRATEGY-RESULT**
+Status: **COMPLETE — STRATEGIC FAIL / PREDICTION ARCHITECTURE REMAINS OPEN**
 
 ## Question
 
@@ -14,7 +14,7 @@ Frozen base: `candidates/r4b_ablation_market_only.py` blob `e564125f0c4a1711fd3e
 
 Frozen pure model: `models/cr007_pure_models.json` blob `d4b29e753e2328ac43503f8daa655cc63abdd336`, file SHA-256 `6f12e86d0b19c5ba39c2ab4131e186ea14b49f42cc33b33a2ad895fab55783bb`.
 
-Adaptive behavior is deliberately narrow:
+Adaptive behavior was deliberately narrow:
 
 - use only public opponent state; never name/team/submission identity;
 - retain 24-turn public history inside the episode;
@@ -34,48 +34,82 @@ This was corrected **before observing any CR-008 W/L** by separating:
 
 No seeds, opponents, thresholds, models or strategic response rules changed. Run 1 is therefore recorded as **MECHANICAL_NULL**, not a strategic FAIL.
 
-## Mandatory deployability gates
+## Deployability gates
 
-Before interpreting W/L:
+Run 2 passed every mechanical gate before strategic interpretation:
 
-1. exported pure-tree SHA must match frozen SHA;
-2. pure-tree probabilities must match sklearn CR-007 to max abs error <= 1e-12 on the Aug-26 temporal test;
-3. trigger decisions must agree 100%;
-4. deployed feature encoder must match frozen CR-004 feature vectors exactly on >=1000 official Aug-26 states;
-5. zero environment/action errors.
+- pure-tree file SHA matched the frozen SHA;
+- sklearn→pure-tree probability parity had max absolute error **0.0** and 100% trigger agreement across 48,000 comparisons;
+- deployed feature encoder parity: **6,000/6,000 exact**, zero key mismatches, zero value mismatches, max abs error 0.0;
+- zero environment/action errors.
 
-Any failure is mechanical and blocks strategy interpretation.
-
-## Fresh exploratory seeds
+## Fresh exploratory field
 
 `configs/cr008_fresh_exploratory_seeds_v1.json` blob `01b29fb4e19cba185b7d99a37ac13ee4715de574`.
 
-12 seeds generated from independent master seed `2026082708`, explicitly excluding development, validation and held-out partitions. Validation/held-out remain untouched.
+12 seeds generated from independent master seed `2026082708`, explicitly excluding development, validation and held-out partitions. Validation/held-out remained untouched.
 
-## Frozen current-meta field
+Exact public package opponents:
 
-Exact public notebook versions, package `main.py` extracted from the submission archive:
+- Kaito Sparse V13 — snapshot 2882.0;
+- Prvsiyan Frontier V10 — 2610.2;
+- Tactical Memory V1 — 2491.7;
+- Andrew V11 — 2441.2.
 
-- Kaito Sparse V13 — `kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13` (snapshot score 2882.0);
-- Prvsiyan Frontier V10 — `prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10` (2610.2);
-- Tactical Memory V1 — `web3cainiao/kaggriculture-v21-tactical-memory/versions/1` (2491.7);
-- Andrew V11 — `andrewsokolovsky/kaggriculture/versions/11` (2441.2).
+For each opponent, CR-008 and R4B played identical 12 seeds from both seats: **96 paired field episodes per policy**. A separate direct CR-008 vs R4B duel used the same 12 seeds from both seats.
 
-For each field opponent, CR-008 and R4B play the identical 12 seeds from both seats: 96 episodes per policy. The primary analysis is paired by `(opponent, seed, seat)`.
+## Strategic result
 
-A direct CR-008 vs R4B exploratory duel on the same seeds is recorded as secondary evidence.
+Run **33100148882** completed the full field and failed the frozen causal gate.  
+Artifact **9659011814**; ZIP SHA-256 `4c8f3a4a1370cae33cee77318dc86028500da2aaf59d5c1e0c9da594e1864140`.
 
-## Frozen causal gate
+### Aggregate field
 
-`ADAPTIVE_CAUSAL_FIELD_PASS` requires:
+- R4B: **74–22**, score rate **0.77083**;
+- CR-008: **75–21**, score rate **0.78125**;
+- score-rate gain: **+0.01042**;
+- mean CR-008 minus R4B own terminal reward: **−64.60**;
+- mean relative-delta gain: **−33.45**;
+- median own-reward gain: **0**;
+- opponent families with positive mean own-reward gain: **0/4**.
 
-- complete paired coverage and zero errors;
-- positive mean CR-008 minus R4B **own terminal reward** over all paired field games;
-- positive mean improvement in relative money delta;
-- positive mean own-reward effect in at least 2 of 4 opponent families;
-- aggregate field score-rate regression no worse than -0.02 versus R4B;
-- no single opponent-family score-rate regression worse than -0.08.
+The superficial W/L result therefore improved by one game while the primary causal economic measures regressed.
 
-The direct R4B duel is diagnostic and does not override the paired current-meta gate.
+### By opponent family
 
-A PASS proves only that this bounded adaptation layer adds causal value over R4B on the frozen exploratory field. It does **not** establish prize readiness or authorize a hosted submission by itself. A later broader/current-meta replication is required.
+| Opponent | Base score | CR-008 score | Own reward gain | Relative delta gain |
+| --- | ---: | ---: | ---: | ---: |
+| Andrew | 1.0000 | 1.0000 | **−8.83** | +56.75 |
+| Kaito | 0.0833 | 0.1250 | **−8.00** | +50.00 |
+| Prvsiyan | 1.0000 | 1.0000 | **−100.08** | −112.92 |
+| Tactical | 1.0000 | 1.0000 | **−141.50** | −127.63 |
+
+### Direct CR-008 vs R4B
+
+- **4–4–16**;
+- score rate **0.5000**;
+- mean terminal delta **+5.5**;
+- zero errors.
+
+## Gate
+
+Passed:
+
+- complete pair coverage;
+- zero errors;
+- aggregate score rate not worse than −0.02;
+- no family score-rate regression worse than −0.08.
+
+Failed:
+
+- positive mean own-reward gain;
+- positive mean relative-delta gain;
+- positive own-reward gain in at least two opponent families.
+
+Final status: **ADAPTIVE_CAUSAL_FIELD_FAIL**.
+
+## Decision
+
+Reject the specific response rule **“high-confidence SELL sometime in the next 24 turns → sell all eligible own shed stock immediately.”** Do not hosted-submit CR-008 and do not tune CARROT/STRAWBERRY thresholds against this W/L result.
+
+The opponent-state prediction architecture itself remains open: CR-007 still has strong out-of-time predictive evidence. CR-008 shows that prediction and best-response timing are separate problems. The next experiment must diagnose trigger-to-sale delay and the value of waiting before designing another causal response.
