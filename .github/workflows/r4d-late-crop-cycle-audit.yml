@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - ".github/workflows/r4d-late-crop-cycle-audit.yml"
+      - "tools/inspect_late_crop_cycles.py"
   workflow_dispatch:
 
 jobs:
