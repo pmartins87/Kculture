@@ -213,9 +213,24 @@ def summarize(players: list[dict]) -> dict:
         vals = [float(r[key]) for r in rows if isinstance(r.get(key), (int, float))]
         return statistics.mean(vals) if vals else None
 
+    def mean_checkpoints(rows: list[dict]) -> dict:
+        out = {}
+        for step in map(str, CHECKPOINTS):
+            points = [r.get("checkpoints", {}).get(step) for r in rows]
+            points = [p for p in points if isinstance(p, dict)]
+            if not points:
+                continue
+            row = {}
+            for key in ("money", "hands", "quads", "herd"):
+                vals = [float(p[key]) for p in points if isinstance(p.get(key), (int, float))]
+                row[key] = statistics.mean(vals) if vals else None
+            out[step] = row
+        return out
+
     farms = collections.Counter()
     winner_teams = collections.Counter()
     all_teams = collections.Counter()
+    shop_prefixes = collections.Counter()
     seed_totals = collections.Counter()
     sell_totals = collections.Counter()
     action_totals = collections.Counter()
@@ -225,6 +240,7 @@ def summarize(players: list[dict]) -> dict:
         all_teams[p["team_name"]] += 1
     for p in winners:
         winner_teams[p["team_name"]] += 1
+        shop_prefixes[" | ".join(p.get("first_three_shops") or [])] += 1
         c = p["final_comp"]
         farms[
             f"{c.get('COW',0)}C/{c.get('SHEEP',0)}S/{c.get('GOOSE',0)}G | "
@@ -246,12 +262,18 @@ def summarize(players: list[dict]) -> dict:
         "winner_profiles": len(winners),
         "team_player_games": dict(all_teams.most_common()),
         "winner_team_counts": dict(winner_teams.most_common()),
+        "winner_first_three_shop_prefixes": dict(shop_prefixes.most_common()),
         "winner_mean_reward": mean_key("reward", winners),
+        "winner_mean_final_hands": mean_key("final_hands", winners),
+        "winner_mean_final_quads": mean_key("final_quads", winners),
+        "winner_mean_final_herd": mean_key("final_herd", winners),
         "winner_mean_movement_pct": mean_key("movement_pct", winners),
         "winner_mean_pass_pct": mean_key("pass_pct", winners),
         "winner_mean_productive_pct": mean_key("productive_pct", winners),
         "winner_mean_herd_drop_672_719": mean_key("herd_drop_672_719", winners),
         "loser_mean_herd_drop_672_719": mean_key("herd_drop_672_719", losers),
+        "winner_mean_checkpoints": mean_checkpoints(winners),
+        "loser_mean_checkpoints": mean_checkpoints(losers),
         "winner_modal_final_farms": farms.most_common(10),
         "winner_mean_seeds_bought": {k: v / n for k, v in sorted(seed_totals.items())},
         "winner_mean_sell_qty": {k: v / n for k, v in sorted(sell_totals.items())},
@@ -306,7 +328,7 @@ def main() -> None:
             })
 
     report = {
-        "schema_version": "live-meta-radar-v2",
+        "schema_version": "live-meta-radar-v3",
         "source": {
             "index_handle": INDEX_HANDLE,
             "day_handle": day_handle,
