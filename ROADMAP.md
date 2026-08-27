@@ -2,172 +2,179 @@
 
 ## Objective
 
-Maximize probability of a **top-10 final finish** in Kaggriculture. Architecture, novelty and elegance are secondary. The project may use heuristics, search, optimization, ML, planning or public strategy components whenever measured evidence says they improve expected prize value.
-
-See `docs/PRIZE_FIRST_DECISION_POLICY.md`.
+Maximize probability of a **top-10 final finish** in Kaggriculture. Architecture, novelty and elegance are secondary. Use heuristics, search, optimization, ML or planning only when evidence says they improve expected prize value.
 
 ## Current gate summary
 
-- **R0 COMPLETE.** Competition entry user-confirmed.
-- **R1 PASS — 2026-08-25.** Official starter/environment reproduction.
-- **R2 PASS — 2026-08-25.** Deterministic laboratory and frozen seed partitions.
-- **R3 PASS for hosted delivery.** First exact R4B package is valid/Complete and live. Hosted score observed **161.6 → 135.7**, creating a major calibration problem.
-- **R4 ACTIVE.** `R4B-market-only-validated-v1` remains frozen hosted champion. No R4D has earned promotion.
+- **R0 COMPLETE** — competition entry/facts frozen.
+- **R1 PASS** — exact official starter/environment reproduction.
+- **R2 PASS** — deterministic laboratory and seed partitions.
+- **R3 DELIVERY PASS / HOSTED CALIBRATION FAIL** — R4B package valid and live, visible hosted rating **161.6 → 135.7 → 110.5**.
+- **R4 ACTIVE / FIRST ADAPTIVE PASS ACHIEVED** — KEXP-041 is the first R4D candidate to beat R4B directly while preserving the modern public regression panel.
 - **Held-out 32/32 sealed.**
-
-Public repository development is deliberate. See `docs/DECISION_PUBLIC_DEVELOPMENT.md`.
 
 ## Decision invariant
 
-Every new idea is a hypothesis. Before an architectural pivot ask:
+Before promoting any idea ask:
 
-1. What competition failure could this fix?
+1. What failure could this fix?
 2. What is the plausible W/L ceiling?
-3. What is the cheapest experiment that can falsify it?
+3. What is the cheapest falsification?
 4. Does it generalize across seeds/opponent families?
-5. Does it improve expected top-10 probability enough to beat the opportunity cost?
+5. Does it improve expected top-10 probability enough to justify opportunity cost?
 
-Hosted evidence outranks an attractive local story when they conflict.
+Hosted/live evidence outranks an attractive local story when they conflict.
 
-## R0 — Intake and freeze official facts
+## R0 — Intake and official facts
 
-Capture mechanics, timeline, action API, validation, packaging, ladder and prize structure.
+Mechanics, timeline, action API, validation, packaging, ladder and prize structure.
 
-**Status:** COMPLETE.
+**Status: COMPLETE.**
 
 ## R1 — Baseline reproduction
 
-Exact 720-turn official/simple reproduction.
+Exact official/simple environment reproduction.
 
-**Status:** PASS.
+**Status: PASS.**
 
 ## R2 — Local tournament laboratory
 
 Deterministic seeds, both seats, fresh module loading, development/validation/held-out separation, raw replays and provenance.
 
-**Status:** PASS.
+**Status: PASS.**
 
 ## R3 — Hosted calibration
 
-First package identity:
+Frozen hosted package: `R4B-market-only-validated-v1`.
 
-- `R4B-market-only-validated-v1`;
-- archive SHA-256 `19cc08d2b3bcb8f8f947806c0ee01f4d7643d36f0c15abe0a978129ed1c53117`;
-- packaged `main.py` SHA-256 `07bda5229dec0e50b56df8e76523188169213ba7cea4d2e118be61491fdc0cd1`;
-- package parity run `32919305800`, 4/4 exact trajectories;
-- Kaggle status `Complete`, green check;
-- observed live score sequence **161.6 → 135.7**.
+- exact package/parity passed;
+- Kaggle status Complete / green check;
+- visible rating **161.6 → 135.7 → 110.5**.
 
-**Status:** DELIVERY PASS / CALIBRATION FAILING.
+**Status: DELIVERY PASS / CALIBRATION FAIL.**
 
-The key task is no longer merely “get on the ladder”; it is explain why a locally strong 81-15 public-panel agent is performing so poorly hosted. Capture hosted Episodes/replays as soon as exposed and reconcile opponent distribution, W/L/T, rating uncertainty and runtime behavior.
+Interpretation: rules and packaging are working; the fixed-route policy is strategically weak against the real field. R4B remains useful as a deterministic baseline only.
 
-## R4 — Strong baseline and evidence-driven replacement
+## R4 — Evidence-driven replacement
 
-### R4A — COK V8 frozen base
+### R4A/R4B — frozen baseline
 
-**Status:** COMPLETE / FROZEN.
+COK V8-derived R4B remains immutable as the hosted baseline.
 
-### R4B — terminal market completeness
+Controlled development panel: Kaito 25-7, Rayk 30-2, Andrew 26-6, combined **81-15 / 96**. This is a regression control, not a live-field strength estimate.
 
-Physical-DROP optimizer rejected. Market-only terminal completeness survived validation and packaging parity.
+### Closed/deprioritized R4 branches
 
-**Status:** VALIDATED / HOSTED CHAMPION.
+- fixed route substitutions: no W/L improvement;
+- route macro-oracle: perfect ex-post route choice only reaches 83-13;
+- terminal CARE patch: neutral;
+- final FEED patch: zero/small ceiling;
+- blanket terminal WATER suppression: false mechanics premise;
+- naive terminal collector: severe regression;
+- terminal SELL ordering: no promotion;
+- generic PASS reduction: large headroom exists, but official winner-vs-loser data do not support PASS minimization as a primary winning mechanism.
 
-### R4C — guarded ninth cow
+### Live-meta calibration layer
 
-**Status:** NO PROMOTION.
+Official daily high-Elo episode datasets are first-class research data. Replay alignment is frozen as `state t -> action frame t+1`; KEXP-028 reproduced 10/10 sampled official episodes exactly.
 
-### KEXP-010/011/012 — public meta screens
+KEXP-042 full-game atlas shows top agents are highly adaptive and differ structurally from R4B in phase action mix and production composition. This supports moving away from a pure route-tape architecture.
 
-Older panel saturated. Exact modern public panel established:
+### R4D mechanism 1 — terminal non-input liquidation
 
-- Kaito V27: 25-7;
-- Rayk V11: 30-2;
-- Andrew V12: 26-6;
-- combined R4B: **81-15 / 96**.
+KEXP-037 sells eligible non-input products at state 717, before final dump.
 
-This is useful controlled evidence but demonstrably not a calibrated live-field proxy.
+- development direct vs R4B: 13-11-8;
+- exploratory live-meta direct: **12-8-20**, score 0.55, mean +32.2.
 
-### KEXP-013/014 — hard replay and lifecycle diagnosis
+**Status: REPLICATED SMALL COMPONENT.** Keep for later combination, not standalone submission.
 
-Repeated pattern: several hard losses are still ahead near step 672, then reverse in the final ~47 turns. Generic weeds/expiry explanation did not generalize.
+### R4D mechanism 2 — state-adaptive crop value
 
-The `8C/6S` weakness found in KEXP-014 is an **observed physical state at step 672**, not automatically the COK internal route label. That distinction is mandatory going forward.
+Evidence chain:
 
-### KEXP-015 — fixed route replacements
+- KEXP-026: no free CARROT seed; deliberate purchase/reallocation required.
+- KEXP-034: mechanically safe WHEAT/CARROT routes have equal yield in audited blocks.
+- KEXP-038: purchase-time value sign survives to later harvest oracle in 234/234 sign-positive events.
+- KEXP-040: one-step JIT value rule passes both development and exploratory diagnostic gates.
 
-- baseline: 81-15, +5,720.5 mean;
-- default→10C/4S: 81-15, +5,908.542;
-- default→6C/8S: 78-18, +5,700.260.
+#### KEXP-041 — single JIT CARROT
 
-**Status:** COMPLETE / NO PROMOTION.
+Candidate `candidates/r4d_jit_carrot_one.py`.
 
-### KEXP-016 — legal public-context diagnostic
+Development:
 
-Corrected run `32968422225`, all jobs PASS. It separated physical-state observations from the actual shop-prefix route signal and captured public money/layout/labor/market context.
+- exact modern panel preservation: **81-15**;
+- direct vs R4B: **20-12**, score **0.625**, mean +53.53;
+- zero errors;
+- independent execution audit proves exact intended mutation in 14/14 triggered episodes.
 
-**Status:** COMPLETE / DIAGNOSTIC ONLY.
+**Status: DEVELOPMENT PASS / EXPLORATORY REPLICATION RUNNING (`33045892841`).**
 
-### KEXP-017 — macro-oracle value-of-information
+#### KEXP-045 — double JIT CARROT
 
-Run `32972566807`, 288 games. Perfect ex-post choice among baseline, default→10C/4S and default→6C/8S yields only:
+Candidate `candidates/r4d_jit_carrot_two.py`.
 
-- Kaito 25-7 → 25-7;
-- Rayk 30-2 → 32-0;
-- Andrew 26-6 → 26-6;
-- combined **81-15 → 83-13**.
+Adds a second bounded q=3 conversion pair (619→620) to the 614→615 pair.
 
-**Decision:** solver/route-oracle architecture **DEPRIORITIZED**. It cannot fix the majority of known losses. Bounded optimization/search remains allowed when tied to a higher-value subproblem.
+**Status: DEVELOPMENT SCREEN RUNNING (`33046361583`).**
 
-### R4D — next candidate search
+Gate: modern-panel preservation, zero errors, direct score >=0.5625 and positive mean delta.
 
-R4D is not a predetermined architecture. It must come from the strongest reproducible failure mechanism.
+### R4 exit criteria
 
-Current priority search space:
+R4 exits when a deterministic adaptive replacement:
 
-1. **Hosted-field mismatch:** what opponents/states make R4B weak online?
-2. **Late-horizon reversals:** why Kaito/Andrew can erase advantages after ~672 when route choice cannot fix them.
-3. **Action throughput:** worker utilization, movement, harvest/drop timing, shed access/capacity, idle/PASS rate.
-4. **Economic exit timing:** when to stop investing/producing and turn remaining horizon into cash.
-5. **Dynamic market response:** product timing and price-impact interaction with observable opponent state.
-6. **Broader distribution robustness:** new exploratory seeds and newer/diverse public strategies.
+1. beats R4B on predeclared development W/L;
+2. replicates on exploratory live-meta environmental seeds;
+3. survives a fresh exact validation gate;
+4. passes package parity;
+5. has a mechanism plausibly relevant to hosted weakness.
 
-Candidate methods may include manual mechanics fixes, parameter sweeps, evolutionary search, black-box optimization, supervised policy selection, value models or bounded lookahead. Choose by empirical return per engineering time, not by label.
+KEXP-041 has satisfied item 1. Items 2-5 remain.
 
-**R4 exit:** a deterministic replacement materially improves cross-family W/L on predeclared development tests, survives a fresh exact validation gate, and has a plausible mechanism relevant to hosted failures.
+## R5 — bounded planning/value search
 
-## R5 — broader strategy search/planning (conditional)
+Use only after R4 establishes a trustworthy adaptive base. Candidate areas:
 
-Only pursue if R4 evidence shows high expected value. Possible tools:
+- crop allocation across more than two safe slots;
+- bounded forward value of seed/animal/land decisions;
+- small terminal planners with exact mechanics;
+- compact value models over public state.
 
-- compact parameter/evolutionary search;
-- state-value approximations;
-- bounded late-game search;
-- learned contextual policies;
-- coherent long-horizon planner.
-
-There is no requirement to build a solver or planner. They compete with simpler methods.
+There is no requirement to build a full-game solver. Search/planning must target demonstrated headroom.
 
 ## R6 — opponent/market robustness
 
-Use legal observable market/opponent state to adapt production, sales, labor and expansion without identity memorization.
+Adapt production, sales, labor and expansion to legal observable opponent/market state without identity memorization.
 
-## R7 — automated search at scale
+## R7 — automated strategy search
 
-Automate strategy search over compact, auditable spaces using newly generated development pools and strict validation separation.
+Automate search over compact auditable spaces using new development pools and strict validation separation.
 
-## R8 — metagame and final pair
+## R8 — metagame and final portfolio
 
-Use hosted episodes and current public meta to construct two complementary final candidates. The latest two submissions are strategic portfolio slots.
+Use hosted episodes/current meta to construct complementary final agents. Hosted submissions are calibration experiments and later portfolio slots; do not waste them on near-identical policies.
 
 ## R9 — final freeze
 
-Reproduce final agents, verify imports/legality/time/memory/fallbacks, freeze hashes and submission IDs, submit both before deadline.
+Reproduce final agents, verify legality/runtime/memory/fallbacks, freeze hashes and submission IDs, and submit before deadline.
 
-## Data-separation invariant
+## Immediate execution path
 
-- original development: open;
-- new exploratory development pools: allowed if independently generated and documented;
+1. Finish KEXP-041 exploratory replication.
+2. Finish KEXP-045 development screen.
+3. If 045 passes, replicate 045 on exploratory live-meta seeds.
+4. Select stronger crop controller.
+5. Add KEXP-037 only if combination improves against crop-only parent.
+6. Freeze candidate and open **fresh validation**.
+7. Build exact submission package and parity test.
+8. Submit the materially different adaptive candidate to Kaggle for hosted calibration.
+9. Use hosted result to decide whether to scale crop/value architecture into R5 or pivot.
+
+## Data separation invariant
+
+- development: open;
+- exploratory live-meta environmental pools: open for development/calibration;
 - validation: candidate-specific formal gates only;
-- held-out: **32/32 sealed** until later promotion/final selection.
+- held-out: **32/32 sealed** until later final selection.
