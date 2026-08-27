@@ -61,6 +61,11 @@ def run(agent_ref,seed):
     return rep, final.get("status"), final.get("reward")
 
 
+def pattern_counts(rr):
+    c=Counter((r["added_carrot_buy_intent_614"],r["extra_carrot_stock_615"],r["delta_carrot_plants_615"],r["delta_wheat_plants_615"]) for r in rr)
+    return {"|".join(map(str,k)):v for k,v in sorted(c.items())}
+
+
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--output",required=True); args=ap.parse_args()
     dev=json.loads((ROOT/"configs/seed_partitions.json").read_text(encoding="utf-8"))["development"]
@@ -74,7 +79,6 @@ def main():
         added_buy=count_market(ca614,"BUY_SEED","CARROT")-count_market(ba614,"BUY_SEED","CARROT")
         delta_carrot=count_plant(ca615,"CARROT")-count_plant(ba615,"CARROT")
         delta_wheat=count_plant(ca615,"WHEAT")-count_plant(ba615,"WHEAT")
-        # Actual seed stock on state 615 tells whether the added market order committed.
         try:
             cseed=int(cr["steps"][PLANT_STEP][0]["observation"]["private"]["seeds"].get("CARROT",0) or 0)
             bseed=int(br["steps"][PLANT_STEP][0]["observation"]["private"]["seeds"].get("CARROT",0) or 0)
@@ -91,7 +95,7 @@ def main():
                     "purchase_committed_episodes":sum(r["extra_carrot_stock_615"]>0 for r in rr),
                     "converted_episodes":sum(r["delta_carrot_plants_615"]>0 and r["delta_wheat_plants_615"]<0 for r in rr),
                     "status_errors":sum(r["candidate_status"]!="DONE" for r in rr),
-                    "pattern_counts":dict(Counter((r["added_carrot_buy_intent_614"],r["extra_carrot_stock_615"],r["delta_carrot_plants_615"],r["delta_wheat_plants_615"]) for r in rr))}
+                    "pattern_counts":pattern_counts(rr)}
     gate={"execution_matches_design":bool(sm["development"]["status_errors"]==0 and sm["live_meta"]["status_errors"]==0 and sm["development"]["converted_episodes"]==sm["development"]["purchase_committed_episodes"] and sm["live_meta"]["converted_episodes"]==sm["live_meta"]["purchase_committed_episodes"] and sm["development"]["converted_episodes"]>=4 and sm["live_meta"]["converted_episodes"]>=5)}
     payload={"schema_version":"kexp041-execution-audit-v1","summary":sm,"gate":gate,"rows":rows}
     out=ROOT/args.output; out.parent.mkdir(parents=True,exist_ok=True); out.write_text(json.dumps(payload,indent=2,sort_keys=True),encoding="utf-8")
