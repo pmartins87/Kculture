@@ -7,75 +7,91 @@ Hosted snapshot after the validated KEXP-050 submission:
 - KEXP-050: **145.1**;
 - R4B at the same snapshot: **142.0**.
 
-KEXP-050 had passed development, an exploratory live-meta pool, a fresh 192-game stress, fresh validation and exact package parity. The tiny hosted separation therefore invalidates the working assumption that the old local strong panel was a sufficiently calibrated promotion proxy.
+KEXP-050 had passed development, exploratory live-meta, a fresh 192-game stress, fresh validation and exact package parity. The tiny hosted separation invalidated the working assumption that the old three-agent local strong panel was a sufficiently calibrated promotion proxy.
 
-## Critical benchmark-identity hypothesis
+## CR-001 — exact scored-package identity audit: CLOSED
 
-The old strong-panel workflows acquired `main.py` from public Kaggle notebook outputs and treated that file as the scored agent. Several high-scoring notebooks also publish a separate `submission.tar.gz`.
+The initial reset hypothesis was that Kculture may have benchmarked notebook-output helper files rather than the exact packages that earned high Kaggle scores. The audit largely **falsified that explanation**.
 
-This creates a potentially severe identity error: the exact package submitted to Kaggle may contain a different `main.py`, additional modules, embedded policy data, or generated code. A local W/L result against the notebook-output helper `main.py` is not evidence against the 3000-class scored agent unless package equivalence is proved.
+Exact results:
 
-Old local results versus Kaito/Rayk/Andrew are therefore **descriptive only until identity proof**.
+- **Kaito V27 V4 — historical 3090.1:** `submission.tar.gz/main.py` is byte-identical to the `main.py` Kculture benchmarked. SHA-256 `f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8`.
+- **Rayk V11 — historical 2990.4:** packaged `main.py` is byte-identical to the benchmarked file. SHA-256 `adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f`.
+- **Andrew V12 — historical 2883.0:** package member is named `submission.py`, but it is byte-identical to the benchmarked top-level `main.py`. SHA-256 `df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5`.
 
-## Public ceiling targets to audit
+Therefore the old R4B results such as 25-7 versus Kaito and ~30-2/32-0 versus Rayk were genuinely against the exact historically high-scoring code. They still failed to predict hosted strength.
 
-Historical best versions selected before package inspection:
+### Dominant interpretation after CR-001
 
-| Target | Exact Kaggle notebook version | Public/best score reference | License status | Reset role |
-|---|---|---:|---|---|
-| Kaito V27 | `kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4` | 3090.1 | Apache-2.0 verified on public notebook page | highest public ceiling reference |
-| Rayk V11 | `raykkretzschmar/kaggriculture-rank-your-agent/versions/11` | 2990.4 best; historical public snapshot 2817.8 | public notebook; derivative reuse remains blocked until exact-version license is independently verified | independent near-ceiling identity audit |
-| Andrew V12 | `andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12` | 2883.0 | Apache-2.0 verified | independent high-score reference |
-| Flex V59 | `flexonafft/kaggriculture-adaptive-replay-agent/versions/59` | 2767.3 | Apache-2.0 verified | multi-route reference |
+**Tiny-panel head-to-head strength is not field strength.** Kaggriculture is strongly matchup-dependent/non-transitive enough that an agent can exploit several elite public policies and still perform poorly across the wider population. The old 81-15 panel is retired as a promotion metric.
 
-Scores are historical discovery references, not permanent ladder ratings.
+Package identity remains mandatory, but it is no longer the main explanation of the calibration failure.
 
-## CR-001 — exact scored-package identity audit
+## CR-001B — broaden public reference coverage
 
-For each target:
+A second package audit acquired identity-proven public agents across a much wider historical score range. The reset league now has exact package identities for public references around:
 
-1. download the exact notebook-version output with KaggleHub;
-2. hash every output file;
-3. enumerate every `.tar.gz`, `.tgz`, `.tar` and `.zip` archive;
-4. hash every archive member without committing third-party code into this public repository;
-5. locate every packaged `main.py` and compare its SHA-256 with top-level notebook-output `main.py`;
-6. record package structure, sibling modules and obvious entry-point candidates;
-7. classify:
-   - `IDENTITY_MATCH`: output `main.py` and packaged `main.py` are byte-identical;
-   - `BENCHMARK_IDENTITY_MISMATCH`: exact package `main.py` differs from the file previously benchmarked;
-   - `NO_COMPARABLE_PACKAGE_MAIN`: package layout needs further forensic work.
+- 3090.1 Kaito;
+- 2990.4 Rayk;
+- 2883.0 Andrew;
+- 2798.6 Prvsiyan Frontier;
+- 2767.3 Flex;
+- 2754.9 Bruce;
+- 2391.0 Roman;
+- 2213.8 Anas;
+- 2123.7 Prvsiyan Baseline;
+- 1771.3 Renji.
 
-The exact third-party package archives remain GitHub Actions artifacts only. They are not committed to this repository.
+Third-party code is kept in GitHub Actions artifacts, not committed into this public repository. License/provenance must remain attached to any future derivative use.
 
-## CR-002 — rebuild the benchmark
+## CR-002 — broad Bradley-Terry proxy league: ACTIVE
 
-After CR-001:
+Frozen config: `configs/competitive_reset_league_v1.json`.  
+Protocol: `experiments/CR-002-broad-proxy-league/README.md`.  
+Actions run: **`33083452488`**.
 
-- benchmark only exact packaged agents whose entry point can be reproduced faithfully;
-- preserve sibling dependencies/package layout;
-- rank the public targets against each other and against R4B/KEXP-050 on broad fresh seeds and both seats;
-- compare the local ordering with the historical hosted ordering 3090 > 2990 > 2883 > 2767.
+Entrants:
 
-A local benchmark is promotion-grade only if it demonstrates useful rank correlation with known hosted strength. Raw victory totals against identity-unproven notebook helper files are retired.
+- the 10 public references above;
+- frozen R4B, hosted snapshot 142.0;
+- frozen KEXP-050, hosted snapshot 145.1.
+
+Design:
+
+- all **66** unordered pairs;
+- 6 common fresh environmental seeds per pair;
+- both seats;
+- **792 complete games** if all jobs succeed;
+- fit one local Bradley–Terry model;
+- compare public local BT ranking with historical Kaggle score ranking.
+
+Predeclared calibration gate:
+
+- 66/66 pair reports;
+- zero runtime errors;
+- Spearman(public BT, historical score) >= **0.60**;
+- public BT ordering accuracy >= **0.65**.
+
+If CR-002 fails, it remains diagnostic only and the field/episode model must be expanded before any new candidate is promoted. If it passes, it becomes the first promotion-grade local strength proxy of the reset.
 
 ## CR-003 — true strong baseline
 
-The next strategic milestone is **not** 145 → 170. It is to reproduce a legitimate public high-strength baseline in the approximate 2000–3000 historical score class, with license/provenance preserved and exact package parity.
+The next strategic milestone is **not** 145 → 170. It is to start from/reproduce a legitimate public high-strength baseline in the approximate 2000–3000 historical score class, preserving attribution/license/provenance, and then improve broad meta coverage rather than one or two hand-picked matchups.
 
-Only after that milestone do we resume differentiation. Candidate directions include:
+Candidate directions after a calibrated benchmark exists:
 
 - dynamic production/capital allocation;
-- market-aware crop and animal portfolio control;
-- high-level behavioral cloning from strong public trajectories;
+- market-aware crop/animal portfolio control;
+- high-level behavioral cloning from strong trajectories;
 - bounded search/value models for high-leverage decisions;
-- meta diversification to reduce non-transitive matchup risk.
+- policy mixtures / meta diversification to reduce non-transitive weakness.
 
 End-to-end PPO is not the first reset step.
 
 ## Frozen old line
 
-R4B and KEXP-050 remain useful as hosted calibration references. No more CARROT/TOMATO micro-overlay is allowed to delay CR-001/CR-002. KEXP-056 is paused before workflow launch.
+R4B and KEXP-050 remain useful hosted calibration references. CARROT/TOMATO micro-overlays are paused. KEXP-056 is not allowed to delay CR-002.
 
 ## Prize-first decision rule
 
-If exact public scored packages can be reproduced and immediately move our calibrated baseline into the high hundreds/thousands, continue aggressively. If we cannot reproduce even the public state of the art after package identity is solved, reassess the expected financial return of this competition rather than spending the remaining month on low-impact local patches.
+Continue aggressively if the reset can reproduce public field ordering and give us a believable route from an identity-proven 2000–3000-class baseline toward broad tournament strength. If even the public state of the art cannot be reproduced/calibrated after CR-002/CR-003, reassess expected financial return rather than spending the remaining competition time on low-impact local patches.
