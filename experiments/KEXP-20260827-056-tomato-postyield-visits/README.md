@@ -1,23 +1,28 @@
 # KEXP-20260827-056 — TOMATO post-yield visit audit
 
-Status: **RUNNING / DIAGNOSTIC ONLY**
+Status: **COMPLETE / CANDIDATE AUTHORIZED**
 
-KEXP-053 identified long-lived WHEAT slots; KEXP-055 showed that five structural slot families do not collide with a later PLANT. KEXP-056 asks whether the existing R4B route revisits those tiles **after TOMATO's 192-turn first-yield threshold but before the original WHEAT HARVEST**.
+Run: **33102950487**  
+Artifact: **9659393076**  
+Artifact digest: **sha256:cc92b6b0e77f406e5799a7ce60edd5d1fd968280be7552ba306ad120f42f5671**
 
-A post-maturity WATER visit at least 24 turns before the original HARVEST is a potential state-gated TOMATO collection point: a future candidate could HARVEST when observed TOMATO yield is positive instead of waiting for the much later one-shot WHEAT harvest.
+KEXP-053 identified long-lived WHEAT slots; KEXP-055 showed that five structural slot families do not collide with a later PLANT. KEXP-056 tested whether the existing R4B route revisits those tiles after TOMATO's 192-turn first-yield threshold but before the original WHEAT HARVEST.
 
-Safe slot families audited:
+## Result
 
-- 262 `(0,4)`;
-- 310 `(9,7)`;
-- 334 `(5,9)`;
-- 451 `(7,3)`;
-- 477 `(0,9)`.
+Across development + exploratory live-meta open distributions, 26 qualifying long-lived slot occurrences were observed in 10 episodes. Every occurrence had a post-maturity WATER visit. Eighteen had a WATER visit at least 24 turns before the base WHEAT harvest.
 
-State381 `(0,2)` is excluded because KEXP-055 proved an immediate WHEAT replant collision at 595.
+Three exact slot families passed the cross-distribution routing gate:
 
-## Routing gate
+- `262@(0,4)`: first post-maturity WATER at state 494; base harvest 543; 3/3 development and 3/3 live-meta occurrences were early opportunities;
+- `310@(9,7)`: first post-maturity WATER at 671; base harvest 708; 3/3 development and 3/3 live-meta;
+- `334@(5,9)`: first post-maturity WATER at 622; base harvest 690; 3/3 development and 3/3 live-meta.
 
-A bounded TOMATO candidate is authorized only if at least one exact slot family has an early post-maturity WATER opportunity in **both** development and exploratory live-meta open distributions.
+The two other structurally safe families were revisited too late for the predeclared early-opportunity rule:
 
-No validation or held-out outcome is accessed. This experiment cannot modify the already frozen/submission-ready KEXP-050.
+- `451@(7,3)`: WATER 667, base harvest 680;
+- `477@(0,9)`: WATER 687, base harvest 688.
+
+Overall mean lead from first post-maturity WATER to base harvest was 37.69 turns. The frozen gate result is therefore **PASS**: a bounded TOMATO candidate is mechanically authorized on the three passing slot families.
+
+This is still mechanics/routing evidence only. It does not prove that replacing the WHEAT lifecycle with TOMATO improves terminal money, and it does not authorize validation, held-out access, or hosted submission by itself.
