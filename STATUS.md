@@ -6,18 +6,23 @@ Last updated: 2026-08-27
 
 **Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
-Repository `pmartins87/Kculture` is the source of truth for code, experiments, public-package provenance, Actions evidence, hosted submissions and continuation state.
+Repository `pmartins87/Kculture` is the source of truth for code, experiments, hosted submissions, public-package provenance and continuation state.
 
-## Hosted reality — reset trigger
+## Hosted reality
 
-Current calibration snapshot:
+Latest observed snapshot from Kaggle UI:
 
-- `Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz`: **145.1**, Complete / green check;
-- `Kculture_R4B_market_only_validated_v1_submission.tar.gz`: **142.0**, Complete / green check.
+- **R4B** — submission ID `55784381`: **143.2**;
+- **KEXP-050** — submission ID `55818927`: **93.8**.
 
-KEXP-050 had passed development, exploratory live-meta, a fresh 192-game stress, fresh validation and exact package parity. A +3.1 hosted separation is far below prize-scale progress. Therefore the R4B → micro-overlay promotion program remains **frozen as calibration history**.
+Known hosted episode IDs supplied from the Kaggle UI:
 
-Earlier R4B snapshots: **161.6 → 135.7 → 110.5 → 142.0**. Rating is dynamic; exact values are evidence snapshots, not permanent scores.
+- R4B: `100996939`;
+- KEXP-050: `100987834`.
+
+KEXP-050 passed extensive local development/stress/validation and exact package parity, yet became materially worse than R4B in the live ladder. This is strong evidence that local win rates against narrow frozen public opponents are not reliable hosted-strength proxies.
+
+Exact hosted replay forensics is scheduled four times per day. As of the latest manual retry on 2026-08-27 23:43 UTC, the daily 27-Aug episode dataset still returned 403/unavailable; the target episodes are absent from the public 24–26 Aug manifests.
 
 **Held-out remains 32/32 sealed.**
 
@@ -27,145 +32,226 @@ Earlier R4B snapshots: **161.6 → 135.7 → 110.5 → 142.0**. Rating is dynami
 
 - candidate: `candidates/r4b_ablation_market_only.py`;
 - blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`;
-- package parity proven;
-- current role: weak hosted calibration reference / exploit detector, not likely final candidate.
+- submission ID: `55784381`;
+- latest observed hosted snapshot: **143.2**;
+- role: weak hosted baseline / exploit detector, not likely final candidate.
 
 ### KEXP-050
 
 - candidate: `candidates/r4d_reallocate_614_carrot.py`;
 - blob: `61b77be136836328917441cb03f89bc6665c4c27`;
-- KEXP-054 validation run `33073517302`: direct **14-8-10**, score 0.59375, mean +31.06, zero errors;
-- formal package run `33074434495`, exact package parity;
-- archive SHA-256 `59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`;
-- hosted snapshot **145.1**;
-- current role: evidence that a carefully validated local micro-improvement did not close the hosted gap.
+- formal package SHA-256: `59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c`;
+- submission ID: `55818927`;
+- latest observed hosted snapshot: **93.8**;
+- role: calibration evidence that a locally validated micro-improvement can regress severely hosted.
 
-## Competitive Reset — ACTIVE
+## Competitive Reset
 
-Research record: `research/COMPETITIVE_RESET_20260827.md`.
+### CR-001 — exact public-package identity: CLOSED
 
-### CR-001 — exact scored-package identity: CLOSED
+The hypothesis that old benchmarks used the wrong files was falsified. Kaito/Rayk/Andrew benchmark files were identity-equivalent to exact high-scoring public submission packages.
 
-The hypothesis that Kculture had benchmarked the wrong public files was falsified for the principal strong references.
+### CR-002 — historical-public BT proxy: CLOSED / CALIBRATION_FAIL
 
-- **Kaito V27 V4, historical 3090.1**: package `main.py` == old benchmark file;
-- **Rayk V11, historical 2990.4**: package `main.py` == old benchmark file;
-- **Andrew V12, historical 2883.0**: package `submission.py` byte-identical to old benchmark `main.py`.
-
-Therefore R4B really did beat exact historically high-scoring code locally. The old three-agent 81-15 panel is permanently retired as a promotion metric.
-
-### CR-002 — historical-public Bradley–Terry proxy: CLOSED / CALIBRATION_FAIL
-
-Canonical run: **`33084489238`**  
-Result artifact: **`9652034347`**  
-Artifact ZIP digest: **sha256:52698fd46d11968893a96baac908cac86afccd0ce9dbe93c726ab4246fd97787**  
-Protocol/result: `experiments/CR-002-broad-proxy-league/README.md`.
-
-Frozen design completed:
-
-- 10 identity-proven historical public references + R4B + KEXP-050;
-- all **66/66** unordered pairs;
-- 6 common fresh seeds per pair;
-- both seats;
-- **792 games**;
-- zero runtime/status errors.
-
-Predeclared gate result:
-
-- complete matrix: PASS;
-- zero errors: PASS;
-- public BT order accuracy: **0.6888889** vs >=0.65 — PASS;
-- public Spearman: **0.5757576** vs >=0.60 — **FAIL**;
-- formal status: **CALIBRATION_FAIL**.
-
-Local BT ranking started with **KEXP-050 #1, R4B #2**, followed by Flex, Andrew, Kaito and Rayk. This is incompatible with their ~145/~142 hosted snapshots.
-
-The stronger falsification is direct coverage: R4B beat every one of the ten historical public references, totaling **112-8 / 120** on fresh seeds:
-
-- Kaito 8-4;
-- Rayk 12-0;
-- Andrew 10-2;
-- Prvsiyan Frontier 12-0;
-- Flex 10-2;
-- Bruce 12-0;
-- Roman 12-0;
-- Anas 12-0;
-- Prvsiyan Baseline 12-0;
-- Renji 12-0.
-
-Conclusion: the historical-public generation is structurally unrepresentative of the current hosted field relevant to Kculture. CR-002 is **diagnostic only** and must never be used for promotion.
-
-### Temporal diagnosis — confirmed
-
-Public notebook score snapshots have moved substantially with the evolving ladder. Examples observed on 2026-08-27 include current-version/public scores materially below old best scores for Rayk, Flex and Andrew. Temporal freshness is now a first-class calibration variable.
-
-### CR-002B — current-meta proxy: ACTIVE / PREFLIGHT
-
-Frozen config: `configs/competitive_reset_current_meta_v1.json`  
-Current preflight workflow: `.github/workflows/cr002b-current-meta-preflight.yml`  
-Preflight run 2: **`33086405765`**.
-
-Current snapshot set uses recent exact public notebook versions and contemporaneous observed public scores, including:
-
-- Kaito Sparse V13 — 2882.0;
-- Prvsiyan Frontier V10 — 2610.2;
-- Salem Harvest V4 — 2590.2;
-- Rayk Rank V23 — 2563.4;
-- Kaito Future/Unseen V1 — 2530.5;
-- Tactical Memory V1 — 2491.7;
-- BoatLee Route V2 — 2467.9;
-- Andrew Kaggriculture V11 — 2441.2;
-- Tetsu Town V2 — 1896.6 lower current-score anchor.
-
-Flex V84 was initially selected as the lower anchor because its public page exposed 1961.6, but KaggleHub returned 404 for that exact version identifier during package preflight. It was replaced **before any CR-002B league episode** by reproducible Tetsu V2; the replacement and reason are frozen in the config.
-
-CR-002B has a stricter calibration gate:
-
-- complete pair matrix;
+- 12 agents;
+- 66/66 unordered pairs;
+- 792 games;
 - zero runtime errors;
-- public Spearman >= **0.65**;
-- public pair-order accuracy >= **0.70**;
-- **hosted sanity clause:** R4B/KEXP-050 must not rank above the majority of contemporaneous 2400+ references. If they do, the proxy fails even if public-public correlation passes.
+- public order accuracy 0.6889;
+- Spearman 0.5758 < frozen 0.60 gate;
+- KEXP-050 #1 local, R4B #2;
+- R4B **112-8** against ten public references historically rated roughly 1771–3090.
 
-No CR-002B league begins until every exact public snapshot has a reproducible runnable package entry point and frozen content hash.
+Conclusion: the historical public generation is structurally unrepresentative of the hosted field relevant to Kculture. Old 81-15/three-agent panels are permanently retired as promotion evidence.
 
-## CR-003 — architecture research active in parallel
+### CR-002B — current-meta calibration research
 
-Research map: `research/CR003_PUBLIC_STRONG_ARCHITECTURE_MAP.md`.
+Config: `configs/competitive_reset_current_meta_v1.json`.
 
-Static study of public high-scoring agents shows a recurring progression:
+Nine exact recent public snapshots were preflighted with package identities frozen, spanning approximately 1897–2882 observed public score. Current-meta calibration remains useful for opponent diversity, but no local public-agent league may overrule direct hosted evidence. Any benchmark that ranks R4B/KEXP-050 as prize-grade despite their ~143/~94 hosted reality is invalid for promotion.
 
-1. mechanically competent routed/base policy;
-2. repair/robustness overlays;
-3. dynamic cash-flow and sell timing;
-4. market-state adaptation using demand/price/inventory;
-5. meta/opponent adaptation and race/front-running logic.
+## Shared-economy mechanics — architecture-changing fact
 
-The strongest public 2700–3100 historical agents do not require a full-game solver or end-to-end RL. R4B is mechanically strong but strategically much less expressive at the economic/meta layer.
+Permanent note: `docs/SHARED_ECONOMY_MECHANICS.md`.
 
-The next legitimate Kculture architecture should therefore combine a strong mechanical base with a **stateful economic controller**, multi-product allocation, cash reserves/sale timing, terminal liquidation, and only then controlled meta adaptation.
+Kaggriculture is best modeled as **private production + shared economy**:
 
-Do not resume isolated CARROT/TOMATO micro-overlay optimization as the main line. Do not start end-to-end PPO as the first reset move.
+- each farm/worker/board is private;
+- players do not collide physically;
+- market inventory and prices are shared;
+- town consumption acts on the same shared inventory;
+- market order positions resolve sequentially: position 0 fully before position 1, etc.;
+- same-position same-product transactions use the same pre-commit quote in lockstep, so there is no intrinsic player-0 pricing advantage;
+- therefore one player's sale/buy changes the economic state faced by later orders from either player.
+
+Final reward is own bank money, but match outcome depends on relative money. A response may reduce own absolute revenue yet still be strategically good if it reduces the opponent more; promotion gates must track both own reward and relative delta/W-L.
+
+## Opponent adaptation line — ACTIVE PRIMARY RESEARCH
+
+### CR-004 — opponent-state predictive signal: PASS
+
+Adding the opponent's public farm state/history to otherwise identical features improved out-of-time prediction materially.
+
+- median error improvement: **7.10%**;
+- 9/16 supported targets improved >5%;
+- strong signals included SELL_CARROT +53.1%, SELL_TOMATO +37.7%, BUY_SEED_CARROT +32.4%, BUY_LAND +26.1%, SELL_STRAWBERRY +22.3%.
+
+Conclusion: public opponent state contains exploitable predictive information.
+
+### CR-005 — four-turn sell forecast: PASS
+
+Out-of-time improvements included:
+
+- MELON +30.9%, AUC ~0.978;
+- CARROT +21.4%, AUC ~0.961;
+- TOMATO +7.2%, AUC ~0.952;
+- STRAWBERRY +6.2%, AUC ~0.848.
+
+### CR-006 — naive low-threshold response: FAIL
+
+Large economic proxy headroom existed, but trigger precision was only 32.1%. Broad reactive behavior was rejected.
+
+### CR-007 — high-confidence selective adaptation: PASS
+
+Frozen out-of-time thresholds:
+
+- CARROT probability >= **0.90**;
+- STRAWBERRY probability >= **0.85**;
+- TOMATO/MELON disabled.
+
+Test precision:
+
+- CARROT 85.7%;
+- STRAWBERRY 98.3%;
+- combined **250/257 = 97.3%**.
+
+Pure deployed-tree parity passed 48,000 inferences with max probability error 0 and 100% trigger agreement.
+
+### CR-008 — append adaptive sale at end of order list: STRATEGIC FAIL
+
+Mechanically clean opponent-aware candidate, but action placement was wrong.
+
+- candidate field 75-21 vs R4B 74-22;
+- mean own reward effect **-64.60/game**;
+- mean relative-delta effect **-33.45/game**;
+- direct vs R4B 4-4-16.
+
+Prediction quality did not translate to value.
+
+### CR-009 — forecast too early?: NOT SUPPORTED
+
+- trigger true-positive rate again 97.28%;
+- opponent first sale delay median **0 turns**, mean 0.464;
+- 75% within 1 turn, 100% within 3;
+- waiting for a better pre-sale price rarely helped.
+
+Conclusion: forecast timing was already correct.
+
+### CR-010 — exact in-turn order-sequence value: PASS
+
+Run 2: `33106343741`.
+
+Among 138 high-confidence same-turn sale events:
+
+- opponent first same-product sale in position 0: **86.96%**;
+- moving our adaptive sale to position 0 vs after that opponent sale: mean **+139.96** revenue/event;
+- median **+72**;
+- positive in **99.28%**;
+- total measured counterfactual headroom **+19,314**;
+- STRAWBERRY dominates the effect (~+152.65/event mean).
+
+Conclusion: CR-008 often predicted the correct same-turn sale but placed its response too late in the shared market sequence.
+
+### CR-011 — same adaptation, early order position: CAUSAL PASS
+
+Candidate: `candidates/cr011_adaptive_early_order.py`  
+Blob: `c4f1cb79f3c20b8229ab09e00a6878289cf9648d`  
+Canonical successful run: `33110421956`.
+
+Mechanical proof on official Aug-26 states:
+
+- 28,760 states compared;
+- zero action/multiset mismatches;
+- 40 states where **only market-order sequence** changed.
+
+Fresh 96-game current-meta field:
+
+- CR-011 **72-24**;
+- CR-008 **72-24**;
+- R4B **72-24**;
+- zero errors.
+
+CR-011 vs R4B paired:
+
+- mean own reward **+40.38/game**;
+- mean relative delta **+235.26/game**;
+- W/L score gain 0;
+- positive own-reward effect in 3/4 opponent families.
+
+CR-011 vs CR-008 paired:
+
+- own reward **+158.76/game**;
+- relative delta **+306.35/game**;
+- W/L unchanged.
+
+**Interpretation:** opponent-aware adaptation plus correct order placement causally improves economic/relative value, but the tested matches were too far from the decision boundary to establish W/L/BT improvement. CR-011 is **not hosted-submission-ready**.
+
+## Active experiments
+
+### CR-012 — attribute CR-011 effects
+
+Run: `33127460773`.
+
+Repeats the frozen CR-011/R4B 96-pair field and attributes the first actual adaptive action to product, quantity, price/state and terminal effect. Purpose: determine whether the next response refinement should be quantity sizing, product/context gating or another axis. Diagnostic only; it cannot directly authorize hosted promotion.
+
+### CR-013 — close-match flip stress
+
+Run: `33127568374`.
+
+Frozen design:
+
+- 20 new exploratory seeds;
+- 9 current public snapshots;
+- both seats;
+- **360 R4B screening games**;
+- CR-011 is excluded from selection;
+- select 40 tuples nearest the W/L boundary using R4B only (<=1000 if enough, else <=3000, else 40 closest);
+- replay CR-011 only on those tuples.
+
+Primary question: can the +relative-money effect of CR-011 actually flip outcomes near zero? Frozen diagnostic gate requires positive relative gain plus a net positive score-rate change. No validation/held-out access.
+
+## TOMATO structural branch — SECONDARY
+
+KEXP-053/055/056 established that several recurrent long-lived physical route slots can support a bounded TOMATO experiment without immediate replant collision.
+
+KEXP-056 PASS:
+
+- 32 candidate slots;
+- 19 post-maturity revisit opportunities;
+- recurrent exact families in both development and exploratory distributions include 310@(9,7), 334@(5,9), 477@(0,9).
+
+This branch remains secondary while opponent adaptation is producing stronger causal information.
+
+## Submission policy
+
+Do **not** submit CR-011 merely because its money/relative margin improved. W/L was unchanged in the broad field and hosted calibration is known to diverge from local narrow tests.
+
+Next hosted submission must be a materially different strategic architecture with evidence that it changes matchup outcomes/BT-relevant coverage, or be explicitly justified as a high-information calibration submission under a frozen policy. Package parity remains mandatory.
 
 ## Exact continuation
 
-1. Complete CR-002B preflight run `33086405765` and inspect all nine manifests.
-2. Freeze exact runnable entry points and hashes; do not normalize away package dependencies.
-3. Launch the current-meta round-robin only after preflight PASS.
-4. Apply all CR-002B gates, including the hosted sanity clause, without reinterpretation.
-5. If calibrated, identify the true current-meta coverage hole and build CR-003 against that distribution.
-6. If still uncalibrated, expand with even fresher public snapshots and official recent-episode behavior before promoting any strategy.
-7. Keep all **32/32 held-out sealed**.
-
-## Paused branches
-
-CARROT/TOMATO micro-overlay work is paused. KEXP-053/055 remain mechanics research only; KEXP-056 must not delay the reset. KEXP-037 is also held.
+1. Finish CR-012 and identify the context/product/quantity pattern behind CR-011 positive and negative effects.
+2. Finish CR-013 and determine whether CR-011 converts close base outcomes into favorable outcomes.
+3. Re-check hosted replay availability automatically; when 27-Aug data opens, analyze episode `100996939` (R4B) and `100987834` (KEXP-050) before trusting another local promotion.
+4. If CR-013 shows real flips, build the next opponent-aware candidate with the smallest refinement supported by CR-012; test on new exploratory seeds/current-meta families.
+5. If close-match flips remain absent, do not optimize margin for its own sake; move adaptation toward production/allocation/cash decisions with larger potential outcome impact.
+6. Keep all **32/32 held-out sealed**.
 
 ## Frozen environment facts
 
 - `kaggle-environments==1.32.7`;
 - official engine commit `28b6d8af3ce73926b3d0fda1410c1ddd8384ab8c`;
 - 720 recorded states; state 718 final executable action;
-- terminal reward is farm money;
-- replay alignment: `state t -> action frame t+1`;
-- final competition relevance is Bradley–Terry / matchup strength, so broad **current-field** coverage matters more than isolated head-to-head exploits.
+- replay alignment: observation state `t` -> submitted action stored at replay frame `t+1`;
+- terminal reward = bank money;
+- final competition relevance is Bradley–Terry/matchup strength, so broad **current-field** coverage and actual W/L flips matter more than isolated money gains.
