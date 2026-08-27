@@ -1,0 +1,94 @@
+name: kexp050-validated-submission-package
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp050-validated-submission-package.yml
+  workflow_dispatch:
+
+jobs:
+  formal-package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch hash-pinned COK V8 base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen source and builder identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4d_reallocate_614_carrot.py)" = "61b77be136836328917441cb03f89bc6665c4c27"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:tools/build_kexp050_submission.py)" = "2a83d060231f725094dc461081c9c809d6e2223a"
+      - name: Verify KEXP-054 promotion record exists
+        run: |
+          grep -q "Status: \*\*PASS / PACKAGE PARITY AUTHORIZED\*\*" experiments/KEXP-20260827-054-kexp050-fresh-validation/README.md
+          grep -q '33073517302' experiments/KEXP-20260827-054-kexp050-fresh-validation/README.md
+          grep -q '0.59375' experiments/KEXP-20260827-054-kexp050-fresh-validation/README.md
+      - name: Build deterministic self-contained archive
+        run: python tools/build_kexp050_submission.py
+      - name: Enforce frozen archive identity from preparation parity
+        run: |
+          test "$(sha256sum artifacts/submissions/kexp050_reallocate614_v1.tar.gz | awk '{print $1}')" = "59a45adf283f2f4dd1f9272150786c014585aa08c9b31b3348cf992ebe3bb64c"
+      - name: Extract and recheck full source/package parity
+        run: |
+          mkdir -p artifacts/kexp050-final-extract
+          tar -xzf artifacts/submissions/kexp050_reallocate614_v1.tar.gz -C artifacts/kexp050-final-extract
+          python tools/compare_agent_prefix.py \
+            --agent-a file:candidates/r4d_reallocate_614_carrot.py:agent \
+            --agent-b file:artifacts/kexp050-final-extract/main.py:agent \
+            --seed-partition development \
+            --limit-seeds 4 \
+            --output artifacts/kexp050-final-parity.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('artifacts/kexp050-final-parity.json').read_text())
+          s=p['summary']
+          if s['identical_full_trajectory_actions'] != s['comparisons']:
+              raise SystemExit(f"action parity failed: {s}")
+          for row in p['rows']:
+              if row['agent_a_terminal'] != row['agent_b_terminal']:
+                  raise SystemExit(f"terminal parity failed: {row}")
+          print('KEXP050_FINAL_PACKAGE_PARITY_PASS')
+          PY
+      - name: Name formal submission and write provenance
+        run: |
+          cp artifacts/submissions/kexp050_reallocate614_v1.tar.gz artifacts/submissions/Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root=Path('artifacts/submissions')
+          archive=root/'Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz'
+          parity=json.loads(Path('artifacts/kexp050-final-parity.json').read_text())
+          payload={
+            'agent':'KEXP-050-reallocate614-validated-v1',
+            'candidate_blob':'61b77be136836328917441cb03f89bc6665c4c27',
+            'r4b_blob':'e564125f0c4a1711fd3ea065dc1cb27d4a62ce37',
+            'validation_run':33073517302,
+            'validation_direct':{'wins':14,'losses':8,'ties':10,'score_rate_tie_half':0.59375,'mean_money_delta':31.0625},
+            'validation_public_panel':{'candidate':'78-18','r4b_control':'78-18','family_regressions':0},
+            'held_out_status':'32/32 SEALED',
+            'package_parity_comparisons':parity['summary']['comparisons'],
+            'package_parity_identical':parity['summary']['identical_full_trajectory_actions'],
+            'archive_sha256':hashlib.sha256(archive.read_bytes()).hexdigest(),
+            'archive_bytes':archive.stat().st_size,
+            'main_py_sha256':hashlib.sha256((Path('artifacts/kexp050-final-extract')/'main.py').read_bytes()).hexdigest(),
+            'hosted_role':'CALIBRATION_CANDIDATE_NOT_FINAL_CHAMPION',
+          }
+          (root/'KEXP050_VALIDATED_SUBMISSION_PROVENANCE.json').write_text(json.dumps(payload,indent=2,sort_keys=True))
+          print(json.dumps(payload,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp050-validated-submission
+          path: |
+            artifacts/submissions/Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz
+            artifacts/submissions/KEXP050_VALIDATED_SUBMISSION_PROVENANCE.json
+            artifacts/submissions/kexp050_reallocate614_v1/BUILD_MANIFEST.json
+            artifacts/kexp050-final-parity.json
