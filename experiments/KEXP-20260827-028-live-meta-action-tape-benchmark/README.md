@@ -1,48 +1,67 @@
 # KEXP-20260827-028 — live-meta action-tape benchmark
 
-Status: **RUNNING / BENCHMARK INFRASTRUCTURE ONLY**
+Status: **COMPLETE / EXACT REPLAY PASS / OPEN-LOOP OPPONENT BENCHMARK DEPRIORITIZED**
 
 ## Prize-first problem
 
-Frozen Kaito/Rayk/Andrew are useful regression controls but are poorly calibrated to the hosted field: R4B scores 81-15 locally while the hosted rating fell 161.6 → 135.7. Official Aug-26 top episodes show a much stronger, state-adaptive live frontier.
+Frozen Kaito/Rayk/Andrew are useful regression controls but are poorly calibrated to the hosted field. Official high-Elo datasets expose complete public replays, including environmental state and both submitted action streams. This experiment tested whether those streams can serve as a closer development benchmark.
 
-Public Kaggriculture episode datasets expose the complete official replay: environmental seed, both submitted action streams and terminal rewards. This experiment tests whether those public action streams can become a closer **development benchmark** without copying them into a submission.
+## Critical replay convention
 
-## Phase A — exact replayability gate
+The canonical V2 established the exact Kaggle JSON alignment:
 
-Freeze the official **2026-08-26 top 10 episodes by manifest `avg_score`**.
+> the action chosen from observation/state frame `t` is stored on replay frame `t+1`.
 
-For each episode:
+This convention is now mandatory for all replay-based Kculture diagnostics.
 
-1. extract both public action streams;
-2. recreate the official environment using its public seed under the frozen Kaggriculture engine;
-3. replay both tapes in their original seats;
-4. require 720 recorded states, both statuses `DONE`, and **exact equality of both terminal rewards** with the public episode.
+## Phase A — exact replayability
 
-No R4B benchmark result is trusted for an episode unless Phase A reproduces it exactly.
+Freeze the official 2026-08-26 top 10 episodes by manifest `avg_score`, extract both action streams with the corrected one-frame alignment, recreate the official environment, and replay tape-vs-tape in original seats.
 
-### Infrastructure gate
+Canonical run **`33040385897` — SUCCESS**.
+Artifact **`9633695306`**, ZIP digest **SHA-256 `ddd3ede71c21e3cbd16343243aa8212abf16826c9055edb5daa921d1cd70ec8f`**.
 
-- If at least **8/10** episodes reproduce exactly, the action-tape benchmark is eligible as a development calibration layer.
-- If fewer than 8/10 reproduce exactly, reject/deprioritize this benchmark until the reproduction mismatch is explained.
+Result:
 
-## Phase B — R4B versus original winner tape
+- exact terminal reproductions: **10/10**;
+- fraction: **1.000**;
+- every replay: 720 states, both players `DONE`;
+- both terminal rewards exactly equal the official public episode.
 
-Only for Phase-A-exact episodes:
+The infrastructure gate therefore passes strongly. Public high-Elo trajectories are reliable for state/action forensics and temporal policy mining.
 
-- keep the original winning tape in its original seat;
-- replace the original loser with frozen `R4B-market-only-validated-v1`;
-- run the same public environmental seed;
-- record R4B W/L/T, terminal delta and how much the winner tape's reward changes under the counterfactual market interaction.
+## Phase B — frozen R4B versus original winner tape
 
-This is deliberately called a **counterfactual tape benchmark**, not an exact model of the live opponent: a fixed action stream cannot adapt to the new market trajectory created by R4B. Its value is calibration against much stronger recent behavior than the frozen notebook panel.
+For each exact episode, keep the original winner tape in its original seat and replace the loser with frozen R4B.
 
-## Provenance and deployment boundary
+Result:
 
-- Source data: official public Kaggle episode datasets only.
-- No validation or held-out seeds.
-- Team name, episode ID, seed ID and action-tape identity are research provenance only and forbidden strategy features.
-- Public opponent tapes are **benchmark-only** and are not copied, distilled or embedded in the submitted agent by this experiment.
+- valid games: 10;
+- R4B W/L/T: **6-4-0**;
+- score rate: **0.60**;
+- mean R4B terminal delta: **+21,938**;
+- median delta: **+14,135.5**.
 
-Tool: `tools/live_meta_action_tape_benchmark.py`
-Frozen tool blob: `f3bb56f9984c54c67c3538cb5cfc12db49199e03`
+Taken alone, 6-4 would misleadingly suggest that R4B is competitive with the top field. The counterfactual diagnostic proves why it cannot be used that way:
+
+- mean absolute change in the winner tape's reward versus its original episode: **44,824.2**.
+
+The fixed winner tape cannot react when R4B changes market supply, prices, blocking and other shared state. Its policy is therefore badly off-distribution in the counterfactual game.
+
+## Decision
+
+**Exact replay infrastructure is promoted; open-loop tape-vs-agent W/L is not.**
+
+Use high-Elo replays for:
+
+- exact observation/action alignment;
+- state-conditioned behavior mining;
+- causal/mechanical hypothesis generation;
+- temporal holdout studies;
+- future behavioral/value-model training where legal.
+
+Do **not** use winner tapes as a calibrated live-field opponent or infer hosted strength from the 6-4 result.
+
+KEXP-029 is the first direct continuation: learn a small late crop demand+price decision surface from exact public state/action pairs, using Aug-22..25 as training days and Aug-26 as temporal test.
+
+No validation or held-out seeds were accessed. Team, episode and seed identities remain forbidden deployment features.
