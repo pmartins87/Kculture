@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "league_id": "CR002-broad-proxy-league-v1",
+  "fresh_seed_master": 202608270202,
+  "seeds_per_pair": 6,
+  "both_seats": true,
+  "public_agents": [
+    {
+      "id": "kaito-v27-v4",
+      "historical_score": 3090.1,
+      "handle": "kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "9a158d0b251d18d042386d33fb31a4f4096005637c80953162e329d2eb7ff072",
+      "entry_path": "main.py",
+      "entry_sha256": "f48c21166eac68d1b05a401f04f94a2eb6154e65415af64893672365ff33c7b8"
+    },
+    {
+      "id": "rayk-rank-v11",
+      "historical_score": 2990.4,
+      "handle": "raykkretzschmar/kaggriculture-rank-your-agent/versions/11",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "99e3ab82275d1d6991553a50c67f7fb3c83c029072dab2e890155b34d34c3cc1",
+      "entry_path": "main.py",
+      "entry_sha256": "adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f"
+    },
+    {
+      "id": "andrew-breaking-v12",
+      "historical_score": 2883.0,
+      "handle": "andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "5e628cb24738d3999d93cd3e38d755561ecf2f6cdc14da0d9b068df8a50c39cc",
+      "entry_path": "submission.py",
+      "entry_sha256": "df4e899ad535754cf2ddbd3c16e48085916b0cd2baa5182a1a2cfc6a856abae5"
+    },
+    {
+      "id": "prvsiyan-frontier-v5",
+      "historical_score": 2798.6,
+      "handle": "prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/5",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "73b5efd9f144159ddb517b2d415bb59a1a835372f8f90e5f06cee293fd0200f6",
+      "entry_path": "main.py",
+      "entry_sha256": "c3be7447f79a1c4e0a9fa537b9fbd2eb7ae1a199a09690e7dfdc15da1cb0b5a4"
+    },
+    {
+      "id": "flex-v59",
+      "historical_score": 2767.3,
+      "handle": "flexonafft/kaggriculture-multi-route-farming-agent/versions/59",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "af2ec593ac28333053ce66dd0616de831bba471dd98bbc334bedbd0526a90884",
+      "entry_path": "main.py",
+      "entry_sha256": "34193f0ca7fdc77db52cfdadf61596d42cbc2ffd3d8b7903819b0ad78a064a2a"
+    },
+    {
+      "id": "bruce-pipeline-v1",
+      "historical_score": 2754.9,
+      "handle": "bruceqdu/my-2026-08-04-high-score-pipeline/versions/1",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "c8b291087d983ea0d4f7badd806612fa3040dc8fe7d3986f60ed0502b4b5ce0f",
+      "entry_path": "main.py",
+      "entry_sha256": "ed8c8420514acb5a96c0d44cfd42a8786e49c7cdc01a0de61d2e6b8997dda87a"
+    },
+    {
+      "id": "roman-hamburger-v21",
+      "historical_score": 2391.0,
+      "handle": "romantamrazov/kaggriculture-hamburger/versions/21",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "e8a298a33a87dbf91031429dd58f9bcfc1630666fd276e3cb262d57fb6faae0d",
+      "entry_path": "main.py",
+      "entry_sha256": "00e8ab594a39779e808dd351d0973260f4c90ddc1370e684fa46eaa184ae4546"
+    },
+    {
+      "id": "anas-v2",
+      "historical_score": 2213.8,
+      "handle": "anasriaz/kaggriculture/versions/2",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "0831a7e27f42159174c27dec33358ba07efe0ee28cd8037c6cd6d4811b2043ce",
+      "entry_path": "main.py",
+      "entry_sha256": "62fb5a5f66f0011092a2b51e3192879ba583d5d815d761f176091c615657147a"
+    },
+    {
+      "id": "prvsiyan-baseline-v2",
+      "historical_score": 2123.7,
+      "handle": "prvsiyan/kaggriculture-baseline/versions/2",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "e131515c79897756973ee9894fd1e8f2a7cae19b261fa8f940f6e29e97dfd4aa",
+      "entry_path": "main.py",
+      "entry_sha256": "dc599d0af2e31a0426c6431ae778be0705b0cf471afb7557cd7eadd23a01815f"
+    },
+    {
+      "id": "renji-builder-v3",
+      "historical_score": 1771.3,
+      "handle": "degnonguidi/kaggriculture-agent-builder/versions/3",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "d6fc2302a69211928c09668dccfed0c58cf0ef84e3088003787241669e96c953",
+      "entry_path": "main.py",
+      "entry_sha256": "32ce3d57a994edfc5856383da074a059cad4117e7ea84012398316f68aad048e"
+    }
+  ],
+  "local_agents": [
+    {
+      "id": "r4b",
+      "spec": "file:candidates/r4b_ablation_market_only.py:agent",
+      "hosted_snapshot": 142.0,
+      "blob": "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+    },
+    {
+      "id": "kexp050",
+      "spec": "file:candidates/r4d_reallocate_614_carrot.py:agent",
+      "hosted_snapshot": 145.1,
+      "blob": "61b77be136836328917441cb03f89bc6665c4c27"
+    }
+  ],
+  "calibration_gate": {
+    "public_spearman_min": 0.60,
+    "public_pair_order_accuracy_min": 0.65,
+    "zero_runtime_errors": true,
+    "interpretation": "If the public historical ordering cannot be reproduced with useful correlation, this league is diagnostic only and must be expanded/reweighted before candidate promotion."
+  }
+}
