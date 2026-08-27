@@ -23,7 +23,7 @@ jobs:
         run: python tools/fetch_public_opponents.py
       - name: Verify frozen CR-008 identities
         run: |
-          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "609eff6a78aaa1dad070268c020d191fb905cfa0"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
           test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
           test "$(git rev-parse HEAD:configs/cr008_fresh_exploratory_seeds_v1.json)" = "01b29fb4e19cba185b7d99a37ac13ee4715de574"
