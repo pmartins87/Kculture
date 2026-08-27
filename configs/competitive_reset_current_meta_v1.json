@@ -1,71 +1,109 @@
 {
   "schema_version": "cr002b-current-meta-v1",
+  "league_id": "CR-002B-current-meta-20260827-v1",
   "snapshot_date": "2026-08-27",
   "purpose": "Temporal current-meta calibration after CR-002 historical-public CALIBRATION_FAIL.",
   "selection_rule": "Public Kaggriculture notebook snapshots discoverable on 2026-08-27, biased toward recent/high public score plus architectural diversity. Exact notebook version and observed public score frozen before local pair results. One inaccessible Flex V84 KaggleHub identifier was replaced during package preflight, before any league episode, by the reproducible Tetsu V2 lower-score anchor.",
+  "preflight_run": 33086405765,
   "public_agents": [
     {
       "id": "kaito-sparse-v13",
       "handle": "kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13",
       "observed_public_score": 2882.0,
       "score_evidence": "Best Score 2882.0 V13 on public Kaggle notebook page",
-      "reuse": "Apache-2.0 page evidence; benchmark reference"
+      "reuse": "Apache-2.0 page evidence; benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "fb821a9f9867cd413e40323e1e79f1014b74eac7aab3db2bcdbfc6eea5e36a10",
+      "entry_path": "main.py",
+      "entry_sha256": "69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3"
     },
     {
       "id": "prvsiyan-frontier-v10",
       "handle": "prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10",
       "observed_public_score": 2610.2,
       "score_evidence": "Public Score 2610.2, Version 10/10 on 2026-08-27 discovery",
-      "reuse": "Apache-2.0 page evidence; benchmark reference"
+      "reuse": "Apache-2.0 page evidence; benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "fadde4e4e5cde332352827cbbfd7c8ea95f2e9abd34a3ca7196a29b007e93bd3",
+      "entry_path": "main.py",
+      "entry_sha256": "943e8c114ace4f5c5965698e66a4943e982dab4ccb57d8efa134a4e5b4f13955"
     },
     {
       "id": "salem-harvest-v4",
       "handle": "salemali7/harvest-kaggriculture/versions/4",
       "observed_public_score": 2590.2,
       "score_evidence": "Public Score 2590.2 on exact public version 4",
-      "reuse": "Apache-2.0 page evidence; benchmark reference"
+      "reuse": "Apache-2.0 page evidence; benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "1614541b59a1a4d71ccd2af8ce8ef94b8ebf657063c4983f1e3676cb740bc0f6",
+      "entry_path": "main.py",
+      "entry_sha256": "f029fa0cb66a9eb509afbe44e3f59b800332d0419db91607183410e4089c4d19"
     },
     {
       "id": "rayk-rank-v23",
       "handle": "raykkretzschmar/kaggriculture-rank-your-agent/versions/23",
       "observed_public_score": 2563.4,
       "score_evidence": "Current public notebook output page showed Public Score 2563.4; 23-version lineage",
-      "reuse": "benchmark-only; no derivative reuse unless exact-version license independently verified"
+      "reuse": "benchmark-only; no derivative reuse unless exact-version license independently verified",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "86b7ae5c029e351adfbd80059cd185b39d1467303437e6441ff7ad871cd8e7ee",
+      "entry_path": "main.py",
+      "entry_sha256": "6c709f6d3ce6cf221a9495de7e716fcd1b660e3bbc8ee5679b63233d0265a812"
     },
     {
       "id": "kaito-future-v19-v1",
       "handle": "kaitofukami/41-49-future-unseen-v19-replication-to-control/versions/1",
       "observed_public_score": 2530.5,
       "score_evidence": "Public Score 2530.5, Version 1/1",
-      "reuse": "public benchmark reference"
+      "reuse": "public benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "baa437b90731429f250ee4700c53e9e13c677a002c87720eaced7e5158492b3b",
+      "entry_path": "main.py",
+      "entry_sha256": "9f18c729b16133443c981b0456515ef21824da72c89ce1387edab69c7e2fb536"
     },
     {
       "id": "tactical-memory-v1",
       "handle": "web3cainiao/kaggriculture-v21-tactical-memory/versions/1",
       "observed_public_score": 2491.7,
       "score_evidence": "Public Score 2491.7, Version 1",
-      "reuse": "benchmark-only until license is independently verified"
+      "reuse": "benchmark-only until license is independently verified",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "9ac5aeeadc6fef13f5e474d75c1c1e2773084e23eabf7ae1a7f0aa76d1704629",
+      "entry_path": "main.py",
+      "entry_sha256": "630125b3f592fdb773f1fac6532b08e97e829ae188180ea17540b702b606a054"
     },
     {
       "id": "boatlee-route-v2",
       "handle": "boatlee/v21-r1-public-state-route-portfolio/versions/2",
       "observed_public_score": 2467.9,
       "score_evidence": "Public Score 2467.9, Version 2/2",
-      "reuse": "Apache-2.0 page evidence; benchmark reference"
+      "reuse": "Apache-2.0 page evidence; benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "d65410a4fc8a31226055e43085131468ac8af5721aabdf3593cb8eade59cabe3",
+      "entry_path": "main.py",
+      "entry_sha256": "c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8"
     },
     {
       "id": "andrew-kaggriculture-v11",
       "handle": "andrewsokolovsky/kaggriculture/versions/11",
       "observed_public_score": 2441.2,
       "score_evidence": "Public Score 2441.2, Version 11/11",
-      "reuse": "Apache-2.0 page evidence; benchmark reference"
+      "reuse": "Apache-2.0 page evidence; benchmark reference",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "cdcac082442f8c70d8caa6f6979a3c699c73810622eca32806c80a924987d3dc",
+      "entry_path": "main.py",
+      "entry_sha256": "0827987dab3f52e1f50661c355b42f289b8e305d90a263b16f3054aaecfe943c"
     },
     {
       "id": "tetsu-town-v2-current",
       "handle": "tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2",
       "observed_public_score": 1896.6,
-      "score_evidence": "Public Score 1896.6, Version 2/2; output exposes submission.tar.gz",
-      "reuse": "benchmark reference; lower current-score anchor"
+      "score_evidence": "Public Score 1896.6, Version 2/2; exact packaged main recovered from submission.tar.gz",
+      "reuse": "benchmark reference; lower current-score anchor",
+      "archive_name": "submission.tar.gz",
+      "archive_sha256": "00c423f03e091c4bc64417fe66bcf44dbe5d1a8b5d5eff5fadc6bc362b318ec9",
+      "entry_path": "main.py",
+      "entry_sha256": "73834889054bb6a515fbb40a306a7e0e609105049c781e32197a205f6c339c4f"
     }
   ],
   "preflight_replacements": [
@@ -99,6 +137,8 @@
     "zero_runtime_errors": true,
     "public_spearman_min": 0.65,
     "public_pair_order_accuracy_min": 0.70,
-    "local_hosted_sanity": "R4B/KEXP-050 must not rank above the majority of 2400+ contemporaneous public references; otherwise the proxy is current-field invalid even if public-public rank correlation passes."
+    "high_score_reference_min": 2400.0,
+    "local_hosted_sanity_min_high_refs_above_each_local": 5,
+    "local_hosted_sanity": "For each of R4B and KEXP-050, at least 5 of the 8 contemporaneous public references scoring 2400+ must rank above it locally; otherwise the proxy is current-field invalid even if public-public correlation passes."
   }
 }
