@@ -1,0 +1,30 @@
+name: kexp031-late-crop-state-tree
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp031-late-crop-state-tree.yml
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install kagglehub scikit-learn
+      - name: Verify frozen diagnostic
+        run: test "$(git rev-parse HEAD:tools/late_crop_state_tree.py)" = "661a78aa75648592f7aa291052afff9fadd1837d"
+      - name: Fit and temporal-test shallow public-state tree
+        run: python tools/late_crop_state_tree.py --top 20 --output artifacts/kexp031/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp031-late-crop-state-tree
+          path: artifacts/kexp031/**
