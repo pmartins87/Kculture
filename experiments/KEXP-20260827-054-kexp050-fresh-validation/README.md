@@ -1,6 +1,6 @@
 # KEXP-20260827-054 — KEXP-050 fresh validation
 
-Status: **FROZEN / VALIDATION AUTHORIZED**
+Status: **FROZEN / VALIDATION RUNNING**
 
 ## Candidate freeze
 
@@ -51,5 +51,15 @@ Terminal money is secondary to W/L/T except for the positive direct-delta guard 
 If the gate fails, do not tune KEXP-050 against individual validation seeds. Validation becomes consumed evidence for this frozen candidate; return to development/exploratory work with a materially different policy.
 
 If the gate passes, freeze the exact candidate/dependency closure, build a Kaggle submission package, and require exact package parity before any hosted calibration submission.
+
+## Mechanical-null first attempt
+
+Run `33073158744` is **MECHANICAL NULL**, not a validation result. All seven jobs reached the evaluation command and were refused before any validation episode could start because `tools/run_late_lifecycle_panel.py` intentionally enforces a development-only safety guard:
+
+`Exploratory lifecycle panel is development-only; refusing partition='validation'`
+
+No tournament/report artifact was generated and no validation outcome was observed. Therefore this attempt does **not** consume validation evidence and does not modify the frozen candidate or gate.
+
+The workflow was repaired in commit `e9cc6bb84d93b96aff21f785711163f15f1362a8` to use the repository's validation-approved `tools/run_tournament.py`, exactly as the earlier R4B validation workflow did. Candidate, opponent versions, seed partition and promotion criteria are unchanged.
 
 Held-out: **32/32 remain sealed**.
