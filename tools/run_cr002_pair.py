@@ -31,7 +31,12 @@ def agent_specs(cfg: dict) -> dict[str, str]:
 
 def fresh_seeds(cfg: dict) -> list[int]:
     partitions = json.loads((ROOT / "configs/seed_partitions.json").read_text(encoding="utf-8"))
-    forbidden = {int(seed) for values in partitions.values() for seed in values}
+    frozen_partition_names = ("development", "validation", "held_out")
+    forbidden = {
+        int(seed)
+        for partition_name in frozen_partition_names
+        for seed in partitions[partition_name]
+    }
     rng = random.Random(int(cfg["fresh_seed_master"]))
     seeds = []
     while len(seeds) < int(cfg["seeds_per_pair"]):
