@@ -1,6 +1,6 @@
 # CR-002 — Broad proxy league calibration
 
-Status: **FROZEN / RUNNING — ATTEMPT 3**
+Status: **CLOSED — CALIBRATION_FAIL**
 
 ## Why this exists
 
@@ -10,7 +10,7 @@ CR-001 falsified the easy explanation that Kculture had benchmarked the wrong fi
 - Rayk V11 (2990.4): packaged `main.py` byte-identical;
 - Andrew V12 (2883.0): packaged `submission.py` byte-identical to the top-level `main.py` Kculture had used.
 
-Therefore R4B beating those three agents locally while scoring ~142 hosted is evidence that a tiny head-to-head panel is not a calibrated field-strength proxy. Non-transitivity / matchup coverage is now the primary hypothesis.
+Therefore R4B beating those three agents locally while scoring ~142 hosted is evidence that a tiny head-to-head panel is not a calibrated field-strength proxy. CR-002 tested whether a much broader historical-public league could repair that problem.
 
 ## Frozen league
 
@@ -20,53 +20,87 @@ Therefore R4B beating those three agents locally while scoring ~142 hosted is ev
 - frozen R4B (hosted snapshot 142.0);
 - frozen KEXP-050 (hosted snapshot 145.1).
 
-All 66 unordered pairs are generated automatically. No pair can be removed after results are observed.
+All 66 unordered pairs were generated automatically. Each pair played the same 6 fresh deterministic environmental seeds in both seats = 12 episodes/pair, 792 total episodes. The fresh seed generator excluded all frozen development/validation/held-out partitions.
 
-Each pair plays the same 6 fresh deterministic environmental seeds in both seats = 12 episodes/pair, 792 total episodes. The fresh seed generator excludes all frozen development/validation/held-out partitions.
-
-## Primary metric
-
-Fit one Bradley–Terry model from the full local league. For the 10 public references only, compare local BT strength ordering with historical Kaggle score ordering.
-
-Predeclared calibration gate:
+## Predeclared calibration gate
 
 - complete 66/66 pair matrix;
 - zero runtime/status errors;
 - Spearman(public local BT, historical score) >= **0.60**;
 - public BT pair-order accuracy >= **0.65**.
 
-If the gate fails, CR-002 is diagnostic only. We must expand/reweight the field or episode design before using it for candidate promotion.
-
-If the gate passes, this league becomes the first promotion-grade local strength proxy of the Competitive Reset. Candidate development then targets broad BT/coverage improvement rather than isolated wins versus Kaito/Rayk/Andrew.
-
 ## Attempt history
 
 ### Attempt 1 — run `33083452488`: MECHANICAL NULL
 
-The preparation stage succeeded and verified all ten exact public packages. Pair jobs then failed before environment creation with:
+Preparation succeeded. Pair jobs failed before any episode with `ModuleNotFoundError: No module named 'tools'`. No competitive outcome was observed.
 
-`ModuleNotFoundError: No module named 'tools'`
-
-Cause: `tools/run_cr002_pair.py` imported `tools.run_tournament` before adding repository root to `sys.path` when executed as a script. No episode outcome was observed, so this attempt contains no league evidence.
-
-Fix commit: `08d242366037b19e20ee906e06dbe2bc6b760242`. The only change bootstraps the repository import path. Entrants, hashes, pair matrix, seed master, seats and calibration gate are unchanged.
+Fix commit: `08d242366037b19e20ee906e06dbe2bc6b760242`.
 
 ### Attempt 2 — run `33083761765`: MECHANICAL NULL
 
-Preparation again passed, but pair jobs failed before the first episode while constructing the fresh-seed exclusion set:
+Preparation succeeded. Pair jobs failed before any episode while constructing the seed exclusion set with `TypeError: 'int' object is not iterable`. No competitive outcome was observed.
 
-`TypeError: 'int' object is not iterable`
+Fix commit: `df23ba195688f599280f9e246b61342bf65bdc5d`.
 
-Cause: `configs/seed_partitions.json` contains metadata fields in addition to the three seed arrays; the runner iterated every top-level value as if all values were seed lists. No episode outcome was observed, so this attempt also contains no league evidence.
+### Attempt 3 — run `33084489238`: VALID / CALIBRATION_FAIL
 
-Fix commit: `df23ba195688f599280f9e246b61342bf65bdc5d`. The runner now explicitly excludes only `development`, `validation` and `held_out`. Entrants, hashes, pair matrix, fresh seed master, seats and calibration gate remain unchanged.
+Canonical result artifact: `cr002-league-result`, artifact id **9652034347**, artifact ZIP digest **sha256:52698fd46d11968893a96baac908cac86afccd0ce9dbe93c726ab4246fd97787**.
 
-### Attempt 3 — run `33084489238`: RUNNING
+Results:
 
-This is the first attempt eligible to produce competitive evidence. The preparation stage passed. Pair jobs are executing on the original frozen 66-pair matrix.
+- pair matrix: **66/66 complete** — PASS;
+- runtime/status errors: **0** — PASS;
+- public BT pair-order accuracy: **0.6888889** — PASS vs 0.65;
+- public Spearman: **0.5757576**, p=0.08155 — **FAIL** vs 0.60;
+- majority cycles: 0 in this small deterministic proxy league;
+- formal status: **CALIBRATION_FAIL**.
 
-## Important interpretation
+Local BT ranking:
 
-Historical Kaggle scores were observed at different snapshots and are not immutable ground truth. The gate asks only for useful rank correlation, not equality of numeric scores. R4B/KEXP-050 are excluded from the historical-score correlation because their 142/145 values are current dynamic snapshots; their local placement remains a crucial diagnostic.
+1. KEXP-050 — BT centered Elo 2246.0; hosted snapshot 145.1
+2. R4B — 2216.4; hosted snapshot 142.0
+3. Flex V59 — 2145.9; historical public 2767.3
+4. Andrew V12 — 1979.7; historical public 2883.0
+5. Kaito V27 — 1821.0; historical public 3090.1
+6. Rayk V11 — 1424.9; historical public 2990.4
+7. Anas V2 — -67.8; historical public 2213.8
+8. Prvsiyan Baseline V2 — -1607.6; historical public 2123.7
+9. Bruce Pipeline V1 — -1803.1; historical public 2754.9
+10. Roman Hamburger V21 — -2067.8; historical public 2391.0
+11. Prvsiyan Frontier V5 — -2263.4; historical public 2798.6
+12. Renji Builder V3 — -4024.2; historical public 1771.3
 
-No validation or held-out outcomes are opened by CR-002.
+## Strong falsification from R4B
+
+R4B beat every one of the ten historical public references on the six fresh seeds, totaling **112-8 / 120**:
+
+- Kaito: R4B 8-4;
+- Rayk: 12-0;
+- Andrew: 10-2;
+- Prvsiyan Frontier: 12-0;
+- Flex: 10-2;
+- Bruce: 12-0;
+- Roman: 12-0;
+- Anas: 12-0;
+- Prvsiyan Baseline: 12-0;
+- Renji: 12-0.
+
+This is incompatible with treating the historical-public league as a current-field strength proxy while R4B/KEXP-050 remain around 142/145 hosted. The result is stronger than a simple failed Spearman threshold: the sampled public generation is structurally unrepresentative of the current ladder distribution relevant to Kculture.
+
+## Decision
+
+**CR-002 is diagnostic only. It is retired for promotion decisions.**
+
+Do not promote a candidate because it beats this historical-public field, Kaito/Rayk/Andrew, or improves local BT here. The next proxy must be anchored to current-meta evidence and current public snapshots, with temporal freshness treated as a first-class variable.
+
+Historical public packages remain useful for architecture study and regression coverage, but no longer define competitive strength.
+
+## Next step
+
+Build a current-meta calibration set using recent public notebook snapshots with contemporaneous public scores plus official recent episode behavior. Before strategic promotion, require the new proxy to explain both:
+
+1. ordering among current public snapshots; and
+2. why R4B/KEXP-050 are weak in hosted play despite exploiting the historical-public generation.
+
+No validation or held-out outcomes were opened by CR-002.
