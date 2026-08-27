@@ -1,0 +1,30 @@
+name: kexp044-live-phase-labor-winloss
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp044-live-phase-labor-winloss.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Verify frozen diagnostic
+        run: test "$(git rev-parse HEAD:tools/live_phase_labor_winloss.py)" = "e7eaed7424c185ed0a9963bf59b58f6e49008de8"
+      - name: Audit winner-loser labor utilization
+        run: python tools/live_phase_labor_winloss.py --top 20 --output artifacts/kexp044/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp044-live-phase-labor-winloss
+          path: artifacts/kexp044/report.json
