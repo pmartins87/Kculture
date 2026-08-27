@@ -5,10 +5,13 @@ import argparse
 import hashlib
 import json
 import random
+import sys
 import traceback
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.run_tournament import aggregate, play  # noqa: E402
 
@@ -73,7 +76,6 @@ def main() -> None:
 
     valid_rows = list(episodes)
     overall = aggregate(valid_rows)
-    # Runner exceptions did not reach aggregate(), so count them explicitly.
     overall["errors"] += len(runner_errors)
     overall["episodes"] += len(runner_errors)
 
