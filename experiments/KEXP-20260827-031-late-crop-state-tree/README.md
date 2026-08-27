@@ -67,4 +67,4 @@ If this richer shallow tree fails, stop threshold/tree tinkering and move the cr
 No validation or held-out seeds are accessed.
 
 Tool: `tools/late_crop_state_tree.py`
-Frozen tool blob: `54b1b7b97103cf22541518569122ecf139540be0`
+Frozen tool blob: `661a78aa75648592f7aa291052afff9fadd1837d`
