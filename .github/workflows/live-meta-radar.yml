@@ -4,6 +4,8 @@ on:
   push:
     paths:
       - ".github/workflows/live-meta-radar.yml"
+  schedule:
+    - cron: "17 0,12 * * *"
   workflow_dispatch:
     inputs:
       date:
@@ -34,9 +36,14 @@ jobs:
           KAGGLE_API_TOKEN: ""
           INPUT_DATE: "${{ github.event.inputs.date }}"
           INPUT_TOP: "${{ github.event.inputs.top }}"
+          EVENT_NAME: "${{ github.event_name }}"
         run: |
           set -euo pipefail
-          TOP="${INPUT_TOP:-20}"
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            TOP="10"
+          else
+            TOP="${INPUT_TOP:-20}"
+          fi
           if [ -n "${INPUT_DATE:-}" ]; then
             python tools/live_meta_radar.py --date "$INPUT_DATE" --top "$TOP" --output artifacts/live-meta/report.json
           else
@@ -44,5 +51,5 @@ jobs:
           fi
       - uses: actions/upload-artifact@v4
         with:
-          name: kexp018-live-meta-radar-top20
+          name: kexp018-live-meta-radar
           path: artifacts/live-meta/report.json
