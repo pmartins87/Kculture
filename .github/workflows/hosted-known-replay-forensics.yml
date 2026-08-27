@@ -8,6 +8,7 @@ on:
       - '.github/workflows/hosted-known-replay-forensics.yml'
   workflow_dispatch:
 
+# Mechanical launch marker: 2026-08-27 exact hosted replay forensics.
 jobs:
   forensics:
     runs-on: ubuntu-24.04
