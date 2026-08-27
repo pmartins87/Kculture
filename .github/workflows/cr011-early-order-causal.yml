@@ -28,9 +28,9 @@ jobs:
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
           test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
           test "$(git rev-parse HEAD:configs/cr011_fresh_exploratory_seeds_v1.json)" = "1833dcc168da09b39c95fd4a734d97a4845a36db"
-          test "$(git rev-parse HEAD:tools/audit_cr011_order_only.py)" = "180a596bb52bf1c1b124ebe9a0cfa1dcbe3834a3"
+          test "$(git rev-parse HEAD:tools/audit_cr011_order_only.py)" = "8f9a1b173438228f63cc77241d9837b8051694ea"
           test "$(git rev-parse HEAD:tools/compare_cr011_triplet_field.py)" = "e7f3d7d7651a226b4aa35e62127179b1fec6e8ee"
-      - name: Prove order-only action equivalence
+      - name: Prove order-only action equivalence on strict OOT states
         run: python tools/audit_cr011_order_only.py
       - name: Fetch exact Kaito Sparse V13 package
         run: python tools/fetch_exact_package_main.py --handle kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13 --output artifacts/cr011/opponents/kaito/main.py --receipt artifacts/cr011/opponents/kaito/receipt.json
