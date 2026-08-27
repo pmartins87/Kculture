@@ -1,10 +1,10 @@
 # CR-007 — High-confidence opponent-aware front-running
 
-Status: **FROZEN / READY TO RUN**
+Status: **COMPLETE / PASS**
 
 ## Question
 
-CR-004 and CR-005 proved that opponent-public state predicts near-future economic behavior, including imminent CARROT/MELON sales. CR-006 found substantial gross economic headroom but failed because a low 0.20 trigger created too many false positives. Can thresholds selected **without using the final test day** isolate only high-confidence situations that retain positive economic value?
+CR-004 and CR-005 proved that opponent-public state predicts near-future economic behavior. CR-006 found substantial gross economic headroom but failed because a low 0.20 trigger created too many false positives. Can thresholds selected **without using the final test day** isolate only high-confidence situations that retain positive economic value?
 
 ## Frozen split
 
@@ -18,25 +18,41 @@ CR-004 and CR-005 proved that opponent-public state predicts near-future economi
 
 ## Threshold selection
 
-For each CARROT/TOMATO/STRAWBERRY/MELON forecast, scan thresholds 0.20..0.90 in 0.05 increments using **only Aug-25**. A product is enabled only if the threshold has:
+For each CARROT/TOMATO/STRAWBERRY/MELON forecast, thresholds 0.20..0.90 in 0.05 increments were scanned using **only Aug-25**. A product was enabled only if the calibration threshold had >=20 stock-eligible triggers, precision >=0.55 and mean isolated net proxy >=$5/trigger.
 
-- >=20 stock-eligible triggers;
-- precision >=0.55;
-- mean isolated net proxy >=$5/trigger.
+## Canonical result
 
-Among eligible thresholds choose the highest mean net proxy, then precision, then support. The Aug-26 outcome is never used to choose or modify thresholds.
+GitHub Actions run **33093144911 — SUCCESS**. Artifact **9655430101**, ZIP digest **SHA-256 `78562629ae026c5b83ab391f01576340c442be62a67ef66dda40eb947491ed4e`**.
 
-## Predeclared final gate
+Calibration enabled exactly two products:
 
-`HIGH_CONFIDENCE_FRONTRUN_PASS` requires all:
+- **CARROT threshold 0.90**;
+- **STRAWBERRY threshold 0.85**.
 
-1. >=2 products enabled by calibration;
-2. >=40 total Aug-26 triggers;
-3. Aug-26 precision >=0.55;
-4. mean Aug-26 net proxy >=$10/trigger;
-5. headroom / false-positive-regret >=1.50;
-6. >=2 products with >=10 triggers, precision >=0.55 and positive net value.
+TOMATO and MELON were disabled before the final test because they did not satisfy the frozen calibration support/value rule.
 
-A PASS still does **not** authorize hosted submission. It authorizes an exact causal wrapper/simulation test in which early sells actually modify the market trajectory.
+Strict Aug-26 test:
+
+- total triggers: **257**;
+- true positives: **250**;
+- overall precision: **0.97276**;
+- gross front-run headroom: **$46,021**;
+- false-positive regret proxy: **$33**;
+- net proxy: **+$45,988**;
+- mean net proxy: **+$178.94/trigger**;
+- headroom/regret ratio: **1394.58**.
+
+Per enabled product:
+
+- CARROT: 21 triggers, 18 true positives, **85.7% precision**, net **+$1,124**, mean +$53.52/trigger;
+- STRAWBERRY: 236 triggers, 232 true positives, **98.3% precision**, net **+$44,864**, mean +$190.10/trigger.
+
+Every predeclared final gate passed.
+
+## Decision
+
+**PASS for causal agent testing, not for hosted submission.** The high-confidence signal is strong enough to embed in a minimal identity-free wrapper and test with actual market trajectory changes. CR-008 performs that causal test.
+
+The intended deployment behavior is selective: preserve the robust base unless the public opponent state produces one of the two calibrated high-confidence signals. No opponent name, team, agent, submission or episode identity is used.
 
 Tool: `tools/cr007_high_confidence_frontrun.py`.
