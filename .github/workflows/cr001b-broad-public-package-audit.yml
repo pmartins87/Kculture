@@ -1,0 +1,87 @@
+name: cr001b-broad-public-package-audit
+
+on:
+  push:
+    paths:
+      - .github/workflows/cr001b-broad-public-package-audit.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: flex-v59
+            handle: flexonafft/kaggriculture-multi-route-farming-agent/versions/59
+            score: 2767.3
+          - id: prvsiyan-frontier-v5
+            handle: prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/5
+            score: 2798.6
+          - id: bruce-pipeline-v1
+            handle: bruceqdu/my-2026-08-04-high-score-pipeline/versions/1
+            score: 2754.9
+          - id: salem-v2
+            handle: salemali7/kaggriculture-3000-socre/versions/2
+            score: 2702.3
+          - id: andrew-original-v10
+            handle: andrewsokolovsky/kaggriculture/versions/10
+            score: 2671.3
+          - id: roman-hamburger-v21
+            handle: romantamrazov/kaggriculture-hamburger/versions/21
+            score: 2391.0
+          - id: anas-v2
+            handle: anasriaz/kaggriculture/versions/2
+            score: 2213.8
+          - id: prvsiyan-baseline-v2
+            handle: prvsiyan/kaggriculture-baseline/versions/2
+            score: 2123.7
+          - id: tetsu-town-v1
+            handle: tetsutani/read-the-town-build-the-farm-kaggriculture/versions/1
+            score: 2043.8
+          - id: renji-builder-v3
+            handle: degnonguidi/kaggriculture-agent-builder/versions/3
+            score: 1771.3
+          - id: rauf-vegetable-v1
+            handle: rauffauzanrambe/kaggriculture-finding-conditional-fresh-vegetable/versions/1
+            score: 1549.1
+          - id: pilkwang-economic-v13
+            handle: pilkwang/kaggriculture-scenario-aware-economic-policy/versions/13
+            score: 1289.6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -U kagglehub
+      - name: Audit exact historical notebook package
+        run: >-
+          python tools/audit_public_submission_package.py
+          --target-id "${{ matrix.id }}"
+          --handle "${{ matrix.handle }}"
+          --reported-score "${{ matrix.score }}"
+          --output-dir "artifacts/cr001b/${{ matrix.id }}/notebook_output"
+          --manifest "artifacts/cr001b/${{ matrix.id }}/manifest.json"
+      - name: Print compact identity summary
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('artifacts/cr001b/${{ matrix.id }}/manifest.json').read_text())
+          print('TARGET',d['target_id'],'SCORE',d['reported_historical_score'],'IDENTITY',d['identity_classification'])
+          print('OUTPUT',[(x['path'],x['sha256']) for x in d['output_files']])
+          print('PACKAGE_PY',[(x['path'],x['sha256']) for x in d['packaged_python_files']])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr001b-${{ matrix.id }}
+          path: |
+            artifacts/cr001b/${{ matrix.id }}/manifest.json
+            artifacts/cr001b/${{ matrix.id }}/notebook_output/*.tar.gz
+            artifacts/cr001b/${{ matrix.id }}/notebook_output/*.tgz
+            artifacts/cr001b/${{ matrix.id }}/notebook_output/*.tar
+            artifacts/cr001b/${{ matrix.id }}/notebook_output/*.zip
+          if-no-files-found: warn
