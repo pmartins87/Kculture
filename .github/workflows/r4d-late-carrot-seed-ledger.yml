@@ -22,7 +22,7 @@ jobs:
         run: python tools/fetch_public_opponents.py
       - name: Verify identities
         run: |
-          test "$(git rev-parse HEAD:tools/inspect_late_carrot_seed_ledger.py)" = "2bb0290ba8bcad4670f6f81b79975484c85ac937"
+          test "$(git rev-parse HEAD:tools/inspect_late_carrot_seed_ledger.py)" = "5b91593fd07d01c3f351c109f530ef138828d624"
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
       - name: Run corrected exact seed ledger audit V2
         run: python tools/inspect_late_carrot_seed_ledger.py --output artifacts/kexp026/report.json
