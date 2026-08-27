@@ -1,0 +1,33 @@
+name: kexp046-kexp041-causal-value
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp046-kexp041-causal-value.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify identities
+        run: |
+          test "$(git rev-parse HEAD:tools/audit_kexp041_causal_value.py)" = "f7622d498422eb4714850dffd08eb00c2bbf54a2"
+          test "$(git rev-parse HEAD:candidates/r4d_jit_carrot_one.py)" = "97e102933f96a85fcc586ec4a96500069902f035"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Run paired-world causal audit
+        run: python tools/audit_kexp041_causal_value.py --output artifacts/kexp046/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp046-kexp041-causal-value
+          path: artifacts/kexp046/report.json
