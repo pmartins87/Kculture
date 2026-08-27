@@ -5,6 +5,10 @@ environmental seeds. Unlike KEXP-025, this diagnostic never sums repeated
 snapshots of the same seed stock. It reconstructs the per-step seed ledger and
 asks whether any CARROT seed at a mechanically safe WHEAT-plant step is truly
 unreserved by same-turn and all later base CARROT plant intents.
+
+Kaggle replay convention: the action submitted from observation step t is stored
+on replay frame t+1, alongside the post-action observation. Ledger transitions
+therefore compare observation[t] -> observation[t+1] against action[t+1].
 """
 from __future__ import annotations
 
@@ -70,7 +74,8 @@ def analyze(replay, seed, source):
     for t in range(600, min(719, len(steps) - 1)):
         entry = steps[t][0]
         nxt = steps[t + 1][0]
-        action = entry.get("action") or {}
+        # Kaggle stores the action that produced frame t+1 on frame t+1.
+        action = nxt.get("action") or {}
         c0, c1 = seed_stock(entry, "CARROT"), seed_stock(nxt, "CARROT")
         w0, w1 = seed_stock(entry, "WHEAT"), seed_stock(nxt, "WHEAT")
         cp, wp = plant_count(action, "CARROT"), plant_count(action, "WHEAT")
@@ -159,7 +164,7 @@ def main():
             "first_safe_unreserved_step_histogram": string_hist(firsts),
             "last_carrot_intent_step_histogram": string_hist([e["last_carrot_intent_step"] for e in ee]),
         }
-    payload = {"schema_version": "late-carrot-seed-ledger-v2", "safe_steps": sorted(SAFE_STEPS), "summary": summary, "episodes": episodes}
+    payload = {"schema_version": "late-carrot-seed-ledger-v3", "safe_steps": sorted(SAFE_STEPS), "summary": summary, "episodes": episodes}
     out = ROOT / args.output; out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     print(json.dumps(summary, indent=2, sort_keys=True))
