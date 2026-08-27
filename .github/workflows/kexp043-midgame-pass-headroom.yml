@@ -1,0 +1,32 @@
+name: kexp043-midgame-pass-headroom
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp043-midgame-pass-headroom.yml
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen diagnostic and base
+        run: |
+          test "$(git rev-parse HEAD:tools/audit_midgame_pass_headroom.py)" = "5afb75ca0b20f64af72ba32d0f80670fa3b8f89a"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Audit midgame PASS headroom
+        run: python tools/audit_midgame_pass_headroom.py --output artifacts/kexp043/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp043-midgame-pass-headroom
+          path: artifacts/kexp043/report.json
