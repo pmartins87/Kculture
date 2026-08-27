@@ -1,0 +1,30 @@
+name: kexp039-live-terminal-sell-timing
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp039-live-terminal-sell-timing.yml
+  workflow_dispatch:
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Verify frozen diagnostic
+        run: test "$(git rev-parse HEAD:tools/live_terminal_sell_timing.py)" = "67487d740a5e2a3ac67a01e60c7d58b59d91a6e5"
+      - name: Mine exact terminal SELL timing
+        run: python tools/live_terminal_sell_timing.py --top 20 --output artifacts/kexp039/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp039-live-terminal-sell-timing
+          path: artifacts/kexp039/**
