@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - 'models/cr007_pure_models.json'
+      - '.github/workflows/cr008-model-parity.yml'
   workflow_dispatch:
 
 jobs:
