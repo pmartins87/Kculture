@@ -1,48 +1,60 @@
 # KEXP-20260827-032 — terminal WATER reallocation
 
-Status: **RUNNING / DEVELOPMENT CANDIDATE**
+Status: **COMPLETE / REJECTED / MECHANICS PREMISE CORRECTED**
 
-## Prize-first mechanism
+## Original hypothesis
 
-The final executable partial day is states 696..718. There is no later daily crop/animal production refresh before terminal scoring. Therefore WATER submitted in this window has zero possible terminal-production value.
+The experiment assumed that because there is no daily refresh after step 695, WATER during states 696..718 could not add terminal crop value.
 
-Inspection of the KEXP-024 development replays showed frozen R4B still emits roughly **10 WATER actions per game** in 696..718 (324 candidate-side WATER actions across 32 direct-panel games). This is a large, exact-mechanics terminal-throughput leak.
+That assumption was **wrong for one-time crops**.
 
-## Candidate
+In the frozen official engine, WATER on a one-time crop applies its bonus **immediately when the WATER action executes** if the crop is inside its watering bonus window. It increments `yield_units` directly, capped by crop max yield. Therefore a final-day WATER can still create product that is later HARVESTed, DROPed and SOLD before terminal scoring.
+
+This distinction does not depend on a day refresh.
+
+## Candidate tested
 
 `candidates/r4d_terminal_water_harvest.py`
 
-Frozen R4B is unchanged everywhere except when a farmer/hand base action is WATER during 696..718:
+Frozen R4B was unchanged except that its WATER actions during 696..718 were replaced by HARVEST when already standing on positive yield, DROP in a narrow shed case, or PASS otherwise.
 
-1. if the actor is already standing on a tile with positive `yield_units`, replace WATER with HARVEST;
-2. else if the actor is on the shed and carries sellable inventory, replace with DROP;
-3. otherwise replace with PASS.
-
-No movement, route selection, crop allocation, FEED, CARE, seed buying, earlier action, or market logic is changed. R4B's step-718 projected-shed liquidation remains active.
-
-This first candidate is deliberately bounded. It tests whether simply reclaiming impossible-to-pay WATER produces measurable gain before building a full final-day planner.
-
-Candidate blob: `a34f7d137b6a06b45714bc7f79bb8c3995c835d0`.
+Candidate blob: `a34f7d137b6a06b45714bc7f79bb8c3995c835d0`.  
 Base R4B blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
 
-## Frozen development gate
+## Canonical result
 
-Run all 16 development seeds in both seats against the modern public panel:
+Actions run **`33041733810` — SUCCESS**.  
+Artifact **`9634478348`**.  
+Artifact ZIP digest **SHA-256 `fae17f93588f092df3b70784e5fd14a89f95bfe9b53736a2e3d493077de1dab8`**.
 
-- Kaito V27;
-- Rayk V11;
-- Andrew V12.
+All runs had zero runtime/status errors.
 
-Also run 16 seeds × both seats directly against frozen R4B.
+Modern development panel:
 
-Promotion to broader exploratory testing requires:
+- Kaito V27: **25-7-0**, mean terminal delta +3,988.34;
+- Rayk V11: **30-2-0**, mean terminal delta +7,076.72;
+- Andrew V12: **24-8-0**, mean terminal delta +4,891.00;
+- combined: **79-17-0** versus frozen R4B reference **81-15-0**.
 
-- zero runtime/status errors;
-- combined modern-panel W/L no worse than frozen R4B's **81-15**;
-- no opponent family loses more than one win versus the frozen R4B reference;
-- direct candidate-vs-R4B score rate >= **0.53125** (at least a one-game edge on 32 games, ties half);
-- direct mean terminal delta > 0.
+Direct candidate vs frozen R4B, 16 development seeds × both seats:
 
-A panel tie with only tiny money gain is not enough for hosted submission. A clear direct edge plus preserved panel W/L would justify expanding toward a stronger terminal planner or, if the effect is already material and mechanically stable, considering hosted calibration under the revised submission policy.
+- **1-31-0**;
+- score rate **0.03125**;
+- mean terminal delta **-441.375**.
 
-No validation or held-out seeds are accessed.
+The candidate fails every meaningful promotion criterion. The almost systematic direct loss is strong empirical evidence that the supposedly wasteful WATER actions often carry real terminal value.
+
+## Decision
+
+**Reject KEXP-032 completely. Do not suppress final-day WATER by step alone.**
+
+The correct next question is state-specific marginal value:
+
+1. does this WATER immediately increase `yield_units` on the current crop?
+2. if yes, is the extra unit actually harvested before terminal?
+3. can it reach shed/market and be sold before scoring?
+4. if no to all value paths, only then is the WATER reclaimable.
+
+This failure also invalidates the blanket WATER premise used when KEXP-033 was launched. KEXP-033's result may still be diagnostically informative, but it cannot be promoted without re-auditing the WATER decisions against the corrected mechanic.
+
+No validation or held-out seeds were accessed.
