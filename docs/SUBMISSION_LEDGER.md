@@ -6,21 +6,25 @@ Record every Kaggle agent submission here with exact provenance and observed hos
 
 | ID | UTC timestamp | Git SHA | Agent/version | Local evidence | Ladder rating | Episodes | Status | Notes |
 |---|---|---|---|---|---:|---:|---|---|
-| unknown | 2026-08-27 ~14:06 UTC screenshot | `b8949a9c43ba9d667b043b3d39ab3e29a3fbaa48` | `KEXP-050-reallocate614-validation-v1` | dev 21-11; live-meta 15-11-14; fresh stress 87-47-58; validation direct 14-8-10 | **145.1** | unknown | Complete | Green check. Only +3.1 versus contemporaneous R4B 142.0. First hosted evidence says the locally validated micro-overlay line is not prize-grade. |
-| unknown | 2026-08-27 ~14:06 UTC screenshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **142.0** | unknown | Complete | Same screenshot. Rating is dynamic and rebounded from prior 110.5 snapshot. |
-| unknown | 2026-08-27 earlier snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **110.5** | unknown | Complete | Earlier user-visible score. |
-| unknown | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **135.7** | unknown | Complete | Intermediate snapshot. |
-| unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **161.6** | unknown | Complete | First observed hosted snapshot. |
+| **55818927** | 2026-08-27 ~16:20 UTC screenshot | `b8949a9c43ba9d667b043b3d39ab3e29a3fbaa48` | `KEXP-050-reallocate614-validation-v1` | dev 21-11; live-meta 15-11-14; fresh stress 87-47-58; validation direct 14-8-10 | **93.8** | unknown | Complete | Current hosted evidence is materially worse than R4B. User supplied Game History episode `100987834`; selected replay shows a loss to Atharva S. Naladkar. |
+| **55784381** | 2026-08-27 ~16:20 UTC screenshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **143.2** | unknown | Complete | User supplied Game History episode `100996939`; selected replay is shown as a tie versus Sathisvaran Ragu. |
+| **55818927** | 2026-08-27 ~14:06 UTC screenshot | `b8949a9c43ba9d667b043b3d39ab3e29a3fbaa48` | `KEXP-050-reallocate614-validation-v1` | dev 21-11; live-meta 15-11-14; fresh stress 87-47-58; validation direct 14-8-10 | **145.1** | unknown | Complete | Green check. Only +3.1 versus contemporaneous R4B 142.0. First hosted evidence says the locally validated micro-overlay line is not prize-grade. |
+| **55784381** | 2026-08-27 ~14:06 UTC screenshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **142.0** | unknown | Complete | Same screenshot. Rating is dynamic and rebounded from prior 110.5 snapshot. |
+| **55784381** | 2026-08-27 earlier snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **110.5** | unknown | Complete | Earlier user-visible score. |
+| **55784381** | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **135.7** | unknown | Complete | Intermediate snapshot. |
+| **55784381** | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **161.6** | unknown | Complete | First observed hosted snapshot. |
 
 ## Submission 1 — R4B
 
 User-visible identity:
 
+- submission ID: **`55784381`**;
 - filename: `Kculture_R4B_market_only_validated_v1_submission.tar.gz`;
 - description: `Kculture R4B market-only validated v1`;
 - status: **Complete** / green check;
-- observed ratings: **161.6 → 135.7 → 110.5 → 142.0**;
-- submission ID and hosted episode count not yet observed.
+- observed ratings: **161.6 → 135.7 → 110.5 → 142.0 → 143.2**;
+- user-supplied hosted episode example: **`100996939`**;
+- hosted episode count not yet observed.
 
 Exact package provenance:
 
@@ -35,12 +39,14 @@ Exact package provenance:
 
 User-visible identity:
 
+- submission ID: **`55818927`**;
 - filename: `Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz`;
 - description: `Kculture KEXP050 reallocate614 validated v1`;
 - status: **Complete** / green check;
-- first observed rating: **145.1** about one hour after submission;
-- contemporaneous R4B rating: **142.0**;
-- submission ID and hosted episode count not yet observed.
+- observed ratings: **145.1 → 93.8**;
+- contemporaneous R4B latest rating: **143.2**;
+- user-supplied hosted episode example: **`100987834`**, shown as a loss to Atharva S. Naladkar;
+- hosted episode count not yet observed.
 
 Exact provenance:
 
@@ -58,11 +64,11 @@ Exact provenance:
 
 ## 2026-08-27 competitive-reset interpretation
 
-The 145.1 vs 142.0 hosted snapshot is decisive evidence that the R4B→KEXP-050 micro-overlay program is not closing the prize-scale gap. The local promotion chain was executed correctly, so the failure is informative rather than a packaging bug.
+The hosted trajectory now makes the micro-overlay failure clearer: KEXP-050 fell from 145.1 to **93.8** while R4B sat at **143.2**. The locally validated R4B→KEXP-050 line is therefore closed as a prize-scale architecture direction; KEXP-050 remains useful only as calibration evidence.
 
-More importantly, the old local strong panel is now considered **identity-unproven**. Historical high-scoring public Kaggle notebooks often publish both a top-level `main.py` and a separate `submission.tar.gz`; previous Kculture workflows benchmarked the top-level `main.py`. Until we prove that this file is byte/behavior equivalent to the exact packaged agent that earned the reported ladder score, old results such as 32-0 versus “Rayk V11” or 25-7 versus “Kaito V27” must not be treated as calibrated strength evidence.
+CR-001 subsequently proved that Kaito/Rayk/Andrew package identities were not the problem. CR-002 then showed the old historical public-opponent laboratory was structurally miscalibrated: R4B/KEXP-050 could dominate many historically high-scoring public agents locally while remaining weak hosted. Current work therefore prioritizes current-meta calibration plus identity-free opponent adaptation and exact hosted-loss forensics.
 
-**Competitive Reset CR-001:** freeze R4B/KEXP-050 as calibration references; audit the exact public submission packages for Kaito V4, Rayk V11, Andrew V12 and Flexonafft V59; rebuild the local benchmark around identity-proven scored packages; then establish a true 2000–3000-class public baseline before further micro-optimization.
+The user supplied exact hosted submission IDs and episode IDs on 2026-08-27. Same-day official episode datasets are not yet anonymously downloadable while the current daily dataset is unpublished/permission-gated; the exact replays will be fetched automatically once the public daily dataset becomes available.
 
 ## Required notes per future submission
 
