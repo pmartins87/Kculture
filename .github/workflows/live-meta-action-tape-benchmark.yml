@@ -17,7 +17,9 @@ jobs:
           python-version: "3.11"
           cache: pip
       - name: Install dependencies
-        run: python -m pip install -r requirements.txt
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install kagglehub
       - name: Fetch frozen R4B base
         run: python tools/fetch_public_opponents.py
       - name: Verify identities
