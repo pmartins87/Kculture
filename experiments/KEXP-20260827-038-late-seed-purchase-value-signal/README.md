@@ -1,56 +1,78 @@
 # KEXP-20260827-038 — purchase-time late crop value signal
 
-Status: **RUNNING / DIAGNOSTIC ONLY**
+Status: **COMPLETE / PASS / BOUNDED PURCHASE REALLOCATION AUTHORIZED**
 
 ## Why this follows KEXP-034
 
 KEXP-034 rejected its deliberately conservative `+20` generic crop proxy, but discovered a stronger mechanics fact: in the audited safe late route slots, WHEAT and same-route CARROT have equal unit yield — 3 vs 3 in the earlier safe block and 2 vs 2 in the later block.
 
-For an audited route yield `q`, the legal current-state comparative value therefore reduces to:
+For an audited route yield `q`, the legal current-state comparative value reduces to:
 
 `q * (CARROT_price - WHEAT_price) - 10`
 
 where 10 is the additional CARROT seed cost.
 
-The practical problem is timing. KEXP-026 proved there is no idle CARROT seed; a deployable policy must reallocate an earlier R4B WHEAT seed purchase. KEXP-038 asks whether the exact route-value sign is already informative at that purchase state.
+KEXP-026 proved there is no idle CARROT seed, so a deployable policy must deliberately reallocate WHEAT seed purchasing. KEXP-038 tests whether this exact value sign is already informative at the preceding R4B WHEAT purchase state.
 
 ## Frozen protocol
 
-Run unchanged `R4B-market-only-validated-v1` against deterministic `starter` on:
+Unchanged `R4B-market-only-validated-v1` vs deterministic `starter` on all 16 development seeds and all 20 exploratory live-meta environmental seeds. Corrected replay alignment is `state t -> action frame t+1`.
 
-- all 16 development seeds;
-- all 20 exploratory live-meta environmental seeds.
+For every R4B WHEAT plant in KEXP-023's mechanically safe windows (614–618, 620–623, 636–647), the audit finds the latest preceding R4B `BUY_SEED WHEAT`, traces the actual later WHEAT HARVEST to get route yield `q`, and evaluates the exact equal-yield margin at purchase, plant and harvest pricing. Harvest-time pricing is diagnostic oracle only.
 
-Use corrected replay alignment (`state t -> action frame t+1`).
+## Canonical result
 
-For every R4B WHEAT plant in KEXP-023's mechanically safe windows (614–618, 620–623, 636–647):
+Actions run **`33043517944` — SUCCESS**.  
+Artifact **`9634809519`**, ZIP digest **SHA-256 `9d18dc5c152f6adbcc1a0830908d0b085320376711ca3e33215219a816dd4e9e`**.
 
-1. find the latest preceding R4B `BUY_SEED WHEAT` during steps 580–635;
-2. trace the actual same-tile WHEAT HARVEST and record its route yield `q`;
-3. compute the exact equal-yield value margin at the preceding purchase state;
-4. compute the same margin again at plant time;
-5. use harvest-time prices only as a forbidden diagnostic oracle to test whether the purchase-time sign survives to monetization.
+Mapped safe plant events: **616** total.
 
-No top-agent behavior or identity is used.
+Development:
 
-## Predeclared rule and gate
+- 272 mapped events;
+- purchase-time sign positive in **94 events across 6/16 episodes**;
+- positive-purchase -> positive plant-time value: **94/94 = 100%**;
+- positive-purchase -> positive harvest-price oracle value: **94/94 = 100%**;
+- mean later oracle margin: **+39.86**;
+- median later oracle margin: **+30**.
 
-There is no threshold search. The tested deployable sign is exactly:
+Exploratory live-meta:
 
-`q * (CARROT_price - WHEAT_price) - 10 > 0`
+- 344 mapped events;
+- purchase-time sign positive in **140 events across 8/20 episodes**;
+- positive-purchase -> positive plant-time value: **140/140 = 100%**;
+- positive-purchase -> positive harvest-price oracle value: **140/140 = 100%**;
+- mean later oracle margin: **+77.25**;
+- median later oracle margin: **+34.5**.
 
-A bounded purchase-reallocation candidate becomes eligible only if all are true:
+Combined: **234/234** sign-positive purchase events remained positive both at plant time and under the later harvest-price oracle.
 
-- development: sign-positive purchase states appear in >=4 episodes and >=10 mapped safe-plant events;
-- exploratory live-meta: sign-positive purchase states appear in >=5 episodes and >=10 events;
-- in each pool, >=70% of sign-positive purchase events remain positive under the later harvest-price oracle;
-- mean later oracle margin among sign-positive purchase events is positive in each pool.
+The predeclared gate required support in >=4 development and >=5 live-meta episodes, >=10 events in each pool, >=70% oracle-positive precision and positive mean oracle margin. **Every condition passes.**
 
-Passing authorizes a development-only candidate that reallocates at most **two** seeds from an existing R4B WHEAT purchase into CARROT and converts only mechanically safe WHEAT plant slots when the value condition remains favorable. It does not authorize validation or hosted submission.
+## Timing structure
 
-If the gate fails, purchase-time current prices are too unstable for this simple controller and the crop branch must move to a richer bounded forecast/rollout model.
+The latest purchase feeding a safe route falls into a clean timing split in this audit:
 
-No validation or held-out seeds are accessed.
+- purchase states `599, 614, 616, 619, 620, 621` feed routes whose harvested WHEAT yield is **3**;
+- purchase states `622, 623` feed routes whose harvested WHEAT yield is **2**.
+
+Across all mapped events, route yields were 334 events at `q=3` and 282 at `q=2`. This makes `q` deployable from route timing rather than future observation.
+
+## Decision
+
+**PASS. Authorize one bounded development candidate.**
+
+The candidate may:
+
+1. inspect legal current WHEAT/CARROT market prices when R4B issues a mapped late WHEAT seed purchase;
+2. use the mechanics-derived route yield `q` for that purchase timing;
+3. when `q * (CARROT_price - WHEAT_price) - 10 > 0`, reallocate at most two WHEAT seed units into CARROT;
+4. spend only those explicitly added CARROT credits by converting mechanically safe downstream R4B WHEAT plant intents;
+5. preserve all other R4B behavior and re-check current value at the plant state when practical.
+
+This PASS authorizes development W/L testing only. Validation, held-out seeds and hosted submission remain closed.
+
+No threshold was fitted after seeing the data; the sign boundary is the exact equal-yield economic break-even condition.
 
 Tool: `tools/audit_late_seed_purchase_value_signal.py`  
 Frozen tool blob: `41419bf62924da4b2dc585641d0569c936243f8f`
