@@ -1,10 +1,10 @@
 # KEXP-20260827-052 — fresh exploratory stress
 
-Status: **RUNNING**
+Status: **COMPLETE — BOTH PASS / KEXP-050 PREFERRED BY FROZEN RULE**
 
 ## Purpose
 
-KEXP-045 and KEXP-050 both produced positive W/L evidence against frozen R4B on previously used development/exploratory pools, but the observed effects are small enough that sampling variance remains material. Before opening validation, increase resolution on a completely fresh exploratory environmental distribution.
+KEXP-045 and KEXP-050 both produced positive W/L evidence against frozen R4B on previously used development/exploratory pools, but the observed effects were small enough that sampling variance remained material. Before opening validation, increase resolution on a completely fresh exploratory environmental distribution.
 
 ## Candidates
 
@@ -14,16 +14,16 @@ KEXP-045 and KEXP-050 both produced positive W/L evidence against frozen R4B on 
 
 ## Fresh seed protocol
 
-`tools/run_fresh_exploratory_stress.py` deterministically generates 96 seeds from master seed `202608270052`, excluding all values in:
+`tools/run_fresh_exploratory_stress.py` deterministically generated 96 seeds from master seed `202608270052`, excluding all values in:
 
 - development;
 - validation;
 - held-out;
 - prior exploratory live-meta environmental pool.
 
-Each candidate plays frozen R4B on all 96 seeds in both seats: **192 games per candidate**.
+Each candidate played frozen R4B on all 96 seeds in both seats: **192 games per candidate**.
 
-Validation and held-out remain sealed.
+Validation and held-out remained sealed.
 
 ## Predeclared gate
 
@@ -36,4 +36,34 @@ For each candidate independently:
 
 If both pass and their overall score rates differ by less than 0.01, prefer KEXP-050 because it changes an existing WHEAT seed purchase into CARROT in the same market slot, has lower incremental cost, and is strategically less invasive. Otherwise prefer the materially stronger passing candidate.
 
-Passing KEXP-052 authorizes candidate freeze and fresh validation; it does not open held-out.
+## Result
+
+Run: `33069453972` — **SUCCESS**.
+
+### KEXP-045
+
+Artifact `9646196500`; ZIP SHA-256 `d2513e1bb88e8ff5e1262347a60b2eeaa956afa0834423c0ce639802d894585a`.
+
+- 192 games; zero errors;
+- **86–46–60**;
+- score rate **0.60417**;
+- mean terminal delta **+88.71**;
+- seat 0 score rate **0.58333**, mean delta **+27.53**;
+- seat 1 score rate **0.62500**, mean delta **+149.90**.
+
+### KEXP-050
+
+Artifact `9646165805`; ZIP SHA-256 `157009b9fbc8661e48c495c959fb65cd3ecb0b9165d2644e47d255ab563bc9de`.
+
+- 192 games; zero errors;
+- **87–47–58**;
+- score rate **0.60417**;
+- mean terminal delta **+41.24**;
+- seat 0 score rate **0.59896**, mean delta **−20.15**;
+- seat 1 score rate **0.60938**, mean delta **+102.63**.
+
+Both candidates pass the frozen stress gate. Their aggregate score rates are exactly tied, so the predeclared tie-break selects **KEXP-050** because it is the less invasive intervention.
+
+## Decision
+
+KEXP-052 correctly authorized KEXP-050 for fresh validation. The later hosted underperformance of KEXP-050 must not retroactively invalidate this result; instead it is evidence that even broad local environmental stress did not reproduce the hosted ladder distribution. Lab-to-host calibration remains a primary unresolved problem.
