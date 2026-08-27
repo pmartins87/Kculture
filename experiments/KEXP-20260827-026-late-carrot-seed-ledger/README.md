@@ -1,40 +1,54 @@
 # KEXP-20260827-026 — exact late CARROT seed ledger
 
-Status: **RUNNING / CORRECTIVE DIAGNOSTIC V2 ONLY**
+Status: **COMPLETE / STOCK-ONLY SUBSTITUTION REJECTED**
 
-## Why this replaces the stock-only interpretation of KEXP-025
+## Why this replaces KEXP-025
 
-KEXP-025 correctly found repeated late snapshots with positive CARROT seed stock, but its per-episode `stock_only_swap_capacity` summed those snapshots. That can count the **same physical seed multiple times**. A concrete replay pattern contains one CARROT seed visible across many safe WHEAT-plant steps and later consumed by the frozen base route.
+KEXP-025 incorrectly summed repeated snapshots of the same CARROT seed and therefore overstated stock-only substitution capacity. KEXP-026 rebuilt the seed ledger with exact replay alignment and same-turn/future reservation.
 
-Therefore the KEXP-025 claim that the median episode had nine stock-only substitutions available is **withdrawn**. Its raw seed-stock/seed-buy observations remain useful; its summed stock-only capacity is not a valid deployable capacity estimate.
+A second correction was required after establishing the Kaggle replay convention exactly: the action chosen from observation/state frame `t` is stored on replay frame `t+1`. V3 is the canonical aligned result.
 
-## Corrected question
+## Canonical protocol
 
-Across the same 16 development + 20 exploratory-live-meta environmental seeds, with frozen R4B unchanged vs `starter`:
+Frozen R4B unchanged vs deterministic `starter` on:
 
-1. Is the replay observation/action alignment consistent with an exact seed ledger?
-2. At a KEXP-023 mechanically safe WHEAT-plant step, is any CARROT stock truly **unreserved by same-turn and all later frozen-base CARROT plant intents**?
+- all 16 development seeds;
+- all 20 exploratory live-meta environmental seeds.
 
-The conservative deployable-safe criterion requires:
+At every KEXP-023 mechanically safe WHEAT-plant step (614–618, 620–623, 636–647), ask whether any CARROT seed is truly unreserved after accounting for:
 
-- step in 614–618, 620–623 or 636–647;
-- frozen base submits at least one WHEAT `PLANT` intent there;
-- pre-action CARROT stock exceeds the number of base CARROT `PLANT` intents submitted **in that same turn**;
-- **zero later CARROT `PLANT` intents** through the end of the episode.
+- base CARROT plant intents in the same turn;
+- all later base CARROT plant intents;
+- exact observation/action timing.
 
-The same-turn reservation is essential because the official engine validates all `PLANT` requests for a crop atomically: if same-turn demand exceeds available pre-action seeds, **all** plant requests for that crop are replaced by PASS. The first KEXP-026 run used the later-intent guard but omitted this same-turn reservation and is therefore superseded by V2 before any policy decision.
+No strategy mutation, validation, or held-out access.
 
-This deliberately refuses to treat later seed purchases as restoring equivalence: consuming a seed early shifts the seed ledger and can invalidate a later base plant.
+## Canonical result
 
-## Gate
+Actions run **`33040343952` — SUCCESS**.
+Artifact **`9633685604`**, ZIP digest **SHA-256 `236c1d4e7beb6b0337946bcd6422b3bccac6d923ba2be3e8974434ac3114926d`**.
 
-No policy is promoted by this diagnostic.
+Exact ledger sanity:
 
-- First, `alignment_bad_total` must be zero in both pools. If not, repair the ledger model before any crop candidate.
-- A no-purchase stock-only candidate is eligible only if at least **50% of episodes in both pools** contain at least one truly-unreserved safe candidate step under the V2 same-turn + future reservation rule.
-- Otherwise, stock-only substitution is rejected and the next crop candidate must explicitly reallocate a bounded number of WHEAT seed purchases into CARROT purchases before the safe planting window.
+- development `alignment_bad_total`: **0**;
+- exploratory live-meta `alignment_bad_total`: **0**;
+- all 36 episodes: **0** alignment inconsistencies.
 
-No validation or held-out seeds are accessed. No seed/opponent/episode identity may be used by a later policy.
+Truly unreserved safe CARROT stock:
 
-Tool: `tools/inspect_late_carrot_seed_ledger.py`
-Frozen V2 tool blob: `2bb0290ba8bcad4670f6f81b79975484c85ac937`
+- development: **0/16 episodes**;
+- exploratory live-meta: **0/20 episodes**;
+- combined: **0/36 episodes**;
+- total stock-only swap capacity: **0**.
+
+The last frozen-base CARROT plant intent is step 645 in 30/36 episodes; six episodes have no late CARROT intent. The apparent persistent one-seed stock seen by KEXP-025 is therefore normally reserved for the base route rather than idle capacity.
+
+## Decision
+
+**No-purchase WHEAT→CARROT substitution is rejected.**
+
+Any serious late crop-response candidate must deliberately reallocate seed purchases before the mechanically safe planting windows. It must use legal public state and must preserve enough inventory to avoid atomic PLANT invalidation.
+
+This result directly motivates KEXP-029, which searches for a conservative demand+price trigger from current high-Elo public trajectories before any seed-purchase mutation is implemented.
+
+Canonical tool blob: `4a602abc7db509e0e4903e2896565403a9dd5530`.
