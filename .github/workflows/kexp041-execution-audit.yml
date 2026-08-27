@@ -22,7 +22,7 @@ jobs:
         run: python tools/fetch_public_opponents.py
       - name: Verify frozen audit and candidate
         run: |
-          test "$(git rev-parse HEAD:tools/audit_kexp041_execution.py)" = "229c5f826d7e37fae2d26f0841da00f394ea16f6"
+          test "$(git rev-parse HEAD:tools/audit_kexp041_execution.py)" = "62ce8d1353e5f5ebcea05fdda1195610a4049b59"
           test "$(git rev-parse HEAD:candidates/r4d_jit_carrot_one.py)" = "97e102933f96a85fcc586ec4a96500069902f035"
       - name: Audit exact execution
         run: python tools/audit_kexp041_execution.py --output artifacts/kexp041-execution/report.json
