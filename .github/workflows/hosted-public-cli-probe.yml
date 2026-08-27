@@ -1,0 +1,30 @@
+name: hosted-public-cli-probe
+
+on:
+  push:
+    paths:
+      - .github/workflows/hosted-public-cli-probe.yml
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install current Kaggle CLI
+        run: python -m pip install -U "kaggle>=2.2.1"
+      - name: List episodes for a known public Kaggriculture submission
+        run: |
+          mkdir -p artifacts/hosted-cli-probe
+          kaggle competitions episodes 55426867 -v > artifacts/hosted-cli-probe/episodes.txt
+          head -40 artifacts/hosted-cli-probe/episodes.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-public-cli-probe
+          path: artifacts/hosted-cli-probe/**
+          if-no-files-found: warn
