@@ -1,57 +1,51 @@
 # KEXP-20260827-037 — early terminal non-input liquidation
 
-Status: **RUNNING / DEVELOPMENT CANDIDATE**
+Status: **DEVELOPMENT PASS / EXPLORATORY DIRECT RUNNING / NOT HOSTED-ELIGIBLE YET**
 
 ## Prize-first mechanism
 
 At the default town intervals, step **716** is the final town-consumption tick before terminal scoring. Neither executable step 717 nor 718 has another town tick.
 
-For `CARROT`, `TOMATO`, `STRAWBERRY`, `MELON`, `EGG`, `MILK`, and `WOOL`:
+For `CARROT`, `TOMATO`, `STRAWBERRY`, `MELON`, `EGG`, `MILK`, and `WOOL`, market inventory cannot decrease between 717 and 718 through town demand or BUY_PRODUCT. Their price can therefore only remain unchanged or fall from player sales. Selling already-available projected shed stock one step earlier weakly front-runs a later terminal dump.
 
-- they cannot be bought back through `BUY_PRODUCT`;
-- after step 717 their market inventory cannot decrease before step 718;
-- therefore their market price between 717 and 718 can only remain unchanged or fall because of player sales.
-
-For stock that is already in (or same-turn projected into) the shed at step 717, selling one turn earlier is therefore weakly better than waiting for R4B's step-718 liquidation, and may strictly improve price by front-running an opponent terminal dump.
-
-WHEAT and FERTILIZER are intentionally excluded because they remain usable/buyable inputs and do not satisfy the same dominance argument.
+WHEAT and FERTILIZER are intentionally excluded because they remain usable/buyable inputs.
 
 ## Candidate
 
-`candidates/r4d_early_terminal_noninput_sell.py`
+`candidates/r4d_early_terminal_noninput_sell.py`, blob `222e9c1de9bab043780af4a1f10bf8cd2f0c210f`.
 
-Frozen R4B is unchanged except at executable step 717:
+Frozen R4B is unchanged except at executable state 717, where eligible projected shed stock is sold using otherwise-free market slots. Step 718 remains normal R4B.
 
-1. obtain R4B's exact base action;
-2. use the same frozen COK projected-shed routine already trusted by R4B's step-718 liquidation;
-3. preserve every existing market order;
-4. append SELL orders for eligible non-input products not already sold in that action, limited by the official 10-order cap;
-5. prioritize appended products by current gross sale value.
-
-Step 718 is left to normal R4B. Any stock sold at 717 is absent from the later shed state, preventing double liquidation naturally.
-
-No route, production, WATER, FEED, CARE, PLANT, HARVEST, DROP, seed purchase, opponent-private state, team, episode or seed identity is changed or used.
-
-Candidate blob: `222e9c1de9bab043780af4a1f10bf8cd2f0c210f`.  
 Base R4B blob: `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`.
 
-## Frozen development gate
+## Development result
 
-Run all 16 development seeds in both seats against:
+GitHub Actions run **33043310488 — SUCCESS**.  
+Artifact **9635102382**, ZIP digest **SHA-256 `133e347dc355844b3611cc17f611e4e33139623262e67db919c39a36411639b5`**.
 
-- Kaito V27;
-- Rayk V11;
-- Andrew V12;
-- frozen R4B directly.
+Modern public panel:
 
-Promotion to exploratory live-meta distribution testing requires:
+- Kaito 25-7;
+- Rayk 30-2;
+- Andrew 26-6;
+- combined **81-15**, exactly preserving R4B;
+- zero errors.
 
-- zero runtime/status errors;
-- modern panel no worse than frozen R4B's **81-15**;
-- no opponent family loses more than one win versus its R4B reference;
-- direct candidate-vs-R4B score rate >= **0.53125**;
-- direct mean terminal delta > 0.
+Direct candidate vs R4B:
 
-Because the intervention is a one-turn market-only front-run with a mechanics-based dominance argument, a clean direct edge plus panel preservation would justify immediate exploratory distribution testing. It still would not by itself authorize validation or a hosted submission.
+- **13-11-8**;
+- score rate **0.53125**;
+- mean terminal delta **+33.5**;
+- zero errors.
 
-No validation or held-out seeds are accessed.
+This exactly meets the predeclared direct-score gate, but the edge is small. Seat behavior is asymmetric: candidate seat0 9-3-4 with mean delta -142.875; candidate seat1 4-8-4 with mean delta +209.875. That makes broader replication mandatory before treating the mechanism as a robust component.
+
+## Current decision
+
+**Development PASS only.** The candidate is not strong enough for validation or hosted submission on this evidence alone.
+
+A fresh exploratory direct screen on the 20 live-meta environmental seeds × both seats has been launched via `kexp037-exploratory-direct`. If the direct edge does not replicate, close the branch. If it replicates cleanly, retain the mechanism only as a small independent component for later combination with a larger adaptive policy.
+
+KEXP-039 provides observational context from recent top episodes; it does not determine promotion.
+
+No validation or held-out seeds were accessed.
