@@ -1,6 +1,6 @@
 # KEXP-20260827-037 — early terminal non-input liquidation
 
-Status: **DEVELOPMENT PASS / EXPLORATORY DIRECT RUNNING / NOT HOSTED-ELIGIBLE YET**
+Status: **EXPLORATORY PASS / RETAIN AS SMALL COMPONENT / NOT HOSTED-ELIGIBLE ALONE**
 
 ## Prize-first mechanism
 
@@ -38,14 +38,33 @@ Direct candidate vs R4B:
 - mean terminal delta **+33.5**;
 - zero errors.
 
-This exactly meets the predeclared direct-score gate, but the edge is small. Seat behavior is asymmetric: candidate seat0 9-3-4 with mean delta -142.875; candidate seat1 4-8-4 with mean delta +209.875. That makes broader replication mandatory before treating the mechanism as a robust component.
+## Exploratory replication
 
-## Current decision
+A fresh direct screen used the 20 exploratory live-meta environmental seeds × both seats (40 games), with fresh agent loads per game.
 
-**Development PASS only.** The candidate is not strong enough for validation or hosted submission on this evidence alone.
+GitHub Actions run **33045020546 — SUCCESS**.  
+Artifact **9635467165**, ZIP digest **SHA-256 `b8322cd6f966e80291d65a52782e570c0eabf8585e3cf5d38cd0b0d341dce3a4`**.
 
-A fresh exploratory direct screen on the 20 live-meta environmental seeds × both seats has been launched via `kexp037-exploratory-direct`. If the direct edge does not replicate, close the branch. If it replicates cleanly, retain the mechanism only as a small independent component for later combination with a larger adaptive policy.
+Result vs frozen R4B:
 
-KEXP-039 provides observational context from recent top episodes; it does not determine promotion.
+- **12-8-20**;
+- score rate **0.55000**;
+- mean terminal delta **+32.2**;
+- zero errors.
+
+Seat split remains asymmetric:
+
+- candidate seat0: 8-2-10;
+- candidate seat1: 4-6-10.
+
+The edge therefore replicated in direction and magnitude across an independent environmental pool, but remains small and seat-sensitive.
+
+## Decision
+
+**Retain as a small independent component.** KEXP-037 has now passed both development and exploratory direct replication, while preserving the strong public panel. Its effect is too small to justify validation or a hosted Kaggle submission alone.
+
+The intended use is combination with a materially stronger state-adaptive policy after that policy independently passes. Combination must then be re-screened because market interaction is not guaranteed additive.
+
+KEXP-039 independently found that 717 liquidation is common in recent top trajectories, but is not itself a winner signature.
 
 No validation or held-out seeds were accessed.
