@@ -1,0 +1,12 @@
+{
+  "schema_version": "cr013-close-match-seeds-v1",
+  "generator": {
+    "algorithm": "python-random.Random randint",
+    "master_seed": 2026082713,
+    "population": [1, 2147483646]
+  },
+  "seeds": [732320826,269615152,631405154,1546531010,1263899283,1706879540,120486219,1793617897,391479232,921896511,1396449672,1609308713,1685644023,1076706004,877444576,1263096502,699994601,1919779533,614229722,862089337],
+  "exclusions": ["development","validation","held_out","cr008_fresh_exploratory_seeds_v1","cr011_fresh_exploratory_seeds_v1"],
+  "selection_policy": "Run only frozen R4B for screening. Primary close set is |money_delta|<=1000; if fewer than 40 tuples, expand to <=3000; if still fewer than 40, use the 40 smallest absolute R4B deltas. CR-011 is never consulted during tuple selection.",
+  "purpose": "CR-013 close-match flip diagnostic only; no sealed validation or held-out access."
+}
