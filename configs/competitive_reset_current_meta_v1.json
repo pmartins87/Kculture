@@ -1,0 +1,96 @@
+{
+  "schema_version": "cr002b-current-meta-v1",
+  "snapshot_date": "2026-08-27",
+  "purpose": "Temporal current-meta calibration after CR-002 historical-public CALIBRATION_FAIL.",
+  "selection_rule": "Public Kaggriculture notebook snapshots discoverable on 2026-08-27, biased toward recent/high public score plus architectural diversity. Exact notebook version and observed public score frozen before local pair results.",
+  "public_agents": [
+    {
+      "id": "kaito-sparse-v13",
+      "handle": "kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13",
+      "observed_public_score": 2882.0,
+      "score_evidence": "Best Score 2882.0 V13 on public Kaggle notebook page",
+      "reuse": "Apache-2.0 page evidence; benchmark reference"
+    },
+    {
+      "id": "prvsiyan-frontier-v10",
+      "handle": "prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10",
+      "observed_public_score": 2610.2,
+      "score_evidence": "Public Score 2610.2, Version 10/10 on 2026-08-27 discovery",
+      "reuse": "Apache-2.0 page evidence; benchmark reference"
+    },
+    {
+      "id": "salem-harvest-v4",
+      "handle": "salemali7/harvest-kaggriculture/versions/4",
+      "observed_public_score": 2590.2,
+      "score_evidence": "Public Score 2590.2 on exact public version 4",
+      "reuse": "Apache-2.0 page evidence; benchmark reference"
+    },
+    {
+      "id": "rayk-rank-v23",
+      "handle": "raykkretzschmar/kaggriculture-rank-your-agent/versions/23",
+      "observed_public_score": 2563.4,
+      "score_evidence": "Current public notebook output page showed Public Score 2563.4; 23-version lineage",
+      "reuse": "benchmark-only; no derivative reuse unless exact-version license independently verified"
+    },
+    {
+      "id": "kaito-future-v19-v1",
+      "handle": "kaitofukami/41-49-future-unseen-v19-replication-to-control/versions/1",
+      "observed_public_score": 2530.5,
+      "score_evidence": "Public Score 2530.5, Version 1/1",
+      "reuse": "public benchmark reference"
+    },
+    {
+      "id": "tactical-memory-v1",
+      "handle": "web3cainiao/kaggriculture-v21-tactical-memory/versions/1",
+      "observed_public_score": 2491.7,
+      "score_evidence": "Public Score 2491.7, Version 1",
+      "reuse": "benchmark-only until license is independently verified"
+    },
+    {
+      "id": "boatlee-route-v2",
+      "handle": "boatlee/v21-r1-public-state-route-portfolio/versions/2",
+      "observed_public_score": 2467.9,
+      "score_evidence": "Public Score 2467.9, Version 2/2",
+      "reuse": "Apache-2.0 page evidence; benchmark reference"
+    },
+    {
+      "id": "andrew-kaggriculture-v11",
+      "handle": "andrewsokolovsky/kaggriculture/versions/11",
+      "observed_public_score": 2441.2,
+      "score_evidence": "Public Score 2441.2, Version 11/11",
+      "reuse": "Apache-2.0 page evidence; benchmark reference"
+    },
+    {
+      "id": "flex-current-v84",
+      "handle": "flexonafft/kaggriculture-adaptive-replay-agent/versions/84",
+      "observed_public_score": 1961.6,
+      "score_evidence": "Current Version 84/84 page showed Public Score 1961.6",
+      "reuse": "Apache-2.0 page evidence; lower current-score anchor"
+    }
+  ],
+  "local_agents": [
+    {
+      "id": "r4b",
+      "spec": "file:candidates/r4b_ablation_market_only.py:agent",
+      "git_blob": "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37",
+      "hosted_snapshot": 142.0
+    },
+    {
+      "id": "kexp050",
+      "spec": "file:candidates/r4d_reallocate_614_carrot.py:agent",
+      "git_blob": "61b77be136836328917441cb03f89bc6665c4c27",
+      "hosted_snapshot": 145.1
+    }
+  ],
+  "fresh_seed_master": 2026082702,
+  "seeds_per_pair": 8,
+  "both_seats": true,
+  "preflight_rule": "No league until every exact public version has a reproducible runnable package entry point and a frozen content hash.",
+  "calibration_gate_draft": {
+    "complete_pair_matrix": true,
+    "zero_runtime_errors": true,
+    "public_spearman_min": 0.65,
+    "public_pair_order_accuracy_min": 0.70,
+    "local_hosted_sanity": "R4B/KEXP-050 must not rank above the majority of 2400+ contemporaneous public references; otherwise the proxy is current-field invalid even if public-public rank correlation passes."
+  }
+}
