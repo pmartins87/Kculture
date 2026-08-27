@@ -1,45 +1,47 @@
 # KEXP-20260827-039 — live terminal SELL timing
 
-Status: **RUNNING / OBSERVATIONAL ONLY**
+Status: **COMPLETE / OBSERVATIONAL SUPPORT ONLY**
 
 ## Question
 
 KEXP-037 derives a mechanics-based argument for selling already-available non-input products at state 717 instead of waiting for 718. KEXP-039 independently checks how recent high-Elo public agents actually time terminal SELLs.
 
-This is supporting external evidence only; top-agent behavior is never used as an identity-conditioned deployable feature.
-
 ## Frozen protocol
 
-Use official daily Kaggriculture episode datasets for:
+Official top-20 episodes from 2026-08-23, 24, 25 and 26; corrected replay alignment `state t -> action frame t+1`; exact states 712..718.
 
-- 2026-08-23;
-- 2026-08-24;
-- 2026-08-25;
-- 2026-08-26.
+## Canonical result
 
-Take the top 20 episodes by official `avg_score` each day.
+GitHub Actions run **33043640991 — SUCCESS**.  
+Artifact **9634827281**, ZIP digest **SHA-256 `4fae13b15f5b174d15792ec312b52a8f133d205472835dac25146e318c324245`**.
 
-Use the corrected replay alignment:
+Across 160 player-trajectories:
 
-**state/observation `t` -> submitted action stored on frame `t+1`.**
+- total SELL qty at state 717: **1,617**;
+- total SELL qty at state 718: **501**;
+- 717 share of combined 717+718 quantity: **76.35%**.
 
-For each player, inspect exact executable states 712..718 and record:
+Winners (80 trajectories):
 
-- SELL quantity by state step;
-- number of SELL order rows by state step;
-- fraction of players selling at each step;
-- product quantities by exact step;
-- market order slot used by each SELL.
+- 717 qty 645;
+- 718 qty 247;
+- 717 share **72.31%**.
 
-Summaries are reported separately for episode winners, losers, all players and each date.
+Losers (80 trajectories):
 
-## Interpretation
+- 717 qty 972;
+- 718 qty 254;
+- 717 share **79.28%**.
 
-Primary quantity of interest is the winner share of combined state-717/state-718 liquidation that occurs at **717**. A persistent 717 presence would be consistent with terminal price front-running; concentration at 718 would show that KEXP-037 is exploiting a mechanics opportunity that the sampled public meta may not systematically use.
+By date, winners' 717 shares were 81.48%, 63.74%, 71.54% and 77.06% respectively. Thus selling before the last executable state is persistent across days, but **more 717 concentration is not a winner signature** in this sample.
 
-There is no promotion gate because this experiment changes no policy. Actual candidate strength is determined by KEXP-037's controlled W/L screen.
+The broader pattern is more important: strong agents liquidate continuously through 712..717 rather than relying on one huge state-718 dump. This supports treating market timing as a dynamic subproblem, while showing that KEXP-037's single-state front-run should be judged only by controlled W/L.
 
-No validation or held-out seeds are accessed.
+## Decision
+
+No policy promotion comes from this observational experiment. KEXP-037 remains a small development-passing candidate pending its exploratory direct replication.
+
+No validation or held-out seeds were accessed.
 
 Tool: `tools/live_terminal_sell_timing.py`  
-Frozen tool blob: `67487d740a5e2a3ac67a01e60c7d58b59d91a6e5`
+Frozen tool blob: `67487d740a5e2a3ac67a01e60c7d58b59d91a6e5`.
