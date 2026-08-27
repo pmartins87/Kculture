@@ -4,6 +4,7 @@ Record every Kaggle agent submission here. The ordering matters because only the
 
 | ID | UTC timestamp | Git SHA | Agent/version | Local win rate | Ladder rating | Episodes | Tracked slot | Notes |
 |---|---|---|---|---:|---:|---:|---|---|
+| unknown | 2026-08-27 user-visible snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **110.5** | unknown | latest / yes | User-visible Kaggle screenshot, status `Complete` / green check. Rating declined again from 135.7. This further confirms a severe hosted/local calibration failure and materially lowers confidence that the current fixed-route architecture is prize-competitive. |
 | unknown | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **135.7** | unknown | latest / yes | User-visible Kaggle screenshot, status `Complete` / green check. Rating declined further from the earlier 161.6 snapshot, strengthening the conclusion that hosted calibration/matchups materially disagree with the local public-agent panel. |
 | unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **161.6** | unknown | latest / yes | First observed hosted rating snapshot. |
 
@@ -14,8 +15,7 @@ User-visible Kaggle evidence:
 - status: **Complete** / green validation check;
 - filename: `Kculture_R4B_market_only_validated_v1_submission.tar.gz`;
 - description: `Kculture R4B market-only validated v1`;
-- displayed score progression observed so far: **161.6 → 135.7**;
-- latest screenshot: phone time 2026-08-26 07:00 at UTC-05:00, approximately **2026-08-26 12:00 UTC**;
+- displayed score progression observed so far: **161.6 → 135.7 → 110.5**;
 - submission ID: not yet observed;
 - hosted episode count: not yet observed.
 
@@ -30,9 +30,9 @@ Exact package provenance:
 
 ### Interpretation checkpoint
 
-Kaggle simulation submissions initialize around rating **600** after validation and then move with win/loss/tie outcomes; terminal coin margin does not directly determine rating movement. The sequence **161.6 → 135.7** is therefore meaningful evidence of continued poor hosted results, not a package-validation error and not a harmless difference in score scale.
+Kaggle simulation submissions initialize around rating **600** after validation and then move with win/loss/tie outcomes; terminal coin margin does not directly determine rating movement. The sequence **161.6 → 135.7 → 110.5** is strong evidence of persistent poor hosted results, not a package-validation error and not a harmless difference in score scale.
 
-This makes hosted calibration a first-class research signal. We should not assume automatic recovery and should not spend a second submission slot on an unvalidated reaction. Continue exact local development while seeking episode-level hosted evidence.
+The current R4B should now be treated strictly as a reproducible baseline, not as a likely final candidate. A second submission remains valuable only when it tests a materially different, evidence-backed architecture or policy and has passed a fresh exact validation gate. The lower hosted score increases urgency to build such a replacement; it does not make an unvalidated reaction more informative.
 
 ## Required notes per submission
 
