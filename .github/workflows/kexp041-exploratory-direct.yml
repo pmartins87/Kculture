@@ -1,0 +1,33 @@
+name: kexp041-exploratory-direct
+
+on:
+  push:
+    paths:
+      - .github/workflows/kexp041-exploratory-direct.yml
+  workflow_dispatch:
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify identities
+        run: |
+          test "$(git rev-parse HEAD:tools/run_exploratory_live_meta_direct.py)" = "c0a72eb7bc58319920748ffb6aece1aa3610dbbf"
+          test "$(git rev-parse HEAD:candidates/r4d_jit_carrot_one.py)" = "97e102933f96a85fcc586ec4a96500069902f035"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Run exploratory direct screen
+        run: python tools/run_exploratory_live_meta_direct.py --candidate file:candidates/r4d_jit_carrot_one.py:agent --opponent file:candidates/r4b_ablation_market_only.py:agent --output artifacts/kexp041-exploratory/report.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kexp041-exploratory-direct
+          path: artifacts/kexp041-exploratory/report.json
