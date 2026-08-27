@@ -6,6 +6,11 @@ reproduction. Phase B, only for episodes that reproduce exactly, replaces the
 original loser with frozen R4B and keeps the original winner action tape in its
 original seat. This is benchmark-only; no tape, team or episode identity is a
 deployable policy feature.
+
+Kaggle replay convention: action submitted from observation step t is stored on
+replay frame t+1. Public tapes are therefore shifted back one frame before being
+used as callable agents. We also preserve the public episode configuration and
+override only episodeSteps/seed explicitly for deterministic reproduction.
 """
 from __future__ import annotations
 
@@ -53,8 +58,17 @@ def get(obj, key, default=None):
 
 
 def actions_for(rep: dict, player: int) -> list[dict]:
+    """Return executable-step-indexed actions.
+
+    Replay frame 0 is the initialized state. The action chosen from observation
+    step t is attached to replay frame t+1, which contains the resulting state.
+    Thus executable step 0 uses frame 1's action and executable step 718 uses
+    frame 719's action.
+    """
+    frames = rep.get("steps", []) or []
     out = []
-    for frame in rep.get("steps", []):
+    for frame_index in range(1, len(frames)):
+        frame = frames[frame_index]
         action = frame[player].get("action") if player < len(frame) else None
         out.append(copy.deepcopy(action) if isinstance(action, dict) else {})
     return out
@@ -90,8 +104,11 @@ def final_statuses(rep: dict) -> list[str | None]:
     return [final[p].get("status") if p < len(final) else None for p in (0, 1)]
 
 
-def run_pair(seed: int, agents: list) -> dict:
-    env = make("kaggriculture", configuration={"episodeSteps": 720, "seed": int(seed)}, debug=True)
+def run_pair(seed: int, agents: list, original_config: dict | None = None) -> dict:
+    configuration = copy.deepcopy(original_config) if isinstance(original_config, dict) else {}
+    configuration["episodeSteps"] = 720
+    configuration["seed"] = int(seed)
+    env = make("kaggriculture", configuration=configuration, debug=True)
     env.run(agents)
     rep = env.toJSON()
     return {
@@ -145,9 +162,10 @@ def main() -> None:
                     raise RuntimeError(f"episode {eid} missing reproducible integer seed: {seed!r}")
             names = (rep.get("info") or {}).get("TeamNames") or ["p0", "p1"]
             original = final_rewards(rep)
+            original_config = rep.get("configuration") if isinstance(rep.get("configuration"), dict) else {}
             tapes = [actions_for(rep, 0), actions_for(rep, 1)]
 
-            replay = run_pair(seed, [tape_agent(tapes[0]), tape_agent(tapes[1])])
+            replay = run_pair(seed, [tape_agent(tapes[0]), tape_agent(tapes[1])], original_config)
             reproducible = replay["steps"] == 720 and exact_rewards(original, replay["rewards"]) and all(s == "DONE" for s in replay["statuses"])
 
             row = {
@@ -155,6 +173,8 @@ def main() -> None:
                 "avg_score": float(mr["avg_score"]),
                 "seed": int(seed),
                 "team_names": names,
+                "original_configuration": original_config,
+                "tape_lengths": [len(tapes[0]), len(tapes[1])],
                 "original_rewards": original,
                 "tape_replay_rewards": replay["rewards"],
                 "tape_replay_statuses": replay["statuses"],
@@ -170,7 +190,7 @@ def main() -> None:
                     agents = [None, None]
                     agents[wi] = tape_agent(tapes[wi])
                     agents[li] = r4b
-                    bench = run_pair(seed, agents)
+                    bench = run_pair(seed, agents, original_config)
                     r4b_reward = bench["rewards"][li]
                     tape_reward = bench["rewards"][wi]
                     if r4b_reward is None or tape_reward is None:
@@ -202,7 +222,7 @@ def main() -> None:
     tape_changes = [abs(float(b["tape_reward_change_vs_original"])) for b in valid if isinstance(b.get("tape_reward_change_vs_original"), (int, float))]
 
     report = {
-        "schema_version": "live-meta-action-tape-benchmark-v1",
+        "schema_version": "live-meta-action-tape-benchmark-v2",
         "source": {"date": args.date, "top_n": args.top},
         "replayability": {
             "episodes": len(rows),
