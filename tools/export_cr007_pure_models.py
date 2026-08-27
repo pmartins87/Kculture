@@ -3,8 +3,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import tempfile
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.cr005_short_horizon_sell_forecast import collect_date, split_features
 from tools.cr007_high_confidence_frontrun import FINAL_TRAIN_DATES, fit_models
