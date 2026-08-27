@@ -4,7 +4,12 @@ on:
   push:
     paths:
       - .github/workflows/cr002-broad-proxy-league.yml
+      - tools/run_cr002_pair.py
   workflow_dispatch:
+
+# Attempt 1 was a mechanical null: every pair stopped before environment
+# creation because the runner had not bootstrapped the repository import path.
+# Attempt 2 preserves the exact entrants, pair matrix, seeds and calibration gate.
 
 jobs:
   prepare:
