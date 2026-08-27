@@ -1,12 +1,14 @@
 # Submission ledger — Kculture
 
-Record every Kaggle agent submission here. The ordering matters because only the latest two submissions remain tracked for final evaluation.
+Record every Kaggle agent submission here with exact provenance and observed hosted behavior.
 
-| ID | UTC timestamp | Git SHA | Agent/version | Local win rate | Ladder rating | Episodes | Tracked slot | Notes |
+**Important policy correction:** the repository previously treated “only the latest two submissions remain tracked for final evaluation” as a hard invariant. That claim is currently **unverified** and must not drive submission decisions. Current Kaggle simulation documentation and Kaggriculture staff guidance support treating hosted submissions as ongoing evaluation/calibration agents; the competition will continue episodes for two weeks after the submission deadline and then run a single Bradley-Terry tournament. Until a Kaggriculture-specific official source explicitly defines any retained-submission limit, preserve all submission history and decide calibration submissions by expected information value plus current competition limits.
+
+| ID | UTC timestamp | Git SHA | Agent/version | Local win rate | Ladder rating | Episodes | Status | Notes |
 |---|---|---|---|---:|---:|---:|---|---|
-| unknown | 2026-08-27 user-visible snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **110.5** | unknown | latest / yes | User-visible Kaggle screenshot, status `Complete` / green check. Rating declined again from 135.7. This further confirms a severe hosted/local calibration failure and materially lowers confidence that the current fixed-route architecture is prize-competitive. |
-| unknown | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **135.7** | unknown | latest / yes | User-visible Kaggle screenshot, status `Complete` / green check. Rating declined further from the earlier 161.6 snapshot, strengthening the conclusion that hosted calibration/matchups materially disagree with the local public-agent panel. |
-| unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **161.6** | unknown | latest / yes | First observed hosted rating snapshot. |
+| unknown | 2026-08-27 user-visible snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 vs current public strong panel (development, descriptive) | **110.5** | unknown | Complete | User-visible Kaggle screenshot, green check. Rating declined again from 135.7. Strong hosted/local calibration contradiction. |
+| unknown | 2026-08-26 12:00 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 | **135.7** | unknown | Complete | Intermediate visible rating snapshot. |
+| unknown | 2026-08-26 04:37 snapshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | 81-15-0 / 96 | **161.6** | unknown | Complete | First observed hosted rating snapshot. |
 
 ## Submission 1 identity
 
@@ -30,17 +32,20 @@ Exact package provenance:
 
 ### Interpretation checkpoint
 
-Kaggle simulation submissions initialize around rating **600** after validation and then move with win/loss/tie outcomes; terminal coin margin does not directly determine rating movement. The sequence **161.6 → 135.7 → 110.5** is strong evidence of persistent poor hosted results, not a package-validation error and not a harmless difference in score scale.
+The sequence **161.6 → 135.7 → 110.5** is persistent evidence that R4B is performing poorly hosted despite strong local results. Packaging parity is already proven, so the primary issue is strategic calibration.
 
-The current R4B should now be treated strictly as a reproducible baseline, not as a likely final candidate. A second submission remains valuable only when it tests a materially different, evidence-backed architecture or policy and has passed a fresh exact validation gate. The lower hosted score increases urgency to build such a replacement; it does not make an unvalidated reaction more informative.
+R4B is a reproducible baseline, not a likely final candidate. A future hosted calibration submission should test a **materially different, evidence-backed policy** and pass exact package parity. It need not be treated as sacred or hoarded merely because it is another submission; it should be sent when the expected information about the live field justifies it under the current Kaggle limits.
 
-## Required notes per submission
+KEXP-041 is **not** such a candidate: development direct 20-12 did not replicate on exploratory live-meta environmental seeds (14-14-12, score 0.50, mean -21.35). It therefore does not justify a hosted submission.
 
-- exact source/config
-- strategy family
-- local validation summary
-- expected matchup strengths/weaknesses
-- validation-episode result
-- hosted errors/anomalies
-- whether it is currently one of the latest two tracked agents
-- whether it remains a final candidate
+## Required notes per future submission
+
+- exact source/config and hashes;
+- strategy family and material difference from previous hosted agents;
+- development + exploratory evidence;
+- fresh validation result when used for promotion;
+- package parity result;
+- expected matchup strengths/weaknesses;
+- hosted errors/anomalies;
+- observed rating/episode progression;
+- whether it remains useful as calibration, champion or final candidate.
