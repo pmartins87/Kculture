@@ -1,6 +1,6 @@
 # KEXP-20260827-026 — exact late CARROT seed ledger
 
-Status: **RUNNING / CORRECTIVE DIAGNOSTIC ONLY**
+Status: **RUNNING / CORRECTIVE DIAGNOSTIC V2 ONLY**
 
 ## Why this replaces the stock-only interpretation of KEXP-025
 
@@ -13,14 +13,16 @@ Therefore the KEXP-025 claim that the median episode had nine stock-only substit
 Across the same 16 development + 20 exploratory-live-meta environmental seeds, with frozen R4B unchanged vs `starter`:
 
 1. Is the replay observation/action alignment consistent with an exact seed ledger?
-2. At a KEXP-023 mechanically safe WHEAT-plant step, is any positive CARROT stock truly **unreserved by all later frozen-base CARROT plant intents**?
+2. At a KEXP-023 mechanically safe WHEAT-plant step, is any CARROT stock truly **unreserved by same-turn and all later frozen-base CARROT plant intents**?
 
 The conservative deployable-safe criterion requires:
 
 - step in 614–618, 620–623 or 636–647;
 - frozen base submits at least one WHEAT `PLANT` intent there;
-- current CARROT stock is positive;
+- pre-action CARROT stock exceeds the number of base CARROT `PLANT` intents submitted **in that same turn**;
 - **zero later CARROT `PLANT` intents** through the end of the episode.
+
+The same-turn reservation is essential because the official engine validates all `PLANT` requests for a crop atomically: if same-turn demand exceeds available pre-action seeds, **all** plant requests for that crop are replaced by PASS. The first KEXP-026 run used the later-intent guard but omitted this same-turn reservation and is therefore superseded by V2 before any policy decision.
 
 This deliberately refuses to treat later seed purchases as restoring equivalence: consuming a seed early shifts the seed ledger and can invalidate a later base plant.
 
@@ -29,10 +31,10 @@ This deliberately refuses to treat later seed purchases as restoring equivalence
 No policy is promoted by this diagnostic.
 
 - First, `alignment_bad_total` must be zero in both pools. If not, repair the ledger model before any crop candidate.
-- A no-purchase stock-only candidate is eligible only if at least **50% of episodes in both pools** contain at least one truly-unreserved safe candidate step.
+- A no-purchase stock-only candidate is eligible only if at least **50% of episodes in both pools** contain at least one truly-unreserved safe candidate step under the V2 same-turn + future reservation rule.
 - Otherwise, stock-only substitution is rejected and the next crop candidate must explicitly reallocate a bounded number of WHEAT seed purchases into CARROT purchases before the safe planting window.
 
 No validation or held-out seeds are accessed. No seed/opponent/episode identity may be used by a later policy.
 
 Tool: `tools/inspect_late_carrot_seed_ledger.py`
-Frozen tool blob: `cdcc957737e689713c37b52cb60e9602ae88819e`
+Frozen V2 tool blob: `2bb0290ba8bcad4670f6f81b79975484c85ac937`
