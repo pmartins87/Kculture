@@ -1,6 +1,6 @@
 # CR-002 — Broad proxy league calibration
 
-Status: **FROZEN / RUNNING — ATTEMPT 2**
+Status: **FROZEN / RUNNING — ATTEMPT 3**
 
 ## Why this exists
 
@@ -51,9 +51,19 @@ Cause: `tools/run_cr002_pair.py` imported `tools.run_tournament` before adding r
 
 Fix commit: `08d242366037b19e20ee906e06dbe2bc6b760242`. The only change bootstraps the repository import path. Entrants, hashes, pair matrix, seed master, seats and calibration gate are unchanged.
 
-### Attempt 2 — run `33083761765`: QUEUED/RUNNING
+### Attempt 2 — run `33083761765`: MECHANICAL NULL
 
-Workflow relaunch commit: `de88b83fae7dc1ebd2c59c21ca61ebef7bcf4352`.
+Preparation again passed, but pair jobs failed before the first episode while constructing the fresh-seed exclusion set:
+
+`TypeError: 'int' object is not iterable`
+
+Cause: `configs/seed_partitions.json` contains metadata fields in addition to the three seed arrays; the runner iterated every top-level value as if all values were seed lists. No episode outcome was observed, so this attempt also contains no league evidence.
+
+Fix commit: `df23ba195688f599280f9e246b61342bf65bdc5d`. The runner now explicitly excludes only `development`, `validation` and `held_out`. Entrants, hashes, pair matrix, fresh seed master, seats and calibration gate remain unchanged.
+
+### Attempt 3 — run `33084489238`: RUNNING
+
+This is the first attempt eligible to produce competitive evidence. The preparation stage passed. Pair jobs are executing on the original frozen 66-pair matrix.
 
 ## Important interpretation
 
