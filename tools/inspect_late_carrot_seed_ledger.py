@@ -75,9 +75,6 @@ def analyze(replay, seed, source):
         w0, w1 = seed_stock(entry, "WHEAT"), seed_stock(nxt, "WHEAT")
         cp, wp = plant_count(action, "CARROT"), plant_count(action, "WHEAT")
         cb, wb = buy_seed(action, "CARROT"), buy_seed(action, "WHEAT")
-        # Unit PLANT executes before market buying. Across the transition,
-        # successful PLANT consumption is current stock + same-turn market buy
-        # minus next-step stock.
         c_consumed = c0 + cb - c1
         w_consumed = w0 + wb - w1
         ledger.append({
@@ -94,8 +91,6 @@ def analyze(replay, seed, source):
             "wheat_inferred_consumed": w_consumed,
         })
 
-    # Validate replay timing/alignment. Seed consumption can only be an integer
-    # count between zero and the submitted PLANT intents for that crop.
     alignment_bad = [r for r in ledger if not (
         isinstance(r["carrot_inferred_consumed"], int)
         and isinstance(r["wheat_inferred_consumed"], int)
@@ -103,13 +98,6 @@ def analyze(replay, seed, source):
         and 0 <= r["wheat_inferred_consumed"] <= r["wheat_plant_intents"]
     )]
 
-    # Conservative truly-unreserved criterion. A new same-turn CARROT PLANT
-    # must not exceed pre-action stock after reserving every base CARROT PLANT
-    # submitted in that same turn, because official atomic validation blocks
-    # ALL PLANT requests for a crop when demand exceeds available seeds.
-    # We additionally require zero later base CARROT PLANT intent so the extra
-    # seed cannot steal stock from a future route action. Later buys are ignored
-    # deliberately: this is a no-purchase stock-only test.
     safe_candidates = []
     for i, r in enumerate(ledger):
         same_turn_unreserved = r["carrot_stock"] - r["carrot_plant_intents"]
@@ -140,6 +128,10 @@ def analyze(replay, seed, source):
     }
 
 
+def string_hist(values):
+    return {str(k): v for k, v in sorted(Counter(values).items(), key=lambda kv: (kv[0] is None, -1 if kv[0] is None else kv[0]))}
+
+
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument("--output", required=True); args = ap.parse_args()
     dev = json.loads((ROOT / "configs/seed_partitions.json").read_text(encoding="utf-8"))["development"]
@@ -163,9 +155,9 @@ def main():
             "episodes_with_safe_unreserved_stock": sum(c > 0 for c in counts),
             "safe_unreserved_candidate_snapshots": sum(counts),
             "total_max_episode_stock_only_capacity": sum(capacities),
-            "max_episode_stock_only_capacity_histogram": dict(sorted(Counter(capacities).items())),
-            "first_safe_unreserved_step_histogram": dict(sorted(Counter(firsts).items())),
-            "last_carrot_intent_step_histogram": dict(sorted(Counter(e["last_carrot_intent_step"] for e in ee).items(), key=lambda kv: (kv[0] is None, kv[0]))),
+            "max_episode_stock_only_capacity_histogram": string_hist(capacities),
+            "first_safe_unreserved_step_histogram": string_hist(firsts),
+            "last_carrot_intent_step_histogram": string_hist([e["last_carrot_intent_step"] for e in ee]),
         }
     payload = {"schema_version": "late-carrot-seed-ledger-v2", "safe_steps": sorted(SAFE_STEPS), "summary": summary, "episodes": episodes}
     out = ROOT / args.output; out.parent.mkdir(parents=True, exist_ok=True)
