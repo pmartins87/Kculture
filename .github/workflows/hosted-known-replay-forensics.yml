@@ -1,0 +1,46 @@
+name: hosted-known-replay-forensics
+
+on:
+  push:
+    paths:
+      - 'tools/fetch_known_hosted_replays.py'
+      - 'tools/hosted_replay_loss_analyzer.py'
+      - '.github/workflows/hosted-known-replay-forensics.yml'
+  workflow_dispatch:
+
+jobs:
+  forensics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dataset client
+        run: python -m pip install -U kagglehub
+      - name: Fetch exact hosted replays
+        run: |
+          python tools/fetch_known_hosted_replays.py \
+            --episode kexp050:100987834 \
+            --episode r4b:100996939 \
+            --end-date 2026-08-27 \
+            --lookback-days 4 \
+            --output-dir artifacts/hosted-known
+      - name: Analyze KEXP050 replay
+        run: |
+          python tools/hosted_replay_loss_analyzer.py \
+            artifacts/hosted-known/replays/kexp050_100987834.json \
+            --team-substring 'Paulo Martins' \
+            --output artifacts/hosted-known/kexp050_analysis.json
+      - name: Analyze R4B replay
+        run: |
+          python tools/hosted_replay_loss_analyzer.py \
+            artifacts/hosted-known/replays/r4b_100996939.json \
+            --team-substring 'Paulo Martins' \
+            --output artifacts/hosted-known/r4b_analysis.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hosted-known-replay-forensics
+          path: artifacts/hosted-known/**
