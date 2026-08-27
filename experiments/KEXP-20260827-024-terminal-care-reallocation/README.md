@@ -1,6 +1,6 @@
 # KEXP-20260827-024 — terminal CARE reallocation
 
-Status: **PREDECLARED / DEVELOPMENT ONLY**
+Status: **COMPLETE / NO PROMOTION**
 
 ## Prize-first hypothesis
 
@@ -53,3 +53,32 @@ Mandatory:
 If the candidate is mechanically sound but merely ties 81-15 while improving money, record `NO PROMOTION` and treat it only as a possible component for a later adaptive architecture. Do not spend validation or a hosted submission on money-only improvement.
 
 Validation and all 32 held-out seeds remain closed.
+
+## Result
+
+GitHub Actions run: **33037860772 — SUCCESS**.
+Artifact: `kexp024-terminal-care-reallocation`, artifact id **9633112705**, SHA-256 `f32ae2b1c87617bdd7d2ab8a81f25b9e499241a44dc42e88df1dcc83b23be9b5`.
+
+Modern public panel:
+
+| Opponent | W-L-T | Errors | Score rate | Mean terminal delta |
+|---|---:|---:|---:|---:|
+| Kaito V27 | 25-7-0 | 0 | 0.78125 | +4396.84375 |
+| Rayk V11 | 30-2-0 | 0 | 0.93750 | +7477.21875 |
+| Andrew V12 | 26-6-0 | 0 | 0.81250 | +5287.43750 |
+| **Combined** | **81-15-0** | **0** | **0.84375** | — |
+
+Direct candidate-vs-R4B:
+
+- **12-12-8**;
+- score rate **0.50000**;
+- mean terminal delta **0.0**;
+- zero execution errors.
+
+## Decision
+
+The candidate satisfies the safety/family-preservation/direct-neutrality parts of the gate, but **fails the required W/L improvement**: the modern panel remains exactly **81-15**, identical to R4B.
+
+Therefore: **NO PROMOTION**. Do not open validation, do not access held-out, and do not spend a Kaggle submission on this mechanism alone.
+
+The experiment still establishes a useful architecture fact: terminally useless CARE can be reallocated without degrading the frozen modern panel, but this isolated mechanism has insufficient prize-relevant ceiling. Future animal work should target a resource-bearing decision such as selectively avoiding terminally worthless FEED while preserving survival, payable care bonuses, inventory capacity and final liquidation.
