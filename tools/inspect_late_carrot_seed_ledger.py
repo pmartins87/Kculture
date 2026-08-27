@@ -1,10 +1,10 @@
 """KEXP-026: exact late CARROT seed ledger and truly unreserved stock audit.
 
 Runs frozen R4B unchanged vs starter on development + exploratory live-meta
-environmental seeds.  Unlike KEXP-025, this diagnostic never sums repeated
-snapshots of the same seed stock.  It reconstructs the per-step seed ledger and
+environmental seeds. Unlike KEXP-025, this diagnostic never sums repeated
+snapshots of the same seed stock. It reconstructs the per-step seed ledger and
 asks whether any CARROT seed at a mechanically safe WHEAT-plant step is truly
-unreserved by all later base CARROT plant intents.
+unreserved by same-turn and all later base CARROT plant intents.
 """
 from __future__ import annotations
 
@@ -75,8 +75,9 @@ def analyze(replay, seed, source):
         w0, w1 = seed_stock(entry, "WHEAT"), seed_stock(nxt, "WHEAT")
         cp, wp = plant_count(action, "CARROT"), plant_count(action, "WHEAT")
         cb, wb = buy_seed(action, "CARROT"), buy_seed(action, "WHEAT")
-        # If observation[t] is pre-action, this exactly reconstructs successful
-        # seed-consuming PLANT count: stock_t + buys_t - stock_{t+1}.
+        # Unit PLANT executes before market buying. Across the transition,
+        # successful PLANT consumption is current stock + same-turn market buy
+        # minus next-step stock.
         c_consumed = c0 + cb - c1
         w_consumed = w0 + wb - w1
         ledger.append({
@@ -93,25 +94,37 @@ def analyze(replay, seed, source):
             "wheat_inferred_consumed": w_consumed,
         })
 
-    # Validate time alignment: inferred consumption must be integral and lie
-    # between zero and submitted PLANT intents on ordinary seed transitions.
-    alignment_bad = [r for r in ledger if not (0 <= r["carrot_inferred_consumed"] <= r["carrot_plant_intents"] and 0 <= r["wheat_inferred_consumed"] <= r["wheat_plant_intents"])]
+    # Validate replay timing/alignment. Seed consumption can only be an integer
+    # count between zero and the submitted PLANT intents for that crop.
+    alignment_bad = [r for r in ledger if not (
+        isinstance(r["carrot_inferred_consumed"], int)
+        and isinstance(r["wheat_inferred_consumed"], int)
+        and 0 <= r["carrot_inferred_consumed"] <= r["carrot_plant_intents"]
+        and 0 <= r["wheat_inferred_consumed"] <= r["wheat_plant_intents"]
+    )]
 
-    # Conservative truly-unreserved criterion: safe WHEAT intent, at least one
-    # CARROT seed now, and no later submitted CARROT PLANT intent at all.  This
-    # deliberately ignores later CARROT buys; it cannot double-count the same
-    # stock and cannot steal a seed from a future base CARROT intent.
+    # Conservative truly-unreserved criterion. A new same-turn CARROT PLANT
+    # must not exceed pre-action stock after reserving every base CARROT PLANT
+    # submitted in that same turn, because official atomic validation blocks
+    # ALL PLANT requests for a crop when demand exceeds available seeds.
+    # We additionally require zero later base CARROT PLANT intent so the extra
+    # seed cannot steal stock from a future route action. Later buys are ignored
+    # deliberately: this is a no-purchase stock-only test.
     safe_candidates = []
     for i, r in enumerate(ledger):
-        if r["step"] not in SAFE_STEPS or r["wheat_plant_intents"] <= 0 or r["carrot_stock"] <= 0:
+        same_turn_unreserved = r["carrot_stock"] - r["carrot_plant_intents"]
+        if r["step"] not in SAFE_STEPS or r["wheat_plant_intents"] <= 0 or same_turn_unreserved <= 0:
             continue
         later_carrot_intents = sum(x["carrot_plant_intents"] for x in ledger[i + 1:])
         if later_carrot_intents == 0:
             safe_candidates.append({
                 "step": r["step"],
                 "carrot_stock": r["carrot_stock"],
+                "same_turn_carrot_plant_intents": r["carrot_plant_intents"],
+                "same_turn_unreserved_carrot_stock": same_turn_unreserved,
                 "wheat_plant_intents": r["wheat_plant_intents"],
                 "later_carrot_plant_intents": 0,
+                "max_extra_stock_only_swaps_this_turn": min(r["wheat_plant_intents"], same_turn_unreserved),
             })
 
     return {
@@ -122,6 +135,7 @@ def analyze(replay, seed, source):
         "last_carrot_consumption_step": max((r["step"] for r in ledger if r["carrot_inferred_consumed"] > 0), default=None),
         "safe_unreserved_candidates": safe_candidates,
         "first_safe_unreserved_step": safe_candidates[0]["step"] if safe_candidates else None,
+        "max_extra_stock_only_swaps": max((r["max_extra_stock_only_swaps_this_turn"] for r in safe_candidates), default=0),
         "ledger": ledger,
     }
 
@@ -142,15 +156,18 @@ def main():
         ee = episodes if source == "all" else [e for e in episodes if e["source"] == source]
         firsts = [e["first_safe_unreserved_step"] for e in ee if e["first_safe_unreserved_step"] is not None]
         counts = [len(e["safe_unreserved_candidates"]) for e in ee]
+        capacities = [e["max_extra_stock_only_swaps"] for e in ee]
         summary[source] = {
             "episodes": len(ee),
             "alignment_bad_total": sum(e["alignment_bad_count"] for e in ee),
             "episodes_with_safe_unreserved_stock": sum(c > 0 for c in counts),
             "safe_unreserved_candidate_snapshots": sum(counts),
+            "total_max_episode_stock_only_capacity": sum(capacities),
+            "max_episode_stock_only_capacity_histogram": dict(sorted(Counter(capacities).items())),
             "first_safe_unreserved_step_histogram": dict(sorted(Counter(firsts).items())),
             "last_carrot_intent_step_histogram": dict(sorted(Counter(e["last_carrot_intent_step"] for e in ee).items(), key=lambda kv: (kv[0] is None, kv[0]))),
         }
-    payload = {"schema_version": "late-carrot-seed-ledger-v1", "safe_steps": sorted(SAFE_STEPS), "summary": summary, "episodes": episodes}
+    payload = {"schema_version": "late-carrot-seed-ledger-v2", "safe_steps": sorted(SAFE_STEPS), "summary": summary, "episodes": episodes}
     out = ROOT / args.output; out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     print(json.dumps(summary, indent=2, sort_keys=True))
