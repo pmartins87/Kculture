@@ -1,0 +1,24 @@
+{
+  "schema_version": "cr008-fresh-exploratory-seeds-v1",
+  "generator": {
+    "algorithm": "python-random.Random randint",
+    "master_seed": 2026082708,
+    "population": [1, 2147483646]
+  },
+  "seeds": [
+    853248964,
+    1955108537,
+    280561076,
+    936110917,
+    1272378278,
+    218549166,
+    1491323052,
+    1418342072,
+    1113320229,
+    205189298,
+    271255260,
+    1852609341
+  ],
+  "exclusions": ["development", "validation", "held_out"],
+  "purpose": "CR-008 causal exploratory evaluation only; no validation or held-out access."
+}
