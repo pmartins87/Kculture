@@ -1,0 +1,30 @@
+name: hosted-submission-episode-list-now
+on:
+  push:
+    paths:
+      - '.github/workflows/hosted-submission-episode-list-now.yml'
+  workflow_dispatch:
+
+jobs:
+  list:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install current Kaggle CLI
+        run: python -m pip install -U 'kaggle>=2.2.1'
+      - name: List R4B and KEXP050 episodes
+        run: |
+          mkdir -p artifacts/hosted-episode-lists
+          kaggle competitions episodes 55784381 -v > artifacts/hosted-episode-lists/r4b.csv
+          kaggle competitions episodes 55818927 -v > artifacts/hosted-episode-lists/kexp050.csv
+          echo 'R4B:' && wc -l artifacts/hosted-episode-lists/r4b.csv && head -10 artifacts/hosted-episode-lists/r4b.csv
+          echo 'KEXP050:' && wc -l artifacts/hosted-episode-lists/kexp050.csv && head -10 artifacts/hosted-episode-lists/kexp050.csv
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-submission-episode-lists
+          path: artifacts/hosted-episode-lists/**
