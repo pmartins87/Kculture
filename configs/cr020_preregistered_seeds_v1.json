@@ -1,0 +1,50 @@
+{
+  "schema_version": "cr020-preregistered-seeds-v1",
+  "created_before_candidate_design": true,
+  "purpose": "future unseen evaluation bank for the next post-CR015 refinement; no CR015 Stage-A outcome may be used to select or tune a CR020 rule",
+  "stage_a_seeds": [
+    914092051,
+    1268056253,
+    710599914,
+    822060386,
+    879576655,
+    261948810,
+    971274105,
+    1647978858,
+    2102486879,
+    1404049544,
+    1343081080,
+    151949713
+  ],
+  "stage_b_seeds": [
+    776626477,
+    1287773207,
+    1747383839,
+    668384030,
+    215261386,
+    1468634816,
+    1787214196,
+    297296123,
+    633773912,
+    1131375553,
+    604958801,
+    1808936117
+  ],
+  "seats": [0, 1],
+  "opponent_set": "configs/cr015_current_meta_opponents_v1.json",
+  "controls_required": ["R4B", "best_relevant_predecessor"],
+  "selection_policy": {
+    "candidate_design_sources_allowed": [
+      "CR-014/CR-014B/CR-014C frozen diagnostic cases",
+      "official Kaggriculture engine semantics",
+      "publicly available pre-CR020 research and agent architecture evidence"
+    ],
+    "forbidden_for_candidate_design": [
+      "CR-015 Stage-A rows or per-opponent results",
+      "CR-020 Stage-A or Stage-B outcomes",
+      "held-out 32/32"
+    ],
+    "stage_b_condition": "Run only for the exact unchanged candidate if Stage A passes its frozen outcome-aware gate.",
+    "held_out_policy": "Remain sealed."
+  }
+}
