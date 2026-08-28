@@ -1,0 +1,40 @@
+name: hosted-calibration-trio
+on:
+  push:
+    paths:
+      - '.github/workflows/hosted-calibration-trio.yml'
+  workflow_dispatch:
+
+jobs:
+  package-and-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Fetch frozen COK base
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
+          test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
+          test "$(git rev-parse HEAD:tools/build_hosted_calibration_trio.py)" = "ada86083357316e275fd07f9039e66533f280c18"
+          test "$(git rev-parse HEAD:tools/audit_hosted_calibration_trio.py)" = "fff5708a54380021e4998983e074092889717b5b"
+      - name: Build deterministic trio
+        run: python tools/build_hosted_calibration_trio.py
+      - name: Prove source-to-package parity and active A/B axes
+        run: python tools/audit_hosted_calibration_trio.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-calibration-trio
+          path: artifacts/submissions/hosted_calibration_trio/**
