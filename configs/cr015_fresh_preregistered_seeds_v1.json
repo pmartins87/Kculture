@@ -1,0 +1,56 @@
+{
+  "schema_version": "cr015-fresh-preregistered-seeds-v1",
+  "generator": {
+    "algorithm": "python-random.Random randint",
+    "master_seed": 2026082815,
+    "population": [1, 2147483646]
+  },
+  "generated_before_cr014_result": true,
+  "stage_a_seeds": [
+    839518046,
+    1158634318,
+    941457637,
+    654526331,
+    1756868752,
+    1542973574,
+    404449105,
+    1824356887,
+    1852981289,
+    1545052343,
+    2140953132,
+    1568840832
+  ],
+  "stage_b_seeds": [
+    19721248,
+    1716820194,
+    69911727,
+    929080287,
+    1893984883,
+    1113042168,
+    1836395890,
+    507681868,
+    868254349,
+    497577303,
+    246111167,
+    1734395973
+  ],
+  "exclusions": [
+    "development",
+    "validation",
+    "held_out",
+    "cr008_fresh_exploratory_seeds_v1",
+    "cr011_fresh_exploratory_seeds_v1",
+    "cr013_close_match_seeds_v1",
+    "cr014_frozen_pairs"
+  ],
+  "evaluation_policy": {
+    "opponents": "same exact current-meta package family frozen for CR-013/CR-014 unless a package becomes unavailable; any replacement must be recorded before candidate execution",
+    "seats": "both",
+    "controls": ["R4B", "CR011"],
+    "stage_a": "Run the eventual CR-015 candidate only after its rule is frozen from CR-014. Compare paired terminal money delta and W/L against both frozen controls on all Stage A tuples. R4B-only results may select a close-boundary subset; candidate outcomes may not select tuples.",
+    "stage_b": "May run only if Stage A supports the direction of the frozen refinement. No thresholds or code changes are allowed between Stage A and Stage B.",
+    "failure_rule": "A refinement that improves mean money while creating a net increase in unfavorable W/L flips is rejected. Outcome conversion has priority over margin optimization.",
+    "held_out": "Remain 32/32 sealed."
+  },
+  "purpose": "Independent fresh evaluation distribution for the next identity-free CR-011 refinement, preregistered before CR-014 context-attribution results are known."
+}
