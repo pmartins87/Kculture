@@ -1,0 +1,31 @@
+name: meta002-postpatch-lineage-snapshot
+on:
+  push:
+    paths:
+      - '.github/workflows/meta002-postpatch-lineage-snapshot.yml'
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install lightweight dependencies
+        run: python -m pip install -U kagglehub pandas
+      - name: Verify tool identity
+        run: test "$(git rev-parse HEAD:tools/meta002_postpatch_lineage_snapshot.py)" = "ef9791ffeb14714afd6b94af460620c5c7ab4745"
+      - name: Build 1.32.7-only lineage snapshot
+        run: |
+          python tools/meta002_postpatch_lineage_snapshot.py \
+            --data-dir artifacts/meta002/data \
+            --top-seat-games 100 \
+            --output artifacts/meta002/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta002-postpatch-lineage-snapshot
+          path: artifacts/meta002/**
