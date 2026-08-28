@@ -1,0 +1,30 @@
+name: meta001-lineage-diversity-snapshot
+on:
+  push:
+    paths:
+      - '.github/workflows/meta001-lineage-diversity-snapshot.yml'
+  workflow_dispatch:
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install lightweight dependencies
+        run: python -m pip install -U kagglehub pandas
+      - name: Verify tool identity
+        run: test "$(git rev-parse HEAD:tools/meta001_lineage_diversity_snapshot.py)" = "51b38a38e5afe6b4ced9c1a97d99947ada439ea0"
+      - name: Download only lineage metadata and summarize
+        run: |
+          python tools/meta001_lineage_diversity_snapshot.py \
+            --data-dir artifacts/meta001/data \
+            --output artifacts/meta001/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta001-lineage-diversity-snapshot
+          path: artifacts/meta001/**
