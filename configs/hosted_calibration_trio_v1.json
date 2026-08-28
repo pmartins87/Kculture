@@ -1,0 +1,39 @@
+{
+  "experiment": "HOSTED-CAL-TRIO-V1",
+  "purpose": "Estimate hosted value of adaptation and market-order position in one narrow time window while measuring same-package hosted noise/drift.",
+  "arms": {
+    "R4B": "Kculture_R4B_fresh_control_v1.tar.gz",
+    "CR008": "Kculture_CR008_adaptive_append_calibration_v1.tar.gz",
+    "CR011": "Kculture_CR011_adaptive_early_calibration_v1.tar.gz"
+  },
+  "submission_order": [
+    "R4B_A",
+    "CR008",
+    "CR011",
+    "R4B_B"
+  ],
+  "primary_contrasts": {
+    "adaptation": "CR008 - mean(R4B_A,R4B_B)",
+    "order_position": "CR011 - CR008",
+    "combined": "CR011 - mean(R4B_A,R4B_B)"
+  },
+  "noise_proxy": "abs(R4B_B - R4B_A)",
+  "interpretation_policy": {
+    "directionally_resolved": "A contrast is directionally resolved only when abs(contrast) > noise_proxy. Otherwise classify it as INCONCLUSIVE, regardless of sign.",
+    "promotion": "No arm may be promoted solely from this four-slot calibration. Hosted results update architecture beliefs and select the next validation target.",
+    "do_not_compare_to_old_snapshot": "Do not substitute the historical R4B 143.2 score for the fresh bracket controls."
+  },
+  "slot_5_rule": {
+    "if_order_position_resolved_positive": "Repeat CR011 to test whether the positive order-position signal reproduces.",
+    "if_adaptation_resolved_positive_but_order_not_positive": "Repeat CR008 to test whether adaptation itself reproduces.",
+    "if_both_primary_effects_negative_or_inconclusive": "Use slot 5 only for a pre-audited orthogonal candidate justified by CR-014; otherwise repeat R4B for a third noise observation rather than inventing a variant post hoc."
+  },
+  "manual_record_required": [
+    "submission_id",
+    "submitted_at",
+    "public_score_when_available",
+    "episode_id_links_if_visible",
+    "package_sha256"
+  ],
+  "held_out": "SEALED"
+}
