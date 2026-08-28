@@ -60,4 +60,4 @@ jobs:
           echo 'Exact hosted replays are not both public yet.'
           exit 2
 
-# Manual availability probe refreshed 2026-08-27 after CR-011 PASS.
+# Manual availability probe refreshed after UTC rollover 2026-08-28.
