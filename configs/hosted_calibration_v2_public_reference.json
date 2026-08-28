@@ -1,0 +1,54 @@
+{
+  "experiment": "HOSTED-CAL-V2-PUBLIC-REFERENCE",
+  "frozen_before_any_new_hosted_scores": true,
+  "purpose": "Spend one full daily budget on orthogonal hosted information: adaptation, queue position, temporal noise, and base-family calibration.",
+  "submission_order": [
+    "R4B_A",
+    "CR008",
+    "CR011",
+    "R4B_B",
+    "KAITO_V43_PUBLIC_REFERENCE"
+  ],
+  "arms": {
+    "R4B_A": "Kculture_R4B_fresh_control_v1.tar.gz",
+    "CR008": "Kculture_CR008_adaptive_append_calibration_v1.tar.gz",
+    "CR011": "Kculture_CR011_adaptive_early_calibration_v1.tar.gz",
+    "R4B_B": "Kculture_R4B_fresh_control_v1.tar.gz",
+    "KAITO_V43_PUBLIC_REFERENCE": "Kculture_PUBLIC_REFERENCE_Kaito_V43_v13.tar.gz"
+  },
+  "primary_questions": {
+    "adaptation": "Does CR008 outperform the fresh R4B bracket beyond same-package temporal noise?",
+    "queue_position": "Does CR011 outperform CR008 when the adaptive sale multiset is identical but moved earlier?",
+    "base_family": "Does the exact contemporary Apache-2.0 Kaito V43 public reference show substantially stronger hosted behavior than our R4B family when submitted in the same time window?"
+  },
+  "contrasts": {
+    "adaptation": "CR008 - mean(R4B_A,R4B_B)",
+    "queue_position": "CR011 - CR008",
+    "combined_r4b_line": "CR011 - mean(R4B_A,R4B_B)",
+    "temporal_noise_proxy": "abs(R4B_B-R4B_A)",
+    "public_reference_gap": "KAITO_V43_PUBLIC_REFERENCE - mean(R4B_A,R4B_B)"
+  },
+  "interpretation_policy": {
+    "r4b_family_direction": "For R4B/CR008/CR011 score contrasts, classify direction as resolved only when absolute contrast exceeds abs(R4B_B-R4B_A).",
+    "public_reference": "Treat Kaito V43 as an external calibration reference, not as automatic promotion. Its original notebook reports Public Score 2882.0 at Version 13, but rating trajectories and match allocation can differ for a newly submitted identical package.",
+    "pivot_signal": "If Kaito V43 materially outperforms both fresh R4B controls in hosted play and its episodes validate normally, shift Kculture's development center of gravity to a properly attributed derivative/public-base lineage rather than continuing to optimize R4B by default.",
+    "no_posthoc": "Do not replace any of the five arms after seeing partial scores from this cycle."
+  },
+  "public_reference_provenance": {
+    "author": "Kaito Fukami",
+    "notebook": "103/128 Fresh Public | v43 Sparse Shop Hybrid",
+    "version": 13,
+    "license": "Apache-2.0",
+    "source_url": "https://www.kaggle.com/code/kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid",
+    "main_sha256": "69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3",
+    "reported_public_score_at_research_capture": 2882.0
+  },
+  "manual_record_required": [
+    "submission_id",
+    "submitted_at",
+    "public_score_when_available",
+    "episode_ids_or_links_when_visible",
+    "package_sha256"
+  ],
+  "held_out": "SEALED"
+}
