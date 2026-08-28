@@ -1,0 +1,51 @@
+name: cr017-public-highscore-base-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr017-public-highscore-base-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install downloader
+        run: python -m pip install -U kagglehub
+      - name: Fetch exact public Apache-2.0 high-score notebook package
+        run: |
+          mkdir -p artifacts/cr017
+          python tools/fetch_exact_package_main.py \
+            --handle bruceqdu/my-2026-08-04-high-score-pipeline/versions/3 \
+            --output artifacts/cr017/bruce_highscore_v3.py \
+            --receipt artifacts/cr017/receipt.json
+          python -m py_compile artifacts/cr017/bruce_highscore_v3.py
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          p=Path('artifacts/cr017/bruce_highscore_v3.py')
+          data=p.read_bytes()
+          known={
+            'R4B':'e564125f0c4a1711fd3ea065dc1cb27d4a62ce37',
+          }
+          report={
+            'bytes':len(data),
+            'sha256':hashlib.sha256(data).hexdigest(),
+            'contains_COK_token':b'COK' in data,
+            'contains_ZhangZiliang_token':b'ZhangZiliang' in data,
+            'contains_market_logic':b'market' in data.lower(),
+            'contains_opponent_reference':b'opponent' in data.lower(),
+            'note':'Blob SHA and git blob SHA are different hash schemes; identity is compared later by content SHA-256/provenance.'
+          }
+          Path('artifacts/cr017/probe.json').write_text(json.dumps(report,indent=2,sort_keys=True))
+          print(json.dumps(report,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr017-public-highscore-base-probe
+          path: artifacts/cr017/**
