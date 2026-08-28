@@ -1,0 +1,24 @@
+{
+  "experiment": "CR-014B",
+  "source_run": 33140495829,
+  "source_artifact": 9674044390,
+  "selection": "all 16 CR-014 affected pairs; frozen before CR-008 outcomes are computed",
+  "pairs": [
+    {"opponent":"boatlee","seed":732320826,"seat":1,"base_delta":-23.0,"candidate_delta":266.0,"relative_gain":289.0,"self_gain":96.0,"score_gain":1.0,"trigger_count":1},
+    {"opponent":"boatlee","seed":732320826,"seat":0,"base_delta":-352.0,"candidate_delta":-5.0,"relative_gain":347.0,"self_gain":137.0,"score_gain":0.0,"trigger_count":1},
+    {"opponent":"tetsu","seed":1396449672,"seat":0,"base_delta":417.0,"candidate_delta":234.0,"relative_gain":-183.0,"self_gain":-199.0,"score_gain":0.0,"trigger_count":1},
+    {"opponent":"tetsu","seed":1396449672,"seat":1,"base_delta":417.0,"candidate_delta":234.0,"relative_gain":-183.0,"self_gain":-199.0,"score_gain":0.0,"trigger_count":1},
+    {"opponent":"rayk","seed":1396449672,"seat":0,"base_delta":530.0,"candidate_delta":363.0,"relative_gain":-167.0,"self_gain":-191.0,"score_gain":0.0,"trigger_count":1},
+    {"opponent":"rayk","seed":1396449672,"seat":1,"base_delta":530.0,"candidate_delta":363.0,"relative_gain":-167.0,"self_gain":-191.0,"score_gain":0.0,"trigger_count":1},
+    {"opponent":"andrew","seed":1076706004,"seat":0,"base_delta":530.0,"candidate_delta":350.0,"relative_gain":-180.0,"self_gain":-105.0,"score_gain":0.0,"trigger_count":2},
+    {"opponent":"andrew","seed":1076706004,"seat":1,"base_delta":530.0,"candidate_delta":350.0,"relative_gain":-180.0,"self_gain":-105.0,"score_gain":0.0,"trigger_count":2},
+    {"opponent":"boatlee","seed":1076706004,"seat":0,"base_delta":-663.0,"candidate_delta":-589.0,"relative_gain":74.0,"self_gain":3.0,"score_gain":0.0,"trigger_count":2},
+    {"opponent":"boatlee","seed":1076706004,"seat":1,"base_delta":-663.0,"candidate_delta":-589.0,"relative_gain":74.0,"self_gain":3.0,"score_gain":0.0,"trigger_count":2},
+    {"opponent":"tetsu","seed":1793617897,"seat":0,"base_delta":775.0,"candidate_delta":344.0,"relative_gain":-431.0,"self_gain":-453.0,"score_gain":0.0,"trigger_count":6},
+    {"opponent":"rayk","seed":699994601,"seat":0,"base_delta":948.0,"candidate_delta":-1610.0,"relative_gain":-2558.0,"self_gain":-1380.0,"score_gain":-1.0,"trigger_count":4},
+    {"opponent":"rayk","seed":699994601,"seat":1,"base_delta":1000.0,"candidate_delta":-1558.0,"relative_gain":-2558.0,"self_gain":-1380.0,"score_gain":-1.0,"trigger_count":4},
+    {"opponent":"rayk","seed":1793617897,"seat":1,"base_delta":1101.0,"candidate_delta":1596.0,"relative_gain":495.0,"self_gain":35.0,"score_gain":0.0,"trigger_count":6},
+    {"opponent":"tetsu","seed":699994601,"seat":0,"base_delta":1160.0,"candidate_delta":-1398.0,"relative_gain":-2558.0,"self_gain":-1380.0,"score_gain":-1.0,"trigger_count":4},
+    {"opponent":"tetsu","seed":699994601,"seat":1,"base_delta":1210.0,"candidate_delta":-1348.0,"relative_gain":-2558.0,"self_gain":-1380.0,"score_gain":-1.0,"trigger_count":4}
+  ]
+}
