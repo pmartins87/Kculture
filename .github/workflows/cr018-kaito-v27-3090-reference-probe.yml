@@ -1,0 +1,53 @@
+name: cr018-kaito-v27-3090-reference-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr018-kaito-v27-3090-reference-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install downloader and current engine
+        run: |
+          python -m pip install -U kagglehub
+          python -m pip install kaggle-environments==1.32.7
+      - name: Fetch exact Version 4 packaged main.py
+        run: |
+          mkdir -p artifacts/cr018
+          python tools/fetch_exact_package_main.py \
+            --handle kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4 \
+            --output artifacts/cr018/kaito_v27_3090_v4.py \
+            --receipt artifacts/cr018/receipt.json
+      - name: Audit import and content identity
+        run: |
+          python - <<'PY'
+          import hashlib, importlib.util, json
+          from pathlib import Path
+          p=Path('artifacts/cr018/kaito_v27_3090_v4.py')
+          data=p.read_bytes()
+          spec=importlib.util.spec_from_file_location('cr018_kaito_v27',p)
+          m=importlib.util.module_from_spec(spec); spec.loader.exec_module(m)
+          assert callable(m.agent)
+          report={
+            'source':'kaitofukami/25-27-strict-future-v27-midgame-meta-reset/versions/4',
+            'reported_public_score':3090.1,
+            'license':'Apache-2.0 (Kaggle notebook metadata; preserve attribution before any hosted use)',
+            'main_sha256':hashlib.sha256(data).hexdigest(),
+            'main_bytes':len(data),
+            'imports_current_engine':True,
+          }
+          Path('artifacts/cr018/probe.json').write_text(json.dumps(report,indent=2,sort_keys=True))
+          print(json.dumps(report,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr018-kaito-v27-3090-reference-probe
+          path: artifacts/cr018/**
