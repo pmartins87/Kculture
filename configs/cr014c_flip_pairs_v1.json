@@ -1,0 +1,13 @@
+{
+  "experiment": "CR-014C",
+  "purpose": "Fast causal decomposition of the five CR-013 outcome flips while CR-014B broad decomposition runs.",
+  "frozen_before_cr008_results": true,
+  "pairs": [
+    {"label":"favorable","opponent":"boatlee","seed":732320826,"seat":1,"r4b_delta":-23.0,"cr011_delta":266.0},
+    {"label":"catastrophic","opponent":"rayk","seed":699994601,"seat":0,"r4b_delta":948.0,"cr011_delta":-1610.0},
+    {"label":"catastrophic","opponent":"rayk","seed":699994601,"seat":1,"r4b_delta":1000.0,"cr011_delta":-1558.0},
+    {"label":"catastrophic","opponent":"tetsu","seed":699994601,"seat":0,"r4b_delta":1160.0,"cr011_delta":-1398.0},
+    {"label":"catastrophic","opponent":"tetsu","seed":699994601,"seat":1,"r4b_delta":1210.0,"cr011_delta":-1348.0}
+  ],
+  "interpretation": "If CR008 reproduces the catastrophic flips, the sale itself is causal. If CR008 stays on the winning side while CR011 flips, early queue position is causal. If CR008 degrades but CR011 crosses the boundary, both components contribute. Diagnostic only."
+}
