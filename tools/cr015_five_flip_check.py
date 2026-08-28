@@ -1,6 +1,8 @@
 """Fast diagnostic: CR-015 on the five CR-014C outcome flips only.
 
-Diagnostic-only.  Fresh preregistered CR-015 Stage A remains the promotion gate.
+Diagnostic-only. Fresh preregistered CR-015 Stage A remains the promotion gate.
+The frozen CR-014C config labels each pair favorable/catastrophic; this harness
+uses that label directly and never reselects or relabels pairs from outcomes.
 """
 from __future__ import annotations
 import argparse, importlib.util, json, sys, time
@@ -38,10 +40,10 @@ def main():
         seed=int(e['seed']); seat=int(e['seat']); opp=od/f"{e['opponent']}.py"
         try:
             vals={k:play(p,opp,seed,seat) for k,p in ARMS.items()}
-            rows.append({'opponent':e['opponent'],'seed':seed,'seat':seat,'expected_cr011_score_gain':e['score_gain'],'terminal':vals})
+            rows.append({'opponent':e['opponent'],'seed':seed,'seat':seat,'frozen_label':e['label'],'terminal':vals})
         except Exception as exc: errors.append({'opponent':e['opponent'],'seed':seed,'seat':seat,'error':repr(exc)})
-    bad=[r for r in rows if float(r['expected_cr011_score_gain'])<0]
-    good=[r for r in rows if float(r['expected_cr011_score_gain'])>0]
+    bad=[r for r in rows if r['frozen_label']=='catastrophic']
+    good=[r for r in rows if r['frozen_label']=='favorable']
     recovered=sum(r['terminal']['cr015']['score']==r['terminal']['cr008']['score']==1.0 for r in bad)
     preserved=sum(r['terminal']['cr015']['score']==r['terminal']['cr011']['score']==1.0 for r in good)
     payload={'experiment':'CR-015-five-flip-check','validation_status':'DIAGNOSTIC_ONLY','status':'PASS' if not errors and recovered==len(bad) and preserved==len(good) else 'FAIL','catastrophic_wins_recovered':recovered,'catastrophic_count':len(bad),'favorable_wins_preserved':preserved,'favorable_count':len(good),'errors':errors,'rows':rows}
