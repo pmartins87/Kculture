@@ -1,0 +1,31 @@
+{
+  "schema_version": "cr014-response-gate-seeds-v1",
+  "generator": {
+    "algorithm": "python-random.Random randint",
+    "master_seed": 2026082714,
+    "population": [1, 2147483646]
+  },
+  "seeds": [
+    903402177,
+    139015807,
+    1274867083,
+    1697936637,
+    1311273098,
+    1304398795,
+    188992505,
+    115034206,
+    1774077240,
+    411464878,
+    2007696240,
+    2028428315
+  ],
+  "exclusions": [
+    "development",
+    "validation",
+    "held_out",
+    "cr008_fresh_exploratory_seeds_v1",
+    "cr011_fresh_exploratory_seeds_v1",
+    "cr013_close_match_seeds_v1"
+  ],
+  "purpose": "CR-014 identity-free opponent-conditioned response-gate research only; no validation or held-out access."
+}
