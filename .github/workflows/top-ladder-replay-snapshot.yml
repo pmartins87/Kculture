@@ -1,0 +1,45 @@
+name: top-ladder-replay-snapshot
+on:
+  workflow_dispatch:
+    inputs:
+      top:
+        description: 'Number of current leaderboard teams'
+        required: false
+        default: '10'
+      episodes_per_team:
+        description: 'Newest completed public episodes per team'
+        required: false
+        default: '2'
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token secret
+        shell: bash
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo 'KAGGLE_API_TOKEN repository secret is not configured.'
+            echo 'Configure it once in GitHub Actions secrets; never commit or print it.'
+            exit 2
+          fi
+      - name: Install official Kaggle client
+        run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture current ladder snapshot and public replays
+        run: |
+          python tools/collect_top_ladder_snapshot.py \
+            --top '${{ inputs.top }}' \
+            --episodes-per-team '${{ inputs.episodes_per_team }}' \
+            --output-dir artifacts/top-ladder-snapshot
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: top-ladder-replay-snapshot
+          path: artifacts/top-ladder-snapshot/**
