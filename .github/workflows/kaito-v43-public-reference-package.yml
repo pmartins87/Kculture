@@ -1,0 +1,45 @@
+name: kaito-v43-public-reference-package
+on:
+  push:
+    paths:
+      - '.github/workflows/kaito-v43-public-reference-package.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install downloader and engine
+        run: |
+          python -m pip install -U kagglehub
+          python -m pip install -r requirements.txt
+      - name: Verify package builder identity
+        run: test "$(git rev-parse HEAD:tools/build_kaito_v43_public_reference.py)" = "ebb705f76344fa77700178674542d305e1359333"
+      - name: Fetch exact public Kaito V43 Version 13 main.py
+        run: |
+          mkdir -p artifacts/kaito_source
+          python tools/fetch_exact_package_main.py \
+            --handle kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13 \
+            --output artifacts/kaito_source/main.py \
+            --receipt artifacts/kaito_source/receipt.json
+      - name: Build attributed deterministic archive
+        run: |
+          python tools/build_kaito_v43_public_reference.py \
+            --source artifacts/kaito_source/main.py \
+            --output-dir artifacts/submissions/kaito_v43_public_reference
+      - name: Audit byte identity and importability
+        run: |
+          test "$(sha256sum artifacts/kaito_source/main.py | cut -d' ' -f1)" = "69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3"
+          test "$(sha256sum artifacts/submissions/kaito_v43_public_reference/Kculture_PUBLIC_REFERENCE_Kaito_V43_v13/main.py | cut -d' ' -f1)" = "69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3"
+          python -m py_compile artifacts/submissions/kaito_v43_public_reference/Kculture_PUBLIC_REFERENCE_Kaito_V43_v13/main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaito-v43-public-reference-package
+          path: |
+            artifacts/submissions/kaito_v43_public_reference/**
+            artifacts/kaito_source/receipt.json
