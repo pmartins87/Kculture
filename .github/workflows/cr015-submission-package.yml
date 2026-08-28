@@ -1,0 +1,41 @@
+name: cr015-submission-package
+on:
+  push:
+    paths:
+      - '.github/workflows/cr015-submission-package.yml'
+  workflow_dispatch:
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen public dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
+          test "$(git rev-parse HEAD:candidates/cr015_liquidation_phase_early_order.py)" = "fabd4bc398e7eadcfd1d44add4d0e593315140e8"
+          test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
+          test "$(git rev-parse HEAD:tools/build_cr015_submission.py)" = "e853764e56a65a730c8e9dad8a2fdf1745d067c0"
+          test "$(git rev-parse HEAD:tools/audit_cr015_submission.py)" = "4c9728085022ffdab627310fa249f52da67a9e16"
+      - name: Build deterministic package
+        run: python tools/build_cr015_submission.py
+      - name: Audit source-package parity and both placement modes
+        run: python tools/audit_cr015_submission.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr015-hosted-calibration-package
+          path: artifacts/submissions/cr015_liquidation_phase_v1/**
