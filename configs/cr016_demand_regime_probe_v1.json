@@ -1,0 +1,22 @@
+{
+  "schema_version": "cr016-demand-regime-probe-v1",
+  "purpose": "Orthogonal diagnostic of public town-demand / no-production regimes for CARROT, TOMATO and EGG under kaggle-environments 1.32.7. No candidate or threshold is authorized by this config.",
+  "generated_before_results": true,
+  "master_seed": 2026082816,
+  "seeds": [830468984, 1942615469, 780989416, 1214969779, 289806533, 1758497991],
+  "seat": 0,
+  "products": ["CARROT", "TOMATO", "EGG"],
+  "shop_weights": {
+    "CARROT": {"PET_CAFE": 2, "FARMERS_MARKET": 1},
+    "TOMATO": {"PIZZA_SHOP": 1, "FARMERS_MARKET": 1},
+    "EGG": {"BAKERY": 1, "BRUNCH_SPOT": 1}
+  },
+  "producer_proxy": {
+    "CARROT": "number of CARROT plant tiles",
+    "TOMATO": "number of TOMATO plant tiles",
+    "EGG": "number of GOOSE animals"
+  },
+  "sampling": "one public state per in-game day at hour 23 when available",
+  "analysis_only": true,
+  "held_out": "SEALED"
+}
