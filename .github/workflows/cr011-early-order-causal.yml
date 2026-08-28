@@ -5,6 +5,7 @@ on:
       - '.github/workflows/cr011-early-order-causal.yml'
   workflow_dispatch:
 
+# Rerun after mechanical order-gate stimulus fix; candidate/seeds/gates unchanged.
 jobs:
   causal:
     runs-on: ubuntu-latest
