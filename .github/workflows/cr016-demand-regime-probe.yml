@@ -1,0 +1,50 @@
+name: cr016-demand-regime-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr016-demand-regime-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen diagnostic identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:configs/cr016_demand_regime_probe_v1.json)" = "d5a53a8f0448003ab1e8840e0122b0f11b2597bb"
+          test "$(git rev-parse HEAD:tools/cr016_demand_regime_probe.py)" = "3f376c60acab9720524027f83f46cd1c419b1fe2"
+      - name: Fetch exact current-meta packages
+        run: |
+          mkdir -p artifacts/cr016/opponents
+          python tools/fetch_exact_package_main.py --handle kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13 --output artifacts/cr016/opponents/kaito_sparse.py --receipt artifacts/cr016/opponents/kaito_sparse.json
+          python tools/fetch_exact_package_main.py --handle prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10 --output artifacts/cr016/opponents/prvsiyan.py --receipt artifacts/cr016/opponents/prvsiyan.json
+          python tools/fetch_exact_package_main.py --handle salemali7/harvest-kaggriculture/versions/4 --output artifacts/cr016/opponents/salem.py --receipt artifacts/cr016/opponents/salem.json
+          python tools/fetch_exact_package_main.py --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/23 --output artifacts/cr016/opponents/rayk.py --receipt artifacts/cr016/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle kaitofukami/41-49-future-unseen-v19-replication-to-control/versions/1 --output artifacts/cr016/opponents/kaito_future.py --receipt artifacts/cr016/opponents/kaito_future.json
+          python tools/fetch_exact_package_main.py --handle web3cainiao/kaggriculture-v21-tactical-memory/versions/1 --output artifacts/cr016/opponents/tactical.py --receipt artifacts/cr016/opponents/tactical.json
+          python tools/fetch_exact_package_main.py --handle boatlee/v21-r1-public-state-route-portfolio/versions/2 --output artifacts/cr016/opponents/boatlee.py --receipt artifacts/cr016/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle andrewsokolovsky/kaggriculture/versions/11 --output artifacts/cr016/opponents/andrew.py --receipt artifacts/cr016/opponents/andrew.json
+          python tools/fetch_exact_package_main.py --handle tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2 --output artifacts/cr016/opponents/tetsu.py --receipt artifacts/cr016/opponents/tetsu.json
+      - name: Measure public demand/no-production opportunity
+        run: |
+          python tools/cr016_demand_regime_probe.py \
+            --opponent-dir artifacts/cr016/opponents \
+            --output artifacts/cr016/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr016-demand-regime-probe
+          path: artifacts/cr016/**
