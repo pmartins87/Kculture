@@ -27,7 +27,7 @@ jobs:
           test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
           test "$(git rev-parse HEAD:candidates/cr015_liquidation_phase_early_order.py)" = "fabd4bc398e7eadcfd1d44add4d0e593315140e8"
           test "$(git rev-parse HEAD:configs/cr014c_flip_pairs_v1.json)" = "ea1762fd292584f50d73d6251f065a6a590de827"
-          test "$(git rev-parse HEAD:tools/cr015_five_flip_check.py)" = "21cdd78d0764b1f663da767aeadec43e52858fc1"
+          test "$(git rev-parse HEAD:tools/cr015_five_flip_check.py)" = "50476635ae8afbdca84cd0d2a82a7c66c32805d5"
       - name: Fetch exact flip opponents
         run: |
           mkdir -p artifacts/cr015_five/opponents
