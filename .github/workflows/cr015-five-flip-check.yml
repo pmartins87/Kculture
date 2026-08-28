@@ -1,0 +1,46 @@
+name: cr015-five-flip-check
+on:
+  push:
+    paths:
+      - '.github/workflows/cr015-five-flip-check.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
+          test "$(git rev-parse HEAD:candidates/cr015_liquidation_phase_early_order.py)" = "fabd4bc398e7eadcfd1d44add4d0e593315140e8"
+          test "$(git rev-parse HEAD:configs/cr014c_flip_pairs_v1.json)" = "ea1762fd292584f50d73d6251f065a6a590de827"
+          test "$(git rev-parse HEAD:tools/cr015_five_flip_check.py)" = "21cdd78d0764b1f663da767aeadec43e52858fc1"
+      - name: Fetch exact flip opponents
+        run: |
+          mkdir -p artifacts/cr015_five/opponents
+          python tools/fetch_exact_package_main.py --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/23 --output artifacts/cr015_five/opponents/rayk.py --receipt artifacts/cr015_five/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle boatlee/v21-r1-public-state-route-portfolio/versions/2 --output artifacts/cr015_five/opponents/boatlee.py --receipt artifacts/cr015_five/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2 --output artifacts/cr015_five/opponents/tetsu.py --receipt artifacts/cr015_five/opponents/tetsu.json
+      - name: Run five-flip check
+        run: |
+          python tools/cr015_five_flip_check.py \
+            --opponent-dir artifacts/cr015_five/opponents \
+            --output artifacts/cr015_five/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr015-five-flip-check
+          path: artifacts/cr015_five/**
