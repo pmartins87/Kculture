@@ -1,0 +1,45 @@
+name: hosted-authenticated-replay-collection
+on:
+  workflow_dispatch:
+    inputs:
+      max_per_submission:
+        description: '0 = all listed episodes; use a small number for a first credential/rate-limit probe'
+        required: false
+        default: '0'
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require repository Kaggle token secret
+        shell: bash
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo 'KAGGLE_API_TOKEN repository secret is not configured.'
+            echo 'Configure it in GitHub Actions secrets; never commit or print the token.'
+            exit 2
+          fi
+      - name: Install current official Kaggle CLI
+        run: |
+          python -m pip install -U 'kaggle>=2.2.3'
+          kaggle --version
+      - name: Enumerate and collect hosted replays sequentially
+        run: |
+          python tools/collect_submission_replays_cli.py \
+            --submission r4b:55784381 \
+            --submission kexp050:55818927 \
+            --output-dir artifacts/hosted-authenticated \
+            --delay-seconds 3.0 \
+            --max-per-submission '${{ inputs.max_per_submission }}'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-authenticated-replays
+          path: artifacts/hosted-authenticated/**
