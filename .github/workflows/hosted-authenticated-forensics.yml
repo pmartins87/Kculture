@@ -1,0 +1,52 @@
+name: hosted-authenticated-forensics
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3,9,15,21 * * *'
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check credential availability
+        id: auth
+        run: |
+          if [ -n "$KAGGLE_API_TOKEN" ]; then
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo 'KAGGLE_API_TOKEN repository secret is not configured; collection skipped.'
+          fi
+      - name: Install current Kaggle CLI
+        if: steps.auth.outputs.available == 'true'
+        run: python -m pip install -U 'kaggle>=2.2.1'
+      - name: Record current submission allowance
+        if: steps.auth.outputs.available == 'true'
+        run: |
+          mkdir -p artifacts/hosted-authenticated
+          kaggle competitions submission-limits kaggriculture --json > artifacts/hosted-authenticated/submission-limits.json || true
+          cat artifacts/hosted-authenticated/submission-limits.json || true
+      - name: Collect episode metadata and high-value replays
+        if: steps.auth.outputs.available == 'true'
+        run: |
+          python tools/fetch_authenticated_hosted_forensics.py \
+            --submission r4b:55784381 \
+            --submission kexp050:55818927 \
+            --output artifacts/hosted-authenticated \
+            --win-sample 25 \
+            --max-replays 120 \
+            --delay 0.8
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-authenticated-forensics
+          path: artifacts/hosted-authenticated/**
+          if-no-files-found: warn
