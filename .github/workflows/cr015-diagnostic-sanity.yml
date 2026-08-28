@@ -1,0 +1,48 @@
+name: cr015-diagnostic-sanity
+on:
+  push:
+    paths:
+      - '.github/workflows/cr015-diagnostic-sanity.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/cr011_adaptive_early_order.py)" = "c4f1cb79f3c20b8229ab09e00a6878289cf9648d"
+          test "$(git rev-parse HEAD:candidates/cr015_liquidation_phase_early_order.py)" = "fabd4bc398e7eadcfd1d44add4d0e593315140e8"
+          test "$(git rev-parse HEAD:configs/cr014b_affected_pairs_v1.json)" = "59b3c9a3e1541dd25418bc2034762cba95be7909"
+          test "$(git rev-parse HEAD:tools/cr015_diagnostic_sanity.py)" = "0ac56b1686c2acd975777ba791f67fe0a44cbbc7"
+      - name: Fetch exact diagnostic opponents
+        run: |
+          mkdir -p artifacts/cr015_sanity/opponents
+          python tools/fetch_exact_package_main.py --handle raykkretzschmar/kaggriculture-rank-your-agent/versions/23 --output artifacts/cr015_sanity/opponents/rayk.py --receipt artifacts/cr015_sanity/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle boatlee/v21-r1-public-state-route-portfolio/versions/2 --output artifacts/cr015_sanity/opponents/boatlee.py --receipt artifacts/cr015_sanity/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle andrewsokolovsky/kaggriculture/versions/11 --output artifacts/cr015_sanity/opponents/andrew.py --receipt artifacts/cr015_sanity/opponents/andrew.json
+          python tools/fetch_exact_package_main.py --handle tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2 --output artifacts/cr015_sanity/opponents/tetsu.py --receipt artifacts/cr015_sanity/opponents/tetsu.json
+      - name: Run diagnostic sanity check
+        run: |
+          python tools/cr015_diagnostic_sanity.py \
+            --opponent-dir artifacts/cr015_sanity/opponents \
+            --output artifacts/cr015_sanity/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr015-diagnostic-sanity
+          path: artifacts/cr015_sanity/**
