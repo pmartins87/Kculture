@@ -76,7 +76,31 @@ A **calibration submission** is justified when all are true:
 
 Calibration submission and promotion are separate concepts. A policy may be worth submitting to learn about the real field even before it is worthy of replacing the frozen champion in a formal local gate. Conversely, a locally prettier candidate that tests essentially the same behavior may not be worth a hosted slot.
 
+### Daily submission budget policy
+
+A daily submission allowance is a **perishable information budget**. Unused daily capacity does not become more valuable merely because it was conserved.
+
+Operationally, when the Kaggle UI currently allows up to five submissions in a day, the project should prefer to use some of that allowance for high-information hosted experiments instead of routinely ending the day at 0/5. The exact mix is contextual, but the default target is:
+
+- 1–2 **calibration / ablation** submissions when materially different hypotheses are ready;
+- 0–1 **promotion** submission when a candidate has earned that role;
+- keep remaining capacity available for discoveries later in the day or packaging retries.
+
+Do **not** submit:
+
+- mechanically unverified packages;
+- candidates that differ only cosmetically or answer the same hosted question as an already-running agent;
+- variants whose likely information value is lower than preserving a slot for a materially different experiment later that day.
+
+The objective is **information gained per hosted slot**, not minimizing the number of submissions and not maximizing raw submission count.
+
 Current official Kaggle simulation documentation says submitted agents continue to play evaluation episodes and the leaderboard displays the team's best scoring agent. Kaggriculture staff also state that after the submission deadline agents continue playing for two weeks before a single final Bradley-Terry tournament. The repository previously treated “only the latest two submissions remain tracked” as a hard invariant; that claim is now **UNVERIFIED and must not drive decisions** until a current Kaggriculture-specific official source confirms it.
+
+## Replay / hosted-forensics policy
+
+A Kaggle episode URL containing `submissionId` and `episodeId` identifies **one specific episode**, not every game played by that submission. The `submissionId` is nevertheless the key needed to enumerate or match additional episodes once Kaggle exposes them through the simulation APIs or daily episode datasets.
+
+For R4B and KEXP-050, episode-level hosted forensics should use as many available games as possible rather than treating a single replay as representative. Aggregate loss analysis should separate opponent family, seat, game phase, money-gap trajectory, market interactions and terminal conversion efficiency before proposing a fix.
 
 ## Architecture policy
 
