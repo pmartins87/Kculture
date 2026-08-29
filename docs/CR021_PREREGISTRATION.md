@@ -22,7 +22,10 @@ Append exactly one `BUY_SEED TOMATO 1` only if all are true:
 2. current TOMATO market price is at least **90** (1.50x official base price 60);
 3. the player's public farm has **zero existing TOMATO plants**;
 4. the base action has a free market-order slot (<10);
-5. the extra-seed ledger can be tracked without consuming seed stock reserved by CR008/R4B.
+5. the extra-seed ledger can be tracked without consuming seed stock reserved by CR008/R4B;
+6. tile `(9,7)` is currently empty and the state-309 CR008 unit action leaves or moves at least one own unit onto `(9,7)`, making the next-state planting opportunity physically visible before the purchase.
+
+Condition 6 was added before candidate implementation/outcomes to prevent orphan seed purchases on route variants where the audited slot is not actually approached.
 
 The 90 threshold is deliberately conservative and mechanics-derived, not fit on CR-016 outcomes: at price 90, four TOMATO units gross 360 against a 50 seed cost, while the official base price is 60. The town-demand requirement prevents pure transient-price chasing.
 
