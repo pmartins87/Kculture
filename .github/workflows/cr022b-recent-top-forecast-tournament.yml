@@ -1,0 +1,32 @@
+name: cr022b-recent-top-forecast-tournament
+on:
+  push:
+    paths:
+      - .github/workflows/cr022b-recent-top-forecast-tournament.yml
+  workflow_dispatch:
+jobs:
+  forecast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: pip}
+      - name: Install research dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Verify frozen CR022B identities
+        run: |
+          test "$(git rev-parse HEAD:tools/cr022b_recent_top_forecast_tournament.py)" = "$(git rev-parse HEAD:tools/cr022b_recent_top_forecast_tournament.py)"
+          test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "$(git rev-parse HEAD:models/cr007_pure_models.json)"
+      - name: Run recent official top-episode forecast tournament
+        run: |
+          mkdir -p artifacts/cr022b
+          python tools/cr022b_recent_top_forecast_tournament.py --top 20 --output artifacts/cr022b/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr022b-recent-top-forecast-tournament
+          path: artifacts/cr022b/**
+          if-no-files-found: warn
