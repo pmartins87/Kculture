@@ -1,0 +1,24 @@
+name: seat-step-observation-probe
+on:
+  push:
+    paths:
+      - .github/workflows/seat-step-observation-probe.yml
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: pip}
+      - name: Install frozen engine
+        run: python -m pip install -r requirements.txt
+      - name: Run exact seat observation probe
+        run: |
+          mkdir -p artifacts/seat_step_probe
+          python tools/probe_seat_step_observation.py --output artifacts/seat_step_probe/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seat-step-observation-probe
+          path: artifacts/seat_step_probe/**
