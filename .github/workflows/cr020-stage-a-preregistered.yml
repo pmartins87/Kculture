@@ -1,6 +1,9 @@
 name: cr020-stage-a-preregistered
 on:
   workflow_dispatch:
+  push:
+    paths:
+      - 'triggers/cr020_stage_a'
 
 jobs:
   shard:
