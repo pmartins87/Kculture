@@ -1,0 +1,58 @@
+name: hosted-entrypoint-regression-fixed
+on:
+  push:
+    paths:
+      - 'tools/build_cr008_cr011_calibration_packages.py'
+      - '.github/workflows/hosted-entrypoint-regression-fixed.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact engine
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Build corrected packages
+        run: python tools/build_cr008_cr011_calibration_packages.py
+      - name: Validate official file-loader entrypoint and full episodes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          roots = [
+              Path('artifacts/submissions/adaptive_calibration_pair/Kculture_CR008_adaptive_append_calibration_v1/main.py'),
+              Path('artifacts/submissions/adaptive_calibration_pair/Kculture_CR011_adaptive_early_calibration_v1/main.py'),
+          ]
+          for path in roots:
+              raw = path.read_text(encoding='utf-8')
+              selected = get_last_callable(raw, path=str(path))
+              print(path.name, 'selected=', selected.__name__, 'argc=', selected.__code__.co_argcount)
+              assert selected.__name__ == 'agent', selected.__name__
+              assert selected.__code__.co_argcount == 2
+              for seat, seed in [(0, 28001), (1, 28002)]:
+                  env = make('kaggriculture', configuration={'episodeSteps': 720, 'seed': seed}, debug=False)
+                  agents = [str(path), 'starter'] if seat == 0 else ['starter', str(path)]
+                  env.run(agents)
+                  final = env.steps[-1]
+                  statuses = [final[0].status, final[1].status]
+                  rewards = [final[0].reward, final[1].reward]
+                  print(path.parent.name, 'seat', seat, 'statuses', statuses, 'rewards', rewards)
+                  assert statuses == ['DONE', 'DONE'], statuses
+          print('HOSTED_ENTRYPOINT_REGRESSION_PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hosted-adaptive-fixed-packages
+          path: |
+            artifacts/submissions/adaptive_calibration_pair/*.tar.gz
+            artifacts/submissions/adaptive_calibration_pair/manifest.json
