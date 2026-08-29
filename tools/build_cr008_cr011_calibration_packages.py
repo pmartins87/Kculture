@@ -170,6 +170,12 @@ def _ka_apply(obs,action,player,step):
 def agent(obs,config=None):
     player=int(_ka_get(obs,"player",0) or 0);step=_ka_clock_step(obs);_ka_reset(player,step)
     action=_ka_base_agent(obs,config);action=_ka_apply(obs,action,player,step);_ka_remember(player,step,obs);return action
+
+# kaggle-environments loads a Python file by selecting the last callable created
+# in its exec namespace.  The COK base defines `agent` earlier, and overwriting
+# that existing dict key does not move its insertion position.  Bind the final
+# wrapper under a fresh name so the hosted loader selects the intended callable.
+_ka_hosted_entrypoint = agent
 '''
 
 
