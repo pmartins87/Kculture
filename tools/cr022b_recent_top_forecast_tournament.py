@@ -19,7 +19,7 @@ for later counterfactual response work, but no quantity model is promoted here.
 """
 from __future__ import annotations
 
-import argparse, collections, hashlib, json, math, statistics, tempfile
+import argparse, collections, hashlib, json, math, statistics, sys, tempfile
 from pathlib import Path
 
 import numpy as np
@@ -30,6 +30,8 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
 ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0,str(ROOT))
 from tools.cr004_adaptation_signal import download, read_csv, public_features
 
 PRODUCTS=("CARROT","TOMATO","STRAWBERRY","MELON")
@@ -129,7 +131,7 @@ def calibrate(c,p):
 
 
 def ece(y,p,bins=10):
-    y=np.asarray(y);p=np.asarray(p);total=len(y);out=0.0
+    y=np.asarray(y);p=np.asarray(p);out=0.0
     for lo in np.linspace(0,1,bins,endpoint=False):
         hi=lo+1/bins;mask=(p>=lo)&((p<hi) if hi<1 else (p<=hi))
         if mask.any():out+=mask.mean()*abs(float(y[mask].mean())-float(p[mask].mean()))
@@ -199,7 +201,6 @@ def main():
     available=sorted({r['date'] for r in rows})
     if len(available)<2:raise SystemExit(f'need >=2 available dates, got {available}')
     test_date=available[-1];train_dates=available[:-1];pre=[r for r in rows if r['date'] in train_dates];test=[r for r in rows if r['date']==test_date]
-    # Deterministic episode-grouped calibration split; no episode appears in both fit/cal.
     cal_eps={e for e in {r['episode_id'] for r in pre} if stable_bucket(e)==0}
     cal=[r for r in pre if r['episode_id'] in cal_eps];fit=[r for r in pre if r['episode_id'] not in cal_eps]
     if not cal or not fit:raise SystemExit('empty grouped fit/cal split')
