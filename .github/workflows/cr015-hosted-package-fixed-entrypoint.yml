@@ -1,0 +1,60 @@
+name: cr015-hosted-package-fixed-entrypoint
+on:
+  push:
+    paths:
+      - '.github/workflows/cr015-hosted-package-fixed-entrypoint.yml'
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact engine and audit deps
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub scikit-learn
+      - name: Fetch frozen public dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen strategic identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+          test "$(git rev-parse HEAD:candidates/cr015_liquidation_phase_early_order.py)" = "fabd4bc398e7eadcfd1d44add4d0e593315140e8"
+          test "$(git rev-parse HEAD:models/cr007_pure_models.json)" = "d4b29e753e2328ac43503f8daa655cc63abdd336"
+      - name: Build CR-015 from fixed hosted template
+        run: python tools/build_cr015_submission.py
+      - name: Validate official Kaggle file-loader entrypoint and full episodes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          p=Path('artifacts/submissions/cr015_liquidation_phase_v1/Kculture_CR015_liquidation_phase_early_v1/main.py')
+          raw=p.read_text(encoding='utf-8')
+          selected=get_last_callable(raw,path=str(p))
+          print('selected=',selected.__name__,'argc=',selected.__code__.co_argcount)
+          assert selected.__name__=='agent'
+          assert selected.__code__.co_argcount==2
+          for seat,seed in [(0,28151),(1,28152)]:
+              env=make('kaggriculture',configuration={'episodeSteps':720,'seed':seed},debug=False)
+              agents=[str(p),'starter'] if seat==0 else ['starter',str(p)]
+              env.run(agents)
+              final=env.steps[-1]
+              statuses=[final[0].status,final[1].status]
+              rewards=[final[0].reward,final[1].reward]
+              print('seat',seat,'statuses',statuses,'rewards',rewards)
+              assert statuses==['DONE','DONE']
+          print('CR015_HOSTED_ENTRYPOINT_PASS')
+          PY
+      - name: Audit source-package parity and activation modes
+        run: python tools/audit_cr015_submission.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr015-hosted-fixed-package
+          path: artifacts/submissions/cr015_liquidation_phase_v1/**
