@@ -1,0 +1,45 @@
+name: debug-hosted-calibration-runtime
+on:
+  push:
+    paths:
+      - '.github/workflows/debug-hosted-calibration-runtime.yml'
+  workflow_dispatch:
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact engine
+        run: python -m pip install -r requirements.txt
+      - name: Fetch frozen base
+        run: python tools/fetch_public_opponents.py
+      - name: Build exact submitted trio
+        run: python tools/build_hosted_calibration_trio.py
+      - name: Extract packages
+        run: |
+          mkdir -p artifacts/runtime_debug/r4b artifacts/runtime_debug/cr008 artifacts/runtime_debug/cr011
+          tar -xzf artifacts/submissions/hosted_calibration_trio/Kculture_R4B_fresh_control_v1.tar.gz -C artifacts/runtime_debug/r4b
+          tar -xzf artifacts/submissions/hosted_calibration_trio/Kculture_CR008_adaptive_append_calibration_v1.tar.gz -C artifacts/runtime_debug/cr008
+          tar -xzf artifacts/submissions/hosted_calibration_trio/Kculture_CR011_adaptive_early_calibration_v1.tar.gz -C artifacts/runtime_debug/cr011
+          python -m py_compile artifacts/runtime_debug/r4b/main.py artifacts/runtime_debug/cr008/main.py artifacts/runtime_debug/cr011/main.py
+      - name: Run exact R4B package
+        run: python tools/run_episode.py --agent0 file:artifacts/runtime_debug/r4b/main.py:agent --agent1 starter --seed 123 --output-root artifacts/runtime_debug/episodes
+      - name: Run exact CR008 package
+        run: python tools/run_episode.py --agent0 file:artifacts/runtime_debug/cr008/main.py:agent --agent1 starter --seed 123 --output-root artifacts/runtime_debug/episodes
+      - name: Run exact CR011 package
+        run: python tools/run_episode.py --agent0 file:artifacts/runtime_debug/cr011/main.py:agent --agent1 starter --seed 123 --output-root artifacts/runtime_debug/episodes
+      - name: Run reverse-seat CR008 package
+        run: python tools/run_episode.py --agent0 starter --agent1 file:artifacts/runtime_debug/cr008/main.py:agent --seed 456 --output-root artifacts/runtime_debug/episodes
+      - name: Run reverse-seat CR011 package
+        run: python tools/run_episode.py --agent0 starter --agent1 file:artifacts/runtime_debug/cr011/main.py:agent --seed 456 --output-root artifacts/runtime_debug/episodes
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-calibration-runtime-debug
+          path: artifacts/runtime_debug/**
