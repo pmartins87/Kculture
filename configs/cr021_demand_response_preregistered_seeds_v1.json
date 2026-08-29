@@ -1,0 +1,43 @@
+{
+  "experiment": "CR-021",
+  "purpose": "fresh preregistered evaluation for a sparse public-demand TOMATO response; frozen before candidate implementation or outcomes",
+  "master_seed": 2026082921,
+  "generated_with": "Python random.Random(master_seed).randrange(1, 2147483647), rejecting all CR015 Stage A/B and CR020 Stage A seeds",
+  "stage_a": [
+    1739173945,
+    351440591,
+    765086036,
+    1052403330,
+    1458928522,
+    1469542198,
+    53535791,
+    1548712323,
+    1574598073,
+    1832874797,
+    1095244584,
+    1537839854
+  ],
+  "stage_b": [
+    1755742763,
+    1045934613,
+    1451116352,
+    345586150,
+    2046633119,
+    1294565572,
+    172982790,
+    695406020,
+    1668831498,
+    740911670,
+    1194845041,
+    894403577
+  ],
+  "policy": {
+    "stage_a_before_stage_b": true,
+    "no_candidate_or_threshold_changes_between_stages": true,
+    "opponent_identity_as_feature_or_gate": false,
+    "held_out_access": false,
+    "primary_priority": "W/L conversion and no unfavorable outcome regression",
+    "candidate_baselines": ["CR008", "CR015"],
+    "stage_b_requires": "unchanged candidate with Stage A support"
+  }
+}
