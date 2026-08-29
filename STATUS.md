@@ -22,56 +22,40 @@ Latest observed Kaggle UI snapshot:
 - R4B_B byte-identical repeat, submission `55868963`: **188.4**;
 - Kaito V43 public reference, submission `55868969`: **1211.7**.
 
-Scores drift while episodes accumulate; these are snapshots, not immutable ratings.
-
 Key calibration:
 
 - R4B temporal-control spread = **17.5**;
 - CR011 − CR008 = **17.7**, therefore noise-scale in this window;
-- CR008 − R4B midpoint = **+1508.45**;
-- CR011 − R4B midpoint = **+1526.15**.
+- CR008 − R4B midpoint = **+1508.45**.
 
-**Decision:** CR008 append adaptation is now the canonical hosted adaptive baseline. The opponent-aware sale response has a very large real hosted signal; early queue placement has no demonstrated hosted advantage beyond measured temporal noise.
+**Decision:** CR008 append adaptation is the canonical hosted baseline. Opponent-aware response is the strongest demonstrated improvement in Kculture. Early queue placement has no hosted advantage beyond measured noise and has severe local tail risk.
 
-## Frozen candidates
-
-### R4B — weak deterministic control
-
-- `candidates/r4b_ablation_market_only.py`
-- blob `e564125f0c4a1711fd3ea065dc1cb27d4a62ce37`
-- role: temporal/control baseline, not final-strength candidate.
+## Frozen / relevant candidates
 
 ### CR008 — canonical hosted baseline
 
 - `candidates/cr008_adaptive_frontrun.py`
 - blob `8e1c26202c3101c19668bf61edf2ae51d4329d5d`
-- high-confidence public-opponent-state forecast;
-- appends same-turn CARROT/STRAWBERRY sales;
-- hosted score ~1705.6 in latest 29-Aug snapshot.
+- high-confidence identity-free public-opponent-state SELL forecast;
+- deployed products CARROT/STRAWBERRY;
+- appends full available same-turn sale;
+- latest observed hosted score **1705.6**.
 
-### CR011 — causal research arm, not current promotion choice
+### CR011 — research arm only
 
 - `candidates/cr011_adaptive_early_order.py`
 - blob `c4f1cb79f3c20b8229ab09e00a6878289cf9648d`
-- same adaptation as CR008 but prepends adaptive sale.
+- same forecast as CR008 but early queue placement.
 
-CR014B decomposition on 16 affected close-match rows showed:
-
-- adaptation CR008 vs R4B: no W/L flips in the critical five;
-- early order CR011 vs CR008: four catastrophic W→L flips and one L→W flip;
-- catastrophic early-order mean relative effect: about **-2441**;
-- favorable case: about **+393**.
-
-Because hosted CR011−CR008 is only noise-scale, CR008 is preferred.
+CR014B/C decomposition showed the critical five close outcome flips were caused by early positioning: four W→L vs one L→W. Hosted CR011−CR008 is only noise-scale, so CR008 remains preferred.
 
 ### CR015 — VALIDATED / HOSTED ELIGIBLE
 
 - `candidates/cr015_liquidation_phase_early_order.py`
 - blob `fabd4bc398e7eadcfd1d44add4d0e593315140e8`
-- 432 fresh preregistered pairs across Stage A+B;
-- zero errors;
+- 432 fresh preregistered pairs, zero errors;
 - vs R4B combined mean relative gain **+149.62**;
-- favorable W/L changes **2**, unfavorable **0**;
+- favorable W/L **2**, unfavorable **0**;
 - package parity 28,760 states / zero mismatches;
 - official Kaggle entrypoint PASS both seats.
 
@@ -79,81 +63,129 @@ Hosted-ready archive SHA256: `41d35a97ebe714a3cb71506e17ec1e629b4a9628cacd688be7
 
 ### CR020 — REJECTED
 
-Stage A: 216/216, zero mechanical errors. It had one favorable / zero unfavorable W/L changes vs R4B, but regressed against CR015 by mean relative **-70.84/game**. Frozen gate failed; no Stage B and no hosted slot.
+Stage A 216/216, zero errors; one favorable / zero unfavorable vs R4B, but mean relative **-70.84/game** vs CR015. No Stage B, no hosted slot.
+
+### CR021A — CLOSED / NO-TRIGGER FAIL
+
+Run `33261563880`, aggregate job `99126072218`, artifact `9717580986`.
+
+- 216/216 fresh Stage-A pairs;
+- zero mechanical errors;
+- **0 triggers, 0 TOMATO plants, 0 harvest interventions**;
+- therefore scientific gate failed;
+- no Stage B and no threshold rescue on the same seeds.
+
+CR016 remains useful architecture evidence (TOMATO/EGG demand-supply gaps), but this one-slot conservative TOMATO implementation is closed. Research priority returns to opponent adaptation.
 
 ## Opponent-adaptation evidence chain
 
-- CR004: public opponent state improves OOT prediction; median error improvement **7.10%**.
+- CR004: opponent public state improves OOT prediction; median error improvement **7.10%**.
 - CR005: strong four-turn SELL forecasts.
 - CR006: broad low-threshold reaction failed on precision.
 - CR007: high-confidence CARROT/STRAWBERRY triggers reached **97.3%** combined precision.
 - CR008: append adaptation produced the major hosted breakthrough.
-- CR009: prediction timing already correct.
-- CR010: in-turn order has large economic causal value.
-- CR011: early placement improves money in some local panels but creates severe boundary pathologies.
-- CR012/013/014/014B/014C: localized those pathologies to early queue placement and state trajectory, not opponent identity.
-- CR015: smallest validated placement refinement, hosted eligible.
-- CR020: monotone latch rejected by preregistered comparison to CR015.
+- CR009: forecast timing already correct.
+- CR010: in-turn order is economically causal.
+- CR011: early placement can improve money but creates severe boundary pathologies.
+- CR012/013/014/014B/014C: attributed the pathology to early positioning/state cascade rather than opponent identity.
+- CR015: validated conservative placement refinement, hosted eligible.
+- CR020: rejected.
 
-## CR016 — production-demand architecture signal
+## CR022 — ADAPTIVE V2 — PRIMARY RESEARCH
 
-Diagnostic only, 54 episodes, engine 1.32.7, zero errors.
+Frozen research design: `docs/ADAPTIVE_V2_RESEARCH_PLAN.md`.
+Exact public-agent review: `docs/TOP_PUBLIC_ARCHITECTURE_REVIEW_2026-08-29.md`.
 
-High-price demanded states:
+### Why
 
-- TOMATO: **644**, self producer zero **100%**, both producers zero **100%**;
-- EGG: **370**, self producer zero **100%**, both zero **100%**;
-- CARROT: **712**, self producer zero **63.1%**.
+Exact public package inspection shows strong current agents generally use a **strong route/replay backbone + sparse heuristics**:
 
-TOMATO is the first production-response target because it can be tested as a small crop substitution. EGG requires a larger goose/coop/feed branch and remains separate.
+- Rayk/Tetsu: hard public-farm clone distance + own future route sale schedule + exact market-impact/demand ordering;
+- Tactical: static hazard-by-step, 0.55 threshold, fixed 50% median quantity, cap 30, cooldown 8;
+- Boatlee: public-state route portfolio selected from shops/opponent money/spending and market overlays;
+- Kaito V43: strong backbone + sparse shop feedback; sophisticated quantity/MPC components exist in library but are conservatively not deployed when grouped holdouts do not support them.
 
-Public research independently shows recent Apache-2.0 agents using unlocked town shops as forward demand signals and sparse material-gap crop switching. We reuse the idea, not their implementation.
+**Adaptive V2 headroom:** replace clone distance / static hazards / fixed fractions with calibrated state-conditioned opponent forecasts, quantity/order-position distributions, route-archetype belief, exact market counterfactuals and downside-aware abstention.
 
-## CR021 — ACTIVE: sparse TOMATO response
+### Frozen Adaptive V2 modules
 
-Preregistration: `docs/CR021_PREREGISTRATION.md`  
-Fresh seeds: `configs/cr021_demand_response_preregistered_seeds_v1.json`  
-Candidate: `candidates/cr021_sparse_tomato_demand.py`  
-Candidate blob: `467a56643e70f018b9a11e82bc5138c30a2a7307`  
-Stage A workflow run: **33261563880**.
+1. **Behavior atlas / route fingerprint** — quantify open-loop rigidity vs real adaptation.
+2. **Probabilistic forecast** — P(SELL product within h), h=0..4; quantity and order-position distribution.
+3. **Forecast residual / surprise state** — deviation from expected route/economy.
+4. **Exact market counterfactual engine** — abstain vs 25/50/75/100% and timing/order alternatives.
+5. **Risk-aware sparse MPC** — maximize expected relative value while penalizing CVaR/downside and own-cash risk.
+6. **Conservative abstention** — sophistication only when it survives grouped/OOT evidence.
 
-Frozen intervention:
+No opponent/team identity is permitted as an agent feature or gate.
 
-- CR008 base everywhere;
-- at state 309, buy one TOMATO seed only under strong public town demand, TOMATO price >=90, no existing own TOMATO, free market slot, and a mechanically visible approach to the audited `310@(9,7)` planting slot;
-- at state 310, replace only that exact WHEAT plant if the extra seed actually arrived;
-- later replace WATER→HARVEST only on that exact diverted tile when TOMATO `yield_units >= 4`.
+### CR022A — current-top replay atlas
 
-Stage A uses 12 completely fresh seeds × 9 exact current-meta opponents × both seats = **216 pairs**. Stage B has 12 separately frozen seeds and is forbidden unless the unchanged candidate passes Stage A.
+Created:
+
+- `tools/collect_top_ladder_snapshot.py`;
+- `tools/top_ladder_behavior_atlas.py`;
+- automated top-20 × up to 3 recent public episodes workflow.
+
+First authenticated run safely stopped because GitHub repository secret `KAGGLE_API_TOKEN` is not configured. No credential was exposed. This is a data-access task only, not a strategic blocker: official daily top-episode datasets remain publicly downloadable via `kagglehub`.
+
+### CR022B — recent official top-episode forecast tournament — RUNNING
+
+Workflow run: **33272910444**.
+
+Protocol frozen before results:
+
+- attempts official 2026-08-27/28/29 episode datasets;
+- newest available date = chronological OOT test;
+- top 20 episodes/date;
+- episode-grouped fit/calibration split;
+- compare frozen CR007 with regularized logistic and calibrated histogram gradient boosting;
+- targets CARROT/TOMATO/STRAWBERRY/MELON SELL within four turns;
+- also records first-sale delay, quantity and order position for CR022C.
+
+No strategy candidate may be built from predictive metrics alone. Response counterfactual evidence is required.
+
+### Clock/seat diagnostic — separate robustness line
+
+A Kaggle discussion reports stored seat-1 `observation.step=None` under 1.32.7. Our direct agent-input probe run `33272723362` saw **719/719 numeric steps in both seats**, with zero day/hour mismatch. Therefore an engine-level bug is **not reproduced in the object actually delivered to our probe agent**.
+
+COK/R4B does depend directly on raw `step`, so a neutral fallback derivative was created for fault injection only:
+
+- `candidates/cr022_clock_safe_cr008.py`;
+- normal behavior must be exactly CR008 when `step` exists;
+- only R4B/COK backbone clock is reconstructed from day/hour if raw step is missing;
+- CR008 learned feature semantics remain unchanged.
+
+Audit run **33273005851** is testing normal parity plus forced `step=None` recovery. This is not Adaptive V2 strategy evidence.
 
 ## Next hosted-reset policy
 
-Five valid daily slots are treated as a perishable information budget.
+Five valid daily slots remain a perishable information budget. Current priority order is provisional until active diagnostics close:
 
-Provisional next-window design:
+1. **CR008_A exact control**;
+2. **CR015**;
+3. strongest newly validated Adaptive V2 / high-information diagnostic arm, if one exists;
+4. **CR008_B exact control**;
+5. second predeclared high-information arm.
 
-1. CR008_A exact control;
-2. CR015 fixed;
-3. CR021 only if its preregistered Stage A/B evidence authorizes it;
-4. CR008_B exact control;
-5. a separately frozen high-information arm chosen before partial scores can bias the decision.
+Do not use CR020 or CR021. Do not spend a slot on CR011 solely because it is ~17.7 above CR008 in the current snapshot.
 
-Do not use CR020. Do not spend a slot on CR011 merely because its current score is ~17.7 above CR008.
+A clock-safe CR008 arm is eligible only if its fault-injection audit passes and we decide hosted seat behavior is worth one information slot; local parity alone is not evidence of strength.
 
 ## Exact continuation
 
-1. Finish CR021 Stage A run `33261563880` and read the frozen gate.
-2. If PASS, run Stage B unchanged; if FAIL, kill CR021A without threshold rescue on the same seeds.
-3. If Stage B passes, build exact hosted package/parity before using a Kaggle slot.
-4. Keep researching sparse demand-response mechanics; evaluate EGG only as a separate architecture after TOMATO is resolved.
-5. Maintain CR008 bracket controls around future hosted experiments.
-6. Keep all 32/32 held-out sealed.
+1. Finish CR022B and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
+2. Use the same recent replay corpus to model sale quantity and order position; build CR022C exact response counterfactuals.
+3. Do **not** promote a model because of AUC alone: require calibration, actionable precision/coverage and causal response value.
+4. Finish clock-safe audit; keep it operationally separate from strategic Adaptive V2 work.
+5. When convenient, configure GitHub Actions secret `KAGGLE_API_TOKEN` once, then run exact current top-20 replay atlas.
+6. First Adaptive V2 candidate must remain a sparse overlay over frozen CR008, use fresh preregistered data and report worst-tail paired deltas/CVaR.
+7. Keep all **32/32 held-out sealed**.
 
-## Frozen environment facts
+## Frozen environment / evaluation facts
 
 - `kaggle-environments==1.32.7`;
 - official terminal reward = own bank money;
-- winner is determined by relative final bank balance;
-- final competition ranking is Bradley–Terry/matchup based;
+- winner = higher final bank balance;
+- final ranking = Bradley–Terry tournament after the submission deadline/run-on window;
 - market/town economy is shared and market-order sequence is economically causal;
 - W/L conversion and broad matchup coverage outrank isolated coin-margin optimization.
