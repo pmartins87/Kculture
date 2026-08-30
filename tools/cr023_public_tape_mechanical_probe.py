@@ -116,7 +116,7 @@ def main():
             }
     compact = {
         "experiment": "CR023 mechanical-only public-tape probe",
-        "reward_observed_or_reported": false,
+        "reward_observed_or_reported": False,
         "routes": results,
         "all_routes_mechanical_pass": all(v["all_done"] for v in results.values()),
     }
