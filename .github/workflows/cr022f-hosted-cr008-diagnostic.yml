@@ -28,7 +28,7 @@ jobs:
       - name: Verify frozen identities
         run: |
           test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
-          test "$(git rev-parse HEAD:tools/cr022f_hosted_cr008_diagnostic.py)" = "f6ba69b0093062293bbda039ad4abb68bfb16259"
+          test "$(git rev-parse HEAD:tools/cr022f_hosted_cr008_diagnostic.py)" = "1cb31467af205e72b61a5778725a77e407c89595"
       - name: Analyze up to 60 recent hosted CR008 episodes
         run: |
           mkdir -p artifacts/cr022f
