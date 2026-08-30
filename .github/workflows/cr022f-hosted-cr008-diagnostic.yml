@@ -1,0 +1,44 @@
+name: cr022f-hosted-cr008-diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/cr022f-hosted-cr008-diagnostic.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:tools/cr022f_hosted_cr008_diagnostic.py)" = "f6ba69b0093062293bbda039ad4abb68bfb16259"
+      - name: Analyze up to 60 recent hosted CR008 episodes
+        run: |
+          mkdir -p artifacts/cr022f
+          python tools/cr022f_hosted_cr008_diagnostic.py \
+            --submission-id 55866079 \
+            --limit 60 \
+            --output artifacts/cr022f/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr022f-hosted-cr008-diagnostic
+          path: artifacts/cr022f/report.json
+          if-no-files-found: warn
