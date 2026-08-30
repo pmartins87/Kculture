@@ -1,0 +1,31 @@
+name: cr024a-initial-regime-diagnostic
+on:
+  push:
+    paths:
+      - '.github/workflows/cr024a-initial-regime-diagnostic.yml'
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install frozen environment
+        run: python -m pip install -r requirements.txt
+      - name: Verify inputs
+        run: |
+          test "$(git rev-parse HEAD:configs/cr023_public_tape_preregistered_seeds_v1.json)" = "5325caa121881bfa8d118d890358cb766dfa1d64"
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+      - name: Run Stage-A-only public-state diagnostic
+        run: python tools/cr024a_initial_regime_diagnostic.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr024a-initial-regime-diagnostic
+          path: artifacts/cr024a_regime_diagnostic/report.json
+          if-no-files-found: error
