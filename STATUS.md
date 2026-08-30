@@ -128,11 +128,18 @@ Created:
 
 First authenticated run safely stopped because GitHub repository secret `KAGGLE_API_TOKEN` is not configured. No credential was exposed. This is a data-access task only, not a strategic blocker: official daily top-episode datasets remain publicly downloadable via `kagglehub`.
 
-### CR022B — recent official top-episode forecast tournament — RUNNING
+### CR022B — recent official top-episode forecast tournament — V2 RUNNING
 
-Workflow run: **33272910444**.
+Initial run `33272910444` failed **mechanically before any dataset/model result** because the repository root was absent from `sys.path`; no statistical result was observed. Only that import defect was corrected.
 
-Protocol frozen before results:
+Unchanged frozen V2 run: **33282366031**.
+
+Frozen identities:
+
+- `tools/cr022b_recent_top_forecast_tournament.py` blob `9e06ca153cd169591d136a5a57db326f27df22b7`;
+- `models/cr007_pure_models.json` blob `d4b29e753e2328ac43503f8daa655cc63abdd336`.
+
+Protocol remains unchanged:
 
 - attempts official 2026-08-27/28/29 episode datasets;
 - newest available date = chronological OOT test;
@@ -144,18 +151,19 @@ Protocol frozen before results:
 
 No strategy candidate may be built from predictive metrics alone. Response counterfactual evidence is required.
 
-### Clock/seat diagnostic — separate robustness line
+### Clock/seat diagnostic — PASS, separate robustness line
 
-A Kaggle discussion reports stored seat-1 `observation.step=None` under 1.32.7. Our direct agent-input probe run `33272723362` saw **719/719 numeric steps in both seats**, with zero day/hour mismatch. Therefore an engine-level bug is **not reproduced in the object actually delivered to our probe agent**.
+Direct agent-input probe run `33272723362` saw **719/719 numeric steps in both seats**, with zero day/hour mismatch, so the reported seat-1 missing-step issue is not reproduced in the normal object delivered to our local probe agent.
 
-COK/R4B does depend directly on raw `step`, so a neutral fallback derivative was created for fault injection only:
+COK/R4B does depend directly on raw `step`. A neutral derivative was therefore tested:
 
 - `candidates/cr022_clock_safe_cr008.py`;
-- normal behavior must be exactly CR008 when `step` exists;
-- only R4B/COK backbone clock is reconstructed from day/hour if raw step is missing;
-- CR008 learned feature semantics remain unchanged.
+- audit run **33273005851**;
+- normal parity: **12/12 cases PASS, zero action mismatches, identical rewards**;
+- forced `step=None`: **6/6 raw CR008/COK paths diverged as expected**;
+- clock-safe derivative recovered the exact expected action in **6/6** injected cases.
 
-Audit run **33273005851** is testing normal parity plus forced `step=None` recovery. This is not Adaptive V2 strategy evidence.
+Interpretation: this is a mechanically validated, behavior-neutral hardening when `step` is present and a correct fallback when it is absent. It is **not evidence of strategic strength** and does not automatically deserve a hosted slot. Prefer to carry the fallback into future Adaptive V2 packages rather than spend a slot unless hosted evidence specifically requires an isolated diagnostic.
 
 ## Next hosted-reset policy
 
@@ -169,14 +177,12 @@ Five valid daily slots remain a perishable information budget. Current priority 
 
 Do not use CR020 or CR021. Do not spend a slot on CR011 solely because it is ~17.7 above CR008 in the current snapshot.
 
-A clock-safe CR008 arm is eligible only if its fault-injection audit passes and we decide hosted seat behavior is worth one information slot; local parity alone is not evidence of strength.
-
 ## Exact continuation
 
-1. Finish CR022B and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
+1. Finish CR022B V2 run `33282366031` and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
 2. Use the same recent replay corpus to model sale quantity and order position; build CR022C exact response counterfactuals.
 3. Do **not** promote a model because of AUC alone: require calibration, actionable precision/coverage and causal response value.
-4. Finish clock-safe audit; keep it operationally separate from strategic Adaptive V2 work.
+4. Carry clock-safe fallback forward as neutral hardening; keep it separate from strategic evidence.
 5. When convenient, configure GitHub Actions secret `KAGGLE_API_TOKEN` once, then run exact current top-20 replay atlas.
 6. First Adaptive V2 candidate must remain a sparse overlay over frozen CR008, use fresh preregistered data and report worst-tail paired deltas/CVaR.
 7. Keep all **32/32 held-out sealed**.
