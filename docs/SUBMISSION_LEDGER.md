@@ -6,6 +6,7 @@ Record every Kaggle agent submission here with exact provenance and observed hos
 
 | ID | UTC timestamp | Git SHA | Agent/version | Local evidence | Ladder rating | Episodes | Status | Notes |
 |---|---|---|---|---|---:|---:|---|---|
+| **55882723** | 2026-08-30 user-supplied (exact UTC not recorded) | `a3024d2af337bebd7cd1dcb107ccc420635756ef` | `CR015-liquidation-phase-early-order` | 432 fresh preregistered pairs; mean relative gain +149.62 vs R4B; favorable W/L 2, unfavorable 0; package parity 28,760 states / 0 mismatches; official entrypoint PASS both seats | pending | pending | Submitted / hosted result pending | User supplied Kaggle submission link for ID 55882723. Candidate blob `fabd4bc398e7eadcfd1d44add4d0e593315140e8`; archive SHA-256 `41d35a97ebe714a3cb71506e17ec1e629b4a9628cacd688be7e79d524fd75c54`. |
 | **55818927** | 2026-08-27 ~16:20 UTC screenshot | `b8949a9c43ba9d667b043b3d39ab3e29a3fbaa48` | `KEXP-050-reallocate614-validation-v1` | dev 21-11; live-meta 15-11-14; fresh stress 87-47-58; validation direct 14-8-10 | **93.8** | unknown | Complete | Current hosted evidence is materially worse than R4B. User supplied Game History episode `100987834`; selected replay shows a loss to Atharva S. Naladkar. |
 | **55784381** | 2026-08-27 ~16:20 UTC screenshot | `29a883aba3df6347d72e321c9970c9694e0b6fa0` | `R4B-market-only-validated-v1` | old public panel 81-15 / 96 | **143.2** | unknown | Complete | User supplied Game History episode `100996939`; selected replay is shown as a tie versus Sathisvaran Ragu. |
 | **55818927** | 2026-08-27 ~14:06 UTC screenshot | `b8949a9c43ba9d667b043b3d39ab3e29a3fbaa48` | `KEXP-050-reallocate614-validation-v1` | dev 21-11; live-meta 15-11-14; fresh stress 87-47-58; validation direct 14-8-10 | **145.1** | unknown | Complete | Green check. Only +3.1 versus contemporaneous R4B 142.0. First hosted evidence says the locally validated micro-overlay line is not prize-grade. |
@@ -61,6 +62,29 @@ Exact provenance:
 - archive size: 102524 bytes;
 - packaged `main.py` SHA-256: `10b904ef9c26c7e87462e1f033c8e6d92bee5984e96a23e67a18804f3034e2d9`;
 - source/package parity: 8/8 full trajectories exact.
+
+## Submission 3 — CR015
+
+User-visible identity:
+
+- submission ID: **`55882723`**;
+- Kaggle submission link: `https://www.kaggle.com/competitions/kaggriculture/submissions?submissionId=55882723`;
+- candidate: `CR015-liquidation-phase-early-order`;
+- status: **submitted; hosted result pending**;
+- observed rating: pending;
+- hosted episode count: pending.
+
+Exact provenance:
+
+- candidate path: `candidates/cr015_liquidation_phase_early_order.py`;
+- candidate freeze commit: `a3024d2af337bebd7cd1dcb107ccc420635756ef`;
+- candidate blob: `fabd4bc398e7eadcfd1d44add4d0e593315140e8`;
+- local validation: 432 fresh preregistered pairs, zero errors;
+- combined mean relative gain vs R4B: **+149.62**;
+- favorable W/L: **2**; unfavorable: **0**;
+- package parity: **28,760 states / zero mismatches**;
+- official Kaggle entrypoint: **PASS both seats**;
+- archive SHA-256: `41d35a97ebe714a3cb71506e17ec1e629b4a9628cacd688be7e79d524fd75c54`.
 
 ## 2026-08-27 competitive-reset interpretation
 
