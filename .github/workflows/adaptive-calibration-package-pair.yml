@@ -28,12 +28,11 @@ jobs:
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
       - name: Build deterministic calibration packages
         run: python tools/build_cr008_cr011_calibration_packages.py
-      - name: Prove source-to-package parity on official active-trigger states
-        run: python tools/audit_adaptive_calibration_package_pair.py
       - uses: actions/upload-artifact@v4
-        if: always()
         with:
           name: adaptive-calibration-package-pair
           path: artifacts/submissions/adaptive_calibration_pair/**
+      - name: Prove source-to-package parity on official active-trigger states
+        run: python tools/audit_adaptive_calibration_package_pair.py
 
-# Recovery rebuild requested 2026-08-30 for exact frozen CR008 temporal control.
+# Recovery rebuild requested 2026-08-30; upload precedes long parity audit.
