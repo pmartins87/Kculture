@@ -1,0 +1,21 @@
+{
+  "experiment": "CR022C",
+  "stage": "B",
+  "created_before_stage_b_results": true,
+  "candidate": "q25",
+  "control": "q100_exact_cr008",
+  "candidate_fraction": 0.25,
+  "source_seed_config": "configs/cr022c_quantity_preregistered_seeds_v1.json",
+  "expected_pairs": 216,
+  "close_target": 40,
+  "confirmation_gate": {
+    "zero_errors": true,
+    "all_expected_pairs_complete": true,
+    "broad_unfavorable_outcome_changes_lte_favorable": true,
+    "close_unfavorable_outcome_changes_lte_favorable": true,
+    "broad_mean_score_gain_gte": 0.0,
+    "positive_signal": "broad_net_outcome_changes > 0 OR broad_mean_relative_gain > 0"
+  },
+  "decision_policy": "q25 either confirms unchanged on disjoint Stage-B seeds or is rejected. No Stage-B rescue tuning, no alternative fraction substitution, and no held-out access.",
+  "held_out_policy": "All 32/32 held-out seeds remain sealed."
+}
