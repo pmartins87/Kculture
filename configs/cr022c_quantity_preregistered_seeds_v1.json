@@ -1,0 +1,19 @@
+{
+  "experiment": "CR022C",
+  "purpose": "Fresh paired evaluation of adaptive-sale quantity only, keeping CR008 forecast thresholds/products and append placement fixed.",
+  "created_before_candidate_results": true,
+  "control": "CR008 full-stock adaptive append sale",
+  "arms": [
+    {"id": "q25", "fraction": 0.25},
+    {"id": "q50", "fraction": 0.50},
+    {"id": "q75", "fraction": 0.75},
+    {"id": "q100", "fraction": 1.00, "role": "frozen CR008 control"}
+  ],
+  "quantity_rounding": "ceil(stock * fraction), minimum 1 when a frozen CR008 trigger occurs",
+  "stage_a_seeds": [421667518,603713306,322871575,1214384251,2076413871,1520162993,742608897,1819682992,575406,762519292,1222767183,836862265],
+  "stage_b_seeds": [892834757,684429139,1164339509,1173497221,1362042088,165213467,293650725,440788975,2023989856,115287485,1566748781,148933950],
+  "both_seats": true,
+  "opponent_set": "configs/cr015_current_meta_opponents_v1.json",
+  "held_out_policy": "All 32/32 held-out seeds remain sealed and forbidden.",
+  "selection_policy": "Stage A may select at most one non-control arm. Candidate code, thresholds, products, placement, and selected fraction are then frozen for Stage B; no rescue tuning on Stage-A seeds."
+}
