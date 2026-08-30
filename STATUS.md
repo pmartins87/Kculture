@@ -1,6 +1,6 @@
 # STATUS — Kculture
 
-Last updated: 2026-08-29
+Last updated: 2026-08-30
 
 ## Mission
 
@@ -49,10 +49,13 @@ Key calibration:
 
 CR014B/C decomposition showed the critical five close outcome flips were caused by early positioning: four W→L vs one L→W. Hosted CR011−CR008 is only noise-scale, so CR008 remains preferred.
 
-### CR015 — VALIDATED / HOSTED ELIGIBLE
+### CR015 — SUBMITTED / HOSTED RESULT PENDING
 
-- `candidates/cr015_liquidation_phase_early_order.py`
-- blob `fabd4bc398e7eadcfd1d44add4d0e593315140e8`
+- Kaggle submission ID **`55882723`**;
+- user-supplied submission link recorded in `docs/SUBMISSION_LEDGER.md`;
+- `candidates/cr015_liquidation_phase_early_order.py`;
+- freeze commit `a3024d2af337bebd7cd1dcb107ccc420635756ef`;
+- blob `fabd4bc398e7eadcfd1d44add4d0e593315140e8`;
 - 432 fresh preregistered pairs, zero errors;
 - vs R4B combined mean relative gain **+149.62**;
 - favorable W/L **2**, unfavorable **0**;
@@ -60,6 +63,8 @@ CR014B/C decomposition showed the critical five close outcome flips were caused 
 - official Kaggle entrypoint PASS both seats.
 
 Hosted-ready archive SHA256: `41d35a97ebe714a3cb71506e17ec1e629b4a9628cacd688be7e79d524fd75c54`.
+
+Hosted ladder rating and episode count are not yet observed. The Kaggle submissions URL is session-authenticated and was not readable externally, so no score is inferred from the link alone.
 
 ### CR020 — REJECTED
 
@@ -88,7 +93,7 @@ CR016 remains useful architecture evidence (TOMATO/EGG demand-supply gaps), but 
 - CR010: in-turn order is economically causal.
 - CR011: early placement can improve money but creates severe boundary pathologies.
 - CR012/013/014/014B/014C: attributed the pathology to early positioning/state cascade rather than opponent identity.
-- CR015: validated conservative placement refinement, hosted eligible.
+- CR015: validated conservative placement refinement; submitted as Kaggle submission `55882723`, hosted result pending.
 - CR020: rejected.
 
 ## CR022 — ADAPTIVE V2 — PRIMARY RESEARCH
@@ -170,7 +175,7 @@ Interpretation: this is a mechanically validated, behavior-neutral hardening whe
 Five valid daily slots remain a perishable information budget. Current priority order is provisional until active diagnostics close:
 
 1. **CR008_A exact control**;
-2. **CR015**;
+2. **CR015** — submitted as `55882723`, hosted result pending;
 3. strongest newly validated Adaptive V2 / high-information diagnostic arm, if one exists;
 4. **CR008_B exact control**;
 5. second predeclared high-information arm.
@@ -179,13 +184,14 @@ Do not use CR020 or CR021. Do not spend a slot on CR011 solely because it is ~17
 
 ## Exact continuation
 
-1. Finish CR022B V2 run `33282366031` and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
-2. Use the same recent replay corpus to model sale quantity and order position; build CR022C exact response counterfactuals.
-3. Do **not** promote a model because of AUC alone: require calibration, actionable precision/coverage and causal response value.
-4. Carry clock-safe fallback forward as neutral hardening; keep it separate from strategic evidence.
-5. When convenient, configure GitHub Actions secret `KAGGLE_API_TOKEN` once, then run exact current top-20 replay atlas.
-6. First Adaptive V2 candidate must remain a sparse overlay over frozen CR008, use fresh preregistered data and report worst-tail paired deltas/CVaR.
-7. Keep all **32/32 held-out sealed**.
+1. Observe hosted result for CR015 submission `55882723` when available and record rating/episodes without changing its pre-hosted interpretation.
+2. Finish CR022B V2 run `33282366031` and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
+3. Use the same recent replay corpus to model sale quantity and order position; build CR022C exact response counterfactuals.
+4. Do **not** promote a model because of AUC alone: require calibration, actionable precision/coverage and causal response value.
+5. Carry clock-safe fallback forward as neutral hardening; keep it separate from strategic evidence.
+6. When convenient, configure GitHub Actions secret `KAGGLE_API_TOKEN` once, then run exact current top-20 replay atlas.
+7. First Adaptive V2 candidate must remain a sparse overlay over frozen CR008, use fresh preregistered data and report worst-tail paired deltas/CVaR.
+8. Keep all **32/32 held-out sealed**.
 
 ## Frozen environment / evaluation facts
 
