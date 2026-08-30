@@ -1,0 +1,135 @@
+name: cr022c-q25-stage-b
+on:
+  push:
+    paths:
+      - '.github/workflows/cr022c-q25-stage-b.yml'
+  workflow_dispatch:
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: kaito_sparse
+            handle: kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13
+            archive_sha256: fb821a9f9867cd413e40323e1e79f1014b74eac7aab3db2bcdbfc6eea5e36a10
+            main_sha256: 69f06a802b62aa08f28705dab5728eb924bb6a7c23ffe0164f65b104cc3dadf3
+          - id: prvsiyan
+            handle: prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10
+            archive_sha256: fadde4e4e5cde332352827cbbfd7c8ea95f2e9abd34a3ca7196a29b007e93bd3
+            main_sha256: 943e8c114ace4f5c5965698e66a4943e982dab4ccb57d8efa134a4e5b4f13955
+          - id: salem
+            handle: salemali7/harvest-kaggriculture/versions/4
+            archive_sha256: 1614541b59a1a4d71ccd2af8ce8ef94b8ebf657063c4983f1e3676cb740bc0f6
+            main_sha256: f029fa0cb66a9eb509afbe44e3f59b800332d0419db91607183410e4089c4d19
+          - id: rayk
+            handle: raykkretzschmar/kaggriculture-rank-your-agent/versions/23
+            archive_sha256: 86b7ae5c029e351adfbd80059cd185b39d1467303437e6441ff7ad871cd8e7ee
+            main_sha256: 6c709f6d3ce6cf221a9495de7e716fcd1b660e3bbc8ee5679b63233d0265a812
+          - id: kaito_future
+            handle: kaitofukami/41-49-future-unseen-v19-replication-to-control/versions/1
+            archive_sha256: baa437b90731429f250ee4700c53e9e13c677a002c87720eaced7e5158492b3b
+            main_sha256: 9f18c729b16133443c981b0456515ef21824da72c89ce1387edab69c7e2fb536
+          - id: tactical
+            handle: web3cainiao/kaggriculture-v21-tactical-memory/versions/1
+            archive_sha256: 9ac5aeeadc6fef13f5e474d75c1c1e2773084e23eabf7ae1a7f0aa76d1704629
+            main_sha256: 630125b3f592fdb773f1fac6532b08e97e829ae188180ea17540b702b606a054
+          - id: boatlee
+            handle: boatlee/v21-r1-public-state-route-portfolio/versions/2
+            archive_sha256: d65410a4fc8a31226055e43085131468ac8af5721aabdf3593cb8eade59cabe3
+            main_sha256: c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8
+          - id: andrew
+            handle: andrewsokolovsky/kaggriculture/versions/11
+            archive_sha256: cdcac082442f8c70d8caa6f6979a3c699c73810622eca32806c80a924987d3dc
+            main_sha256: 0827987dab3f52e1f50661c355b42f289b8e305d90a263b16f3054aaecfe943c
+          - id: tetsu
+            handle: tetsutani/read-the-town-build-the-farm-kaggriculture/versions/2
+            archive_sha256: 00c423f03e091c4bc64417fe66bcf44dbe5d1a8b5d5eff5fadc6bc362b318ec9
+            main_sha256: 73834889054bb6a515fbb40a306a7e0e609105049c781e32197a205f6c339c4f
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen CR022C Stage-B identities
+        run: |
+          test "$(git rev-parse HEAD:candidates/cr008_adaptive_frontrun.py)" = "8e1c26202c3101c19668bf61edf2ae51d4329d5d"
+          test "$(git rev-parse HEAD:candidates/cr022c_fractional_adaptive.py)" = "2ecec8f89401e02322933882d0ada41aba810330"
+          test "$(git rev-parse HEAD:configs/cr022c_quantity_preregistered_seeds_v1.json)" = "c3a69ceec4b04d84c91dcf269bc980b00785cee6"
+          test "$(git rev-parse HEAD:configs/cr022c_stage_b_confirmation_gate_v1.json)" = "d9047a843f33b2379a3232ed4e0b656304375e3f"
+          test "$(git rev-parse HEAD:tools/cr022c_quantity_shard.py)" = "77b5ac4f9fc051d833b98abb24480e366fb6f441"
+          test "$(git rev-parse HEAD:tools/cr022c_stage_b_q25_shard.py)" = "204c90212048bf075afb7808d882fa732e4ea38a"
+      - name: Fetch exact frozen opponent
+        run: |
+          mkdir -p artifacts/cr022c_stage_b/opponent
+          python tools/fetch_exact_package_main.py \
+            --handle '${{ matrix.handle }}' \
+            --output 'artifacts/cr022c_stage_b/opponent/${{ matrix.id }}.py' \
+            --receipt 'artifacts/cr022c_stage_b/opponent/${{ matrix.id }}.json'
+      - name: Verify opponent package identity
+        env:
+          RECEIPT: artifacts/cr022c_stage_b/opponent/${{ matrix.id }}.json
+          EXPECT_ARCHIVE: ${{ matrix.archive_sha256 }}
+          EXPECT_MAIN: ${{ matrix.main_sha256 }}
+        run: |
+          python - <<'PY'
+          import json, os
+          r=json.load(open(os.environ['RECEIPT']))
+          assert r['archive_sha256']==os.environ['EXPECT_ARCHIVE']
+          assert r['main_sha256']==os.environ['EXPECT_MAIN']
+          print('opponent identity PASS')
+          PY
+      - name: Run frozen q25 versus q100 Stage-B shard
+        run: |
+          python tools/cr022c_stage_b_q25_shard.py \
+            --opponent 'artifacts/cr022c_stage_b/opponent/${{ matrix.id }}.py' \
+            --opponent-id '${{ matrix.id }}' \
+            --output 'artifacts/cr022c_stage_b/shard_${{ matrix.id }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr022c-stage-b-${{ matrix.id }}
+          path: artifacts/cr022c_stage_b/shard_${{ matrix.id }}.json
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify frozen Stage-B gate identity
+        run: |
+          test "$(git rev-parse HEAD:configs/cr022c_stage_b_confirmation_gate_v1.json)" = "d9047a843f33b2379a3232ed4e0b656304375e3f"
+          test "$(git rev-parse HEAD:tools/cr022c_stage_b_q25_confirm.py)" = "082d802b189370dc1cf92c66bf18325aaa83fee7"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr022c-stage-b-*
+          path: artifacts/downloaded
+          merge-multiple: true
+      - name: Apply frozen q25 Stage-B confirmation gate
+        run: |
+          mkdir -p artifacts/cr022c_stage_b_final
+          python tools/cr022c_stage_b_q25_confirm.py \
+            --input-glob 'artifacts/downloaded/**/shard_*.json' \
+            --output artifacts/cr022c_stage_b_final/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr022c-stage-b-final
+          path: artifacts/cr022c_stage_b_final/**
+          if-no-files-found: warn
