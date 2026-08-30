@@ -17,6 +17,8 @@ jobs:
           cache: pip
       - name: Install frozen environment
         run: python -m pip install -r requirements.txt
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
       - name: Verify inputs
         run: |
           test "$(git rev-parse HEAD:configs/cr023_public_tape_preregistered_seeds_v1.json)" = "5325caa121881bfa8d118d890358cb766dfa1d64"
