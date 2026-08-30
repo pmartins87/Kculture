@@ -35,3 +35,5 @@ jobs:
         with:
           name: adaptive-calibration-package-pair
           path: artifacts/submissions/adaptive_calibration_pair/**
+
+# Recovery rebuild requested 2026-08-30 for exact frozen CR008 temporal control.
