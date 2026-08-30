@@ -1,0 +1,21 @@
+{
+  "experiment": "CR023",
+  "created_before_any_tape_reward_evaluation": true,
+  "mechanical_probe_only_completed": true,
+  "mechanical_probe_run": 33286607721,
+  "routes": {
+    "top11_openloop": {"submission_id": 55858273, "episode_id": 102908981, "source_seat": 1},
+    "top16_openloop": {"submission_id": 55847696, "episode_id": 102915518, "source_seat": 1},
+    "top19_openloop": {"submission_id": 55872138, "episode_id": 102895545, "source_seat": 1}
+  },
+  "raw_backbone_stage_a_seeds": [652745218,1250543639,818628043,547918053,201276891,2078928293,62034274,1364125636,1316798892,930848954,312969125,1450748216],
+  "raw_backbone_stage_b_seeds": [1680430405,669037691,1345043539,991630826,1062831115,451534639,1271155419,2091575884,887631645,1379034051,696229387,1481855863],
+  "adaptive_overlay_stage_a_seeds_reserved": [1243764287,1103555817,505621628,1652079648,1833335111,1855484966,1713031365,1605288614,69099350,139160778,1062947539,789803827],
+  "adaptive_overlay_stage_b_seeds_reserved": [835439305,1801837293,2054127011,1675408933,1012995035,1502614783,1515953712,917155237,1470547667,294153776,1066759023,1069600571],
+  "both_seats": true,
+  "opponent_set": "configs/cr015_current_meta_opponents_v1.json",
+  "raw_control": "frozen CR008",
+  "held_out_policy": "All 32/32 held-out seeds remain sealed and forbidden.",
+  "replay_policy": "Public replay is fetched transiently at evaluation/build time. Raw replay/tape bytes are not committed to the repository.",
+  "adaptive_seed_firewall": "Reserved adaptive-overlay seeds cannot be inspected until one raw backbone has passed Stage A and Stage B and the adaptive overlay candidate is frozen."
+}
