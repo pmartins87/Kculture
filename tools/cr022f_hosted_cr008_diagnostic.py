@@ -143,7 +143,7 @@ def main():
             eid=int(ep["id"])
             try:rows.append(episode_analysis(download(api,eid,root),seat,eid))
             except Exception as exc:errors.append({"episode_id":eid,"seat":seat,"error":repr(exc)})
-    payload={"experiment":"CR022F","submission_id":args.submission_id,"requested_limit":args.limit,"summary":summarize(rows),"errors":errors,"episodes":rows,"raw_replays_persisted":false,"identity_policy":"opponent identity is not used as a feature or gate"}
+    payload={"experiment":"CR022F","submission_id":args.submission_id,"requested_limit":args.limit,"summary":summarize(rows),"errors":errors,"episodes":rows,"raw_replays_persisted":False,"identity_policy":"opponent identity is not used as a feature or gate"}
     out=Path(args.output);out.parent.mkdir(parents=True,exist_ok=True);out.write_text(json.dumps(payload,indent=2,sort_keys=True),encoding="utf-8")
     print(json.dumps({"experiment":"CR022F","submission_id":args.submission_id,"summary":payload["summary"],"error_count":len(errors)},indent=2,sort_keys=True))
     if errors and not rows: raise SystemExit(2)
