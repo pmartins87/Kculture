@@ -1,0 +1,34 @@
+name: cr023-public-tape-mechanical-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr023-public-tape-mechanical-probe.yml'
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Require Kaggle token
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+      - name: Install dependencies
+        run: |
+          python -m pip install -r requirements.txt
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Fetch frozen R4B dependencies
+        run: python tools/fetch_public_opponents.py
+      - name: Verify frozen probe identity
+        run: |
+          test "$(git rev-parse HEAD:tools/cr023_public_tape_mechanical_probe.py)" = "5fdc2c45fb43f20221d6ce8cf1a4c31a6cd43b89"
+          test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
+      - name: Run mechanical-only probe
+        run: python tools/cr023_public_tape_mechanical_probe.py
