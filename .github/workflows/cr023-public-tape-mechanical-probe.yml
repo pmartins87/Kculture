@@ -28,7 +28,7 @@ jobs:
         run: python tools/fetch_public_opponents.py
       - name: Verify frozen probe identity
         run: |
-          test "$(git rev-parse HEAD:tools/cr023_public_tape_mechanical_probe.py)" = "5fdc2c45fb43f20221d6ce8cf1a4c31a6cd43b89"
+          test "$(git rev-parse HEAD:tools/cr023_public_tape_mechanical_probe.py)" = "301a9f73cacecc950fea822eb78b9986af7f9e5f"
           test "$(git rev-parse HEAD:candidates/r4b_ablation_market_only.py)" = "e564125f0c4a1711fd3ea065dc1cb27d4a62ce37"
       - name: Run mechanical-only probe
         run: python tools/cr023_public_tape_mechanical_probe.py
