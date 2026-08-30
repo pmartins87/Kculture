@@ -1,0 +1,55 @@
+name: cr022a-top20-replay-atlas-run
+on:
+  push:
+    paths:
+      - '.github/workflows/cr022a-top20-replay-atlas-run.yml'
+  workflow_dispatch:
+
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token secret
+        shell: bash
+        run: |
+          if [ -z "$KAGGLE_API_TOKEN" ]; then
+            echo 'KAGGLE_API_TOKEN repository secret is not configured.'
+            exit 2
+          fi
+      - name: Install official Kaggle client
+        run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture current top-20 ladder and up to 3 public episodes each
+        shell: bash
+        run: |
+          set +e
+          python tools/collect_top_ladder_snapshot.py \
+            --top 20 \
+            --episodes-per-team 3 \
+            --output-dir artifacts/cr022a_top20
+          rc=$?
+          echo "collector_exit_code=$rc"
+          test -f artifacts/cr022a_top20/snapshot.json
+      - name: Build behavior atlas from captured replays
+        run: |
+          python tools/top_ladder_behavior_atlas.py \
+            --snapshot artifacts/cr022a_top20/snapshot.json \
+            --output-dir artifacts/cr022a_top20/atlas
+      - name: Preserve compact analysis artifacts
+        run: |
+          mkdir -p artifacts/cr022a_export
+          cp artifacts/cr022a_top20/snapshot.json artifacts/cr022a_export/snapshot.json
+          cp artifacts/cr022a_top20/atlas/atlas.json artifacts/cr022a_export/atlas.json
+          cp artifacts/cr022a_top20/atlas/training_rows.jsonl artifacts/cr022a_export/training_rows.jsonl
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr022a-top20-replay-atlas
+          path: artifacts/cr022a_export/**
+          if-no-files-found: warn
