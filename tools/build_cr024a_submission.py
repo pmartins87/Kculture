@@ -41,19 +41,6 @@ def sha(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def _clock(frame):
-    try:
-        raw = frame.get("step")
-        if raw is not None:
-            return max(0, int(raw))
-    except Exception:
-        pass
-    try:
-        return max(0, int(frame.get("day") or 0)) * 24 + max(0, int(frame.get("hour") or 0))
-    except Exception:
-        return 0
-
-
 def extract_top19_tape() -> tuple[list[dict], dict]:
     cfg = json.loads(CFG.read_text(encoding="utf-8"))
     meta = cfg["routes"]["top19_openloop"]
@@ -135,7 +122,7 @@ _cr024_hosted_entrypoint = agent
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--stage-b-decision", default="CR024A_STAGE_B_PASS__BUILD_NEW_STRATEGY_PACKAGE")
+    ap.add_argument("--stage-b-decision", required=True)
     args = ap.parse_args()
     if args.stage_b_decision != "CR024A_STAGE_B_PASS__BUILD_NEW_STRATEGY_PACKAGE":
         raise SystemExit("CR024A package build not authorized by Stage-B decision")
