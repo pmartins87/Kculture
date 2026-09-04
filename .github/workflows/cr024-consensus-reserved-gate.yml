@@ -125,3 +125,66 @@ jobs:
           name: cr024-consensus-reserved-final
           path: artifacts/cr024_consensus_reserved_final/report.json
           if-no-files-found: error
+
+  package:
+    needs: aggregate
+    if: ${{ needs.aggregate.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr024-consensus-reserved-final
+          path: artifacts/gate
+      - name: Require fresh reserved PASS
+        run: |
+          python - <<'PY'
+          import json
+          r=json.load(open('artifacts/gate/report.json'))
+          assert r['decision']=='CR024_CONSENSUS_V1_PASS__BUILD_PACKAGE', r['decision']
+          print(r['decision'])
+          PY
+      - name: Fetch frozen public parity opponent
+        run: python tools/fetch_public_opponents.py
+      - name: Build deterministic package
+        run: python tools/build_cr024_consensus_submission.py --authorization CR024_CONSENSUS_V1_PASS__BUILD_PACKAGE
+      - name: Mechanical package audit
+        run: |
+          python tools/audit_cr024_consensus_submission.py \
+            --archive artifacts/submissions/cr024_consensus_v1/R4D_CR024_CONSENSUS_H11_M19_V1.tar.gz \
+            --output artifacts/submissions/cr024_consensus_v1/audit.json
+      - name: Exact action-trace package parity
+        run: |
+          python tools/cr024_consensus_package_parity.py \
+            --archive artifacts/submissions/cr024_consensus_v1/R4D_CR024_CONSENSUS_H11_M19_V1.tar.gz \
+            --opponent artifacts/public_opponents/kaito_v18_public_8b8c421.py \
+            --output artifacts/submissions/cr024_consensus_v1/parity.json
+      - name: Final approval
+        run: |
+          python - <<'PY'
+          import json
+          root='artifacts/submissions/cr024_consensus_v1/'
+          a=json.load(open(root+'audit.json')); p=json.load(open(root+'parity.json')); m=json.load(open(root+'manifest.json'))
+          assert a['decision']=='PASS', a
+          assert p['decision']=='PASS', p
+          assert a['archive_sha256']==m['archive_sha256']
+          print(json.dumps({'decision':'PASS','archive_sha256':m['archive_sha256'],'archive_bytes':m['archive_bytes'],'parity_rows':p['row_count']},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr024-consensus-final-submission
+          path: artifacts/submissions/cr024_consensus_v1/**
+          if-no-files-found: error
