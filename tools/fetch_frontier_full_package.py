@@ -12,6 +12,7 @@ devices, and no path traversal.  The local wrapper is never a submission.
 from __future__ import annotations
 
 import argparse
+import ast
 import hashlib
 import json
 import os
@@ -98,7 +99,6 @@ def copy_loose_outputs(root: Path, loose: list[Path], out: Path) -> list[str]:
         parts = set(rel.parts)
         if ".complete" in parts or "__pycache__" in parts or src.suffix == ".pyc":
             continue
-        # Archives are provenance inputs, not Python siblings; keep them out of sys.path package.
         if src.name.lower().endswith((".tar.gz", ".tgz", ".tar", ".zip", ".archive")):
             continue
         dest = out / rel
@@ -106,6 +106,35 @@ def copy_loose_outputs(root: Path, loose: list[Path], out: Path) -> list[str]:
         shutil.copyfile(src, dest)
         copied.append(rel.as_posix())
     return copied
+
+
+def wrapper_source(original_text: str, package_root: Path, original: Path) -> str:
+    """Inject local sys.path setup *after* a module docstring and __future__ imports.
+
+    Python requires future imports to precede ordinary executable statements.  We
+    use the AST only to locate the legal insertion point; the original source is
+    otherwise byte-for-byte preserved as text.
+    """
+    tree = ast.parse(original_text)
+    insert_after = 0
+    body = list(tree.body)
+    i = 0
+    if body and isinstance(body[0], ast.Expr) and isinstance(getattr(body[0], "value", None), ast.Constant) and isinstance(body[0].value.value, str):
+        insert_after = int(body[0].end_lineno or body[0].lineno)
+        i = 1
+    while i < len(body) and isinstance(body[i], ast.ImportFrom) and body[i].module == "__future__":
+        insert_after = int(body[i].end_lineno or body[i].lineno)
+        i += 1
+    prefix = (
+        "# Local package-aware frontier wrapper; never submit this file.\n"
+        "import sys as _kc_sys\n"
+        f"_kc_sys.path.insert(0, {str(package_root)!r})\n"
+        f"_kc_sys.path.insert(0, {str(original.parent)!r})\n"
+        f"__file__ = {str(original)!r}\n"
+    )
+    lines = original_text.splitlines(keepends=True)
+    pos = max(0, min(len(lines), insert_after))
+    return "".join(lines[:pos]) + prefix + "".join(lines[pos:])
 
 
 def main() -> None:
@@ -169,9 +198,6 @@ def main() -> None:
                 "members": archive_inventory(arc),
             }
         else:
-            # Kaggle notebooks may put the real entrypoint loose while their archive
-            # intentionally contains submission.py.  Accept only one ordinary loose
-            # main.py and preserve its siblings; never guess among multiple mains.
             loose_mains = [p for p in loose if p.name == "main.py" and ".complete" not in p.parts and "__pycache__" not in p.parts]
             if len(loose_mains) == 1:
                 copied_loose = copy_loose_outputs(root, loose, package)
@@ -201,14 +227,7 @@ def main() -> None:
         wrapper = Path(args.wrapper)
         wrapper.parent.mkdir(parents=True, exist_ok=True)
         original_text = original.read_text(encoding="utf-8")
-        prefix = (
-            "# Local package-aware frontier wrapper; never submit this file.\n"
-            "import sys as _kc_sys\n"
-            f"_kc_sys.path.insert(0, {str(package_root)!r})\n"
-            f"_kc_sys.path.insert(0, {str(original.parent)!r})\n"
-            f"__file__ = {str(original)!r}\n"
-        )
-        wrapper.write_text(prefix + original_text, encoding="utf-8")
+        wrapper.write_text(wrapper_source(original_text, package_root, original), encoding="utf-8")
 
         receipt.update(
             status="READY",
