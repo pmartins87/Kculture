@@ -1,0 +1,40 @@
+name: cr026-live-meta-cr024-benchmark
+on:
+  push:
+    paths:
+      - '.github/workflows/cr026-live-meta-cr024-benchmark.yml'
+  workflow_dispatch:
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt
+          python -m pip install -U kagglehub 'kaggle>=2.2.3'
+      - name: Verify frozen CR024 sources
+        run: |
+          test "$(git rev-parse HEAD:tools/build_cr024_consensus_submission.py)" = "734dfa07df48ee528fd680a7aeb2729a8e0b891b"
+          test "$(git rev-parse HEAD:configs/cr023_public_tape_preregistered_seeds_v1.json)" = "5325caa121881bfa8d118d890358cb766dfa1d64"
+      - name: Benchmark CR024 against current official winners
+        run: |
+          python tools/cr026_live_meta_cr024_benchmark.py \
+            --date 2026-09-04 \
+            --top 10 \
+            --output artifacts/cr026_live_meta_cr024/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr026-live-meta-cr024-benchmark
+          path: artifacts/cr026_live_meta_cr024/report.json
+          if-no-files-found: warn
