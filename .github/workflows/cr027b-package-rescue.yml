@@ -1,0 +1,98 @@
+name: cr027b-package-rescue
+on:
+  push:
+    paths:
+      - '.github/workflows/cr027b-package-rescue.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  rescue:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: indar_v1
+            handle: indarkarhana/shape-the-shop-work-the-pasture-top-10/versions/1
+          - id: andrey_v12
+            handle: andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Fetch complete pinned package or preserve diagnostic inventory
+        run: |
+          mkdir -p artifacts/cr027b/${{ matrix.id }}
+          python tools/fetch_frontier_full_package.py \
+            --handle '${{ matrix.handle }}' \
+            --package-dir artifacts/cr027b/${{ matrix.id }}/package \
+            --wrapper artifacts/cr027b/${{ matrix.id }}/candidate_local.py \
+            --receipt artifacts/cr027b/${{ matrix.id }}/package_receipt.json \
+            --allow-no-main
+      - name: Run package-aware frontier screen when an entrypoint was recovered
+        run: |
+          STATUS=$(python - <<'PY'
+          import json
+          print(json.load(open('artifacts/cr027b/${{ matrix.id }}/package_receipt.json'))['status'])
+          PY
+          )
+          echo "package status: $STATUS"
+          if [ "$STATUS" != "READY" ]; then
+            echo "No runnable entrypoint recovered; keeping inventory as diagnostic evidence."
+            exit 0
+          fi
+          mkdir -p artifacts/cr027b/${{ matrix.id }}/opponents
+          python tools/fetch_exact_package_main.py \
+            --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/23' \
+            --output artifacts/cr027b/${{ matrix.id }}/opponents/rayk.py \
+            --receipt artifacts/cr027b/${{ matrix.id }}/opponents/rayk.json
+          python tools/fetch_exact_package_main.py \
+            --handle 'boatlee/v21-r1-public-state-route-portfolio/versions/2' \
+            --output artifacts/cr027b/${{ matrix.id }}/opponents/boatlee.py \
+            --receipt artifacts/cr027b/${{ matrix.id }}/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py \
+            --handle 'prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10' \
+            --output artifacts/cr027b/${{ matrix.id }}/opponents/prvsiyan.py \
+            --receipt artifacts/cr027b/${{ matrix.id }}/opponents/prvsiyan.json
+          python - <<'PY'
+          import json
+          expected={
+            'rayk':('86b7ae5c029e351adfbd80059cd185b39d1467303437e6441ff7ad871cd8e7ee','6c709f6d3ce6cf221a9495de7e716fcd1b660e3bbc8ee5679b63233d0265a812'),
+            'boatlee':('d65410a4fc8a31226055e43085131468ac8af5721aabdf3593cb8eade59cabe3','c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8'),
+            'prvsiyan':('fadde4e4e5cde332352827cbbfd7c8ea95f2e9abd34a3ca7196a29b007e93bd3','943e8c114ace4f5c5965698e66a4943e982dab4ccb57d8efa134a4e5b4f13955'),
+          }
+          root='artifacts/cr027b/${{ matrix.id }}/opponents'
+          for k,(a,m) in expected.items():
+              r=json.load(open(f'{root}/{k}.json'))
+              assert r['archive_sha256']==a,(k,r['archive_sha256'])
+              assert r['main_sha256']==m,(k,r['main_sha256'])
+          PY
+          python tools/cr027_frontier_screen.py \
+            --candidate-id '${{ matrix.id }}' \
+            --candidate artifacts/cr027b/${{ matrix.id }}/candidate_local.py \
+            --candidate-receipt artifacts/cr027b/${{ matrix.id }}/package_receipt.json \
+            --opponent-dir artifacts/cr027b/${{ matrix.id }}/opponents \
+            --output artifacts/cr027b/${{ matrix.id }}/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr027b-${{ matrix.id }}
+          path: |
+            artifacts/cr027b/${{ matrix.id }}/package_receipt.json
+            artifacts/cr027b/${{ matrix.id }}/report.json
+            artifacts/cr027b/${{ matrix.id }}/candidate_local.py
+          if-no-files-found: warn
+          retention-days: 14
