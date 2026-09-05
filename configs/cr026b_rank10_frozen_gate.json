@@ -1,0 +1,34 @@
+{
+  "candidate": "CR026B_RANK10",
+  "source_run_id": 33973134213,
+  "source_artifact": "cr026-screen-input",
+  "source": {
+    "rank": 10,
+    "episode_id": "105550817",
+    "source_seat": 0,
+    "source_seed": 1829938287,
+    "team": "keiz",
+    "tape_sha256": "13a1ea6399ed192dc3251acb27a08f1ccf1b3e98f4f82c3d783900d55ac5f770"
+  },
+  "control_tape_sha256": "d2d253bd65de3658ec55e2fe16bdb85e3a9a51c0a13dee4a756b646cfeac307e",
+  "seeds": [926052301, 926052303, 926052307, 926052309],
+  "direct_seeds": [926052401, 926052403, 926052407, 926052409],
+  "reactive_opponents": ["rayk", "boatlee", "prvsiyan"],
+  "hosted_sample_size": 20,
+  "hosted_sampling_salt": "CR026B_RANK10_FRESH_V1",
+  "exclude_hosted_episode_ids": [
+    105824670, 105823780, 105806355, 105805448, 105796642,
+    105784493, 105777602, 105762525, 105752688, 105749159,
+    105746328, 105743635, 105751453, 105751031, 105750141,
+    105748261, 105747366, 105745427, 105744529, 105741795
+  ],
+  "gate": {
+    "reactive_min_score_gain": 0,
+    "reactive_max_regressions": 2,
+    "hosted_min_score_gain": 6,
+    "hosted_max_regressions": 2,
+    "direct_min_score": 6
+  },
+  "selection_policy": "Rank 10 was the predeclared backup before CR026A outcomes. No threshold changes after CR026A inspection. Fresh hosted sample is SHA256-order selected from completed public CR024 episodes after excluding all CR026A hosted episodes.",
+  "held_out_touched": false
+}
