@@ -1,0 +1,36 @@
+name: cr028-opening-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr028-opening-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact Kaggriculture environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt 'kaggle>=2.2.3'
+      - name: Verify dominant >=3000 opening and compare CR024
+        run: python tools/cr028_opening_probe.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr028-opening-probe
+          path: artifacts/cr028_opening/report.json
+          if-no-files-found: error
+          retention-days: 30
