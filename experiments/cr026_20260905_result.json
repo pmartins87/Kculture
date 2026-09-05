@@ -1,0 +1,650 @@
+{
+  "run_id": 33973134213,
+  "screen": {
+    "decision": "SHORTLIST_FOR_FRESH_REACTIVE_TESTS",
+    "held_out_touched": false,
+    "hosted_authorized": false,
+    "limitation": "Exploratory fixed tapes; no estimate of live rating; source families are research metadata only.",
+    "ranking": [
+      {
+        "direct_mean_delta": 28865.5625,
+        "direct_score": 16,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 2,
+        "paired_regressions": 0,
+        "rank": 5,
+        "shortlist": true,
+        "source": {
+          "episode_id": "105565284",
+          "original_rewards": [
+            72100,
+            81368
+          ],
+          "rank": 5,
+          "source_seat": 1,
+          "source_seed": 1061116030,
+          "tape_sha256": "7e90e317f88016a76b73b833c9f5c8aac30f950776b4da12aedb7aa5b3378b5b",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": 28216.5625,
+        "direct_score": 16,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 2,
+        "paired_regressions": 0,
+        "rank": 10,
+        "shortlist": true,
+        "source": {
+          "episode_id": "105550817",
+          "original_rewards": [
+            109857,
+            95532
+          ],
+          "rank": 10,
+          "source_seat": 0,
+          "source_seed": 1829938287,
+          "tape_sha256": "13a1ea6399ed192dc3251acb27a08f1ccf1b3e98f4f82c3d783900d55ac5f770",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": 1629,
+        "direct_score": 12,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 2,
+        "paired_regressions": 2,
+        "rank": 2,
+        "shortlist": true,
+        "source": {
+          "episode_id": "105617544",
+          "original_rewards": [
+            85229,
+            85375
+          ],
+          "rank": 2,
+          "source_seat": 1,
+          "source_seed": 1675093238,
+          "tape_sha256": "30c8913ecd5e4fba6f06ac1e09842ad4106e874ec13db1e6b1f46b1a738e6067",
+          "team": "Jesse Bullard"
+        }
+      },
+      {
+        "direct_mean_delta": 22723.4375,
+        "direct_score": 10,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 0,
+        "paired_regressions": 2,
+        "rank": 9,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105550812",
+          "original_rewards": [
+            119161,
+            121336
+          ],
+          "rank": 9,
+          "source_seat": 1,
+          "source_seed": 1973181638,
+          "tape_sha256": "9caf07ccfc0223f80a1c13d4aabb4757b0ff91d983e0a8325e6d03c7a6013425",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": 7578.25,
+        "direct_score": 8,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 0,
+        "paired_regressions": 2,
+        "rank": 1,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105620288",
+          "original_rewards": [
+            59267,
+            70930
+          ],
+          "rank": 1,
+          "source_seat": 1,
+          "source_seed": 1050807738,
+          "tape_sha256": "35a93625250150b3a06611796c8bd477072f789e16d10ed5196de8191d2654aa",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": 1167.125,
+        "direct_score": 8,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": 0,
+        "paired_regressions": 2,
+        "rank": 4,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105614731",
+          "original_rewards": [
+            66976,
+            75017
+          ],
+          "rank": 4,
+          "source_seat": 1,
+          "source_seed": 1229631324,
+          "tape_sha256": "613a6bda24dde36bbbf76ee8d2b6ef74fca4d277b43fc4efc727e77db53d2371",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": 12255.5,
+        "direct_score": 10,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": -2,
+        "paired_regressions": 2,
+        "rank": 8,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105562605",
+          "original_rewards": [
+            127593,
+            128572
+          ],
+          "rank": 8,
+          "source_seat": 1,
+          "source_seed": 88256241,
+          "tape_sha256": "940f5ff3c1d4db47e84ee1ebd7186f2f0ccd54f197bd96d964aafaa6ccb6ecfb",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": -16720.25,
+        "direct_score": 0,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": -2,
+        "paired_regressions": 2,
+        "rank": 7,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105559879",
+          "original_rewards": [
+            57971,
+            59938
+          ],
+          "rank": 7,
+          "source_seat": 1,
+          "source_seed": 428307041,
+          "tape_sha256": "096d1feeea5f4d9efebe693d58b32cb7a567c65ddce819c9b59a8b3fa8eb53d7",
+          "team": "keiz"
+        }
+      },
+      {
+        "direct_mean_delta": -32523,
+        "direct_score": 0,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": -2,
+        "paired_regressions": 4,
+        "rank": 3,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105571264",
+          "original_rewards": [
+            95061,
+            95341
+          ],
+          "rank": 3,
+          "source_seat": 1,
+          "source_seed": 1596134077,
+          "tape_sha256": "0529b6b6f752fdb049469c42ab80f9701cc5cb3b4835d28df134aa39cb578232",
+          "team": "Crop Dusta"
+        }
+      },
+      {
+        "direct_mean_delta": -24828.875,
+        "direct_score": 2,
+        "held_out_touched": false,
+        "hosted_authorized": false,
+        "paired_gain": -4,
+        "paired_regressions": 4,
+        "rank": 6,
+        "shortlist": false,
+        "source": {
+          "episode_id": "105559878",
+          "original_rewards": [
+            81546,
+            82397
+          ],
+          "rank": 6,
+          "source_seat": 1,
+          "source_seed": 115575762,
+          "tape_sha256": "40952af79b46ac8f6c7120e788e444b44f8f1680b3fe3e47eae649baf9e91948",
+          "team": "Crop Dusta"
+        }
+      }
+    ]
+  },
+  "hosted": {
+    "aggregate": {
+      "games": 20,
+      "loss_flag_counts": {
+        "first_sustained_money_deficit_5000": 7,
+        "midgame_idle_gap": 8,
+        "terminal_unmonetized_resources": 12
+      },
+      "losses": 12,
+      "mean_money_delta": -6475.6,
+      "phase_win_loss_contrast": {
+        "0_95": {
+          "loss_mean_pass_gap": 21.416666666666668,
+          "loss_mean_productive_gap": -3.9166666666666665,
+          "win_mean_pass_gap": 56.375,
+          "win_mean_productive_gap": 17.375
+        },
+        "192_287": {
+          "loss_mean_pass_gap": 70,
+          "loss_mean_productive_gap": 1.8333333333333333,
+          "win_mean_pass_gap": 110,
+          "win_mean_productive_gap": 12
+        },
+        "288_383": {
+          "loss_mean_pass_gap": 56.083333333333336,
+          "loss_mean_productive_gap": -27.75,
+          "win_mean_pass_gap": 64.75,
+          "win_mean_productive_gap": -6.25
+        },
+        "384_479": {
+          "loss_mean_pass_gap": 45.916666666666664,
+          "loss_mean_productive_gap": -38.083333333333336,
+          "win_mean_pass_gap": 58.5,
+          "win_mean_productive_gap": -33
+        },
+        "480_575": {
+          "loss_mean_pass_gap": 29.583333333333332,
+          "loss_mean_productive_gap": -29.833333333333332,
+          "win_mean_pass_gap": 58.5,
+          "win_mean_productive_gap": -30.625
+        },
+        "576_647": {
+          "loss_mean_pass_gap": 20.166666666666668,
+          "loss_mean_productive_gap": -17,
+          "win_mean_pass_gap": 24.5,
+          "win_mean_productive_gap": -19.125
+        },
+        "648_695": {
+          "loss_mean_pass_gap": -13.583333333333334,
+          "loss_mean_productive_gap": 18.75,
+          "win_mean_pass_gap": -1,
+          "win_mean_productive_gap": 18.375
+        },
+        "696_718": {
+          "loss_mean_pass_gap": 3.3333333333333335,
+          "loss_mean_productive_gap": -2,
+          "win_mean_pass_gap": -7,
+          "win_mean_productive_gap": 11.625
+        },
+        "96_191": {
+          "loss_mean_pass_gap": 26.666666666666668,
+          "loss_mean_productive_gap": -4.916666666666667,
+          "win_mean_pass_gap": 68.75,
+          "win_mean_productive_gap": 2
+        }
+      },
+      "ties": 0,
+      "wins": 8
+    },
+    "analyzed": 20,
+    "available_public_episodes": 79,
+    "captured_at": "2026-09-05T14:58:04.900347+00:00",
+    "control_provenance": {
+      "tape_sha256": "d2d253bd65de3658ec55e2fe16bdb85e3a9a51c0a13dee4a756b646cfeac307e",
+      "top11": {
+        "action_count": 719,
+        "canonical_tape_sha256": "be2abbc02f0f54a0ddabeb5a2b886525e8efbbf86ee18dc28783bafcfe447828",
+        "episode_id": 102908981,
+        "source_seat": 1
+      },
+      "top19": {
+        "action_count": 719,
+        "canonical_tape_sha256": "eb106b7c6fb51372e01579537b0f2f06e7e29af6698c10fdcefe4dd6e340726a",
+        "episode_id": 102895545,
+        "source_seat": 1
+      }
+    },
+    "errors": [],
+    "execution_checks": [
+      {
+        "action_mismatches": 0,
+        "episode_id": 105824670,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          65941,
+          76245
+        ],
+        "original_rewards": [
+          65941,
+          76245
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105823780,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          83108,
+          61926
+        ],
+        "original_rewards": [
+          83108,
+          61926
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105806355,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          82938,
+          177206
+        ],
+        "original_rewards": [
+          82938,
+          177206
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105805448,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          105286,
+          102160
+        ],
+        "original_rewards": [
+          105286,
+          102160
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105796642,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          100539,
+          119685
+        ],
+        "original_rewards": [
+          100539,
+          119685
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105784493,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          63780,
+          78032
+        ],
+        "original_rewards": [
+          63780,
+          78032
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105777602,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          76437,
+          75361
+        ],
+        "original_rewards": [
+          76437,
+          75361
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105762525,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          68379,
+          72621
+        ],
+        "original_rewards": [
+          68379,
+          72621
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105752688,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          67934,
+          85988
+        ],
+        "original_rewards": [
+          67934,
+          85988
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105749159,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          69488,
+          67994
+        ],
+        "original_rewards": [
+          69488,
+          67994
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105746328,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          97776,
+          71424
+        ],
+        "original_rewards": [
+          97776,
+          71424
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105743635,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          100555,
+          100781
+        ],
+        "original_rewards": [
+          100555,
+          100781
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105751453,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          120684,
+          117773
+        ],
+        "original_rewards": [
+          120684,
+          117773
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105751031,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          82358,
+          82784
+        ],
+        "original_rewards": [
+          82358,
+          82784
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105750141,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          100334,
+          118739
+        ],
+        "original_rewards": [
+          100334,
+          118739
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105748261,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          96001,
+          115630
+        ],
+        "original_rewards": [
+          96001,
+          115630
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105747366,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          128248,
+          124785
+        ],
+        "original_rewards": [
+          128248,
+          124785
+        ],
+        "seat": 0,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105745427,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          92183,
+          117959
+        ],
+        "original_rewards": [
+          92183,
+          117959
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105744529,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          102538,
+          115858
+        ],
+        "original_rewards": [
+          102538,
+          115858
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      },
+      {
+        "action_mismatches": 0,
+        "episode_id": 105741795,
+        "exact_terminal_reproduction": true,
+        "first_mismatches": [],
+        "local_rewards": [
+          76307,
+          76587
+        ],
+        "original_rewards": [
+          76307,
+          76587
+        ],
+        "seat": 1,
+        "trace_steps": 719
+      }
+    ],
+    "held_out_touched": false,
+    "metadata_outcomes": {
+      "LOSS": 36,
+      "WIN": 43
+    },
+    "sample_policy": "latest up to 12 losses, 8 wins, 4 ties/unknown; not an unbiased win-rate sample",
+    "selected": 20,
+    "submission_id": 56025052
+  }
+}

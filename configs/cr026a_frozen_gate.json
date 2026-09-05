@@ -1,0 +1,205 @@
+{
+  "candidate": "CR026A_RANK5",
+  "source_run_id": 33973134213,
+  "source_artifact": "cr026-screen-input",
+  "source": {
+    "episode_id": "105565284",
+    "original_rewards": [
+      72100,
+      81368
+    ],
+    "rank": 5,
+    "source_seat": 1,
+    "source_seed": 1061116030,
+    "tape_sha256": "7e90e317f88016a76b73b833c9f5c8aac30f950776b4da12aedb7aa5b3378b5b",
+    "team": "keiz"
+  },
+  "control_tape_sha256": "d2d253bd65de3658ec55e2fe16bdb85e3a9a51c0a13dee4a756b646cfeac307e",
+  "seeds": [
+    926051301,
+    926051303,
+    926051307,
+    926051309
+  ],
+  "direct_seeds": [
+    926051401,
+    926051403,
+    926051407,
+    926051409
+  ],
+  "hosted_sample": [
+    {
+      "episode_id": 105824670,
+      "seat": 0,
+      "original_rewards": [
+        65941,
+        76245
+      ]
+    },
+    {
+      "episode_id": 105823780,
+      "seat": 1,
+      "original_rewards": [
+        83108,
+        61926
+      ]
+    },
+    {
+      "episode_id": 105806355,
+      "seat": 0,
+      "original_rewards": [
+        82938,
+        177206
+      ]
+    },
+    {
+      "episode_id": 105805448,
+      "seat": 1,
+      "original_rewards": [
+        105286,
+        102160
+      ]
+    },
+    {
+      "episode_id": 105796642,
+      "seat": 0,
+      "original_rewards": [
+        100539,
+        119685
+      ]
+    },
+    {
+      "episode_id": 105784493,
+      "seat": 0,
+      "original_rewards": [
+        63780,
+        78032
+      ]
+    },
+    {
+      "episode_id": 105777602,
+      "seat": 1,
+      "original_rewards": [
+        76437,
+        75361
+      ]
+    },
+    {
+      "episode_id": 105762525,
+      "seat": 0,
+      "original_rewards": [
+        68379,
+        72621
+      ]
+    },
+    {
+      "episode_id": 105752688,
+      "seat": 0,
+      "original_rewards": [
+        67934,
+        85988
+      ]
+    },
+    {
+      "episode_id": 105749159,
+      "seat": 1,
+      "original_rewards": [
+        69488,
+        67994
+      ]
+    },
+    {
+      "episode_id": 105746328,
+      "seat": 1,
+      "original_rewards": [
+        97776,
+        71424
+      ]
+    },
+    {
+      "episode_id": 105743635,
+      "seat": 0,
+      "original_rewards": [
+        100555,
+        100781
+      ]
+    },
+    {
+      "episode_id": 105751453,
+      "seat": 0,
+      "original_rewards": [
+        120684,
+        117773
+      ]
+    },
+    {
+      "episode_id": 105751031,
+      "seat": 1,
+      "original_rewards": [
+        82358,
+        82784
+      ]
+    },
+    {
+      "episode_id": 105750141,
+      "seat": 1,
+      "original_rewards": [
+        100334,
+        118739
+      ]
+    },
+    {
+      "episode_id": 105748261,
+      "seat": 1,
+      "original_rewards": [
+        96001,
+        115630
+      ]
+    },
+    {
+      "episode_id": 105747366,
+      "seat": 0,
+      "original_rewards": [
+        128248,
+        124785
+      ]
+    },
+    {
+      "episode_id": 105745427,
+      "seat": 1,
+      "original_rewards": [
+        92183,
+        117959
+      ]
+    },
+    {
+      "episode_id": 105744529,
+      "seat": 1,
+      "original_rewards": [
+        102538,
+        115858
+      ]
+    },
+    {
+      "episode_id": 105741795,
+      "seat": 1,
+      "original_rewards": [
+        76307,
+        76587
+      ]
+    }
+  ],
+  "reactive_opponents": [
+    "rayk",
+    "boatlee",
+    "tetsu"
+  ],
+  "gate": {
+    "reactive_min_score_gain": 0,
+    "reactive_max_regressions": 2,
+    "hosted_min_score_gain": 6,
+    "hosted_max_regressions": 2,
+    "direct_min_score": 6
+  },
+  "held_out_touched": false
+}

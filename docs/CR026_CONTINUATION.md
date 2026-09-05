@@ -1,5 +1,7 @@
 # CR026 continuation — 2026-09-05
 
+> **Latest:** run 33973134213 completed. Rank 5 selected for CR026A: 16/16 direct, +2 paired score, zero regressions. Actual CR024 audit: 20/20 exact traces/rewards. Follow [CR026A_FROZEN_FOLLOWUP](CR026A_FROZEN_FOLLOWUP.md) and workflow `cr026a-fresh-gate.yml`; earlier active-screen instructions below are historical.
+
 This is the current operational entrypoint; it supersedes the older continuation lists in HANDOFF, STATUS and ROADMAP.
 
 ## Confirmed state
