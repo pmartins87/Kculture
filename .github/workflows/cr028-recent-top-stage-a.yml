@@ -1,0 +1,118 @@
+name: cr028-recent-top-stage-a
+on:
+  push:
+    paths:
+      - '.github/workflows/cr028-recent-top-stage-a.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Prepare and provenance-check frozen recent route variants
+        run: python tools/cr028_recent_top_prepare.py
+      - name: Fetch exact frozen reactive opponents
+        run: |
+          mkdir -p artifacts/cr028_stagea/prepared/opponents
+          python tools/fetch_exact_package_main.py --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/23' --output artifacts/cr028_stagea/prepared/opponents/rayk.py --receipt artifacts/cr028_stagea/prepared/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle 'boatlee/v21-r1-public-state-route-portfolio/versions/2' --output artifacts/cr028_stagea/prepared/opponents/boatlee.py --receipt artifacts/cr028_stagea/prepared/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle 'prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10' --output artifacts/cr028_stagea/prepared/opponents/prvsiyan.py --receipt artifacts/cr028_stagea/prepared/opponents/prvsiyan.json
+          python - <<'PY'
+          import json
+          cfg=json.load(open('configs/cr028_recent_top_splice_screen.json'))
+          for o in cfg['opponents']:
+              r=json.load(open(f"artifacts/cr028_stagea/prepared/opponents/{o['id']}.json"))
+              assert r['archive_sha256']==o['archive_sha256'],(o['id'],r['archive_sha256'])
+              assert r['main_sha256']==o['main_sha256'],(o['id'],r['main_sha256'])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr028-stagea-prepared
+          path: artifacts/cr028_stagea/prepared/**
+          if-no-files-found: error
+          retention-days: 14
+
+  screen:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix:
+        variant:
+          - full_recent_top
+          - prefix24_then_cr024
+          - prefix48_then_cr024
+          - prefix100_then_cr024
+          - prefix136_then_cr024
+          - prefix200_then_cr024
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact engine
+        run: python -m pip install -r requirements.txt
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr028-stagea-prepared
+          path: artifacts/cr028_stagea/prepared
+      - name: Run fresh paired screen
+        run: |
+          python tools/cr028_recent_top_variant_screen.py \
+            --variant-id '${{ matrix.variant }}' \
+            --prepared-dir artifacts/cr028_stagea/prepared \
+            --opponent-dir artifacts/cr028_stagea/prepared/opponents \
+            --output 'artifacts/cr028_stagea/report_${{ matrix.variant }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr028-stagea-${{ matrix.variant }}
+          path: 'artifacts/cr028_stagea/report_${{ matrix.variant }}.json'
+          if-no-files-found: warn
+          retention-days: 30
+
+  aggregate:
+    needs: screen
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr028-stagea-*
+          path: artifacts/cr028_stagea/downloaded
+          merge-multiple: true
+      - name: Rank frozen Stage-A variants
+        run: |
+          python tools/cr028_recent_top_aggregate.py \
+            --input-glob 'artifacts/cr028_stagea/downloaded/**/report_*.json' \
+            --output artifacts/cr028_stagea/final.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr028-stagea-final
+          path: artifacts/cr028_stagea/final.json
+          if-no-files-found: error
+          retention-days: 30
