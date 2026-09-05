@@ -1,10 +1,13 @@
-"""Fetch a pinned public Kaggle notebook output and preserve its full submission package.
+"""Fetch a pinned public Kaggle notebook output and preserve its runnable package.
 
-This is a research/evaluation helper.  Unlike fetch_frontier_submission_main.py it
-keeps sibling modules required by main.py.  Archive extraction is deliberately
-strict: regular files/directories only, no links/devices, and no path traversal.
-A local wrapper adds the extracted roots to sys.path before executing the original
-main.py; the wrapper is for local reproduction only and is never a submission.
+Research/evaluation helper.  It prefers a canonical submission archive containing
+main.py and preserves sibling modules.  Some high-scoring public notebooks emit a
+submission archive containing submission.py *plus* a loose main.py beside it; in
+that case the unique loose main.py is the real Kaggle entrypoint and all ordinary
+loose output files are copied beside it for exact local reproduction.
+
+Extraction is deliberately strict: regular files/directories only, no links or
+devices, and no path traversal.  The local wrapper is never a submission.
 """
 from __future__ import annotations
 
@@ -12,6 +15,7 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
 import tarfile
 import tempfile
 import zipfile
@@ -85,6 +89,25 @@ def safe_extract(path: Path, out: Path) -> None:
                 dest.write_bytes(fh.read() if fh else b"")
 
 
+def copy_loose_outputs(root: Path, loose: list[Path], out: Path) -> list[str]:
+    """Copy ordinary notebook output files, excluding cache/control debris."""
+    copied = []
+    out.mkdir(parents=True, exist_ok=True)
+    for src in loose:
+        rel = src.relative_to(root)
+        parts = set(rel.parts)
+        if ".complete" in parts or "__pycache__" in parts or src.suffix == ".pyc":
+            continue
+        # Archives are provenance inputs, not Python siblings; keep them out of sys.path package.
+        if src.name.lower().endswith((".tar.gz", ".tgz", ".tar", ".zip", ".archive")):
+            continue
+        dest = out / rel
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, dest)
+        copied.append(rel.as_posix())
+    return copied
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--handle", required=True)
@@ -126,36 +149,58 @@ def main() -> None:
             except Exception as exc:
                 inventories.append({"archive": arc.name, "inventory_error": repr(exc)[:500]})
 
-        # Canonical submission archive wins. Otherwise require one unambiguous archive/main.py.
+        package = Path(args.package_dir)
         canonical = [x for x in candidates if x[2]]
         chosen = canonical if canonical else candidates
-        if len(chosen) != 1:
-            receipt.update(
-                status="NO_UNAMBIGUOUS_MAIN",
-                loose_files=[str(p.relative_to(root)).replace(os.sep, "/") for p in loose][:300],
-                archives=inventories,
-                main_candidates=[{"archive": x[0].name, "member": x[1], "canonical": x[2]} for x in candidates],
-            )
-            Path(args.receipt).parent.mkdir(parents=True, exist_ok=True)
-            Path(args.receipt).write_text(json.dumps(receipt, indent=2, sort_keys=True), encoding="utf-8")
-            print(json.dumps(receipt, indent=2, sort_keys=True))
-            if args.allow_no_main:
-                return
-            raise RuntimeError(f"no unambiguous package main.py for {args.handle}")
+        source_mode = None
+        archive_meta = {}
+        copied_loose = []
 
-        arc, member, is_canonical = chosen[0]
-        package = Path(args.package_dir)
-        safe_extract(arc, package)
-        original = (package / Path(*PurePosixPath(member).parts)).resolve()
+        if len(chosen) == 1:
+            arc, member, is_canonical = chosen[0]
+            safe_extract(arc, package)
+            original = (package / Path(*PurePosixPath(member).parts)).resolve()
+            source_mode = "archive_main"
+            archive_meta = {
+                "source_archive": arc.name,
+                "canonical_archive": is_canonical,
+                "archive_sha256": sha(arc.read_bytes()),
+                "member_count": len(archive_inventory(arc)),
+                "members": archive_inventory(arc),
+            }
+        else:
+            # Kaggle notebooks may put the real entrypoint loose while their archive
+            # intentionally contains submission.py.  Accept only one ordinary loose
+            # main.py and preserve its siblings; never guess among multiple mains.
+            loose_mains = [p for p in loose if p.name == "main.py" and ".complete" not in p.parts and "__pycache__" not in p.parts]
+            if len(loose_mains) == 1:
+                copied_loose = copy_loose_outputs(root, loose, package)
+                rel = loose_mains[0].relative_to(root)
+                original = (package / rel).resolve()
+                source_mode = "loose_output_main"
+                archive_meta = {"archives": inventories}
+            else:
+                receipt.update(
+                    status="NO_UNAMBIGUOUS_MAIN",
+                    loose_files=[str(p.relative_to(root)).replace(os.sep, "/") for p in loose][:300],
+                    archives=inventories,
+                    main_candidates=[{"archive": x[0].name, "member": x[1], "canonical": x[2]} for x in candidates],
+                    loose_main_candidates=[str(p.relative_to(root)).replace(os.sep, "/") for p in loose_mains],
+                )
+                Path(args.receipt).parent.mkdir(parents=True, exist_ok=True)
+                Path(args.receipt).write_text(json.dumps(receipt, indent=2, sort_keys=True), encoding="utf-8")
+                print(json.dumps(receipt, indent=2, sort_keys=True))
+                if args.allow_no_main:
+                    return
+                raise RuntimeError(f"no unambiguous package/loose main.py for {args.handle}")
+
         package_root = package.resolve()
         if not original.is_file():
-            raise RuntimeError(f"extracted main missing: {original}")
+            raise RuntimeError(f"entrypoint missing after preservation: {original}")
 
         wrapper = Path(args.wrapper)
         wrapper.parent.mkdir(parents=True, exist_ok=True)
         original_text = original.read_text(encoding="utf-8")
-        # Execute the original source in the wrapper globals so Kaggle's 'last callable'
-        # semantics can still discover the original agent function.
         prefix = (
             "# Local package-aware frontier wrapper; never submit this file.\n"
             "import sys as _kc_sys\n"
@@ -167,20 +212,18 @@ def main() -> None:
 
         receipt.update(
             status="READY",
-            source_archive=arc.name,
-            canonical_archive=is_canonical,
-            archive_sha256=sha(arc.read_bytes()),
-            original_main_member=member,
+            source_mode=source_mode,
+            original_main_member=str(original.relative_to(package_root)).replace(os.sep, "/"),
             original_main_sha256=sha(original.read_bytes()),
             wrapper_sha256=sha(wrapper.read_bytes()),
-            member_count=len(archive_inventory(arc)),
-            members=archive_inventory(arc),
+            copied_loose_outputs=copied_loose,
             loose_output_files=[str(p.relative_to(root)).replace(os.sep, "/") for p in loose][:300],
+            **archive_meta,
         )
         rp = Path(args.receipt)
         rp.parent.mkdir(parents=True, exist_ok=True)
         rp.write_text(json.dumps(receipt, indent=2, sort_keys=True), encoding="utf-8")
-        print(json.dumps({k: v for k, v in receipt.items() if k != "members"}, indent=2, sort_keys=True))
+        print(json.dumps({k: v for k, v in receipt.items() if k not in ("members", "archives")}, indent=2, sort_keys=True))
 
 
 if __name__ == "__main__":
