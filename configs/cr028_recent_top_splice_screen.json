@@ -1,0 +1,70 @@
+{
+  "experiment": "CR028_RECENT_TOP_SPLICE_STAGE_A",
+  "frozen_at": "2026-09-05",
+  "purpose": "Test the strongest recent engine-1.32.7 public action route and bounded prefix splices against CR024 using fresh paired reactive games before any hosted calibration.",
+  "source": {
+    "episode_id": 105248818,
+    "source_seat": 0,
+    "submission_id": 55992804,
+    "observed_rating": 2645.271463984536,
+    "engine_version": "1.32.7",
+    "expected_stream_hashes": {
+      "24": "ae831dd2ed69073e",
+      "48": "cc0dff4cf858cc09",
+      "100": "1aa8a3c99592537e",
+      "136": "a9930ef499dd88bd",
+      "200": "04ed6bf3e90b511b",
+      "400": "40170920482303b2",
+      "719": "ab5995ca8d95f3a7"
+    },
+    "replication_context": {
+      "episode_id": 105254265,
+      "source_seat": 0,
+      "submission_id": 55993805,
+      "observed_rating": 2597.9588428109187,
+      "same_hashes_through_719": true
+    }
+  },
+  "variants": [
+    {"id": "full_recent_top", "recent_prefix_turns": 719},
+    {"id": "prefix24_then_cr024", "recent_prefix_turns": 24},
+    {"id": "prefix48_then_cr024", "recent_prefix_turns": 48},
+    {"id": "prefix100_then_cr024", "recent_prefix_turns": 100},
+    {"id": "prefix136_then_cr024", "recent_prefix_turns": 136},
+    {"id": "prefix200_then_cr024", "recent_prefix_turns": 200}
+  ],
+  "fresh_seeds": [1849673021, 1849673071, 1849673119, 1849673189],
+  "opponents": [
+    {
+      "id": "rayk",
+      "handle": "raykkretzschmar/kaggriculture-rank-your-agent/versions/23",
+      "archive_sha256": "86b7ae5c029e351adfbd80059cd185b39d1467303437e6441ff7ad871cd8e7ee",
+      "main_sha256": "6c709f6d3ce6cf221a9495de7e716fcd1b660e3bbc8ee5679b63233d0265a812"
+    },
+    {
+      "id": "boatlee",
+      "handle": "boatlee/v21-r1-public-state-route-portfolio/versions/2",
+      "archive_sha256": "d65410a4fc8a31226055e43085131468ac8af5721aabdf3593cb8eade59cabe3",
+      "main_sha256": "c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8"
+    },
+    {
+      "id": "prvsiyan",
+      "handle": "prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10",
+      "archive_sha256": "fadde4e4e5cde332352827cbbfd7c8ea95f2e9abd34a3ca7196a29b007e93bd3",
+      "main_sha256": "943e8c114ace4f5c5965698e66a4943e982dab4ccb57d8efa134a4e5b4f13955"
+    }
+  ],
+  "screen_gate": {
+    "direct_min_score": 4.0,
+    "reactive_min_score_gain": 0.0,
+    "reactive_max_regressions": 4,
+    "require_zero_runtime_errors": true
+  },
+  "notes": [
+    "Source selected before Stage-A outcomes from the recent engine-1.32.7 rating frontier, not from CR028 test results.",
+    "The full recent route is included because the exact full stream was independently observed in two strong submissions.",
+    "Prefix splices are diagnostics and may expose state-discontinuity failures; they are not presumed superior.",
+    "Fresh seeds must be disjoint from CR023 and CR027 seed sets.",
+    "No held-out seed set is opened and no Kaggle submission is authorized by this screen."
+  ]
+}
