@@ -1,0 +1,124 @@
+name: cr027-frontier-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr027-frontier-screen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - id: andrey_v12
+            handle: andrewsokolovsky/kaggriculture-breaking-the-tie/versions/12
+          - id: kaito_v13
+            handle: kaitofukami/103-128-fresh-public-v43-sparse-shop-hybrid/versions/13
+          - id: flex_v59
+            handle: flexonafft/kaggriculture-adaptive-replay-agent/versions/59
+          - id: indar_v1
+            handle: indarkarhana/shape-the-shop-work-the-pasture-top-10/versions/1
+          - id: salem_v2
+            handle: salemali7/kaggriculture-2900/versions/2
+          - id: salem_v13
+            handle: salemali7/kaggriculture-2900/versions/13
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Fetch pinned frontier candidate
+        run: |
+          mkdir -p artifacts/cr027/${{ matrix.id }}/opponents
+          python tools/fetch_frontier_submission_main.py \
+            --handle '${{ matrix.handle }}' \
+            --output artifacts/cr027/${{ matrix.id }}/candidate.py \
+            --receipt artifacts/cr027/${{ matrix.id }}/candidate_receipt.json
+      - name: Fetch frozen reactive opponents
+        run: |
+          python tools/fetch_exact_package_main.py \
+            --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/23' \
+            --output artifacts/cr027/${{ matrix.id }}/opponents/rayk.py \
+            --receipt artifacts/cr027/${{ matrix.id }}/opponents/rayk.json
+          python tools/fetch_exact_package_main.py \
+            --handle 'boatlee/v21-r1-public-state-route-portfolio/versions/2' \
+            --output artifacts/cr027/${{ matrix.id }}/opponents/boatlee.py \
+            --receipt artifacts/cr027/${{ matrix.id }}/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py \
+            --handle 'prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10' \
+            --output artifacts/cr027/${{ matrix.id }}/opponents/prvsiyan.py \
+            --receipt artifacts/cr027/${{ matrix.id }}/opponents/prvsiyan.json
+      - name: Verify frozen opponent identities
+        run: |
+          python - <<'PY'
+          import json
+          expected={
+            'rayk':('86b7ae5c029e351adfbd80059cd185b39d1467303437e6441ff7ad871cd8e7ee','6c709f6d3ce6cf221a9495de7e716fcd1b660e3bbc8ee5679b63233d0265a812'),
+            'boatlee':('d65410a4fc8a31226055e43085131468ac8af5721aabdf3593cb8eade59cabe3','c6f96a8521dc9aa369b6f27e5b36b9d481e5c1688f50c8ca215c3bb53f1f9eb8'),
+            'prvsiyan':('fadde4e4e5cde332352827cbbfd7c8ea95f2e9abd34a3ca7196a29b007e93bd3','943e8c114ace4f5c5965698e66a4943e982dab4ccb57d8efa134a4e5b4f13955'),
+          }
+          root='artifacts/cr027/${{ matrix.id }}/opponents'
+          for k,(a,m) in expected.items():
+              r=json.load(open(f'{root}/{k}.json'))
+              assert r['archive_sha256']==a,(k,r['archive_sha256'])
+              assert r['main_sha256']==m,(k,r['main_sha256'])
+          PY
+      - name: Run paired fresh frontier screen
+        run: |
+          python tools/cr027_frontier_screen.py \
+            --candidate-id '${{ matrix.id }}' \
+            --candidate artifacts/cr027/${{ matrix.id }}/candidate.py \
+            --candidate-receipt artifacts/cr027/${{ matrix.id }}/candidate_receipt.json \
+            --opponent-dir artifacts/cr027/${{ matrix.id }}/opponents \
+            --output artifacts/cr027/${{ matrix.id }}/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr027-screen-${{ matrix.id }}
+          path: |
+            artifacts/cr027/${{ matrix.id }}/report.json
+            artifacts/cr027/${{ matrix.id }}/candidate_receipt.json
+            artifacts/cr027/${{ matrix.id }}/candidate.py
+          if-no-files-found: warn
+          retention-days: 14
+
+  aggregate:
+    needs: screen
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr027-screen-*
+          path: artifacts/cr027/downloaded
+      - name: Aggregate without threshold rescue
+        run: |
+          python tools/cr027_frontier_aggregate.py \
+            --input-glob 'artifacts/cr027/downloaded/**/report.json' \
+            --output artifacts/cr027/final.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr027-frontier-final
+          path: artifacts/cr027/final.json
+          if-no-files-found: error
+          retention-days: 90
