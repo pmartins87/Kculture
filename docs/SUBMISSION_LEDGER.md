@@ -110,3 +110,7 @@ The user supplied exact hosted submission IDs and episode IDs on 2026-08-27. Sam
 - hosted errors/anomalies;
 - observed rating/episode progression;
 - whether it remains useful as calibration, champion or final candidate.
+
+## 2026-09-05 Chat5 continuation update
+
+CR024 Consensus: submission **56025052**, archive `R4D_CR024_CONSENSUS_H11_M19_V1.tar.gz`, SHA-256 `133411bb9734ffbf77870335b89da9e046400ee2a8a5e7587103ddcf284fafc3`. User screenshot shows approximately **1600**; selected loss episode **105806355**. No final status is inferred from Game History. CR015 completed at **1577.6** per user-supplied Chat5 handoff. CR025 was rejected and is not submitted. See `docs/CR026_CONTINUATION.md`.

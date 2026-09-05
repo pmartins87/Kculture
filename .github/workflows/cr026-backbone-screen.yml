@@ -1,0 +1,96 @@
+name: cr026-backbone-screen
+on:
+  push:
+    paths:
+      - '.github/workflows/cr026-backbone-screen.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - run: python tools/cr026_backbone_screen.py prepare --output artifacts/cr026_screen/bundle.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr026-screen-input
+          path: artifacts/cr026_screen/bundle.json
+          retention-days: 7
+  shard:
+    needs: prepare
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        rank: [1,2,3,4,5,6,7,8,9,10]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr026-screen-input
+          path: artifacts/cr026_screen
+      - run: python tools/cr026_backbone_screen.py shard --bundle artifacts/cr026_screen/bundle.json --rank ${{ matrix.rank }} --output artifacts/cr026_screen/rank_${{ matrix.rank }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr026-screen-rank-${{ matrix.rank }}
+          path: artifacts/cr026_screen/rank_*.json
+          if-no-files-found: error
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr026-screen-rank-*
+          path: artifacts/cr026_screen/results
+          merge-multiple: true
+      - run: python tools/cr026_backbone_screen.py aggregate --folder artifacts/cr026_screen/results --output artifacts/cr026_screen/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr026-screen-final
+          path: artifacts/cr026_screen/report.json
+          if-no-files-found: error
+  hosted:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - run: python tools/cr026_hosted_diagnostic.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr026-hosted-diagnostic
+          path: artifacts/cr026_hosted/report.json
+          if-no-files-found: error

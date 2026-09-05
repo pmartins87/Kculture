@@ -1,5 +1,7 @@
 # STATUS — Kculture
 
+> **Current update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded. Do not repeat CR008/CR015.
+
 Last updated: 2026-08-30
 
 ## Mission
