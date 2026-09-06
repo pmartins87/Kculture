@@ -1,0 +1,56 @@
+{
+  "experiment": "CR030_DIVERSE_COMPLETE_POLICY_SCREEN_V1",
+  "frozen_at": "2026-09-06",
+  "engine_version": "1.32.7",
+  "dataset": "georgymamarin/kaggriculture-episodes",
+  "recent_days_from_dataset_max": 7,
+  "max_candidates": 8,
+  "champion": {
+    "candidate_id": "full_recent_top",
+    "episode_id": 105248818,
+    "source_seat": 0,
+    "tape_sha256": "6c56840b9510e0688da2fbec47e8f89583c63a0124fa4c8801fa5d93c197226b",
+    "stream_h200": "04ed6bf3e90b511b",
+    "stream_h719": "ab5995ca8d95f3a7"
+  },
+  "selection": {
+    "sort": "rating_desc_then_end_time_desc",
+    "require_current_engine": true,
+    "require_recent_window": true,
+    "require_rating": true,
+    "require_complete_stream_h200_and_h719": true,
+    "exclude_champion_h200": true,
+    "exclude_champion_h719": true,
+    "unique_submission": true,
+    "unique_team": true,
+    "unique_stream_h200": true,
+    "unique_stream_h719": true,
+    "runtime_identity_features": false
+  },
+  "fresh_development_seeds": [
+    1746090101,
+    1746090139,
+    1746090193,
+    1746090247
+  ],
+  "both_seats": true,
+  "expected_games_per_candidate": 8,
+  "ranking": [
+    "higher W/L score versus full_recent_top",
+    "higher mean reward delta versus full_recent_top",
+    "higher source rating",
+    "more recent source observation"
+  ],
+  "shortlist_rule": {
+    "automatic": "top_3_valid_candidates",
+    "strong_challenger": "score_vs_champion >= 5.0 out of 8",
+    "aggressive_hosted_policy": "a mechanically packageable materially distinct finalist may be submitted even before final sealed stress if its result has decision value"
+  },
+  "notes": [
+    "Complete coherent policies only; no prefix splice or hybrid.",
+    "Selection identity is research metadata only and is never available to runtime agents.",
+    "Seeds must not occur in any other configs/*.json file.",
+    "This is development screening, not the final sealed distribution-shift block.",
+    "No automatic Kaggle submission."
+  ]
+}
