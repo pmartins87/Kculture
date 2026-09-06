@@ -1,0 +1,46 @@
+{
+  "schema_version": "cr037-hard-keiz-public-router-v1",
+  "purpose": "Find a simple public-state separator for the two already-open keiz scenario families where the coherent rank5 route fixes CR029 losses, then screen that route on the same open panel before any fresh validation.",
+  "source_bundle_run_id": 34016286606,
+  "source_bundle_artifact": "cr035-source-bundle",
+  "source_scenarios_already_open": true,
+  "first_stage": {
+    "feature": "self_money",
+    "clock": 24,
+    "operator": ">",
+    "threshold": 35.5,
+    "positive_label": "keiz"
+  },
+  "hard_keiz_diagnostic_ranks": [5, 12],
+  "easy_keiz_diagnostic_ranks": [1, 2, 3, 4, 6, 11],
+  "alternate_complete_tape_rank": 5,
+  "probe_horizons": [24, 48, 72, 96, 120, 144, 168, 192, 240, 288, 336, 384, 432, 480, 528, 576, 600, 624, 648, 672, 696],
+  "fingerprint_gate": {
+    "hard_seat_recall_min": 4,
+    "easy_seat_false_positives_max": 0,
+    "leave_one_scenario_out_correct_min": 8,
+    "scenario_count": 8
+  },
+  "route_screen_gate": {
+    "paired_score_gain_vs_cr029_min": 2.0,
+    "net_favorable_conversions_min": 2,
+    "unfavorable_conversions_max": 1,
+    "paired_mean_delta_gain_min": 0.0
+  },
+  "selection_order": [
+    "leave_one_scenario_out_correct_desc",
+    "scenario_correct_desc",
+    "seat_correct_desc",
+    "hard_true_positive_desc",
+    "easy_false_positive_asc",
+    "normalized_margin_desc",
+    "feature_simplicity_asc",
+    "horizon_asc",
+    "feature_name_asc",
+    "direction_asc"
+  ],
+  "runtime_identity_features": false,
+  "runtime_forbidden_features": ["rank", "team", "episode_id", "seed", "winner_seat", "submission_id", "opponent_identity"],
+  "fresh_validation_touched": false,
+  "held_out_touched": false
+}
