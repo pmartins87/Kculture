@@ -1,0 +1,46 @@
+{
+  "schema_version": "cr036-rank5-component-graft-v1",
+  "parent_experiment": "CR035_PUBLIC_REGIME_SELECTOR_V1",
+  "source_bundle": {
+    "workflow_run_id": 34016286606,
+    "artifact_name": "cr035-source-bundle",
+    "artifact_digest": "sha256:bcc525ad8628300242011d5fc9de83582a74f139f67459f9e9745a469f1646d5"
+  },
+  "base": "CR029_recent_top",
+  "alternate_rank": 5,
+  "switch_clock": 24,
+  "classifier": {
+    "feature": "self_money",
+    "operator": ">",
+    "threshold": 35.5,
+    "positive_regime": "keiz"
+  },
+  "variants": [
+    {"id": 0, "name": "control_cr029", "components": []},
+    {"id": 1, "name": "farmer", "components": ["farmer"]},
+    {"id": 2, "name": "hands", "components": ["hands"]},
+    {"id": 3, "name": "market", "components": ["market"]},
+    {"id": 4, "name": "farmer_hands", "components": ["farmer", "hands"]},
+    {"id": 5, "name": "farmer_market", "components": ["farmer", "market"]},
+    {"id": 6, "name": "hands_market", "components": ["hands", "market"]},
+    {"id": 7, "name": "full_rank5_reference", "components": ["farmer", "hands", "market"]}
+  ],
+  "screen_gate": {
+    "classifier_correct": "24/24",
+    "score_gain_vs_cr029_min": 2.0,
+    "favorable_conversions_min": 2,
+    "unfavorable_conversions_max": 2,
+    "mean_paired_delta_gain_min_exclusive": 0.0,
+    "jesse_conversions_required": 0
+  },
+  "notes": [
+    "Frozen after CR035 showed rank5 full handoff +3 W/L but negative paired margin.",
+    "Only component subset is changed; classifier, switch clock, base and alternate tape are frozen.",
+    "No threshold retuning after this screen.",
+    "Uses only the already-open CR035 12-scenario panel; fresh and held-out remain untouched."
+  ],
+  "source_scenarios_already_open": true,
+  "fresh_validation_touched": false,
+  "held_out_touched": false,
+  "runtime_identity_features": false
+}
