@@ -25,7 +25,7 @@ jobs:
           python-version: '3.11'
           cache: pip
       - name: Install exact environment
-        run: python -m pip install -r requirements.txt
+        run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
       - name: Download CR035 verified source bundle
         uses: actions/download-artifact@v4
         with:
