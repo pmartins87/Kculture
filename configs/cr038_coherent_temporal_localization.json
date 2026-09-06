@@ -1,0 +1,54 @@
+{
+  "schema_version": "cr038-coherent-temporal-localization-v1",
+  "parent_experiments": [
+    "CR036_RANK5_COMPONENT_GRAFT_V1",
+    "CR037_HARD_KEIZ_PUBLIC_ROUTER_V1"
+  ],
+  "source_bundle": {
+    "workflow_run_id": 34016286606,
+    "artifact_name": "cr035-source-bundle",
+    "artifact_digest": "sha256:bcc525ad8628300242011d5fc9de83582a74f139f67459f9e9745a469f1646d5"
+  },
+  "paired_reference": {
+    "workflow_run_id": 34016876808,
+    "control_artifact": "cr036-variant-0",
+    "control_digest": "sha256:b5ef11b1a0f2773d036b44f4b0a8df654b3b42eaa117c453dc87d8ac50c7e155",
+    "full_rank5_artifact": "cr036-variant-7",
+    "full_rank5_digest": "sha256:ea6ffe6fe927a59267b106be83f9ae17687e3bb2bfbab4baf04dacc6b15595f4"
+  },
+  "base": "CR029_recent_top",
+  "alternate_rank": 5,
+  "classifier": {
+    "switch_clock": 24,
+    "feature": "self_money",
+    "operator": ">",
+    "threshold": 35.5,
+    "positive_regime": "keiz"
+  },
+  "families": {
+    "prefix": "rank5 on all three action channels from clock 24 until cut, then CR029",
+    "suffix": "CR029 until cut, then rank5 on all three action channels"
+  },
+  "cutpoints": [72, 120, 168, 216, 264, 312, 360, 408, 456, 504, 552, 600, 648, 696],
+  "phase1_shortlist": 8,
+  "promotion_gate": {
+    "net_min": 3,
+    "unfavorable_max": 1,
+    "score_gain_min": 3.0,
+    "score_gain_strong_min": 4.0,
+    "equal_score_requires_mean_margin_better_than_full_rank5": true
+  },
+  "notes": [
+    "CR036 proved that farmer/hands/market cannot be grafted independently; all three remain coherent here.",
+    "CR037 produced a perfect public-state detector but its clock-432 switch generated zero conversions and worse margin, indicating path dependence.",
+    "Phase 1 uses only the five W/L-conversion-sensitive rows already revealed by frozen CR036 (four favorable, one unfavorable).",
+    "Phase 2 evaluates the eight best temporal candidates on the full already-open 24-row source panel.",
+    "A candidate matching the full rank5 +3 W/L gain must improve its paired mean margin; a +4 W/L candidate may advance even without that condition.",
+    "No fresh-validation or final held-out scenario is touched in CR038."
+  ],
+  "source_scenarios_already_open": true,
+  "fresh_validation_touched": false,
+  "held_out_touched": false,
+  "runtime_identity_features": false,
+  "all_three_action_channels_coherent": true
+}
