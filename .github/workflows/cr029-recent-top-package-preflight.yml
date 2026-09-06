@@ -1,0 +1,93 @@
+name: cr029-recent-top-package-preflight
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cr029-recent-top-package-preflight.yml'
+      - 'tools/build_cr029_recent_top_submission.py'
+      - 'tools/audit_cr029_recent_top_submission.py'
+      - 'tools/cr029_recent_top_package_parity.py'
+      - 'configs/cr029_fresh_official_meta_calibration.json'
+      - 'configs/cr023_public_tape_preregistered_seeds_v1.json'
+      - 'opponents/simple_crop.py'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt 'kaggle>=2.2.3'
+      - name: Syntax-check package tools
+        run: |
+          python -m py_compile tools/build_cr029_recent_top_submission.py
+          python -m py_compile tools/audit_cr029_recent_top_submission.py
+          python -m py_compile tools/cr029_recent_top_package_parity.py
+      - name: Build exact promoted policy package
+        run: |
+          python tools/build_cr029_recent_top_submission.py \
+            --authorization CR029_FULL_RECENT_TOP_PASS__BUILD_PACKAGE
+      - name: Audit archive and exhaustive clock identity
+        run: |
+          python tools/audit_cr029_recent_top_submission.py \
+            --archive artifacts/submissions/cr029_full_recent_top_v1/R4D_CR029_FULL_RECENT_TOP_V1.tar.gz \
+            --manifest artifacts/submissions/cr029_full_recent_top_v1/manifest.json \
+            --output artifacts/submissions/cr029_full_recent_top_v1/audit.json
+      - name: Run research-to-package game parity
+        run: |
+          python tools/cr029_recent_top_package_parity.py \
+            --archive artifacts/submissions/cr029_full_recent_top_v1/R4D_CR029_FULL_RECENT_TOP_V1.tar.gz \
+            --output artifacts/submissions/cr029_full_recent_top_v1/parity.json
+      - name: Final package receipt
+        run: |
+          python - <<'PY'
+          import hashlib, json
+          from pathlib import Path
+          root = Path('artifacts/submissions/cr029_full_recent_top_v1')
+          manifest = json.loads((root/'manifest.json').read_text())
+          audit = json.loads((root/'audit.json').read_text())
+          parity = json.loads((root/'parity.json').read_text())
+          archive = root/'R4D_CR029_FULL_RECENT_TOP_V1.tar.gz'
+          digest = hashlib.sha256(archive.read_bytes()).hexdigest()
+          if manifest['archive_sha256'] != digest: raise SystemExit('manifest/archive digest mismatch')
+          if audit['decision'] != 'PASS': raise SystemExit('audit not PASS')
+          if parity['decision'] != 'PASS': raise SystemExit('parity not PASS')
+          receipt = {
+              'decision': 'READY_FOR_KAGGLE_HOSTED_SUBMISSION',
+              'candidate': 'full_recent_top',
+              'archive_name': archive.name,
+              'archive_sha256': digest,
+              'archive_bytes': archive.stat().st_size,
+              'tape_sha256': manifest['tape_sha256'],
+              'audit': audit['decision'],
+              'parity': parity['decision'],
+              'policy_modified': False,
+              'held_out_touched': False,
+              'automatic_kaggle_submission': False,
+          }
+          (root/'preflight_receipt.json').write_text(json.dumps(receipt, indent=2, sort_keys=True))
+          print(json.dumps(receipt, indent=2, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr029-full-recent-top-submission
+          path: |
+            artifacts/submissions/cr029_full_recent_top_v1/R4D_CR029_FULL_RECENT_TOP_V1.tar.gz
+            artifacts/submissions/cr029_full_recent_top_v1/manifest.json
+            artifacts/submissions/cr029_full_recent_top_v1/audit.json
+            artifacts/submissions/cr029_full_recent_top_v1/parity.json
+            artifacts/submissions/cr029_full_recent_top_v1/preflight_receipt.json
+          retention-days: 30
