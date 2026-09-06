@@ -1,0 +1,49 @@
+name: cr029-fresh-official-meta-calibration
+on:
+  push:
+    paths:
+      - '.github/workflows/cr029-fresh-official-meta-calibration.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  calibrate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Recover exact package-aware Indar V1
+        run: |
+          mkdir -p artifacts/cr029_stageb
+          python tools/fetch_frontier_full_package.py \
+            --handle 'indarkarhana/shape-the-shop-work-the-pasture-top-10/versions/1' \
+            --package-dir artifacts/cr029_stageb/indar_package \
+            --wrapper artifacts/cr029_stageb/indar_local.py \
+            --receipt artifacts/cr029_stageb/indar_receipt.json
+          python -m py_compile artifacts/cr029_stageb/indar_local.py
+      - name: Syntax-check frozen CR029 harness
+        run: python -m py_compile tools/cr029_stageb_calibration.py
+      - name: Run fresh official-meta and pairwise calibration
+        run: python tools/cr029_stageb_calibration.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr029-stageb-calibration
+          path: |
+            artifacts/cr029_stageb/report.json
+            artifacts/cr029_stageb/indar_receipt.json
+          if-no-files-found: warn
+          retention-days: 30
