@@ -1,0 +1,40 @@
+name: cr030-diverse-complete-screen
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/cr030-diverse-complete-screen.yml'
+      - 'tools/cr030_diverse_complete_screen.py'
+      - 'configs/cr030_diverse_complete_screen.json'
+
+permissions:
+  contents: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub pandas 'kaggle>=2.2.3'
+      - name: Syntax check
+        run: python -m py_compile tools/cr030_diverse_complete_screen.py
+      - name: Run frozen CR030 screen
+        run: python tools/cr030_diverse_complete_screen.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr030-diverse-complete-screen
+          path: artifacts/cr030_diverse/report.json
+          if-no-files-found: warn
+          retention-days: 30
