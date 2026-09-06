@@ -12,7 +12,36 @@ env:
   KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
 
 jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Syntax check frozen CR035 bundle preparation
+        run: |
+          python -m py_compile tools/cr035_public_regime_selector_shard.py
+          python -m py_compile tools/cr035_prepare_source_bundle.py
+      - name: Download and verify frozen sources once
+        run: python tools/cr035_prepare_source_bundle.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: |
+            artifacts/cr035_source_bundle/source_bundle.json
+            artifacts/cr035_source_bundle/summary.json
+          if-no-files-found: error
+          retention-days: 30
+
   screen:
+    needs: prepare
     runs-on: ubuntu-latest
     timeout-minutes: 60
     strategy:
@@ -27,13 +56,21 @@ jobs:
           python-version: '3.11'
           cache: pip
       - name: Install exact environment
+        run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Download verified frozen source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+      - name: Syntax check frozen selector and mechanical retry shard
         run: |
-          test -n "$KAGGLE_API_TOKEN"
-          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
-      - name: Syntax check shard
-        run: python -m py_compile tools/cr035_public_regime_selector_shard.py
-      - name: Run selector shard
-        run: python tools/cr035_public_regime_selector_shard.py --candidate-rank ${{ matrix.candidate_rank }}
+          python -m py_compile tools/cr035_public_regime_selector_shard.py
+          python -m py_compile tools/cr035_public_regime_selector_shard_v2.py
+      - name: Run frozen selector shard without Kaggle downloads
+        run: >-
+          python tools/cr035_public_regime_selector_shard_v2.py
+          --candidate-rank ${{ matrix.candidate_rank }}
+          --source-bundle artifacts/cr035_source_bundle/source_bundle.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
