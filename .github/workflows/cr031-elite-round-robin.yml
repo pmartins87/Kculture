@@ -1,0 +1,40 @@
+name: cr031-elite-round-robin
+on:
+  push:
+    paths:
+      - '.github/workflows/cr031-elite-round-robin.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Syntax check frozen CR031 harness
+        run: python -m py_compile tools/cr031_elite_round_robin.py
+      - name: Run elite complete-policy round robin
+        run: python tools/cr031_elite_round_robin.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr031-elite-round-robin
+          path: |
+            artifacts/cr031_elite_round_robin/report.json
+            artifacts/cr031_elite_round_robin/summary.json
+          if-no-files-found: warn
+          retention-days: 30
