@@ -1,3 +1,4 @@
+# Mechanical relaunch only: strategy/gate/config remain frozen.
 name: cr036-rank5-component-graft
 on:
   push:
