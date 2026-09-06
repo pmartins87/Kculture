@@ -1,0 +1,32 @@
+{
+  "schema_version": "cr031-elite-round-robin-v1",
+  "source_date": "2026-09-05",
+  "recent_top": {
+    "episode_id": 105248818,
+    "source_seat": 0,
+    "tape_sha256": "6c56840b9510e0688da2fbec47e8f89583c63a0124fa4c8801fa5d93c197226b"
+  },
+  "direct_seeds_already_open": [1735090501, 1735090529, 1735090571, 1735090607, 1735090661, 1735090703],
+  "scenarios": [
+    {"rank":1,"episode_id":105680367,"seed":90181401,"winner_seat":0,"team":"keiz","tape_sha256":"a38da686949890eb9f43d8f4ac4012dad8589461c06357ed3f5b0ffe22ba4d1f"},
+    {"rank":2,"episode_id":105680386,"seed":396582466,"winner_seat":1,"team":"keiz","tape_sha256":"577a3e02d391a8a36623eea110df1c954902dd27619efa9d9ba915ae79f2d6f7"},
+    {"rank":3,"episode_id":105717134,"seed":1386178497,"winner_seat":0,"team":"keiz","tape_sha256":"b204d1e3079f1800f1f908195c29251a524288852dca795c058ae806f46afccf"},
+    {"rank":4,"episode_id":105720912,"seed":452722930,"winner_seat":0,"team":"keiz","tape_sha256":"e38120cc802e60ee8f4c45dd79610c7c0c63128d2eeeea3db539d9816bfa651c"},
+    {"rank":5,"episode_id":105664019,"seed":160851287,"winner_seat":0,"team":"keiz","tape_sha256":"40131768784294413d463277928a8c01a017ea841172dd04884ef45b5e3620cd"},
+    {"rank":6,"episode_id":105661109,"seed":1883796572,"winner_seat":1,"team":"keiz","tape_sha256":"a8013d351f89a9b0547177388b96c8006cde4a0b2f25926d38f1b1ed9ee57826"},
+    {"rank":7,"episode_id":105676885,"seed":1800774398,"winner_seat":0,"team":"Jesse Bullard","tape_sha256":"0db11b3995f79631e15eddffd79e59fbf4c4ef5fa9484fb7668542f9bbd49beb"},
+    {"rank":8,"episode_id":105709681,"seed":247843448,"winner_seat":0,"team":"Jesse Bullard","tape_sha256":"b56fd72a4fe0835630aa30a7b30788a17bbee51ebd26cdf76b0585a807044c69"},
+    {"rank":9,"episode_id":105728339,"seed":668508889,"winner_seat":1,"team":"Jesse Bullard","tape_sha256":"d95fa5fa6a847cec2f0959d27c4518ae28ef5d7ed510dd913d0b826f40329e64"},
+    {"rank":10,"episode_id":105724562,"seed":1867376517,"winner_seat":0,"team":"Jesse Bullard","tape_sha256":"5ade11490f2c6a19822e77a4e30eb39368d3839b346de32e52fdf8eba4e5c8a0"},
+    {"rank":11,"episode_id":105673919,"seed":910315341,"winner_seat":1,"team":"keiz","tape_sha256":"5bf8c18147bbd9f29293ed7f7b60e4ac6a96c186769796c6688f6accbd11fa7b"},
+    {"rank":12,"episode_id":105629107,"seed":1204657994,"winner_seat":0,"team":"keiz","tape_sha256":"cf60bf0aa6f557b16b325168f2c1b8a16bab691dffa83b5bc691ffdb8703ade1"}
+  ],
+  "screen_gate": {
+    "paired_score_gain_vs_recent_top_excluding_self_min": 2.0,
+    "paired_mean_delta_gain_vs_recent_top_excluding_self_min": 0.0,
+    "direct_wins_vs_recent_top_min": 7,
+    "direct_mean_delta_vs_recent_top_min": 0.0
+  },
+  "runtime_identity_features": false,
+  "held_out_touched": false
+}
