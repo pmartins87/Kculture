@@ -1,0 +1,45 @@
+name: cr037-hard-keiz-public-router
+on:
+  push:
+    paths:
+      - '.github/workflows/cr037-hard-keiz-public-router.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: python -m pip install -r requirements.txt
+      - name: Download frozen CR035 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Syntax check CR037
+        run: python -m py_compile tools/cr037_hard_keiz_public_router.py
+      - name: Run public fingerprint and coherent router screen
+        run: >-
+          python tools/cr037_hard_keiz_public_router.py
+          --source-bundle artifacts/cr035_source_bundle/source_bundle.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr037-hard-keiz-public-router-final
+          path: |
+            artifacts/cr037_hard_keiz_public_router/report.json
+            artifacts/cr037_hard_keiz_public_router/summary.json
+          if-no-files-found: warn
+          retention-days: 30
