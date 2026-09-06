@@ -1,0 +1,63 @@
+name: cr038-coherent-temporal-localization
+on:
+  push:
+    paths:
+      - '.github/workflows/cr038-coherent-temporal-localization.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Download frozen CR035 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Download frozen CR036 control
+        uses: actions/download-artifact@v4
+        with:
+          name: cr036-variant-0
+          path: artifacts/cr036_control
+          run-id: 34016876808
+          github-token: ${{ github.token }}
+      - name: Download frozen CR036 full rank5 reference
+        uses: actions/download-artifact@v4
+        with:
+          name: cr036-variant-7
+          path: artifacts/cr036_full
+          run-id: 34016876808
+          github-token: ${{ github.token }}
+      - name: Syntax check CR038
+        run: |
+          python -m py_compile tools/cr035_public_regime_selector_shard.py
+          python -m py_compile tools/cr038_coherent_temporal_localization.py
+      - name: Run coherent temporal localization
+        run: >-
+          python tools/cr038_coherent_temporal_localization.py
+          --source-bundle artifacts/cr035_source_bundle/source_bundle.json
+          --cr036-control artifacts/cr036_control/variant_00.json
+          --cr036-full artifacts/cr036_full/variant_07.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr038-coherent-temporal-localization
+          path: |
+            artifacts/cr038_coherent_temporal_localization/report.json
+            artifacts/cr038_coherent_temporal_localization/summary.json
+          if-no-files-found: warn
+          retention-days: 30
