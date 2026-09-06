@@ -30,7 +30,7 @@ def _variant_agent(base: list[dict], alt: list[dict], components: tuple[str, ...
     state = {"classified": False, "predicted_team": None, "self_money_at_24": None, "grafted": False}
 
     def agent(obs, config=None):
-        s = max(0, min(718, core._step(obs)))
+        s = max(0, min(718, core._clock(obs)))
         if not state["classified"] and s >= core.SWITCH_CLOCK:
             money = core._self_money(obs)
             state["classified"] = True
