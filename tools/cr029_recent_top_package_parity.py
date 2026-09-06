@@ -1,7 +1,7 @@
 """Exact game-trace parity for CR029 full_recent_top research tape vs package.
 
-Uses only already-open CR023 raw Stage-A seeds and the local simple_crop opponent.
-No reserved or held-out CR029 data are touched.
+Uses only already-open CR023 raw Stage-A seeds and the local simple_crop wheat
+opponent. No reserved or held-out CR029 data are touched.
 """
 from __future__ import annotations
 
@@ -47,7 +47,8 @@ def trace(env, seat: int) -> list[str]:
 
 
 def run(agent, opponent_path: Path, seed: int, seat: int):
-    opponent = load_module(opponent_path, "cr029_parity_opp").agent
+    # simple_crop intentionally exports named crop agents rather than generic `agent`.
+    opponent = load_module(opponent_path, "cr029_parity_opp").wheat_agent
     agents = [agent, opponent] if seat == 0 else [opponent, agent]
     env = make("kaggriculture", configuration={"episodeSteps": 720, "seed": int(seed)}, debug=True)
     env.run(agents)
@@ -139,6 +140,7 @@ def main() -> None:
     report = {
         "experiment": "CR029_FULL_RECENT_TOP_V1_PACKAGE_PARITY",
         "seed_class": "CR023_RAW_STAGE_A_ALREADY_OPEN_ONLY",
+        "opponent": "simple_crop.wheat_agent",
         "seeds": seeds,
         "rows": rows,
         "row_count": len(rows),
