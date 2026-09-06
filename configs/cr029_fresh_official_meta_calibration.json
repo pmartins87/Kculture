@@ -1,0 +1,68 @@
+{
+  "experiment": "CR029_FRESH_OFFICIAL_META_CALIBRATION_V1",
+  "frozen_at": "2026-09-05",
+  "source_date": "2026-09-05",
+  "manifest_scan_limit": 30,
+  "target_unique_exact_scenarios": 12,
+  "min_unique_exact_scenarios": 8,
+  "recent_top_source": {
+    "episode_id": 105248818,
+    "source_seat": 0,
+    "submission_id": 55992804,
+    "observed_rating": 2645.271463984536,
+    "expected_stream_hashes": {
+      "24": "ae831dd2ed69073e",
+      "48": "cc0dff4cf858cc09",
+      "100": "1aa8a3c99592537e",
+      "136": "a9930ef499dd88bd",
+      "200": "04ed6bf3e90b511b",
+      "400": "40170920482303b2",
+      "719": "ab5995ca8d95f3a7"
+    }
+  },
+  "indar": {
+    "handle": "indarkarhana/shape-the-shop-work-the-pasture-top-10/versions/1",
+    "reported_public_score_context": 2686.3,
+    "archive_sha256": "fa9e7eb1a0174a1bf292fb4d47bd209defed929758214d3506e050a68ee5f98f",
+    "main_sha256": "0cc2a88594f82b6c8d3cb15fcd4aa2df2bdd2a0a7fb0133d95a3204dd2d6ba38"
+  },
+  "candidate_ids": [
+    "cr024",
+    "full_recent_top",
+    "indar_v1"
+  ],
+  "fresh_pairwise_seeds": [
+    1735090501,
+    1735090529,
+    1735090571,
+    1735090607,
+    1735090661,
+    1735090703
+  ],
+  "pairwise_pairs": [
+    ["full_recent_top", "cr024"],
+    ["indar_v1", "cr024"],
+    ["indar_v1", "full_recent_top"]
+  ],
+  "gate": {
+    "live_meta_min_score_gain_vs_cr024": 0.0,
+    "live_meta_max_regressions_vs_cr024": 2,
+    "fresh_pairwise_min_score_vs_cr024": 5.0
+  },
+  "selection_order": [
+    "higher live-meta W/L gain versus CR024",
+    "fewer live-meta W/L regressions versus CR024",
+    "higher absolute live-meta W/L score",
+    "higher fresh pairwise score versus CR024",
+    "higher head-to-head score against the other finalist",
+    "higher live-meta mean delta gain versus CR024"
+  ],
+  "notes": [
+    "Protocol frozen before CR029 outcomes.",
+    "Official source episodes are selected by manifest avg_score only, then require exact terminal tape reproduction and unique winner-tape SHA256.",
+    "Episode/team/submission identity is evaluation-only and is never exposed to any runtime agent.",
+    "All official-meta games use the source episode seed and configuration and test both candidate seats.",
+    "Fresh pairwise seeds are firewalled against seed values in every other JSON config in configs/.",
+    "No held-out set and no automatic Kaggle submission are used."
+  ]
+}
