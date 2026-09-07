@@ -1,0 +1,14 @@
+{
+  "experiment": "CR054_PUBLIC_PREEMPT_H6_L1_SCREEN_V1",
+  "candidate": {
+    "handle": "koushikrudra/kaggriculture-preempt-h6/versions/1",
+    "public_notebook_best_score_observed": 2882.2,
+    "source": "Public Kaggle notebook, Apache-2.0, exact pinned version"
+  },
+  "engine": "1.32.7",
+  "seed_generator": {"algorithm":"python_random_v1","master_seed":5409072026,"count":256,"range_min":1,"range_max":2147483646},
+  "promotion_gate": {"min_score_rate_vs_cr029":0.53,"min_mean_margin":0.0,"max_error_rate":0.0},
+  "purpose": "Independent external lane while CR052/CR053 enter hosted calibration. Evaluate exact public Post-Patch Adaptive Market Agent H6, reported 2882.2, as a live callable against frozen CR029 on fresh bit-exact L1 seasons in both seats.",
+  "kaggle_hidden_test_touched": false,
+  "automatic_kaggle_submission": false
+}
