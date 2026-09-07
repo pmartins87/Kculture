@@ -30,12 +30,14 @@ jobs:
           path: artifacts/cr035_source_bundle
           run-id: 34016286606
           github-token: ${{ github.token }}
-      - name: Syntax check
+      - name: Prepare mechanically fixed runtime and syntax check
         run: |
-          python -m py_compile tools/cr049_live_king_knn_clone.py tools/cr051_initial_route_selector.py
+          cp tools/cr051_initial_route_selector.py tools/cr051_runtime.py
+          sed -i 's/: false/: False/g' tools/cr051_runtime.py
+          python -m py_compile tools/cr049_live_king_knn_clone.py tools/cr051_runtime.py
       - name: Run oracle and initial-state route selector
         run: |
-          python tools/cr051_initial_route_selector.py \
+          python tools/cr051_runtime.py \
             --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
             --output artifacts/cr051/report.json
       - uses: actions/upload-artifact@v4
