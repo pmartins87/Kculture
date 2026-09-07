@@ -1,0 +1,51 @@
+name: cr049-live-king-knn-clone
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr049-live-king-knn-clone.yml'
+      - 'tools/cr049_live_king_knn_clone.py'
+      - 'configs/cr049_live_king_knn_clone.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator and analysis dependencies
+        run: |
+          python -m pip install requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Syntax check
+        run: python -m py_compile tools/cr049_live_king_knn_clone.py
+      - name: Harvest king, train KNN, holdout-check and fresh-play
+        run: |
+          python tools/cr049_live_king_knn_clone.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr049/report.json \
+            --model-output artifacts/cr049/model.json.gz
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr049-live-king-knn-clone
+          path: |
+            artifacts/cr049/report.json
+            artifacts/cr049/model.json.gz
+          if-no-files-found: warn
+          retention-days: 30
