@@ -39,11 +39,23 @@ def extract(src: Path, dst: Path) -> None:
         tf.extractall(dst)
 
 
+def clean_bytecode(root: Path) -> None:
+    """Verifier imports must never leak cache files into submission archives."""
+    for cache in sorted(root.rglob("__pycache__"), reverse=True):
+        if cache.is_dir():
+            shutil.rmtree(cache)
+    for pyc in root.rglob("*.pyc"):
+        if pyc.is_file():
+            pyc.unlink()
+
+
 def pack(src_dir: Path, out: Path) -> None:
     out.parent.mkdir(parents=True, exist_ok=True)
     with tarfile.open(out, "w:gz") as tf:
         for p in sorted(src_dir.rglob("*")):
             if p.is_file():
+                if p.suffix == ".pyc" or "__pycache__" in p.parts:
+                    raise RuntimeError(f"bytecode leaked into package: {p}")
                 tf.add(p, arcname=p.relative_to(src_dir).as_posix())
 
 
@@ -127,6 +139,9 @@ def main() -> None:
             before_main = hashlib.sha256((root / "main.py").read_bytes()).hexdigest()
             patch = patcher(root)
             verification = verifier(root)
+            clean_bytecode(root)
+            if list(root.rglob("*.pyc")) or list(root.rglob("__pycache__")):
+                raise RuntimeError(f"bytecode cleanup failed for {key}")
             target = out / name
             pack(root, target)
             report["candidates"][key] = {
@@ -138,6 +153,7 @@ def main() -> None:
                 "archive_bytes": target.stat().st_size,
                 "patch": patch,
                 "verification": verification,
+                "bytecode_clean": True,
                 "decision": "READY_FOR_HOSTED_SEAT_BUG_CALIBRATION",
             }
     (out / "receipt.json").write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
