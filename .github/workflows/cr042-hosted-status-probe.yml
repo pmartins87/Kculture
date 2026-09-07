@@ -1,0 +1,40 @@
+name: cr042-hosted-status-probe
+on:
+  push:
+    paths:
+      - '.github/workflows/cr042-hosted-status-probe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle client
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install 'kaggle>=2.2.3'
+      - name: Query hosted submissions
+        run: |
+          mkdir -p artifacts/cr042
+          kaggle competitions submissions -c kaggriculture > artifacts/cr042/submissions.txt
+          cat artifacts/cr042/submissions.txt
+          grep -n '560458488\|CR029\|full recent' artifacts/cr042/submissions.txt > artifacts/cr042/cr029_match.txt || true
+          cat artifacts/cr042/cr029_match.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr042-hosted-status-probe
+          path: artifacts/cr042/*
+          if-no-files-found: warn
+          retention-days: 7
