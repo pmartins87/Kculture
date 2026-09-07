@@ -24,7 +24,7 @@ jobs:
       - name: Install bit-exact engine and data dependency
         run: |
           test -n "$KAGGLE_API_TOKEN"
-          python -m pip install kagglehub pybind11
+          python -m pip install kagglehub 'kaggle>=2.2.3' pybind11
           python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
       - name: Download frozen CR029 source bundle
         uses: actions/download-artifact@v4
