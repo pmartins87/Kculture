@@ -1,0 +1,71 @@
+name: cr058-broad-live-agent-league
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr058-broad-live-agent-league.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  league:
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - {a: cr052, b: cr053, af: R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz, bf: R4D_CR053_ROUTE106309334_V1.tar.gz}
+          - {a: cr052, b: cr055, af: R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz, bf: R4D_CR055_PREEMPT_H6_PUBLIC_EXACT.tar.gz}
+          - {a: cr052, b: cr056, af: R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz, bf: R4D_CR056_INDAR_TOP10_PUBLIC_EXACT.tar.gz}
+          - {a: cr053, b: cr055, af: R4D_CR053_ROUTE106309334_V1.tar.gz, bf: R4D_CR055_PREEMPT_H6_PUBLIC_EXACT.tar.gz}
+          - {a: cr053, b: cr056, af: R4D_CR053_ROUTE106309334_V1.tar.gz, bf: R4D_CR056_INDAR_TOP10_PUBLIC_EXACT.tar.gz}
+          - {a: cr055, b: cr056, af: R4D_CR055_PREEMPT_H6_PUBLIC_EXACT.tar.gz, bf: R4D_CR056_INDAR_TOP10_PUBLIC_EXACT.tar.gz}
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator
+        run: |
+          python -m pip install numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download CR052 CR053 exact packages
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/pair_a
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Download CR055 CR056 exact packages
+        uses: actions/download-artifact@v4
+        with:
+          name: cr055-cr056-exact-public-hosted-pair
+          path: artifacts/pair_b
+          run-id: 34127313109
+          github-token: ${{ github.token }}
+      - name: Resolve package paths
+        run: |
+          mkdir -p artifacts/cr058
+          A=$(find artifacts -name '${{ matrix.af }}' -print -quit)
+          B=$(find artifacts -name '${{ matrix.bf }}' -print -quit)
+          test -n "$A"; test -n "$B"
+          echo "A_PATH=$A" >> "$GITHUB_ENV"
+          echo "B_PATH=$B" >> "$GITHUB_ENV"
+      - name: Run common-seed both-seat matchup
+        run: |
+          python tools/cr058_broad_live_agent_league.py \
+            --a "$A_PATH" --b "$B_PATH" \
+            --a-id '${{ matrix.a }}' --b-id '${{ matrix.b }}' \
+            --output 'artifacts/cr058/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr058-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: artifacts/cr058/*.json
+          if-no-files-found: warn
+          retention-days: 30
