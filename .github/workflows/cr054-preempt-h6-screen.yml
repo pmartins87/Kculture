@@ -1,0 +1,65 @@
+name: cr054-preempt-h6-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr054-preempt-h6-screen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Fetch exact public H6 package
+        run: |
+          mkdir -p artifacts/cr054
+          python tools/fetch_exact_package_dir.py \
+            --handle 'koushikrudra/kaggriculture-preempt-h6/versions/1' \
+            --output-dir artifacts/cr054/package \
+            --receipt artifacts/cr054/receipt.json
+          test -f artifacts/cr054/package/main.py
+      - name: Prepare generic L1 runner
+        run: |
+          cp tools/cr052_public_adaptive_v2_screen.py tools/cr054_runtime.py
+          sed -i 's#configs/cr052_public_adaptive_v2_screen.json#configs/cr054_preempt_h6_screen.json#' tools/cr054_runtime.py
+          python -m py_compile artifacts/cr054/package/main.py tools/cr054_runtime.py
+      - name: Run live L1 screen
+        run: |
+          python tools/cr054_runtime.py \
+            --candidate artifacts/cr054/package/main.py \
+            --receipt artifacts/cr054/receipt.json \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr054/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr054-preempt-h6-screen
+          path: |
+            artifacts/cr054/report.json
+            artifacts/cr054/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
