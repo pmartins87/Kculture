@@ -34,20 +34,22 @@ jobs:
           path: artifacts/cr035_source_bundle
           run-id: 34016286606
           github-token: ${{ github.token }}
-      - name: Fetch exact public V2 package
+      - name: Fetch exact complete public V2 package
         run: |
           mkdir -p artifacts/cr052
-          python tools/fetch_exact_package_main.py \
+          python tools/fetch_exact_package_dir.py \
             --handle 'reyhanksatria/adaptive-route-agent-v2/versions/2' \
-            --output artifacts/cr052/candidate.py \
+            --output-dir artifacts/cr052/package \
             --receipt artifacts/cr052/receipt.json
+          test -f artifacts/cr052/package/main.py
+          test -f artifacts/cr052/package/agent.so
       - name: Syntax check
         run: |
-          python -m py_compile artifacts/cr052/candidate.py tools/cr052_public_adaptive_v2_screen.py
+          python -m py_compile artifacts/cr052/package/main.py tools/cr052_public_adaptive_v2_screen.py
       - name: Run live L1 screen
         run: |
           python tools/cr052_public_adaptive_v2_screen.py \
-            --candidate artifacts/cr052/candidate.py \
+            --candidate artifacts/cr052/package/main.py \
             --receipt artifacts/cr052/receipt.json \
             --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
             --output artifacts/cr052/report.json
