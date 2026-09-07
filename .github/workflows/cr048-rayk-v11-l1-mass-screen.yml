@@ -1,0 +1,64 @@
+name: cr048-rayk-v11-l1-mass-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr048-rayk-v11-l1-mass-screen.yml'
+      - 'tools/cr048_rayk_v11_l1_mass_screen.py'
+      - 'configs/cr048_rayk_v11_l1_mass_screen.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact simulator dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Fetch exact Rayk V11 package
+        run: |
+          mkdir -p artifacts/cr048
+          python tools/fetch_exact_package_main.py \
+            --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/11' \
+            --output artifacts/cr048/rayk_v11.py \
+            --receipt artifacts/cr048/rayk_v11_receipt.json
+      - name: Syntax check
+        run: |
+          python -m py_compile artifacts/cr048/rayk_v11.py
+          python -m py_compile tools/cr048_rayk_v11_l1_mass_screen.py
+      - name: Run 512-seed both-seat L1 mass screen
+        run: |
+          python tools/cr048_rayk_v11_l1_mass_screen.py \
+            --candidate artifacts/cr048/rayk_v11.py \
+            --receipt artifacts/cr048/rayk_v11_receipt.json \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr048/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr048-rayk-v11-l1-mass-screen
+          path: |
+            artifacts/cr048/report.json
+            artifacts/cr048/rayk_v11_receipt.json
+          if-no-files-found: warn
+          retention-days: 30
