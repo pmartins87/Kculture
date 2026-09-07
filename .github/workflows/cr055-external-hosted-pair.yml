@@ -1,0 +1,44 @@
+name: cr055-external-hosted-pair
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr055-external-hosted-pair.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install Kaggle output client
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub
+      - name: Syntax check
+        run: python -m py_compile tools/cr055_prepare_external_hosted_pair.py
+      - name: Prepare exact hosted pair
+        run: |
+          python tools/cr055_prepare_external_hosted_pair.py --output-dir artifacts/cr055_external_pair
+      - name: Audit archive members and hashes
+        run: |
+          for f in artifacts/cr055_external_pair/*.tar.gz; do
+            echo "===== $f ====="
+            tar -tzf "$f"
+            sha256sum "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr055-cr056-exact-public-hosted-pair
+          path: artifacts/cr055_external_pair/
+          retention-days: 30
