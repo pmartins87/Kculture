@@ -1,0 +1,71 @@
+name: cr067-current-frontier-smoke-league
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr067-current-frontier-smoke-league.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - {a: cr053, b: cr064, afile: R4D_CR053_ROUTE106309334_V1.tar.gz, bfile: R4D_CR064_ADAPTIVE_SHOP_GUARD_SEATSAFE_V1.tar.gz}
+          - {a: cr053, b: cr065, afile: R4D_CR053_ROUTE106309334_V1.tar.gz, bfile: R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz}
+          - {a: cr053, b: cr066, afile: R4D_CR053_ROUTE106309334_V1.tar.gz, bfile: R4D_CR066_RANK_AGENT_LATEST_SEATSAFE_V1.tar.gz}
+          - {a: cr064, b: cr065, afile: R4D_CR064_ADAPTIVE_SHOP_GUARD_SEATSAFE_V1.tar.gz, bfile: R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz}
+          - {a: cr064, b: cr066, afile: R4D_CR064_ADAPTIVE_SHOP_GUARD_SEATSAFE_V1.tar.gz, bfile: R4D_CR066_RANK_AGENT_LATEST_SEATSAFE_V1.tar.gz}
+          - {a: cr065, b: cr066, afile: R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz, bfile: R4D_CR066_RANK_AGENT_LATEST_SEATSAFE_V1.tar.gz}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator
+        run: |
+          python -m pip install numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download CR053
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Download current seat-safe candidates
+        uses: actions/download-artifact@v4
+        with:
+          name: cr064-cr066-current-frontier-seatsafe
+          path: artifacts/current
+          run-id: 34160996911
+          github-token: ${{ github.token }}
+      - name: Resolve packages
+        run: |
+          A=$(find artifacts -name '${{ matrix.afile }}' -print -quit)
+          B=$(find artifacts -name '${{ matrix.bfile }}' -print -quit)
+          test -n "$A"; test -n "$B"
+          echo "A_PATH=$A" >> "$GITHUB_ENV"
+          echo "B_PATH=$B" >> "$GITHUB_ENV"
+      - name: Common-seed both-seat smoke
+        run: |
+          mkdir -p artifacts/cr067
+          python tools/cr058_broad_live_agent_league.py \
+            --a "$A_PATH" --b "$B_PATH" \
+            --a-id '${{ matrix.a }}' --b-id '${{ matrix.b }}' \
+            --output 'artifacts/cr067/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr067-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: artifacts/cr067/*.json
+          retention-days: 30
+          if-no-files-found: warn
