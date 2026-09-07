@@ -1,0 +1,53 @@
+name: cr057-current-hosted-forensics
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr057-current-hosted-forensics.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install clients
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub requests
+      - name: Fetch exact CR052 package
+        run: |
+          mkdir -p artifacts/cr057
+          python tools/fetch_exact_package_dir.py \
+            --handle 'reyhanksatria/adaptive-route-agent-v2/versions/2' \
+            --output-dir artifacts/cr057/cr052_package \
+            --receipt artifacts/cr057/cr052_receipt.json
+          test -f artifacts/cr057/cr052_package/main.py
+          test -f artifacts/cr057/cr052_package/agent.so
+      - name: Syntax check
+        run: python -m py_compile tools/cr057_current_hosted_forensics.py artifacts/cr057/cr052_package/main.py
+      - name: Analyze latest hosted episodes and parity
+        run: |
+          python tools/cr057_current_hosted_forensics.py \
+            --cr052-package artifacts/cr057/cr052_package \
+            --latest 16 \
+            --output artifacts/cr057/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr057-current-hosted-forensics
+          path: |
+            artifacts/cr057/report.json
+            artifacts/cr057/cr052_receipt.json
+          if-no-files-found: warn
+          retention-days: 30
