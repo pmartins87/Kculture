@@ -1,0 +1,67 @@
+name: cr044-top3000-tape-fresh-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr044-top3000-tape-fresh-screen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Fetch frozen reactive opponents
+        run: |
+          mkdir -p artifacts/cr044/opponents
+          python tools/fetch_exact_package_main.py --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/23' --output artifacts/cr044/opponents/rayk.py --receipt artifacts/cr044/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle 'boatlee/v21-r1-public-state-route-portfolio/versions/2' --output artifacts/cr044/opponents/boatlee.py --receipt artifacts/cr044/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle 'prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10' --output artifacts/cr044/opponents/prvsiyan.py --receipt artifacts/cr044/opponents/prvsiyan.json
+      - name: Verify frozen opponent identities
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('configs/cr044_top3000_tape_fresh_screen.json'))
+          for o in cfg['opponents']:
+              r=json.load(open(f"artifacts/cr044/opponents/{o['id']}.json"))
+              assert r['archive_sha256']==o['archive_sha256'],(o['id'],r['archive_sha256'])
+              assert r['main_sha256']==o['main_sha256'],(o['id'],r['main_sha256'])
+          PY
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/cr043_latest_top3000_probe.py
+          python -m py_compile tools/cr044_top3000_tape_fresh_screen.py
+      - name: Run fresh screen
+        run: |
+          python tools/cr044_top3000_tape_fresh_screen.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --opponent-dir artifacts/cr044/opponents \
+            --output artifacts/cr044/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr044-top3000-tape-fresh-screen
+          path: artifacts/cr044/report.json
+          if-no-files-found: warn
+          retention-days: 30
