@@ -1,0 +1,12 @@
+{
+  "experiment": "CR049_LIVE_KING_STEPWISE_KNN_CLONE_V1",
+  "source_submission_id": 56064100,
+  "source_capture_note": "Current live rank-1 identified by CR046A at displayScore 2960.4; freeze this submission, not the moving KING alias.",
+  "episode_selection": {"completed_latest_n": 40, "train_newest_n": 32, "holdout_oldest_n": 8},
+  "knn": {"k": 1, "categorical_mismatch_penalty": 12.0},
+  "fresh_seed_generator": {"algorithm":"python_random_v1","master_seed":4909072026,"count":64,"range_min":1,"range_max":2147483646},
+  "fresh_gate": {"min_score_rate_vs_cr029":0.52,"min_mean_margin":0.0,"max_errors":0},
+  "purpose": "Prototype a genuinely state-conditioned policy by retrieving, at each clock, the action taken by the frozen live king in the nearest of 32 public states. Validate behavior imitation on 8 unseen king episodes and then play the clone on fresh 1.32.7 seasons against CR029.",
+  "held_out_touched": false,
+  "automatic_kaggle_submission": false
+}
