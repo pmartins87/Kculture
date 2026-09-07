@@ -1,0 +1,44 @@
+name: cr041-independent-meta-scan
+on:
+  push:
+    paths:
+      - '.github/workflows/cr041-independent-meta-scan.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install research dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub pandas
+      - name: Latest official top-episode radar
+        run: python tools/live_meta_radar.py --top 20 --output artifacts/cr041/meta_radar.json
+      - name: Latest public-demand response scan
+        run: python tools/live_meta_demand_response.py --top 20 --output artifacts/cr041/demand_response.json
+      - name: Latest policy-diversity fingerprint
+        run: python tools/live_meta_policy_fingerprint.py --top 20 --output artifacts/cr041/policy_fingerprint.json
+      - name: Refresh current-engine frontier dataset
+        run: |
+          python tools/cr028_recent_frontier.py
+          cp artifacts/cr028_recent/report.json artifacts/cr041/current_engine_frontier.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr041-independent-meta-scan
+          path: artifacts/cr041/*.json
+          if-no-files-found: warn
+          retention-days: 30
