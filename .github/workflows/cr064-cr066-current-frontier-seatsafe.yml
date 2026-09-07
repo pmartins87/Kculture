@@ -1,0 +1,47 @@
+name: cr064-cr066-current-frontier-seatsafe
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr064-cr066-current-frontier-seatsafe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download current frontier source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cr063-current-public-frontier-refresh
+          path: artifacts/source
+          run-id: 34160755496
+          github-token: ${{ github.token }}
+      - name: Syntax check builder
+        run: python -m py_compile tools/cr064_cr066_current_frontier_seatsafe.py
+      - name: Build seat-safe current candidates
+        run: |
+          python tools/cr064_cr066_current_frontier_seatsafe.py \
+            --source-dir artifacts/source \
+            --output-dir artifacts/cr064_cr066
+      - name: Audit archives
+        run: |
+          for f in artifacts/cr064_cr066/*.tar.gz; do
+            echo "===== $f ====="
+            tar -tzf "$f" | head -80
+            sha256sum "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr064-cr066-current-frontier-seatsafe
+          path: artifacts/cr064_cr066/
+          retention-days: 30
+          if-no-files-found: error
