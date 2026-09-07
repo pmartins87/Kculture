@@ -1,0 +1,24 @@
+{
+  "experiment": "CR048_RAYK_V11_L1_MASS_SCREEN_V1",
+  "engine": "1.32.7",
+  "candidate": {
+    "handle": "raykkretzschmar/kaggriculture-rank-your-agent/versions/11",
+    "archive_sha256": "99e3ab82275d1d6991553a50c67f7fb3c83c029072dab2e890155b34d34c3cc1",
+    "main_sha256": "adc61ab15b3b4016e49efe525f4906e6ae3bbb66c4ff29ab795ae09df9fbaa5f"
+  },
+  "seed_generator": {
+    "algorithm": "python_random_v1",
+    "master_seed": 4809072026,
+    "count": 512,
+    "range_min": 1,
+    "range_max": 2147483646
+  },
+  "promotion_gate": {
+    "min_score_rate_vs_cr029": 0.55,
+    "min_mean_margin": 0.0,
+    "max_error_rate": 0.0
+  },
+  "purpose": "Measure exact public Rayk V11 adaptive agent against frozen CR029 on hundreds of fresh 1.32.7 seasons in both seats using bit-exact L1 step mode.",
+  "held_out_touched": false,
+  "automatic_kaggle_submission": false
+}
