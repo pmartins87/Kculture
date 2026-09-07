@@ -1,0 +1,69 @@
+name: cr040-cr039-fresh-reactive-validation
+on:
+  push:
+    paths:
+      - '.github/workflows/cr040-cr039-fresh-reactive-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact environment
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -r requirements.txt kagglehub 'kaggle>=2.2.3'
+      - name: Download frozen CR035 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Fetch frozen reactive opponents serially
+        run: |
+          mkdir -p artifacts/cr040/opponents
+          python tools/fetch_exact_package_main.py --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/23' --output artifacts/cr040/opponents/rayk.py --receipt artifacts/cr040/opponents/rayk.json
+          python tools/fetch_exact_package_main.py --handle 'boatlee/v21-r1-public-state-route-portfolio/versions/2' --output artifacts/cr040/opponents/boatlee.py --receipt artifacts/cr040/opponents/boatlee.json
+          python tools/fetch_exact_package_main.py --handle 'prvsiyan/kaggriculture-frontier-the-soil-remembers-rain/versions/10' --output artifacts/cr040/opponents/prvsiyan.py --receipt artifacts/cr040/opponents/prvsiyan.json
+      - name: Verify frozen opponent identities
+        run: |
+          python - <<'PY'
+          import json
+          cfg=json.load(open('configs/cr040_cr039_fresh_reactive_validation.json'))
+          for o in cfg['opponents']:
+              r=json.load(open(f"artifacts/cr040/opponents/{o['id']}.json"))
+              assert r['archive_sha256']==o['archive_sha256'],(o['id'],r['archive_sha256'])
+              assert r['main_sha256']==o['main_sha256'],(o['id'],r['main_sha256'])
+          PY
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/cr035_public_regime_selector_shard.py
+          python -m py_compile tools/cr039_state_adaptive_rank5_exit.py
+          python -m py_compile tools/cr040_cr039_fresh_reactive_validation.py
+      - name: Run fresh reactive validation
+        run: >-
+          python tools/cr040_cr039_fresh_reactive_validation.py
+          --source-bundle artifacts/cr035_source_bundle/source_bundle.json
+          --opponent-dir artifacts/cr040/opponents
+          --output artifacts/cr040/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr040-cr039-fresh-reactive-validation
+          path: artifacts/cr040/report.json
+          if-no-files-found: warn
+          retention-days: 30
