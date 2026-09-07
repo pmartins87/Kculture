@@ -1,0 +1,21 @@
+{
+  "experiment": "CR047_KAGSIM_TOP3000_MASS_SCREEN_V1",
+  "engine": "1.32.7",
+  "source_date": "2026-09-06",
+  "day_handle": "kaggle/kaggriculture-episodes-2026-09-06",
+  "episodes": [
+    {"episode_id":106275171,"winner_seat":1},
+    {"episode_id":106277936,"winner_seat":1},
+    {"episode_id":106272405,"winner_seat":0},
+    {"episode_id":106269624,"winner_seat":0},
+    {"episode_id":106262306,"winner_seat":1},
+    {"episode_id":106255661,"winner_seat":1},
+    {"episode_id":106257899,"winner_seat":0},
+    {"episode_id":106254763,"winner_seat":0}
+  ],
+  "seed_generator": {"algorithm":"python_random_v1","master_seed":4709072026,"count":4096,"range_min":1,"range_max":2147483646},
+  "promotion_gate": {"min_score_rate_vs_cr029":0.55,"min_mean_margin":0.0},
+  "purpose": "Use the bit-exact 1.32.7 C++ simulator to test whether current ~3000 winner tapes retain strength over thousands of fresh seasons, both seats, eliminating tiny-panel variance.",
+  "held_out_touched": false,
+  "automatic_kaggle_submission": false
+}
