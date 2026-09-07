@@ -1,0 +1,62 @@
+name: cr052-public-adaptive-v2-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr052-public-adaptive-v2-screen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Fetch exact public V2 package
+        run: |
+          mkdir -p artifacts/cr052
+          python tools/fetch_exact_package_main.py \
+            --handle 'reyhanksatria/adaptive-route-agent-v2/versions/2' \
+            --output artifacts/cr052/candidate.py \
+            --receipt artifacts/cr052/receipt.json
+      - name: Syntax check
+        run: |
+          python -m py_compile artifacts/cr052/candidate.py tools/cr052_public_adaptive_v2_screen.py
+      - name: Run live L1 screen
+        run: |
+          python tools/cr052_public_adaptive_v2_screen.py \
+            --candidate artifacts/cr052/candidate.py \
+            --receipt artifacts/cr052/receipt.json \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr052/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr052-public-adaptive-v2-screen
+          path: |
+            artifacts/cr052/report.json
+            artifacts/cr052/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
