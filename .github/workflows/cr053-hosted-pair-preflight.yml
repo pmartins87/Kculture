@@ -1,0 +1,54 @@
+name: cr053-hosted-pair-preflight
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr053-hosted-pair-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/cr049_live_king_knn_clone.py tools/cr053_prepare_hosted_pair.py
+      - name: Build and fresh-check both hosted candidates
+        run: |
+          python tools/cr053_prepare_hosted_pair.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output-dir artifacts/cr053_hosted_pair
+      - name: Audit tar members
+        run: |
+          tar -tzf artifacts/cr053_hosted_pair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz
+          tar -tzf artifacts/cr053_hosted_pair/R4D_CR053_ROUTE106309334_V1.tar.gz
+          sha256sum artifacts/cr053_hosted_pair/*.tar.gz
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053_hosted_pair/
+          retention-days: 30
