@@ -1,0 +1,26 @@
+{
+  "experiment": "CR043_LATEST_TOP3000_INDEPENDENT_PROBE_V1",
+  "source_date": "2026-09-06",
+  "day_handle": "kaggle/kaggriculture-episodes-2026-09-06",
+  "purpose": "Independent probe of the current ~3000 official meta, deliberately separate from the CR039/rank5 theory.",
+  "selection_rule": "Frozen representatives from CR041 top-20 official episodes, spanning the dominant current team plus both minority teams and distinct score/reward contexts.",
+  "episodes": [
+    {"episode_id":106275171,"expected_avg_score":3017.729278,"expected_winner_seat":1,"expected_winner_team":"沒有道歉 沒有道歉"},
+    {"episode_id":106277936,"expected_avg_score":3017.729278,"expected_winner_seat":1,"expected_winner_team":"HowardLeeTW"},
+    {"episode_id":106272405,"expected_avg_score":3016.068005,"expected_winner_seat":0,"expected_winner_team":"沒有道歉 沒有道歉"},
+    {"episode_id":106269624,"expected_avg_score":3014.430099,"expected_winner_seat":0,"expected_winner_team":"HowardLeeTW"},
+    {"episode_id":106262306,"expected_avg_score":3009.302149,"expected_winner_seat":1,"expected_winner_team":"沒有道歉 沒有道歉"},
+    {"episode_id":106255661,"expected_avg_score":2996.458842,"expected_winner_seat":1,"expected_winner_team":"我都先道歉"},
+    {"episode_id":106257899,"expected_avg_score":2996.216889,"expected_winner_seat":0,"expected_winner_team":"沒有道歉 沒有道歉"},
+    {"episode_id":106254763,"expected_avg_score":2992.660162,"expected_winner_seat":0,"expected_winner_team":"沒有道歉 沒有道歉"}
+  ],
+  "checkpoints": [24,96,168,288,432,576,648,696,719],
+  "gate": {
+    "diagnostic_only": true,
+    "no_candidate_promotion_from_this_probe_alone": true
+  },
+  "runtime_identity_features": false,
+  "fresh_validation_touched": false,
+  "held_out_touched": false,
+  "automatic_kaggle_submission": false
+}
