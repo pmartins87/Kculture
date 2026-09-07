@@ -1,0 +1,38 @@
+name: research-rayk-v11
+'on':
+  push:
+    paths:
+      - '.github/workflows/research-rayk-v11.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install downloader
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub
+      - name: Fetch exact Rayk V11 package main
+        run: |
+          python tools/fetch_exact_package_main.py \
+            --handle 'raykkretzschmar/kaggriculture-rank-your-agent/versions/11' \
+            --output artifacts/rayk_v11/main.py \
+            --receipt artifacts/rayk_v11/receipt.json
+          python -m py_compile artifacts/rayk_v11/main.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: rayk-v11-exact-main
+          path: artifacts/rayk_v11
+          if-no-files-found: error
+          retention-days: 30
