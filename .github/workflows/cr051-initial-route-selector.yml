@@ -1,0 +1,47 @@
+name: cr051-initial-route-selector
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr051-initial-route-selector.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator and analysis dependencies
+        run: |
+          python -m pip install requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Syntax check
+        run: |
+          python -m py_compile tools/cr049_live_king_knn_clone.py tools/cr051_initial_route_selector.py
+      - name: Run oracle and initial-state route selector
+        run: |
+          python tools/cr051_initial_route_selector.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr051/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr051-initial-route-selector
+          path: artifacts/cr051/report.json
+          if-no-files-found: warn
+          retention-days: 30
