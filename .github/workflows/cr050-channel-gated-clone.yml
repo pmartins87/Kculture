@@ -1,0 +1,49 @@
+name: cr050-channel-gated-clone
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr050-channel-gated-clone.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator and analysis dependencies
+        run: |
+          python -m pip install requests numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Prepare and syntax-check CR050 runtime
+        run: |
+          cp tools/cr050_channel_gated_clone.py tools/cr050_runtime.py
+          sed -i 's/: false/: False/g' tools/cr050_runtime.py
+          python -m py_compile tools/cr049_live_king_knn_clone.py tools/cr050_runtime.py
+      - name: Run channel-gated clone experiment
+        run: |
+          python tools/cr050_runtime.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr050/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr050-channel-gated-clone
+          path: artifacts/cr050/report.json
+          if-no-files-found: warn
+          retention-days: 30
