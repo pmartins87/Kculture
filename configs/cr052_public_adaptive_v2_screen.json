@@ -1,0 +1,14 @@
+{
+  "experiment": "CR052_PUBLIC_ADAPTIVE_ROUTE_V2_L1_SCREEN_V1",
+  "candidate": {
+    "handle": "reyhanksatria/adaptive-route-agent-v2/versions/2",
+    "public_notebook_best_score_observed": 2589.3,
+    "source": "Public Kaggle notebook, Apache-2.0, exact pinned version"
+  },
+  "engine": "1.32.7",
+  "seed_generator": {"algorithm":"python_random_v1","master_seed":5209072026,"count":256,"range_min":1,"range_max":2147483646},
+  "promotion_gate": {"min_score_rate_vs_cr029":0.53,"min_mean_margin":0.0,"max_error_rate":0.0},
+  "purpose": "Independent external lane after CR049/CR050 behavior-cloning failures. Evaluate the exact newly public Adaptive Route Agent V2 as a live callable against frozen CR029 on fresh bit-exact L1 seasons in both seats. This is not derived from the frozen king and therefore acts as an anti-tunnel-vision check.",
+  "kaggle_hidden_test_touched": false,
+  "automatic_kaggle_submission": false
+}
