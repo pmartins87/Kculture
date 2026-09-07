@@ -1,0 +1,30 @@
+name: cr062-public-frontier-audit
+on:
+  push:
+    paths:
+      - 'tools/cr062_public_frontier_audit.py'
+      - '.github/workflows/cr062-public-frontier-audit.yml'
+  workflow_dispatch:
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle output client
+        run: python -m pip install kagglehub
+      - name: Syntax check
+        run: python -m py_compile tools/cr062_public_frontier_audit.py
+      - name: Fetch and audit pinned public frontier
+        run: python tools/cr062_public_frontier_audit.py --output-dir artifacts/cr062
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr062-public-frontier-audit
+          path: artifacts/cr062/
+          retention-days: 30
