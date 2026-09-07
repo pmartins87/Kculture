@@ -1,0 +1,37 @@
+name: cr045-top3000-lineage-map
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr045-top3000-lineage-map.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install research dependencies
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub pandas
+      - name: Syntax check
+        run: python -m py_compile tools/cr045_top3000_lineage_map.py
+      - name: Map top-3000 lineages
+        run: python tools/cr045_top3000_lineage_map.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr045-top3000-lineage-map
+          path: artifacts/cr045/report.json
+          if-no-files-found: warn
+          retention-days: 30
