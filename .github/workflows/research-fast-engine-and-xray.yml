@@ -23,17 +23,28 @@ jobs:
         run: |
           test -n "$KAGGLE_API_TOKEN"
           python -m pip install 'kaggle>=2.2.3'
-      - name: Pull high-value public research notebooks
+      - name: Pull fast C++ engine notebook
         run: |
-          mkdir -p artifacts/research/fast_engine artifacts/research/xray artifacts/research/route_v2 artifacts/research/farming_v3
-          kaggle kernels pull destbreso/from-1-to-24-000-episodes-a-second -p artifacts/research/fast_engine -m
+          mkdir -p artifacts/research/fast_engine
+          kaggle kernels pull destbreso/from-1-to-24k-episodes-a-second -p artifacts/research/fast_engine -m
+      - name: Pull X-ray notebook
+        run: |
+          mkdir -p artifacts/research/xray
           kaggle kernels pull destbreso/x-ray-your-agent -p artifacts/research/xray -m
+      - name: Pull adaptive route notebook
+        run: |
+          mkdir -p artifacts/research/route_v2
           kaggle kernels pull reyhanksatria/adaptive-route-agent-v2 -p artifacts/research/route_v2 -m
+      - name: Pull farming replay notebook
+        run: |
+          mkdir -p artifacts/research/farming_v3
           kaggle kernels pull lynnsakurai/farming-score-v3-replay-revised -p artifacts/research/farming_v3 -m
-          find artifacts/research -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+      - name: Inventory pulled research
+        run: find artifacts/research -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: current-public-research-notebooks
           path: artifacts/research
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30
