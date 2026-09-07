@@ -1,0 +1,51 @@
+name: cr060-cr061-seat1-clock-fix
+on:
+  push:
+    paths:
+      - 'tools/cr060_cr061_seat1_clock_fix.py'
+      - '.github/workflows/cr060-cr061-seat1-clock-fix.yml'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download exact CR055 CR056 source artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cr055-cr056-exact-public-hosted-pair
+          path: artifacts/source
+          run-id: 34127313109
+          github-token: ${{ github.token }}
+      - name: Resolve sources
+        run: |
+          echo "CR055=$(find artifacts/source -name 'R4D_CR055_PREEMPT_H6_PUBLIC_EXACT.tar.gz' -print -quit)" >> "$GITHUB_ENV"
+          echo "CR056=$(find artifacts/source -name 'R4D_CR056_INDAR_TOP10_PUBLIC_EXACT.tar.gz' -print -quit)" >> "$GITHUB_ENV"
+      - name: Syntax check builder
+        run: python -m py_compile tools/cr060_cr061_seat1_clock_fix.py
+      - name: Build seat-safe candidates
+        run: |
+          test -n "$CR055"; test -n "$CR056"
+          python tools/cr060_cr061_seat1_clock_fix.py \
+            --cr055 "$CR055" \
+            --cr056 "$CR056" \
+            --output-dir artifacts/cr060_cr061
+      - name: Audit packages
+        run: |
+          for f in artifacts/cr060_cr061/*.tar.gz; do
+            echo "===== $f ====="
+            tar -tzf "$f" | head -50
+            sha256sum "$f"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr060-cr061-seat-safe-candidates
+          path: artifacts/cr060_cr061/
+          retention-days: 30
