@@ -1,0 +1,49 @@
+name: cr047-kagsim-top3000-mass-screen
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr047-kagsim-top3000-mass-screen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install bit-exact engine and data dependency
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install kagglehub pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download frozen CR029 source bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: cr035-source-bundle
+          path: artifacts/cr035_source_bundle
+          run-id: 34016286606
+          github-token: ${{ github.token }}
+      - name: Syntax check
+        run: python -m py_compile tools/cr047_kagsim_top3000_mass_screen.py
+      - name: Run 4096-seed x both-seat mass screen
+        run: |
+          python tools/cr047_kagsim_top3000_mass_screen.py \
+            --source-bundle artifacts/cr035_source_bundle/source_bundle.json \
+            --output artifacts/cr047/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr047-kagsim-top3000-mass-screen
+          path: artifacts/cr047/report.json
+          if-no-files-found: warn
+          retention-days: 30
