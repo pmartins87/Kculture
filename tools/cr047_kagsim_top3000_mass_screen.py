@@ -7,6 +7,8 @@ frozen CR029 full_recent_top stream in both seat orders on every seed.
 from __future__ import annotations
 
 import argparse
+import copy
+import hashlib
 import json
 import random
 import statistics
@@ -16,11 +18,21 @@ from pathlib import Path
 import kagglehub
 import kagsim
 
-import cr035_public_regime_selector_shard as core
-import cr043_latest_top3000_probe as p43
-
 ROOT = Path(__file__).resolve().parents[1]
 CFG = ROOT / "configs/cr047_kagsim_top3000_mass_screen.json"
+
+
+def canon(x) -> str:
+    return json.dumps(x, sort_keys=True, separators=(",", ":"))
+
+
+def tape_sha(tape: list[dict]) -> str:
+    return hashlib.sha256(canon(tape).encode("utf-8")).hexdigest()
+
+
+def actions_from_replay(rep: dict, seat: int) -> list[dict]:
+    steps = rep.get("steps") or []
+    return [copy.deepcopy((steps[t][seat] or {}).get("action") or {}) for t in range(1, len(steps))]
 
 
 def download_episode(handle: str, eid: int, out: Path) -> dict:
@@ -46,6 +58,7 @@ def metrics(results: list[tuple[float, float]]) -> dict:
     wins = sum(x > 0 for x in margins)
     losses = sum(x < 0 for x in margins)
     ties = len(margins) - wins - losses
+    ordered = sorted(margins)
     return {
         "games": len(margins),
         "wins": wins,
@@ -55,8 +68,8 @@ def metrics(results: list[tuple[float, float]]) -> dict:
         "score_rate": (wins + 0.5 * ties) / len(margins) if margins else None,
         "mean_margin": statistics.mean(margins) if margins else None,
         "median_margin": statistics.median(margins) if margins else None,
-        "p05_margin": sorted(margins)[max(0, int(0.05 * (len(margins)-1)))] if margins else None,
-        "p95_margin": sorted(margins)[min(len(margins)-1, int(0.95 * (len(margins)-1)))] if margins else None,
+        "p05_margin": ordered[max(0, int(0.05 * (len(ordered)-1)))] if ordered else None,
+        "p95_margin": ordered[min(len(ordered)-1, int(0.95 * (len(ordered)-1)))] if ordered else None,
     }
 
 
@@ -75,7 +88,7 @@ def main():
 
     bundle = json.loads(Path(args.source_bundle).read_text(encoding="utf-8"))
     base_actions = bundle["recent_top"]["tape"]
-    if len(base_actions) != 719 or core._tape_sha(base_actions) != bundle["recent_top"]["tape_sha256"]:
+    if len(base_actions) != 719 or tape_sha(base_actions) != bundle["recent_top"]["tape_sha256"]:
         raise RuntimeError("CR029 source bundle mismatch")
     base = kagsim.Stream(base_actions)
     seeds = make_seeds(cfg["seed_generator"])
@@ -95,14 +108,14 @@ def main():
                 win = 0 if rewards[0] >= rewards[1] else 1
                 if win != int(meta["winner_seat"]):
                     raise RuntimeError(f"episode {eid} winner seat {win} != frozen {meta['winner_seat']}")
-                actions = p43._actions(rep, win)
+                actions = actions_from_replay(rep, win)
                 if len(actions) != 719:
                     raise RuntimeError(f"episode {eid} tape length {len(actions)}")
                 candidates[f"ep{eid}_s{win}"] = {
                     "episode_id": eid,
                     "winner_seat": win,
                     "source_rewards": rewards,
-                    "tape_sha256": core._tape_sha(actions),
+                    "tape_sha256": tape_sha(actions),
                     "stream": kagsim.Stream(actions),
                 }
             except Exception as exc:
@@ -111,23 +124,19 @@ def main():
     reports = {}
     for cid, c in candidates.items():
         stream = c["stream"]
-        # Seat 0: candidate vs CR029. Seat 1: CR029 vs candidate, then flip banks.
         jobs0 = [(stream, base, int(s)) for s in seeds]
         jobs1 = [(base, stream, int(s)) for s in seeds]
         r0 = list(kagsim.run_many(jobs0))
         r1raw = list(kagsim.run_many(jobs1))
         r1 = [(b, a) for a, b in r1raw]
-        m0, m1 = metrics(r0), metrics(r1)
-        both = r0 + r1
-        mb = metrics(both)
         reports[cid] = {
             "episode_id": c["episode_id"],
             "winner_seat": c["winner_seat"],
             "source_rewards": c["source_rewards"],
             "tape_sha256": c["tape_sha256"],
-            "seat0": m0,
-            "seat1": m1,
-            "combined": mb,
+            "seat0": metrics(r0),
+            "seat1": metrics(r1),
+            "combined": metrics(r0 + r1),
         }
 
     gate = cfg["promotion_gate"]
