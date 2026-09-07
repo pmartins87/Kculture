@@ -1,0 +1,25 @@
+{
+  "experiment": "CR050_CHANNEL_GATED_BEHAVIOR_CLONE_V1",
+  "source_submission_id": 56064100,
+  "source_capture_note": "Freeze the exact 40 public replay episodes harvested by CR049; do not move with the live ladder.",
+  "train_episode_ids": [106336069,106332236,106331244,106330395,106329480,106328562,106327644,106326723,106324895,106325863,106323975,106323064,106323097,106322154,106321236,106320318,106319368,106318496,106317578,106316547,106315769,106314816,106313903,106312987,106312067,106311157,106310231,106309334,106309312,106308686,106308439,106308397],
+  "holdout_episode_ids": [106307487,106306573,106305664,106304753,106303844,106302923,106302938,106302010],
+  "categorical_penalties": [0.0, 2.0, 8.0],
+  "gate_quantiles": [0.10, 0.25, 0.50],
+  "feature_masks": {
+    "farmer": ["own_opp_market", "own_private_market", "full"],
+    "hands": ["own_market", "own_private_market", "full"],
+    "market": ["money_shed_market", "money_private_market", "full"]
+  },
+  "dev_seed_generator": {"algorithm":"python_random_v1","master_seed":5009072026,"count":96,"range_min":1,"range_max":2147483646},
+  "validation_seed_generator": {"algorithm":"python_random_v1","master_seed":5009073026,"count":256,"range_min":1,"range_max":2147483646},
+  "selection": {
+    "max_finalists": 2,
+    "min_dev_score_rate_vs_cr029": 0.50,
+    "min_validation_score_rate_vs_cr029": 0.515,
+    "min_validation_mean_margin": 0.0
+  },
+  "purpose": "CR049 showed that whole-action 1-NN is catastrophically off-manifold while channel imitation is uneven (market strongest, hands weakest). CR050 learns each action channel independently with train-only leave-one-episode-out feature-mask/categorical tuning and z-scored distances, then applies only high-confidence channel substitutions on top of the exact CR029 action. A development panel chooses at most two candidates; an independent larger validation panel decides promotion.",
+  "kaggle_hidden_test_touched": false,
+  "automatic_kaggle_submission": false
+}
