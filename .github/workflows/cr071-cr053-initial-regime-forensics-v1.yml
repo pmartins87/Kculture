@@ -1,0 +1,65 @@
+name: cr071-cr053-initial-regime-forensics-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-cr053-initial-regime-forensics-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  forensic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile forensic runner
+        run: |
+          python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_matchup_forensics.py
+      - name: Download frozen six-agent corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-reference-league-packages
+          path: artifacts/packages
+          run-id: 34276243787
+          github-token: ${{ github.token }}
+      - name: Resolve CR053 and CR070A packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A=$(find artifacts/packages -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -type f -print -quit)
+          B=$(find artifacts/packages -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          test -n "$A" && test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference initial-regime forensics — 64 paired seeds
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_matchup_forensics.py \
+            --a "$A" --b "$B" \
+            --a-id CR053 --b-id CR070A \
+            --seed-count 64 \
+            --master-seed 5809072026 \
+            --checkpoints '0,1,2,6,12,24,48,72,96,120,144,168,192,216,225,226,240,288,360,432,433' \
+            --output artifacts/result/CR053_vs_CR070A_initial_regime_forensics.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-cr053-initial-regime-forensics-v1
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
