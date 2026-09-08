@@ -127,7 +127,11 @@ def _worker(conn, package_dir_s: str, label: str) -> None:
                         name="kaggriculture",
                     )
                     runtime_agent = KaggleAgent(str(package_dir / "main.py"), env_stub)
-                action, log = runtime_agent.act(msg["obs"])
+                # Official Environment.__agent_runner passes a Struct-like observation
+                # to Agent.act; Agent.act itself reads observation.remainingOverageTime
+                # after invoking the submission.  Passing a plain dict here would be
+                # observably different from hosted execution.
+                action, log = runtime_agent.act(structify(msg["obs"]))
                 conn.send(
                     {
                         "ok": True,
