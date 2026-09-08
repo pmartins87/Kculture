@@ -1,0 +1,138 @@
+name: kaggle-parity-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/kaggle-parity-v1.yml'
+      - 'tools/kaggle_faithful_h2h.py'
+      - 'tools/validate_kaggle_parity.py'
+      - 'tools/cr070_shape_shop_frontier.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  parity-and-reference-reevaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      KAGSIM_SOURCE_COMMIT: da15925dcf2357d750cbae4bf35712011b4733c8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install exact Kaggle reference and pinned accelerator
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy pybind11 kagglehub
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@da15925dcf2357d750cbae4bf35712011b4733c8'
+          python - <<'PY'
+          from importlib.metadata import version
+          import kagsim
+          from kaggle_environments import make
+          assert version('kaggle-environments') == '1.32.7', version('kaggle-environments')
+          assert str(getattr(kagsim,'ENGINE_VERSION','')) == '1.32.7'
+          env=make('kaggriculture', configuration={'episodeSteps':720,'seed':123})
+          env.reset(2)
+          print('kaggle-environments=', version('kaggle-environments'))
+          print('kagsim engine=', kagsim.ENGINE_VERSION)
+          print('initial step=', env.state[0].observation.get('step'))
+          PY
+      - name: Compile corrected tools
+        run: |
+          python -m py_compile tools/kaggle_faithful_h2h.py tools/validate_kaggle_parity.py tools/cr070_shape_shop_frontier.py
+      - name: Rebuild exact CR070 hosted candidates
+        run: |
+          python tools/cr070_shape_shop_frontier.py --output-dir artifacts/cr070
+          test -f artifacts/cr070/R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz
+          test -f artifacts/cr070/R4D_CR070B_INDAR_SHAPE_SHOP_SEATSAFE_V1.tar.gz
+      - name: Download authoritative CR053 package
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Resolve packages and hashes
+        run: |
+          CR053=$(find artifacts/cr053 -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -print -quit)
+          CR070A=$(find artifacts/cr070 -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -print -quit)
+          CR070B=$(find artifacts/cr070 -name 'R4D_CR070B_INDAR_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -print -quit)
+          test -n "$CR053" && test -n "$CR070A" && test -n "$CR070B"
+          echo "CR053=$CR053" >> "$GITHUB_ENV"
+          echo "CR070A=$CR070A" >> "$GITHUB_ENV"
+          echo "CR070B=$CR070B" >> "$GITHUB_ENV"
+          sha256sum "$CR053" "$CR070A" "$CR070B"
+      - name: Closed-loop adaptive parity - CR053 vs CR070A
+        run: |
+          mkdir -p artifacts/parity
+          python tools/validate_kaggle_parity.py \
+            --a "$CR053" --b "$CR070A" --a-id CR053 --b-id CR070A \
+            --seed-count 4 --output artifacts/parity/cr053_vs_cr070a.json
+      - name: Closed-loop adaptive parity - CR053 vs CR070B
+        run: |
+          python tools/validate_kaggle_parity.py \
+            --a "$CR053" --b "$CR070B" --a-id CR053 --b-id CR070B \
+            --seed-count 4 --output artifacts/parity/cr053_vs_cr070b.json
+      - name: Kaggle-reference H2H - CR053 vs CR070A
+        run: |
+          mkdir -p artifacts/reference
+          python tools/kaggle_faithful_h2h.py \
+            --backend kaggle --a "$CR053" --b "$CR070A" --a-id CR053 --b-id CR070A \
+            --seed-count 16 --output artifacts/reference/cr053_vs_cr070a.json
+      - name: Kaggle-reference H2H - CR053 vs CR070B
+        run: |
+          python tools/kaggle_faithful_h2h.py \
+            --backend kaggle --a "$CR053" --b "$CR070B" --a-id CR053 --b-id CR070B \
+            --seed-count 16 --output artifacts/reference/cr053_vs_cr070b.json
+      - name: Produce corrected strategy ranking
+        if: always()
+        run: |
+          mkdir -p artifacts/summary
+          python - <<'PY'
+          import json, pathlib
+          pairs={}
+          for cand in ('cr070a','cr070b'):
+              p=pathlib.Path(f'artifacts/reference/cr053_vs_{cand}.json')
+              if not p.exists():
+                  continue
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              ci=d['paired_seed_uncertainty']['ci95'] if d.get('paired_seed_uncertainty') else None
+              # A is CR053, so candidate score is complementary under tie-half scoring.
+              cand_score=1.0-float(m['score_rate'])
+              cand_ci=[1.0-ci[1],1.0-ci[0]] if ci else None
+              pairs[cand.upper()]={
+                  'candidate_score_rate_vs_CR053':cand_score,
+                  'candidate_paired_bootstrap_ci95':cand_ci,
+                  'CR053_score_rate':m['score_rate'],
+                  'candidate_mean_margin_secondary':-float(m['mean_margin']),
+                  'candidate_median_margin_secondary':-float(m['median_margin']),
+                  'games':m['games'],
+              }
+          ranking=sorted(pairs, key=lambda k:pairs[k]['candidate_score_rate_vs_CR053'], reverse=True)
+          out={
+              'schema_version':'kculture-corrected-strategy-ranking-v1',
+              'reference':'kaggle-environments==1.32.7',
+              'primary_metric':'seat_balanced_score_rate',
+              'money_margin_role':'diagnostic_only',
+              'ranking_vs_CR053':ranking,
+              'candidates':pairs,
+              'promotion_rule':'Do not promote from mean/median coin margin. Require Kaggle-reference seat-balanced W/L evidence; expand N when CI crosses 0.5.',
+          }
+          pathlib.Path('artifacts/summary/corrected_strategy_ranking.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kaggle-parity-v1-results
+          path: |
+            artifacts/parity/
+            artifacts/reference/
+            artifacts/summary/
+            artifacts/cr070/report.json
+          retention-days: 30
