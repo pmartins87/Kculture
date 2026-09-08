@@ -20,7 +20,7 @@ jobs:
       - run: python tools/cr069_frontier_v5_harvest.py --output-dir artifacts/cr069
       - uses: actions/upload-artifact@v4
         with:
-          name: cr069-frontier-packages
+          name: cr069-frontier-packages-v2
           path: artifacts/cr069/
           retention-days: 30
   smoke:
@@ -43,7 +43,7 @@ jobs:
       - name: Download CR069
         uses: actions/download-artifact@v4
         with:
-          name: cr069-frontier-packages
+          name: cr069-frontier-packages-v2
           path: artifacts/cr069
       - name: Download CR053
         uses: actions/download-artifact@v4
@@ -62,16 +62,16 @@ jobs:
       - name: Resolve
         run: |
           A=$(find artifacts -name '${{ matrix.afile }}' -print -quit)
-          B=$(find artifacts -name 'R4D_CR069A_FARMING_SCORE_V5_SEATSAFE_V1.tar.gz' -print -quit)
+          B=$(find artifacts -name 'R4D_CR069A_FARMING_SCORE_V5_SEATSAFE_V2.tar.gz' -print -quit)
           test -n "$A"; test -n "$B"
           echo "A=$A" >> "$GITHUB_ENV"; echo "B=$B" >> "$GITHUB_ENV"
       - name: Common-seed both-seat smoke
         run: |
           mkdir -p artifacts/result
-          python tools/cr058_broad_live_agent_league.py --a "$A" --b "$B" --a-id '${{ matrix.a }}' --b-id cr069a --output 'artifacts/result/${{ matrix.a }}_vs_cr069a.json'
+          python tools/cr058_broad_live_agent_league.py --a "$A" --b "$B" --a-id '${{ matrix.a }}' --b-id cr069a_v5 --output 'artifacts/result/${{ matrix.a }}_vs_cr069a_v5.json'
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cr069-${{ matrix.a }}-vs-v5
+          name: cr069-v2-${{ matrix.a }}-vs-v5
           path: artifacts/result/*.json
           retention-days: 30
