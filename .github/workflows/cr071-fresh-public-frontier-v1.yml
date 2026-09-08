@@ -1,0 +1,53 @@
+name: cr071-fresh-public-frontier-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-fresh-public-frontier-v1.yml'
+      - 'tools/cr071_fresh_public_frontier.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install downloader
+        run: python -m pip install kagglehub
+      - name: Compile freezer
+        run: python -m py_compile tools/cr071_fresh_public_frontier.py
+      - name: Freeze current public notebook outputs
+        run: python tools/cr071_fresh_public_frontier.py --output-dir artifacts/cr071_fresh
+      - name: Summarize hashes
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('artifacts/cr071_fresh/report.json')
+          if not p.exists():
+              raise SystemExit('report missing')
+          d=json.loads(p.read_text())
+          print(json.dumps(d, indent=2, sort_keys=True))
+          with open(pathlib.Path.home() / 'summary.md', 'w') as f:
+              f.write('# CR071 fresh public frontier\n\n')
+              f.write('| Key | Status | Source main SHA256 | Archive |\n|---|---|---|---|\n')
+              for key,x in d['targets'].items():
+                  f.write(f"| {key} | {x.get('status')} | `{x.get('source_main_sha256','')}` | `{x.get('archive','')}` |\n")
+          PY
+          cat "$HOME/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-fresh-public-frontier-v1
+          path: artifacts/cr071_fresh/
+          retention-days: 30
+          if-no-files-found: error
