@@ -1,0 +1,179 @@
+name: kaggle-parity-v2
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/kaggle-parity-v2.yml'
+      - 'tools/kaggle_exact_runtime.py'
+      - 'tools/validate_kaggle_parity_v2.py'
+      - 'tools/kaggle_reference_h2h_v2.py'
+      - 'tools/cr070_shape_shop_frontier.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  strict-parity-and-reevaluation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      KAGSIM_SOURCE_COMMIT: da15925dcf2357d750cbae4bf35712011b4733c8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+
+      - name: Install pinned reference and accelerator
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy pybind11 kagglehub
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@da15925dcf2357d750cbae4bf35712011b4733c8'
+
+      - name: Compile v2 tools
+        run: |
+          python -m py_compile \
+            tools/kaggle_exact_runtime.py \
+            tools/validate_kaggle_parity_v2.py \
+            tools/kaggle_reference_h2h_v2.py \
+            tools/cr070_shape_shop_frontier.py
+
+      - name: Prove official shared-state delivery path
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          from importlib.metadata import version
+          import kagsim
+          from kaggle_exact_runtime import agent_visible_observation, make_reference_env
+
+          assert version('kaggle-environments') == '1.32.7'
+          assert str(kagsim.ENGINE_VERSION) == '1.32.7'
+          env = make_reference_env(123)
+          raw0 = dict(env.state[0].observation)
+          raw1 = dict(env.state[1].observation)
+          visible0 = agent_visible_observation(env, 0)
+          visible1 = agent_visible_observation(env, 1)
+          assert visible0['step'] == 0
+          assert visible1['step'] == 0
+          assert visible0['player'] == 0
+          assert visible1['player'] == 1
+          assert 'private' in visible0 and 'private' in visible1
+          print('kaggle-environments=', version('kaggle-environments'))
+          print('kagsim=', kagsim.ENGINE_VERSION)
+          print('raw seat0 has step=', 'step' in raw0)
+          print('raw seat1 has step=', 'step' in raw1)
+          print('agent-visible seat1 step=', visible1['step'])
+          print('agent-visible keys=', sorted(visible1))
+          PY
+
+      - name: Rebuild exact hosted CR070A
+        run: |
+          python tools/cr070_shape_shop_frontier.py --output-dir artifacts/cr070 || true
+          test -f artifacts/cr070/R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz
+          python - <<'PY'
+          import json, pathlib
+          d=json.loads(pathlib.Path('artifacts/cr070/report.json').read_text())
+          assert d['targets']['tetsu']['status']=='PASS', d
+          print(json.dumps(d['targets']['tetsu'], indent=2, sort_keys=True))
+          PY
+
+      - name: Download authoritative CR053 package
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+
+      - name: Resolve package hashes
+        run: |
+          CR053=$(find artifacts/cr053 -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -print -quit)
+          CR070A=$(find artifacts/cr070 -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -print -quit)
+          test -n "$CR053" && test -n "$CR070A"
+          echo "CR053=$CR053" >> "$GITHUB_ENV"
+          echo "CR070A=$CR070A" >> "$GITHUB_ENV"
+          sha256sum "$CR053" "$CR070A"
+
+      - name: Strict closed-loop parity v2 - CR053 vs CR070A
+        run: |
+          mkdir -p artifacts/parity_v2
+          PYTHONPATH=tools python tools/validate_kaggle_parity_v2.py \
+            --a "$CR053" --b "$CR070A" --a-id CR053 --b-id CR070A \
+            --seed-count 8 --output artifacts/parity_v2/cr053_vs_cr070a.json
+
+      - name: Exact Kaggle reference H2H v2 - CR053 vs CR070A
+        run: |
+          mkdir -p artifacts/reference_v2
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$CR053" --b "$CR070A" --a-id CR053 --b-id CR070A \
+            --seed-count 32 --output artifacts/reference_v2/cr053_vs_cr070a.json
+
+      - name: Produce corrected CR053-CR070A decision
+        if: always()
+        run: |
+          mkdir -p artifacts/summary_v2
+          python - <<'PY'
+          import json, pathlib
+          parity_p=pathlib.Path('artifacts/parity_v2/cr053_vs_cr070a.json')
+          ref_p=pathlib.Path('artifacts/reference_v2/cr053_vs_cr070a.json')
+          out={
+            'schema_version':'kculture-corrected-decision-v2',
+            'reference':'kaggle-environments==1.32.7',
+            'hosted_snapshot':{'CR053_rating_approx':2065,'CR070A_rating_stabilized':2024,'CR070A_peak_approx':2034},
+            'primary_metric':'seat_balanced_win_loss_score_rate',
+            'money_margin_role':'diagnostic_only',
+            'accelerator_policy':'candidate-specific closed-loop parity PASS required before kagsim may influence promotion',
+          }
+          if parity_p.exists():
+              p=json.loads(parity_p.read_text())
+              out['parity_verdict']=p.get('verdict')
+              out['parity_episodes_passed']=p.get('episodes_passed')
+              out['parity_episodes_expected']=p.get('episodes_expected')
+          else:
+              out['parity_verdict']='NOT_RUN'
+          if ref_p.exists():
+              d=json.loads(ref_p.read_text())
+              m=d['metrics_a_vs_b']
+              u=d.get('paired_seed_uncertainty')
+              cr053=float(m['score_rate'])
+              cr070=1.0-cr053
+              ci=u.get('ci95') if u else None
+              out['CR053_vs_CR070A']={
+                  'games':m['games'],
+                  'CR053_wins':m['wins'],
+                  'CR053_losses':m['losses'],
+                  'CR053_ties':m['ties'],
+                  'CR053_score_rate':cr053,
+                  'CR070A_score_rate':cr070,
+                  'CR053_paired_ci95':ci,
+                  'mean_margin_secondary':m['mean_margin_secondary'],
+                  'median_margin_secondary':m['median_margin_secondary'],
+                  'ordering_agrees_with_hosted_snapshot':cr053>0.5,
+              }
+              if ci and ci[0] > 0.5:
+                  out['strategy_verdict']='CR053_CONFIRMED_STRONGER_THAN_CR070A'
+              elif ci and ci[1] < 0.5:
+                  out['strategy_verdict']='CR070A_STRONGER_IN_EXACT_REFERENCE_DESPITE_HOSTED_RATING'
+              elif cr053 > 0.5:
+                  out['strategy_verdict']='CR053_LEADS_BUT_MORE_SEEDS_REQUIRED'
+              elif cr053 < 0.5:
+                  out['strategy_verdict']='CR070A_LEADS_BUT_MORE_SEEDS_REQUIRED'
+              else:
+                  out['strategy_verdict']='TIED_MORE_SEEDS_REQUIRED'
+          else:
+              out['strategy_verdict']='REFERENCE_H2H_NOT_AVAILABLE'
+          pathlib.Path('artifacts/summary_v2/corrected_decision.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kaggle-parity-v2-results
+          path: |
+            artifacts/parity_v2/
+            artifacts/reference_v2/
+            artifacts/summary_v2/
+            artifacts/cr070/report.json
+          retention-days: 30
