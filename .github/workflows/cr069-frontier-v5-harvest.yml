@@ -1,0 +1,77 @@
+name: cr069-frontier-v5-harvest
+'on':
+  push:
+    paths:
+      - '.github/workflows/cr069-frontier-v5-harvest.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install kagglehub
+      - run: python -m py_compile tools/cr069_frontier_v5_harvest.py
+      - run: python tools/cr069_frontier_v5_harvest.py --output-dir artifacts/cr069
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr069-frontier-packages
+          path: artifacts/cr069/
+          retention-days: 30
+  smoke:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {a: cr053, afile: R4D_CR053_ROUTE106309334_V1.tar.gz}
+          - {a: cr065, afile: R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11', cache: pip}
+      - run: |
+          python -m pip install numpy pybind11
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+      - name: Download CR069
+        uses: actions/download-artifact@v4
+        with:
+          name: cr069-frontier-packages
+          path: artifacts/cr069
+      - name: Download CR053
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Download CR065
+        uses: actions/download-artifact@v4
+        with:
+          name: cr064-cr066-current-frontier-seatsafe
+          path: artifacts/current
+          run-id: 34160996911
+          github-token: ${{ github.token }}
+      - name: Resolve
+        run: |
+          A=$(find artifacts -name '${{ matrix.afile }}' -print -quit)
+          B=$(find artifacts -name 'R4D_CR069A_FARMING_SCORE_V5_SEATSAFE_V1.tar.gz' -print -quit)
+          test -n "$A"; test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"; echo "B=$B" >> "$GITHUB_ENV"
+      - name: Common-seed both-seat smoke
+        run: |
+          mkdir -p artifacts/result
+          python tools/cr058_broad_live_agent_league.py --a "$A" --b "$B" --a-id '${{ matrix.a }}' --b-id cr069a --output 'artifacts/result/${{ matrix.a }}_vs_cr069a.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr069-${{ matrix.a }}-vs-v5
+          path: artifacts/result/*.json
+          retention-days: 30
