@@ -1,0 +1,67 @@
+name: cr071-cr053-initial-regime-analysis-v1
+'on':
+  workflow_run:
+    workflows:
+      - cr071-cr053-initial-regime-forensics-v1
+    types:
+      - completed
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  analyze:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Compile preregistered analyzer
+        run: python -m py_compile tools/cr071_initial_regime_stump_search.py
+      - name: Download completed forensic artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-cr053-initial-regime-forensics-v1
+          path: artifacts/forensics
+          run-id: ${{ github.event.workflow_run.id }}
+          github-token: ${{ github.token }}
+      - name: Run frozen discovery-validation stump analysis
+        shell: bash
+        run: |
+          set -euo pipefail
+          INPUT=$(find artifacts/forensics -name 'CR053_vs_CR070A_initial_regime_forensics.json' -type f -print -quit)
+          test -n "$INPUT"
+          mkdir -p artifacts/analysis
+          python tools/cr071_initial_regime_stump_search.py \
+            --input "$INPUT" \
+            --discovery-count 32 \
+            --output artifacts/analysis/cr071_cr053_initial_regime_stump_v1.json
+      - name: Publish summary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          p=pathlib.Path('artifacts/analysis/cr071_cr053_initial_regime_stump_v1.json')
+          d=json.loads(p.read_text())
+          with open(pathlib.Path.home()/'summary.md','w') as f:
+              f.write('# CR071 initial-regime stump analysis\n\n')
+              f.write(f"Decision: **{d['decision']}**\n\n")
+              f.write(f"Research gate: **{d['research_gate_pass']}**\n\n")
+              b=d['best_stump_frozen_on_discovery']
+              f.write(f"Frozen stump: `{b['feature']}` <= `{b['threshold']}` => `{b['left_choice']}`\n\n")
+              f.write(f"Discovery: {b['discovery_score']:.4f}; best constant: {d['discovery_best_constant']:.4f}\n\n")
+              f.write(f"Fresh validation: {d['validation_score_one_shot']:.4f}; constants A/B: {d['validation_constant_a']:.4f}/{d['validation_constant_b']:.4f}\n")
+          PY
+          cat "$HOME/summary.md" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-cr053-initial-regime-stump-v1
+          path: artifacts/analysis/*.json
+          retention-days: 30
+          if-no-files-found: error
