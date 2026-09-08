@@ -1,0 +1,87 @@
+name: audit-agent-isolation
+'on':
+  push:
+    branches:
+      - audit/cr070-local-sim-isolation
+    paths:
+      - '.github/workflows/audit-agent-isolation.yml'
+      - 'tools/audit_agent_isolation.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  cr053-vs-cr070a:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install simulator and audit dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pybind11 kagglehub
+          python -m pip install 'git+https://github.com/destbreso/kaggriculture-cppsim@main'
+          python - <<'PY'
+          import kagsim
+          print('ENGINE_VERSION=', getattr(kagsim, 'ENGINE_VERSION', None))
+          assert str(getattr(kagsim, 'ENGINE_VERSION', '')) == '1.32.7'
+          PY
+      - name: Compile audit tools
+        run: |
+          python -m py_compile tools/audit_agent_isolation.py tools/cr070_shape_shop_frontier.py
+      - name: Rebuild CR070 packages exactly from recorded source notebooks
+        run: |
+          python tools/cr070_shape_shop_frontier.py --output-dir artifacts/cr070
+          test -f artifacts/cr070/R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz
+      - name: Download authoritative CR053 artifact used by CR070 smoke
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: artifacts/cr053
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Resolve exact packages
+        run: |
+          A=$(find artifacts/cr053 -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -print -quit)
+          B=$(find artifacts/cr070 -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -print -quit)
+          test -n "$A"
+          test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+          sha256sum "$A" "$B"
+      - name: Audit legacy loader order vs process-isolated reference
+        run: |
+          mkdir -p artifacts/audit
+          python tools/audit_agent_isolation.py \
+            --a "$A" \
+            --b "$B" \
+            --a-id CR053 \
+            --b-id CR070A \
+            --seed-count 8 \
+            --output artifacts/audit/cr053_vs_cr070a_isolation_audit.json
+      - name: Print compact verdict
+        if: always()
+        run: |
+          if test -f artifacts/audit/cr053_vs_cr070a_isolation_audit.json; then
+            python - <<'PY'
+          import json
+          p=json.load(open('artifacts/audit/cr053_vs_cr070a_isolation_audit.json'))
+          print(json.dumps({
+            'metrics':p.get('metrics'),
+            'order_sensitive_samples':p.get('order_sensitive_samples'),
+            'legacy_vs_isolated_changed_samples':p.get('legacy_vs_isolated_changed_samples'),
+            'interpretation':p.get('interpretation'),
+            'errors':len(p.get('errors',[])),
+          }, indent=2, sort_keys=True))
+          PY
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr053-cr070a-agent-isolation-audit
+          path: artifacts/audit/
+          retention-days: 30
