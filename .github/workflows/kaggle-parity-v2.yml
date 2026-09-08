@@ -6,6 +6,7 @@ name: kaggle-parity-v2
     paths:
       - '.github/workflows/kaggle-parity-v2.yml'
       - 'tools/kaggle_exact_runtime.py'
+      - 'tools/validate_hosted_replays.py'
       - 'tools/validate_kaggle_parity_v2.py'
       - 'tools/kaggle_reference_h2h_v2.py'
       - 'tools/cr070_shape_shop_frontier.py'
@@ -36,6 +37,7 @@ jobs:
         run: |
           python -m py_compile \
             tools/kaggle_exact_runtime.py \
+            tools/validate_hosted_replays.py \
             tools/validate_kaggle_parity_v2.py \
             tools/kaggle_reference_h2h_v2.py \
             tools/cr070_shape_shop_frontier.py
@@ -66,6 +68,21 @@ jobs:
           print('agent-visible seat1 step=', visible1['step'])
           print('agent-visible keys=', sorted(visible1))
           PY
+
+      - name: Download actual hosted Kaggle replay corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: hosted-authenticated-forensics
+          path: artifacts/hosted_golden
+          run-id: 34233404226
+          github-token: ${{ github.token }}
+
+      - name: Hosted golden replay parity - all captured episodes
+        run: |
+          mkdir -p artifacts/hosted_parity
+          PYTHONPATH=tools python tools/validate_hosted_replays.py \
+            --root artifacts/hosted_golden \
+            --output artifacts/hosted_parity/hosted_replays_vs_local_1_32_7.json
 
       - name: Rebuild exact hosted CR070A
         run: |
@@ -115,6 +132,7 @@ jobs:
           mkdir -p artifacts/summary_v2
           python - <<'PY'
           import json, pathlib
+          hosted_p=pathlib.Path('artifacts/hosted_parity/hosted_replays_vs_local_1_32_7.json')
           parity_p=pathlib.Path('artifacts/parity_v2/cr053_vs_cr070a.json')
           ref_p=pathlib.Path('artifacts/reference_v2/cr053_vs_cr070a.json')
           out={
@@ -125,6 +143,13 @@ jobs:
             'money_margin_role':'diagnostic_only',
             'accelerator_policy':'candidate-specific closed-loop parity PASS required before kagsim may influence promotion',
           }
+          if hosted_p.exists():
+              h=json.loads(hosted_p.read_text())
+              out['hosted_golden_replay_verdict']=h.get('verdict')
+              out['hosted_replays_passed']=h.get('replays_passed')
+              out['hosted_replays_discovered']=h.get('replays_discovered')
+          else:
+              out['hosted_golden_replay_verdict']='NOT_RUN'
           if parity_p.exists():
               p=json.loads(parity_p.read_text())
               out['parity_verdict']=p.get('verdict')
@@ -172,6 +197,7 @@ jobs:
         with:
           name: kaggle-parity-v2-results
           path: |
+            artifacts/hosted_parity/
             artifacts/parity_v2/
             artifacts/reference_v2/
             artifacts/summary_v2/
