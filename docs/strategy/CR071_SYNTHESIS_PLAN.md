@@ -35,6 +35,20 @@ The corrected exact-reference CR053 vs CR070A run used 32 paired seeds / 64 game
 
 This replaces the earlier incorrect interpretation that CR053 had decisively beaten CR070A.
 
+## Hosted-winner shape diagnostic (prior only, never a promotion gate)
+
+The latest public-opponent meta radar contains 10 winner profiles. Comparing each candidate's frozen route/tape to the winner-mean action and market profile produces a useful *shape prior*.
+
+CR053 is unusually close to the public winner archetype:
+
+- worker-action normalized L1 deviation: about **0.041**;
+- seed-purchase normalized L1 deviation: about **0.070**;
+- sell-quantity normalized L1 deviation: about **0.273**.
+
+For comparison, the main alternatives have worker-action deviation roughly 0.117–0.308 and seed-purchase deviation roughly 0.30–0.48. CR053's seed mix is especially close to the public winner mean: WHEAT 132 vs 140.9, CARROT 42 vs 44.1, STRAWBERRY 30 vs 27.7, TOMATO 11 vs 9.1, MELON 13 vs 14.4.
+
+This is **not evidence that CR053 is strongest**. It is a diagnostic explanation for why a static replay-derived policy can remain hosted-competitive and a reason to preserve CR053 as a serious backbone/prior even if a specialized H2H favors another candidate. The exact-reference league and hosted results retain precedence.
+
 ## Why CR071 should not be a naive blend
 
 The six policies differ primarily in *where* they add intelligence around a strong route backbone. Their useful components are not interchangeable:
