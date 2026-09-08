@@ -1,0 +1,130 @@
+name: cr071-tetsu-component-ablation-v1
+
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths:
+      - '.github/workflows/cr071-tetsu-component-ablation-v1.yml'
+      - 'tools/cr071_tetsu_component_ablation.py'
+      - 'tools/cr071_ablation_rank.py'
+      - 'tools/kaggle_reference_h2h_v2.py'
+      - 'tools/kaggle_exact_runtime.py'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen six-agent corpus
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p corpus
+          gh run download 34276243787 -n historical-reference-league-packages -D corpus
+          find corpus -maxdepth 3 -type f -print
+      - name: Build exact one-component ablations
+        run: |
+          BASE="$(find corpus -type f -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -print -quit)"
+          test -n "$BASE"
+          python tools/cr071_tetsu_component_ablation.py --base "$BASE" --output-dir packages
+          cp "$(find corpus -type f -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -print -quit)" packages/CR053_CONTROL.tar.gz
+          cp "$(find corpus -type f -name 'R4D_CR061_INDAR_TOP10_SEATSAFE_V1.tar.gz' -print -quit)" packages/CR061_CONTROL.tar.gz
+          cp "$(find corpus -type f -name 'R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz' -print -quit)" packages/CR065_CONTROL.tar.gz
+          sha256sum packages/*.tar.gz | sort | tee packages/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-ablation-packages
+          path: packages/
+          retention-days: 30
+
+  screen:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        candidate:
+          - { id: PARENT, file: PARENT_SEATSAFE_V1.tar.gz }
+          - { id: CR071A_NO_YARN_GATE, file: CR071A_NO_YARN_GATE_SEATSAFE_V1.tar.gz }
+          - { id: CR071B_NO_CARROT_GATE, file: CR071B_NO_CARROT_GATE_SEATSAFE_V1.tar.gz }
+          - { id: CR071C_NO_MILK_GLUT_GATE, file: CR071C_NO_MILK_GLUT_GATE_SEATSAFE_V1.tar.gz }
+          - { id: CR071D_NO_WEED_DIG, file: CR071D_NO_WEED_DIG_SEATSAFE_V1.tar.gz }
+          - { id: CR071E_NO_ROOM_GUARD, file: CR071E_NO_ROOM_GUARD_SEATSAFE_V1.tar.gz }
+          - { id: CR071F_NO_CLAMP_SELLS, file: CR071F_NO_CLAMP_SELLS_SEATSAFE_V1.tar.gz }
+          - { id: CR071G_NO_DEAD_STOCK, file: CR071G_NO_DEAD_STOCK_SEATSAFE_V1.tar.gz }
+        opponent:
+          - { id: CR070A, file: PARENT_SEATSAFE_V1.tar.gz }
+          - { id: CR065, file: CR065_CONTROL.tar.gz }
+          - { id: CR053, file: CR053_CONTROL.tar.gz }
+          - { id: CR061, file: CR061_CONTROL.tar.gz }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned Kaggle reference
+        run: pip install --disable-pip-version-check 'kaggle-environments==1.32.7'
+      - name: Compile exact-reference runner
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-ablation-packages
+          path: packages
+      - name: Exact Kaggle reference screen — 8 paired seeds / 16 games
+        run: |
+          mkdir -p out
+          python tools/kaggle_reference_h2h_v2.py \
+            --a "packages/${{ matrix.candidate.file }}" \
+            --b "packages/${{ matrix.opponent.file }}" \
+            --a-id "${{ matrix.candidate.id }}" \
+            --b-id "${{ matrix.opponent.id }}" \
+            --seed-count 8 \
+            --output out/result.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-ablation-result-${{ matrix.candidate.id }}-vs-${{ matrix.opponent.id }}
+          path: out/
+          if-no-files-found: ignore
+          retention-days: 30
+
+  aggregate:
+    needs: screen
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download ablation results
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cr071-ablation-result-*
+          path: results
+          merge-multiple: false
+      - name: Rank W/L screen
+        run: |
+          mkdir -p summary
+          python tools/cr071_ablation_rank.py \
+            --input-dir results \
+            --output-json summary/cr071_ablation_screen_v1.json \
+            --output-md summary/cr071_ablation_screen_v1.md
+          cat summary/cr071_ablation_screen_v1.md
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-ablation-screen-v1-summary
+          path: summary/
+          retention-days: 30
