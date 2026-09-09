@@ -1,0 +1,44 @@
+name: cr074-current-hosted-meta-atlas-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr074-current-hosted-meta-atlas-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install public Kaggle dataset client
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install kagglehub
+      - name: Compile CR074
+        run: python -m py_compile tools/cr074_current_hosted_meta_atlas.py
+      - name: Build dynamic current hosted-meta atlas
+        run: |
+          python tools/cr074_current_hosted_meta_atlas.py \
+            --latest-dates 3 \
+            --top-per-date 12 \
+            --output-dir artifacts/cr074
+      - name: Upload CR074 atlas
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr074-current-hosted-meta-atlas-v1
+          path: artifacts/cr074/
+          retention-days: 30
+          if-no-files-found: error
