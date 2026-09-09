@@ -1,12 +1,39 @@
 # ROADMAP — Kculture
 
-> **Current update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded. Do not repeat CR008/CR015.
+> **CURRENT — 2026-09-09:** the authoritative operational plan is [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). It supersedes the immediate-path sections below when they conflict. Current candidate: `CR071M PRESALE1`; current deep validation run: `34359535052`; one hosted probe is justified now while the deep run continues. The CR071O `opp.money > 190` selector is rejected, but CR071 development is **not** closed.
 
-## Objective
+## Current objective
+
+Maximize probability of a **prize-winning / top-10 final finish**, with practical focus on closing the gap from the ~1600 hosted range observed in Kculture toward the current ~2700+ public frontier. Local elegance and exhaustive proof are secondary to expected prize value.
+
+## Current execution invariants
+
+1. User questions do not silently change the plan.
+2. Hosted/live evidence and exact-reference W/L both matter; neither replaces the other.
+3. Qualified materially different candidates should not sit unsubmitted for >24h merely because more local tests are possible.
+4. Five daily submissions are a cap, not a quota; only the latest two active agents matter, so each new submission must justify retiring an active slot.
+5. Narrow hypotheses get discovery -> one fresh confirmation -> broad validation only if still decision-relevant. Failed validation sets are not retuned.
+6. An independent architecture branch remains active in parallel with candidate validation.
+7. All material branches and stop decisions are predeclared in `docs/EXECUTION_CONTRACT_2026-09-09.md`.
+
+## Current immediate path
+
+1. Submit exact frozen `CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz` once as a hosted challenger; record submission ID and hash in the ledger.
+2. Let deep-frontier run `34359535052` finish; do not cancel it because of the hosted probe.
+3. Refresh current ~2700+ public frontier and identify structural mechanisms worth causal testing.
+4. At hosted checkpoint (~60 episodes or ~5h if count unavailable), compare against the active hosted baseline without overreading early Elo noise.
+5. Apply predeclared decision tree A/B/C/D from the execution contract.
+6. Next hosted slot goes only to a materially different validated challenger or deliberate complementary hedge.
+
+---
+
+> **Historical update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded by the current section above where they conflict.
+
+## Objective (historical)
 
 Maximize probability of a **top-10 final finish** in Kaggriculture. Architecture, novelty and elegance are secondary. Use heuristics, search, optimization, ML or planning only when evidence says they improve expected prize value.
 
-## Current gate summary
+## Current gate summary (historical)
 
 - **R0 COMPLETE** — competition entry/facts frozen.
 - **R1 PASS** — exact official starter/environment reproduction.
@@ -51,7 +78,7 @@ Frozen hosted package: `R4B-market-only-validated-v1`.
 
 - exact package/parity passed;
 - Kaggle status Complete / green check;
-- visible rating **161.6 → 135.7 → 110.5**.
+- visible hosted rating **161.6 → 135.7 → 110.5**.
 
 **Status: DELIVERY PASS / CALIBRATION FAIL.**
 
@@ -162,7 +189,7 @@ Use hosted episodes/current meta to construct complementary final agents. Hosted
 
 Reproduce final agents, verify legality/runtime/memory/fallbacks, freeze hashes and submission IDs, and submit before deadline.
 
-## Immediate execution path
+## Immediate execution path (historical)
 
 1. Finish KEXP-041 exploratory replication.
 2. Finish KEXP-045 development screen.
