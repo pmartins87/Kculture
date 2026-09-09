@@ -1,0 +1,224 @@
+name: cr071-presale1-deep-frontier-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-presale1-deep-frontier-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen PRESALE1 corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-confirm-packages
+          path: artifacts/presale
+          run-id: 34315316048
+          github-token: ${{ github.token }}
+      - name: Download frozen historical frontier
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-reference-league-packages
+          path: artifacts/historical
+          run-id: 34276243787
+          github-token: ${{ github.token }}
+      - name: Build deep-frontier corpus and prove new-seed separation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/corpus
+          cp "$(find artifacts/presale -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/PARENT.tar.gz
+          cp "$(find artifacts/presale -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR071M_CR053_PRESALE1.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR053.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR061_INDAR_TOP10_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR061.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR065.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR068A_RANK_V11_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR068A.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR068B_MATH_V4_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR068B.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR070A.tar.gz
+          test -s artifacts/corpus/PARENT.tar.gz
+          test -s artifacts/corpus/CR071M_CR053_PRESALE1.tar.gz
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'tools')
+          from kaggle_exact_runtime import make_seeds
+          old=set()
+          old |= set(make_seeds(64,5809072026))
+          old |= set(make_seeds(32,9092026))
+          old |= set(make_seeds(32,9092027))
+          old |= set(make_seeds(32,9092028))
+          deep=set(make_seeds(64,9092029))
+          overlap=old & deep
+          if overlap:
+              raise SystemExit(f'new-seed firewall failed: {sorted(overlap)}')
+          print('new-seed firewall PASS', len(deep), min(deep), max(deep))
+          PY
+          sha256sum artifacts/corpus/CR071M_CR053_PRESALE1.tar.gz
+          find artifacts/corpus -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum > artifacts/corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-deep-frontier-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - { variant: PARENT, opponent: CR053 }
+          - { variant: PARENT, opponent: CR061 }
+          - { variant: PARENT, opponent: CR065 }
+          - { variant: PARENT, opponent: CR068A }
+          - { variant: PARENT, opponent: CR068B }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR053 }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR061 }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR065 }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR068A }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR068B }
+          - { variant: CR071M_CR053_PRESALE1, opponent: CR070A }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile exact-reference runner
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-deep-frontier-packages
+          path: artifacts/corpus
+      - name: Resolve packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A="artifacts/corpus/${{ matrix.variant }}.tar.gz"
+          B="artifacts/corpus/${{ matrix.opponent }}.tar.gz"
+          test -s "$A" && test -s "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference deep frontier — 64 paired seeds / 128 games
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$A" --b "$B" \
+            --a-id '${{ matrix.variant }}' --b-id '${{ matrix.opponent }}' \
+            --seed-count 64 \
+            --master-seed 9092029 \
+            --output 'artifacts/result/${{ matrix.variant }}_vs_${{ matrix.opponent }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-deep-${{ matrix.variant }}-vs-${{ matrix.opponent }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: h2h
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr071-deep-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate deep-frontier W/L
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              rows.append({
+                  'variant':d['a'],'opponent':d['b'],
+                  'wins':m['wins'],'losses':m['losses'],'ties':m['ties'],
+                  'games':m['games'],'score_rate':m['score_rate'],
+                  'ci95':d.get('paired_seed_uncertainty',{}).get('ci95'),
+              })
+          by={(r['variant'],r['opponent']):r for r in rows}
+          cand='CR071M_CR053_PRESALE1'; parent='PARENT'
+          panel=['CR053','CR061','CR065','CR068A','CR068B']
+          missing=[(v,o) for v in (cand,parent) for o in panel if (v,o) not in by]
+          if (cand,'CR070A') not in by: missing.append((cand,'CR070A'))
+          if missing: raise SystemExit(f'missing H2H results: {missing}')
+          deltas={o:by[(cand,o)]['score_rate']-by[(parent,o)]['score_rate'] for o in panel}
+          cand_points=sum(by[(cand,o)]['wins']+0.5*by[(cand,o)]['ties'] for o in panel)
+          parent_points=sum(by[(parent,o)]['wins']+0.5*by[(parent,o)]['ties'] for o in panel)
+          panel_games=sum(by[(cand,o)]['games'] for o in panel)
+          candidate_panel=cand_points/panel_games
+          parent_panel=parent_points/panel_games
+          direct=by[(cand,'CR070A')]['score_rate']
+          guardrails=['CR061','CR065','CR068A','CR068B']
+          no_material_regression=all(deltas[o] >= -0.03125 for o in guardrails)
+          strong=(deltas['CR053'] >= 0.0625 and no_material_regression and candidate_panel-parent_panel >= 0.015625 and direct >= 0.46875)
+          moderate=(deltas['CR053'] > 0 and no_material_regression and candidate_panel >= parent_panel and direct >= 0.46875)
+          interpretation='STRONG_SUPPORT' if strong else ('MODERATE_SUPPORT' if moderate else 'NO_ROBUST_SUPPORT')
+          out={
+              'schema_version':'kculture-cr071-presale1-deep-frontier-v1-summary',
+              'purpose':'large_fresh_sample_evidence_not_posthoc_threshold_tuning',
+              'primary_metric':'seat-balanced W/L / score_rate',
+              'money_margin_role':'diagnostic_only',
+              'fresh_master_seed':9092029,
+              'fresh_seed_count':64,
+              'rows':rows,
+              'score_rate_delta_candidate_minus_parent':deltas,
+              'candidate_panel_score_rate':candidate_panel,
+              'parent_panel_score_rate':parent_panel,
+              'candidate_vs_cr070a_score_rate':direct,
+              'interpretation_checks':{
+                  'cr053_delta_at_least_0.0625':deltas['CR053'] >= 0.0625,
+                  'no_guardrail_delta_below_minus_0.03125':no_material_regression,
+                  'panel_delta_at_least_0.015625':candidate_panel-parent_panel >= 0.015625,
+                  'candidate_vs_cr070a_at_least_0.46875':direct >= 0.46875,
+              },
+              'interpretation':interpretation,
+              'automatic_kaggle_submission':False,
+          }
+          Path('artifacts/summary').mkdir(parents=True,exist_ok=True)
+          Path('artifacts/summary/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          md=['# CR071 PRESALE1 deep fresh-frontier validation','',
+              f"Candidate panel score: **{candidate_panel:.4f}**",f"Parent panel score: **{parent_panel:.4f}**",f"Panel delta: **{candidate_panel-parent_panel:+.4f}**",f"Candidate vs CR070A: **{direct:.4f}**",'',
+              '| Variant | Opponent | W | L | T | Score | CI95 |','|---|---|---:|---:|---:|---:|---|']
+          for r in sorted(rows,key=lambda x:(x['variant'],x['opponent'])):
+              md.append(f"| {r['variant']} | {r['opponent']} | {r['wins']} | {r['losses']} | {r['ties']} | {r['score_rate']:.4f} | {r['ci95']} |")
+          md += ['', '## Candidate minus parent', '']
+          for o in panel: md.append(f"- {o}: {deltas[o]:+.4f}")
+          md += ['',f"Interpretation: **{interpretation}**"]
+          Path('artifacts/summary/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-deep-frontier-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
