@@ -1,0 +1,186 @@
+name: cr071-presale1-lockstep-telemetry-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-presale1-lockstep-telemetry-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen counterplay corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-cr053-counterplay-packages
+          path: artifacts/corpus
+          run-id: 34311033067
+          github-token: ${{ github.token }}
+      - name: Verify exact packages and telemetry tool
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/cr071_presale1_lockstep_telemetry.py tools/kaggle_exact_runtime.py
+          C=$(find artifacts/corpus -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          P=$(find artifacts/corpus -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          O=$(find artifacts/corpus -name 'CR053_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$C" && test -n "$P" && test -n "$O"
+          sha256sum "$C" "$P" "$O" > artifacts/corpus/TELEMETRY_SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-telemetry-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  telemetry:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        include:
+          - batch: screen
+            master_seed: 5809072026
+            seed_count: 16
+          - batch: confirm
+            master_seed: 9092026
+            seed_count: 32
+          - batch: broad
+            master_seed: 9092027
+            seed_count: 32
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-telemetry-packages
+          path: artifacts/corpus
+      - name: Resolve packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          C=$(find artifacts/corpus -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          P=$(find artifacts/corpus -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          O=$(find artifacts/corpus -name 'CR053_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$C" && test -n "$P" && test -n "$O"
+          echo "C=$C" >> "$GITHUB_ENV"
+          echo "P=$P" >> "$GITHUB_ENV"
+          echo "O=$O" >> "$GITHUB_ENV"
+      - name: Causal lockstep telemetry
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/cr071_presale1_lockstep_telemetry.py \
+            --candidate "$C" --parent "$P" --cr053 "$O" \
+            --seed-count '${{ matrix.seed_count }}' \
+            --master-seed '${{ matrix.master_seed }}' \
+            --batch-id '${{ matrix.batch }}' \
+            --output 'artifacts/result/${{ matrix.batch }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-presale1-telemetry-${{ matrix.batch }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: telemetry
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr071-presale1-telemetry-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate first causal divergence telemetry
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, statistics
+          from collections import Counter, defaultdict
+          from pathlib import Path
+          rows=[]
+          errors=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              errors.extend(d.get('errors',[]))
+              for r in d.get('rows',[]):
+                  r=dict(r); r['batch']=d.get('batch_id'); rows.append(r)
+          if errors:
+              raise SystemExit(f'telemetry errors: {errors[:3]}')
+          # Aggregate by seed (two seats). A seed improves/worsens if average score delta is +/-.
+          byseed=defaultdict(list)
+          for r in rows: byseed[(r['batch'],r['seed'])].append(r)
+          seed_rows=[]
+          key_stats=defaultdict(lambda: Counter())
+          for (batch,seed), rs in sorted(byseed.items()):
+              delta=sum(float(r['score_delta']) for r in rs)/len(rs)
+              cls='improve' if delta>0 else ('worse' if delta<0 else 'same')
+              firsts=[r.get('first_self_divergence') for r in rs if r.get('first_self_divergence')]
+              sig=[]
+              for f in firsts:
+                  d=f.get('sell_delta_candidate_minus_parent') or {}
+                  pos=tuple(sorted((k,int(v)) for k,v in d.items() if int(v)>0))
+                  prices=f.get('market_before',{}).get('prices',{})
+                  priced=tuple((k,prices.get(k)) for k,_ in pos)
+                  sig.append((int(f['step']),pos,priced,bool(f.get('pre_action_worlds_equal'))))
+              key=str(sig[0] if sig else ('NO_DIVERGENCE',))
+              key_stats[key][cls]+=1
+              seed_rows.append({'batch':batch,'seed':seed,'score_delta':delta,'class':cls,'first_signatures':sig})
+          class_counts=Counter(r['class'] for r in seed_rows)
+          # Per game causal sanity and first-divergence summary.
+          sanity={
+              'games':len(rows),
+              'first_divergence_worlds_equal':sum(bool((r.get('first_self_divergence') or {}).get('pre_action_worlds_equal')) for r in rows if r.get('first_self_divergence')),
+              'games_with_first_divergence':sum(r.get('first_self_divergence') is not None for r in rows),
+              'pre_divergence_state_mismatches':sum(r.get('pre_divergence_state_mismatch_step') is not None for r in rows),
+              'pre_divergence_opponent_action_mismatches':sum(r.get('pre_divergence_opponent_action_mismatch_step') is not None for r in rows),
+          }
+          summary={
+              'schema_version':'kculture-cr071-presale1-lockstep-telemetry-v1-summary',
+              'purpose':'causal explanatory only; no promotion',
+              'seed_count':len(seed_rows),
+              'seed_class_counts':dict(class_counts),
+              'causal_sanity':sanity,
+              'first_signature_outcomes':{k:dict(v) for k,v in sorted(key_stats.items(), key=lambda kv:-(kv[1]['improve']+kv[1]['worse']))},
+              'seed_rows':seed_rows,
+          }
+          out=Path('artifacts/summary'); out.mkdir(parents=True,exist_ok=True)
+          (out/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True))
+          md=['# CR071 PRESALE1 lockstep telemetry','',f"Seeds: {len(seed_rows)}; improve={class_counts['improve']}, worse={class_counts['worse']}, same={class_counts['same']}",'',f"Causal sanity: `{sanity}`",'', '## First causal signatures', '', '| Signature | Improve | Worse | Same |','|---|---:|---:|---:|']
+          for k,v in sorted(key_stats.items(), key=lambda kv:-(kv[1]['improve']+kv[1]['worse']+kv[1]['same'])):
+              md.append(f"| `{k}` | {v['improve']} | {v['worse']} | {v['same']} |")
+          (out/'summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-lockstep-telemetry-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
