@@ -1,10 +1,80 @@
 # STATUS — Kculture
 
-> **Current update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded. Do not repeat CR008/CR015.
+> **CURRENT — 2026-09-09:** authoritative operational plan: [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). Current qualified hosted challenger: `CR071M PRESALE1`; deep-frontier run `34359535052` is active. CR071O selector hypothesis is rejected only; CR071/PRESALE1 development remains active.
+
+## Current mission
+
+Maximize probability of a prize-winning / top-10 final result in Kaggriculture. The practical strategic problem is to close the gap between Kculture's recent ~1600 hosted range and a current public frontier with agents/notebooks around 2700+.
+
+## Current hosted policy
+
+- Final submission deadline: 2026-09-30 23:59 UTC.
+- Daily cap: 5 submissions.
+- Only the latest two submissions remain active and feed final evaluation; team score uses the better active agent, so slot 2 is a hedge.
+- Five/day is not a quota. Keep one incumbent and one materially different challenger/hedge.
+- A qualified candidate must not remain local-only for >24h merely because more tests are possible.
+- Live Elo/rating is calibration evidence; final objective is post-deadline Bradley-Terry performance.
+
+## Current candidate — CR071M PRESALE1
+
+Frozen package: `CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz`
+
+SHA256: `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652`
+
+Four independent CR053 batches, exact reference, both seats:
+
+1. screen: PRESALE1 20-12; PARENT 13-19;
+2. fresh confirmation: 38-26 vs 24-40;
+3. broad frontier: 36-28 vs 32-32;
+4. fourth fresh set: 44-20 vs 36-28.
+
+Diagnostic combined: PRESALE1 138-86 (61.61%) vs PARENT 105-119 (46.88%), 112 paired seeds / 224 games per policy.
+
+CR071O `opp.money > 190` selector failed fresh validation and is closed. Do not retune that selector on the same evidence.
+
+**Decision:** CR071M qualifies for one hosted probe now while local deep validation continues.
+
+## Current local validation
+
+Run `34359535052` — `cr071-presale1-deep-frontier-v1`.
+
+- exact `kaggle-environments==1.32.7`;
+- 64 fresh paired seeds / 128 games per matchup;
+- 11 H2Hs / 1,408 games total;
+- PARENT and PRESALE1 vs CR053/CR061/CR065/CR068A/CR068B;
+- PRESALE1 direct vs CR070A;
+- seed firewall passed.
+
+Do not cancel because a hosted probe is running. Local deep validation and hosted calibration answer different questions.
+
+## Current parallel architecture branch
+
+Regardless of PRESALE1 result:
+
+1. refresh strongest current public agents/notebooks and freeze time-stamped identities/scores;
+2. reproduce exact packages locally where possible;
+3. compare production, route, shop, market and adaptation mechanics to CR070A/PRESALE1;
+4. use hosted losses + public episode datasets to recalibrate opponent families;
+5. prioritize mechanisms with plausible prize-scale W/L ceiling rather than tiny money-margin gains;
+6. next hosted challenger must be materially different unless it is a deliberate control.
+
+## Decision tree
+
+See `docs/EXECUTION_CONTRACT_2026-09-09.md`. In brief:
+
+- local strong + hosted strong -> PRESALE1 becomes incumbent candidate; next work is independent architectural challenger;
+- local strong + hosted weak -> hosted failure diagnosis/pivot; do not keep adding local seeds to rationalize it;
+- local weak + hosted strong -> recalibrate local panel around hosted-relevant families;
+- both weak -> reject PRESALE1 and pivot architecture;
+- immature hosted trajectory -> wait only until the explicit hosted checkpoint, not indefinitely.
+
+---
+
+> **Historical update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The remainder below is historical and superseded by the current section above where it conflicts.
 
 Last updated: 2026-08-30
 
-## Mission
+## Mission (historical)
 
 **Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
 
