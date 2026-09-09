@@ -1,0 +1,64 @@
+name: cr071-cr053-vs-cr070a-action-trace-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-cr053-vs-cr070a-action-trace-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile action tracer
+        run: |
+          python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_action_trace.py
+      - name: Download frozen six-agent corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-reference-league-packages
+          path: artifacts/packages
+          run-id: 34276243787
+          github-token: ${{ github.token }}
+      - name: Resolve CR053 and CR070A packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A=$(find artifacts/packages -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -type f -print -quit)
+          B=$(find artifacts/packages -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          test -n "$A" && test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference action trace — 16 paired seeds
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_action_trace.py \
+            --a "$A" --b "$B" \
+            --a-id CR053 --b-id CR070A \
+            --seed-count 16 \
+            --master-seed 5809072026 \
+            --output artifacts/result/CR053_vs_CR070A_action_trace.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-cr053-vs-cr070a-action-trace-v1
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
