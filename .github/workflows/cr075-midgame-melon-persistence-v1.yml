@@ -1,0 +1,134 @@
+name: cr075-midgame-melon-persistence-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr075-midgame-melon-persistence-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download canonical parent package
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-confirm-packages
+          path: artifacts/control
+          run-id: 34315316048
+          github-token: ${{ github.token }}
+      - name: Build the single frozen CR075 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m py_compile tools/cr075_midgame_melon_persistence.py
+          PARENT="$(find artifacts/control -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)"
+          test -s "$PARENT"
+          mkdir -p artifacts/package
+          cp "$PARENT" artifacts/package/PARENT_SEATSAFE_V1.tar.gz
+          python tools/cr075_midgame_melon_persistence.py \
+            --base artifacts/package/PARENT_SEATSAFE_V1.tar.gz \
+            --output-dir artifacts/package
+          test -s artifacts/package/CR075_MIDGAME_MELON_PERSISTENCE_SEATSAFE_V1.tar.gz
+          sha256sum artifacts/package/*.tar.gz > artifacts/package/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr075-midgame-melon-persistence-packages
+          path: artifacts/package/
+          retention-days: 30
+          if-no-files-found: error
+
+  audit:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile exact CR075 audit
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/cr075_melon_persistence_audit.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr075-midgame-melon-persistence-packages
+          path: artifacts/package
+      - name: Fresh-seed firewall
+        shell: bash
+        run: |
+          PYTHONPATH=tools python - <<'PY'
+          from kaggle_exact_runtime import make_seeds
+          prior=set()
+          for n,m in [(64,5809072026),(64,9092026),(64,9092027),(64,9092028),(64,9092029),(32,9092031)]:
+              prior |= set(make_seeds(n,m))
+          fresh=set(make_seeds(12,9092032))
+          overlap=prior & fresh
+          if overlap:
+              raise SystemExit(f'CR075 fresh-seed firewall failed: {sorted(overlap)}')
+          print('CR075 fresh-seed firewall PASS', len(fresh), min(fresh), max(fresh))
+          PY
+      - name: Exact mechanical and causal audit — 12 paired seeds / 24 games
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/audit
+          PYTHONPATH=tools python tools/cr075_melon_persistence_audit.py \
+            --candidate artifacts/package/CR075_MIDGAME_MELON_PERSISTENCE_SEATSAFE_V1.tar.gz \
+            --parent artifacts/package/PARENT_SEATSAFE_V1.tar.gz \
+            --seed-count 12 \
+            --master-seed 9092032 \
+            --output artifacts/audit/audit.json
+      - name: Freeze gate summary
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('artifacts/audit/audit.json').read_text())
+          cp=d['checkpoint_melon']; ph=d['sell_melon_by_phase']; ex=d['intervention_execution']
+          md=[
+            '# CR075 — Midgame Melon Persistence', '',
+            f"Gate: **{d['gate']}**", f"Next action: `{d['next_action']}`", '',
+            '## Frozen intervention execution', '',
+            f"- step264 MELON seed buy=3: {ex['step264_buy_melon3_games']}/{d['games']} games",
+            f"- step264 CARROT seed buy removed: {ex['step264_buy_carrot0_games']}/{d['games']} games",
+            f"- step275 >=1 MELON plant: {ex['step275_plant_melon1_games']}/{d['games']} games",
+            f"- step277 >=2 MELON plants: {ex['step277_plant_melon2_games']}/{d['games']} games", '',
+            '## Causal public-state effect', '',
+          ]
+          for k in ('288','432','576','696'):
+              x=cp[k]
+              md.append(f"- cp{k}: candidate MELON median {x['candidate_median_crop_melon']} vs parent {x['parent_median_crop_melon']} (delta {x['median_delta_crop_melon']})")
+          md += ['', '## Actual MELON sell timing', '']
+          for k in ('0','1','2','3','4'):
+              x=ph[k]
+              md.append(f"- phase {k}: candidate median {x['candidate_median_sell_qty']} vs parent {x['parent_median_sell_qty']}")
+          md += ['', f"Local candidate-vs-parent score rate (diagnostic safety floor only): {d['candidate_local_score_rate_diagnostic_only']}", f"Non-DONE games: {d['non_done_games']}", '', 'No automatic Kaggle submission.']
+          Path('artifacts/audit/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr075-midgame-melon-persistence-audit-v1
+          path: artifacts/audit/
+          retention-days: 30
+          if-no-files-found: warn
