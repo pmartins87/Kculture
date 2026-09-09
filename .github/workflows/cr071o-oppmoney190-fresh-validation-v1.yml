@@ -1,0 +1,173 @@
+name: cr071o-oppmoney190-fresh-validation-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071o-oppmoney190-fresh-validation-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen PRESALE1 corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-telemetry-packages
+          path: artifacts/source
+          run-id: 34349439774
+          github-token: ${{ github.token }}
+      - name: Build CR071O and prove fourth-seed separation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/corpus
+          PRESALE=$(find artifacts/source -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          test -n "$PRESALE"
+          python tools/cr071_presale1_oppmoney_gate.py --presale1 "$PRESALE" --output-dir artifacts/corpus
+          cp "$PRESALE" artifacts/corpus/CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz
+          cp "$(find artifacts/source -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/PARENT_SEATSAFE_V1.tar.gz
+          for OPP in CR053 CR061 CR065; do
+            cp "$(find artifacts/source -name "${OPP}_CONTROL.tar.gz" -type f -print -quit)" "artifacts/corpus/${OPP}_CONTROL.tar.gz"
+          done
+          PYTHONPATH=. python - <<'PY'
+          from tools.kaggle_exact_runtime import make_seeds
+          old = set(make_seeds(16,5809072026)) | set(make_seeds(32,9092026)) | set(make_seeds(32,9092027))
+          new = set(make_seeds(32,9092028))
+          overlap = sorted(old & new)
+          print({'old_unique':len(old),'new_unique':len(new),'overlap':overlap})
+          assert not overlap, overlap
+          PY
+          python -m py_compile tools/cr071_presale1_oppmoney_gate.py tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+          find artifacts/corpus -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum > artifacts/corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071o-oppmoney190-fresh-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        include:
+          - a_id: CR071O_CR053_PRESALE1_OPPMONEY190
+            a_file: CR071O_CR053_PRESALE1_OPPMONEY190_SEATSAFE_V1.tar.gz
+            opponent: CR053
+          - a_id: CR071M_CR053_PRESALE1
+            a_file: CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz
+            opponent: CR053
+          - a_id: PARENT
+            a_file: PARENT_SEATSAFE_V1.tar.gz
+            opponent: CR053
+          - a_id: CR071O_CR053_PRESALE1_OPPMONEY190
+            a_file: CR071O_CR053_PRESALE1_OPPMONEY190_SEATSAFE_V1.tar.gz
+            opponent: CR061
+          - a_id: CR071O_CR053_PRESALE1_OPPMONEY190
+            a_file: CR071O_CR053_PRESALE1_OPPMONEY190_SEATSAFE_V1.tar.gz
+            opponent: CR065
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071o-oppmoney190-fresh-packages
+          path: artifacts/corpus
+      - name: Resolve exact packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A=$(find artifacts/corpus -name '${{ matrix.a_file }}' -type f -print -quit)
+          B=$(find artifacts/corpus -name '${{ matrix.opponent }}_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$A" && test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference fourth-seed validation — 32 paired seeds / 64 games
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$A" --b "$B" \
+            --a-id '${{ matrix.a_id }}' --b-id '${{ matrix.opponent }}' \
+            --seed-count 32 --master-seed 9092028 \
+            --output 'artifacts/result/${{ matrix.a_id }}_vs_${{ matrix.opponent }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071o-fresh-${{ matrix.a_id }}-vs-${{ matrix.opponent }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: h2h
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr071o-fresh-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate fresh W/L and frozen selector gate
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              rows.append({'variant':d['a'],'opponent':d['b'],'wins':m['wins'],'losses':m['losses'],'ties':m['ties'],'games':m['games'],'score_rate':m['score_rate'],'ci95':d.get('paired_seed_uncertainty',{}).get('ci95')})
+          by={(r['variant'],r['opponent']):r for r in rows}
+          o='CR071O_CR053_PRESALE1_OPPMONEY190'; m='CR071M_CR053_PRESALE1'; p='PARENT'
+          o53=by[(o,'CR053')]; m53=by[(m,'CR053')]; p53=by[(p,'CR053')]
+          o61=by[(o,'CR061')]; o65=by[(o,'CR065')]
+          gap_m=o53['score_rate']-m53['score_rate']; gap_p=o53['score_rate']-p53['score_rate']
+          checks={
+            'beats_presale1_by_at_least_2_games': gap_m >= (2/64)-1e-12,
+            'beats_parent_by_at_least_4_games': gap_p >= (4/64)-1e-12,
+            'cr061_guardrail_ge_0_90': o61['score_rate'] >= 0.90,
+            'cr065_guardrail_ge_0_90': o65['score_rate'] >= 0.90,
+          }
+          passed=all(checks.values())
+          out={'schema_version':'kculture-cr071o-oppmoney190-fresh-validation-v1-summary','primary_metric':'seat-balanced W/L / score_rate','master_seed':9092028,'seed_count':32,'selector_frozen_from_run':34351223145,'rows':rows,'gaps':{'vs_presale1_cr053':gap_m,'vs_parent_cr053':gap_p},'checks':checks,'gate_pass':passed,'decision':'EXPAND_CR071O_BROAD_CONFIRMATION' if passed else 'REJECT_CR071O_FRESH_GATE','automatic_kaggle_submission':False}
+          Path('artifacts/summary').mkdir(parents=True,exist_ok=True)
+          Path('artifacts/summary/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          md=['# CR071O fresh validation','',f"Decision: **{out['decision']}**",'', '| Variant | Opponent | W | L | T | Score |','|---|---|---:|---:|---:|---:|']
+          for r in sorted(rows,key=lambda x:(x['variant'],x['opponent'])): md.append(f"| {r['variant']} | {r['opponent']} | {r['wins']} | {r['losses']} | {r['ties']} | {r['score_rate']:.4f} |")
+          md += ['',f"CR053 gain vs PRESALE1: {gap_m:+.4f}",f"CR053 gain vs PARENT: {gap_p:+.4f}",'',f"Checks: `{checks}`"]
+          Path('artifacts/summary/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071o-oppmoney190-fresh-validation-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
