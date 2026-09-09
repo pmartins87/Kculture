@@ -1,0 +1,164 @@
+name: cr071-tetsu-gate-family-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-tetsu-gate-family-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen historical corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-reference-league-packages
+          path: artifacts/historical
+          run-id: 34276243787
+          github-token: ${{ github.token }}
+      - name: Build targeted Tetsu gate family
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE=$(find artifacts/historical -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          test -n "$BASE"
+          mkdir -p artifacts/corpus
+          python tools/cr071_tetsu_gate_family.py --base "$BASE" --output-dir artifacts/corpus
+          cp "$(find artifacts/historical -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR053_CONTROL.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR061_INDAR_TOP10_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR061_CONTROL.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR065_FARMING_SCORE_V3_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR065_CONTROL.tar.gz
+          find artifacts/corpus -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum > artifacts/corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-tetsu-gate-family-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  screen:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        variant:
+          - PARENT
+          - CR071I_NO_YARN_GATE
+          - CR071J_NO_MILK_GLUT_GATE
+          - CR071K_MAIN_ONLY
+        opponent:
+          - CR053
+          - CR061
+          - CR065
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile exact-reference runner
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-tetsu-gate-family-packages
+          path: artifacts/corpus
+      - name: Resolve packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A=$(find artifacts/corpus -name '${{ matrix.variant }}_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          B=$(find artifacts/corpus -name '${{ matrix.opponent }}_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$A" && test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference gate-family screen — 16 paired seeds / 32 games
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$A" --b "$B" \
+            --a-id '${{ matrix.variant }}' --b-id '${{ matrix.opponent }}' \
+            --seed-count 16 \
+            --master-seed 5809072026 \
+            --output 'artifacts/result/${{ matrix.variant }}_vs_${{ matrix.opponent }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-gate-${{ matrix.variant }}-vs-${{ matrix.opponent }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: screen
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr071-gate-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate W/L only
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              rows.append({
+                  'variant': d['a'], 'opponent': d['b'],
+                  'wins': m['wins'], 'losses': m['losses'], 'ties': m['ties'],
+                  'games': m['games'], 'score_rate': m['score_rate'],
+                  'ci95': d.get('paired_seed_uncertainty',{}).get('ci95'),
+              })
+          variants=sorted({r['variant'] for r in rows})
+          summary=[]
+          for v in variants:
+              rs=[r for r in rows if r['variant']==v]
+              games=sum(r['games'] for r in rs)
+              wins=sum(r['wins'] for r in rs)
+              losses=sum(r['losses'] for r in rs)
+              ties=sum(r['ties'] for r in rs)
+              summary.append({'variant':v,'wins':wins,'losses':losses,'ties':ties,'games':games,'score_rate':(wins+0.5*ties)/games if games else 0})
+          summary.sort(key=lambda x:(-x['score_rate'],x['variant']))
+          out={'schema_version':'kculture-cr071-gate-family-v1-summary','primary_metric':'seat-balanced W/L / score_rate','money_margin_role':'diagnostic_only','rows':rows,'summary':summary,'automatic_kaggle_submission':False}
+          Path('artifacts/summary').mkdir(parents=True,exist_ok=True)
+          Path('artifacts/summary/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          md=['# CR071 Tetsu gate family v1','', '| Variant | W | L | T | Score |','|---|---:|---:|---:|---:|']
+          for x in summary:
+              md.append(f"| {x['variant']} | {x['wins']} | {x['losses']} | {x['ties']} | {x['score_rate']:.4f} |")
+          md += ['', '## Pairwise', '', '| Variant | Opponent | W | L | T | Score | CI95 |','|---|---|---:|---:|---:|---:|---|']
+          for r in sorted(rows,key=lambda x:(x['variant'],x['opponent'])):
+              md.append(f"| {r['variant']} | {r['opponent']} | {r['wins']} | {r['losses']} | {r['ties']} | {r['score_rate']:.4f} | {r['ci95']} |")
+          Path('artifacts/summary/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-tetsu-gate-family-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
