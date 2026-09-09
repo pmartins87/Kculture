@@ -1,0 +1,194 @@
+name: cr073-public-frontier-exact-benchmark-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr073-public-frontier-exact-benchmark-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download CR072 public frontier corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr072-public-frontier-corpus-v1
+          path: artifacts/public
+          run-id: 34370093160
+          github-token: ${{ github.token }}
+      - name: Download frozen PRESALE1 corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-confirm-packages
+          path: artifacts/presale
+          run-id: 34315316048
+          github-token: ${{ github.token }}
+      - name: Download frozen historical frontier
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-reference-league-packages
+          path: artifacts/historical
+          run-id: 34276243787
+          github-token: ${{ github.token }}
+      - name: Build benchmark corpus and prove seed separation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/corpus
+          cp "$(find artifacts/public -path '*rayk_v11_2990/submission.tar.gz' -type f -print -quit)" artifacts/corpus/RAYK_V11.tar.gz
+          cp "$(find artifacts/public -path '*moon_v11_2736/submission.tar.gz' -type f -print -quit)" artifacts/corpus/MOON_V11.tar.gz
+          cp "$(find artifacts/public -path '*multiroute_v59_2767/submission.tar.gz' -type f -print -quit)" artifacts/corpus/MULTIROUTE_V59.tar.gz
+          cp "$(find artifacts/public -path '*indar_v1_2686/submission.tar.gz' -type f -print -quit)" artifacts/corpus/INDAR_PUBLIC_V1.tar.gz
+          cp "$(find artifacts/presale -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/PRESALE1.tar.gz
+          cp "$(find artifacts/historical -name 'R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR070A.tar.gz
+          for f in artifacts/corpus/*.tar.gz; do test -s "$f"; done
+          python - <<'PY'
+          import sys
+          sys.path.insert(0, 'tools')
+          from kaggle_exact_runtime import make_seeds
+          old=set()
+          for count,master in [(64,5809072026),(32,9092026),(32,9092027),(32,9092028),(64,9092029)]:
+              old |= set(make_seeds(count,master))
+          fresh=set(make_seeds(32,9092030))
+          overlap=old & fresh
+          if overlap:
+              raise SystemExit(f'fresh-seed firewall failed: {sorted(overlap)}')
+          print('fresh-seed firewall PASS', len(fresh), min(fresh), max(fresh))
+          PY
+          find artifacts/corpus -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum > artifacts/corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr073-public-frontier-benchmark-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - { a: RAYK_V11, b: CR070A }
+          - { a: RAYK_V11, b: PRESALE1 }
+          - { a: MOON_V11, b: CR070A }
+          - { a: MOON_V11, b: PRESALE1 }
+          - { a: MULTIROUTE_V59, b: CR070A }
+          - { a: MULTIROUTE_V59, b: PRESALE1 }
+          - { a: INDAR_PUBLIC_V1, b: CR070A }
+          - { a: INDAR_PUBLIC_V1, b: PRESALE1 }
+          - { a: RAYK_V11, b: MOON_V11 }
+          - { a: RAYK_V11, b: MULTIROUTE_V59 }
+          - { a: RAYK_V11, b: INDAR_PUBLIC_V1 }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile exact-reference runner
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr073-public-frontier-benchmark-packages
+          path: artifacts/corpus
+      - name: Resolve packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A="artifacts/corpus/${{ matrix.a }}.tar.gz"
+          B="artifacts/corpus/${{ matrix.b }}.tar.gz"
+          test -s "$A" && test -s "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference public frontier — 32 paired seeds / 64 games
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$A" --b "$B" \
+            --a-id '${{ matrix.a }}' --b-id '${{ matrix.b }}' \
+            --seed-count 32 \
+            --master-seed 9092030 \
+            --output 'artifacts/result/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr073-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: h2h
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr073-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate and apply frozen architecture decision
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              rows.append({'a':d['a'],'b':d['b'],'wins':m['wins'],'losses':m['losses'],'ties':m['ties'],'games':m['games'],'score_rate':m['score_rate'],'ci95':d.get('paired_seed_uncertainty',{}).get('ci95')})
+          by={(r['a'],r['b']):r for r in rows}
+          publics=['RAYK_V11','MOON_V11','MULTIROUTE_V59','INDAR_PUBLIC_V1']
+          anchors=['CR070A','PRESALE1']
+          missing=[(p,a) for p in publics for a in anchors if (p,a) not in by]
+          if missing: raise SystemExit(f'missing anchor H2H: {missing}')
+          anchor_mean={p:sum(by[(p,a)]['score_rate'] for a in anchors)/2 for p in publics}
+          qualifies={p:all(by[(p,a)]['score_rate'] >= 0.5625 for a in anchors) for p in publics}
+          q=[p for p in publics if qualifies[p]]
+          if q:
+              target=max(q,key=lambda p:(anchor_mean[p],p))
+              decision='TARGET_'+target+'_ARCHITECTURE'
+          else:
+              target=None
+              decision='LOCAL_HOSTED_META_MISMATCH_PRIORITIZE_HOSTED_REPLAYS'
+          out={'schema_version':'kculture-cr073-public-frontier-benchmark-v1-summary','purpose':'architecture_discovery_not_submission_promotion','reference_backend':'kaggle-environments==1.32.7','fresh_master_seed':9092030,'fresh_seed_count':32,'rows':rows,'anchor_mean_score':anchor_mean,'qualifies_both_anchors_ge_0.5625':qualifies,'decision':decision,'automatic_kaggle_submission':False}
+          Path('artifacts/summary').mkdir(parents=True,exist_ok=True)
+          Path('artifacts/summary/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          md=['# CR073 public-frontier exact benchmark','',f'Decision: **{decision}**','', '| A | B | W | L | T | Score | CI95 |','|---|---|---:|---:|---:|---:|---|']
+          for r in sorted(rows,key=lambda x:(x['a'],x['b'])):
+              md.append(f"| {r['a']} | {r['b']} | {r['wins']} | {r['losses']} | {r['ties']} | {r['score_rate']:.4f} | {r['ci95']} |")
+          md += ['', '## Anchor means']
+          for p in publics:
+              md.append(f"- {p}: {anchor_mean[p]:.4f}; qualifies={qualifies[p]}")
+          Path('artifacts/summary/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr073-public-frontier-exact-benchmark-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
