@@ -1,0 +1,191 @@
+name: cr071-cr053-presale1-confirm-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr071-cr053-presale1-confirm-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download frozen counterplay corpus from screen run
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-cr053-counterplay-packages
+          path: artifacts/corpus
+          run-id: 34311033067
+          github-token: ${{ github.token }}
+      - name: Verify candidate/control packages and fresh-seed firewall
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f artifacts/corpus/PARENT_SEATSAFE_V1.tar.gz
+          test -f artifacts/corpus/CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz
+          test -f artifacts/corpus/CR053_CONTROL.tar.gz
+          test -f artifacts/corpus/CR061_CONTROL.tar.gz
+          test -f artifacts/corpus/CR065_CONTROL.tar.gz
+          PYTHONPATH=tools python - <<'PY'
+          from kaggle_exact_runtime import make_seeds
+          discovery=set(make_seeds(16, 5809072026))
+          confirm=set(make_seeds(32, 9092026))
+          overlap=sorted(discovery & confirm)
+          assert not overlap, f'fresh-seed firewall violated: {overlap}'
+          print('fresh_seed_firewall=PASS')
+          print('confirmation_seed_count=', len(confirm))
+          PY
+          find artifacts/corpus -maxdepth 1 -type f -print0 | sort -z | xargs -0 sha256sum
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-confirm-packages
+          path: artifacts/corpus/
+          retention-days: 30
+          if-no-files-found: error
+
+  confirm:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        variant:
+          - PARENT
+          - CR071M_CR053_PRESALE1
+        opponent:
+          - CR053
+          - CR061
+          - CR065
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Compile exact-reference runner
+        run: python -m py_compile tools/kaggle_exact_runtime.py tools/kaggle_reference_h2h_v2.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-confirm-packages
+          path: artifacts/corpus
+      - name: Resolve packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          A=$(find artifacts/corpus -name '${{ matrix.variant }}_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          B=$(find artifacts/corpus -name '${{ matrix.opponent }}_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$A" && test -n "$B"
+          echo "A=$A" >> "$GITHUB_ENV"
+          echo "B=$B" >> "$GITHUB_ENV"
+      - name: Exact-reference fresh confirmation — 32 paired seeds / 64 games
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/kaggle_reference_h2h_v2.py \
+            --a "$A" --b "$B" \
+            --a-id '${{ matrix.variant }}' --b-id '${{ matrix.opponent }}' \
+            --seed-count 32 \
+            --master-seed 9092026 \
+            --output 'artifacts/result/${{ matrix.variant }}_vs_${{ matrix.opponent }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr071-presale1-confirm-${{ matrix.variant }}-vs-${{ matrix.opponent }}
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: confirm
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr071-presale1-confirm-*-vs-*
+          path: artifacts/results
+          merge-multiple: true
+      - name: Aggregate fresh-seed W/L and confirmation gate
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          rows=[]
+          for p in sorted(Path('artifacts/results').glob('*.json')):
+              d=json.loads(p.read_text())
+              m=d['metrics_a_vs_b']
+              rows.append({
+                  'variant': d['a'], 'opponent': d['b'],
+                  'wins': m['wins'], 'losses': m['losses'], 'ties': m['ties'],
+                  'games': m['games'], 'score_rate': m['score_rate'],
+                  'ci95': d.get('paired_seed_uncertainty',{}).get('ci95'),
+              })
+          by={(r['variant'],r['opponent']):r for r in rows}
+          variants=sorted({r['variant'] for r in rows})
+          summary=[]
+          for v in variants:
+              rs=[r for r in rows if r['variant']==v]
+              games=sum(r['games'] for r in rs)
+              wins=sum(r['wins'] for r in rs)
+              losses=sum(r['losses'] for r in rs)
+              ties=sum(r['ties'] for r in rs)
+              summary.append({'variant':v,'wins':wins,'losses':losses,'ties':ties,'games':games,'score_rate':(wins+0.5*ties)/games if games else 0})
+          summary.sort(key=lambda x:(-x['score_rate'],x['variant']))
+          c='CR071M_CR053_PRESALE1'; p='PARENT'
+          improvement={opp: by[(c,opp)]['score_rate']-by[(p,opp)]['score_rate'] for opp in ('CR053','CR061','CR065')}
+          gate=bool(
+              improvement['CR053'] > 0
+              and improvement['CR061'] >= 0
+              and improvement['CR065'] >= 0
+              and next(x for x in summary if x['variant']==c)['score_rate'] > next(x for x in summary if x['variant']==p)['score_rate']
+          )
+          out={
+              'schema_version':'kculture-cr071-presale1-confirm-v1-summary',
+              'primary_metric':'seat-balanced W/L / score_rate',
+              'money_margin_role':'diagnostic_only',
+              'fresh_master_seed':9092026,
+              'fresh_seed_count':32,
+              'rows':rows,
+              'summary':summary,
+              'score_rate_delta_candidate_minus_parent':improvement,
+              'confirmation_gate_pass':gate,
+              'decision':'EXPAND_TO_BROAD_FRONTIER_CONFIRMATION' if gate else 'DO_NOT_PROMOTE_PRESALE1',
+              'automatic_kaggle_submission':False,
+          }
+          Path('artifacts/summary').mkdir(parents=True,exist_ok=True)
+          Path('artifacts/summary/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          md=['# CR071 PRESALE1 fresh-seed confirmation','', '| Variant | W | L | T | Score |','|---|---:|---:|---:|---:|']
+          for x in summary:
+              md.append(f"| {x['variant']} | {x['wins']} | {x['losses']} | {x['ties']} | {x['score_rate']:.4f} |")
+          md += ['', '## Pairwise', '', '| Variant | Opponent | W | L | T | Score | CI95 |','|---|---|---:|---:|---:|---:|---|']
+          for r in sorted(rows,key=lambda x:(x['variant'],x['opponent'])):
+              md.append(f"| {r['variant']} | {r['opponent']} | {r['wins']} | {r['losses']} | {r['ties']} | {r['score_rate']:.4f} | {r['ci95']} |")
+          md += ['', f"Confirmation gate: **{'PASS' if gate else 'FAIL'}**", '', f"Decision: `{out['decision']}`"]
+          Path('artifacts/summary/summary.md').write_text('\n'.join(md)+'\n')
+          print('\n'.join(md))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-confirm-v1-summary
+          path: artifacts/summary/
+          retention-days: 30
+          if-no-files-found: error
