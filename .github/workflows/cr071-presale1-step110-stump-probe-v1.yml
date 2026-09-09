@@ -1,0 +1,56 @@
+name: cr071-presale1-step110-stump-probe-v1
+'on':
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: ['.github/workflows/cr071-presale1-step110-stump-probe-v1.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+      - name: Install pinned Kaggle reference
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download frozen counterplay corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr071-cr053-counterplay-packages
+          path: artifacts/corpus
+          run-id: 34311033067
+          github-token: ${{ github.token }}
+      - name: Resolve exact packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          C=$(find artifacts/corpus -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          P=$(find artifacts/corpus -name 'PARENT_SEATSAFE_V1.tar.gz' -type f -print -quit)
+          O=$(find artifacts/corpus -name 'CR053_CONTROL.tar.gz' -type f -print -quit)
+          test -n "$C" && test -n "$P" && test -n "$O"
+          echo "C=$C" >> "$GITHUB_ENV"
+          echo "P=$P" >> "$GITHUB_ENV"
+          echo "O=$O" >> "$GITHUB_ENV"
+          python -m py_compile tools/cr071_presale1_step110_stump_probe.py tools/kaggle_exact_runtime.py
+      - name: Discovery-only step110 stump probe
+        run: |
+          mkdir -p artifacts/result
+          PYTHONPATH=tools python tools/cr071_presale1_step110_stump_probe.py \
+            --candidate "$C" --parent "$P" --cr053 "$O" \
+            --output artifacts/result/step110_stump_probe.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr071-presale1-step110-stump-probe-v1
+          path: artifacts/result/*.json
+          retention-days: 30
+          if-no-files-found: error
