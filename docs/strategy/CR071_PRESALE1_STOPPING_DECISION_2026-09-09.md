@@ -1,12 +1,20 @@
-# CR071 PRESALE1 stopping decision — 2026-09-09
+# CR071 PRESALE1 development policy — 2026-09-09
 
-## Decision
+## Correction
 
-The CR071O opponent-money selector is rejected. Do not create further CR071P/Q/R variants derived from the same step-110 selector hypothesis.
+The previous wording in this document incorrectly treated a user question about possible infinite testing as an instruction to stop local development. That was not the user's intent.
 
-The simple CR071M `PRESALE1` variant is the nominated candidate for the next hosted Kaggle probe. Local micro-tuning on this line stops here.
+The corrected policy is:
 
-## Why the selector line stops
+- do **not** stop evidence-generating work merely because many tests have already been run;
+- do **not** create an open-ended chain of post-hoc threshold tweaks after every near miss;
+- stop only a **specific falsified hypothesis/variant family** when its pre-registered gate fails;
+- continue with higher-information validation or a genuinely independent strategy hypothesis when useful;
+- hosted Kaggle evidence remains important, but it is not an artificial prerequisite for all further local research.
+
+## What is actually closed
+
+The CR071O opponent-money selector is rejected. Do not create further variants that merely retune the same step-110 opponent-money threshold on the already observed data.
 
 Fresh validation run `34353924026` used 32 paired seeds from a fourth independent seed set (`master_seed=9092028`).
 
@@ -18,9 +26,11 @@ Fresh validation run `34353924026` used 32 paired seeds from a fourth independen
 
 CR071O failed its frozen gate because it did not beat PRESALE1 by at least two games. Decision from the workflow: `REJECT_CR071O_FRESH_GATE`.
 
-## Four independent CR053 replications for PRESALE1
+## What remains open
 
-Using the frozen CR071M package and exact Kaggle reference environment:
+The simple CR071M `PRESALE1` remains a strong candidate and should continue to receive evidence-driven evaluation and, where justified, independent improvements that are not post-hoc retuning of the failed OPPMONEY190 selector.
+
+Four independent CR053 replications currently favor PRESALE1 over PARENT:
 
 1. Screen: PRESALE1 20-12 vs PARENT 13-19
 2. Fresh confirmation: PRESALE1 38-26 vs PARENT 24-40
@@ -33,13 +43,13 @@ Combined diagnostic total across the four independent batches:
 - PARENT: 105-119 = 46.88%
 - 112 paired seeds / 224 games per policy against CR053
 
-Every independent batch favored PRESALE1 over PARENT. This combined total is diagnostic rather than a new post-hoc promotion gate, but it is sufficient to stop further local selector tuning and move to a hosted probe.
+This combined total is diagnostic rather than a newly invented promotion gate. It supports continuing the line, not ending it prematurely.
 
 ## Robustness already observed
 
 Across prior screen, fresh confirmation, and broad-frontier validation, PRESALE1 showed no material regression versus CR061, CR065, CR068A, or CR068B. In the broad-frontier comparison it was effectively neutral against the CR070A parent itself.
 
-## Exact hosted-probe package
+## Frozen candidate package
 
 `CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz`
 
@@ -47,10 +57,15 @@ SHA256:
 
 `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652`
 
-Do not substitute CR071O or any regenerated package without revalidating the hash.
+Do not substitute regenerated packages without revalidating the hash.
 
-## Stopping rule
+## Anti-infinite-loop rule
 
-No more local variants derived from the current PRESALE1/step-110 selector line before a hosted Kaggle observation.
+An infinite loop is avoided by separating **hypothesis testing** from **hypothesis retuning**:
 
-Next action: one controlled hosted probe of the exact frozen PRESALE1 package, compared against the current hosted baseline under the same meta period. Further development should depend on that hosted evidence, not another chain of local micro-threshold tests.
+- a failed pre-registered selector hypothesis is not retuned repeatedly on the same evidence;
+- a promising candidate can receive larger fresh-sample validation to reduce uncertainty;
+- genuinely different mechanisms may still be researched;
+- each new experiment must answer a material unresolved question, not merely seek a favorable seed batch.
+
+Next research action: run a larger fresh-sample frontier validation of the frozen PRESALE1 package, then use that evidence together with hosted Kaggle results when available.
