@@ -1,0 +1,44 @@
+name: cr076-current-rung-successor-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr076-current-rung-successor-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install public dataset client
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install kagglehub
+      - name: Compile CR076
+        run: python -m py_compile tools/cr076_current_rung_successor.py
+      - name: Analyze successor branches inside current dominant rung
+        run: |
+          python tools/cr076_current_rung_successor.py \
+            --dates 2026-09-08 2026-09-09 \
+            --top 40 \
+            --output artifacts/cr076/summary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr076-current-rung-successor-v1
+          path: |
+            artifacts/cr076/summary.json
+            artifacts/cr076/summary.md
+          retention-days: 30
+          if-no-files-found: error
