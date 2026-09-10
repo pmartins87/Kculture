@@ -1,0 +1,63 @@
+name: hosted-authenticated-cr071m
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/hosted-authenticated-cr071m.yml'
+  workflow_dispatch:
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check credential availability
+        id: auth
+        shell: bash
+        run: |
+          mkdir -p artifacts/hosted-cr071m
+          if [ -n "$KAGGLE_API_TOKEN" ]; then
+            echo 'available=true' >> "$GITHUB_OUTPUT"
+            echo 'available=true' > artifacts/hosted-cr071m/auth-status.txt
+          else
+            echo 'available=false' >> "$GITHUB_OUTPUT"
+            echo 'available=false' > artifacts/hosted-cr071m/auth-status.txt
+            echo 'KAGGLE_API_TOKEN repository secret is not configured; hosted collection skipped.'
+          fi
+      - name: Install current Kaggle CLI
+        if: steps.auth.outputs.available == 'true'
+        run: python -m pip install -U 'kaggle>=2.2.1'
+      - name: Record submission allowance
+        if: steps.auth.outputs.available == 'true'
+        run: |
+          kaggle competitions submission-limits kaggriculture --json > artifacts/hosted-cr071m/submission-limits.json || true
+          cat artifacts/hosted-cr071m/submission-limits.json || true
+      - name: Collect CR071M hosted episodes and replays
+        if: steps.auth.outputs.available == 'true'
+        run: |
+          python tools/fetch_authenticated_hosted_forensics.py \
+            --submission cr071m:56124705 \
+            --output artifacts/hosted-cr071m \
+            --win-sample 40 \
+            --max-replays 160 \
+            --delay 0.8
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-authenticated-cr071m
+          path: artifacts/hosted-cr071m/**
+          retention-days: 30
+          if-no-files-found: error
