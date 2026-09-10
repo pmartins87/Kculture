@@ -1,0 +1,59 @@
+name: kaggle-api-meta-scout-v1
+on:
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/kaggle-api-meta-scout-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require authenticated Kaggle API token
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN" || { echo 'KAGGLE_API_TOKEN missing'; exit 2; }
+      - name: Install current official Kaggle CLI
+        run: |
+          python -m pip install -U 'kaggle>=2.2.3'
+          kaggle --version
+      - name: Authenticated read-only competition meta scout
+        run: |
+          python tools/kaggle_meta_scout_cli.py \
+            --competition kaggriculture \
+            --output-dir artifacts/kaggle-api-meta-scout-v1 \
+            --top-teams 15 \
+            --submissions-per-team 2 \
+            --replays-per-submission 2 \
+            --delay 0.75
+      - name: Freeze hashes and inventory
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/kaggle-api-meta-scout-v1
+          find artifacts/kaggle-api-meta-scout-v1 -type f -print | sort > artifacts/kaggle-api-meta-scout-v1/FILELIST.txt || true
+          find artifacts/kaggle-api-meta-scout-v1 -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 -r sha256sum > artifacts/kaggle-api-meta-scout-v1/SHA256SUMS.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kaggle-api-meta-scout-v1
+          path: artifacts/kaggle-api-meta-scout-v1/**
+          retention-days: 30
+          if-no-files-found: error
