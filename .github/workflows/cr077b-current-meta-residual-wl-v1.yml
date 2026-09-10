@@ -7,6 +7,9 @@ name: cr077b-current-meta-residual-wl-v1
       - '.github/workflows/cr077b-current-meta-residual-wl-v1.yml'
   workflow_dispatch:
 
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+
 permissions:
   contents: read
 
