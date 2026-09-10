@@ -42,7 +42,7 @@ jobs:
           mkdir -p artifacts/corpus artifacts/build
           BASE="$(find artifacts/source -name 'CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz' -type f -print -quit)"
           test -s "$BASE"
-          python tools/cr078_late_mirror_breaker.py --base "$BASE" --output-dir artifacts/build
+          python tools/cr078_late_mirror_breaker_v2.py --base "$BASE" --output-dir artifacts/build
           cp "$BASE" artifacts/corpus/CR071M_PARENT.tar.gz
           cp artifacts/build/CR078_LATE_MIRROR_BREAKER_V1.tar.gz artifacts/corpus/CR078.tar.gz
           cp "$(find artifacts/historical -name 'R4D_CR053_ROUTE106309334_V1.tar.gz' -type f -print -quit)" artifacts/corpus/CR053.tar.gz
