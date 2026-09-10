@@ -1,0 +1,43 @@
+name: cr077b-current-meta-residual-wl-v1
+'on':
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/cr077b-current-meta-residual-wl-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  residual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install analysis runtime
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install kagglehub numpy scikit-learn
+      - name: Compile CR077B
+        run: python -m py_compile tools/cr077b_current_meta_residual_wl.py
+      - name: Run frozen W/L-aligned residual analysis
+        run: |
+          python tools/cr077b_current_meta_residual_wl.py \
+            --top 60 \
+            --output artifacts/cr077b/summary.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr077b-current-meta-residual-wl-v1
+          path: |
+            artifacts/cr077b/summary.json
+            artifacts/cr077b/summary.md
+          retention-days: 30
+          if-no-files-found: error
