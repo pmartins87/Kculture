@@ -1,0 +1,24 @@
+name: Stop obsolete CR080-triggered research reruns
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr080-stop-obsolete-runs.yml]
+permissions:
+  actions: write
+  contents: read
+jobs:
+  cancel:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Cancel only obsolete ablation and historical league triggered by shared harness repair
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          for cr080_run in 34655053119 34655053118; do
+            cr080_status=$(gh run view "$cr080_run" --json status --jq .status)
+            if [ "$cr080_status" != 'completed' ]; then
+              gh run cancel "$cr080_run"
+            fi
+          done
