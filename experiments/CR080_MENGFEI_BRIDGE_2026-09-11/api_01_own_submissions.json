@@ -1,0 +1,14 @@
+{
+  "command": [
+    "kaggle",
+    "competitions",
+    "submissions",
+    "kaggriculture",
+    "-v",
+    "-q"
+  ],
+  "label": "01_own_submissions",
+  "returncode": 0,
+  "stderr": "",
+  "stdout": "ref,fileName,date,description,status,publicScore,privateScore\n56124705,CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz,2026-09-09 14:02:10.630000,,SubmissionStatus.COMPLETE,1728.2,\n56091951,R4D_CR070A_TETSU_SHAPE_SHOP_SEATSAFE_V1.tar.gz,2026-09-08 06:01:30.847000,CR070A current Shape-Shop-Pasture seat-safe,SubmissionStatus.COMPLETE,1717.1,\n56080050,R4D_CR060_PREEMPT_H6_SEATSAFE_V1.tar.gz,2026-09-07 15:43:30.930000,CR060 H6 seat-safe step fix.,SubmissionStatus.COMPLETE,959.0,\n56078111,R4D_CR056_INDAR_TOP10_PUBLIC_EXACT.tar.gz,2026-09-07 13:55:10.050000,CR056 exact Indar TOP10 V1 hosted calibration,SubmissionStatus.COMPLETE,1536.4,\n56078108,R4D_CR055_PREEMPT_H6_PUBLIC_EXACT.tar.gz,2026-09-07 13:54:48.993000,CR055 exact Preempt H6 V1 hosted calibration,SubmissionStatus.COMPLETE,1000.1,\n56073870,R4D_CR053_ROUTE106309334_V1.tar.gz,2026-09-07 09:26:47.173000,,SubmissionStatus.COMPLETE,2064.8,\n56073867,R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz,2026-09-07 09:26:28.407000,,SubmissionStatus.COMPLETE,1749.2,\n56045848,R4D_CR029_FULL_RECENT_TOP_V1.tar.gz,2026-09-06 03:30:22.363000,CR029 full recent-top coherent policy,SubmissionStatus.COMPLETE,1847.2,\n56025052,R4D_CR024_CONSENSUS_H11_M19_V1.tar.gz,2026-09-05 04:46:14.277000,,SubmissionStatus.COMPLETE,1561.3,\n55882723,06_CR015_liquidation_phase_FIXED.tar.gz,2026-08-30 05:28:35.887000,CR015_liquidation_phase_FIXED,SubmissionStatus.COMPLETE,1439.6,\n55868969,05_Kaito_V43_public_reference.tar.gz,2026-08-29 14:23:47.533000,,SubmissionStatus.COMPLETE,1537.2,\n55868963,04_R4B_B_repeat_control.tar.gz,2026-08-29 14:23:19.990000,,SubmissionStatus.COMPLETE,177.6,\n55866088,03_CR011_adaptive_early_FIXED.tar.gz,2026-08-29 11:45:21.837000,03_CR011_adaptive_early_FIXED.tar,SubmissionStatus.COMPLETE,1723.3,\n55866079,02_CR008_adaptive_append_FIXED.tar.gz,2026-08-29 11:44:49.310000,02_CR008_adaptive_append_FIXED,SubmissionStatus.COMPLETE,1705.6,\n55859361,03_CR011_adaptive_early.tar.gz,2026-08-29 04:22:53.280000,,SubmissionStatus.ERROR,,\n55859352,02_CR008_adaptive_append.tar.gz,2026-08-29 04:22:30.603000,,SubmissionStatus.ERROR,,\n55859297,01_R4B_A_control.tar.gz,2026-08-29 04:18:10.060000,01_R4B_A_control,SubmissionStatus.COMPLETE,205.9,\n55818927,Kculture_KEXP050_reallocate614_validated_v1_submission.tar.gz,2026-08-27 13:12:06.020000,Kculture KEXP050 reallocate614 validated v1,SubmissionStatus.COMPLETE,169.8,\n55784381,Kculture_R4B_market_only_validated_v1_submission.tar.gz,2026-08-26 03:25:59.340000,Kculture R4B market-only validated v1,SubmissionStatus.COMPLETE,157.2,\n"
+}

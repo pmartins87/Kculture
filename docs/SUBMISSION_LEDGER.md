@@ -1,3 +1,27 @@
+# Current active submissions — authenticated checkpoint 2026-09-11
+
+Source run 34655053172 / artifact 10284539343. Full parsed evidence in
+`experiments/CR080_MENGFEI_BRIDGE_2026-09-11/kaggle_checkpoint.json`.
+
+| Submission | Agent | Submitted UTC | Status | Snapshot rating |
+|---|---|---|---|---:|
+| 56124705 | CR071M PRESALE1 seat-safe | 2026-09-09 14:02:10 | COMPLETE | 1728.2 |
+| 56091951 | CR070A Tetsu seat-safe | 2026-09-08 06:01:30 | COMPLETE | 1717.1 |
+
+CR071M package SHA256: dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652.
+296 episodes listed; newest 32 replays: 7 W / 23 L / 2 T, 0.25 score rate,
+16 games in each seat. Earlier 1841/1887 screenshots remain historical snapshots.
+Five submissions currently allowed; this is a cap, not a quota.
+
+**CR080 is NOT submitted.** Discovery PASS 10-6; independent confirmation run
+34655496708 pending. If qualified, the next submission retires older CR070A
+56091951 while retaining CR071M 56124705. Do not retire a slot until confirmed.
+
+The earlier entries below are historical, including statements that authenticated
+replays were unavailable; API-first access is now functional.
+
+---
+
 # Submission ledger — Kculture
 
 Record every Kaggle agent submission here with exact provenance and observed hosted behavior.

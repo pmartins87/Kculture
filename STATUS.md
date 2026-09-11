@@ -21,7 +21,7 @@ research branch; do not assume its scheduled artifacts describe the current agen
 **CR080 screen completed: PASS**, 10–6 over 8 fresh seeds in both seats (5–3 each),
 zero execution failures. This is only a discovery gate, not demonstrated top-tier
 strength. Frozen package cc9f30b8... reproduced in run 34655053162.
-Independent confirmation is next: 32 fresh paired seeds, seven H2Hs / 448 games;
+Independent confirmation **run 34655496708** is launched: 32 fresh paired seeds, seven H2Hs / 448 games;
 no strategy changes after freeze. See experiments/CR080_MENGFEI_BRIDGE_2026-09-11.
 
 API checkpoint: CR071M 1728.2 / 296 episodes; latest 32: 7–23–2 (score 0.25).

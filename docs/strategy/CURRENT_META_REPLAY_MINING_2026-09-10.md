@@ -1,3 +1,9 @@
+> **2026-09-11 update:** The historical next-sequence section below is superseded.
+> CR079 simple SpaTaro 1-NN failed; CR080 Mengfei daily-route bridge passed its
+> initial exact screen 10-6 and is in confirmation run 34655496708. See STATUS.md.
+> Current snapshot leader is Majkel1337 3152.9, SpaTaro 3049.7; the table below
+> remains the earlier timestamped snapshot, not current ranking.
+
 # Current-meta replay mining — 2026-09-10/11
 
 ## Why this replaces blind CR071 micro-tuning

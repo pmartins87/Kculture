@@ -31,7 +31,7 @@ snapshots, not final rank guarantees. Five submission allowances available.
 
 ## Next
 
-Exactly one independent confirmation, master 9112081, 32 paired seeds per H2H.
+Exactly one independent confirmation, run **34655496708**, master 9112081, 32 paired seeds per H2H.
 Seven H2Hs / 448 games. CR080 vs incumbent + CR053/CR061/CR065; incumbent vs same
 three guardrails. Gate and stop rule are in the protocol and executable aggregator.
 PASS -> prepare one hosted probe that retires older CR070A; FAIL -> close CR080.
