@@ -1,0 +1,62 @@
+name: CR079 SpaTaro chronological clone holdout v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - .github/workflows/cr079-spataro-clone-holdout-v1.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  holdout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout frozen implementation
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install evaluator dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy orjson
+
+      - name: Download frozen SpaTaro hosted corpus artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p corpus
+          gh run download 34554072056 \
+            --repo "${{ github.repository }}" \
+            --name hosted-spataro-current-corpus-v1 \
+            --dir corpus
+          test -f corpus/collector_report.json
+          test -f corpus/spataro_current/episodes_command.json
+          test -d corpus/spataro_current/replays
+          echo "Replay files: $(find corpus/spataro_current/replays -maxdepth 1 -name '*.json' | wc -l)"
+
+      - name: Run preregistered CR079 chronological holdout
+        run: |
+          mkdir -p results
+          python tools/cr079_spataro_clone_holdout.py \
+            --corpus corpus \
+            --out results
+          cat results/report.md
+
+      - name: Upload CR079 result bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr079-spataro-clone-holdout-v1-results
+          path: results/
+          if-no-files-found: warn
+          retention-days: 30
