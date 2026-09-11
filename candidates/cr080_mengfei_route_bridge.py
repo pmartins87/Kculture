@@ -120,6 +120,11 @@ def agent(obs, configuration=None):
     # Do not catch policy failures as PASS: exact runner must expose regressions.
     global _INSTANCE
     if _INSTANCE is None or clock(obs) == 0:
-        with gzip.open(Path(__file__).resolve().parent / 'routes.json.gz', 'rt') as f:
+        # Kaggle's path loader executes with an empty globals dict (__file__ absent).
+        # build_agent supplies the original package path through configuration.
+        raw_path = (configuration or {}).get('__raw_path__') or globals().get('__file__')
+        if not raw_path:
+            raise RuntimeError('CR080 package path not supplied by runner')
+        with gzip.open(Path(raw_path).resolve().parent / 'routes.json.gz', 'rt') as f:
             _INSTANCE = RouteBridge(json.load(f))
     return _INSTANCE.act(obs)

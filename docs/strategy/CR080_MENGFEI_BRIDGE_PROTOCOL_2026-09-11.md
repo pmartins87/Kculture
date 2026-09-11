@@ -94,3 +94,21 @@ hashes are saved in build_receipt.json before evaluating.
 Closed-loop drift (route position correction, unfilled orders, low farm output)
 is a concrete risk. The short W/L screen is deliberately the stop gate for this
 risk; an attractive offline reconstruction score cannot override a failed screen.
+
+## Mechanical invalidation, before any valid CR080 W/L observation
+
+The first archive (12a38694...) could not load routes under KaggleAgent: the
+official get_last_callable executes Python with globals={} and no __file__.
+KaggleAgent.act returned NameError as the action plus a stderr traceback. The
+legacy manual-env harness passed it through; Kaggriculture treated it as {}.
+All 16 games therefore stayed at initial 3000 coins and were not policy trials.
+The apparent 0-16 / zero-errors output is **INVALID**, preserved for audit.
+
+Correct only the model path using configuration['__raw_path__'], supplied by the
+official loader. Policy, bank, weights, gates and seed list are unchanged. Add a
+fail-fast contract to AgentProcess.call for returned BaseException/non-dict,
+verified with real spawned official-loader failures and valid PASS. Check actual
+CR080 first action in both seats before replaying the frozen screen. The corrected
+archive is cc9f30b833b292d3f735d6c821f3844e3fd3a0a3d840500616bb0369132a7a2d;
+model hash is unchanged e7812d0d.... No strategic score or holdout has informed
+this engineering repair. Invalid screen is not a rejection/rescue of the policy.

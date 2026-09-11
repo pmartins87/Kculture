@@ -1,0 +1,35 @@
+name: CR080 reproducible package freeze
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr080-freeze-package-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: hosted-mengfei-current-sample-v1
+          path: corpus
+          run-id: 34558022808
+          github-token: ${{ github.token }}
+      - run: python tools/cr080_build_mengfei_bridge.py --corpus corpus/mengfei_current --output build
+      - name: Verify frozen package identity
+        run: |
+          echo 'cc9f30b833b292d3f735d6c821f3844e3fd3a0a3d840500616bb0369132a7a2d  build/CR080_MENGFEI_DAILY_ROUTE_BRIDGE_V1.tar.gz' | sha256sum -c -
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr080-mengfei-route-bridge-v1-package
+          path: |
+            build/*.json
+            build/*.tar.gz
+          retention-days: 30

@@ -195,6 +195,18 @@ class AgentProcess:
         msg = self._recv()
         if not msg.get("ok"):
             raise RuntimeError(f"agent call failed: {msg}")
+        # KaggleAgent.act returns exceptions as its action (with traceback in
+        # stderr); it does not raise them. Passing such a value to manual env.step
+        # lets Kaggriculture coerce it to {}, hiding a crash as 719 PASS turns.
+        # Promotion must fail mechanically here, before scoring a fake strategy.
+        action = msg.get("action")
+        if isinstance(action, BaseException):
+            raise RuntimeError(
+                f"Kaggle agent returned {type(action).__name__}: {action}; "
+                f"stderr={msg.get('stderr', '')[-4000:]}"
+            )
+        if not isinstance(action, dict):
+            raise RuntimeError(f"Kaggriculture action must be a dict, got {type(action).__name__}: {action!r}")
         return msg["action"], float(msg.get("duration", 0.0))
 
     def close(self, force: bool = False):

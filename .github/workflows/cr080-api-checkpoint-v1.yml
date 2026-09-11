@@ -24,10 +24,24 @@ jobs:
           python tools/kaggle_meta_scout_cli.py --output-dir artifacts/checkpoint --top-teams 0 --replays-per-submission 0
           kaggle competitions episodes 56124705 --format json --quiet > artifacts/checkpoint/cr071m_episodes.json
           kaggle competitions submission-limits kaggriculture --json > artifacts/checkpoint/submission_limits.json
-          kaggle competitions pages kaggriculture --content > artifacts/checkpoint/competition_pages.txt
+          python - <<'PYCODE'
+          import json, subprocess
+          from pathlib import Path
+          root=Path('artifacts/checkpoint')
+          commands=[['kaggle','competitions','pages','list','--help'], ['kaggle','competitions','pages','list','kaggriculture','--content']]
+          rows=[]
+          for cmd in commands:
+              r=subprocess.run(cmd,capture_output=True,text=True)
+              rows.append({'command':cmd,'returncode':r.returncode,'stdout':r.stdout,'stderr':r.stderr})
+          (root/'pages_commands.json').write_text(json.dumps(rows,indent=2))
+          print('pages read return codes:',[r['returncode'] for r in rows])
+          PYCODE
+      - name: Collect latest 32 incumbent replays
+        run: |
+          python tools/collect_submission_replays_cli_v2.py --submission cr071m:56124705 --output-dir artifacts/recent --max-per-submission 32 --selection newest --retries 6 --delay-seconds 0.5
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: cr080-api-checkpoint-v1
-          path: artifacts/checkpoint/
+          path: artifacts/
           retention-days: 30

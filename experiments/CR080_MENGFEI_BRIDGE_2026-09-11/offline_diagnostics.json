@@ -1,0 +1,567 @@
+{
+  "role": "descriptive only; exact closed-loop W/L decides",
+  "episodes": 32,
+  "counts": {
+    "n": 23008,
+    "farmer": 13119,
+    "market": 20058,
+    "whole": 9393,
+    "hands_n": 188641,
+    "hands": 88539
+  },
+  "farmer_exact": 0.57019297635605,
+  "hands_slot": 0.46935183761748506,
+  "market_exact": 0.8717837273991655,
+  "composite": 0.6102962655583312,
+  "audits": {
+    "clock_fallback": true,
+    "seat_covariance": true,
+    "forbidden_fields_ignored": true
+  },
+  "rows": [
+    {
+      "episode_id": 107600978,
+      "counts": {
+        "n": 719,
+        "farmer": 386,
+        "market": 620,
+        "whole": 265,
+        "hands_n": 5566,
+        "hands": 2664
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3097,
+        "weed_repairs": 1,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107601281,
+      "counts": {
+        "n": 719,
+        "farmer": 448,
+        "market": 632,
+        "whole": 310,
+        "hands_n": 5713,
+        "hands": 3111
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 2767,
+        "weed_repairs": 0,
+        "switches": 6
+      }
+    },
+    {
+      "episode_id": 107605271,
+      "counts": {
+        "n": 719,
+        "farmer": 401,
+        "market": 632,
+        "whole": 289,
+        "hands_n": 5864,
+        "hands": 2587
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3307,
+        "weed_repairs": 0,
+        "switches": 6
+      }
+    },
+    {
+      "episode_id": 107609781,
+      "counts": {
+        "n": 719,
+        "farmer": 461,
+        "market": 623,
+        "whole": 309,
+        "hands_n": 6129,
+        "hands": 2849
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3246,
+        "weed_repairs": 0,
+        "switches": 14
+      }
+    },
+    {
+      "episode_id": 107613790,
+      "counts": {
+        "n": 719,
+        "farmer": 408,
+        "market": 635,
+        "whole": 290,
+        "hands_n": 5697,
+        "hands": 2607
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3167,
+        "weed_repairs": 0,
+        "switches": 14
+      }
+    },
+    {
+      "episode_id": 107615039,
+      "counts": {
+        "n": 719,
+        "farmer": 389,
+        "market": 644,
+        "whole": 290,
+        "hands_n": 5803,
+        "hands": 2647
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3171,
+        "weed_repairs": 1,
+        "switches": 7
+      }
+    },
+    {
+      "episode_id": 107617886,
+      "counts": {
+        "n": 719,
+        "farmer": 507,
+        "market": 637,
+        "whole": 327,
+        "hands_n": 6048,
+        "hands": 3272
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 2638,
+        "weed_repairs": 0,
+        "switches": 9
+      }
+    },
+    {
+      "episode_id": 107621908,
+      "counts": {
+        "n": 719,
+        "farmer": 442,
+        "market": 611,
+        "whole": 289,
+        "hands_n": 5873,
+        "hands": 2799
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3207,
+        "weed_repairs": 2,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107625538,
+      "counts": {
+        "n": 719,
+        "farmer": 368,
+        "market": 603,
+        "whole": 280,
+        "hands_n": 6156,
+        "hands": 2627
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3653,
+        "weed_repairs": 0,
+        "switches": 11
+      }
+    },
+    {
+      "episode_id": 107629586,
+      "counts": {
+        "n": 719,
+        "farmer": 439,
+        "market": 640,
+        "whole": 311,
+        "hands_n": 5808,
+        "hands": 2915
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3029,
+        "weed_repairs": 0,
+        "switches": 16
+      }
+    },
+    {
+      "episode_id": 107630677,
+      "counts": {
+        "n": 719,
+        "farmer": 414,
+        "market": 625,
+        "whole": 288,
+        "hands_n": 5935,
+        "hands": 2777
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3240,
+        "weed_repairs": 0,
+        "switches": 15
+      }
+    },
+    {
+      "episode_id": 107633714,
+      "counts": {
+        "n": 719,
+        "farmer": 402,
+        "market": 610,
+        "whole": 290,
+        "hands_n": 6225,
+        "hands": 2709
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3297,
+        "weed_repairs": 0,
+        "switches": 17
+      }
+    },
+    {
+      "episode_id": 107638188,
+      "counts": {
+        "n": 719,
+        "farmer": 385,
+        "market": 619,
+        "whole": 280,
+        "hands_n": 5632,
+        "hands": 2521
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3257,
+        "weed_repairs": 0,
+        "switches": 15
+      }
+    },
+    {
+      "episode_id": 107638474,
+      "counts": {
+        "n": 719,
+        "farmer": 410,
+        "market": 624,
+        "whole": 289,
+        "hands_n": 5983,
+        "hands": 2809
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3187,
+        "weed_repairs": 0,
+        "switches": 17
+      }
+    },
+    {
+      "episode_id": 107642443,
+      "counts": {
+        "n": 719,
+        "farmer": 397,
+        "market": 639,
+        "whole": 280,
+        "hands_n": 5779,
+        "hands": 2537
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3386,
+        "weed_repairs": 9,
+        "switches": 11
+      }
+    },
+    {
+      "episode_id": 107643189,
+      "counts": {
+        "n": 719,
+        "farmer": 381,
+        "market": 621,
+        "whole": 288,
+        "hands_n": 5852,
+        "hands": 2833
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3244,
+        "weed_repairs": 1,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107647363,
+      "counts": {
+        "n": 719,
+        "farmer": 448,
+        "market": 639,
+        "whole": 314,
+        "hands_n": 5781,
+        "hands": 3022
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 2822,
+        "weed_repairs": 2,
+        "switches": 13
+      }
+    },
+    {
+      "episode_id": 107652066,
+      "counts": {
+        "n": 719,
+        "farmer": 400,
+        "market": 616,
+        "whole": 308,
+        "hands_n": 6029,
+        "hands": 2941
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3277,
+        "weed_repairs": 2,
+        "switches": 11
+      }
+    },
+    {
+      "episode_id": 107655121,
+      "counts": {
+        "n": 719,
+        "farmer": 383,
+        "market": 617,
+        "whole": 288,
+        "hands_n": 5937,
+        "hands": 2741
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3215,
+        "weed_repairs": 1,
+        "switches": 15
+      }
+    },
+    {
+      "episode_id": 107659321,
+      "counts": {
+        "n": 719,
+        "farmer": 381,
+        "market": 637,
+        "whole": 290,
+        "hands_n": 5757,
+        "hands": 2643
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3292,
+        "weed_repairs": 0,
+        "switches": 13
+      }
+    },
+    {
+      "episode_id": 107660090,
+      "counts": {
+        "n": 719,
+        "farmer": 377,
+        "market": 639,
+        "whole": 290,
+        "hands_n": 5803,
+        "hands": 2689
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3287,
+        "weed_repairs": 1,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107660225,
+      "counts": {
+        "n": 719,
+        "farmer": 436,
+        "market": 627,
+        "whole": 299,
+        "hands_n": 5823,
+        "hands": 2915
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 2883,
+        "weed_repairs": 0,
+        "switches": 11
+      }
+    },
+    {
+      "episode_id": 107664991,
+      "counts": {
+        "n": 719,
+        "farmer": 418,
+        "market": 632,
+        "whole": 288,
+        "hands_n": 6132,
+        "hands": 2762
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3336,
+        "weed_repairs": 1,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107665057,
+      "counts": {
+        "n": 719,
+        "farmer": 448,
+        "market": 628,
+        "whole": 288,
+        "hands_n": 5739,
+        "hands": 2559
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3291,
+        "weed_repairs": 0,
+        "switches": 18
+      }
+    },
+    {
+      "episode_id": 107669858,
+      "counts": {
+        "n": 719,
+        "farmer": 400,
+        "market": 632,
+        "whole": 309,
+        "hands_n": 5830,
+        "hands": 2797
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3238,
+        "weed_repairs": 0,
+        "switches": 13
+      }
+    },
+    {
+      "episode_id": 107669913,
+      "counts": {
+        "n": 719,
+        "farmer": 396,
+        "market": 625,
+        "whole": 291,
+        "hands_n": 5896,
+        "hands": 2880
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3061,
+        "weed_repairs": 1,
+        "switches": 12
+      }
+    },
+    {
+      "episode_id": 107674872,
+      "counts": {
+        "n": 719,
+        "farmer": 404,
+        "market": 631,
+        "whole": 288,
+        "hands_n": 5780,
+        "hands": 2723
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3188,
+        "weed_repairs": 0,
+        "switches": 11
+      }
+    },
+    {
+      "episode_id": 107679770,
+      "counts": {
+        "n": 719,
+        "farmer": 385,
+        "market": 622,
+        "whole": 289,
+        "hands_n": 5956,
+        "hands": 2608
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3428,
+        "weed_repairs": 0,
+        "switches": 17
+      }
+    },
+    {
+      "episode_id": 107679803,
+      "counts": {
+        "n": 719,
+        "farmer": 425,
+        "market": 631,
+        "whole": 289,
+        "hands_n": 5955,
+        "hands": 2735
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3421,
+        "weed_repairs": 1,
+        "switches": 14
+      }
+    },
+    {
+      "episode_id": 107684761,
+      "counts": {
+        "n": 719,
+        "farmer": 407,
+        "market": 623,
+        "whole": 286,
+        "hands_n": 5957,
+        "hands": 2720
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3381,
+        "weed_repairs": 2,
+        "switches": 18
+      }
+    },
+    {
+      "episode_id": 107684780,
+      "counts": {
+        "n": 719,
+        "farmer": 400,
+        "market": 637,
+        "whole": 313,
+        "hands_n": 6024,
+        "hands": 2887
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3069,
+        "weed_repairs": 0,
+        "switches": 9
+      }
+    },
+    {
+      "episode_id": 107684784,
+      "counts": {
+        "n": 719,
+        "farmer": 373,
+        "market": 607,
+        "whole": 288,
+        "hands_n": 6179,
+        "hands": 2653
+      },
+      "runtime_stats": {
+        "decisions": 719,
+        "position_repairs": 3574,
+        "weed_repairs": 1,
+        "switches": 10
+      }
+    }
+  ]
+}

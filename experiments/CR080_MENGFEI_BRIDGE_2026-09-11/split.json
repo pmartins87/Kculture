@@ -1,0 +1,775 @@
+{
+  "train": [
+    {
+      "create_time": "2026-09-09 22:24:50.733000",
+      "episode_id": 107265709,
+      "file": "episode-107265709-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 22:32:53.757000",
+      "episode_id": 107267438,
+      "file": "episode-107267438-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 22:44:51.939000",
+      "episode_id": 107270996,
+      "file": "episode-107270996-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 22:48:50.865000",
+      "episode_id": 107271700,
+      "file": "episode-107271700-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 23:04:52.623000",
+      "episode_id": 107275575,
+      "file": "episode-107275575-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-09 23:12:53.654000",
+      "episode_id": 107277555,
+      "file": "episode-107277555-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-09 23:20:53.965000",
+      "episode_id": 107279087,
+      "file": "episode-107279087-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 23:21:01.517000",
+      "episode_id": 107279416,
+      "file": "episode-107279416-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-09 23:36:52.119000",
+      "episode_id": 107283283,
+      "file": "episode-107283283-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-09 23:52:51.617000",
+      "episode_id": 107287100,
+      "file": "episode-107287100-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 00:04:50.522000",
+      "episode_id": 107290178,
+      "file": "episode-107290178-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 00:20:50.623000",
+      "episode_id": 107294155,
+      "file": "episode-107294155-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 00:40:50.588000",
+      "episode_id": 107298711,
+      "file": "episode-107298711-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 00:56:54.658000",
+      "episode_id": 107302751,
+      "file": "episode-107302751-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 01:12:50.542000",
+      "episode_id": 107306781,
+      "file": "episode-107306781-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 01:32:50.761000",
+      "episode_id": 107311364,
+      "file": "episode-107311364-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 01:48:55.472000",
+      "episode_id": 107315433,
+      "file": "episode-107315433-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 02:04:51.034000",
+      "episode_id": 107319298,
+      "file": "episode-107319298-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 02:24:56.678000",
+      "episode_id": 107323936,
+      "file": "episode-107323936-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 02:32:56.287000",
+      "episode_id": 107325515,
+      "file": "episode-107325515-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 02:48:57.693000",
+      "episode_id": 107329905,
+      "file": "episode-107329905-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 03:12:16.375000",
+      "episode_id": 107334750,
+      "file": "episode-107334750-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 03:16:00.079000",
+      "episode_id": 107335315,
+      "file": "episode-107335315-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 03:35:58.938000",
+      "episode_id": 107340495,
+      "file": "episode-107340495-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 03:47:58.704000",
+      "episode_id": 107343396,
+      "file": "episode-107343396-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 04:07:58.685000",
+      "episode_id": 107348126,
+      "file": "episode-107348126-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 04:07:59.183000",
+      "episode_id": 107348443,
+      "file": "episode-107348443-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 04:15:59.078000",
+      "episode_id": 107350081,
+      "file": "episode-107350081-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 04:15:59.413000",
+      "episode_id": 107350343,
+      "file": "episode-107350343-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 04:23:58.935000",
+      "episode_id": 107351953,
+      "file": "episode-107351953-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 04:43:59.236000",
+      "episode_id": 107357046,
+      "file": "episode-107357046-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 04:55:58.445000",
+      "episode_id": 107359885,
+      "file": "episode-107359885-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 05:19:59.544000",
+      "episode_id": 107365715,
+      "file": "episode-107365715-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 05:23:58.875000",
+      "episode_id": 107366540,
+      "file": "episode-107366540-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 05:43:57.426000",
+      "episode_id": 107371189,
+      "file": "episode-107371189-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 06:03:58.625000",
+      "episode_id": 107376533,
+      "file": "episode-107376533-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 06:27:58.124000",
+      "episode_id": 107382266,
+      "file": "episode-107382266-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 06:47:58.895000",
+      "episode_id": 107387290,
+      "file": "episode-107387290-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 06:52:00.013000",
+      "episode_id": 107388037,
+      "file": "episode-107388037-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 06:59:58.503000",
+      "episode_id": 107390018,
+      "file": "episode-107390018-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 07:19:58.506000",
+      "episode_id": 107395106,
+      "file": "episode-107395106-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 07:28:03.100000",
+      "episode_id": 107396708,
+      "file": "episode-107396708-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 07:39:59.705000",
+      "episode_id": 107399676,
+      "file": "episode-107399676-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 07:43:58.329000",
+      "episode_id": 107400382,
+      "file": "episode-107400382-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 08:03:58.799000",
+      "episode_id": 107405858,
+      "file": "episode-107405858-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 08:20:02.710000",
+      "episode_id": 107409340,
+      "file": "episode-107409340-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 08:43:59.132000",
+      "episode_id": 107415357,
+      "file": "episode-107415357-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 09:08:06.246000",
+      "episode_id": 107421256,
+      "file": "episode-107421256-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 09:28:06.844000",
+      "episode_id": 107426237,
+      "file": "episode-107426237-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 09:32:18.113000",
+      "episode_id": 107427201,
+      "file": "episode-107427201-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 09:55:58.731000",
+      "episode_id": 107432885,
+      "file": "episode-107432885-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 10:19:58.126000",
+      "episode_id": 107438746,
+      "file": "episode-107438746-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 10:19:58.358000",
+      "episode_id": 107438869,
+      "file": "episode-107438869-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 10:27:59.209000",
+      "episode_id": 107440600,
+      "file": "episode-107440600-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 10:47:59.936000",
+      "episode_id": 107445721,
+      "file": "episode-107445721-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 11:12:03.576000",
+      "episode_id": 107451645,
+      "file": "episode-107451645-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 11:20:01.530000",
+      "episode_id": 107453127,
+      "file": "episode-107453127-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 11:24:05.608000",
+      "episode_id": 107454428,
+      "file": "episode-107454428-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 11:48:07.105000",
+      "episode_id": 107460204,
+      "file": "episode-107460204-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 11:48:07.117000",
+      "episode_id": 107460216,
+      "file": "episode-107460216-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 12:12:07.235000",
+      "episode_id": 107466012,
+      "file": "episode-107466012-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 12:32:06.312000",
+      "episode_id": 107471079,
+      "file": "episode-107471079-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 12:56:03.906000",
+      "episode_id": 107476745,
+      "file": "episode-107476745-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 13:16:04.187000",
+      "episode_id": 107481859,
+      "file": "episode-107481859-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 13:40:08.087000",
+      "episode_id": 107487464,
+      "file": "episode-107487464-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 14:04:04.202000",
+      "episode_id": 107493389,
+      "file": "episode-107493389-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 14:28:12.522000",
+      "episode_id": 107499334,
+      "file": "episode-107499334-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 14:52:16.413000",
+      "episode_id": 107505263,
+      "file": "episode-107505263-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 15:16:09.525000",
+      "episode_id": 107511259,
+      "file": "episode-107511259-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 15:44:09.570000",
+      "episode_id": 107517732,
+      "file": "episode-107517732-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 15:44:09.586000",
+      "episode_id": 107517733,
+      "file": "episode-107517733-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 16:08:10.452000",
+      "episode_id": 107523933,
+      "file": "episode-107523933-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 16:32:10.730000",
+      "episode_id": 107529887,
+      "file": "episode-107529887-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 16:32:10.738000",
+      "episode_id": 107529893,
+      "file": "episode-107529893-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 16:40:17.714000",
+      "episode_id": 107531802,
+      "file": "episode-107531802-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 16:44:11.151000",
+      "episode_id": 107532558,
+      "file": "episode-107532558-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 17:08:09.708000",
+      "episode_id": 107538639,
+      "file": "episode-107538639-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 17:32:18.677000",
+      "episode_id": 107544504,
+      "file": "episode-107544504-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 17:32:18.687000",
+      "episode_id": 107544512,
+      "file": "episode-107544512-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 17:56:10.975000",
+      "episode_id": 107550300,
+      "file": "episode-107550300-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 18:16:12.385000",
+      "episode_id": 107555285,
+      "file": "episode-107555285-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 18:16:12.530000",
+      "episode_id": 107555392,
+      "file": "episode-107555392-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 18:40:11.699000",
+      "episode_id": 107560641,
+      "file": "episode-107560641-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 18:40:12.194000",
+      "episode_id": 107560979,
+      "file": "episode-107560979-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 19:00:14.811000",
+      "episode_id": 107565923,
+      "file": "episode-107565923-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 19:12:14.124000",
+      "episode_id": 107569009,
+      "file": "episode-107569009-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 19:32:13.777000",
+      "episode_id": 107573829,
+      "file": "episode-107573829-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 19:40:11.186000",
+      "episode_id": 107575398,
+      "file": "episode-107575398-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 19:56:12.477000",
+      "episode_id": 107579828,
+      "file": "episode-107579828-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 20:08:15.336000",
+      "episode_id": 107582630,
+      "file": "episode-107582630-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 20:16:11.300000",
+      "episode_id": 107584260,
+      "file": "episode-107584260-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 20:16:11.585000",
+      "episode_id": 107584418,
+      "file": "episode-107584418-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 20:28:12.185000",
+      "episode_id": 107587373,
+      "file": "episode-107587373-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 20:32:13.477000",
+      "episode_id": 107588233,
+      "file": "episode-107588233-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 20:48:11.137000",
+      "episode_id": 107592439,
+      "file": "episode-107592439-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 21:04:11.033000",
+      "episode_id": 107596484,
+      "file": "episode-107596484-replay.json",
+      "seat": 1
+    }
+  ],
+  "holdout": [
+    {
+      "create_time": "2026-09-10 21:24:10.399000",
+      "episode_id": 107600978,
+      "file": "episode-107600978-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 21:24:10.911000",
+      "episode_id": 107601281,
+      "file": "episode-107601281-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 21:40:11.172000",
+      "episode_id": 107605271,
+      "file": "episode-107605271-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 22:00:10.045000",
+      "episode_id": 107609781,
+      "file": "episode-107609781-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 22:16:10.233000",
+      "episode_id": 107613790,
+      "file": "episode-107613790-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 22:20:10.496000",
+      "episode_id": 107615039,
+      "file": "episode-107615039-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 22:32:12.298000",
+      "episode_id": 107617886,
+      "file": "episode-107617886-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 22:50:50.091000",
+      "episode_id": 107621908,
+      "file": "episode-107621908-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 23:08:49.404000",
+      "episode_id": 107625538,
+      "file": "episode-107625538-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 23:24:45.278000",
+      "episode_id": 107629586,
+      "file": "episode-107629586-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-10 23:28:49.397000",
+      "episode_id": 107630677,
+      "file": "episode-107630677-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-10 23:40:50.531000",
+      "episode_id": 107633714,
+      "file": "episode-107633714-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 00:00:48.603000",
+      "episode_id": 107638188,
+      "file": "episode-107638188-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 00:00:49.022000",
+      "episode_id": 107638474,
+      "file": "episode-107638474-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 00:16:45.030000",
+      "episode_id": 107642443,
+      "file": "episode-107642443-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 00:20:45.090000",
+      "episode_id": 107643189,
+      "file": "episode-107643189-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 00:36:45.016000",
+      "episode_id": 107647363,
+      "file": "episode-107647363-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 00:56:44.590000",
+      "episode_id": 107652066,
+      "file": "episode-107652066-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 01:08:44.994000",
+      "episode_id": 107655121,
+      "file": "episode-107655121-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 01:24:48.775000",
+      "episode_id": 107659321,
+      "file": "episode-107659321-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 01:28:45.841000",
+      "episode_id": 107660090,
+      "file": "episode-107660090-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 01:28:46.041000",
+      "episode_id": 107660225,
+      "file": "episode-107660225-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 01:48:51.519000",
+      "episode_id": 107664991,
+      "file": "episode-107664991-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 01:48:51.635000",
+      "episode_id": 107665057,
+      "file": "episode-107665057-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 02:08:45.073000",
+      "episode_id": 107669858,
+      "file": "episode-107669858-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 02:08:45.136000",
+      "episode_id": 107669913,
+      "file": "episode-107669913-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 02:28:56.624000",
+      "episode_id": 107674872,
+      "file": "episode-107674872-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 02:48:59.816000",
+      "episode_id": 107679770,
+      "file": "episode-107679770-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 02:48:59.880000",
+      "episode_id": 107679803,
+      "file": "episode-107679803-replay.json",
+      "seat": 0
+    },
+    {
+      "create_time": "2026-09-11 03:08:53.624000",
+      "episode_id": 107684761,
+      "file": "episode-107684761-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 03:08:53.675000",
+      "episode_id": 107684780,
+      "file": "episode-107684780-replay.json",
+      "seat": 1
+    },
+    {
+      "create_time": "2026-09-11 03:08:53.676000",
+      "episode_id": 107684784,
+      "file": "episode-107684784-replay.json",
+      "seat": 1
+    }
+  ],
+  "excluded": []
+}

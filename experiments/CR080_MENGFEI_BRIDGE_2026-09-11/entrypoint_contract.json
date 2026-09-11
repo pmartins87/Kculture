@@ -1,0 +1,62 @@
+{
+  "checks": [
+    {
+      "check": "raised_exception",
+      "pass": true,
+      "detail": "Kaggle agent returned ValueError: CR080_CONTRACT_SENTINEL; stderr=Traceback (most recent call last):\n  File \"/workspace/scratch/4ae702bc170d/kculture-deps/kaggle_environments/agent.py\", line 192, in act\n    action = self.agent(*args)\n             ^^^^^^^^^^^^^^^^^\n  File \"/workspace/scratch/4ae702bc170d/kculture-deps/kaggle_environments/agent.py\", line 154, in callable_agent\n    return agent(*args) if callable(agent) else agent\n           ^^^^^^^^^^^^\n  File \"/tmp/tmpfybu6g5l/raised_exception/main.py\", line 2, in agent\n    raise ValueError(\"CR080_CONTRACT_SENTINEL\")\nValueError: CR080_CONTRACT_SENTINEL\n"
+    },
+    {
+      "check": "invalid_action",
+      "pass": true,
+      "detail": "Kaggriculture action must be a dict, got list: ['PASS']"
+    },
+    {
+      "check": "legal_pass",
+      "pass": true,
+      "detail": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": []
+      }
+    },
+    {
+      "check": "actual_loader_seat_0",
+      "pass": true,
+      "duration": 2.275614,
+      "action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            13
+          ]
+        ]
+      }
+    },
+    {
+      "check": "actual_loader_seat_1",
+      "pass": true,
+      "duration": 2.335137,
+      "action": {
+        "farmer": [
+          "PASS"
+        ],
+        "hands": [],
+        "market": [
+          [
+            "BUY_PRODUCT",
+            "WHEAT",
+            13
+          ]
+        ]
+      }
+    }
+  ],
+  "pass": true
+}
