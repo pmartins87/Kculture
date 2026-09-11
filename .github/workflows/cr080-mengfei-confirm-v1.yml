@@ -1,0 +1,108 @@
+name: CR080 Mengfei independent confirmation
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr080-mengfei-confirm-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr080-mengfei-route-bridge-v1-package
+          path: source/cr080
+          run-id: 34655053162
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr071-presale1-telemetry-packages
+          path: source/anchors
+          run-id: 34349439774
+          github-token: ${{ github.token }}
+      - name: Freeze exact panel and verify seed firewall
+        run: |
+          mkdir -p corpus
+          cp source/cr080/CR080_MENGFEI_DAILY_ROUTE_BRIDGE_V1.tar.gz corpus/CR080.tar.gz
+          echo 'cc9f30b833b292d3f735d6c821f3844e3fd3a0a3d840500616bb0369132a7a2d  corpus/CR080.tar.gz' | sha256sum -c -
+          cp source/anchors/CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz corpus/CR071M.tar.gz
+          echo 'dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652  corpus/CR071M.tar.gz' | sha256sum -c -
+          for cr080_guard in CR053 CR061 CR065; do cp "source/anchors/${cr080_guard}_CONTROL.tar.gz" "corpus/${cr080_guard}.tar.gz"; done
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          prior=json.loads(Path('experiments/CR080_MENGFEI_BRIDGE_2026-09-11/seed_firewall.json').read_text())
+          masters=prior['earlier_masters_checked']+[9112080]
+          used=set()
+          for master in masters:used.update(make_seeds(512,master))
+          fresh=make_seeds(32,9112081)
+          assert not (used & set(fresh)), 'Seed overlap'
+          Path('corpus/seed_firewall.json').write_text(json.dumps({'master_seed':9112081,'seeds':fresh,'earlier_masters':masters,'overlap':[]},indent=2))
+          print('Fresh seed firewall PASS:',len(fresh))
+          PY
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr080-confirmation-packages-v1
+          path: corpus/
+          retention-days: 30
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        include:
+          - {a: CR080, b: CR071M}
+          - {a: CR080, b: CR053}
+          - {a: CR080, b: CR061}
+          - {a: CR080, b: CR065}
+          - {a: CR071M, b: CR053}
+          - {a: CR071M, b: CR061}
+          - {a: CR071M, b: CR065}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr080-confirmation-packages-v1
+          path: corpus
+      - name: Exact reference, frozen candidate, both seats
+        run: |
+          python tools/kaggle_reference_h2h_v2.py --a 'corpus/${{ matrix.a }}.tar.gz' --b 'corpus/${{ matrix.b }}.tar.gz' --a-id '${{ matrix.a }}' --b-id '${{ matrix.b }}' --seed-count 32 --master-seed 9112081 --output 'results/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr080-confirm-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: results/*.json
+          retention-days: 30
+  aggregate:
+    if: always()
+    needs: h2h
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr080-confirm-*
+          path: results
+          merge-multiple: true
+      - run: python tools/cr080_confirm_gate.py --results results --output summary/gate.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr080-confirmation-gate-v1
+          path: summary/
+          retention-days: 30

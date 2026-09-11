@@ -16,3 +16,11 @@ Operational rules:
 8. Preserve API-derived findings, hashes, run IDs, artifacts, decisions and resulting strategy hypotheses in the repository so they survive chat boundaries.
 
 Rationale: authenticated API access is a high-value project capability and should be treated as standard infrastructure, not an exceptional/manual fallback.
+
+## 2026-09-11 operational repair
+
+The legacy main-branch scheduled forensics had hardcoded R4B/KEXP050 IDs. Current
+collection must resolve the latest two successful submissions through the API,
+then take the newest explicitly ordered replay window; no old label may be
+treated as the active candidate. A successful workflow does not imply current
+data unless its submission IDs/timestamps were checked.

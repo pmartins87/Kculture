@@ -18,8 +18,22 @@ research branch; do not assume its scheduled artifacts describe the current agen
 - **CR077B:** OOT 2026-09-10 pending publication/access; no promotion inferred.
 - No automatic Kaggle submission. Original final holdout remains sealed.
 
-Next: finish and freeze CR080; execute the bounded screen; record its result and
-stop/confirmation decision here. All conflicting immediate actions below are
+**CR080 screen completed: PASS**, 10–6 over 8 fresh seeds in both seats (5–3 each),
+zero execution failures. This is only a discovery gate, not demonstrated top-tier
+strength. Frozen package cc9f30b8... reproduced in run 34655053162.
+Independent confirmation is next: 32 fresh paired seeds, seven H2Hs / 448 games;
+no strategy changes after freeze. See experiments/CR080_MENGFEI_BRIDGE_2026-09-11.
+
+API checkpoint: CR071M 1728.2 / 296 episodes; latest 32: 7–23–2 (score 0.25).
+Other active slot CR070A 56091951 / 1717.1. Main scheduled collector was repaired
+in commit c47d62dd... to resolve active submissions instead of querying old IDs.
+
+Mechanical audit: the first CR080 run was invalid due to __file__ absence and a
+legacy harness that hid returned exceptions as PASS. Corrected both; actual-loader
+contract tests PASS. Never interpret that initial apparent 0–16 as policy evidence.
+
+Next: collect the independent confirmation and apply the frozen gate. PASS ->
+prepare one hosted probe; FAIL -> close this implementation without retuning. All conflicting immediate actions below are
 historical, not instructions to resubmit CR071M or repeat closed experiments.
 
 ---

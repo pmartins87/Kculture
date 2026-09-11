@@ -5,10 +5,10 @@ Objective remains a prize-winning/top-10 final result. Working source of truth:
 [CR080 protocol](docs/strategy/CR080_MENGFEI_BRIDGE_PROTOCOL_2026-09-11.md).
 
 1. COMPLETE: authenticated current-meta corpora; CR078 and CR079 rejected.
-2. ACTIVE: CR080 executable Mengfei daily-route bridge (96 training episodes).
-3. GATE: package smoke + 8 fresh seeds/two seats vs CR071M. Score >=0.625 and
-   zero execution failures required. FAIL closes this implementation.
-4. IF PASS: 32 new paired seeds against CR071M and CR053/CR061/CR065 guardrails,
+2. COMPLETE: CR080 executable Mengfei daily-route bridge (96 training episodes).
+3. PASS: package smoke + 8 fresh seeds/two seats vs CR071M, 10–6; score 0.625,
+   zero execution failures in corrected valid run. Initial loader run invalid.
+4. CURRENT: 32 new paired seeds against CR071M and CR053/CR061/CR065 guardrails,
    plus same-seed incumbent guardrails. Apply predeclared deltas; no tuning.
 5. IF CONFIRMED: identify retiring active slot and prepare one hosted probe.
    Do not delay a qualified candidate >24h for optional testing.
