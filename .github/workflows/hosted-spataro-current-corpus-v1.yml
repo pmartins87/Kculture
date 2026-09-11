@@ -1,0 +1,60 @@
+name: hosted-spataro-current-corpus-v1
+on:
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/hosted-spataro-current-corpus-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require authenticated Kaggle API token
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN" || { echo 'KAGGLE_API_TOKEN missing'; exit 2; }
+      - name: Install official Kaggle CLI
+        run: |
+          python -m pip install -U 'kaggle>=2.2.3'
+          kaggle --version
+      - name: Collect full current SpaTaro corpus
+        run: |
+          python tools/collect_submission_replays_cli_v2.py \
+            --submission spataro_current:56114097 \
+            --output-dir artifacts/hosted-spataro-current \
+            --delay-seconds 0.50 \
+            --max-per-submission 0 \
+            --retries 6 \
+            --retry-backoff-seconds 1.0
+      - name: Freeze corpus inventory and hashes
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/hosted-spataro-current
+          find artifacts/hosted-spataro-current -type f -print | sort > artifacts/hosted-spataro-current/FILELIST.txt || true
+          find artifacts/hosted-spataro-current -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 -r sha256sum > artifacts/hosted-spataro-current/SHA256SUMS.txt || true
+          echo "json_files=$(find artifacts/hosted-spataro-current -type f -name '*.json' | wc -l)"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-spataro-current-corpus-v1
+          path: artifacts/hosted-spataro-current/**
+          retention-days: 30
+          if-no-files-found: error
