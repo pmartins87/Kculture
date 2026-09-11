@@ -15,9 +15,10 @@ Source GitHub Actions run: `34554072056`.
 Artifact: `hosted-spataro-current-corpus-v1`.
 Artifact id: `10182031598`.
 Artifact SHA256 digest recorded by GitHub: `12e17e246c984ceba8a664adf4d05fb1a2f260d96079a1e413135b2bd4eb4a2e`.
-Collector report: 203 SpaTaro replays, 0 collection failures.
 
-Seven SpaTaro-vs-SpaTaro replays are ambiguous because the exported replay does not identify which SpaTaro seat corresponds to the target submission. They are excluded rather than guessed. Expected unique-target corpus: 196 episodes.
+The artifact's own `collector_report.json` and `FILELIST.txt` were verified directly before holdout scoring: **204 replay files, 204 listed episodes, 0 collection failures**. Exactly one replay (`107017328`) has `TeamNames=["SpaTaro","SpaTaro"]`, so the target seat is ambiguous and is excluded rather than guessed. Expected unique-target corpus: **203 episodes**.
+
+This replaces an earlier preliminary inventory that stated 203 total / 7 ambiguous; that preliminary count was incorrect. The correction was made before any holdout action-fidelity score was computed and does not change the model, features, weights, gates, or split rule.
 
 ## Split — frozen before holdout scoring
 
