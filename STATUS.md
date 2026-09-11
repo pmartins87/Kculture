@@ -1,3 +1,10 @@
+> **Current research source of truth (2026-09-11):** active work continues on
+> [fix/kaggle-parity-v1](https://github.com/pmartins87/Kculture/tree/fix/kaggle-parity-v1).
+> Read its [STATUS](https://github.com/pmartins87/Kculture/blob/fix/kaggle-parity-v1/STATUS.md)
+> and [ROADMAP](https://github.com/pmartins87/Kculture/blob/fix/kaggle-parity-v1/ROADMAP.md).
+> CR071M is already submission 56124705; CR078 and CR079 are closed. Current work
+> is CR080. The older candidate/run instructions below are historical.
+
 # STATUS — Kculture
 
 > **Current update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded. Do not repeat CR008/CR015.
