@@ -1,0 +1,132 @@
+name: current-meta-policy-fingerprint-v1
+on:
+  push:
+    branches:
+      - fix/kaggle-parity-v1
+    paths:
+      - '.github/workflows/current-meta-policy-fingerprint-v1.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  mengfei_newest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/download-artifact@v4
+        with:
+          name: hosted-mengfei-current-sample-v1
+          path: corpus
+          repository: pmartins87/Kculture
+          run-id: 34558022808
+          github-token: ${{ github.token }}
+      - name: Fingerprint newest Mengfei policy
+        run: |
+          python tools/hosted_policy_corpus_fingerprint.py corpus \
+            --team 'Mengfei Li' \
+            --output out/mengfei_newest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fingerprint-mengfei-newest-v1
+          path: out/mengfei_newest.json
+          retention-days: 30
+
+  mengfei_oldest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/download-artifact@v4
+        with:
+          name: hosted-mengfei-current-sample-v1
+          path: corpus
+          repository: pmartins87/Kculture
+          run-id: 34554248891
+          github-token: ${{ github.token }}
+      - name: Fingerprint oldest Mengfei policy sample
+        run: |
+          python tools/hosted_policy_corpus_fingerprint.py corpus \
+            --team 'Mengfei Li' \
+            --output out/mengfei_oldest.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fingerprint-mengfei-oldest-v1
+          path: out/mengfei_oldest.json
+          retention-days: 30
+
+  spataro_full:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+      - uses: actions/download-artifact@v4
+        with:
+          name: hosted-spataro-current-corpus-v1
+          path: corpus
+          repository: pmartins87/Kculture
+          run-id: 34554072056
+          github-token: ${{ github.token }}
+      - name: Fingerprint full current SpaTaro policy
+        run: |
+          python tools/hosted_policy_corpus_fingerprint.py corpus \
+            --team 'SpaTaro' \
+            --output out/spataro_full.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fingerprint-spataro-full-v1
+          path: out/spataro_full.json
+          retention-days: 30
+
+  compare:
+    needs: [mengfei_newest, mengfei_oldest, spataro_full]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: fingerprint-*-v1
+          path: fingerprints
+          merge-multiple: true
+      - name: Freeze compact comparison
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          names = ['mengfei_newest','mengfei_oldest','spataro_full']
+          out = {'schema_version':'kculture-current-meta-policy-fingerprint-comparison-v1','policies':{}}
+          for name in names:
+              p=Path('fingerprints')/f'{name}.json'
+              d=json.loads(p.read_text())
+              out['policies'][name]={
+                  'usable_replays':d['usable_replays'],
+                  'errors':len(d.get('errors') or []),
+                  'outcomes':d.get('outcomes'),
+                  'seats':d.get('seats'),
+                  'score_rate':d.get('score_rate'),
+                  'policy_shape':d['policy_shape'],
+                  'opening_clusters_96':d['opening_clusters'].get('96',[])[:8],
+                  'opening_clusters_192':d['opening_clusters'].get('192',[])[:8],
+                  'opening_clusters_288':d['opening_clusters'].get('288',[])[:8],
+                  'checkpoints':{k:d['checkpoints'].get(k) for k in ('96','192','226','288','336','384','480','576','648','696','718')},
+              }
+          Path('summary').mkdir(exist_ok=True)
+          Path('summary/comparison.json').write_text(json.dumps(out,indent=2,sort_keys=True,ensure_ascii=False))
+          for name,d in out['policies'].items():
+              print(name, json.dumps({k:d[k] for k in ('usable_replays','errors','outcomes','seats','score_rate','policy_shape')},ensure_ascii=False))
+              print('  clusters96', d['opening_clusters_96'][:4])
+              print('  clusters288', d['opening_clusters_288'][:4])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: current-meta-policy-fingerprint-v1-summary
+          path: summary/comparison.json
+          retention-days: 30
