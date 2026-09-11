@@ -1,6 +1,30 @@
+# ROADMAP — current path 2026-09-11
+
+Objective remains a prize-winning/top-10 final result. Working source of truth:
+`fix/kaggle-parity-v1`, current [STATUS](STATUS.md) and
+[CR080 protocol](docs/strategy/CR080_MENGFEI_BRIDGE_PROTOCOL_2026-09-11.md).
+
+1. COMPLETE: authenticated current-meta corpora; CR078 and CR079 rejected.
+2. ACTIVE: CR080 executable Mengfei daily-route bridge (96 training episodes).
+3. GATE: package smoke + 8 fresh seeds/two seats vs CR071M. Score >=0.625 and
+   zero execution failures required. FAIL closes this implementation.
+4. IF PASS: 32 new paired seeds against CR071M and CR053/CR061/CR065 guardrails,
+   plus same-seed incumbent guardrails. Apply predeclared deltas; no tuning.
+5. IF CONFIRMED: identify retiring active slot and prepare one hosted probe.
+   Do not delay a qualified candidate >24h for optional testing.
+6. IF FAILED: preserve the failure and diagnose route execution/production drift
+   before selecting a materially different mechanism. No CR080A/B/C threshold
+   rescue on used seeds. No return to PRESALE1 or SpaTaro same-step 1-NN.
+
+API-first checkpoint runs independently of the strategy evaluation. Historical
+scheduled jobs targeting R4B/KEXP050 cannot answer current CR071M performance.
+No automatic submission and no use of the original sealed final holdout.
+
+---
+
 # ROADMAP — Kculture
 
-> **CURRENT — 2026-09-09:** the authoritative operational plan is [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). It supersedes the immediate-path sections below when they conflict. Current candidate: `CR071M PRESALE1`; current deep validation run: `34359535052`; one hosted probe is justified now while the deep run continues. The CR071O `opp.money > 190` selector is rejected, but CR071 development is **not** closed.
+> **ARCHIVED — 2026-09-09:** the authoritative operational plan is [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). It supersedes the immediate-path sections below when they conflict. Current candidate: `CR071M PRESALE1`; current deep validation run: `34359535052`; one hosted probe is justified now while the deep run continues. The CR071O `opp.money > 190` selector is rejected, but CR071 development is **not** closed.
 
 ## Current objective
 

@@ -1,3 +1,8 @@
+> **2026-09-11 amendment:** Governance, hosted slot accounting and minimum
+> execution gates below remain binding. The 09/09 immediate actions and candidate
+> state are superseded by STATUS.md, ROADMAP.md and the CR080 protocol. CR071M is
+> already submission 56124705. CR078/CR079 are closed; current work is CR080.
+
 # Kculture execution contract — 2026-09-09
 
 ## Mission

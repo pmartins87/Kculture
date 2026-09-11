@@ -1,0 +1,33 @@
+name: CR080 authenticated Kaggle checkpoint
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr080-api-checkpoint-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Freeze API metadata and rules
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          mkdir -p artifacts/checkpoint
+          python tools/kaggle_meta_scout_cli.py --output-dir artifacts/checkpoint --top-teams 0 --replays-per-submission 0
+          kaggle competitions episodes 56124705 --format json --quiet > artifacts/checkpoint/cr071m_episodes.json
+          kaggle competitions submission-limits kaggriculture --json > artifacts/checkpoint/submission_limits.json
+          kaggle competitions pages kaggriculture --content > artifacts/checkpoint/competition_pages.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr080-api-checkpoint-v1
+          path: artifacts/checkpoint/
+          retention-days: 30

@@ -1,6 +1,32 @@
+# STATUS — current checkpoint 2026-09-11
+
+Authoritative working branch: `fix/kaggle-parity-v1`. `main` remains behind the
+research branch; do not assume its scheduled artifacts describe the current agent.
+
+- **CR079 closed / FAIL:** run 34562284953; composite 0.28566 vs clock 0.37223,
+  worse in 51/51 holdout episodes. No SpaTaro 1-NN retuning.
+- **CR078 closed / FAIL:** mirror-breaker lost fresh exact screen.
+- **CR071M:** existing hosted submission 56124705; incumbent calibration reference,
+  no further PRESALE1 microvariants. Do not submit another copy.
+- **Current work: CR080 Mengfei route bridge**, training 96 oldest / diagnostics
+  32 newest episodes in frozen recent corpus 34558022808, artifact 10183391523.
+  Protocol: [CR080](docs/strategy/CR080_MENGFEI_BRIDGE_PROTOCOL_2026-09-11.md).
+  Build then 8 fresh paired seeds vs CR071M; only PASS opens independent panel.
+- **API-first:** token is functional in GitHub Actions. A new authenticated
+  checkpoint queries current submissions/leaderboard and 56124705 episodes.
+  Legacy scheduled R4B/KEXP050 collection is historical, not current evidence.
+- **CR077B:** OOT 2026-09-10 pending publication/access; no promotion inferred.
+- No automatic Kaggle submission. Original final holdout remains sealed.
+
+Next: finish and freeze CR080; execute the bounded screen; record its result and
+stop/confirmation decision here. All conflicting immediate actions below are
+historical, not instructions to resubmit CR071M or repeat closed experiments.
+
+---
+
 # STATUS — Kculture
 
-> **CURRENT — 2026-09-09:** authoritative operational plan: [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). Current qualified hosted challenger: `CR071M PRESALE1`; deep-frontier run `34359535052` is active. CR071O selector hypothesis is rejected only; CR071/PRESALE1 development remains active.
+> **ARCHIVED — 2026-09-09:** authoritative operational plan: [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). Current qualified hosted challenger: `CR071M PRESALE1`; deep-frontier run `34359535052` is active. CR071O selector hypothesis is rejected only; CR071/PRESALE1 development remains active.
 
 ## Current mission
 
