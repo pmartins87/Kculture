@@ -1,0 +1,42 @@
+name: CR082 state-signal exploration v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr082-state-signal-explore-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  explore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {label: umg, artifact: cr081-umg_current_56169353, team: 'Unknown Mother-Goose'}
+          - {label: majkel, artifact: cr081-majkel_current_56156662, team: 'Majkel1337'}
+          - {label: ymg, artifact: cr081-ymg_current_56161578, team: 'ymg_aq'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: corpus
+          run-id: 34669006417
+          github-token: ${{ github.token }}
+      - run: |
+          python tools/cr082_state_signal_explore.py \
+            --root corpus \
+            --team '${{ matrix.team }}' \
+            --output 'out/${{ matrix.label }}.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr082-state-signal-${{ matrix.label }}
+          path: out/*.json
+          retention-days: 30
