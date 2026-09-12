@@ -1,20 +1,26 @@
-# CR081 promotion protocol — frozen before H2H results
+# CR081 promotion protocol — corrected runtime-aligned freeze
 
-Candidate family is fixed by `CR081_GATE_A_RESULT_2026-09-11.md`. This protocol is frozen before any exact CR081-vs-anchor result is observed.
+Candidate family is fixed by `CR081_GATE_A_RESULT_2026-09-11.md`. The strategic gate thresholds remain exactly those frozen before H2H. This revision corrects a replay-storage indexing error discovered before any valid CR081 H2H result was interpreted.
 
-## Candidate
+## Invalid first implementation
 
-Exactly one CR081 implementation is allowed for this bridge experiment:
+Run `34671122716` is **INVALID / SUPERSEDED**. It incorrectly interpreted replay action index `s` as runtime step `s`, which caused it to delay the CR071M physical backbone by one turn. Kaggle replay `steps[s].action` actually corresponds to runtime step `s-1`. No strategic result from run `34671122716` may be used.
+
+The corrected implementation is evaluated on a new, non-overlapping seed master.
+
+## Correct candidate
+
+Exactly one corrected CR081 implementation is allowed for this bridge experiment:
 
 - exact CR071M source as base;
-- route backbone delayed by one turn, with step 0 PASS;
-- steps 0–287 market queue replaced by UMG development-only per-step modal market queue;
+- **CR071M physical/runtime backbone remains same-step and unchanged**;
+- runtime steps 0–287 market queue is replaced by UMG development-only per-step modal market queue learned from replay action indices 1–288;
 - original CR071M safety/repair logic retained;
-- same-turn BUY_PRODUCT is credited before a later SELL while clamping the market queue, because the UMG step-1 mechanism explicitly uses buy -> buy -> sell in one queue;
-- after step 287, continue the delayed CR071M backbone; no replay-route selection/stitching;
+- same-turn BUY_PRODUCT is credited before a later SELL while clamping the market queue, because the UMG runtime-step-0 mechanism explicitly uses buy -> buy -> sell in one queue;
+- after runtime step 287, use normal same-step CR071M behavior; no replay-route selection/stitching;
 - no team name, episode ID, seed, future state or opponent-private feature.
 
-The 288-step boundary was selected from **development-only** support: market modal support is 0.971 / 0.942 / 0.918 over the first three 96-step blocks and drops to 0.687 in the next block. It is not changed after H2H results.
+The 288-runtime-step boundary was selected from development-only evidence. Runtime-aligned market modal support is approximately 0.970 / 0.942 / 0.914 over the first three 96-step blocks and drops to ~0.683 in the next block. It is not changed after H2H results.
 
 Mechanical fixes are allowed only if the package fails to load or returns illegal/exception actions and must not change the strategic policy. A mechanically invalid run cannot be interpreted as policy evidence.
 
@@ -22,14 +28,14 @@ Mechanical fixes are allowed only if the package fails to load or returns illega
 
 Runtime: `kaggle-environments==1.32.7`, isolated package process, both seats.
 
-Fresh master seed: **9120811**.
+Corrected fresh master seed: **9120812**.
 
 - 32 seeds x 2 seats = 64 games per H2H.
 - Candidate direct: CR081 vs CR071M.
 - Guardrails: CR081 vs CR053, CR061, CR065.
 - Same-seed incumbents: CR071M vs CR053, CR061, CR065.
 
-Seed firewall must verify no overlap with the earlier CR080 discovery/confirmation masters recorded in `experiments/CR080_MENGFEI_BRIDGE_2026-09-11/seed_firewall.json`, plus master 9112081.
+Seed firewall must verify no overlap with earlier CR080 masters **and with invalid CR081 master 9120811**.
 
 ## Frozen promotion gate
 
