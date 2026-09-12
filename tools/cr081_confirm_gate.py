@@ -2,7 +2,7 @@
 import argparse,json
 from pathlib import Path
 
-MASTER_SEED=9120811
+MASTER_SEED=9120812
 SEED_COUNT=32
 
 
@@ -16,9 +16,10 @@ def main():
     required=[('CR081','CR071M')]+[(v,o) for o in guards for v in ['CR081','CR071M']]
     missing=[x for x in required if x not in games]
     report={
-        'schema_version':'cr081-promotion-gate-v1',
+        'schema_version':'cr081-promotion-gate-v2-runtime-aligned',
         'master_seed':MASTER_SEED,
         'seed_count':SEED_COUNT,
+        'invalid_prior_run':34671122716,
         'missing':missing,
         'primary_metric':'seat-balanced W/L',
         'automatic_kaggle_submission':False,
