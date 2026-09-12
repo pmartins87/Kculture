@@ -1,10 +1,11 @@
 """Build the single frozen CR081 current-3056 lineage bridge.
 
-Architecture is fixed by CR081_GATE_A_RESULT_2026-09-11.md:
+Correct replay/runtime alignment:
+- Kaggle replay action at index s+1 is the action emitted at runtime observation.step=s.
 - base = exact CR071M package source;
-- delay the CR071M route backbone by one turn (step 0 is PASS);
-- for steps 0..287 replace only the base market queue with the UMG development-only
-  per-step modal market queue;
+- keep the CR071M physical/runtime backbone SAME-STEP and unchanged;
+- for runtime steps 0..287 replace only the base market queue with the UMG
+  development-only modal market queue learned from replay action indices 1..288;
 - keep CR071M public route decisions and safety/repair logic;
 - extend sell clamping inside the stable prefix so an earlier same-turn BUY_PRODUCT
   can legally fund a later SELL, required by the observed UMG buy->sell market cycle;
@@ -20,12 +21,12 @@ import io
 import json
 import statistics
 import tarfile
-import tempfile
 from collections import Counter
 from pathlib import Path
 
 UMG = "Unknown Mother-Goose"
 PREFIX = 288
+REPLAY_ACTION_OFFSET = 1
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -40,12 +41,15 @@ def read_record(path: Path):
     d = json.loads(path.read_text(encoding="utf-8"))
     teams = list(d.get("info", {}).get("TeamNames") or [])
     seats = [i for i, t in enumerate(teams) if t == UMG]
-    if len(seats) != 1 or len(d.get("steps") or []) < PREFIX:
+    if len(seats) != 1 or len(d.get("steps") or []) < PREFIX + REPLAY_ACTION_OFFSET:
         return None
     seat = seats[0]
     return {
         "episode": int(d.get("info", {}).get("EpisodeId") or path.name.split("-")[1]),
-        "market": [d["steps"][s][seat]["action"].get("market") or [] for s in range(PREFIX)],
+        "market": [
+            d["steps"][s + REPLAY_ACTION_OFFSET][seat]["action"].get("market") or []
+            for s in range(PREFIX)
+        ],
     }
 
 
@@ -67,7 +71,7 @@ def modal_market(umg_root: Path):
         blocks.append({"start": a, "end": a + 95, "mean_market_support": statistics.mean(support[a:a+96])})
     # Frozen development-only rationale for PREFIX=288.
     if min(b["mean_market_support"] for b in blocks) < 0.80:
-        raise RuntimeError(f"frozen 0..287 development support no longer satisfies evidence: {blocks}")
+        raise RuntimeError(f"frozen runtime 0..287 development support no longer satisfies evidence: {blocks}")
     return rows, dev, hold, policy, support, blocks
 
 
@@ -86,26 +90,24 @@ def patch_source(source: str, policy: list[list]) -> str:
         raise RuntimeError("CR071M constant anchor mismatch")
     constants = (
         "_CR053_COUNTER_LEAD = 1\n\n"
-        "# CR081 frozen current-3056 bridge: development-only UMG market prefix.\n"
+        "# CR081 frozen current-3056 bridge: runtime-aligned dev-only UMG market prefix.\n"
         f"CR081_PREFIX = {PREFIX}\n"
         "CR081_MARKET = " + repr(policy) + "\n\n"
         "_BLOB = ("
     )
     source = source.replace(const_anchor, constants, 1)
 
-    base_old = "        base = route[step] if step < len(route) else PASS\n"
-    base_new = (
-        "        # CR081: UMG/bridge lineage begins the conserved route one turn later.\n"
-        "        base = PASS if step == 0 else (route[step - 1] if (step - 1) < len(route) else PASS)\n"
-    )
-    if source.count(base_old) != 1:
-        raise RuntimeError("CR071M base-action anchor mismatch")
-    source = source.replace(base_old, base_new, 1)
+    # IMPORTANT: do not alter CR071M's base = route[step]. The apparent one-turn
+    # delay in raw replays was a storage-index artifact; runtime step s maps to
+    # replay action index s+1.
+    base_anchor = "        base = route[step] if step < len(route) else PASS\n"
+    if source.count(base_anchor) != 1:
+        raise RuntimeError("CR071M same-step base-action anchor mismatch")
 
     market_old = "        market = [list(o) for o in (base.get(\"market\") or [])]\n"
     market_new = (
         "        market = [list(o) for o in (base.get(\"market\") or [])]\n"
-        "        # CR081: only the frozen stable prefix receives the UMG market queue.\n"
+        "        # CR081: only the frozen stable runtime prefix receives UMG market.\n"
         "        if 0 <= step < CR081_PREFIX:\n"
         "            market = [list(o) for o in CR081_MARKET[step]]\n"
     )
@@ -131,7 +133,7 @@ def patch_source(source: str, policy: list[list]) -> str:
         "        for o in market:\n"
         "            # In the CR081 prefix, market orders are sequential: an earlier\n"
         "            # BUY_PRODUCT can supply a later SELL in the same queue. This is\n"
-        "            # required by the observed UMG WHEAT buy->sell cycle at step 1.\n"
+        "            # required by the observed UMG WHEAT buy->sell cycle at runtime step 0.\n"
         "            if (step < CR081_PREFIX and o and len(o) >= 3\n"
         "                    and o[0] == \"BUY_PRODUCT\"):\n"
         "                avail[o[1]] = avail.get(o[1], 0) + max(0, int(o[2]))\n"
@@ -154,12 +156,12 @@ def patch_source(source: str, policy: list[list]) -> str:
 
     header = (
         '"""CR081 current-3056 lineage bridge.\n\n'
-        'Single frozen candidate: delayed conserved CR071M backbone plus development-only\n'
-        'UMG market prefix (steps 0..287), with legal same-turn buy->sell accounting.\n'
-        'No replay route stitching and no hidden/identity features.\n'
+        'Single frozen candidate: unchanged same-step CR071M physical backbone plus\n'
+        'runtime-aligned development-only UMG market prefix (steps 0..287), with\n'
+        'legal same-turn buy->sell accounting. No replay route stitching and no\n'
+        'hidden/identity features.\n'
         '"""\n'
     )
-    # Replace only the leading module docstring to make runtime provenance obvious.
     if source.startswith('"""'):
         end = source.find('"""', 3)
         if end != -1:
@@ -195,10 +197,14 @@ def main():
     out_hash = sha256_bytes(a.output.read_bytes())
 
     manifest = {
-        "schema_version": "cr081-current3056-bridge-v1",
+        "schema_version": "cr081-current3056-bridge-v2-runtime-aligned",
         "candidate": "CR081",
-        "architecture": "delayed CR071M backbone + UMG dev-only modal market prefix",
+        "architecture": "unchanged same-step CR071M physical/runtime backbone + runtime-aligned UMG dev-only modal market prefix",
         "prefix_steps": PREFIX,
+        "replay_action_index_offset": REPLAY_ACTION_OFFSET,
+        "replay_action_window_used": [1, PREFIX],
+        "runtime_market_window": [0, PREFIX - 1],
+        "physical_backbone_delayed": False,
         "usable_umg_episodes": len(rows),
         "development_episodes": len(dev),
         "sealed_holdout_episodes_not_used_in_build": len(hold),
