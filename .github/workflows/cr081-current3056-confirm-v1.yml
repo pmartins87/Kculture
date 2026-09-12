@@ -1,0 +1,149 @@
+name: CR081 current-3056 bridge confirmation v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr081-current3056-confirm-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr081-umg_current_56169353
+          path: source/umg
+          run-id: 34669006417
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: hosted-authenticated-forensics
+          path: source/hosted
+          run-id: 34657568296
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr080-confirmation-packages-v1
+          path: source/anchors
+          run-id: 34655496708
+          github-token: ${{ github.token }}
+      - name: Reproduce frozen Gate A
+        run: |
+          python tools/cr081_gate_a.py \
+            --umg-root source/umg \
+            --bridge-root source/hosted \
+            --output build/gate_a.json
+          python - <<'PY'
+          import json
+          d=json.load(open('build/gate_a.json'))
+          assert d['pass'], d
+          print('CR081 Gate A PASS reproduced')
+          PY
+      - name: Build the single frozen candidate
+        run: |
+          mkdir -p corpus build
+          python tools/cr081_build_current3056_bridge.py \
+            --umg-root source/umg \
+            --cr071m source/anchors/CR071M.tar.gz \
+            --output corpus/CR081.tar.gz \
+            --manifest build/candidate_manifest.json
+          cp source/anchors/CR071M.tar.gz corpus/CR071M.tar.gz
+          cp source/anchors/CR053.tar.gz corpus/CR053.tar.gz
+          cp source/anchors/CR061.tar.gz corpus/CR061.tar.gz
+          cp source/anchors/CR065.tar.gz corpus/CR065.tar.gz
+      - name: Fresh-seed firewall
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          prior=json.loads(Path('experiments/CR080_MENGFEI_BRIDGE_2026-09-11/seed_firewall.json').read_text())
+          masters=[]
+          masters.extend(prior.get('earlier_masters_checked',[]))
+          if prior.get('master_seed') is not None: masters.append(prior['master_seed'])
+          masters.extend([9112080,9112081])
+          masters=list(dict.fromkeys(int(x) for x in masters))
+          used=set()
+          for master in masters: used.update(make_seeds(512,master))
+          fresh=make_seeds(32,9120811)
+          overlap=sorted(used & set(fresh))
+          assert not overlap, f'Seed overlap: {overlap}'
+          Path('corpus/seed_firewall.json').write_text(json.dumps({'master_seed':9120811,'seeds':fresh,'earlier_masters':masters,'overlap':overlap},indent=2))
+          print('Fresh seed firewall PASS:',len(fresh))
+          PY
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+          cp build/gate_a.json corpus/GATE_A.json
+          cp build/candidate_manifest.json corpus/CANDIDATE_MANIFEST.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr081-confirmation-packages-v1
+          path: corpus/
+          retention-days: 30
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 7
+      matrix:
+        include:
+          - {a: CR081, b: CR071M}
+          - {a: CR081, b: CR053}
+          - {a: CR081, b: CR061}
+          - {a: CR081, b: CR065}
+          - {a: CR071M, b: CR053}
+          - {a: CR071M, b: CR061}
+          - {a: CR071M, b: CR065}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr081-confirmation-packages-v1
+          path: corpus
+      - name: Exact reference, frozen candidate, both seats
+        run: |
+          python tools/kaggle_reference_h2h_v2.py \
+            --a 'corpus/${{ matrix.a }}.tar.gz' \
+            --b 'corpus/${{ matrix.b }}.tar.gz' \
+            --a-id '${{ matrix.a }}' \
+            --b-id '${{ matrix.b }}' \
+            --seed-count 32 \
+            --master-seed 9120811 \
+            --output 'results/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr081-confirm-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: results/*.json
+          retention-days: 30
+  aggregate:
+    if: always()
+    needs: h2h
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr081-confirm-*
+          path: results
+          merge-multiple: true
+      - run: python tools/cr081_confirm_gate.py --results results --output summary/gate.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr081-confirmation-gate-v1
+          path: summary/
+          retention-days: 30
