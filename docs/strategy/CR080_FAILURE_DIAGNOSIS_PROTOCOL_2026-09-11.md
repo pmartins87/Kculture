@@ -1,4 +1,4 @@
-# CR080 failure diagnosis — frozen protocol
+# CR080 failure diagnosis — frozen protocol + result
 
 Frozen after CR080 independent confirmation run `34655496708` failed its predeclared gate and before inspecting any post-failure telemetry.
 
@@ -41,10 +41,36 @@ H3 — **route stitching drift:** day-boundary selection repeatedly jumps betwee
 
 H4 — if H1-H3 are weak or similar in wins and losses, the failure is strategic rather than mechanical: Mengfei's historical route family itself is no longer a robust current-meta bridge.
 
-## Decision use
+## Result — run `34668446703`
 
-- Strong H1/H2/H3 evidence closes the *route-replay follower architecture* as currently represented; the next candidate must model labor/production state directly rather than patch CR080 on these seeds.
-- Weak H1/H2/H3 evidence closes the Mengfei bridge on strategic grounds and sends research back to current hosted/top-agent state-adaptive mechanisms.
-- In neither branch is a CR080 retune allowed.
+All three 64-game diagnostic panels completed successfully. Across CR071M, CR061 and CR065:
 
-Original final held-out seeds remain sealed. No Kaggle submission is part of this diagnostic.
+- mean hand shortfall worker-steps = **0.0**;
+- mean omitted reference-hand actions = **0.0**;
+- mean position-mismatch worker-steps = **0.0**;
+- mean market-action mismatch steps = **0.0**;
+- actual worker-action mutations were negligible (~0.11–0.14 per game, almost entirely weed repair).
+
+Therefore H1 and H2 are falsified as material causes. The runtime is reproducing the selected source route mechanically; the confirmation failure is not explained by missing hands or movement-repair cascades.
+
+The consistent separation is economic-state mismatch. In all three panels losses begin a day farther from the selected route's economic state and finish farther from it than wins:
+
+| Opponent | selection economy L1, wins | selection economy L1, losses | end-drift economy L1, wins | end-drift economy L1, losses |
+|---|---:|---:|---:|---:|
+| CR071M | 1.744 | 3.489 | 1.817 | 3.601 |
+| CR061 | 2.375 | 3.887 | 2.472 | 4.023 |
+| CR065 | 1.989 | 3.495 | 2.071 | 3.592 |
+
+The effect grows particularly in the mid/late game. Against CR071M, for example, loss-side selected economy L1 rises from roughly 1.3 around day 13 to ~3.9 on day 15 and >5 by days 17–18, while wins remain materially closer for most of that interval.
+
+Route switching itself is common in both wins and losses (roughly 5.5–7 switches/game), so switch count alone is not the explanation. The important failure is **state aliasing**: the selector finds a trajectory that looks locally compatible in public/physical features, but the accumulated economic path is not causally interchangeable with that source trajectory. Following it for the next day can therefore preserve visible mechanics while producing a different economic state. Repeating this process compounds the mismatch.
+
+## Decision
+
+**H3 is supported; H1 and H2 are rejected. H4 may also contribute, but is not needed to close the architecture.**
+
+The route-replay follower / daily nearest-route stitching architecture is closed. We will not repair CR080 by changing selector weights, adding more Mengfei routes or lowering thresholds on the same evidence. The next architecture must transfer current-meta mechanisms at the semantic/state level — especially market/economic decisions — rather than treat whole replay trajectories as interchangeable continuations.
+
+This directly motivates CR081's current-3056-lineage market/economy bridge. CR081 may preserve a physical backbone where independently supported, but it must not perform nearest-replay route stitching.
+
+Original final held-out seeds remain sealed. No Kaggle submission was made from this diagnostic.
