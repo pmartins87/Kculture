@@ -1,103 +1,99 @@
 # ROADMAP — Kculture live plan
 
-Updated: 2026-09-11 local / 2026-09-12 UTC boundary
+Updated: 2026-09-12
 
-Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Working source of truth is branch `fix/kaggle-parity-v1`, together with `STATUS.md` and current frozen experiment protocols.
+Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Working source of truth is branch `fix/kaggle-parity-v1` plus `STATUS.md` and the current frozen protocol.
 
 ## Invariants
 
-1. Hosted/live evidence and exact-reference W/L both matter; neither replaces the other.
-2. Five daily submissions are a cap, not a quota. Do not retire an active slot for an unqualified candidate.
-3. Every candidate family gets a predeclared gate before valid validation results are observed.
-4. Failed validation data may diagnose failure but may not be used to retune the same candidate until it passes.
+1. Hosted/live evidence and exact-reference W/L both matter.
+2. Submission allowance is a cap, not a quota.
+3. Every candidate family gets a predeclared gate before valid validation scores are interpreted.
+4. Mechanically or semantically invalid runs are quarantined and their scores are not strategy evidence.
 5. No seed, team identity, episode ID, future state or opponent-private state as an agent feature.
-6. Authenticated official Kaggle API is the default current-meta source.
+6. Authenticated Kaggle API is the default current-meta source.
 7. Original final holdout remains sealed.
-8. A mechanically or semantically invalid evaluation is quarantined; its result is not strategy evidence.
 
-## Completed / closed
+## Closed architecture classes
 
-- CR071M hosted as submission `56124705`; incumbent/calibration reference.
 - CR078 late mirror breaker: closed.
-- CR079 simple SpaTaro nearest-neighbor clone: closed after OOT generalization failure.
-- CR080 Mengfei daily-route bridge: closed after independent confirmation run `34655496708` failed direct/guardrail gates.
-- CR080 post-failure diagnostic `34668446703`: complete. Mechanical replay execution was intact; economic state aliasing under daily nearest-route stitching separated losses from wins. Replay-route stitching architecture closed.
+- CR079 simple SpaTaro 1-NN: closed after OOT failure.
+- CR080 Mengfei nearest-route/day stitching: closed after independent gate failure; post-failure diagnosis identified economic-state aliasing.
 
 ## Current frontier
 
-Authenticated run `34668645531`: Majkel 3181.9, ymg_aq 3075.1, UMG 3056.5, Artem 3029.3, SpaTaro 3029.0.
+Authenticated snapshot `34668645531`: Majkel 3181.9, ymg_aq 3075.1, UMG 3056.5, Artem 3029.3, SpaTaro 3029.0.
 
-UMG is the bridge target because it is current-top-tier and structurally related to a hosted family already beating CR071M.
+UMG remains the bridge target because it is top-tier and structurally related to a family already beating CR071M while introducing a strongly reproducible market/economic transformation.
 
 ## CR081 Gate A — COMPLETE / PASS
 
-Deep corpus run `34669006417`: UMG 111 downloaded episodes, 110 usable after excluding one ambiguous self-play; chronological split 82 development / 28 newest holdout. Majkel newest64 and ymg_aq newest64 collected in parallel.
+Deep corpus `34669006417`: UMG 110 usable episodes = 82 development + 28 newest chronological holdout.
 
-Correct runtime-aligned Gate A:
+Runtime-aligned Gate A:
 
-- farmer median similarity 0.90104 >= 0.80;
-- hands median similarity 0.73958 >= 0.60;
-- dev-only modal market -> holdout fidelity 0.94959 >= 0.65.
+- farmer median 0.90104 >= 0.80;
+- hands median 0.73958 >= 0.60;
+- dev-only modal market holdout fidelity 0.94959 >= 0.65.
 
-The fixed stable prefix remains runtime steps 0..287 because development market support is ~0.970 / 0.942 / 0.914 over the first three 96-step blocks and falls to ~0.683 in the next.
+Stable runtime prefix stays 0–287.
 
-## Replay-index gate
+## Implementation quarantine history
 
-Kaggle replay action index `s` corresponds to runtime step `s-1`. This was caught before any valid CR081 H2H result was accepted.
+- v1 run `34671122716`, master `9120811`: invalid replay/runtime indexing; physical route delayed one turn.
+- v2 run `34671446692`, master `9120812`: invalid because inherited strategic market logic remained active inside the overlay. The defect was discovered before any v2 score was read. `dead_stock` was directly isolated as the source of 20 extra actions in UMG episode `107956535`; `_cr053_counter_market` is also strategic and could contaminate the CR053 guardrail.
 
-- Run `34671122716` used the wrong translation and delayed the CR071M physical route. **INVALID / SUPERSEDED; ignore results.**
-- Correct translation: keep CR071M physical route same-step; map UMG replay actions 1..288 onto runtime market steps 0..287.
-- Invalid run seed master 9120811 is burned and included in the corrected seed firewall.
+Both masters are permanently burned. Their scores must never influence strategic selection.
 
-## CURRENT — corrected CR081 confirmation
+## CURRENT — CR081 v3 fidelity confirmation
 
-Run **`34671446692`**, master seed **9120812**.
+Run **`34694092039`**, master **`9120813`**.
 
-Single candidate architecture:
+One candidate only:
 
 - unchanged same-step CR071M physical/runtime backbone;
-- runtime steps 0..287 use UMG development-only modal market queue;
-- CR071M safety/repair retained;
-- same-turn BUY_PRODUCT can supply a later SELL inside the prefix, needed for observed UMG market semantics;
+- runtime 0–287 UMG development-only modal market;
+- retain `room_guard` and `clamp_sells` as mechanical safety/legality repairs;
+- disable `_cr053_counter_market` and `dead_stock` only inside the UMG prefix;
+- resume normal CR071M strategy after step 287;
 - no replay stitching or hidden/identity features.
 
-Frozen 7-H2H panel:
+Frozen seven-H2H panel:
 
-1. CR081 vs CR071M;
-2. CR081 vs CR053;
-3. CR081 vs CR061;
-4. CR081 vs CR065;
-5. CR071M vs CR053;
-6. CR071M vs CR061;
-7. CR071M vs CR065.
+1. CR081 vs CR071M
+2. CR081 vs CR053
+3. CR081 vs CR061
+4. CR081 vs CR065
+5. CR071M vs CR053
+6. CR071M vs CR061
+7. CR071M vs CR065
 
-Each: 32 fresh seeds x two seats = 64 games.
+Each uses 32 fresh seeds × two seats = 64 games.
 
-Promotion requires all:
+Promotion requires:
 
-- direct CR081 vs CR071M >=0.5625;
+- direct >=0.5625;
 - aggregate guardrail delta >=0;
-- each guardrail delta >= -0.0625;
+- each guardrail delta >=-0.0625;
 - zero errors/non-DONE;
-- complete exact panel.
+- complete panel.
 
 ## Conditional next path
 
-### If corrected CR081 passes
+### If v3 PASS
 
-1. freeze exact tested package hash;
-2. account for which active hosted slot to retire;
-3. submit exactly one hosted CR081 probe;
-4. collect its episodes through authenticated API;
-5. compare live W/L/rating trajectory against incumbents without overreacting to tiny samples.
+1. freeze exact tested SHA-256;
+2. refresh active Kaggle slot/submission state through authenticated API;
+3. retire only the rational incumbent if necessary;
+4. submit exactly one hosted CR081 probe;
+5. collect hosted episodes and evaluate live W/L/rating trajectory without reacting to tiny samples.
 
-### If corrected CR081 fails
+### If v3 FAIL
 
-Close CR081 bridge with no threshold/boundary/quantity retuning on validation data. Start the already-motivated **state-adaptive macro-economic policy** using current top-3 corpora. The key prior is that market behavior is highly structured across current leaders while physical routes differ; model economic macros as functions of legal current state instead of copying another tape.
+Close CR081 completely. Do not create CR081A/B/C, move the 288 boundary, edit individual market quantities or retune on v3 seeds.
 
-## Stop / escalation criteria
+Advance immediately to a **state-adaptive macro-economic policy** trained on the frozen current-frontier corpora. Current evidence already indicates that top agents have highly structured but distinct economic styles: UMG is market-intensive with frequent same-queue buy/sell cycles, Majkel is even more market-active with a different opening, and ymg_aq uses another economic macro. The next representation should infer legal economic macro from current state rather than copy a single time-indexed tape.
 
-- Never reopen PRESALE1 microvariants, CR078, CR079 simple 1-NN, CR080 route stitching, or invalid CR081-v1 without genuinely new evidence invalidating the closure reason.
-- A current-frontier candidate that cannot generalize chronologically or survive fresh paired seeds is closed even if its source agent has a high Kaggle rating.
-- If corrected CR081 fails, do not create CR081A/B/C. Change representation to state-adaptive macro economics.
-- If a candidate passes a frozen fresh gate with material uplift, do not keep it local indefinitely for optional tests; move to one controlled hosted probe.
+## Escalation rule
+
+If a valid candidate passes a frozen fresh gate with material uplift, move to one controlled hosted probe rather than endlessly adding optional local tests. If it fails, change representation rather than tuning against spent validation seeds.
