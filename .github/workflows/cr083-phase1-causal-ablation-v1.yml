@@ -1,0 +1,123 @@
+name: CR083 Phase-1 causal market ablation v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr083-phase1-causal-ablation-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr080-confirmation-packages-v1
+          path: source/anchors
+          run-id: 34655496708
+          github-token: ${{ github.token }}
+      - name: Build six clean causal deletions
+        run: |
+          mkdir -p corpus manifests
+          cp source/anchors/CR071M.tar.gz corpus/CR071M.tar.gz
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op SELL --output corpus/CR083_NO_SELL.tar.gz --manifest manifests/NO_SELL.json
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op BUY_SEED --output corpus/CR083_NO_BUY_SEED.tar.gz --manifest manifests/NO_BUY_SEED.json
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op BUY_PRODUCT --output corpus/CR083_NO_BUY_PRODUCT.tar.gz --manifest manifests/NO_BUY_PRODUCT.json
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op BUY_ANIMAL --output corpus/CR083_NO_BUY_ANIMAL.tar.gz --manifest manifests/NO_BUY_ANIMAL.json
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op HIRE --output corpus/CR083_NO_HIRE.tar.gz --manifest manifests/NO_HIRE.json
+          python tools/cr083_build_market_ablation.py --base source/anchors/CR071M.tar.gz --op BUY_LAND --output corpus/CR083_NO_BUY_LAND.tar.gz --manifest manifests/NO_BUY_LAND.json
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+          cp manifests/*.json corpus/
+      - name: Fresh exploratory seed firewall
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          prior=json.loads(Path('experiments/CR080_MENGFEI_BRIDGE_2026-09-11/seed_firewall.json').read_text())
+          masters=[]
+          masters.extend(prior.get('earlier_masters_checked',[]))
+          if prior.get('master_seed') is not None: masters.append(prior['master_seed'])
+          masters.extend([9112080,9112081,9120811,9120812,9120813,9120821])
+          masters=list(dict.fromkeys(int(x) for x in masters))
+          used=set()
+          for master in masters: used.update(make_seeds(512,master))
+          fresh=make_seeds(8,9130830)
+          overlap=sorted(used & set(fresh))
+          assert not overlap, f'Seed overlap: {overlap}'
+          Path('corpus/seed_firewall.json').write_text(json.dumps({
+              'master_seed':9130830,
+              'seed_count':8,
+              'seeds':fresh,
+              'earlier_masters':masters,
+              'overlap':overlap,
+              'architecture_research_only':True,
+              'promotion_use_forbidden':True,
+          },indent=2))
+          print('CR083 Phase-1 fresh exploratory seed firewall PASS:',fresh)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr083-phase1-ablation-packages-v1
+          path: corpus/
+          retention-days: 30
+  h2h:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        variant: [CR083_NO_SELL, CR083_NO_BUY_SEED, CR083_NO_BUY_PRODUCT, CR083_NO_BUY_ANIMAL, CR083_NO_HIRE, CR083_NO_BUY_LAND]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase1-ablation-packages-v1
+          path: corpus
+      - name: Exact paired causal ablation vs CR071M
+        run: |
+          python tools/kaggle_reference_h2h_v2.py \
+            --a 'corpus/${{ matrix.variant }}.tar.gz' \
+            --b 'corpus/CR071M.tar.gz' \
+            --a-id '${{ matrix.variant }}' \
+            --b-id 'CR071M' \
+            --seed-count 8 \
+            --master-seed 9130830 \
+            --output 'results/${{ matrix.variant }}_vs_CR071M.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr083-phase1-${{ matrix.variant }}-vs-CR071M
+          path: results/*.json
+          retention-days: 30
+  aggregate:
+    if: always()
+    needs: h2h
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr083-phase1-CR083_*
+          path: results
+          merge-multiple: true
+      - run: python tools/cr083_phase1_ablation_summary.py --results results --output summary/ablation.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr083-phase1-causal-ablation-summary-v1
+          path: summary/
+          retention-days: 30
