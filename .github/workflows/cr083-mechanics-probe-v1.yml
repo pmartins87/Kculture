@@ -1,0 +1,29 @@
+name: CR083 exact mechanics Phase-0 probe v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr083-mechanics-probe-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7'
+      - name: Probe exact mechanics and state branching
+        run: |
+          python tools/cr083_mechanics_probe.py \
+            --output out/mechanics_probe.json \
+            --source-dir out/kaggriculture_source
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr083-mechanics-probe-v1
+          path: out/
+          retention-days: 30
