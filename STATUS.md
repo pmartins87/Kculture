@@ -6,7 +6,7 @@ Authoritative branch: `fix/kaggle-parity-v1`.
 
 ## Mission
 
-Maximize probability of a prize-winning / top-10 Kaggriculture finish before 2026-09-30 23:59 UTC. No hosted submission without a passed frozen gate.
+Maximize probability of a prize-winning / top-10 Kaggriculture finish before 2026-09-30 23:59 UTC. No hosted submission without a passed frozen promotion gate.
 
 ## Hosted incumbents
 
@@ -17,9 +17,15 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 
 - CR078: closed.
 - CR079 SpaTaro 1-NN clone: closed / FAIL.
-- CR080 Mengfei route stitching: closed / FAIL. Post-failure diagnostic showed economic-state aliasing, so nearest-route/day replay stitching is closed.
-- CR081 v1 — run `34671122716`, seed master `9120811`: **INVALID**. Replay-storage offset was misread and the CR071M physical backbone was delayed one runtime turn.
-- CR081 v2 — run `34671446692`, seed master `9120812`: **INVALID**. Correct replay/runtime offset, but inherited strategic market transforms remained active inside the frozen UMG prefix. This was discovered before any v2 score was read. Pre-score audit on UMG episode `107956535` isolated 20 extra market actions at runtime steps 267–287 to `dead_stock`; `_cr053_counter_market` was also identified as an inherited strategic transform that could fire in the CR053 guardrail. No v1/v2 score may be used as strategy evidence.
+- CR080 Mengfei route stitching: closed / FAIL. Post-failure diagnosis identified economic-state aliasing; nearest-route/day replay stitching is closed.
+- CR081 v1 run `34671122716`, master `9120811`: INVALID replay/runtime indexing.
+- CR081 v2 run `34671446692`, master `9120812`: INVALID because inherited strategic market transforms remained active inside the UMG overlay. Both were quarantined before score interpretation.
+- **CR081 v3 run `34694092039`, master `9120813`: VALID / FAIL / CLOSED.** Exact package SHA-256 `b608b8a46a67e7dbbf2c53e5f36e25a19cad708aeeab30a6e28c93321d78ec40`. Complete seven-H2H panel, zero errors/non-DONE:
+  - vs CR071M: **0–64 = 0.0000**;
+  - vs CR053: **0–64 = 0.0000** vs CR071M 40–24 = 0.6250, delta -0.6250;
+  - vs CR061: **6–58 = 0.09375** vs CR071M 64–0 = 1.0000, delta -0.90625;
+  - vs CR065: **4–60 = 0.06250** vs CR071M 60–4 = 0.9375, delta -0.8750.
+  Frozen decision: `CLOSE_CR081_BRIDGE_MOVE_TO_STATE_ADAPTIVE_MACRO_POLICY`. No CR081A/B/C, no boundary or quantity retuning, no hosted submission. Final analysis: `docs/strategy/CR081_FINAL_RESULT_2026-09-12.md`.
 
 ## Current frontier snapshot
 
@@ -31,49 +37,42 @@ Authenticated run `34668645531`:
 4. Artem The Farmer 3029.3
 5. SpaTaro 3029.0
 
-## CR081 Gate A — PASS
+## Architectural conclusion
 
-Deep corpus run `34669006417`: 111 UMG episodes downloaded; one UMG-vs-UMG replay excluded as seat-ambiguous; **110 usable = 82 development + 28 newest holdout**.
+CR080 and CR081 fail through the same deeper issue from different directions: action trajectories are not portable across mismatched economic states. CR081 Gate A proved UMG's market tape is chronologically stable (~94.96% exact holdout fidelity), yet faithfully transplanting that tape onto CR071M caused catastrophic losses. Temporal predictability is therefore not causal portability.
 
-Runtime-aligned newest-28 results:
+The active research path must condition economic actions on the **legal current economic state**, one step at a time, rather than copy a route or market tape.
 
-- farmer median similarity to frozen bridge family: **0.90104** (gate >=0.80);
-- hands median similarity: **0.73958** (gate >=0.60);
-- development-only modal market -> holdout exact fidelity: **0.94959** (gate >=0.65).
+## ACTIVE — CR082 state-adaptive macro economics
 
-Kaggle replay action index `s+1` maps to runtime step `s`. The frozen market prefix remains runtime steps **0–287**, with development support ~0.970 / 0.942 / 0.914 across the first three 96-step blocks and ~0.683 in the next block.
+Protocol: `docs/strategy/CR082_STATE_ADAPTIVE_MACRO_PROTOCOL_2026-09-12.md`.
 
-## ACTIVE — CR081 v3 fidelity confirmation
+Frozen representation:
 
-Workflow run: **`34694092039`**.
-Fresh master seed: **`9120813`**, firewalled against prior CR080 masters and burned CR081 masters `9120811`/`9120812`.
+- primary teacher = current #1 Majkel1337;
+- same runtime step only;
+- legal current-state features: day/hour, own money, labor count/hires, unlocked quadrants, own shed and seed inventory, public prices and market inventory;
+- standardized on frozen teacher development data;
+- one nearest teacher state from the same runtime step supplies **only that step's market queue**;
+- OOD fallback to per-step modal market when distance exceeds development leave-one-out p95;
+- no replay continuation, no farmer/hands copying, no identity/private-opponent features;
+- active prefix fixed at runtime 0–287;
+- only capacity/legality repairs permitted inside prefix.
 
-Exact candidate architecture:
+Old-corpus exploration (hypothesis-forming only) found Majkel exact market fidelity 0.7949 -> 0.8498 (+0.0549) and semantic fidelity 0.8162 -> 0.8707 (+0.0545), reproduced in GitHub run `34694384742`.
 
-- same-step CR071M physical/runtime backbone unchanged;
-- runtime steps 0–287 use the UMG development-only modal market learned from replay indices 1–288;
-- `room_guard` retained inside prefix as shed-capacity safety repair;
-- `clamp_sells` retained as legality/order-slot protection, including same-turn BUY_PRODUCT -> later SELL accounting;
-- `_cr053_counter_market` disabled inside prefix because it is strategy, not safety;
-- `dead_stock` disabled inside prefix because it is strategy, not safety;
-- both inherited strategies resume after step 287 with normal CR071M behavior;
-- no replay stitching, team identity, episode ID, seed, future state or opponent-private feature.
+### Fresh Gate A audit
 
-Frozen v3 promotion panel: CR081 vs CR071M/CR053/CR061/CR065 plus same-seed CR071M guardrail controls; 32 fresh seeds x two seats = 64 games/H2H.
+Loose fresh-gate run `34694479980` initially reported PASS using 64 EpisodeIds absent from old64, but audit found 38 were older unseen episodes. That result is **not promotion evidence**.
 
-Promotion requires all:
+The original old64 maximum EpisodeId is `108032343`. The current newest128 corpus contains **26 strictly later episodes** (`EpisodeId > 108032343`), enough to meet the frozen minimum of 24.
 
-- direct CR081 vs CR071M >= **0.5625**;
-- aggregate guardrail delta >= 0;
-- every individual guardrail delta >= **-0.0625**;
-- complete panel, zero errors and zero non-DONE.
-
-PASS -> exact tested hash eligible for one hosted probe after slot accounting. FAIL -> close CR081 and move directly to the predeclared state-adaptive macro-economic architecture; no CR081A/B/C retuning.
+**Current valid Gate A run: `34694852503`**, strict-forward filter only. No model, feature, k, p95, prefix or threshold changed. It must beat step-modal by >= +0.03 absolute in both exact and semantic fidelity on those strictly later episodes. Only PASS makes one executable CR082 candidate eligible to be built.
 
 ## Binding policies
 
-- Kaggle authenticated API first.
+- Authenticated Kaggle API first.
 - Exact H2H uses `kaggle-environments==1.32.7`, isolated package processes and both seats.
 - Original final holdout remains sealed.
-- Mechanically/semantically invalid runs are quarantined before score interpretation.
-- Closed hypotheses remain closed unless genuinely new evidence invalidates their failure reason.
+- Invalid evaluations are quarantined before score interpretation.
+- Closed hypotheses stay closed unless genuinely new evidence invalidates their closure.
