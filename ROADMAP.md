@@ -1,233 +1,96 @@
-# ROADMAP — current path 2026-09-11
+# ROADMAP — Kculture live plan
 
-Objective remains a prize-winning/top-10 final result. Working source of truth:
-`fix/kaggle-parity-v1`, current [STATUS](STATUS.md) and
-[CR080 protocol](docs/strategy/CR080_MENGFEI_BRIDGE_PROTOCOL_2026-09-11.md).
+Updated: 2026-09-11 local / 2026-09-12 UTC boundary
 
-1. COMPLETE: authenticated current-meta corpora; CR078 and CR079 rejected.
-2. COMPLETE: CR080 executable Mengfei daily-route bridge (96 training episodes).
-3. PASS: package smoke + 8 fresh seeds/two seats vs CR071M, 10–6; score 0.625,
-   zero execution failures in corrected valid run. Initial loader run invalid.
-4. CURRENT: run **34655496708**, 32 new paired seeds against CR071M and CR053/CR061/CR065 guardrails,
-   plus same-seed incumbent guardrails. Apply predeclared deltas; no tuning.
-5. IF CONFIRMED: identify retiring active slot and prepare one hosted probe.
-   Do not delay a qualified candidate >24h for optional testing.
-6. IF FAILED: preserve the failure and diagnose route execution/production drift
-   before selecting a materially different mechanism. No CR080A/B/C threshold
-   rescue on used seeds. No return to PRESALE1 or SpaTaro same-step 1-NN.
+Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Working source of truth is branch `fix/kaggle-parity-v1`, together with `STATUS.md` and the current frozen experiment protocols. Historical roadmap versions remain in Git history and are not operational instructions.
 
-API-first checkpoint runs independently of the strategy evaluation. Historical
-scheduled jobs targeting R4B/KEXP050 cannot answer current CR071M performance.
-No automatic submission and no use of the original sealed final holdout.
+## Invariants
 
----
+1. Hosted/live evidence and exact-reference W/L both matter; neither replaces the other.
+2. Five daily submissions are a cap, not a quota. Do not retire an active slot for an unqualified candidate.
+3. Every candidate family gets a predeclared gate before its validation result is observed.
+4. Failed validation data may diagnose failure but may not be used to retune the same candidate until it passes.
+5. No use of seed, team identity, episode ID, future state or opponent-private state as an agent feature.
+6. Authenticated official Kaggle API is the default current-meta source.
+7. Original final holdout remains sealed.
 
-# ROADMAP — Kculture
+## Completed / closed
 
-> **ARCHIVED — 2026-09-09:** the authoritative operational plan is [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). It supersedes the immediate-path sections below when they conflict. Current candidate: `CR071M PRESALE1`; current deep validation run: `34359535052`; one hosted probe is justified now while the deep run continues. The CR071O `opp.money > 190` selector is rejected, but CR071 development is **not** closed.
+- CR071M hosted as submission `56124705`; it is now an incumbent/calibration reference, not the main research path.
+- CR078 late mirror breaker: closed.
+- CR079 simple SpaTaro nearest-neighbor clone: closed after OOT generalization failure.
+- CR080 Mengfei daily-route bridge: closed after independent confirmation run `34655496708` failed its frozen direct and guardrail gates. No CR080A/B/C retuning.
 
-## Current objective
+## Stage 1 — explain CR080 failure without rescuing it
 
-Maximize probability of a **prize-winning / top-10 final finish**, with practical focus on closing the gap from the ~1600 hosted range observed in Kculture toward the current ~2700+ public frontier. Local elegance and exhaustive proof are secondary to expected prize value.
+**CURRENT RUN:** `34668446703`.
 
-## Current execution invariants
+Purpose: determine whether CR080 failed mainly through labor-plan drift, position-repair cascades, day-to-day route stitching/economic drift, or because the Mengfei route family itself is strategically inadequate.
 
-1. User questions do not silently change the plan.
-2. Hosted/live evidence and exact-reference W/L both matter; neither replaces the other.
-3. Qualified materially different candidates should not sit unsubmitted for >24h merely because more local tests are possible.
-4. Five daily submissions are a cap, not a quota; only the latest two active agents matter, so each new submission must justify retiring an active slot.
-5. Narrow hypotheses get discovery -> one fresh confirmation -> broad validation only if still decision-relevant. Failed validation sets are not retuned.
-6. An independent architecture branch remains active in parallel with candidate validation.
-7. All material branches and stop decisions are predeclared in `docs/EXECUTION_CONTRACT_2026-09-09.md`.
+Decision:
 
-## Current immediate path
+- strong labor/repair/stitching signal -> eliminate replay-route follower architecture and require explicit state-aware labor/production modeling;
+- weak mechanical signal -> treat failure as strategic and eliminate Mengfei bridge directly.
 
-1. Submit exact frozen `CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz` once as a hosted challenger; record submission ID and hash in the ledger.
-2. Let deep-frontier run `34359535052` finish; do not cancel it because of the hosted probe.
-3. Refresh current ~2700+ public frontier and identify structural mechanisms worth causal testing.
-4. At hosted checkpoint (~60 episodes or ~5h if count unavailable), compare against the active hosted baseline without overreading early Elo noise.
-5. Apply predeclared decision tree A/B/C/D from the execution contract.
-6. Next hosted slot goes only to a materially different validated challenger or deliberate complementary hedge.
+This diagnostic cannot promote CR080 and uses already-spent confirmation seeds only descriptively.
 
----
+## Stage 2 — current-frontier target selection
 
-> **Historical update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The continuation lists below are historical and superseded by the current section above where they conflict.
+**COMPLETE:** authenticated frontier refresh run `34668645531`.
 
-## Objective (historical)
+Snapshot top:
 
-Maximize probability of a **top-10 final finish** in Kaggriculture. Architecture, novelty and elegance are secondary. Use heuristics, search, optimization, ML or planning only when evidence says they improve expected prize value.
+1. Majkel1337 3181.9 (`56156662`)
+2. ymg_aq 3075.1 (`56161578`)
+3. Unknown Mother-Goose 3056.5 (`56169353`)
+4. Artem The Farmer 3029.3
+5. SpaTaro 3029.0
 
-## Current gate summary (historical)
+Selection rule applied before deep-corpus inspection: target Unknown Mother-Goose because it is the strongest current agent with a demonstrated bridge to the CR071M lineage. Recent CR071M losses against a related family show ~90% farmer / 74.5% hands / 78.8% market equality to sampled UMG over steps 0–191 while still losing by roughly 4k–9.6k reward.
 
-- **R0 COMPLETE** — competition entry/facts frozen.
-- **R1 PASS** — exact official starter/environment reproduction.
-- **R2 PASS** — deterministic laboratory and seed partitions.
-- **R3 DELIVERY PASS / HOSTED CALIBRATION FAIL** — R4B package valid and live, visible hosted rating **161.6 → 135.7 → 110.5**.
-- **R4 ACTIVE / FIRST ADAPTIVE PASS ACHIEVED** — KEXP-041 is the first R4D candidate to beat R4B directly while preserving the modern public regression panel.
-- **Held-out 32/32 sealed.**
+## Stage 3 — CR081 deep corpus and Gate A
 
-## Decision invariant
+**CURRENT RUN:** `34669006417`.
 
-Before promoting any idea ask:
+Frozen collection:
 
-1. What failure could this fix?
-2. What is the plausible W/L ceiling?
-3. What is the cheapest falsification?
-4. Does it generalize across seeds/opponent families?
-5. Does it improve expected top-10 probability enough to justify opportunity cost?
+- UMG `56169353`: newest 128 episodes — primary;
+- Majkel `56156662`: newest 64 — context;
+- ymg_aq `56161578`: newest 64 — context.
 
-Hosted/live evidence outranks an attractive local story when they conflict.
+Protocol: `docs/strategy/CR081_CURRENT_3056_BRIDGE_PROTOCOL_2026-09-11.md`.
 
-## R0 — Intake and official facts
+CR081 Gate A passes only if the newest-25% UMG holdout preserves enough of the known physical lineage and exposes a reproducible market/economy transformation. Required first-192 similarity to the frozen bridge-family reference: median farmer >=0.80, hands >=0.60; market must either have exact step-modal coverage >=0.65 or a legal state-conditioned semantic model must beat step-only market fidelity by >=0.10 absolute.
 
-Mechanics, timeline, action API, validation, packaging, ladder and prize structure.
+If Gate A fails, no CR081A/B/C threshold rescue. Move to a state-adaptive macro-economic policy using current-frontier corpora.
 
-**Status: COMPLETE.**
+## Stage 4 — one CR081 executable candidate, only if Gate A passes
 
-## R1 — Baseline reproduction
+Architecture constraints:
 
-Exact official/simple environment reproduction.
+- preserve CR071M physical backbone where the current 3056 lineage demonstrably agrees;
+- port stable market/economic semantics, plus only physical actions strictly required by current state;
+- reconstruct all actions from legal current observation;
+- no nearest-replay route stitching;
+- no opponent-name classifier.
 
-**Status: PASS.**
+Before any H2H result is seen, freeze a fresh paired-seed promotion panel against CR071M and relevant current-lineage anchors. Require material direct improvement plus guardrail preservation and zero execution failures.
 
-## R2 — Local tournament laboratory
+## Stage 5 — hosted probe decision
 
-Deterministic seeds, both seats, fresh module loading, development/validation/held-out separation, raw replays and provenance.
+Only if the fresh frozen CR081 promotion gate passes:
 
-**Status: PASS.**
+1. identify which of the two active submissions is rational to retire;
+2. package/hash the exact tested candidate;
+3. submit exactly once;
+4. collect hosted episodes through authenticated API;
+5. compare current-meta W/L and rating trajectory against incumbents without reacting to tiny early samples.
 
-## R3 — Hosted calibration
+If CR081 fails the fresh gate, close it and advance to the predeclared state-adaptive macro-economic architecture rather than threshold-tuning the failed bridge.
 
-Frozen hosted package: `R4B-market-only-validated-v1`.
+## Stop / escalation criteria
 
-- exact package/parity passed;
-- Kaggle status Complete / green check;
-- visible hosted rating **161.6 → 135.7 → 110.5**.
-
-**Status: DELIVERY PASS / CALIBRATION FAIL.**
-
-Interpretation: rules and packaging are working; the fixed-route policy is strategically weak against the real field. R4B remains useful as a deterministic baseline only.
-
-## R4 — Evidence-driven replacement
-
-### R4A/R4B — frozen baseline
-
-COK V8-derived R4B remains immutable as the hosted baseline.
-
-Controlled development panel: Kaito 25-7, Rayk 30-2, Andrew 26-6, combined **81-15 / 96**. This is a regression control, not a live-field strength estimate.
-
-### Closed/deprioritized R4 branches
-
-- fixed route substitutions: no W/L improvement;
-- route macro-oracle: perfect ex-post route choice only reaches 83-13;
-- terminal CARE patch: neutral;
-- final FEED patch: zero/small ceiling;
-- blanket terminal WATER suppression: false mechanics premise;
-- naive terminal collector: severe regression;
-- terminal SELL ordering: no promotion;
-- generic PASS reduction: large headroom exists, but official winner-vs-loser data do not support PASS minimization as a primary winning mechanism.
-
-### Live-meta calibration layer
-
-Official daily high-Elo episode datasets are first-class research data. Replay alignment is frozen as `state t -> action frame t+1`; KEXP-028 reproduced 10/10 sampled official episodes exactly.
-
-KEXP-042 full-game atlas shows top agents are highly adaptive and differ structurally from R4B in phase action mix and production composition. This supports moving away from a pure route-tape architecture.
-
-### R4D mechanism 1 — terminal non-input liquidation
-
-KEXP-037 sells eligible non-input products at state 717, before final dump.
-
-- development direct vs R4B: 13-11-8;
-- exploratory live-meta direct: **12-8-20**, score 0.55, mean +32.2.
-
-**Status: REPLICATED SMALL COMPONENT.** Keep for later combination, not standalone submission.
-
-### R4D mechanism 2 — state-adaptive crop value
-
-Evidence chain:
-
-- KEXP-026: no free CARROT seed; deliberate purchase/reallocation required.
-- KEXP-034: mechanically safe WHEAT/CARROT routes have equal yield in audited blocks.
-- KEXP-038: purchase-time value sign survives to later harvest oracle in 234/234 sign-positive events.
-- KEXP-040: one-step JIT value rule passes both development and exploratory diagnostic gates.
-
-#### KEXP-041 — single JIT CARROT
-
-Candidate `candidates/r4d_jit_carrot_one.py`.
-
-Development:
-
-- exact modern panel preservation: **81-15**;
-- direct vs R4B: **20-12**, score **0.625**, mean +53.53;
-- zero errors;
-- independent execution audit proves exact intended mutation in 14/14 triggered episodes.
-
-**Status: DEVELOPMENT PASS / EXPLORATORY REPLICATION RUNNING (`33045892841`).**
-
-#### KEXP-045 — double JIT CARROT
-
-Candidate `candidates/r4d_jit_carrot_two.py`.
-
-Adds a second bounded q=3 conversion pair (619→620) to the 614→615 pair.
-
-**Status: DEVELOPMENT SCREEN RUNNING (`33046361583`).**
-
-Gate: modern-panel preservation, zero errors, direct score >=0.5625 and positive mean delta.
-
-### R4 exit criteria
-
-R4 exits when a deterministic adaptive replacement:
-
-1. beats R4B on predeclared development W/L;
-2. replicates on exploratory live-meta environmental seeds;
-3. survives a fresh exact validation gate;
-4. passes package parity;
-5. has a mechanism plausibly relevant to hosted weakness.
-
-KEXP-041 has satisfied item 1. Items 2-5 remain.
-
-## R5 — bounded planning/value search
-
-Use only after R4 establishes a trustworthy adaptive base. Candidate areas:
-
-- crop allocation across more than two safe slots;
-- bounded forward value of seed/animal/land decisions;
-- small terminal planners with exact mechanics;
-- compact value models over public state.
-
-There is no requirement to build a full-game solver. Search/planning must target demonstrated headroom.
-
-## R6 — opponent/market robustness
-
-Adapt production, sales, labor and expansion to legal observable opponent/market state without identity memorization.
-
-## R7 — automated strategy search
-
-Automate search over compact auditable spaces using new development pools and strict validation separation.
-
-## R8 — metagame and final portfolio
-
-Use hosted episodes/current meta to construct complementary final agents. Hosted submissions are calibration experiments and later portfolio slots; do not waste them on near-identical policies.
-
-## R9 — final freeze
-
-Reproduce final agents, verify legality/runtime/memory/fallbacks, freeze hashes and submission IDs, and submit before deadline.
-
-## Immediate execution path (historical)
-
-1. Finish KEXP-041 exploratory replication.
-2. Finish KEXP-045 development screen.
-3. If 045 passes, replicate 045 on exploratory live-meta seeds.
-4. Select stronger crop controller.
-5. Add KEXP-037 only if combination improves against crop-only parent.
-6. Freeze candidate and open **fresh validation**.
-7. Build exact submission package and parity test.
-8. Submit the materially different adaptive candidate to Kaggle for hosted calibration.
-9. Use hosted result to decide whether to scale crop/value architecture into R5 or pivot.
-
-## Data separation invariant
-
-- development: open;
-- exploratory live-meta environmental pools: open for development/calibration;
-- validation: candidate-specific formal gates only;
-- held-out: **32/32 sealed** until later final selection.
+- Never reopen PRESALE1 microvariants, CR078, CR079 simple 1-NN, or CR080 route stitching without genuinely new evidence that invalidates their failure reason.
+- A current-frontier candidate that cannot generalize chronologically or survive fresh paired seeds is closed even if its source agent has a high Kaggle rating.
+- If two architecture families in succession fail for the same mechanical reason, stop building derivatives and redesign the representation/runtime around that failure mode.
+- If a candidate passes a frozen fresh gate with material uplift, do not keep it local indefinitely for optional tests; move to one controlled hosted probe.
