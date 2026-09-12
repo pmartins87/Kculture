@@ -20,65 +20,56 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 - CR078 late mirror breaker: closed.
 - CR079 simple SpaTaro 1-NN: closed after OOT failure.
 - CR080 nearest-route/day replay stitching: closed; economic-state aliasing.
-- CR081 time-indexed UMG market transplant: closed after valid v3 catastrophic H2H failure.
+- CR081 time-indexed UMG market transplant: closed after valid catastrophic H2H failure.
+- **CR082 same-step state-conditioned teacher 1-NN: closed after valid catastrophic H2H failure.** Canonical run `34708795892`, master `9120821`, lost 0–64 directly to CR071M and 0–64 against all three guardrails despite zero execution errors. No CR082 retuning.
 
-Combined conclusion: copying a stable action trajectory does not transport the economic state that makes those actions good. Economic decisions must be conditioned on current legal state rather than trajectory identity.
+Combined conclusion: neither trajectory imitation nor current-state behavioral imitation establishes causal economic value for CR071M. The representation must change from `predict leader action` to `estimate value of legal action`.
 
 ## Current frontier
 
 Authenticated snapshot `34668645531`: Majkel 3181.9, ymg_aq 3075.1, UMG 3056.5, Artem 3029.3, SpaTaro 3029.0.
 
-## ACTIVE — CR082 state-adaptive Majkel 1-NN
+## ACTIVE — CR083 explicit economic-value / macro selection
 
-The strict-forward fresh Gate A is complete and **PASS** in canonical run `34694852503` using 26 episodes strictly later than the original 64-episode corpus.
+Architecture boundary: `docs/strategy/CR083_EXPLICIT_VALUE_ARCHITECTURE_BOUNDARY_2026-09-12.md`.
 
-Observed fresh uplift over step-modal baseline:
+Phase 0 completed successfully in run `34709053070` with exact `kaggle-environments==1.32.7`:
 
-- exact: **+0.055823** absolute;
-- semantic: **+0.058627** absolute;
-- frozen requirement for each: +0.03.
+- exact state cloning/branching is technically valid offline;
+- terminal objective is final money;
+- market execution order, capacity, prices, crops, animals, hires and land mechanics have been captured;
+- future random shop unlocks depend on hidden seed and must be marginalized rather than exposed to runtime policy;
+- opponent market actions are simultaneous/lockstep, so value research must predeclare an opponent assumption/mixture.
 
-Exactly one executable candidate is therefore authorized and frozen:
+### Phase 1 — causal economic-family ablation
 
-- CR071M same-step physical backbone unchanged;
-- market steps 0–287 only;
-- teacher = oldest 48 of the fixed original Majkel64 corpus;
-- 41 legal current-state features;
-- per-step z-score Euclidean 1-NN, `k=1`;
-- leave-one-out p95 OOD threshold with step-modal fallback;
-- only mechanical legality/capacity transforms allowed inside prefix.
+Before freezing a CR083 executable, determine which CR071M market-action families actually create value for its physical backbone.
 
-Candidate SHA-256:
-`199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`
+Use a new fresh exploratory master, never `9120821`, and exact reference runtime. Construct mechanically identical CR071M variants that remove exactly one market family after all baseline safety logic:
 
-Canonical frozen H2H workflow: **`34708795892`**, master **`9120821`**. Prepare/self-audit/deterministic-rebuild/seed-firewall all PASS. Duplicate run `34708837989` is non-canonical and ignored.
+- `SELL`;
+- `BUY_SEED`;
+- `BUY_PRODUCT`;
+- `BUY_ANIMAL`;
+- `HIRE`;
+- `BUY_LAND`.
 
-### Frozen H2H promotion gate
+This is architecture research only, not a promotion gate. No hosted submission. The result chooses which economic mechanisms deserve explicit value modeling; it does not authorize tuning on its seeds.
 
-Seven rows, each 32 fresh seeds × both seats = 64 games:
+### Phase 2 — explicit-value representation
 
-1. CR082 vs CR071M;
-2. CR082 vs CR053;
-3. CR082 vs CR061;
-4. CR082 vs CR065;
-5. CR071M vs CR053;
-6. CR071M vs CR061;
-7. CR071M vs CR065.
+After Phase 1:
 
-PASS requires all of:
+1. preserve CR071M same-step farmer/hands backbone and proven safety transforms;
+2. formulate value scores only for economic families implicated by the causal ablation;
+3. use current legal observation + public mechanics/constants only;
+4. if multi-step counterfactual labels are used, average/marginalize hidden future randomness across independent seeds rather than using replay seed clairvoyance;
+5. handle opponent market uncertainty with a frozen structural-anchor mixture or robust objective;
+6. pre-register representation, calibration data, Gate A and promotion thresholds before building the executable candidate.
 
-- complete panel and zero errors/non-DONE;
-- direct CR082 vs CR071M score rate >= **0.5625**;
-- aggregate guardrail delta >= 0;
-- each individual guardrail delta >= **-0.0625**.
+### Promotion discipline
 
-### If CR082 H2H PASS
-
-Freeze exact tested hash, refresh authenticated hosted slot/submission state, then make **exactly one controlled hosted probe** if slot accounting permits. Do not add optional local tuning first.
-
-### If CR082 H2H FAIL
-
-Close CR082 1-NN. No CR082A/B/C, no k/feature/p95/prefix/teacher tuning on the spent seeds. Advance directly to **CR083 explicit economic-value / macro-selection modeling** from legal current game state and mechanics, rather than behavior imitation.
+Any eventual CR083 candidate gets a new non-overlapping master and a frozen direct+guardrail panel. PASS can authorize one controlled hosted probe after authenticated slot accounting. FAIL changes representation again; no post-hoc threshold/feature tuning on spent seeds.
 
 ## Escalation rule
 
