@@ -1,47 +1,57 @@
-# CR081 promotion protocol — corrected runtime-aligned freeze
+# CR081 promotion protocol — fidelity-correct v3 freeze
 
-Candidate family is fixed by `CR081_GATE_A_RESULT_2026-09-11.md`. The strategic gate thresholds remain exactly those frozen before H2H. This revision corrects a replay-storage indexing error discovered before any valid CR081 H2H result was interpreted.
+Candidate family is fixed by `CR081_GATE_A_RESULT_2026-09-11.md`. Strategic thresholds and the 288-step boundary remain exactly those frozen before H2H. Two implementation-only defects were discovered **before reading their H2H scores** and are quarantined below.
 
-## Invalid first implementation
+## Invalid implementations
 
-Run `34671122716` is **INVALID / SUPERSEDED**. It incorrectly interpreted replay action index `s` as runtime step `s`, which caused it to delay the CR071M physical backbone by one turn. Kaggle replay `steps[s].action` actually corresponds to runtime step `s-1`. No strategic result from run `34671122716` may be used.
+### v1 — run `34671122716` — INVALID / SUPERSEDED
 
-The corrected implementation is evaluated on a new, non-overlapping seed master.
+Replay action index `s` was incorrectly interpreted as runtime step `s`, delaying the CR071M physical backbone by one turn. Kaggle replay `steps[s].action` corresponds to runtime step `s-1`. Master seed `9120811` is permanently burned.
 
-## Correct candidate
+### v2 — run `34671446692` — INVALID / SUPERSEDED
 
-Exactly one corrected CR081 implementation is allowed for this bridge experiment:
+The replay/runtime offset was fixed, but two inherited CR071M **strategic** market transforms remained active after the UMG overlay inside steps 0–287:
+
+- `_cr053_counter_market`, which can alter market behavior specifically on a CR053-like public trajectory;
+- `dead_stock`, which appends additional economic SELL orders.
+
+This was detected before any v2 score was read. Concrete pre-score audit evidence: UMG holdout episode `107956535` produced 20 extra market actions over runtime steps 267–287; isolating the runtime showed they disappear when `dead_stock` alone is disabled. These are not legality/capacity repairs, so v2 does not faithfully implement the frozen market-replacement hypothesis. Master seed `9120812` is permanently burned. No v1/v2 score may be used for strategic inference.
+
+## Correct v3 candidate
+
+Exactly one fidelity-correct CR081 implementation is allowed:
 
 - exact CR071M source as base;
-- **CR071M physical/runtime backbone remains same-step and unchanged**;
-- runtime steps 0–287 market queue is replaced by UMG development-only per-step modal market queue learned from replay action indices 1–288;
-- original CR071M safety/repair logic retained;
-- same-turn BUY_PRODUCT is credited before a later SELL while clamping the market queue, because the UMG runtime-step-0 mechanism explicitly uses buy -> buy -> sell in one queue;
-- after runtime step 287, use normal same-step CR071M behavior; no replay-route selection/stitching;
-- no team name, episode ID, seed, future state or opponent-private feature.
+- CR071M physical/runtime backbone remains same-step and unchanged;
+- runtime steps **0–287** replace the base market queue with the UMG development-only per-step modal queue learned from replay action indices **1–288**;
+- same-turn `BUY_PRODUCT` is credited before a later `SELL` during legality clamping, required by the UMG runtime-step-0 buy→buy→sell mechanism;
+- `room_guard` remains inside the prefix because it is a shed-capacity safety repair;
+- `clamp_sells` remains because it prevents impossible/partially impossible SELL orders and preserves order-slot legality;
+- `_cr053_counter_market` is disabled inside steps 0–287 and resumes after the prefix;
+- `dead_stock` is disabled inside steps 0–287 and resumes after the prefix;
+- after runtime step 287, normal same-step CR071M behavior resumes;
+- no replay route stitching, team identity, episode ID, seed, future state or opponent-private feature.
 
-The 288-runtime-step boundary was selected from development-only evidence. Runtime-aligned market modal support is approximately 0.970 / 0.942 / 0.914 over the first three 96-step blocks and drops to ~0.683 in the next block. It is not changed after H2H results.
-
-Mechanical fixes are allowed only if the package fails to load or returns illegal/exception actions and must not change the strategic policy. A mechanically invalid run cannot be interpreted as policy evidence.
+The runtime-aligned development support remains approximately 0.970 / 0.942 / 0.914 for the three 96-step blocks and drops to ~0.683 in the next block. The 288-step boundary is not changed.
 
 ## Exact evaluation panel
 
-Runtime: `kaggle-environments==1.32.7`, isolated package process, both seats.
+Runtime: `kaggle-environments==1.32.7`, isolated package processes, both seats.
 
-Corrected fresh master seed: **9120812**.
+Fresh v3 master seed: **9120813**.
 
-- 32 seeds x 2 seats = 64 games per H2H.
-- Candidate direct: CR081 vs CR071M.
-- Guardrails: CR081 vs CR053, CR061, CR065.
-- Same-seed incumbents: CR071M vs CR053, CR061, CR065.
+- 32 seeds × 2 seats = 64 games per H2H;
+- direct: CR081 vs CR071M;
+- guardrails: CR081 vs CR053, CR061, CR065;
+- same-seed incumbents: CR071M vs CR053, CR061, CR065.
 
-Seed firewall must verify no overlap with earlier CR080 masters **and with invalid CR081 master 9120811**.
+Seed firewall must exclude all earlier CR080 masters plus invalid CR081 masters `9120811` and `9120812`.
 
 ## Frozen promotion gate
 
 All checks must pass:
 
-1. complete 7-H2H panel, exactly 64 games / 32 fresh seeds each;
+1. complete seven-H2H panel, exactly 64 games / 32 fresh seeds each;
 2. zero agent errors and zero non-DONE games;
 3. CR081 direct score rate vs CR071M >= **0.5625**;
 4. aggregate guardrail delta `sum(score(CR081, guard) - score(CR071M, guard)) >= 0`;
@@ -51,7 +61,7 @@ Primary metric is seat-balanced W/L score rate. Reward margin is diagnostic only
 
 ## Decision tree
 
-- **PASS:** freeze exact candidate hash, perform active-slot accounting, then submit exactly one hosted CR081 probe. Do not delay a qualified candidate for optional local tuning.
-- **FAIL:** close this CR081 bridge implementation. Do **not** create CR081A/B/C by moving the 288 boundary, changing support thresholds, editing individual market quantities or retuning on these seeds. Advance to the predeclared state-adaptive macro-economic policy using current-frontier corpora.
+- **PASS:** freeze exact candidate hash, account for active hosted slots, then submit exactly one hosted CR081 probe.
+- **FAIL:** close CR081. No CR081A/B/C, no boundary movement, no market-quantity edits and no retuning on these seeds. Advance to the already-predeclared state-adaptive macro-economic architecture using the current-frontier corpora.
 
-Original final holdout remains sealed. No automatic Kaggle submission is part of this workflow.
+The original final holdout remains sealed. No automatic Kaggle submission is part of this workflow.
