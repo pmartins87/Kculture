@@ -17,10 +17,17 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 
 - CR078: closed.
 - CR079 SpaTaro 1-NN clone: closed / FAIL.
-- CR080 Mengfei route stitching: closed / FAIL. Post-failure diagnosis identified economic-state aliasing; nearest-route/day replay stitching is closed.
-- CR081 v1 run `34671122716`, master `9120811`: INVALID replay/runtime indexing.
-- CR081 v2 run `34671446692`, master `9120812`: INVALID because inherited strategic market transforms remained active inside the UMG overlay. Both were quarantined before score interpretation.
-- **CR081 v3 run `34694092039`, master `9120813`: VALID / FAIL / CLOSED.** Exact package SHA-256 `b608b8a46a67e7dbbf2c53e5f36e25a19cad708aeeab30a6e28c93321d78ec40`. Complete seven-H2H panel, zero errors/non-DONE: direct vs CR071M 0–64; severe negative guardrail deltas vs CR053/061/065. Frozen decision: `CLOSE_CR081_BRIDGE_MOVE_TO_STATE_ADAPTIVE_MACRO_POLICY`. No CR081 retuning or hosted submission.
+- CR080 Mengfei route stitching: closed / FAIL; economic-state aliasing.
+- CR081 v1/v2: invalid and quarantined before score interpretation.
+- CR081 v3 run `34694092039`, master `9120813`: valid catastrophic FAIL / CLOSED; no retuning or hosted submission.
+- **CR082 state-adaptive Majkel 1-NN: VALID / FAIL / CLOSED.** Canonical workflow `34708795892`, master `9120821`, candidate SHA-256 `199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`. Complete panel, zero errors/non-DONE:
+  - vs CR071M: **0–64 = 0.0000**;
+  - vs CR053: **0–64 = 0.0000**, CR071M control 32–32 = 0.5000, delta -0.5000;
+  - vs CR061: **0–64 = 0.0000**, CR071M control 62–2 = 0.96875, delta -0.96875;
+  - vs CR065: **0–64 = 0.0000**, CR071M control 62–2 = 0.96875, delta -0.96875.
+  Mean direct reward margin `-128488.703125`; median `-129738.5`; best game still `-72758`. Frozen decision: `CLOSE_CR082_1NN_MOVE_TO_EXPLICIT_ECONOMIC_VALUE_MODEL`. No CR082A/B/C or tuning on `9120821`. Final result: `docs/strategy/CR082_FINAL_RESULT_2026-09-12.md`.
+
+A mechanically duplicate CR082 run `34708837989` is non-canonical and permanently ignored as evidence.
 
 ## Current frontier snapshot
 
@@ -34,60 +41,29 @@ Authenticated run `34668645531`:
 
 ## Architectural conclusion
 
-CR080 and CR081 fail through the same deeper issue: action trajectories are not portable across mismatched economic states. The active path therefore conditions economic action on the **legal current economic state**, one step at a time, rather than copying a route/tape.
+CR080/081 showed that trajectories/tapes do not transport across mismatched economic states. CR082 then showed something stronger: even **correctly predicting a leader's current-step market action from current state is not equivalent to economic value for our backbone**. Behavioral fidelity is therefore closed as the primary representation.
 
-## ACTIVE — CR082 state-adaptive Majkel 1-NN
+## ACTIVE — CR083 explicit economic value
 
-Protocols:
+Boundary: `docs/strategy/CR083_EXPLICIT_VALUE_ARCHITECTURE_BOUNDARY_2026-09-12.md`.
 
-- `docs/strategy/CR082_STATE_ADAPTIVE_MACRO_PROTOCOL_2026-09-12.md`
-- `docs/strategy/CR082_PROMOTION_PROTOCOL_2026-09-12.md`
+Phase 0 mechanics audit: `docs/strategy/CR083_PHASE0_MECHANICS_RESULT_2026-09-12.md`, canonical run `34709053070`, exact `kaggle-environments==1.32.7`.
 
-### Strict-forward Gate A — VALID PASS
+Phase 0 established:
 
-Canonical run `34694852503` evaluated only 26 Majkel episodes strictly later than the original old64 maximum EpisodeId `108032343`.
+- terminal reward = final money only;
+- exact environment `deepcopy`/branching is supported and deterministic for identical actions;
+- divergent clone actions change only the clone, not source state;
+- market queues are ordered and lockstep across players;
+- unsold inventory has zero terminal value;
+- buy→sell same-product round trip is explicitly zero-arbitrage;
+- future town-shop unlocks depend on hidden seed, so hidden future/seed cannot be a runtime feature or clairvoyant label shortcut.
 
-- exact fidelity: step-modal `0.788996` → state-conditioned `0.844818`, delta **+0.055823**;
-- semantic fidelity: `0.810363` → `0.868990`, delta **+0.058627**;
-- OOD fallback rate `0.084535`;
-- all frozen checks PASS;
-- decision: `ELIGIBLE_TO_BUILD_ONE_CR082_CANDIDATE`.
+CR083 must rank legal economic macros by mechanics-derived expected value under legal current observation, with opponent-action uncertainty and hidden future randomness marginalized/robustly handled. No teacher 1-NN/action oracle is allowed.
 
-Loose run `34694479980` remains invalid for promotion because its unseen-ID filter included older episodes.
+### Immediate CR083 research
 
-### Single frozen executable candidate
-
-Canonical confirmation workflow: **`34708795892`**, master seed **`9120821`**.
-
-Candidate SHA-256:
-`199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`
-
-Base CR071M SHA-256:
-`dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652`
-
-Frozen implementation:
-
-- exact CR071M physical/runtime backbone, same-step farmer/hands unchanged;
-- runtime market policy only steps 0–287;
-- oldest 48/64 original Majkel episodes as teacher;
-- 41 legal current-state features;
-- per-step z-score Euclidean `k=1`;
-- per-step leave-one-out p95 OOD threshold; modal fallback;
-- CR053 strategic counter-market and dead_stock disabled only inside prefix;
-- room_guard, SELL clamping and same-turn BUY_PRODUCT→later SELL legality retained;
-- no identity, EpisodeId, seed, future state, opponent-private state, or replay continuation.
-
-Prepare gate passed before H2H:
-
-- strict-forward Gate A reproduced;
-- runtime predictor equivalence: **2304/2304**;
-- CR071M farmer/hands equivalence: **1440/1440**;
-- deterministic rebuild: byte-identical;
-- 32 H2H seeds from master `9120821`, overlap **0** with registered prior masters.
-
-Seven frozen H2Hs are active: CR082 vs CR071M/CR053/CR061/CR065 and same-seed CR071M guardrail controls. No hosted submission is part of this workflow.
-
-A mechanically duplicate run `34708837989` was accidentally triggered while confirming workflow registration. It is **non-canonical and must never be counted as independent evidence**; only `34708795892` determines the frozen CR082 decision.
+Next active study is a fresh-seed **causal ablation of CR071M market-action families** to determine which investment/liquidation components materially create value for the existing physical backbone before freezing an explicit-value candidate. This study is architecture research only, not a promotion gate; it must not use master `9120821`.
 
 ## Binding policies
 
@@ -96,4 +72,4 @@ A mechanically duplicate run `34708837989` was accidentally triggered while conf
 - Original final holdout remains sealed.
 - Invalid/duplicate evaluations are quarantined before score interpretation.
 - Closed hypotheses stay closed unless genuinely new evidence invalidates their closure.
-- CR082 FAIL means no CR082A/B/C or tuning on master `9120821`; change representation to explicit economic-value / macro-selection modeling.
+- CR083 runtime features/actions may use only legal current observation plus frozen public mechanics/constants; hidden seed/future state/opponent-private state remain forbidden.
