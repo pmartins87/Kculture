@@ -1,0 +1,43 @@
+name: Kaggle API current frontier refresh v2 lightweight
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/kaggle-api-current-frontier-refresh-v2.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  scout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Read-only current hosted frontier and own submissions
+        run: |
+          python tools/kaggle_meta_scout_cli.py \
+            --competition kaggriculture \
+            --output-dir artifacts/current-frontier \
+            --top-teams 20 \
+            --submissions-per-team 1 \
+            --replays-per-submission 0 \
+            --delay 0.25
+      - name: Freeze provenance
+        if: always()
+        run: |
+          find artifacts/current-frontier -type f -print | sort > artifacts/current-frontier/FILELIST.txt || true
+          find artifacts/current-frontier -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 -r sha256sum > artifacts/current-frontier/SHA256SUMS.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: kaggle-api-current-frontier-refresh-v2-lightweight
+          path: artifacts/current-frontier/**
+          retention-days: 30
+          if-no-files-found: error
