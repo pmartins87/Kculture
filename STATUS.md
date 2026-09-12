@@ -1,315 +1,74 @@
-# STATUS — current checkpoint 2026-09-11
+# STATUS — Kculture live source of truth
 
-Authoritative working branch: `fix/kaggle-parity-v1`. `main` remains behind the
-research branch; do not assume its scheduled artifacts describe the current agent.
+Updated: 2026-09-11 local / 2026-09-12 UTC boundary
 
-- **CR079 closed / FAIL:** run 34562284953; composite 0.28566 vs clock 0.37223,
-  worse in 51/51 holdout episodes. No SpaTaro 1-NN retuning.
-- **CR078 closed / FAIL:** mirror-breaker lost fresh exact screen.
-- **CR071M:** existing hosted submission 56124705; incumbent calibration reference,
-  no further PRESALE1 microvariants. Do not submit another copy.
-- **Current work: CR080 Mengfei route bridge**, training 96 oldest / diagnostics
-  32 newest episodes in frozen recent corpus 34558022808, artifact 10183391523.
-  Protocol: [CR080](docs/strategy/CR080_MENGFEI_BRIDGE_PROTOCOL_2026-09-11.md).
-  Build then 8 fresh paired seeds vs CR071M; only PASS opens independent panel.
-- **API-first:** token is functional in GitHub Actions. A new authenticated
-  checkpoint queries current submissions/leaderboard and 56124705 episodes.
-  Legacy scheduled R4B/KEXP050 collection is historical, not current evidence.
-- **CR077B:** OOT 2026-09-10 pending publication/access; no promotion inferred.
-- No automatic Kaggle submission. Original final holdout remains sealed.
+Authoritative working branch: `fix/kaggle-parity-v1`. Historical detail remains available in Git history; this file intentionally contains only the current operational state.
 
-**CR080 screen completed: PASS**, 10–6 over 8 fresh seeds in both seats (5–3 each),
-zero execution failures. This is only a discovery gate, not demonstrated top-tier
-strength. Frozen package cc9f30b8... reproduced in run 34655053162.
-Independent confirmation **run 34655496708** is launched: 32 fresh paired seeds, seven H2Hs / 448 games;
-no strategy changes after freeze. See experiments/CR080_MENGFEI_BRIDGE_2026-09-11.
+## Mission
 
-API checkpoint: CR071M 1728.2 / 296 episodes; latest 32: 7–23–2 (score 0.25).
-Other active slot CR070A 56091951 / 1717.1. Main scheduled collector was repaired
-in commit c47d62dd... to resolve active submissions instead of querying old IDs.
+Maximize the probability of a prize-winning / top-10 Kaggriculture result. Final deadline remains 2026-09-30 23:59 UTC. Do not spend a hosted submission on a candidate that has not passed its frozen gate.
 
-Mechanical audit: the first CR080 run was invalid due to __file__ absence and a
-legacy harness that hid returned exceptions as PASS. Corrected both; actual-loader
-contract tests PASS. Never interpret that initial apparent 0–16 as policy evidence.
+## Incumbents / hosted reality
 
-Next: collect the independent confirmation and apply the frozen gate. PASS ->
-prepare one hosted probe; FAIL -> close this implementation without retuning. All conflicting immediate actions below are
-historical, not instructions to resubmit CR071M or repeat closed experiments.
+- CR071M — submission `56124705`; current authenticated API checkpoint: rating **1731.8**, 297 listed episodes. Newest 32 replays: 8W / 22L / 2T, score rate 0.28125. It remains the incumbent reference, not an architecture worth microtuning.
+- CR070A — submission `56091951`; current authenticated rating **1724.0**. Newest 32: 8W / 19L / 5T, score rate 0.328125.
+- Submission allowance at the latest API checkpoint: 5 currently allowed. This is capacity, not a quota.
+- Do **not** submit CR080.
 
----
+## Closed candidates
 
-# STATUS — Kculture
+- CR078 mirror breaker: closed / FAIL.
+- CR079 SpaTaro simple 1-NN behavioral clone: closed / FAIL. Run `34562284953`; composite 0.28566 vs clock 0.37223, worse in 51/51 holdout episodes. No threshold retuning.
+- CR080 Mengfei route bridge: **closed / FAIL**. Independent exact confirmation run `34655496708`:
+  - vs CR071M: 33–31 = 0.515625, below required 0.5625;
+  - vs CR053: 34–30 = 0.53125 vs CR071M 0.59375, delta -0.0625;
+  - vs CR061: 33–31 = 0.515625 vs CR071M 1.0000, delta -0.484375;
+  - vs CR065: 39–25 = 0.609375 vs CR071M 0.890625, delta -0.28125;
+  - zero execution failures; frozen gate decision `CLOSE_CR080_NO_RETUNING`.
+  No CR080A/B/C rescue is permitted.
 
-> **ARCHIVED — 2026-09-09:** authoritative operational plan: [EXECUTION_CONTRACT_2026-09-09](docs/EXECUTION_CONTRACT_2026-09-09.md). Current qualified hosted challenger: `CR071M PRESALE1`; deep-frontier run `34359535052` is active. CR071O selector hypothesis is rejected only; CR071/PRESALE1 development remains active.
+## Active diagnostics
 
-## Current mission
+Run `34668446703` — CR080 post-failure closed-loop diagnostic — is currently running on the already-used confirmation seeds for explanation only. Frozen hypotheses: labor-plan/hand-count drift, position-repair cascade, route-stitching economic drift, or strategic failure if those mechanical effects are weak. It cannot reopen CR080. Protocol: `docs/strategy/CR080_FAILURE_DIAGNOSIS_PROTOCOL_2026-09-11.md`.
 
-Maximize probability of a prize-winning / top-10 final result in Kaggriculture. The practical strategic problem is to close the gap between Kculture's recent ~1600 hosted range and a current public frontier with agents/notebooks around 2700+.
+## Current frontier — authenticated API snapshot
 
-## Current hosted policy
+Fresh read-only run `34668645531` walked the top 20 and sampled 80 current hosted replays. Current leaders in that snapshot:
 
-- Final submission deadline: 2026-09-30 23:59 UTC.
-- Daily cap: 5 submissions.
-- Only the latest two submissions remain active and feed final evaluation; team score uses the better active agent, so slot 2 is a hedge.
-- Five/day is not a quota. Keep one incumbent and one materially different challenger/hedge.
-- A qualified candidate must not remain local-only for >24h merely because more tests are possible.
-- Live Elo/rating is calibration evidence; final objective is post-deadline Bradley-Terry performance.
+1. Majkel1337 — **3181.9** — submission `56156662`;
+2. ymg_aq — **3075.1** — submission `56161578`;
+3. Unknown Mother-Goose — **3056.5** — submission `56169353`;
+4. Artem The Farmer — **3029.3**;
+5. SpaTaro — **3029.0**.
 
-## Current candidate — CR071M PRESALE1
+The key structural discovery is that a recent hosted loss-family faced by CR071M (Sidharth Hulyalkar / XiaoYan12 / ocean240812) is closely related to current #3 Unknown Mother-Goose. Against the frozen loss-family reference over steps 0–191, the four sampled current UMG replays average about 90% exact farmer-action similarity, 74.5% hands similarity and 78.8% market similarity. The three hosted family members beat CR071M by roughly 4k–9.6k reward and show large market/economy changes beginning immediately while retaining much of the familiar physical backbone.
 
-Frozen package: `CR071M_CR053_PRESALE1_SEATSAFE_V1.tar.gz`
+This makes current UMG, rather than historical Mengfei or simple SpaTaro replay imitation, the preferred bridge target.
 
-SHA256: `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652`
+## Active research — CR081
 
-Four independent CR053 batches, exact reference, both seats:
+CR081 is a **current ~3056-lineage market/economy bridge**, frozen before deep-corpus inspection. Protocol: `docs/strategy/CR081_CURRENT_3056_BRIDGE_PROTOCOL_2026-09-11.md`.
 
-1. screen: PRESALE1 20-12; PARENT 13-19;
-2. fresh confirmation: 38-26 vs 24-40;
-3. broad frontier: 36-28 vs 32-32;
-4. fourth fresh set: 44-20 vs 36-28.
+Run `34669006417` is collecting through the authenticated official Kaggle API:
 
-Diagnostic combined: PRESALE1 138-86 (61.61%) vs PARENT 105-119 (46.88%), 112 paired seeds / 224 games per policy.
+- newest 128 episodes of UMG `56169353` — primary target;
+- newest 64 episodes of Majkel `56156662` — #1 context;
+- newest 64 episodes of ymg_aq `56161578` — #2 context.
 
-CR071O `opp.money > 190` selector failed fresh validation and is closed. Do not retune that selector on the same evidence.
+CR081 Gate A asks whether UMG preserves enough of the known physical lineage while exposing a reproducible market/economic transformation. If it passes, build exactly one market-first/state-legal bridge and freeze its exact H2H promotion gate before results. If it fails, do not create threshold variants; move to a state-adaptive macro-economic policy trained on the current frontier.
 
-**Decision:** CR071M qualifies for one hosted probe now while local deep validation continues.
+## Operational policies that remain binding
 
-## Current local validation
+- Authenticated Kaggle API first; screenshots/UI only as fallback. See `docs/strategy/KAGGLE_API_FIRST_POLICY.md`.
+- Fresh exact H2H uses `kaggle-environments==1.32.7`, isolated package processes and both seats.
+- No use of team name, episode ID, seed, future information or opponent private state as an agent feature.
+- Original final holdout remains sealed.
+- No automatic hosted submission without a passed frozen promotion gate.
+- Closed hypotheses stay closed unless genuinely new evidence invalidates the reason for closure; do not retune on their failed validation data.
 
-Run `34359535052` — `cr071-presale1-deep-frontier-v1`.
+## Immediate next actions
 
-- exact `kaggle-environments==1.32.7`;
-- 64 fresh paired seeds / 128 games per matchup;
-- 11 H2Hs / 1,408 games total;
-- PARENT and PRESALE1 vs CR053/CR061/CR065/CR068A/CR068B;
-- PRESALE1 direct vs CR070A;
-- seed firewall passed.
-
-Do not cancel because a hosted probe is running. Local deep validation and hosted calibration answer different questions.
-
-## Current parallel architecture branch
-
-Regardless of PRESALE1 result:
-
-1. refresh strongest current public agents/notebooks and freeze time-stamped identities/scores;
-2. reproduce exact packages locally where possible;
-3. compare production, route, shop, market and adaptation mechanics to CR070A/PRESALE1;
-4. use hosted losses + public episode datasets to recalibrate opponent families;
-5. prioritize mechanisms with plausible prize-scale W/L ceiling rather than tiny money-margin gains;
-6. next hosted challenger must be materially different unless it is a deliberate control.
-
-## Decision tree
-
-See `docs/EXECUTION_CONTRACT_2026-09-09.md`. In brief:
-
-- local strong + hosted strong -> PRESALE1 becomes incumbent candidate; next work is independent architectural challenger;
-- local strong + hosted weak -> hosted failure diagnosis/pivot; do not keep adding local seeds to rationalize it;
-- local weak + hosted strong -> recalibrate local panel around hosted-relevant families;
-- both weak -> reject PRESALE1 and pivot architecture;
-- immature hosted trajectory -> wait only until the explicit hosted checkpoint, not indefinitely.
-
----
-
-> **Historical update — 2026-09-05:** Read [CR026_CONTINUATION](docs/CR026_CONTINUATION.md) first. CR024 submission 56025052 is near 1600; CR025 is rejected; CR026 Phase 0 finished 8-12. The remainder below is historical and superseded by the current section above where it conflicts.
-
-Last updated: 2026-08-30
-
-## Mission (historical)
-
-**Goal: maximize probability of a top-10 final finish in Kaggriculture; each top-10 position pays US$5,000.**
-
-Repository `pmartins87/Kculture` is the source of truth. Hosted/live evidence outranks local proxy stories when they conflict.
-
-**Held-out remains 32/32 sealed.**
-
-## Hosted reality — 2026-08-29 calibration
-
-Frozen snapshot and interpretation: `docs/HOSTED_CALIBRATION_2026-08-29.md`.
-
-Latest observed Kaggle UI snapshot:
-
-- R4B_A control: **205.9**;
-- CR008 adaptive append: **1705.6**;
-- CR011 adaptive early: **1723.3**;
-- R4B_B byte-identical repeat, submission `55868963`: **188.4**;
-- Kaito V43 public reference, submission `55868969`: **1211.7**.
-
-Key calibration:
-
-- R4B temporal-control spread = **17.5**;
-- CR011 − CR008 = **17.7**, therefore noise-scale in this window;
-- CR008 − R4B midpoint = **+1508.45**.
-
-**Decision:** CR008 append adaptation is the canonical hosted baseline. Opponent-aware response is the strongest demonstrated improvement in Kculture. Early queue placement has no hosted advantage beyond measured noise and has severe local tail risk.
-
-## Frozen / relevant candidates
-
-### CR008 — canonical hosted baseline
-
-- `candidates/cr008_adaptive_frontrun.py`
-- blob `8e1c26202c3101c19668bf61edf2ae51d4329d5d`
-- high-confidence identity-free public-opponent-state SELL forecast;
-- deployed products CARROT/STRAWBERRY;
-- appends full available same-turn sale;
-- latest observed hosted score **1705.6**.
-
-### CR011 — research arm only
-
-- `candidates/cr011_adaptive_early_order.py`
-- blob `c4f1cb79f3c20b8229ab09e00a6878289cf9648d`
-- same forecast as CR008 but early queue placement.
-
-CR014B/C decomposition showed the critical five close outcome flips were caused by early positioning: four W→L vs one L→W. Hosted CR011−CR008 is only noise-scale, so CR008 remains preferred.
-
-### CR015 — SUBMITTED / HOSTED RESULT PENDING
-
-- Kaggle submission ID **`55882723`**;
-- user-supplied submission link recorded in `docs/SUBMISSION_LEDGER.md`;
-- `candidates/cr015_liquidation_phase_early_order.py`;
-- freeze commit `a3024d2af337bebd7cd1dcb107ccc420635756ef`;
-- blob `fabd4bc398e7eadcfd1d44add4d0e593315140e8`;
-- 432 fresh preregistered pairs, zero errors;
-- vs R4B combined mean relative gain **+149.62**;
-- favorable W/L **2**, unfavorable **0**;
-- package parity 28,760 states / zero mismatches;
-- official Kaggle entrypoint PASS both seats.
-
-Hosted-ready archive SHA256: `41d35a97ebe714a3cb71506e17ec1e629b4a9628cacd688be7e79d524fd75c54`.
-
-Hosted ladder rating and episode count are not yet observed. The Kaggle submissions URL is session-authenticated and was not readable externally, so no score is inferred from the link alone.
-
-### CR020 — REJECTED
-
-Stage A 216/216, zero errors; one favorable / zero unfavorable vs R4B, but mean relative **-70.84/game** vs CR015. No Stage B, no hosted slot.
-
-### CR021A — CLOSED / NO-TRIGGER FAIL
-
-Run `33261563880`, aggregate job `99126072218`, artifact `9717580986`.
-
-- 216/216 fresh Stage-A pairs;
-- zero mechanical errors;
-- **0 triggers, 0 TOMATO plants, 0 harvest interventions**;
-- therefore scientific gate failed;
-- no Stage B and no threshold rescue on the same seeds.
-
-CR016 remains useful architecture evidence (TOMATO/EGG demand-supply gaps), but this one-slot conservative TOMATO implementation is closed. Research priority returns to opponent adaptation.
-
-## Opponent-adaptation evidence chain
-
-- CR004: opponent public state improves OOT prediction; median error improvement **7.10%**.
-- CR005: strong four-turn SELL forecasts.
-- CR006: broad low-threshold reaction failed on precision.
-- CR007: high-confidence CARROT/STRAWBERRY triggers reached **97.3%** combined precision.
-- CR008: append adaptation produced the major hosted breakthrough.
-- CR009: forecast timing already correct.
-- CR010: in-turn order is economically causal.
-- CR011: early placement can improve money but creates severe boundary pathologies.
-- CR012/013/014/014B/014C: attributed the pathology to early positioning/state cascade rather than opponent identity.
-- CR015: validated conservative placement refinement; submitted as Kaggle submission `55882723`, hosted result pending.
-- CR020: rejected.
-
-## CR022 — ADAPTIVE V2 — PRIMARY RESEARCH
-
-Frozen research design: `docs/ADAPTIVE_V2_RESEARCH_PLAN.md`.
-Exact public-agent review: `docs/TOP_PUBLIC_ARCHITECTURE_REVIEW_2026-08-29.md`.
-
-### Why
-
-Exact public package inspection shows strong current agents generally use a **strong route/replay backbone + sparse heuristics**:
-
-- Rayk/Tetsu: hard public-farm clone distance + own future route sale schedule + exact market-impact/demand ordering;
-- Tactical: static hazard-by-step, 0.55 threshold, fixed 50% median quantity, cap 30, cooldown 8;
-- Boatlee: public-state route portfolio selected from shops/opponent money/spending and market overlays;
-- Kaito V43: strong backbone + sparse shop feedback; sophisticated quantity/MPC components exist in library but are conservatively not deployed when grouped holdouts do not support them.
-
-**Adaptive V2 headroom:** replace clone distance / static hazards / fixed fractions with calibrated state-conditioned opponent forecasts, quantity/order-position distributions, route-archetype belief, exact market counterfactuals and downside-aware abstention.
-
-### Frozen Adaptive V2 modules
-
-1. **Behavior atlas / route fingerprint** — quantify open-loop rigidity vs real adaptation.
-2. **Probabilistic forecast** — P(SELL product within h), h=0..4; quantity and order-position distribution.
-3. **Forecast residual / surprise state** — deviation from expected route/economy.
-4. **Exact market counterfactual engine** — abstain vs 25/50/75/100% and timing/order alternatives.
-5. **Risk-aware sparse MPC** — maximize expected relative value while penalizing CVaR/downside and own-cash risk.
-6. **Conservative abstention** — sophistication only when it survives grouped/OOT evidence.
-
-No opponent/team identity is permitted as an agent feature or gate.
-
-### CR022A — current-top replay atlas
-
-Created:
-
-- `tools/collect_top_ladder_snapshot.py`;
-- `tools/top_ladder_behavior_atlas.py`;
-- automated top-20 × up to 3 recent public episodes workflow.
-
-First authenticated run safely stopped because GitHub repository secret `KAGGLE_API_TOKEN` is not configured. No credential was exposed. This is a data-access task only, not a strategic blocker: official daily top-episode datasets remain publicly downloadable via `kagglehub`.
-
-### CR022B — recent official top-episode forecast tournament — V2 RUNNING
-
-Initial run `33272910444` failed **mechanically before any dataset/model result** because the repository root was absent from `sys.path`; no statistical result was observed. Only that import defect was corrected.
-
-Unchanged frozen V2 run: **33282366031**.
-
-Frozen identities:
-
-- `tools/cr022b_recent_top_forecast_tournament.py` blob `9e06ca153cd169591d136a5a57db326f27df22b7`;
-- `models/cr007_pure_models.json` blob `d4b29e753e2328ac43503f8daa655cc63abdd336`.
-
-Protocol remains unchanged:
-
-- attempts official 2026-08-27/28/29 episode datasets;
-- newest available date = chronological OOT test;
-- top 20 episodes/date;
-- episode-grouped fit/calibration split;
-- compare frozen CR007 with regularized logistic and calibrated histogram gradient boosting;
-- targets CARROT/TOMATO/STRAWBERRY/MELON SELL within four turns;
-- also records first-sale delay, quantity and order position for CR022C.
-
-No strategy candidate may be built from predictive metrics alone. Response counterfactual evidence is required.
-
-### Clock/seat diagnostic — PASS, separate robustness line
-
-Direct agent-input probe run `33272723362` saw **719/719 numeric steps in both seats**, with zero day/hour mismatch, so the reported seat-1 missing-step issue is not reproduced in the normal object delivered to our local probe agent.
-
-COK/R4B does depend directly on raw `step`. A neutral derivative was therefore tested:
-
-- `candidates/cr022_clock_safe_cr008.py`;
-- audit run **33273005851**;
-- normal parity: **12/12 cases PASS, zero action mismatches, identical rewards**;
-- forced `step=None`: **6/6 raw CR008/COK paths diverged as expected**;
-- clock-safe derivative recovered the exact expected action in **6/6** injected cases.
-
-Interpretation: this is a mechanically validated, behavior-neutral hardening when `step` is present and a correct fallback when it is absent. It is **not evidence of strategic strength** and does not automatically deserve a hosted slot. Prefer to carry the fallback into future Adaptive V2 packages rather than spend a slot unless hosted evidence specifically requires an isolated diagnostic.
-
-## Next hosted-reset policy
-
-Five valid daily slots remain a perishable information budget. Current priority order is provisional until active diagnostics close:
-
-1. **CR008_A exact control**;
-2. **CR015** — submitted as `55882723`, hosted result pending;
-3. strongest newly validated Adaptive V2 / high-information diagnostic arm, if one exists;
-4. **CR008_B exact control**;
-5. second predeclared high-information arm.
-
-Do not use CR020 or CR021. Do not spend a slot on CR011 solely because it is ~17.7 above CR008 in the current snapshot.
-
-## Exact continuation
-
-1. Observe hosted result for CR015 submission `55882723` when available and record rating/episodes without changing its pre-hosted interpretation.
-2. Finish CR022B V2 run `33282366031` and determine whether current top-episode data supports a stronger probabilistic opponent model than CR007.
-3. Use the same recent replay corpus to model sale quantity and order position; build CR022C exact response counterfactuals.
-4. Do **not** promote a model because of AUC alone: require calibration, actionable precision/coverage and causal response value.
-5. Carry clock-safe fallback forward as neutral hardening; keep it separate from strategic evidence.
-6. When convenient, configure GitHub Actions secret `KAGGLE_API_TOKEN` once, then run exact current top-20 replay atlas.
-7. First Adaptive V2 candidate must remain a sparse overlay over frozen CR008, use fresh preregistered data and report worst-tail paired deltas/CVaR.
-8. Keep all **32/32 held-out sealed**.
-
-## Frozen environment / evaluation facts
-
-- `kaggle-environments==1.32.7`;
-- official terminal reward = own bank money;
-- winner = higher final bank balance;
-- final ranking = Bradley–Terry tournament after the submission deadline/run-on window;
-- market/town economy is shared and market-order sequence is economically causal;
-- W/L conversion and broad matchup coverage outrank isolated coin-margin optimization.
+1. Finish run `34668446703` and classify CR080 failure mechanism; use it only to eliminate bad architecture classes.
+2. Finish run `34669006417` and apply the frozen CR081 Gate A to the deep UMG corpus.
+3. If Gate A passes, build one CR081 candidate and run fresh exact paired-seed validation against CR071M plus relevant current-lineage anchors.
+4. Only a candidate that passes that frozen promotion gate becomes eligible for a hosted Kaggle probe.
