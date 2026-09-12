@@ -1,11 +1,14 @@
 """CR081 Gate A: frozen current-3056 bridge test.
 
+Replay convention note: Kaggle replay ``steps[s][seat]['action']`` is the action
+that produced replay state ``s``. Therefore runtime observation step ``t`` maps to
+replay action index ``t + 1``. Gate A compares replay against replay on that aligned
+runtime window; no thresholds are tuned here.
+
 Uses only already-frozen evidence:
 - primary current UMG corpus;
 - canonical bridge-family replay = earliest of the three hosted CR071M loss-family
   replays identified before deep-corpus inspection (Sidharth Hulyalkar, episode 107807039).
-
-The script does not select thresholds or tune a candidate.
 """
 from __future__ import annotations
 
@@ -19,6 +22,7 @@ UMG = "Unknown Mother-Goose"
 CANONICAL_OPP = "Sidharth Hulyalkar"
 CANONICAL_EPISODE = 107807039
 PREFIX = 192
+REPLAY_ACTION_OFFSET = 1
 
 
 def replay_files(root: Path):
@@ -32,13 +36,13 @@ def target_actions(path: Path, team: str):
     if len(seats) != 1:
         return None
     seat = seats[0]
-    if len(d.get("steps") or []) < PREFIX:
+    if len(d.get("steps") or []) < PREFIX + REPLAY_ACTION_OFFSET:
         return None
     return {
         "episode": int(d.get("info", {}).get("EpisodeId") or path.name.split("-")[1]),
         "teams": teams,
         "seat": seat,
-        "actions": [d["steps"][s][seat]["action"] for s in range(PREFIX)],
+        "actions": [d["steps"][s + REPLAY_ACTION_OFFSET][seat]["action"] for s in range(PREFIX)],
     }
 
 
@@ -55,7 +59,12 @@ def canonical_reference(root: Path):
         if CANONICAL_OPP not in teams:
             continue
         seat = teams.index(CANONICAL_OPP)
-        matches.append([d["steps"][s][seat]["action"] for s in range(PREFIX)])
+        if len(d.get("steps") or []) < PREFIX + REPLAY_ACTION_OFFSET:
+            raise RuntimeError("canonical bridge replay too short")
+        matches.append([
+            d["steps"][s + REPLAY_ACTION_OFFSET][seat]["action"]
+            for s in range(PREFIX)
+        ])
     if len(matches) != 1:
         raise RuntimeError(f"canonical bridge replay resolution expected 1, got {len(matches)}")
     return matches[0]
@@ -119,7 +128,10 @@ def main():
         "no_private_or_identity_features": True,
     }
     report = {
-        "schema_version": "cr081-gate-a-v1",
+        "schema_version": "cr081-gate-a-v2-runtime-aligned",
+        "replay_action_index_offset": REPLAY_ACTION_OFFSET,
+        "runtime_window": [0, PREFIX - 1],
+        "replay_action_window": [REPLAY_ACTION_OFFSET, PREFIX],
         "canonical_bridge": {"episode": CANONICAL_EPISODE, "team": CANONICAL_OPP},
         "usable_episodes": len(rows),
         "development_episodes": len(dev),
