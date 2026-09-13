@@ -10,83 +10,97 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 
 ## Hosted live state
 
-Authenticated hosted-status run `34745664559` (2026-09-13 07:37 UTC):
+### CR083 — ACTIVE / IMMUTABLE / STILL CONVERGING
 
-- **CR083** — submission `56199767`, `CR083.tar.gz`, description `CR083_FROZEN_PROBE_648FBCDB`, status `COMPLETE`, current API public score **1563.9**. Submitted 2026-09-13 05:21:53 UTC. The hosted package is byte-identical to frozen SHA-256 `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`.
-- **CR071M control** — submission `56124705`, current API public score **1647.2**.
-- CR083 is therefore **-83.3 rating points** behind CR071M at this early checkpoint.
-- CR083 has **34 listed completed episodes: 33 public + 1 validation**. CR071M has 361 listed completed episodes at the same checkpoint.
-- CR070A — submission `56091951`, current API public score `1637.9`; it is now older than the two live recent submissions CR083 + CR071M.
+- submission: **`56199767`**
+- file: `CR083.tar.gz`
+- frozen SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`**
+- submitted: `2026-09-13 05:21:53 UTC`
+- latest authenticated score checkpoint (`34745664559`, rerun job `103694087017`): **1596.2**
+- mature CR071M control `56124705`: **1642.4** at the same checkpoint
+- current gap: **-46.2**, narrowed from the earlier `-83.3`
 
-This is **negative hosted evidence but still provisional** because CR083 is much less mature than CR071M. No CR083 retuning and no additional hosted submission is authorized from this checkpoint alone.
+Important correction: Kaggle simulation submissions start from `mu_0 = 600` with high uncertainty and converge through repeated episodes. A new CR083 rating therefore cannot be maturity-compared directly with the much older CR071M after only a few dozen games. Money margin does not affect the rating update; W/L/T does.
 
-## Current hosted frontier snapshot
+Frozen hosted checkpoint and maturity rule: `docs/strategy/CR083_HOSTED_PROBE_CHECKPOINT_2026-09-13.md`.
 
-Same authenticated run `34745664559`:
+### 36-replay hosted forensic freeze
 
-1. Majkel1337 `3214.8`
-2. Mengfei Li `3071.1`
-3. Artem The Farmer `3032.6`
-4. THIRD FARM CLUB `3031.1`
-5. ymg_aq `3023.1`
-6. SpaTaro `3018.2`
+Read-only forensic run `34745898829`, artifact `10314660085`:
+
+- **27W–9L–0T = 75.0% raw win rate**;
+- mean money margin `+14,703.1`, median `+6,385`;
+- seat 0: 14W–4L; seat 1: 13W–5L;
+- 36/36 opponents matched exactly to fresh full leaderboard artifact `10313912424`, snapshot `2026-09-13T07:47:09 UTC`.
+
+Opponent-strength split from the fresh snapshot:
+
+- `<1200`: 6–0;
+- `1200–1499`: 8–2;
+- `1500–1699`: 10–3;
+- `1700–1999`: 2–0;
+- `2000–2299`: 1–0;
+- `2300–2599`: **0–3**;
+- `2600+`: **0–1**.
+
+Current rating `2300.8` is approximately rank 1000. The strongest current warning is therefore **0–4 against the four sampled opponents at >=2300 / roughly top-1000 strength**. This is small-n evidence, not a final CR083 verdict, but it exposes a missing high-strength population proxy in our old local gate.
+
+### Frozen maturity decision
+
+Project heuristic, not an official Kaggle rule:
+
+- **do not close CR083 before 100 completed public episodes**;
+- at 100+, re-freeze hosted replays, rating trend, overall W/L and high-strength W/L;
+- no CR083A/B/C, no `step 434` retuning, no crop exception, no clamp-formula tuning from hosted outcomes;
+- no second hosted candidate while CR083 is still being diagnosed.
+
+## Current hosted frontier
+
+Fresh full leaderboard snapshot `2026-09-13T07:47:09 UTC`:
+
+1. Majkel1337 `3217.2`
+2. Mengfei Li `3068.7`
+3. THIRD FARM CLUB `3034.7`
+4. ymg_aq `3034.2`
+5. Artem The Farmer `3028.0`
+6. SpaTaro `3021.9`
 7. feel the agi `3002.8`
-8. Otter Vibe `2986.1`
-9. Subramanya N `2974.5`
-10. binghua `2967.2`
+8. Otter Vibe `2990.0`
+9. Subramanya N `2974.9`
+10. binghua `2970.8`
 
-The current top-10 frontier remains roughly **1400 rating points above CR083**. Closing that gap requires a representation/proxy breakthrough rather than incremental hosted probing.
+Population thresholds: rank 100 `2782.8`, rank 500 `2578.1`, rank 1000 `2300.8`, rank 2000 `1679.7`.
 
 ## Closed / quarantined
 
 - CR078: closed.
 - CR079 SpaTaro 1-NN clone: closed / FAIL.
 - CR080 Mengfei route stitching: closed / FAIL; economic-state aliasing.
-- CR081 v1/v2: invalid and quarantined before score interpretation.
-- CR081 v3 run `34694092039`, master `9120813`: valid catastrophic FAIL / CLOSED.
-- **CR082 state-adaptive Majkel 1-NN: VALID / FAIL / CLOSED.** Canonical workflow `34708795892`, master `9120821`, candidate SHA-256 `199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`. It lost 0–64 directly to CR071M and 0–64 to CR053/CR061/CR065 with zero errors/non-DONE. No CR082A/B/C. Final result: `docs/strategy/CR082_FINAL_RESULT_2026-09-12.md`.
+- CR081 v1/v2 invalid; CR081 v3 valid catastrophic FAIL / CLOSED.
+- CR082 state-adaptive Majkel 1-NN: valid catastrophic FAIL / CLOSED; canonical run `34708795892`, SHA `199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`.
 
-CR082 duplicate run `34708837989` is non-canonical and permanently ignored.
+Behavioral imitation / replay stitching remains closed as the primary representation.
 
-## Architectural conclusion
+## CR083 local evidence
 
-CR080/081 showed that trajectories/tapes do not port across mismatched states. CR082 showed that even correctly predicting a leader's same-step action from current state is not equivalent to economic value for our backbone. Behavioral imitation is closed as the primary representation.
+Phase 0 mechanics: `34709053070`.
 
-CR083 now adds a new warning: a mechanism can strongly dominate CR071M on fresh exact local H2H and still start below CR071M in the live population. Therefore **local H2H against our anchor panel is not by itself a sufficient proxy for hosted metagame value**. Hosted replay forensics is active to identify the missing population signal.
+Phase 1 broad family ablation: `34715158344`; every whole-market-family deletion lost 0–16 to exact CR071M, so broad deletion remains closed.
 
-## ACTIVE — CR083 explicit economic value
+Phase 2 canonical promotion: **`34715575445`**.
 
-Boundary: `docs/strategy/CR083_EXPLICIT_VALUE_ARCHITECTURE_BOUNDARY_2026-09-12.md`.
+- CR083 vs CR071M: **45W–1L–18T = 0.84375** over 64 fresh games;
+- direct mean margin `+172.5`, median `+240`;
+- guardrail score delta vs CR053/CR061/CR065: `0 / 0 / 0`;
+- zero execution errors / incomplete games.
 
-Phase 0 mechanics audit: `docs/strategy/CR083_PHASE0_MECHANICS_RESULT_2026-09-12.md`, run `34709053070`.
+Conclusion: local anchor dominance was real, but it did not test upper-population transfer. Future gates must include an independent high-strength population proxy.
 
-### Phase 1 — COMPLETE causal market-family ablation
+## Active research direction
 
-Canonical run `34715158344`, exploratory master `9130830`, 8 fresh seeds × both seats =16 games/variant. Every broad deletion lost 0–16 to exact CR071M. Broad family deletion remains closed.
+**Population-strength proxy gap.** Build a legal offline stress layer from high-strength public live replays/current-observation regimes. The goal is not to clone opponent actions; it is to expose economic states and strategy pressures absent from CR071M/CR053/CR061/CR065 validation.
 
-### Phase 2 — LOCAL PROMOTION PASS / HOSTED PROBE ACTIVE
-
-Protocol: `docs/strategy/CR083_PHASE2_SEED_DEMAND_CLAMP_PROTOCOL_2026-09-12.md`.
-
-Canonical promotion run: **`34715575445`**.
-
-Frozen package artifact: `cr083-phase2-frozen-packages-v1`, artifact ID `10304915100`.
-
-Frozen candidate SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`**.
-
-Fresh local promotion result:
-
-- CR083 vs CR071M: **45W–1L–18T = 0.84375** over 64 games;
-- direct median money margin: **+240**;
-- direct mean money margin: **+172.5**;
-- guardrail score delta vs CR053/CR061/CR065: **0 / 0 / 0**;
-- zero execution errors and zero incomplete games.
-
-Frozen hosted probe workflow `34740104210` re-downloaded artifact `10304915100`, verified exact SHA-256, confirmed no duplicate probe, and submitted exactly once. Kaggle registered submission **`56199767`** and reported `4 submissions remaining today` after the upload.
-
-Hosted checkpoint workflow `34745664559` now shows `COMPLETE`, score `1563.9`, 33 public episodes, versus CR071M `1647.2`. This is a **provisional hosted underperformance of -83.3 points**.
-
-Read-only hosted replay forensics run `34745733865` is active against the public CR083 episodes. Its purpose is diagnostic only: quantify actual hosted W/L/margins/opponent mix and identify why local promotion evidence failed to transfer. No runtime identity/opponent-private/hidden-seed information may be introduced from this analysis.
+Runtime remains prohibited from using identity, EpisodeId, hidden seed, future state or opponent-private state.
 
 ## Binding policies
 
@@ -95,6 +109,6 @@ Read-only hosted replay forensics run `34745733865` is active against the public
 - Original final holdout remains sealed.
 - Invalid/duplicate evaluations are quarantined before score interpretation.
 - Closed hypotheses stay closed unless genuinely new evidence invalidates their closure.
-- Runtime features/actions may use only legal current observation plus frozen public mechanics/constants; hidden seed/future state/opponent-private state remain forbidden.
-- CR083 hosted package remains immutable at SHA-256 `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`.
-- **No new hosted submission and no CR083 retuning while the current hosted probe is being diagnosed.**
+- Runtime features/actions use only legal current observation plus frozen public mechanics/constants.
+- CR083 remains immutable at SHA-256 `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`.
+- **No new hosted submission while CR083 matures and the population proxy is being rebuilt.**
