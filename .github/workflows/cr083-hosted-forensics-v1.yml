@@ -13,6 +13,7 @@ jobs:
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       TARGET_SUBMISSION: '56199767'
+      TARGET_TEAM_NAME: 'Paulo Martins'
     steps:
       - uses: actions/checkout@v4
         with: {ref: fix/kaggle-parity-v1}
@@ -37,7 +38,6 @@ jobs:
                   ids.append(str(r['id']))
           Path('hosted_forensics/public_episode_ids.txt').write_text('\n'.join(ids)+'\n')
           print('public_completed_episode_ids=',len(ids))
-          print('\n'.join(ids))
           PY
       - name: Download public replays read-only
         shell: bash
@@ -53,20 +53,21 @@ jobs:
               echo "$eid" >> hosted_forensics/replay_failures.txt
               fail=$((fail+1))
             fi
-            sleep 0.15
+            sleep 0.10
           done < hosted_forensics/public_episode_ids.txt
           echo "replay_download_ok=$ok replay_download_fail=$fail"
-      - name: Summarize target rewards and metadata
+      - name: Summarize target rewards and opponent mix
         shell: bash
         run: |
           set -euo pipefail
           python tools/cr083_hosted_forensics.py \
             --replay-root hosted_forensics/replays \
+            --target-team-name "$TARGET_TEAM_NAME" \
             --target-submission "$TARGET_SUBMISSION" \
             --output hosted_forensics/summary.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: cr083-hosted-forensics-v1
+          name: cr083-hosted-forensics-v2-teamname
           path: hosted_forensics/**
           retention-days: 30
