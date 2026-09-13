@@ -1,0 +1,37 @@
+name: CR083 hosted status v1 read-only
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr083-hosted-status-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_SUBMISSION: '56199767'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Read-only CR083 status and current frontier
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p hosted_status
+          kaggle competitions submissions kaggriculture -v -q | tee hosted_status/own_submissions.csv
+          echo '=== TARGET ==='
+          grep -F "${TARGET_SUBMISSION}," hosted_status/own_submissions.csv || true
+          echo '=== CURRENT LEADERBOARD ==='
+          kaggle competitions leaderboard kaggriculture --show -v -q | tee hosted_status/leaderboard.csv
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr083-hosted-status-v1
+          path: hosted_status/**
+          retention-days: 30
