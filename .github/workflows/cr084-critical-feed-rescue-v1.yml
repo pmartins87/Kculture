@@ -1,0 +1,274 @@
+name: CR084 critical feed rescue v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr084-critical-feed-rescue-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact frozen CR083 package and anchors
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - name: Verify frozen CR083 and build CR084 deterministically
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p corpus build
+          test "$(sha256sum source/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          python tools/cr084_build_critical_feed_rescue.py \
+            --base source/cr083/CR083.tar.gz \
+            --output corpus/CR084.tar.gz \
+            --manifest build/CANDIDATE_MANIFEST.json
+          python tools/cr084_build_critical_feed_rescue.py \
+            --base source/cr083/CR083.tar.gz \
+            --output build/CR084_REBUILD.tar.gz \
+            --manifest build/REBUILD_MANIFEST.json
+          cmp corpus/CR084.tar.gz build/CR084_REBUILD.tar.gz
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          m1=json.loads(Path('build/CANDIDATE_MANIFEST.json').read_text())
+          m2=json.loads(Path('build/REBUILD_MANIFEST.json').read_text())
+          a=h('corpus/CR084.tar.gz'); b=h('build/CR084_REBUILD.tar.gz')
+          assert a==b==m1['candidate_sha256']==m2['candidate_sha256'],(a,b,m1,m2)
+          assert m1['base_sha256']=='648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8'
+          assert m1['activation_start_step']==576 and m1['activation_end_step_exclusive']==696
+          assert m1['replacement']=='engine-certain noop -> FEED'
+          assert m1['route_tapes_modified'] is False and m1['route_switch_modified'] is False
+          assert m1['market_logic_modified'] is False and m1['cr083_seed_clamp_modified'] is False
+          assert m1['non_noop_action_can_be_replaced'] is False and m1['care_repair_enabled'] is False
+          assert m1['identity_episode_seed_future_opponent_private_features'] is False
+          print('CR084 deterministic frozen SHA:',a)
+          PY
+          cp source/cr083/CR083.tar.gz corpus/CR083.tar.gz
+          cp source/cr083/CR071M.tar.gz corpus/CR071M.tar.gz
+          cp source/cr083/CR053.tar.gz corpus/CR053.tar.gz
+          cp source/cr083/CR061.tar.gz corpus/CR061.tar.gz
+          cp source/cr083/CR065.tar.gz corpus/CR065.tar.gz
+      - name: Score-blind exact-observation semantic audit
+        run: |
+          python tools/cr084_critical_feed_shadow_audit.py \
+            --base corpus/CR083.tar.gz \
+            --candidate corpus/CR084.tar.gz \
+            --seed-count 8 \
+            --output build/SHADOW_AUDIT.json
+          python - <<'PY'
+          import json
+          d=json.load(open('build/SHADOW_AUDIT.json'))
+          assert d['pass'] is True,d
+          assert d['score_blind'] is True,d
+          assert d['invalid_physical_differences']==0,d
+          assert d['market_mismatches']==0,d
+          assert d['rescued_unit_actions']>0,d
+          print('CR084 semantic audit PASS; rescues=',d['rescued_unit_actions'],d['rescues_by_animal'])
+          PY
+      - name: Fresh Gate-A and promotion seed firewall
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          earlier_masters=[
+            9112080,9112081,9120811,9120812,9120813,9120821,
+            9130830,91308309,9130831,9130832,91408409
+          ]
+          # Include every master already frozen into CR083's own firewall, when present.
+          p=Path('source/cr083/seed_firewall.json')
+          if p.exists():
+            old=json.loads(p.read_text())
+            earlier_masters.extend(old.get('earlier_masters',[]))
+            for k in ('gate_a_master','promotion_master'):
+              if old.get(k) is not None: earlier_masters.append(old[k])
+          earlier_masters=list(dict.fromkeys(int(x) for x in earlier_masters))
+          used=set()
+          for master in earlier_masters:
+            used.update(make_seeds(512,master))
+          audit=set(make_seeds(8,91408409))
+          gate=make_seeds(16,9140841)
+          promo=make_seeds(32,9140842)
+          assert not (set(gate)&used),sorted(set(gate)&used)
+          assert not (set(promo)&used),sorted(set(promo)&used)
+          assert not (set(gate)&audit),sorted(set(gate)&audit)
+          assert not (set(promo)&audit),sorted(set(promo)&audit)
+          assert not (set(gate)&set(promo)),sorted(set(gate)&set(promo))
+          out={
+            'gate_a_master':9140841,'gate_a_seeds':gate,
+            'promotion_master':9140842,'promotion_seeds':promo,
+            'audit_master':91408409,'audit_seeds':sorted(audit),
+            'earlier_masters':earlier_masters,'all_overlaps_zero':True
+          }
+          Path('build/SEED_FIREWALL.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+          cp build/CANDIDATE_MANIFEST.json corpus/CANDIDATE_MANIFEST.json
+          cp build/SHADOW_AUDIT.json corpus/SHADOW_AUDIT.json
+          cp build/SEED_FIREWALL.json corpus/SEED_FIREWALL.json
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr084-frozen-packages-v1
+          path: corpus/
+          retention-days: 30
+
+  gate_a:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    outputs:
+      pass: ${{ steps.decision.outputs.pass }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr084-frozen-packages-v1
+          path: corpus
+      - name: Frozen fresh direct Gate A
+        run: |
+          python tools/kaggle_reference_h2h_v2.py \
+            --a corpus/CR084.tar.gz --b corpus/CR083.tar.gz \
+            --a-id CR084 --b-id CR083 \
+            --seed-count 16 --master-seed 9140841 \
+            --output result/direct.json
+      - id: decision
+        name: Apply frozen Gate A
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          d=json.load(open('result/direct.json'))
+          m=d['metrics_a_vs_b']
+          checks={
+            'identity':d.get('a')=='CR084' and d.get('b')=='CR083',
+            'exact_32_games_16_seeds':m.get('games')==32 and d.get('seed_count')==16 and d.get('master_seed')==9140841,
+            'no_errors_or_non_done':not (d.get('errors') or []) and m.get('non_done_games')==0,
+            'score_rate_at_least_0_5625':m.get('score_rate',0)>=0.5625,
+            'mean_margin_positive':m.get('mean_margin_secondary',0)>0,
+          }
+          out={'schema_version':'cr084-gate-a-v1','master_seed':9140841,'seed_count':16,'checks':checks,'metrics':m,'pass':all(checks.values())}
+          out['decision']='ELIGIBLE_FOR_FROZEN_PROMOTION_PANEL' if out['pass'] else 'CLOSE_CR084_CRITICAL_FEED_RESCUE'
+          Path('result/gate_a.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          with open(os.environ['GITHUB_OUTPUT'],'a') as fh: fh.write('pass='+('true' if out['pass'] else 'false')+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr084-gate-a-v1
+          path: result/
+          retention-days: 30
+
+  promotion:
+    needs: [prepare, gate_a]
+    if: needs.gate_a.outputs.pass == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      max-parallel: 9
+      matrix:
+        include:
+          - {a: CR084, b: CR083}
+          - {a: CR084, b: CR071M}
+          - {a: CR084, b: CR053}
+          - {a: CR084, b: CR061}
+          - {a: CR084, b: CR065}
+          - {a: CR083, b: CR071M}
+          - {a: CR083, b: CR053}
+          - {a: CR083, b: CR061}
+          - {a: CR083, b: CR065}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr084-frozen-packages-v1
+          path: corpus
+      - name: Frozen fresh promotion row
+        run: |
+          python tools/kaggle_reference_h2h_v2.py \
+            --a 'corpus/${{ matrix.a }}.tar.gz' --b 'corpus/${{ matrix.b }}.tar.gz' \
+            --a-id '${{ matrix.a }}' --b-id '${{ matrix.b }}' \
+            --seed-count 32 --master-seed 9140842 \
+            --output 'results/${{ matrix.a }}_vs_${{ matrix.b }}.json'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr084-promo-${{ matrix.a }}-vs-${{ matrix.b }}
+          path: results/*.json
+          retention-days: 30
+
+  aggregate:
+    needs: promotion
+    if: always() && needs.promotion.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr084-promo-*
+          path: results
+          merge-multiple: true
+      - name: Apply frozen CR084 promotion gate
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          games={}
+          for p in Path('results').rglob('*.json'):
+            d=json.loads(p.read_text())
+            if 'metrics_a_vs_b' in d: games[(d['a'],d['b'])]=d
+          guards=['CR071M','CR053','CR061','CR065']
+          required=[('CR084','CR083')]+[('CR084',o) for o in guards]+[('CR083',o) for o in guards]
+          missing=[list(x) for x in required if x not in games]
+          checks={'complete_panel':not missing}
+          out={'schema_version':'cr084-promotion-gate-v1','master_seed':9140842,'seed_count':32,'missing':missing}
+          if not missing:
+            checks['all_64_games_32_fresh_seeds']=all(games[x]['metrics_a_vs_b']['games']==64 and games[x]['seed_count']==32 and games[x]['master_seed']==9140842 for x in required)
+            checks['no_errors_or_non_done']=all(not games[x]['errors'] and games[x]['metrics_a_vs_b']['non_done_games']==0 for x in required)
+            rate=lambda a,b:games[(a,b)]['metrics_a_vs_b']['score_rate']
+            direct=games[('CR084','CR083')]['metrics_a_vs_b']
+            delta={o:rate('CR084',o)-rate('CR083',o) for o in guards}
+            checks['direct_at_least_0_5625']=direct.get('score_rate',0)>=0.5625
+            checks['direct_mean_margin_positive']=direct.get('mean_margin_secondary',0)>0
+            checks['aggregate_guardrail_delta_nonnegative']=sum(delta.values())>=0
+            checks['each_guardrail_delta_at_least_minus_0_0625']=min(delta.values())>=-0.0625
+            out['guardrail_deltas']=delta
+            out['rows']=[{'a':x[0],'b':x[1],**games[x]['metrics_a_vs_b']} for x in required]
+          out['checks']=checks
+          out['pass']=all(checks.values())
+          out['decision']='ELIGIBLE_FOR_INDEPENDENT_HIGH_STRENGTH_PROXY_ONLY' if out['pass'] else 'CLOSE_CR084_CRITICAL_FEED_RESCUE'
+          Path('summary').mkdir(exist_ok=True)
+          Path('summary/gate.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr084-promotion-gate-v1
+          path: summary/
+          retention-days: 30
