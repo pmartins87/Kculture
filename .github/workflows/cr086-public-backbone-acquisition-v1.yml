@@ -1,0 +1,73 @@
+name: CR086 public backbone acquisition v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr086-public-backbone-acquisition-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  acquire:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Freeze CLI/version/help
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/cr086-public-backbones
+          kaggle --version > artifacts/cr086-public-backbones/KAGGLE_VERSION.txt 2>&1
+          kaggle kernels pull -h > artifacts/cr086-public-backbones/KERNELS_PULL_HELP.txt 2>&1 || true
+      - name: Pull selected public notebook sources read-only
+        run: |
+          set -uo pipefail
+          ROOT=artifacts/cr086-public-backbones
+          : > "$ROOT/ACQUISITION.tsv"
+          printf 'slug\tdir\treturncode\n' >> "$ROOT/ACQUISITION.tsv"
+          pull_one () {
+            slug="$1"; dir="$2"
+            mkdir -p "$ROOT/$dir"
+            kaggle kernels pull "$slug" -p "$ROOT/$dir" -m > "$ROOT/$dir/PULL_STDOUT.txt" 2> "$ROOT/$dir/PULL_STDERR.txt"
+            rc=$?
+            printf '%s\t%s\t%s\n' "$slug" "$dir" "$rc" >> "$ROOT/ACQUISITION.tsv"
+            printf '%s\n' "$slug" > "$ROOT/$dir/SOURCE_SLUG.txt"
+            return 0
+          }
+          pull_one 'indarkarhana/shape-the-shop-work-the-pasture-top-10' 'shape_shop_top10'
+          pull_one 'boatlee/v29-r1-adaptive-market-hysteresis' 'adaptive_market_hysteresis'
+          pull_one 'lynnsakurai/farming-score-v3-replay-revised' 'farming_score_v3'
+          pull_one 'tetsutani/shape-the-shop-work-the-pasture-kaggriculture' 'shape_shop_tetsutani'
+          cat "$ROOT/ACQUISITION.tsv"
+      - name: Inventory and source hashes
+        run: |
+          set -euo pipefail
+          ROOT=artifacts/cr086-public-backbones
+          find "$ROOT" -type f -print | sort > "$ROOT/FILELIST.txt"
+          find "$ROOT" -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 -r sha256sum > "$ROOT/SHA256SUMS.txt"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root=Path('artifacts/cr086-public-backbones')
+          out={}
+          for d in sorted(x for x in root.iterdir() if x.is_dir()):
+              files=[]
+              for p in sorted(d.rglob('*')):
+                  if p.is_file():
+                      files.append({'path':str(p.relative_to(root)),'bytes':p.stat().st_size})
+              out[d.name]=files
+          (root/'INVENTORY.json').write_text(json.dumps(out,indent=2,sort_keys=True),encoding='utf-8')
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr086-public-backbone-acquisition-v1
+          path: artifacts/cr086-public-backbones/**
+          retention-days: 30
+          if-no-files-found: error
