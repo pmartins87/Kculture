@@ -1,10 +1,10 @@
 """Build the single frozen CR084 critical late-livestock feed rescue.
 
-Base is the exact hosted/local-promoted CR083 package.  CR084 changes only a physical
+Base is the exact hosted/local-promoted CR083 package. CR084 changes only a physical
 command that CR083 would send as an engine-certain noop: during steps 576..695, if
 that unit is standing on a live animal at immediate escape risk and carries WHEAT,
-replace the noop with FEED.  Market logic, route selection and the CR083 seed clamp
-are untouched.
+replace the noop with FEED. The rescue is applied only after CR083 has completely
+computed its market queue so the frozen protocol guarantee of market identity holds.
 """
 from __future__ import annotations
 
@@ -35,19 +35,24 @@ def extract_main(package: Path) -> str:
 
 
 def patch_source(source: str) -> str:
+    # Apply the physical rescue only after CR083 has frozen final_market. This keeps
+    # all existing route/market/seed-clamp calculations byte-for-byte independent of
+    # the rescue, exactly as required by the pre-build protocol.
     anchor = (
-        '        positions = [tuple(farm["farmer"])] + [tuple(p) for p in farm["hands"]]\n'
+        '            final_market = clamped\n'
         '\n'
-        '        # ---- weed_dig: a wasted turn spent standing on a weed becomes a DIG ----\n'
+        '        return {"farmer": acts[0], "hands": acts[1:],\n'
+        '                "market": final_market}\n'
     )
     if source.count(anchor) != 1:
-        raise RuntimeError("CR083 physical-action anchor mismatch")
+        raise RuntimeError("CR083 final-action anchor mismatch")
     block = (
-        '        positions = [tuple(farm["farmer"])] + [tuple(p) for p in farm["hands"]]\n'
+        '            final_market = clamped\n'
         '\n'
         '        # ---- CR084 critical_feed_rescue ----\n'
-        '        # Only replace an engine-certain noop.  The animal must already have\n'
-        '        # missed one feed, be unfed today, and this unit must carry WHEAT.\n'
+        '        # Deliberately post-market: only the returned physical command may change.\n'
+        '        # Replace an engine-certain noop only when an at-risk, unfed live animal\n'
+        '        # is under this unit and the unit already carries WHEAT.\n'
         f'        if {START_STEP} <= step < {END_STEP_EXCLUSIVE}:\n'
         '            for i in range(min(len(acts), len(positions))):\n'
         '                x, y = positions[i]\n'
@@ -63,7 +68,8 @@ def patch_source(source: str) -> str:
         '                        and _noop(acts[i], tile, inv, seeds, x, y, board)):\n'
         '                    acts[i] = ["FEED"]\n'
         '\n'
-        '        # ---- weed_dig: a wasted turn spent standing on a weed becomes a DIG ----\n'
+        '        return {"farmer": acts[0], "hands": acts[1:],\n'
+        '                "market": final_market}\n'
     )
     source = source.replace(anchor, block, 1)
     compile(source, "main.py", "exec")
@@ -111,6 +117,7 @@ def main() -> None:
         "activation_start_step": START_STEP,
         "activation_end_step_exclusive": END_STEP_EXCLUSIVE,
         "replacement": "engine-certain noop -> FEED",
+        "patch_stage": "post-final-market pre-return",
         "requires_live_animal": True,
         "requires_fed_today_false": True,
         "requires_consecutive_unfed_at_least": 1,
