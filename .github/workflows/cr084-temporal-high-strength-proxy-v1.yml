@@ -1,0 +1,98 @@
+name: CR084 temporal high-strength proxy v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr084-temporal-high-strength-proxy-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  proxy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_SUBMISSION: '56199767'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Download exact frozen CR084 Gate-A corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr084-corrected-gate-a-v1
+          path: gate_a
+          run-id: 34758074656
+          github-token: ${{ github.token }}
+      - name: Freeze CR083 episodes and full leaderboard after proxy protocol
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p proxy/replays proxy/leaderboard/unpacked
+          kaggle competitions episodes "$TARGET_SUBMISSION" -v -q > proxy/episodes.csv
+          kaggle competitions leaderboard kaggriculture --download -p proxy/leaderboard
+          unzip -q proxy/leaderboard/kaggriculture.zip -d proxy/leaderboard/unpacked
+          find proxy/leaderboard/unpacked -type f -maxdepth 2 -print
+      - name: Freeze temporal holdout episode ids without looking at outcomes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv,datetime
+          from pathlib import Path
+          start=datetime.datetime.fromisoformat('2026-09-13T08:00:31')
+          end=datetime.datetime.fromisoformat('2026-09-13T12:55:00')
+          rows=list(csv.DictReader(Path('proxy/episodes.csv').read_text().splitlines()))
+          ids=[]
+          for r in rows:
+              if 'PUBLIC' not in str(r.get('type','')) or not str(r.get('state','')).endswith('COMPLETED'):
+                  continue
+              ct=datetime.datetime.fromisoformat(str(r['createTime']))
+              if start <= ct <= end:
+                  ids.append(str(r['id']))
+          Path('proxy/holdout_ids.txt').write_text('\n'.join(ids)+'\n')
+          print('temporal_holdout_public_ids=',len(ids))
+          print('\n'.join(ids))
+          PY
+      - name: Download frozen-window public replays read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          while read -r eid; do
+            [ -n "$eid" ] || continue
+            mkdir -p "proxy/replays/$eid"
+            kaggle competitions replay "$eid" -p "proxy/replays/$eid" -q
+            ok=$((ok+1))
+          done < proxy/holdout_ids.txt
+          echo "replays_downloaded=$ok"
+      - name: Evaluate frozen temporal high-strength proxy
+        shell: bash
+        run: |
+          set -euo pipefail
+          LB=$(find proxy/leaderboard/unpacked -type f -name '*.csv' | head -n1)
+          test -n "$LB"
+          test "$(sha256sum gate_a/corpus/CR084.tar.gz | awk '{print $1}')" = "3aa08bb2ee163d1707dbf0bf9d2cb4b6f8c194fa2dbd715c38a67a4a41d414a2"
+          test "$(sha256sum gate_a/corpus/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          python tools/cr084_temporal_proxy.py \
+            --episodes-csv proxy/episodes.csv \
+            --leaderboard-csv "$LB" \
+            --replay-root proxy/replays \
+            --base gate_a/corpus/CR083.tar.gz \
+            --candidate gate_a/corpus/CR084.tar.gz \
+            --output proxy/result.json
+      - name: Freeze provenance
+        if: always()
+        run: |
+          find proxy -type f -print | sort > proxy/FILELIST.txt || true
+          find proxy -type f ! -name SHA256SUMS.txt -print0 | sort -z | xargs -0 -r sha256sum > proxy/SHA256SUMS.txt || true
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr084-temporal-high-strength-proxy-v1
+          path: proxy/**
+          retention-days: 30
