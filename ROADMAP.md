@@ -1,6 +1,6 @@
 # ROADMAP — Kculture live plan
 
-Updated: 2026-09-12
+Updated: 2026-09-13
 
 Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Working source of truth is branch `fix/kaggle-parity-v1`, `STATUS.md`, and frozen experiment protocols.
 
@@ -31,34 +31,36 @@ Phase 0 (`34709053070`) established exact mechanics and offline branching.
 
 ### Phase 1 — complete
 
-Causal deletion run `34715158344`, master `9130830`, removed one final market family at a time from exact CR071M. Every variant lost 0–16. Therefore **all broad market families are essential** and whole-family disabling is closed. See `docs/strategy/CR083_PHASE1_CAUSAL_ABLATION_RESULT_2026-09-12.md`.
+Causal deletion run `34715158344`, master `9130830`, removed one final market family at a time from exact CR071M. Every variant lost 0–16. Therefore all broad market families are essential and whole-family disabling is closed.
 
-### Phase 2 — route-aware future-seed-demand clamp
+### Phase 2 — local promotion complete / one hosted probe next
 
 Protocol: `docs/strategy/CR083_PHASE2_SEED_DEMAND_CLAMP_PROTOCOL_2026-09-12.md`.
 
-This is not a broad BUY_SEED reduction. It removes only seed quantity that is mechanically unusable by the already-selected own route after the last route switch:
+Canonical promotion workflow: **`34715575445`**.
 
-- active only from `step >= 434`;
-- compute selected-route future PLANT demand by crop from `step+1` onward;
-- project current seed stock after same-turn physical PLANT requests using exact atomic validation semantics;
-- clamp each final `BUY_SEED` order to the remaining maximum usable quantity;
-- preserve farmer/hands, route switches, all non-seed orders and all CR071M safety logic.
+Frozen candidate SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`** from artifact `10304915100` (`CR083.tar.gz`).
 
-Why this is admissible: seeds cannot be sold, do not affect the public market/shed, and have zero terminal value unless consumed by a later PLANT command.
+Fresh promotion result:
 
-Canonical workflow: **`34715575445`**.
+- direct vs CR071M: **45W–1L–18T = 0.84375**;
+- median margin `+240`, mean margin `+172.5`;
+- guardrail score deltas vs CR053/CR061/CR065: **0 / 0 / 0**;
+- zero execution errors and zero incomplete games.
 
-Frozen sequence:
+Frozen decision: **`ELIGIBLE_FOR_ONE_HOSTED_PROBE_AFTER_SLOT_ACCOUNTING`**.
 
-1. deterministic candidate build;
-2. score-blind shadow audit on exact official observations; any difference outside allowed BUY_SEED reduction aborts before scoring;
-3. fresh Gate A master `9130831`: 32 direct games vs CR071M; PASS requires >=0.5625 score rate, positive mean margin and zero failures;
-4. only on PASS, the identical candidate hash automatically advances to master `9130832` seven-row promotion panel;
-5. promotion PASS requires direct >=0.5625, aggregate guardrail delta >=0 and every guardrail delta >=-0.0625;
-6. only then refresh authenticated hosted slots and consider exactly one hosted probe.
+Fresh authenticated slot accounting run `34740003554` lists no team submissions after 2026-09-09, so current daily allowance is unused. The next action is exactly one hosted submission of the byte-identical frozen candidate. Before submission the workflow must re-check the SHA and abort if an identical CR083 probe is already present.
 
-No parameter, crop exception or activation boundary may be retuned on `9130831`/`9130832` if this mechanism fails.
+No parameter, crop exception, activation boundary, rebuild, CR083A/B/C or other retuning is allowed before this hosted probe.
+
+## After the hosted probe
+
+- Record submission ID, status, filename, exact SHA and timestamps immediately.
+- Refresh authenticated own submissions/frontier.
+- Do not judge the bot from an immature live rating; keep local promotion evidence separate from live rating convergence.
+- Preserve CR071M as calibration/control and treat CR083 as the only newly authorized live experiment.
+- Any next architecture change requires a new independent mechanism and fresh preregistered evidence; do not tune Phase 2 on its spent validation panel.
 
 ## Escalation rule
 
