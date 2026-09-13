@@ -21,7 +21,7 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 - current observed gap at that checkpoint: **CR083 +21.5**
 - episode listing contained 77 completed rows including the validation episode, i.e. about **76 public completed episodes**.
 
-CR083 has therefore crossed CR071M on the live rating, which is encouraging, but the predeclared maturity rule remains binding: no final hosted verdict before 100 completed public episodes. Do not repeatedly poll; make one checkpoint only when the maturity condition is actually reached or when another material decision requires it.
+CR083 has crossed CR071M on the live rating, which is encouraging, but the predeclared maturity rule remains binding: no final hosted verdict before 100 completed public episodes. Do not repeatedly poll; make one checkpoint only when the maturity condition is actually reached or when another material decision requires it.
 
 Important: Kaggle simulation ratings converge through repeated episodes. Money margin does not directly determine the live rating; W/L/T does.
 
@@ -72,8 +72,9 @@ Older full-snapshot population thresholds remain useful only as approximate cont
 - CR081 v1/v2 invalid; CR081 v3 valid catastrophic FAIL / CLOSED.
 - CR082 state-adaptive Majkel 1-NN: valid catastrophic FAIL / CLOSED; canonical run `34708795892`, SHA `199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`.
 - **CR084 critical late-livestock rescue: CLOSED / DO NOT RETUNE.** Corrected SHA `3aa08bb2ee163d1707dbf0bf9d2cb4b6f8c194fa2dbd715c38a67a4a41d414a2`. Gate A barely passed 0.5625, but frozen promotion run `34758417896` failed: CR084 vs CR083 12W–10L–42T = **0.515625**, mean margin `-106.625`, aggregate guardrail delta negative and CR071M delta `-0.125`. Independent temporal high-strength proxy `34758785488` also found **0 rescue opportunities / 0 preventable escapes** in 6 >=2300 episodes. Final record: `docs/strategy/CR084_FINAL_RESULT_2026-09-13.md`.
+- **CR085 Pareto-guarded adaptive switch: CLOSED / DO NOT RETUNE.** Frozen SHA `eb7bac5c5619e70d1ef81dd18f28b642b96326be31ae50354cdca7770531bdf7`. Semantic audit and seed firewall passed, but Gate A run `34761593920` on master `9150851` produced **3W–3L–26T = 0.5000**, mean margin **-147.46875** versus CR083. Decision: `CLOSE_CR085_PARETO_GUARDED_SWITCH`. No tuning of guarded dimensions, switch steps, or zero thresholds.
 
-Behavioral imitation / replay stitching remains closed as the primary representation. CR084-style late FEED rescue is also closed.
+Behavioral imitation / replay stitching remains closed as the primary representation. CR084-style late FEED rescue and CR085-style Pareto switch gating are also closed.
 
 ## CR083 local evidence
 
@@ -92,11 +93,22 @@ A fresh same-master row inside the CR084 promotion panel also reconfirmed CR083'
 
 ## Active research direction
 
-**CR085 discovery must start from economic-state decomposition of high-strength losses, not from another livestock patch.**
+**CR086 discovery — public strong-backbone benchmark + quantitative market/adversary-state modeling.**
 
-Use already-frozen public/legal replay evidence to answer which economic quantities begin diverging before the terminal losses: cash trajectory, market inventory/prices, private productive inventory, crop/animal production, shed pressure, worker/land utilization, and route-switch consequences. The goal is to identify a repeatable causal bottleneck that is observable legally at runtime.
+Incremental patches on the CR083 route architecture have now failed twice independently (CR084 and CR085). The next step is not another route threshold. Public Kaggriculture notebooks currently exist with displayed ratings materially above CR083, including agents around the mid/high 2000s. Kaggle staff has publicly stated that freely/publicly available competition material is fair use, subject to normal competition/licensing requirements.
 
-Do not clone opponent actions and do not condition runtime policy on identity, EpisodeId, rating, hidden seed, future state or opponent-private state.
+Before defining CR086:
+
+1. pull selected public notebook sources read-only through authenticated Kaggle CLI;
+2. freeze exact source/package hashes and notebook license/attribution metadata;
+3. identify executable agent packages and architectural mechanisms;
+4. benchmark exact public agents locally against CR083 and legacy anchors before modifying anything;
+5. separately evaluate a legal quantitative opponent-inventory estimator derived from public state, with uncertainty around floor sales/private losses;
+6. only after those benchmarks may a CR086 candidate protocol be frozen.
+
+Public code is a benchmark/backbone candidate, not automatic permission to submit an unchanged third-party agent. Prize eligibility, attribution and license compliance must remain explicit.
+
+Do not clone hidden/private strategies and do not condition runtime policy on identity, EpisodeId, rating, hidden seed, future state or opponent-private state.
 
 ## Binding policies
 
