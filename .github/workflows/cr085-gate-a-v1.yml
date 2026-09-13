@@ -1,0 +1,121 @@
+name: CR085 Pareto-guarded switch Gate A v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr085-gate-a-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact frozen CR083 corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - name: Build exact frozen CR085 twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p corpus build result
+          test "$(sha256sum source/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          python tools/cr085_build_pareto_guarded_switch.py --base source/cr083/CR083.tar.gz --output corpus/CR085.tar.gz --manifest build/CANDIDATE_MANIFEST.json
+          python tools/cr085_build_pareto_guarded_switch.py --base source/cr083/CR083.tar.gz --output build/CR085_REBUILD.tar.gz --manifest build/REBUILD_MANIFEST.json
+          cmp corpus/CR085.tar.gz build/CR085_REBUILD.tar.gz
+          cp source/cr083/CR083.tar.gz corpus/CR083.tar.gz
+          cp source/cr083/CR071M.tar.gz corpus/CR071M.tar.gz
+          cp source/cr083/CR053.tar.gz corpus/CR053.tar.gz
+          cp source/cr083/CR061.tar.gz corpus/CR061.tar.gz
+          cp source/cr083/CR065.tar.gz corpus/CR065.tar.gz
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          m=json.loads(Path('build/CANDIDATE_MANIFEST.json').read_text())
+          assert h('corpus/CR085.tar.gz')==h('build/CR085_REBUILD.tar.gz')==m['candidate_sha256']
+          assert m['base_sha256']=='648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8'
+          assert m['guarded_steps']==[360,433]
+          assert m['fitted_thresholds'] is False
+          assert m['step_226_modified'] is False
+          assert m['route_tapes_modified'] is False
+          print('CR085 frozen SHA:',m['candidate_sha256'])
+          PY
+      - name: Score-blind semantic audit
+        run: |
+          python tools/cr085_semantic_audit.py --base corpus/CR083.tar.gz --candidate corpus/CR085.tar.gz --output build/SEMANTIC_AUDIT.json
+          python - <<'PY'
+          import json
+          d=json.load(open('build/SEMANTIC_AUDIT.json'))
+          assert d['pass'] is True and d['score_blind'] is True
+          assert d['guarded_switches_exercised'] >= 2
+          print('semantic audit PASS')
+          PY
+      - name: Fresh-seed firewall
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          earlier=[9112080,9112081,9120811,9120812,9120813,9120821,9130830,91308309,9130831,9130832,91408409,9140841,9140842]
+          p=Path('source/cr083/seed_firewall.json')
+          if p.exists():
+              old=json.loads(p.read_text())
+              earlier.extend(old.get('earlier_masters',[]))
+              for k in ('gate_a_master','promotion_master'):
+                  if old.get(k) is not None: earlier.append(old[k])
+          earlier=list(dict.fromkeys(map(int,earlier)))
+          used=set()
+          for master in earlier: used.update(make_seeds(512,master))
+          audit=set(make_seeds(8,91508509)); gate=set(make_seeds(16,9150851)); promo=set(make_seeds(32,9150852))
+          assert not audit&used and not gate&used and not promo&used
+          assert not audit&gate and not audit&promo and not gate&promo
+          out={'audit_master':91508509,'gate_a_master':9150851,'promotion_master':9150852,'earlier_masters':earlier,'all_overlaps_zero':True}
+          Path('build/SEED_FIREWALL.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - name: Frozen fresh direct Gate A
+        run: |
+          python tools/kaggle_reference_h2h_v2.py --a corpus/CR085.tar.gz --b corpus/CR083.tar.gz --a-id CR085 --b-id CR083 --seed-count 16 --master-seed 9150851 --output result/direct.json
+      - name: Apply frozen Gate A threshold
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.load(open('result/direct.json')); m=d['metrics_a_vs_b']
+          checks={
+            'identity':d.get('a')=='CR085' and d.get('b')=='CR083',
+            'exact_32_games_16_seeds':m.get('games')==32 and d.get('seed_count')==16 and d.get('master_seed')==9150851,
+            'no_errors_or_non_done':not (d.get('errors') or []) and m.get('non_done_games')==0,
+            'score_rate_at_least_0_5625':m.get('score_rate',0)>=0.5625,
+            'mean_margin_positive':m.get('mean_margin_secondary',0)>0,
+          }
+          out={'schema_version':'cr085-gate-a-v1','master_seed':9150851,'seed_count':16,'checks':checks,'metrics':m,'pass':all(checks.values())}
+          out['decision']='ELIGIBLE_FOR_FROZEN_PROMOTION_PANEL' if out['pass'] else 'CLOSE_CR085_PARETO_GUARDED_SWITCH'
+          Path('result/gate_a.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+          cp build/CANDIDATE_MANIFEST.json corpus/CANDIDATE_MANIFEST.json
+          cp build/SEMANTIC_AUDIT.json corpus/SEMANTIC_AUDIT.json
+          cp build/SEED_FIREWALL.json corpus/SEED_FIREWALL.json
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr085-gate-a-v1
+          path: |
+            corpus/**
+            build/**
+            result/**
+          retention-days: 30
