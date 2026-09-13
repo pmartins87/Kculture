@@ -1,154 +1,161 @@
 #!/usr/bin/env python3
 """Read-only forensic summary for hosted Kaggriculture episode replays.
 
-This script never contacts Kaggle and never mutates submissions. It reads replay JSON
-files already downloaded by a workflow and attempts to locate the target submission
-seat from replay metadata, then summarizes final rewards/margins.
+The Kaggle replay schema records team names in ``info.TeamNames`` and final money in
+``rewards``.  This analyzer uses only those offline replay fields; it never contacts
+Kaggle, never mutates submissions, and none of the identity fields it reads are
+intended for runtime policy use.
 """
 from __future__ import annotations
 
 import argparse
 import json
 import statistics
+from collections import defaultdict
 from pathlib import Path
-from typing import Any
 
 
-def walk(obj: Any, path=()):
-    if isinstance(obj, dict):
-        for k, v in obj.items():
-            yield from walk(v, path + (str(k),))
-    elif isinstance(obj, list):
-        for i, v in enumerate(obj):
-            yield from walk(v, path + (str(i),))
-    else:
-        yield path, obj
-
-
-def find_target_paths(data: Any, target: str):
-    out=[]
-    for p,v in walk(data):
-        s=str(v)
-        if s == target or target in s:
-            out.append(p)
-    return out
-
-
-def infer_seat(data: dict, target: str):
-    # Common metadata layouts first.
-    for key in ("agents", "submissions", "participants", "players"):
-        arr=data.get(key)
-        if isinstance(arr,list):
-            for i,x in enumerate(arr):
-                if target in json.dumps(x, default=str):
-                    return i, f"top.{key}[{i}]"
-    info=data.get("info")
-    if isinstance(info,dict):
-        for key,val in info.items():
-            if isinstance(val,list):
-                for i,x in enumerate(val):
-                    if target in json.dumps(x, default=str):
-                        return i, f"info.{key}[{i}]"
-    # Generic heuristic: if a target occurrence sits under a numeric index 0/1,
-    # prefer the nearest such index in the path.
-    paths=find_target_paths(data,target)
-    votes=[]
-    for p in paths:
-        nums=[int(x) for x in p if x in ("0","1")]
-        if nums:
-            votes.append(nums[-1])
-    if votes and all(v==votes[0] for v in votes):
-        return votes[0], "generic-path"
-    return None, None
+def infer_seat_and_names(data: dict, target_team_name: str):
+    info = data.get("info") if isinstance(data.get("info"), dict) else {}
+    names = info.get("TeamNames")
+    if not isinstance(names, list) or len(names) < 2:
+        agents = info.get("Agents")
+        if isinstance(agents, list):
+            names = [a.get("Name") if isinstance(a, dict) else str(a) for a in agents]
+    if not isinstance(names, list) or len(names) < 2:
+        return None, None, None
+    normalized = [str(x) for x in names[:2]]
+    hits = [i for i, name in enumerate(normalized) if name == target_team_name]
+    if len(hits) != 1:
+        return None, normalized, None
+    seat = hits[0]
+    return seat, normalized, normalized[1 - seat]
 
 
 def final_rewards(data: dict):
-    steps=data.get("steps")
-    if not isinstance(steps,list) or not steps:
-        return None
-    final=steps[-1]
-    if not isinstance(final,list) or len(final)<2:
-        return None
-    vals=[]
-    for a in final[:2]:
-        if isinstance(a,dict):
-            vals.append(a.get("reward"))
-        else:
-            vals.append(None)
-    if any(v is None for v in vals):
-        return None
-    try:
-        return [float(v) for v in vals]
-    except Exception:
-        return None
+    vals = data.get("rewards")
+    if isinstance(vals, list) and len(vals) >= 2:
+        try:
+            return [float(vals[0]), float(vals[1])]
+        except (TypeError, ValueError):
+            pass
+    # Defensive fallback only; current official replay schema uses top-level rewards.
+    steps = data.get("steps")
+    if isinstance(steps, list) and steps:
+        final = steps[-1]
+        if isinstance(final, list) and len(final) >= 2:
+            out = []
+            for a in final[:2]:
+                out.append(a.get("reward") if isinstance(a, dict) else None)
+            if all(v is not None for v in out):
+                try:
+                    return [float(out[0]), float(out[1])]
+                except (TypeError, ValueError):
+                    pass
+    return None
 
 
 def episode_id(path: Path, data: dict):
-    for k in ("id","episodeId","episode_id"):
-        if k in data:
-            return str(data[k])
-    digits=''.join(c for c in path.stem if c.isdigit())
+    info = data.get("info") if isinstance(data.get("info"), dict) else {}
+    if info.get("EpisodeId") is not None:
+        return str(info["EpisodeId"])
+    digits = "".join(c for c in path.stem if c.isdigit())
     return digits or path.stem
 
 
-def compact_metadata(data: dict):
-    out={}
-    for key in ("id","episodeId","agents","submissions","participants","players","info"):
-        if key in data:
-            v=data[key]
-            text=json.dumps(v,default=str)
-            if len(text)>3000:
-                text=text[:3000]+"..."
-            out[key]=text
-    return out
+def grouped_stats(rows):
+    groups = defaultdict(list)
+    for r in rows:
+        groups[r["opponent_team"]].append(r)
+    out = []
+    for opponent, games in groups.items():
+        margins = [g["margin"] for g in games]
+        out.append(
+            {
+                "opponent_team": opponent,
+                "games": len(games),
+                "wins": sum(g["result"] == "W" for g in games),
+                "losses": sum(g["result"] == "L" for g in games),
+                "ties": sum(g["result"] == "T" for g in games),
+                "mean_margin": statistics.fmean(margins),
+                "median_margin": statistics.median(margins),
+            }
+        )
+    return sorted(out, key=lambda x: (-x["games"], x["mean_margin"], x["opponent_team"]))
 
 
 def main():
-    ap=argparse.ArgumentParser()
-    ap.add_argument("--replay-root",required=True)
-    ap.add_argument("--target-submission",required=True)
-    ap.add_argument("--output",required=True)
-    args=ap.parse_args()
-    root=Path(args.replay_root)
-    files=sorted(root.rglob("*.json"))
-    rows=[]
-    unresolved=[]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--replay-root", required=True)
+    ap.add_argument("--target-team-name", required=True)
+    ap.add_argument("--target-submission", default=None)
+    ap.add_argument("--output", required=True)
+    args = ap.parse_args()
+
+    root = Path(args.replay_root)
+    files = sorted(root.rglob("*.json"))
+    rows = []
+    unresolved = []
     for p in files:
         try:
-            data=json.loads(p.read_text(encoding="utf-8"))
+            data = json.loads(p.read_text(encoding="utf-8"))
         except Exception as e:
-            unresolved.append({"file":str(p),"error":repr(e)})
+            unresolved.append({"file": str(p), "error": repr(e)})
             continue
-        rewards=final_rewards(data)
-        seat,seat_source=infer_seat(data,str(args.target_submission))
-        eid=episode_id(p,data)
-        rec={"episode_id":eid,"file":str(p),"seat":seat,"seat_source":seat_source,"rewards":rewards}
-        if rewards is not None and seat in (0,1):
-            margin=rewards[seat]-rewards[1-seat]
-            rec.update({"target_reward":rewards[seat],"opponent_reward":rewards[1-seat],"margin":margin,"result":"W" if margin>0 else "L" if margin<0 else "T"})
-            rows.append(rec)
-        else:
-            rec["target_paths"]=[list(x) for x in find_target_paths(data,str(args.target_submission))[:20]]
-            rec["metadata_sample"]=compact_metadata(data)
+
+        rewards = final_rewards(data)
+        seat, team_names, opponent = infer_seat_and_names(data, args.target_team_name)
+        eid = episode_id(p, data)
+        rec = {
+            "episode_id": eid,
+            "file": str(p),
+            "seat": seat,
+            "team_names": team_names,
+            "opponent_team": opponent,
+            "rewards": rewards,
+        }
+        if rewards is None or seat not in (0, 1):
             unresolved.append(rec)
-    margins=[r["margin"] for r in rows]
-    summary={
-        "schema_version":"cr083-hosted-forensics-v1",
-        "target_submission":str(args.target_submission),
-        "replay_json_files":len(files),
-        "resolved_games":len(rows),
-        "unresolved_games":len(unresolved),
-        "wins":sum(r["result"]=="W" for r in rows),
-        "losses":sum(r["result"]=="L" for r in rows),
-        "ties":sum(r["result"]=="T" for r in rows),
-        "mean_margin":statistics.fmean(margins) if margins else None,
-        "median_margin":statistics.median(margins) if margins else None,
-        "worst":sorted(rows,key=lambda r:r["margin"])[:10],
-        "best":sorted(rows,key=lambda r:r["margin"],reverse=True)[:10],
-        "unresolved":unresolved[:5],
+            continue
+
+        margin = rewards[seat] - rewards[1 - seat]
+        rec.update(
+            {
+                "target_reward": rewards[seat],
+                "opponent_reward": rewards[1 - seat],
+                "margin": margin,
+                "result": "W" if margin > 0 else "L" if margin < 0 else "T",
+            }
+        )
+        rows.append(rec)
+
+    margins = [r["margin"] for r in rows]
+    summary = {
+        "schema_version": "cr083-hosted-forensics-v2-teamname",
+        "target_submission": args.target_submission,
+        "target_team_name": args.target_team_name,
+        "identity_use": "offline forensic only; prohibited as runtime policy feature",
+        "replay_json_files": len(files),
+        "resolved_games": len(rows),
+        "unresolved_games": len(unresolved),
+        "wins": sum(r["result"] == "W" for r in rows),
+        "losses": sum(r["result"] == "L" for r in rows),
+        "ties": sum(r["result"] == "T" for r in rows),
+        "score_rate": (sum(r["result"] == "W" for r in rows) + 0.5 * sum(r["result"] == "T" for r in rows)) / len(rows) if rows else None,
+        "mean_margin": statistics.fmean(margins) if margins else None,
+        "median_margin": statistics.median(margins) if margins else None,
+        "min_margin": min(margins) if margins else None,
+        "max_margin": max(margins) if margins else None,
+        "opponents_unique": len({r["opponent_team"] for r in rows}),
+        "by_opponent": grouped_stats(rows),
+        "worst": sorted(rows, key=lambda r: r["margin"])[:10],
+        "best": sorted(rows, key=lambda r: r["margin"], reverse=True)[:10],
+        "games": rows,
+        "unresolved": unresolved,
     }
-    Path(args.output).write_text(json.dumps(summary,indent=2,sort_keys=True),encoding="utf-8")
-    print(json.dumps(summary,indent=2,sort_keys=True))
+    Path(args.output).write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
+    print(json.dumps(summary, indent=2, sort_keys=True))
+
 
 if __name__ == "__main__":
     main()
