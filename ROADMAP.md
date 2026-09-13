@@ -15,7 +15,8 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 7. Original final holdout remains sealed.
 8. Do not tune a failed architecture on spent validation evidence; change representation instead.
 9. Strong local H2H against CR071M/legacy anchors is necessary but not sufficient for hosted metagame value.
-10. Future promotion requires an independent **high-strength population proxy** before a hosted slot is spent.
+10. Future promotion requires an independent high-strength population proxy before a hosted slot is spent.
+11. **Do not enter polling loops.** Live state is checked only at predeclared/material decision boundaries.
 
 ## Closed architecture classes
 
@@ -24,6 +25,7 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 - CR080 replay/route stitching.
 - CR081 time-indexed market transplant.
 - CR082 same-step state-conditioned teacher 1-NN.
+- **CR084 critical late-livestock rescue.** Corrected Gate A barely passed, but frozen promotion failed and independent temporal high-strength evidence showed zero actual rescue opportunities. No window/risk/animal retuning.
 
 Behavioral imitation remains closed. Public replays may be used offline to discover state/regime stressors, not to make identity-conditioned runtime policies.
 
@@ -35,14 +37,14 @@ Kaggle submission: **`56199767`**.
 
 Local promotion (`34715575445`) passed strongly: 45W–1L–18T versus CR071M, neutral guardrail deltas versus CR053/CR061/CR065.
 
-Hosted evidence now has the correct interpretation:
+Latest authenticated checkpoint already obtained in this work session:
 
-- Kaggle initializes a new valid simulation submission at `mu_0 = 600`; its rating is still converging during early episodes;
-- CR083 moved from `1563.9` to **`1596.2`** while CR071M moved to `1642.4`, reducing the apparent gap from `83.3` to **`46.2`**;
-- frozen 36-replay forensics: **27W–9L**, 75.0% raw win rate;
-- however, fresh population cross-match is **0–4 versus current >=2300 / roughly top-1000 opponents**.
+- CR083: **1660.3**;
+- CR071M: **1638.8**;
+- observed CR083 lead: **+21.5**;
+- about **76 public completed episodes** plus validation.
 
-Full checkpoint: `docs/strategy/CR083_HOSTED_PROBE_CHECKPOINT_2026-09-13.md`.
+This is encouraging but not the final hosted verdict.
 
 ### Frozen maturity rule
 
@@ -50,36 +52,69 @@ Operational project heuristic, not Kaggle policy:
 
 1. Keep the exact CR083 submission live and immutable.
 2. Do not issue the final hosted verdict before **100 completed public episodes**.
-3. At 100+, freeze a new checkpoint of rating, rating trend, all public W/L/T, seat split and opponent-strength bands.
-4. Crossing CR071M before 100 episodes is encouraging but not sufficient; upper-population transfer must also improve.
-5. No CR083A/B/C and no tuning of the seed-clamp activation boundary, crop rules or formula from this hosted sample.
-6. No new hosted submission solely to reroll rating convergence.
+3. Do **not** repeatedly poll between now and that boundary.
+4. At 100+, make one frozen checkpoint of rating, W/L/T, seat split, opponent-strength bands and trend.
+5. Crossing CR071M before 100 episodes is encouraging but not sufficient; upper-population transfer must also improve.
+6. No CR083A/B/C and no tuning of the seed-clamp activation boundary, crop rules or formula from this hosted sample.
+7. No new hosted submission solely to reroll rating convergence.
 
-## ACTIVE IN PARALLEL — rebuild the promotion proxy
+## CLOSED — CR084
 
-The old gate asked whether a candidate improved CR071M and preserved legacy anchors. The missing question is whether it survives **high-strength live population regimes**.
+Final record: `docs/strategy/CR084_FINAL_RESULT_2026-09-13.md`.
 
-Next evaluation layer must therefore:
+Corrected frozen SHA: `3aa08bb2ee163d1707dbf0bf9d2cb4b6f8c194fa2dbd715c38a67a4a41d414a2`.
 
-1. freeze a current high-strength population cohort, prioritizing roughly top-1000 (`rating >= ~2300`) and top-500 (`>= ~2578`) opponents;
-2. obtain only public/legal replay evidence through authenticated Kaggle interfaces;
-3. extract current-observation/economic-regime stressors and mechanics-level differences — not opponent identity as a runtime feature and not replay-action imitation;
-4. identify which economic states are systematically absent from CR071M/CR053/CR061/CR065 local validation;
-5. turn those regimes into a frozen offline stress protocol;
-6. only then build the next genuinely independent economic-value architecture;
-7. require that candidate to pass CR071M direct, legacy guardrails **and** high-strength population-proxy evidence before any hosted probe.
+Key evidence:
+
+- semantic audit valid: 23 exercised rescues, 0 market mismatches, 0 invalid physical differences;
+- Gate A: 11W–7L–14T = `0.5625`, mean margin `+140.6875`;
+- promotion master `9140842`: CR084 vs CR083 **12W–10L–42T = `0.515625`**, mean margin `-106.625`;
+- CR071M guardrail delta versus CR083: `-0.125`;
+- temporal high-strength proxy: 6 opponents `>=2300`, 5 CR083 losses, **0 rescue opportunities / 0 confirmed preventable escapes**.
+
+Decision: `CLOSE_CR084_CRITICAL_FEED_RESCUE`.
+
+## NEXT — CR085 architecture discovery
+
+Do not build CR085 from a guessed patch. First decompose already-frozen high-strength losses into economic trajectories.
+
+The discovery phase must compare CR083 and strong-opponent state evolution by coarse, legal economic families:
+
+1. **cash / liquidity trajectory** by day;
+2. **market prices and market inventory** for sellable products;
+3. **productive inventory** — live animals, planted crops, harvested products;
+4. **shed pressure / discarded overflow**;
+5. **worker and land utilization**;
+6. **input acquisition efficiency** — seed/product/animal/land/hire spending;
+7. **route-switch aftermath** around the frozen CR083 switch points;
+8. terminal conversion: which intermediate state variable best predicts the late money gap.
+
+The discovery objective is not to imitate strong opponents. It is to find a repeatable causal bottleneck that:
+
+- appears before terminal divergence;
+- is observable from legal current state;
+- recurs across multiple strong-opponent losses;
+- can be converted into a narrow intervention with an explicit economic argument;
+- can be stress-tested on a holdout cohort that did not motivate the intervention.
+
+Only after this decomposition may a CR085 protocol be frozen.
 
 ## Frontier targets
 
-Fresh full leaderboard snapshot `2026-09-13T07:47:09 UTC`:
+Latest top-10 read-only checkpoint already obtained in this work session:
 
-- top 10 cutoff: **2970.8**;
-- rank 100: `2782.8`;
-- rank 500: `2578.1`;
-- rank 1000: `2300.8`;
-- rank 2000: `1679.7`.
+1. Majkel1337 `3239.9`
+2. Mengfei Li `3065.9`
+3. Artem The Farmer `3064.4`
+4. ymg_aq `3020.9`
+5. SpaTaro `3019.2`
+6. Otter Vibe `3005.0`
+7. redblackbst `2991.3`
+8. feel the agi `2990.5`
+9. binghua `2968.2`
+10. Subramanya N `2965.4`
 
-The strategic target is not merely to exceed mature CR071M around the mid-1600s. We need a representation that continues winning as matchmaking moves upward through the 2000s toward the 3000 frontier.
+The strategic target remains far above mature CR071M/CR083 mid-1600s. We need a representation that keeps winning as matchmaking reaches the 2000s and eventually the ~3000 frontier.
 
 ## Escalation rule
 
