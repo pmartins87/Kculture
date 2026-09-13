@@ -1,0 +1,74 @@
+name: Kaggle API slot accounting v1 read-only
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/kaggle-api-slot-accounting-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  slot-accounting:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Read-only own submissions and competition submission metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p slot_accounting
+          kaggle competitions submissions kaggriculture -v -q | tee slot_accounting/own_submissions.csv
+          python - <<'PY' | tee slot_accounting/api_metadata.txt
+          import json
+          try:
+              from kaggle.api.kaggle_api_extended import KaggleApi
+              api = KaggleApi()
+              api.authenticate()
+              comp = api.competition_view('kaggriculture')
+              out = {}
+              for n in dir(comp):
+                  ln = n.lower()
+                  if any(k in ln for k in ('submission','daily','limit','deadline','enabled')):
+                      if n.startswith('_'):
+                          continue
+                      try:
+                          v = getattr(comp, n)
+                      except Exception:
+                          continue
+                      if callable(v):
+                          continue
+                      if isinstance(v, (str, int, float, bool, type(None))):
+                          out[n] = v
+              print(json.dumps(out, indent=2, sort_keys=True, default=str))
+          except Exception as e:
+              print(json.dumps({'competition_view_error': repr(e)}, indent=2))
+          PY
+          python - <<'PY' | tee slot_accounting/parsed_recent.json
+          import csv, io, json, pathlib
+          p=pathlib.Path('slot_accounting/own_submissions.csv')
+          text=p.read_text(encoding='utf-8', errors='replace') if p.exists() else ''
+          lines=[x for x in text.splitlines() if x.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if ',' not in line: continue
+              try:
+                  cand=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
+              except Exception:
+                  continue
+              if cand and any(k and ('date' in k.lower() or 'ref' in k.lower() or 'status' in k.lower() or 'description' in k.lower()) for k in cand[0].keys()):
+                  rows=cand; break
+          print(json.dumps({'count_listed':len(rows),'recent':rows[:20]},indent=2,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: kaggle-api-slot-accounting-v1
+          path: slot_accounting/**
+          retention-days: 30
+          if-no-files-found: error
