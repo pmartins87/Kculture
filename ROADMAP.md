@@ -14,7 +14,8 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 6. Authenticated Kaggle API is the default current-meta source.
 7. Original final holdout remains sealed.
 8. Do not tune a failed architecture on spent validation evidence; change representation instead.
-9. Strong local H2H against CR071M/legacy anchors is **necessary but not sufficient** for hosted metagame value.
+9. Strong local H2H against CR071M/legacy anchors is necessary but not sufficient for hosted metagame value.
+10. Future promotion requires an independent **high-strength population proxy** before a hosted slot is spent.
 
 ## Closed architecture classes
 
@@ -24,56 +25,68 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 - CR081 time-indexed market transplant.
 - CR082 same-step state-conditioned teacher 1-NN.
 
-Combined conclusion: neither trajectory imitation nor behavioral prediction establishes causal economic value for CR071M. CR083 has additionally shown that even a mechanics-valid local improvement can fail to transfer immediately to the live population.
+Behavioral imitation remains closed. Public replays may be used offline to discover state/regime stressors, not to make identity-conditioned runtime policies.
 
-## ACTIVE — CR083 explicit economic value
+## ACTIVE — CR083 hosted maturation
 
-Phase 0 (`34709053070`) established exact mechanics and offline branching.
+Frozen candidate SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`**.
 
-### Phase 1 — complete
+Kaggle submission: **`56199767`**.
 
-Causal deletion run `34715158344`, master `9130830`, removed one final market family at a time from exact CR071M. Every variant lost 0–16. Broad family disabling remains closed.
+Local promotion (`34715575445`) passed strongly: 45W–1L–18T versus CR071M, neutral guardrail deltas versus CR053/CR061/CR065.
 
-### Phase 2 — local promotion PASS / hosted probe active
+Hosted evidence now has the correct interpretation:
 
-Protocol: `docs/strategy/CR083_PHASE2_SEED_DEMAND_CLAMP_PROTOCOL_2026-09-12.md`.
+- Kaggle initializes a new valid simulation submission at `mu_0 = 600`; its rating is still converging during early episodes;
+- CR083 moved from `1563.9` to **`1596.2`** while CR071M moved to `1642.4`, reducing the apparent gap from `83.3` to **`46.2`**;
+- frozen 36-replay forensics: **27W–9L**, 75.0% raw win rate;
+- however, fresh population cross-match is **0–4 versus current >=2300 / roughly top-1000 opponents**.
 
-Canonical promotion workflow: **`34715575445`**.
+Full checkpoint: `docs/strategy/CR083_HOSTED_PROBE_CHECKPOINT_2026-09-13.md`.
 
-Frozen candidate SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`** from artifact `10304915100` (`CR083.tar.gz`).
+### Frozen maturity rule
 
-Fresh local promotion result:
+Operational project heuristic, not Kaggle policy:
 
-- direct vs CR071M: **45W–1L–18T = 0.84375**;
-- median margin `+240`, mean margin `+172.5`;
-- guardrail score deltas vs CR053/CR061/CR065: **0 / 0 / 0**;
-- zero execution errors and zero incomplete games.
+1. Keep the exact CR083 submission live and immutable.
+2. Do not issue the final hosted verdict before **100 completed public episodes**.
+3. At 100+, freeze a new checkpoint of rating, rating trend, all public W/L/T, seat split and opponent-strength bands.
+4. Crossing CR071M before 100 episodes is encouraging but not sufficient; upper-population transfer must also improve.
+5. No CR083A/B/C and no tuning of the seed-clamp activation boundary, crop rules or formula from this hosted sample.
+6. No new hosted submission solely to reroll rating convergence.
 
-Frozen hosted probe workflow `34740104210` submitted exactly one SHA-locked package. Kaggle submission: **`56199767`**.
+## ACTIVE IN PARALLEL — rebuild the promotion proxy
 
-Authenticated checkpoint run `34745664559`:
+The old gate asked whether a candidate improved CR071M and preserved legacy anchors. The missing question is whether it survives **high-strength live population regimes**.
 
-- CR083: `COMPLETE`, **1563.9**;
-- CR071M control: **1647.2**;
-- current gap: **-83.3**;
-- CR083 maturity: **33 public episodes + 1 validation**;
-- CR071M maturity: 361 listed completed episodes.
+Next evaluation layer must therefore:
 
-Interpretation: this is meaningful negative hosted evidence, but it is still an early checkpoint. Do not retune the seed clamp from this live score and do not spend another submission slot trying a nearby variant.
+1. freeze a current high-strength population cohort, prioritizing roughly top-1000 (`rating >= ~2300`) and top-500 (`>= ~2578`) opponents;
+2. obtain only public/legal replay evidence through authenticated Kaggle interfaces;
+3. extract current-observation/economic-regime stressors and mechanics-level differences — not opponent identity as a runtime feature and not replay-action imitation;
+4. identify which economic states are systematically absent from CR071M/CR053/CR061/CR065 local validation;
+5. turn those regimes into a frozen offline stress protocol;
+6. only then build the next genuinely independent economic-value architecture;
+7. require that candidate to pass CR071M direct, legacy guardrails **and** high-strength population-proxy evidence before any hosted probe.
 
-## Immediate diagnostic path
+## Frontier targets
 
-1. Complete read-only hosted replay forensics run **`34745733865`** over the public CR083 episodes.
-2. Quantify CR083 hosted W/L/ties, money margins, opponent mix if legally observable offline, and whether losses are concentrated in specific economic states or opponent strategy families.
-3. Compare those failures with the local promotion panel to identify the **proxy gap** — what the current CR071M/CR053/CR061/CR065 panel is not representing.
-4. Freeze a new evaluation protocol that includes a genuinely independent population/metagame proxy before building the next architecture.
-5. Preserve the CR083 package unchanged while its hosted evidence matures. No CR083A/B/C and no tuning of `step 434`, crop exceptions or clamp formula on this spent evidence.
-6. No new hosted submission until a distinct architecture passes the revised frozen gate.
+Fresh full leaderboard snapshot `2026-09-13T07:47:09 UTC`:
 
-## Hosted frontier reality
+- top 10 cutoff: **2970.8**;
+- rank 100: `2782.8`;
+- rank 500: `2578.1`;
+- rank 1000: `2300.8`;
+- rank 2000: `1679.7`.
 
-Authenticated snapshot `34745664559`: top 10 ranges from **3214.8** (Majkel1337) to **2967.2** (binghua). CR083 at 1563.9 and CR071M at 1647.2 remain far outside prize range. The next breakthrough must therefore improve metagame representation, not merely add a few local rating points.
+The strategic target is not merely to exceed mature CR071M around the mid-1600s. We need a representation that continues winning as matchmaking moves upward through the 2000s toward the 3000 frontier.
 
 ## Escalation rule
 
-When a frozen mechanism passes fresh direct, broad guardrail **and independent population-proxy evidence**, move to one controlled hosted probe. When hosted evidence contradicts a local gate, treat that contradiction as evidence about the gate/proxy itself; do not retune the mechanism on the same spent panel.
+A new architecture earns a hosted probe only after passing three independent layers:
+
+1. fresh direct improvement versus the incumbent backbone;
+2. broad legacy-anchor guardrails;
+3. frozen high-strength population-regime stress evidence.
+
+If hosted evidence contradicts the first two layers, improve the proxy, not the already-spent mechanism.
