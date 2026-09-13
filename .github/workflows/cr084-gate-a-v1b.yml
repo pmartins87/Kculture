@@ -1,0 +1,123 @@
+name: CR084 corrected frozen Gate A v1b
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr084-gate-a-v1b.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact frozen CR083 package and anchors
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - name: Build corrected protocol-faithful CR084
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p corpus build result
+          test "$(sha256sum source/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          python tools/cr084_build_critical_feed_rescue.py --base source/cr083/CR083.tar.gz --output corpus/CR084.tar.gz --manifest build/CANDIDATE_MANIFEST.json
+          python tools/cr084_build_critical_feed_rescue.py --base source/cr083/CR083.tar.gz --output build/CR084_REBUILD.tar.gz --manifest build/REBUILD_MANIFEST.json
+          cmp corpus/CR084.tar.gz build/CR084_REBUILD.tar.gz
+          cp source/cr083/CR083.tar.gz corpus/CR083.tar.gz
+          cp source/cr083/CR071M.tar.gz corpus/CR071M.tar.gz
+          cp source/cr083/CR053.tar.gz corpus/CR053.tar.gz
+          cp source/cr083/CR061.tar.gz corpus/CR061.tar.gz
+          cp source/cr083/CR065.tar.gz corpus/CR065.tar.gz
+          python - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          h=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          m=json.loads(Path('build/CANDIDATE_MANIFEST.json').read_text())
+          assert h('corpus/CR084.tar.gz')==h('build/CR084_REBUILD.tar.gz')==m['candidate_sha256']
+          assert m['base_sha256']=='648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8'
+          assert m['activation_start_step']==576 and m['activation_end_step_exclusive']==696
+          assert m['patch_stage']=='post-final-market pre-return'
+          assert m['market_logic_modified'] is False and m['cr083_seed_clamp_modified'] is False
+          assert m['non_noop_action_can_be_replaced'] is False
+          print('CR084 corrected frozen SHA:',m['candidate_sha256'])
+          PY
+      - name: Score-blind semantic audit before any score
+        run: |
+          python tools/cr084_critical_feed_shadow_audit.py --base corpus/CR083.tar.gz --candidate corpus/CR084.tar.gz --seed-count 8 --output build/SHADOW_AUDIT.json
+          python - <<'PY'
+          import json
+          d=json.load(open('build/SHADOW_AUDIT.json'))
+          assert d['pass'] is True,d
+          assert d['score_blind'] is True,d
+          assert d['market_mismatches']==0,d
+          assert d['invalid_physical_differences']==0,d
+          assert d['rescued_unit_actions']>0,d
+          print('semantic audit PASS',d['rescued_unit_actions'],d['rescues_by_animal'])
+          PY
+      - name: Seed firewall
+        run: |
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          earlier=[9112080,9112081,9120811,9120812,9120813,9120821,9130830,91308309,9130831,9130832,91408409]
+          p=Path('source/cr083/seed_firewall.json')
+          if p.exists():
+            old=json.loads(p.read_text())
+            earlier.extend(old.get('earlier_masters',[]))
+            for k in ('gate_a_master','promotion_master'):
+              if old.get(k) is not None: earlier.append(old[k])
+          earlier=list(dict.fromkeys(map(int,earlier)))
+          used=set()
+          for master in earlier: used.update(make_seeds(512,master))
+          audit=set(make_seeds(8,91408409)); gate=set(make_seeds(16,9140841)); promo=set(make_seeds(32,9140842))
+          assert not gate&used and not promo&used and not gate&audit and not promo&audit and not gate&promo
+          out={'audit_master':91408409,'gate_a_master':9140841,'promotion_master':9140842,'earlier_masters':earlier,'all_overlaps_zero':True}
+          Path('build/SEED_FIREWALL.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - name: Frozen fresh direct Gate A
+        run: |
+          python tools/kaggle_reference_h2h_v2.py --a corpus/CR084.tar.gz --b corpus/CR083.tar.gz --a-id CR084 --b-id CR083 --seed-count 16 --master-seed 9140841 --output result/direct.json
+      - name: Apply frozen Gate A threshold
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.load(open('result/direct.json')); m=d['metrics_a_vs_b']
+          checks={
+            'identity':d.get('a')=='CR084' and d.get('b')=='CR083',
+            'exact_32_games_16_seeds':m.get('games')==32 and d.get('seed_count')==16 and d.get('master_seed')==9140841,
+            'no_errors_or_non_done':not (d.get('errors') or []) and m.get('non_done_games')==0,
+            'score_rate_at_least_0_5625':m.get('score_rate',0)>=0.5625,
+            'mean_margin_positive':m.get('mean_margin_secondary',0)>0,
+          }
+          out={'schema_version':'cr084-gate-a-v1','master_seed':9140841,'seed_count':16,'checks':checks,'metrics':m,'pass':all(checks.values())}
+          out['decision']='ELIGIBLE_FOR_FROZEN_PROMOTION_PANEL' if out['pass'] else 'CLOSE_CR084_CRITICAL_FEED_RESCUE'
+          Path('result/gate_a.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+          cp build/CANDIDATE_MANIFEST.json corpus/CANDIDATE_MANIFEST.json
+          cp build/SHADOW_AUDIT.json corpus/SHADOW_AUDIT.json
+          cp build/SEED_FIREWALL.json corpus/SEED_FIREWALL.json
+          sha256sum corpus/*.tar.gz > corpus/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr084-corrected-gate-a-v1
+          path: |
+            corpus/**
+            build/**
+            result/**
+          retention-days: 30
