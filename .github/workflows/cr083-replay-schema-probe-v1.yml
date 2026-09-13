@@ -1,0 +1,58 @@
+name: CR083 replay schema probe v1 read-only
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr083-replay-schema-probe-v1.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      EPISODE_ID: '108462490'
+      TARGET_SUBMISSION: '56199767'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Download one replay and print compact schema
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p replay_probe
+          kaggle competitions replay "$EPISODE_ID" -p replay_probe -q
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          files=list(Path('replay_probe').rglob('*.json'))
+          print('files=',[str(x) for x in files])
+          p=files[0]
+          d=json.loads(p.read_text())
+          print('top_keys=',list(d.keys()))
+          for k,v in d.items():
+              if k=='steps':
+                  print('steps_len=',len(v) if isinstance(v,list) else type(v).__name__)
+                  if isinstance(v,list) and v:
+                      print('step0_type=',type(v[0]).__name__,'step0_len=',len(v[0]) if isinstance(v[0],list) else None)
+                      print('final_step=',json.dumps(v[-1],default=str)[:2500])
+              else:
+                  s=json.dumps(v,default=str)
+                  print('KEY',k,'=',s[:4000])
+          target='56199767'
+          # Search only outside the huge steps payload.
+          meta={k:v for k,v in d.items() if k!='steps'}
+          def walk(x,path=()):
+              if isinstance(x,dict):
+                  for kk,vv in x.items(): yield from walk(vv,path+(str(kk),))
+              elif isinstance(x,list):
+                  for i,vv in enumerate(x): yield from walk(vv,path+(str(i),))
+              else:
+                  if target in str(x): print('TARGET_PATH',path,'VALUE',x)
+          list(walk(meta))
+          PY
