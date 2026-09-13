@@ -1,6 +1,6 @@
 # STATUS — Kculture live source of truth
 
-Updated: 2026-09-12
+Updated: 2026-09-13
 
 Authoritative branch: `fix/kaggle-parity-v1`.
 
@@ -10,8 +10,13 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 
 ## Hosted incumbents
 
-- CR071M — submission `56124705`; last authenticated checkpoint rating 1731.8. Incumbent/calibration reference only.
-- CR070A — submission `56091951`; last authenticated checkpoint rating 1724.0.
+Fresh authenticated own-submission accounting run `34740003554` (2026-09-13):
+
+- CR071M — submission `56124705`, current API public score `1658.1`, submitted 2026-09-09 14:02:10 UTC.
+- CR070A — submission `56091951`, current API public score `1640.8`, submitted 2026-09-08 06:01:30 UTC.
+- No team submission has been made since CR071M; current daily submission allowance is therefore unused by this team.
+
+The two most recent submissions are the live incumbents. CR083 has not yet been submitted at this checkpoint.
 
 ## Closed / quarantined
 
@@ -23,10 +28,6 @@ Maximize probability of a prize-winning / top-10 Kaggriculture finish before 202
 - **CR082 state-adaptive Majkel 1-NN: VALID / FAIL / CLOSED.** Canonical workflow `34708795892`, master `9120821`, candidate SHA-256 `199d32fdda64d4c8d4334f7174d1532147b75837c51104eab9a7c78aec302c2a`. It lost 0–64 directly to CR071M and 0–64 to CR053/CR061/CR065 with zero errors/non-DONE. No CR082A/B/C. Final result: `docs/strategy/CR082_FINAL_RESULT_2026-09-12.md`.
 
 CR082 duplicate run `34708837989` is non-canonical and permanently ignored.
-
-## Current frontier snapshot
-
-Authenticated run `34668645531`: Majkel1337 3181.9, ymg_aq 3075.1, Unknown Mother-Goose 3056.5, Artem 3029.3, SpaTaro 3029.0.
 
 ## Architectural conclusion
 
@@ -42,41 +43,36 @@ Phase 0 mechanics audit: `docs/strategy/CR083_PHASE0_MECHANICS_RESULT_2026-09-12
 
 Canonical run `34715158344`, exploratory master `9130830`, 8 fresh seeds × both seats =16 games/variant. Architecture evidence only; never promotion evidence.
 
-Every broad deletion lost **0–16** to exact CR071M with zero execution failures:
+Every broad deletion lost **0–16** to exact CR071M with zero execution failures. Conclusion: there is no expendable market family. CR071M's economy is tightly coupled to its physical route; CR083 must make narrow within-family interventions only.
 
-- NO_HIRE mean margin `-155494.1`;
-- NO_BUY_ANIMAL `-153976.4`;
-- NO_BUY_SEED `-152182.4`;
-- NO_BUY_PRODUCT `-139142.0`;
-- NO_SELL `-138184.8`;
-- NO_BUY_LAND `-70241.5`.
+### Phase 2 — PROMOTION PASS / frozen hosted-probe candidate
 
-Conclusion: there is no expendable market family. CR071M's economy is tightly coupled to its physical route; CR083 must make narrow within-family interventions only. Result: `docs/strategy/CR083_PHASE1_CAUSAL_ABLATION_RESULT_2026-09-12.md`.
+Protocol: `docs/strategy/CR083_PHASE2_SEED_DEMAND_CLAMP_PROTOCOL_2026-09-12.md`.
 
-### Phase 2 — ACTIVE route-aware future-seed-demand clamp
+Canonical run: **`34715575445`**.
 
-Protocol frozen before candidate evaluation: `docs/strategy/CR083_PHASE2_SEED_DEMAND_CLAMP_PROTOCOL_2026-09-12.md`.
+Frozen package artifact: `cr083-phase2-frozen-packages-v1`, artifact ID `10304915100`.
 
-Mechanics invariant:
+Frozen candidate: `CR083.tar.gz`.
 
-- after the final route-switch checkpoint (`step 433`), current route is fixed;
-- seeds are private, not sellable, do not occupy shed capacity and have zero terminal value;
-- a seed above the selected route's remaining maximum `PLANT` demand cannot create value;
-- candidate therefore clamps only final `BUY_SEED` quantities for `step >= 434` to remaining route PLANT demand minus projected post-current-turn seed stock;
-- same-turn atomic PLANT validation is mirrored exactly;
-- farmer/hands, route selection, all non-seed market orders and all CR071M safety logic remain unchanged;
-- seed quantity can only decrease, never increase.
+Frozen candidate SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`**.
 
-Canonical workflow launched: **`34715575445`**.
+Mechanism remains exactly the predeclared route-aware future-seed-demand clamp from `step >= 434`; farmer/hands, route selection, non-seed market actions and CR071M safety logic are unchanged.
 
-Evaluation is automatic and frozen:
+Promotion result on fresh master `9130832`:
 
-1. deterministic build + score-blind exact-observation shadow audit;
-2. Gate A master `9130831`: 16 fresh seeds × both seats =32 direct games vs CR071M; PASS requires score >=0.5625, positive mean margin, zero failures;
-3. only if Gate A PASS, unchanged hash advances automatically to promotion master `9130832`, seven-row 64-game direct+guardrail panel;
-4. no hosted submission occurs automatically.
+- CR083 vs CR071M: **45W–1L–18T = 0.84375** over 64 games;
+- direct median money margin: **+240**;
+- direct mean money margin: **+172.5**;
+- guardrail score delta vs CR053: **0**;
+- guardrail score delta vs CR061: **0**;
+- guardrail score delta vs CR065: **0**;
+- execution errors: **0**;
+- incomplete/non-DONE: **0**.
 
-Phase-1 master `9130830`, CR082 master `9120821`, and all earlier masters are excluded by firewall.
+Frozen gate decision: **`ELIGIBLE_FOR_ONE_HOSTED_PROBE_AFTER_SLOT_ACCOUNTING`**.
+
+Fresh authenticated slot accounting: workflow run **`34740003554`**. It listed 19 historical team submissions and none after 2026-09-09, so the team has not spent any daily submission allowance today. Exactly one CR083 hosted probe is authorized. No CR083A/B/C and no retuning before that probe.
 
 ## Binding policies
 
@@ -86,3 +82,4 @@ Phase-1 master `9130830`, CR082 master `9120821`, and all earlier masters are ex
 - Invalid/duplicate evaluations are quarantined before score interpretation.
 - Closed hypotheses stay closed unless genuinely new evidence invalidates their closure.
 - Runtime features/actions may use only legal current observation plus frozen public mechanics/constants; hidden seed/future state/opponent-private state remain forbidden.
+- Hosted CR083 probe must be byte-identical to SHA-256 `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8` and may be submitted exactly once under this authorization.
