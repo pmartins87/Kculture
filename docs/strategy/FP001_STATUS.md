@@ -59,7 +59,7 @@ Mean deltas over 8 fresh seed/seat episodes each:
 6. COW2_H0 +8522.25;
 7. COW2_H2 +8465.0.
 
-Routine daily hands were negative marginal value in the animal-only small module: COW2 H2-H0 -57.25 and COW3 H2-H0 -56.0. This result does **not** globally close HIRE; H11 crop workload creates a new context where labor can have positive marginal value and must be retested causally.
+Routine daily hands were negative marginal value in the animal-only small module: COW2 H2-H0 -57.25 and COW3 H2-H0 -56.0. This result does **not** globally close HIRE; crop workload creates a new context where labor can have positive marginal value and is being retested causally.
 
 ### R2A2-B3 CARE overlay — STRONG PASS
 
@@ -117,11 +117,7 @@ At nominal market values:
 - under product scarcity / fertilizer abundance the advantage can become much larger;
 - MELON showed no additional tested fertilizer benefit in this exact setup.
 
-This creates a high-priority integration hypothesis:
-
-> animals are not only sale-product engines; they can be fertilizer factories feeding premium crop production.
-
-Because STRAWBERRY also creates substantial watering/harvest/fertilize workload, the previous animal-only negative-HIRE result must be retested rather than generalized.
+This creates a high-priority integration hypothesis: animals can be fertilizer factories feeding premium crop production. It does not imply that STRAWBERRY is the best labor-adjusted premium crop.
 
 ## B4 scale × CARE — PASS; action-capacity frontier located
 
@@ -152,30 +148,54 @@ Critical paired interpretation:
 
 All animals survived. Therefore six cows under CARE lose due to **action/opportunity-cost saturation**, not mortality.
 
-Decision: do not declare COW5_DAILY a universal farm optimum. Preserve three animal-only controls for hybrid integration:
+Decision: preserve COW4_DAILY, COW5_SURVIVAL and COW5_DAILY as animal-only controls for integration rather than declaring one universal optimum.
 
-1. COW4_DAILY — slightly lower mean, more action headroom;
-2. COW5_SURVIVAL — lower CARE intensity, more headroom for crop work;
-3. COW5_DAILY — mean-best animal-only benchmark.
+## E1 marginal STRAWBERRY overlay — MECHANICAL PASS / ARCHITECTURE CLOSED
+
+Workflow **`34860319522`**. Full result: `docs/strategy/FP001_E1_STRAWBERRY_MARGINAL_RESULT_2026-09-14.md`.
+
+E1 allowed one early STRAWBERRY to use only main-farmer actions that the animal backbone would otherwise PASS. It never overwrote a non-PASS animal action.
+
+Results over 8 paired fresh seed/seat observations per backbone:
+
+- **COW4_DAILY**: S1-control `+317` mean but median `-2474`, only **2W-6L**; crop planted 8/8 but received only one WATER per episode, produced zero berries and failed 8/8. The positive mean is variance, not crop value.
+- **COW5_SURVIVAL**: S1-control **`-693.5` mean**, 4W-4L; crop planted 8/8, received 72 WATER total and sold 32 berries = 4/episode, but executed zero fertilizer actions. Animal output/survival stayed intact.
+- **COW5_DAILY**: S1-control **exactly `-100` in 8/8**; the control had zero idle PASS. The hybrid bought the 100-cost seed but never obtained a turn to plant it.
+
+Decision: **close only the residual-idle-main-farmer STRAWBERRY architecture. Do not close STRAWBERRY or premium crops.** E1 identifies labor/action allocation as the failure mechanism.
+
+## E2 dedicated STRAWBERRY hand — ACTIVE / FROZEN
+
+Protocol: `docs/strategy/FP001_E2_DEDICATED_HAND_PROTOCOL_2026-09-14.md`.
+
+Workflow run: **`34864820833`**.
+
+E2 keeps the main farmer completely under the B4 animal scheduler and assigns one opening STRAWBERRY to a bounded dedicated farm hand. The official default first HIRE costs 1 per day and resets daily. No CR086/CR088 market overlay is mixed into this causal gate.
+
+Matched architectures for each COW4_DAILY, COW5_SURVIVAL and COW5_DAILY backbone:
+
+1. animal-only `S0H0`;
+2. exact E1 crop/no-hand `S1H0`;
+3. crop + dedicated hand `S1H1`.
+
+Promotion requires S1H1 to beat both its S1H0 crop control and its S0H0 animal control while preserving expected cows. Otherwise this one-hand/one-STRAWBERRY architecture closes without threshold rescue.
 
 ## Competitive convergence with CR087
 
-The accumulated elite macro evidence independently supports the same direction now suggested by H11: current ~3000-class policies commonly combine premium crops such as MELON/STRAWBERRY with durable animal production and state-adaptive market behavior. FP001 therefore should **not** continue optimizing a pure cow farm in isolation.
+Accumulated elite macro evidence independently supports mixed production: current ~3000-class policies commonly combine premium crops such as MELON/STRAWBERRY with durable mixed animals and state-adaptive market behavior.
 
-The next experiment is an integrated hybrid gate using elite-informed macro priors plus causally proven FP001 primitives.
+Important labor-adjusted prior: official mechanics give MELON seed cost 80, nominal base sale 250, one-time crop, max yield 6; STRAWBERRY seed cost 100, base 120 and ongoing maintenance. This does **not** settle the comparison, but together with CR087's strong MELON prevalence it makes MELON a high-priority next comparator rather than endlessly retuning STRAWBERRY.
+
+The historical H8 mixed scheduler remains reusable infrastructure, but its original 3-animal form predates B3 CARE and H10 batching. Future mixed COW/SHEEP work should port those proven primitives into the known scheduler rather than rewrite it from scratch.
 
 ## Current active decision
 
-Build and compare matched hybrids:
-
-- COW4_DAILY + fertilized STRAWBERRY;
-- COW5_SURVIVAL + fertilized STRAWBERRY;
-- COW5_DAILY + fertilized STRAWBERRY as action-starvation control;
-- bounded dedicated HIRE variants where crop workload can make labor positive;
-- an elite-informed mixed COW/SHEEP comparator based on CR087 macro families, without assuming one public action tape is the universal solution.
-
-After causal economic/logistics screening, survivors must face heterogeneous population tests and then hosted calibration. FP001 alone never authorizes a hosted promotion.
+1. Complete frozen E2 and record causal labor value.
+2. If E2 passes, test bounded scale / crop portfolio rather than immediately hosted-promoting it.
+3. If E2 fails, close this labor-enabled STRAWBERRY architecture and move directly to lower-labor elite-informed production, led by MELON + mixed COW/SHEEP/WHEAT structure.
+4. Regardless of E2, elite-macro integration must reuse B3 CARE, H10 batching/compact routing, H9 demand adaptation and preserved CR086/CR088/H1/H1B market knowledge where causal tests justify them.
+5. Survivors must face heterogeneous population testing and hosted calibration. FP001 alone never authorizes hosted promotion.
 
 ## Hosted policy
 
-No FP001-only hosted submission is authorized. The track's value is now its library of proven primitives. A hosted candidate should be an integrated competitive policy unless evidence unexpectedly shows a standalone FP architecture is superior.
+No FP001-only hosted submission is authorized. The track's value is its library of proven primitives and its contribution to an integrated competitive policy. A hosted candidate should be strategically distinct, mechanically valid and answer a population-transfer question.
