@@ -1,0 +1,26 @@
+name: FP001 H10 COW scale runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - 'tools/fp001_h10_cow_scale_runtime_test.py'
+      - '.github/workflows/fp001-h10-cow-scale-runtime.yml'
+      - 'candidates/fp001_h8_multi_animal_module.py'
+      - 'requirements.txt'
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run H10 COW scale and batch-harvest gate
+        run: python tools/fp001_h10_cow_scale_runtime_test.py
