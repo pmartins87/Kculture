@@ -16,46 +16,75 @@ Read together:
 2. `docs/strategy/FP001_ROADMAP.md`
 3. `tools/fp001_market_microsim.py`
 4. `tools/fp001_engine_parity.py`
+5. `candidates/fp001_h1_town_wheat_carry.py`
+6. `tools/fp001_h1_causal_test.py`
+7. `tools/fp001_h1b_pulse_hold_scan.py`
+8. `tools/fp001_h1b_engine_parity.py`
 
 ## Current state
 
-- Parallel branch created from `fix/kaggle-parity-v1`.
-- CR088 remains untouched on its authoritative branch.
+- Parallel branch created from `fix/kaggle-parity-v1`; CR088 remains untouched on its authoritative branch.
 - FP001 purity boundary is frozen: zero competitor replay lineage in policy construction.
-- First mechanism selected: **town-pulse WHEAT carry**.
-- Standalone market microsimulator created.
-- Exact-engine parity workflow run **34842825909** completed **SUCCESS** against `kaggle-environments==1.32.7`.
-- FP0 result: **PASS**.
-- Exact checks: 108 market-price cases, 24 BUY/SELL transaction cases, 90 town-carry cases.
-- 56/90 town-carry cases were positive; demand-zero cases remained exactly zero.
-- Canonical check `I0=10000`, `q=90`, town WHEAT demand `7`: exact-engine PnL **+57**, identical to microsim.
-- Therefore H1 is a real engine mechanic, not a microsimulation artifact.
+- **FP0 mechanics parity: PASS.** Exact-engine workflow `34842825909` matched 108 price cases, 24 transaction cases and 90 town-carry cases against `kaggle-environments==1.32.7`.
+- **FP1 H1 town-pulse WHEAT runtime proof: PASS.** Workflow `34843184110` completed with zero mechanical errors.
+- H1 used a PASS-only physical policy and fixed `TARGET_QTY=50`; the only treatment was WHEAT BUY_PRODUCT on known town pulses and SELL on the next turn.
+- Across 16 fresh seeds × both seats = 32 treatment episodes, paired own-bank delta vs PASS was:
+  - mean **+916.875**;
+  - median **+935**;
+  - min **+688**;
+  - max **+1120**;
+  - seat 0 and seat 1 summaries were exactly identical.
+- H1 intervention triggered 2,475 BUY and 2,475 SELL orders per seat block, with matched total bought/sold quantity.
+- Flat-WHEAT-price causal null: 8/8 episodes exactly **0.0** delta despite 1,200 BUY and 1,200 SELL triggers. Therefore the observed H1 gain is causally attributable to town-induced price movement, not route or unrelated state changes.
+- H1 is economically real but the PASS experiment has no productive cash opportunity cost. It is **not yet a production-ready +917 claim**.
 
-## Priority hypotheses
+## H1B — delay owned sales across town demand — PASS at mechanics layer
 
-1. H1 town-pulse WHEAT carry.
-2. H2 cash/shed-aware WHEAT carry.
-3. H3 input squeeze / animal-tax extension.
-4. H4 premium-sale denial under relative-bank objective.
-5. H5 event-driven inventory MPC.
-6. H6 shop-conditioned production portfolio.
-7. H7 hierarchical zero-lineage agent.
+Hypothesis: when we already own a product, postponing its sale from the pulse step to the next step lets town demand lower shared inventory first. Around normal prices, the immediate-sale and delayed-sale paths end with the same market inventory, so the revenue difference is pure timing value when no opponent trade intervenes.
+
+Analytical workflow `34843505162`: **PASS**.
+
+Exact-engine workflow `34843556192`: **PASS**, 104/104 tested cases positive and exactly equal to the microsimulator.
+
+Canonical exact-engine gains for quantity 25 and demand 4:
+
+- MILK: **+241**;
+- STRAWBERRY: **+224**;
+- WOOL: **+159**;
+- MELON: **+62**;
+- TOMATO: **+48**;
+- CARROT: **+22**;
+- EGG: **+21**;
+- WHEAT: **+18**.
+
+Large exact cases include MILK q50/D7 **+792**, STRAWBERRY q50/D7 **+731**, WOOL q50/D6 **+827**. These are isolated timing effects, not population-performance claims. Real deployment must price one-step cash delay and opponent same/next-step sale risk.
+
+## New first-principles production hypothesis — H8 fertilizer flywheel
+
+Official mechanics audit shows:
+
+- animal structures are free to build;
+- every surviving animal sets `fertilizer_available=True` at end of day;
+- `COLLECT_FERTILIZER` yields one fertilizer and clears that flag;
+- an animal escapes only after two consecutive unfed days;
+- therefore feeding on alternating days appears sufficient for survival while fertilizer remains available every surviving day;
+- all animal species generate the same fertilizer unit, while GOOSE has the lowest purchase cost (300 vs COW 400 vs SHEEP 500).
+
+This creates a candidate economic mechanism: **GOOSE as fertilizer-producing capital equipment**, with eggs as secondary output rather than the primary thesis. It must be quantified including WHEAT feed, labor/movement, fertilizer price decay, shed capacity and setup capital before promotion.
+
+## Priority now
+
+1. Preserve H1 as proven market alpha but do not integrate naively; build an opportunity-cost-aware controller.
+2. Promote H1B to a separate runtime-risk experiment because its per-event upside can dominate H1 without tying up buy capital.
+3. Quantify H8 fertilizer flywheel before committing to a physical farm architecture.
+4. Choose the next production architecture from mechanics-derived marginal return per cash/tile/action — not from competitor route counts.
 
 ## Current gate
 
-**FP1 — causal runtime proof.**
+**R2A — economic ranking of first-principles mechanisms.**
 
-Build and test a legal runtime agent that changes only WHEAT market actions around known town-demand pulses. Physical actions remain PASS so every reward delta is attributable to H1.
-
-Required evidence:
-
-- both seats;
-- fresh deterministic seeds;
-- zero mechanical errors;
-- actual BUY and SELL triggers;
-- positive reward delta under default town demand;
-- zero-delta null under a flat WHEAT price curve despite identical carry actions.
+Before building the full zero-lineage scheduler, compare H1, H1B and H8 under common shadow prices for cash, shed space and actions. H1/H1B are already causally proven at the mechanics layer; H8 must first receive an exact mechanics/ROI audit.
 
 ## Next action
 
-Implement `fp001_h1_town_wheat_carry.py` and its exact-environment FP1 causal harness. Do not introduce cash-shadow-price tuning or production logic until FP1 closes.
+Build the H8 exact-engine economics audit, then update the R2 controller design around the highest-value mechanisms. No hosted submission is authorized yet; the H1 PASS-only probe is intentionally noncompetitive as a full farm policy.
