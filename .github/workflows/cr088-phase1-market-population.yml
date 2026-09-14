@@ -1,0 +1,157 @@
+name: CR088 state-coherent market population Phase 1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr088-phase1-market-population.yml]
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr088-top-tape-population-phase0-aggregate
+          path: phase0
+          run-id: 34806600636
+          github-token: ${{ github.token }}
+      - id: matrix
+        run: |
+          python tools/cr088_phase1_market_population.py matrix \
+            --metadata source/lineage/episodes.json \
+            --phase0 phase0/CR088_PHASE0_AGGREGATE.json --output matrix.json
+          echo "matrix=$(jq -c . matrix.json)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr088-phase1-frozen-matrix
+          path: matrix.json
+          retention-days: 30
+
+  evaluate:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: exact/hostedpair
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: exact/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr086-latent-supply-gate-a-v1
+          path: exact/cr086
+          run-id: 34800444746
+          github-token: ${{ github.token }}
+      - name: Build exact base and frozen variant
+        shell: bash
+        env:
+          VID: ${{ matrix.variant_id }}
+          BASE_ID: ${{ matrix.base_candidate_id }}
+          TAPE_FILE: ${{ matrix.tape_file }}
+          EPISODE_ID: ${{ matrix.episode_id }}
+          SUBMISSION_ID: ${{ matrix.submission_id }}
+          OPERATOR: ${{ matrix.operator }}
+        run: |
+          set -euo pipefail
+          mkdir -p build anchors "result/$VID"
+          python tools/cr088_phase1_market_population.py build \
+            --metadata source/lineage/episodes.json --tape "source/lineage/tapes/$TAPE_FILE" \
+            --episode-id "$EPISODE_ID" --submission-id "$SUBMISSION_ID" --operator base \
+            --estimator-source tools/cr086_opponent_inventory_estimator_eval.py \
+            --output "build/$BASE_ID.tar.gz" --manifest "build/$BASE_ID.json"
+          python tools/cr088_phase1_market_population.py build \
+            --metadata source/lineage/episodes.json --tape "source/lineage/tapes/$TAPE_FILE" \
+            --episode-id "$EPISODE_ID" --submission-id "$SUBMISSION_ID" --operator "$OPERATOR" \
+            --estimator-source tools/cr086_opponent_inventory_estimator_eval.py \
+            --output "build/$VID.tar.gz" --manifest "result/$VID/manifest.json"
+          cp exact/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz anchors/CR053_REAL.tar.gz
+          cp exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz anchors/CR052_REAL.tar.gz
+          cp exact/cr083/CR083.tar.gz anchors/CR083.tar.gz
+          cp exact/cr086/corpus/CR086.tar.gz anchors/CR086.tar.gz
+      - name: Fresh exact direct and four-anchor panel
+        shell: bash
+        env:
+          VID: ${{ matrix.variant_id }}
+          BASE_ID: ${{ matrix.base_candidate_id }}
+        run: |
+          set -euo pipefail
+          python tools/kaggle_reference_h2h_v2.py \
+            --a "build/$VID.tar.gz" --b "build/$BASE_ID.tar.gz" \
+            --a-id "$VID" --b-id "$BASE_ID" --seed-count 3 --master-seed 9230881 \
+            --output "result/$VID/direct_vs_base.json" || true
+          for anchor in CR053_REAL CR052_REAL CR083 CR086
+          do
+            python tools/kaggle_reference_h2h_v2.py \
+              --a "build/$VID.tar.gz" --b "anchors/$anchor.tar.gz" \
+              --a-id "$VID" --b-id "$anchor" --seed-count 3 --master-seed 9230881 \
+              --output "result/$VID/vs_$anchor.json" || true
+          done
+          python tools/cr088_phase1_market_population.py collect \
+            --result-dir "result/$VID" --manifest "result/$VID/manifest.json" \
+            --output "result/$VID/candidate-summary.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr088-phase1-${{ matrix.variant_id }}
+          path: result/${{ matrix.variant_id }}/**
+          retention-days: 30
+
+  aggregate:
+    if: always()
+    needs: evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr088-phase1-r*
+          path: population-results
+      - run: |
+          python tools/cr088_phase1_market_population.py aggregate \
+            --input-dir population-results --output CR088_PHASE1_AGGREGATE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr088-state-coherent-market-population-phase1-aggregate
+          path: CR088_PHASE1_AGGREGATE.json
+          retention-days: 30
