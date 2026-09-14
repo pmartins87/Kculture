@@ -1,0 +1,27 @@
+name: FP001 H1B exact engine proof
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_market_microsim.py'
+      - 'tools/fp001_h1b_pulse_hold_scan.py'
+      - 'tools/fp001_h1b_engine_parity.py'
+      - '.github/workflows/fp001-h1b-engine-proof.yml'
+      - 'requirements.txt'
+
+jobs:
+  engine-proof:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run H1B exact engine proof
+        working-directory: tools
+        run: python fp001_h1b_engine_parity.py
