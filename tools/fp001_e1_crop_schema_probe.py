@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """E1 preflight: print exact Kaggriculture 1.32.7 plant/animal runtime schema.
 
-This is deliberately tiny.  The integrated hybrid must not guess observation keys.
+This is deliberately tiny. The integrated hybrid must not guess observation keys.
 """
 from pprint import pprint
 from kaggle_environments.envs.kaggriculture import kaggriculture as kg
@@ -15,7 +15,7 @@ print("COW_CONFIG")
 pprint(dict(kg.ANIMALS["COW"]))
 
 plant = kg._new_plant("STRAWBERRY", 0, TPD)
-animal = kg._new_animal("COW")
+animal = kg._new_animal("COW", 0)
 print("NEW_STRAWBERRY")
 pprint(plant)
 print("NEW_COW")
@@ -23,6 +23,8 @@ pprint(animal)
 
 farm = kg._new_farm(10, 1_000_000)
 private = kg._new_private()
+print("NEW_PRIVATE")
+pprint(private)
 pos = tuple(farm["farmer"])
 x, y = pos
 farm["tiles"][y][x] = kg._new_plant("STRAWBERRY", 0, TPD)
@@ -33,7 +35,7 @@ for day in range(0, 14):
     if not isinstance(tile, dict):
         break
     kg._apply_unit_action(farm, private, 0, ["WATER"], 10, day, TPD, 1000)
-    # H11's strongest two-fertilizer exact schedule.
+    # H11's strongest two-fertilizer exact schedule relative to planting day.
     if day in (9, 13):
         kg._apply_unit_action(farm, private, 0, ["FERTILIZE"], 10, day, TPD, 1000)
     print("DAY", day, "AFTER_ACTIONS")
