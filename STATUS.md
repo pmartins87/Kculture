@@ -6,120 +6,128 @@ Authoritative branch: `fix/kaggle-parity-v1`.
 
 ## Mission
 
-Maximize probability of a prize-winning / top-10 Kaggriculture finish before 2026-09-30 23:59 UTC. No hosted submission without a passed frozen promotion gate.
+Win / maximize probability of a prize-winning top-10 Kaggriculture finish. Hosted leaderboard strength is the primary outcome. Local H2H is a mechanics/catastrophe/causal tool and must not be treated as a single-opponent proxy for population skill.
 
-## Hosted live state
+## Critical calibration correction
 
-### CR083 — ACTIVE / IMMUTABLE / STILL CONVERGING
+The historically hosted **CR053** that reached the project's best known hosted score is NOT the file later used as `CR053.tar.gz` guardrail in CR083/CR084/CR085 work.
 
-- submission: **`56199767`**
-- frozen SHA-256: **`648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`**
-- latest already-frozen checkpoint: **1660.3** versus CR071M **1638.8** (`+21.5`), about 76 public episodes plus validation.
+### Real hosted CR053
+- submission `56073870`
+- filename `R4D_CR053_ROUTE106309334_V1.tar.gz`
+- exact historical artifact run `34105008373`, artifact `10012004237`
+- exact archive SHA-256 **`095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`**
+- source episode `106309334`, seat 1
+- original prehosted validation: 1268W / 780L, 61.91%, mean +988.625 vs then-CR029
+- latest authenticated historical Kaggle list: **2064.8**
 
-No repeated polling. The next hosted checkpoint remains the predeclared 100-public-episode maturity boundary or another material decision boundary.
+### False local CR053 representative — QUARANTINED AS HOSTED PROXY
+- later local anchor SHA **`a9fea4493031cab1aa9b4fe6b45188459fee1c37e95b9a22e5638cb08ca3bd4c`**
+- provenance: inherited `CR053_CONTROL.tar.gz`
+- it is not byte-identical to hosted CR053 and must never again be described as the 2064.8 agent.
 
-Earlier 36-replay freeze `34745898829`: 27W–9L overall, 0–4 versus the sampled >=2300 cohort. That evidence motivated CR086 representation work, not CR083 retuning.
+This materially invalidates the former practice of calling tests against `CR053_CONTROL` a guardrail against our strongest hosted agent.
 
-## Current hosted frontier
+Historical project documentation from 2026-09-07 had already concluded that single-anchor H2H was insufficient and that a broad hosted-calibrated league was required. That requirement is binding again.
 
-Latest already-frozen read-only top-10 checkpoint from this work session:
+## Hosted score hierarchy — exact known project submissions
 
-1. Majkel1337 `3239.9`
-2. Mengfei Li `3065.9`
-3. Artem The Farmer `3064.4`
-4. ymg_aq `3020.9`
-5. SpaTaro `3019.2`
-6. Otter Vibe `3005.0`
-7. redblackbst `2991.3`
-8. feel the agi `2990.5`
-9. binghua `2968.2`
-10. Subramanya N `2965.4`
+Current best known historical project reference:
 
-Approximate older full-snapshot thresholds: rank100 `2782.8`, rank500 `2578.1`, rank1000 `2300.8`, rank2000 `1679.7`.
+1. **CR053 `56073870`: 2064.8**
+2. CR029 `56045848`: historically ~1892 (later authenticated list around mid-1800s)
+3. CR052 `56073867`: ~1700–1750
+4. CR011 `55866088`: 1723.3 historical checkpoint
+5. CR008 `55866079`: 1705.6 historical checkpoint
+6. CR083 `56199767`: latest authenticated list ~1619.8
+7. CR071M `56124705`: latest authenticated list ~1590.1
 
-## Closed / quarantined
+Scores move with continuing episodes; exact archives and ordering evidence matter more than any single stale snapshot.
 
-- CR078: closed.
-- CR079 SpaTaro 1-NN: FAIL / closed.
-- CR080 replay-route stitching: FAIL / closed.
-- CR081 market-prefix transplant: catastrophic FAIL / closed.
-- CR082 state-conditioned teacher 1-NN: catastrophic FAIL / closed.
-- CR084 critical late-livestock rescue: CLOSED / DO NOT RETUNE.
-- CR085 Pareto-guarded adaptive switch: CLOSED / DO NOT RETUNE. Gate A `34761593920`: 3W–3L–26T = `0.5000`, mean `-147.46875` versus CR083.
-- **Direct public-backbone adoption for CR086: CLOSED / DO NOT RETUNE.** Frozen characterization run `34798209070` swept all three public executable agents 0–32 versus exact CR083.
+## Current external frontier
 
-Behavioral imitation/replay stitching, CR084 FEED rescue, CR085 Pareto gating and direct adoption/retuning of the three screened public backbones remain closed.
+Fresh leaderboard CSV frozen 2026-09-14 during CR087 discovery attempt:
 
-## CR083 local evidence
+1. Majkel1337 `3191.4`
+2. SpaTaro `3049.9`
+3. ymg_aq `3024.2`
+4. DSM `3011.6`
+5. Mengfei Li `2984.6`
+6. Orbital Terraformer `2980.4`
+7. feel the agi `2979.8`
+8. HowardLeeTW `2978.9`
+9. Otter Vibe `2959.9`
+10. redblackbst `2958.4`
 
-Canonical promotion `34715575445`: CR083 vs CR071M 45W–1L–18T = `0.84375`, mean `+172.5`, neutral guardrail deltas versus CR053/CR061/CR065, zero execution errors.
+Target class remains ~3000+, not incremental improvement around 1600.
 
-## CR086 — opponent private-inventory representation
+## CR086 — opponent private-inventory representation PASS
 
-### FEASIBILITY PASS
+Legal mechanical estimator confirmed on an independent strong-agent holdout, 100,660 commodity-step observations:
+- MAE `1.25005`
+- p95 abs error `9`
+- interval coverage `0.969462`
+- `stock>=10` accuracy `0.956338`
 
-The legal estimator represents opponent private premium-stock using public market/farm transitions, our own private state and frozen mechanics. No opponent-private observation/action, identity, rating, EpisodeId, hidden seed or future state is used at runtime.
+No identity/rating/EpisodeId/hidden seed/future/opponent-private runtime features.
 
-Independent confirmation on a different preselected second replay from each of 10 strong teams, both seats, **100,660 commodity-step observations**:
+## CR086 — latent-supply SELL-priority candidate
 
-- MAE **1.25005** — PASS (`<=3`);
-- p95 absolute error **9** — PASS (`<=10`);
-- interval coverage **0.969462** — PASS (`>=0.95`);
-- `stock >= 10` classification accuracy **0.956338** — PASS (`>=0.90`).
+Exact SHA **`11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888`**.
 
-Decision: **`OPPONENT_INVENTORY_REPRESENTATION_FEASIBILITY_PASS`**.
+Mechanism: preserves CR083 route, physical actions, market-order multiset/products/quantities; only reorders existing premium SELL slots by mechanics-derived cash-at-risk from estimated latent opponent supply.
 
-Evaluator: `tools/cr086_opponent_inventory_estimator_eval.py`.
+Fresh Gate A `34800444746` vs exact CR083:
+- **26W–6L–0T = 0.8125**
+- mean margin **+260.5625**
+- 13–3 from each seat
+- zero errors/non-DONE
+- paired CI95 `[0.6875, 0.9375]`
 
-This proves representation quality only; it does not prove W/L value.
+Hosted probe submitted exactly once:
+- submission **`56220184`**
+- description `CR086_LATENT_SUPPLY_11296A4E`
+- submitted 2026-09-14 03:21:23 UTC
+- one-shot read-only status workflow `34802927151` was started; do not poll it repeatedly.
 
-## CR086 — public strong-backbone characterization COMPLETE / FAIL FOR DIRECT ADOPTION
+## Hosted-calibrated league — ACTIVE
 
-Acquisition run `34790801576`, artifact `10327672303`, froze three deterministic executable public packages plus one analytical notebook.
+Workflow `.github/workflows/hosted-calibrated-league-v1.yml`, commit `a42b4589e568e3203ede7dad653e1c000f22b710`.
 
-Frozen benchmark run **`34798209070`**, master `9160861`, 16 fresh seeds × both seats, exact reference runtime, zero execution errors:
+Exact bytes included:
+- CR053_REAL `095080e7...b9a15` (~2064.8 hosted)
+- CR052_REAL `b650a31d...b278d` (~1700–1750 hosted)
+- CR083 `648fbcdb...41b8` (~1619.8 latest authenticated)
+- CR086 `11296a4e...f888` (hosted probe active)
 
-| Public agent | Frozen package SHA-256 | W-L-T vs CR083 | Score rate | Mean margin |
-|---|---|---:|---:|---:|
-| `shape_shop_top10` | `fa9e7eb1a0174a1bf292fb4d47bd209defed929758214d3506e050a68ee5f98f` | **0-32-0** | **0.0000** | **-9416.34375** |
-| `adaptive_market_hysteresis` | `8dc512911c0173483211314f63cbf1d7e460cad33dfbc02f0f77d023f6d809fe` | **0-32-0** | **0.0000** | **-10710.0** |
-| `farming_score_v3` | `5cde13b09e9506f24b2f5df05719b597fe07ebbb6dead7da12894beda203e419` | **0-32-0** | **0.0000** | **-8996.1875** |
+Fresh paired tests use master `9190861`. Purpose: calibrate local league structure against known hosted ordering and place CR086 relative to the true CR053, not the false control.
 
-All three lost 16/16 from each candidate seat. Decision: **`CLOSE_DIRECT_PUBLIC_BACKBONE_ADOPTION_MOVE_TO_CLEANROOM_MARKET_VALUE_LAYER`**.
+## CR087 — current top-lineage mining — ACTIVE
 
-Result record: `docs/strategy/CR086_PUBLIC_BACKBONE_BENCHMARK_RESULT_2026-09-14.md`.
+Current community/meta evidence indicates top agents remain largely heuristic/fixed-policy lineages with selective market adaptation. The project is therefore mining current top-team active submissions directly via Kaggle `team-submissions` + public episodes rather than relying on notebook titles.
 
-Interpretation: public/historical hosted score is not a substitute for our exact paired H2H, and CR083 is extremely strong locally against these route/heuristic agents. At the same time, CR083 remains far from the hosted ~3000 frontier, so the local-vs-hosted proxy gap is now even more explicit.
+First run `34803046771` failed only because current leaderboard CSV is rankless and already sorted; frozen CSV was preserved and confirmed the current top scores above.
 
-The public notebooks remain architecture research evidence only:
+Parser fixed in commit `666f8f0f3ddce078fc643789a48cd706a69db0ec` and discovery relaunched automatically. Miner now preserves every individual 719-action tape plus medoid/modal consensus statistics for population search.
 
-- Adaptive Market Hysteresis: public-flow memory, reserves and bounded selling tranches;
-- Shape Shop: structural production adaptation/capacity activation;
-- Farming Score V3: budget guarding.
+## Public notebook benchmark — characterization only
 
-Do not retune these packages on the spent benchmark.
+Run `34798209070`: three public executable agents each lost 0–32 to CR083. This no longer means CR083 is globally stronger; it only characterizes those exact public bytes in that matchup. A cross-anchor diagnostic run `34802342857` was started but still in progress at its one permitted check. Do not poll repeatedly.
 
-## Active CR086 direction — clean-room latent-supply value layer
+## Closed / quarantined classes
 
-CR086 now stays on the exact CR083 physical backbone and uses the independently validated opponent-stock representation as a first-class state variable.
+CR078, CR079, CR080 replay stitching, CR081 static market-prefix transplant, CR082 1-NN teacher imitation, CR084 FEED rescue, CR085 Pareto gating: closed / do not retune spent hypotheses.
 
-Before a candidate is frozen:
+Direct adoption of the three screened public notebook packages is closed; their ideas remain research evidence.
 
-1. audit official market transition, pricing and execution-order mechanics;
-2. audit CR083's current SELL / counterplay / room-guard / dead-stock behavior;
-3. derive an explicit economic value quantity from **latent opponent supply**, not another fitted route threshold;
-4. prefer mechanics-derived sell-now/hold, saturation-risk or scarcity/glut logic;
-5. freeze the value rule and fresh evaluation boundaries before testing performance.
+## Binding operating policy
 
-No CR086 policy candidate is frozen yet and no hosted submission is authorized.
-
-## Binding policies
-
-- Authenticated Kaggle API first.
-- Exact H2H uses `kaggle-environments==1.32.7`, isolated packages and both seats.
-- Original final holdout remains sealed.
-- Closed hypotheses remain closed unless genuinely new evidence invalidates closure.
+- Hosted leaderboard/prize objective governs architecture choices.
+- Local tests must use exact hosted bytes when claiming calibration against a hosted agent.
+- Use a heterogeneous hosted-calibrated league, never one incumbent alone.
+- Authenticated Kaggle API first for current meta/submission evidence.
+- Exact H2H uses `kaggle-environments==1.32.7`, isolated packages, both seats.
 - No identity/EpisodeId/rating/hidden seed/future/opponent-private runtime features.
-- CR083 remains immutable at its frozen SHA.
-- **No repeated live or CI polling.**
-- **No hosted submission until a genuinely independent architecture passes direct, legacy-guardrail and high-strength-population layers plus provenance/license review where applicable.**
+- Original final holdout remains sealed.
+- No repeated polling loops.
+- Distinct mechanically valid architectures may receive hosted probes earlier; local rigor must prevent broken submissions, not prevent learning from the actual population.
