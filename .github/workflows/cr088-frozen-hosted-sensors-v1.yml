@@ -1,0 +1,131 @@
+name: CR088 frozen hosted sensors v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr088-frozen-hosted-sensors-v1.yml]
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit-two:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      MAX_DAILY: '5'
+      A_DESCRIPTION: CR088A_ORBITAL_BASE_24E78D65
+      B_DESCRIPTION: CR088B_FEEL_R8P125_055FBBCD
+      A_EXPECTED_SHA256: 24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e
+      B_EXPECTED_SHA256: 055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - name: Rebuild exactly the two frozen sensors
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p frozen smoke/a smoke/b
+          python tools/cr088_phase1_market_population.py build \
+            --metadata source/lineage/episodes.json \
+            --tape source/lineage/tapes/episode_108754069_sid_56205640.json \
+            --episode-id 108754069 --submission-id 56205640 --operator base \
+            --estimator-source tools/cr086_opponent_inventory_estimator_eval.py \
+            --output frozen/CR088A.tar.gz --manifest frozen/CR088A_MANIFEST.json
+          python tools/cr088_phase1_market_population.py build \
+            --metadata source/lineage/episodes.json \
+            --tape source/lineage/tapes/episode_108766657_sid_56132899.json \
+            --episode-id 108766657 --submission-id 56132899 --operator risk8_p125 \
+            --estimator-source tools/cr086_opponent_inventory_estimator_eval.py \
+            --output frozen/CR088B.tar.gz --manifest frozen/CR088B_MANIFEST.json
+          test "$(sha256sum frozen/CR088A.tar.gz | awk '{print $1}')" = "$A_EXPECTED_SHA256"
+          test "$(sha256sum frozen/CR088B.tar.gz | awk '{print $1}')" = "$B_EXPECTED_SHA256"
+          test "$(tar -tzf frozen/CR088A.tar.gz)" = "main.py"
+          test "$(tar -tzf frozen/CR088B.tar.gz)" = "main.py"
+          tar -xzf frozen/CR088A.tar.gz -C smoke/a
+          tar -xzf frozen/CR088B.tar.gz -C smoke/b
+      - name: Official loader entrypoint smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+
+          for label in ('a', 'b'):
+              path = Path('smoke') / label / 'main.py'
+              fn = get_last_callable(path.read_text(encoding='utf-8'), path=str(path.resolve()))
+              argc = getattr(getattr(fn, '__code__', None), 'co_argcount', None)
+              if argc not in (1, 2):
+                  raise RuntimeError(f'{label}: loader selected {fn!r}, argc={argc}')
+              print(label, getattr(fn, '__name__', repr(fn)), argc)
+          PY
+      - name: Fresh authenticated quota and duplicate preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q | tee before_submissions.csv
+          python - <<'PY'
+          import csv, io, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          text = Path('before_submissions.csv').read_text(encoding='utf-8', errors='replace')
+          lines = [line for line in text.splitlines() if line.strip()]
+          rows = []
+          for i, line in enumerate(lines):
+              if ',' not in line:
+                  continue
+              candidate = list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
+              if candidate and any(key and ('date' in key.lower() or 'ref' in key.lower()) for key in candidate[0]):
+                  rows = candidate
+                  break
+
+          today = datetime.now(timezone.utc).date().isoformat()
+          today_rows = [row for row in rows if next((str(v) for k, v in row.items() if k and 'date' in k.lower()), '').startswith(today)]
+          descriptions = {str(v) for row in rows for k, v in row.items() if k and 'description' in k.lower()}
+          wanted = [os.environ['A_DESCRIPTION'], os.environ['B_DESCRIPTION']]
+          duplicates = sorted(set(wanted) & descriptions)
+          if duplicates:
+              raise SystemExit(f'duplicate descriptions already exist: {duplicates}')
+          projected = len(today_rows) + len(wanted)
+          maximum = int(os.environ['MAX_DAILY'])
+          print({'today_utc': today, 'observed': len(today_rows), 'projected': projected, 'maximum': maximum})
+          if projected > maximum:
+              raise SystemExit(f'daily cap would be exceeded: {projected}>{maximum}')
+          PY
+      - name: Submit exactly two frozen sensors
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION" -f frozen/CR088A.tar.gz -m "$A_DESCRIPTION"
+          kaggle competitions submit -c "$COMPETITION" -f frozen/CR088B.tar.gz -m "$B_DESCRIPTION"
+      - name: One bounded registration checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          sleep 10
+          kaggle competitions submissions "$COMPETITION" -v -q | tee after_submissions.csv
+          grep -F "$A_DESCRIPTION" after_submissions.csv
+          grep -F "$B_DESCRIPTION" after_submissions.csv
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr088-frozen-hosted-sensors-v1-provenance
+          path: |
+            frozen/**
+            before_submissions.csv
+            after_submissions.csv
+          retention-days: 30
+          if-no-files-found: warn
