@@ -7,169 +7,129 @@ Objective: produce a hosted-competitive zero-lineage Kaggriculture agent by deri
 ## Binding rules
 
 - Official environment + our experiments define mechanics.
-- Competitor replays may be used only as evaluation opponents, never as teachers or route templates.
-- Every stage needs an explicit causal hypothesis and null/control.
-- Local H2H filters mechanics/catastrophe; hosted probes measure population transfer.
-- Preserve fresh seeds and both seats.
+- Competitor replays may be evaluation opponents only, never teachers or route templates.
+- Every stage needs a causal hypothesis and control/null where applicable.
+- Use fresh seeds and both seats.
 - No identity/rating/EpisodeId/hidden-seed/future/opponent-private runtime features.
-- Do not retune failed hypotheses indefinitely.
+- Do not rescue failed first-principles hypotheses with replay-derived routes.
 
-## R0 — FP0 mechanics parity — PASS
+## R0 — mechanics parity — PASS
 
-Exact-engine workflow `34842825909`: full tested price/transaction/town-carry parity against `kaggle-environments==1.32.7`.
+Workflow `34842825909`.
 
-## R1 — H1 town-pulse WHEAT overlay — PASS
+## R1 — H1 town-pulse WHEAT carry — PASS
 
-Workflow `34843184110`: mean paired own-bank delta **+916.875** across 32 treatment episodes; flat-price null exactly zero.
+Workflow `34843184110`: +916.875 mean paired delta; flat-price null exactly zero. Preserve for later opportunity-cost integration.
 
-Decision: preserve as real market alpha, but do not spend productive cash blindly.
+## R1B — owned-inventory pulse sale deferral — PASS
 
-## R1B — owned-inventory pulse sale deferral — MECHANICS PASS
+Workflow `34843556192`: 104/104 positive exact cases. Preserve as sale-timing primitive.
 
-Exact-engine workflow `34843556192`: 104/104 positive tested cases. Strong exact gains include MILK q50/D7 +792, STRAWBERRY q50/D7 +731, WOOL q50/D6 +827.
+## R2A — H8 animal/fertilizer economics — PASS
 
-Decision: preserve as sale-timing primitive; account for delayed liquidity and intervening orders before deployment.
+Workflow `34844070131`: large raw economics established.
 
-## R2A — H8 animal/fertilizer exact economics — PASS
+## R2A2-A — exact FEED/CARE frontier — PASS
 
-Workflow `34844070131`.
+Workflow `34844616747`: abstract control favored SHEEP, proving species choice depends on action/horizon economics but not settling physical architecture.
 
-Three-animal day-30 raw economics after animal purchase, exact WHEAT feed cost and exact nonlinear sale curves, before routing/hire costs:
+## R2A2-B1 — one-animal runtime — PASS
 
-- SHEEP +10411;
-- COW +10111;
-- GOOSE +9544.
+Workflow `34844919444`: COW mean +4721, SHEEP +3593, GOOSE +3457. Physical runtime reversed the abstract species ranking.
 
-Decision: H8 is large enough to justify an early narrow physical scheduler.
+## R2A2-B2 — multi-animal runtime — PASS
 
-## R2A2-A — exact FEED/CARE Pareto frontier — PASS
+Workflow **`34846686427`**.
 
-Workflow `34844616747`, `H8_CONTROL_FRONTIER_PASS`.
+Mean realized deltas, 8 fresh seed/seat episodes each:
 
-At 3 animals, SHEEP was best at every tested action shadow price 0–80 and horizons 10/20/30 days. Day-30 examples:
+- **COW3_H0 +12880.75**;
+- COW3_H2 +12824.75;
+- COW2_SHEEP1_H2 +11881.0;
+- COW1_SHEEP2_H2 +10874.75;
+- SHEEP3_H2 +9807.0;
+- COW2_H0 +8522.25;
+- COW2_H2 +8465.0.
 
-- shadow 0: SHEEP raw/objective 13187, 187 actions;
-- shadow 40: SHEEP objective 6019, raw 12899, 172 actions;
-- shadow 60: SHEEP objective 2579, raw 12899, 172 actions.
+Labor ablation:
 
-Decision: abstract control favors SHEEP, but this is not yet a routing result.
+- COW2: H2-H0 **-57.25**;
+- COW3: H2-H0 **-56.0**.
 
-## R2A2-B1 — one-animal full runtime logistics — PASS
+Decision: freeze **COW3_H0** as the provisional physical backbone: 3 cows on `(4,4),(3,4),(4,3)`, main farmer only, no routine HIRE. Hands saved movement but did not increase realized output, so their hire cost was pure drag in this small module.
 
-Workflow `34844919444`, 4 fresh seeds × both seats per species.
+## H9 — town-conditioned animal demand — PASS
 
-Realized own-bank delta vs PASS baseline:
+Workflow `34847099631`.
 
-- COW mean **+4721**, min +4425;
-- SHEEP mean **+3593**, min +3516;
-- GOOSE mean **+3457**, min +3317.
+Full-season prior expected town pulls:
 
-All animals survived and every episode was profitable.
+- EGG 228;
+- MILK 327;
+- WOOL 228.
 
-Critical decision: **physical runtime ranking differs from abstract Pareto ranking.** COW beat SHEEP materially in the one-animal implementation, so species selection must be decided at the realized scheduler level.
+Public shop reveals materially change future product demand. Examples:
 
-## R2A2-B2 — multi-animal realized logistics — ACTIVE
+- day3 YARN_STORE: expected remaining WOOL 508.5 vs MILK 263.25;
+- day3 PIZZA_SHOP: MILK 425.25 vs WOOL 184.5.
 
-Current workflow: `34846686427`.
+Decision: opening COW3 remains justified by prior/runtime evidence, but later capacity should be conditional on observed town shops rather than forced monoculture.
 
-### Architectures
+## R2A2-B3 — CARE overlay on COW3/H0 — ACTIVE
 
-- COW2, no hands;
-- COW2, 2 daily hands;
-- COW3, no hands;
-- COW3, 2 daily hands;
-- COW2 + SHEEP1, 2 daily hands;
-- COW1 + SHEEP2, 2 daily hands;
-- SHEEP3, 2 daily hands.
+Files:
 
-### Physical constraints charged
+- `candidates/fp001_h8_cow3_care_wrapper.py`
+- `tools/fp001_h8_cow3_care_runtime_test.py`
+- `.github/workflows/fp001-h8-cow3-care-runtime.yml`
 
-- fixed first-principles tiles `(4,4)`, `(3,4)`, `(4,3)`;
-- main-farmer setup only;
-- actual BUY_ANIMAL, pickup, build, movement and placement;
-- real shared WHEAT inventory and market cost;
-- movement by main farmer and hands;
-- actual daily HIRE orders/costs;
-- FEED survival deadlines;
-- daily fertilizer opportunity loss if collection is missed;
-- HARVEST cadence and market liquidation;
-- terminal return/drop behavior.
+Paired modes on the same fresh seed/seat pairs:
 
-### Required evidence
+- `NONE`: B2-style COW3/H0 control;
+- `SURVIVAL`: CARE only after baseline survival FEED, using otherwise idle turns;
+- `DAILY`: use idle turns for extra daily FEED + CARE to bank additional COW production bonus.
 
-- both seats, fresh seeds, all episodes DONE;
-- all target animals alive at finish;
-- positive realized margin in every tested architecture or explicit failure classification;
-- movement and hire counts recorded;
-- direct labor value from COW2 H2-H0 and COW3 H2-H0;
-- ranking of pure COW, pure SHEEP and mixed 3-animal portfolios.
+Safety invariant: CARE overlay never replaces urgent survival FEED, fertilizer collection or harvest from the B2 scheduler.
 
-### B2 decision gate
+### B3 PASS rule
 
-- If 3-animal runtime remains strongly positive and H2 labor helps, advance the best architecture to B3.
-- If H0 beats H2, stop assuming cheap hands are valuable and redesign around persistent main-farmer routing.
-- If mixed species win, keep the physical production portfolio heterogeneous.
-- If COW remains runtime-best, use COW as the first physical backbone despite SHEEP's abstract frontier lead.
-- If congestion destroys scale, cap H8 at the largest stable small module rather than forcing expansion.
+Promote a CARE mode only if it improves paired realized final bank materially on fresh seeds without animal loss or reduction in critical collection/harvest throughput. If CARE fails, retain COW3/H0 unchanged; do not tune indefinitely.
 
-## R2A2-B3 — control-aware realized attribution — CONDITIONAL NEXT
+## R2A2-B4 — shop-conditioned expansion — CONDITIONAL NEXT
 
-Only if B2 passes materially.
-
-Add the best exact FEED/CARE policy to the winning physical architecture and decompose realized PnL into:
-
-- animal purchase capital;
-- WHEAT spend;
-- HIRE spend;
-- fertilizer revenue;
-- product revenue;
-- movement count;
-- FEED/CARE/collection/harvest actions;
-- missed fertilizer/harvest opportunities;
-- shed overflow/discard;
-- H1B sale-timing contribution.
-
-PASS requires material improvement over the B2 conservative survival scheduler on fresh seeds without new catastrophe modes.
+After B3, test additional capacity selected from current public town shops + expected future demand. Opening COW3 is the fixed control; expansion species is the treatment. No opponent replay information is permitted.
 
 ## R2B — common opportunity-cost controller
 
-After B3, combine the surviving production engine with H1/H1B under shadow prices for:
-
-- cash;
-- shed space;
-- action/labor;
-- remaining horizon;
-- current market state;
-- deterministic town pulse;
-- opponent intervention risk from legal/public state only.
+After the physical production primitive is stable, combine it with H1/H1B using shadow prices for cash, shed space, action/labor, remaining horizon and current public market/town state.
 
 ## R3 — adversarial market extensions
 
-Separate experiments: H3 WHEAT input squeeze and H4 premium-sale denial / queue-position response. No seat-specific same-slot price advantage is assumed.
+Separate experiments: H3 WHEAT input squeeze and H4 premium-sale denial / queue-position response.
 
 ## R4 — event-driven inventory MPC
 
-Generalize hold/sell/buy/abstain decisions over a short horizon.
+Short-horizon hold/sell/buy/abstain optimization.
 
-## R5 — shop-conditioned production economics
+## R5 — crop-vs-animal production economics
 
-Compare the surviving animal engine against crop alternatives from first principles under observed shops and remaining horizon. No replay-derived target counts.
+Compare surviving animal architecture against crop alternatives from first principles under current shops/horizon.
 
 ## R6 — full zero-lineage physical scheduler
 
-Expand only after H8/crop economics prove which modules deserve physical capacity.
+Expand only after economic modules justify capacity.
 
 ## R7 — hierarchical agent
 
-Integrate macro planner + physical scheduler + market MPC.
+Macro planner + physical scheduler + market MPC.
 
 ## Hosted policy
 
-No current FP candidate receives a hosted slot yet. Eligibility begins after a complete mechanically valid zero-lineage farm policy clears catastrophe/logistics gates.
+No FP hosted slot yet. Eligibility begins after a complete mechanically valid zero-lineage farm policy clears catastrophe/logistics gates.
 
 ## Stop criteria
 
-- Close H1 if cash/shed opportunity cost consumes its alpha.
-- Close H1B if intervention/liquidity risk consumes timing value.
-- Cap or close H8 scale if multi-animal logistics erase its economics.
-- Do not rescue a failed first-principles hypothesis by importing competitor routes.
+- Close H1 if cash/shed opportunity cost consumes alpha.
+- Close H1B if liquidity/intervention risk consumes timing value.
+- Retain COW3/H0 if CARE does not improve it; do not force CARE.
+- Cap H8 scale if further expansion adds congestion without return.
