@@ -1,0 +1,74 @@
+name: CR086 frozen hosted probe v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr086-frozen-hosted-probe-v1.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  submit-once:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      EXPECTED_SHA256: 11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888
+      PROBE_DESCRIPTION: CR086_LATENT_SUPPLY_11296A4E
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: test -n "$KAGGLE_API_TOKEN"
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Download exact frozen CR086 Gate A artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cr086-latent-supply-gate-a-v1
+          path: frozen
+          run-id: 34800444746
+          github-token: ${{ github.token }}
+      - name: Verify frozen bytes and preflight duplicate guard
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f frozen/corpus/CR086.tar.gz
+          ACTUAL="$(sha256sum frozen/corpus/CR086.tar.gz | awk '{print $1}')"
+          echo "CR086 frozen SHA256=$ACTUAL"
+          test "$ACTUAL" = "$EXPECTED_SHA256"
+          kaggle competitions submissions kaggriculture -v -q | tee before_submissions.csv
+          if grep -Fq "$PROBE_DESCRIPTION" before_submissions.csv; then
+            echo "ABORT: identical CR086 hosted probe description already exists."
+            exit 91
+          fi
+          echo "Preflight PASS: exact CR086 bytes verified and no duplicate description found."
+      - name: Submit exactly one frozen CR086 probe
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c kaggriculture -f frozen/corpus/CR086.tar.gz -m "$PROBE_DESCRIPTION"
+      - name: Capture new submission identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 12); do
+            kaggle competitions submissions kaggriculture -v -q > after_submissions.csv
+            if grep -Fq "$PROBE_DESCRIPTION" after_submissions.csv; then
+              echo "CR086 probe registered by Kaggle:"
+              grep -F "$PROBE_DESCRIPTION" after_submissions.csv | head -1
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Submission command returned but CR086 row was not visible within bounded registration check."
+          cat after_submissions.csv
+          exit 93
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr086-hosted-probe-v1-provenance
+          path: |
+            before_submissions.csv
+            after_submissions.csv
+          retention-days: 30
+          if-no-files-found: warn
