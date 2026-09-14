@@ -1,0 +1,26 @@
+name: FP001 exact engine parity
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_market_microsim.py'
+      - 'tools/fp001_engine_parity.py'
+      - '.github/workflows/fp001-engine-parity.yml'
+      - 'requirements.txt'
+
+jobs:
+  parity:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run FP0 exact engine parity
+        working-directory: tools
+        run: python fp001_engine_parity.py
