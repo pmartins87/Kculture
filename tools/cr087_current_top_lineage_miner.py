@@ -62,8 +62,7 @@ def main():
         data=fetch_json(LIST_URL,post={"submissionId":sid})
         eps=[e for e in (data.get("episodes") or []) if str(e.get("state") or "").upper()=="COMPLETED" and e.get("endTime")]
         eps.sort(key=lambda e:e.get("endTime") or "",reverse=True)
-        take=eps[:args.episodes_per_submission]
-        for e in take:
+        for e in eps[:args.episodes_per_submission]:
             try:
                 row=load_episode(e,sid); row.update({"team_id":target.get("team_id"),"team_name":target.get("team_name"),"leaderboard_rank":target.get("rank"),"leaderboard_score":target.get("score")}); loaded.append(row)
             except Exception as exc:
@@ -79,29 +78,30 @@ def main():
     medoid=min(range(n),key=lambda i:(mean_d[i],i))
     modal=[]; agreement=[]; unique_counts=[]
     for t in range(719):
-        vals=[canon(x[t]) for x in tapes]
-        counts={v:vals.count(v) for v in set(vals)}
+        vals=[canon(x[t]) for x in tapes]; counts={v:vals.count(v) for v in set(vals)}
         best=max(sorted(counts),key=lambda v:counts[v])
         modal.append(json.loads(best)); agreement.append(counts[best]/n); unique_counts.append(len(counts))
     exact_hashes=[]
+    tapes_dir=out/'tapes'; tapes_dir.mkdir(exist_ok=True)
     for r in loaded:
         blob=json.dumps(r["tape"],sort_keys=True,separators=(",",":"),ensure_ascii=True).encode()
         exact_hashes.append(hashlib.sha256(blob).hexdigest())
+        (tapes_dir/f"episode_{int(r['episode_id'])}_sid_{int(r['submission_id'])}.json").write_bytes(blob)
     pair_ds=[dist[i][j] for i in range(n) for j in range(i+1,n)]
     summary={
-        "schema":"cr087-current-top-lineage-v1","targets":targets,"episodes_loaded":n,"errors":errors,
+        "schema":"cr087-current-top-lineage-v2","targets":targets,"episodes_loaded":n,"errors":errors,
         "unique_exact_tapes":len(set(exact_hashes)),
         "pairwise_hamming":{"mean":statistics.mean(pair_ds) if pair_ds else 0,"median":statistics.median(pair_ds) if pair_ds else 0,"min":min(pair_ds) if pair_ds else 0,"max":max(pair_ds) if pair_ds else 0},
         "medoid":{"index":medoid,"episode_id":loaded[medoid]["episode_id"],"submission_id":loaded[medoid]["submission_id"],"team_name":loaded[medoid].get("team_name"),"leaderboard_rank":loaded[medoid].get("leaderboard_rank"),"mean_hamming_to_pool":mean_d[medoid]},
         "consensus":{"mean_step_agreement":statistics.mean(agreement),"median_step_agreement":statistics.median(agreement),"steps_unanimous":sum(x==1 for x in agreement),"steps_ge_0_8":sum(x>=0.8 for x in agreement),"steps_ge_0_5":sum(x>=0.5 for x in agreement),"mean_unique_actions_per_step":statistics.mean(unique_counts)},
     }
-    Path(out/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True))
-    Path(out/'modal_tape.json').write_text(json.dumps(modal,separators=(",",":"),sort_keys=True))
-    Path(out/'medoid_tape.json').write_text(json.dumps(loaded[medoid]["tape"],separators=(",",":"),sort_keys=True))
+    (out/'summary.json').write_text(json.dumps(summary,indent=2,sort_keys=True))
+    (out/'modal_tape.json').write_text(json.dumps(modal,separators=(",",":"),sort_keys=True))
+    (out/'medoid_tape.json').write_text(json.dumps(loaded[medoid]["tape"],separators=(",",":"),sort_keys=True))
     meta=[]
     for i,r in enumerate(loaded):
         meta.append({k:r.get(k) for k in ("episode_id","submission_id","seat","end_time","team_id","team_name","leaderboard_rank","leaderboard_score")} | {"tape_sha256":exact_hashes[i],"mean_hamming_to_pool":mean_d[i]})
-    Path(out/'episodes.json').write_text(json.dumps(meta,indent=2,sort_keys=True))
+    (out/'episodes.json').write_text(json.dumps(meta,indent=2,sort_keys=True))
     print(json.dumps(summary,indent=2,sort_keys=True))
 
 if __name__=='__main__': main()
