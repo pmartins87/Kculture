@@ -1,0 +1,24 @@
+name: FP001 E1 crop schema probe
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_e1_crop_schema_probe.py'
+      - '.github/workflows/fp001-e1-crop-schema-probe.yml'
+      - 'requirements.txt'
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Probe exact plant/animal schema
+        run: python tools/fp001_e1_crop_schema_probe.py
