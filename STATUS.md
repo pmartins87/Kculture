@@ -108,7 +108,7 @@ Corrected discovery run `34803148700` resolved the active submissions of all cur
 
 Key result: all 30 exact tapes are unique; median cross-pool Hamming distance is 719/719, mean 702.8. Even within the same active submission, hundreds of physical and market actions change between episodes. No step reaches 50% modal agreement across the pool. A modal/medoid tape is therefore not a faithful reconstruction of the current elite.
 
-Macroeconomic profile run `34803658746` parsed 26 replays and shows repeated high-level production families despite action-level variability. Descriptive families to preserve in population work are:
+Macroeconomic profile run `34803658746` parsed 26 replays and shows repeated high-level production families despite action-level variability. Full result: `docs/strategy/CR087_TOP_MACRO_PROFILE_RESULT_2026-09-14.md`. Descriptive families to preserve in population work are:
 
 - Majkel / DSM / Orbital;
 - Mengfei / feel the agi / redblackbst;
@@ -118,14 +118,22 @@ Macroeconomic profile run `34803658746` parsed 26 replays and shows repeated hig
 
 CR087 CR053-real + latent-supply screen `34803266002` was mechanically safe but economically neutral: 8–8 direct against CR053, and candidate/base were identical at 10–6 against CR052 with the same mean margin. It is **not submitted** absent demonstrated causal impact.
 
-## CR088 — automatic population search — PHASE 0 ACTIVE
+## CR088 — automatic population search — PHASE 1 ACTIVE
 
-Frozen protocol: `docs/strategy/CR088_PHASE0_PROTOCOL_2026-09-14.md`.
-Workflow run: **`34806600636`**.
+### Phase 0 — COMPLETE
 
-Phase 0 screens all 30 current-top public tapes against exact CR053_REAL, CR052_REAL, CR083 and CR086 on master `9220881`, three fresh seeds and both seats: 720 games total. It is explicitly a mechanical/catastrophe/diversity screen, not a hosted-rating gate. No Kaggle submission is authorized from Phase 0.
+Run `34806600636`: 720/720 games, 30/30 mechanically valid packages, zero engine failures. Highest local safety seeds were feel the agi `0.4583`, Orbital `0.4167` and Majkel `0.3333`; local scores are not hosted promotion scores.
 
-Continuation rule: preserve several source-team/macro families, then build a state-coherent Phase-1 population with economically meaningful operators. Do not select one tape solely because it tops the local score.
+Seven diverse bases were retained: Majkel, Orbital, feel the agi, redblackbst, ymg_aq, Otter and SpaTaro. This preserves hosted-rank priority, the five descriptive macro families and the distinct redblack four-land path.
+
+### Phase 1 — RUNNING
+
+Frozen protocol: `docs/strategy/CR088_PHASE1_PROTOCOL_2026-09-14.md`.
+Workflow run: **`34807533884`**.
+
+Phase 1 evaluates 42 policies: seven unchanged coherent bases plus a six-member factorial market family per base (base, latent SELL ordering, and risk-sale caps 8/16 at natural price floors 1.00x/1.25x). Every overlay uses only legal current state, never changes physical actions, and is compared directly with its own base plus the four exact anchors on master `9230881`.
+
+No Phase-1 result alone authorizes hosted promotion; no automatic Kaggle submission is performed.
 
 ## Public notebook benchmark — characterization only
 
