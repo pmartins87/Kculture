@@ -3,15 +3,29 @@
 Date: 2026-09-14  
 Branch: `research/first-principles-economy-v1`
 
+## 2026-09-14 integration amendment — binding
+
+This document began as an intentionally isolated **zero-lineage experimental protocol**. That isolation remains useful when a causal experiment needs clean attribution, but it is **no longer a global restriction on the final competition policy**.
+
+The competition-level objective is to win / maximize prize probability. Therefore:
+
+- knowledge already acquired from opponent testing, public replays, top-player analysis, copied/derived baselines, hosted probes, failures and successful heuristics is cumulative and must not be discarded;
+- legal competitor evidence may be used as policy-construction input, architecture prior, comparator or adaptation signal;
+- FP001's purpose is to contribute new causally proven mechanics/economic primitives to that accumulated stack;
+- a mechanism is not promoted because it is novel, and an older mechanism is not rejected because it is derivative;
+- the final criterion is expected population/hosted strength under competition legality.
+
+Where this historical protocol below says “zero-lineage”, “forbidden as policy-construction input”, “never as teachers” or “no replay-derived route backbone”, read those restrictions as applying to **experiments explicitly designated as isolated FP causal tests**, not to the integrated winning-policy track. Current binding integration gates live in `FP001_ROADMAP.md` and the competition-level `STATUS.md` / `ROADMAP.md` on `fix/kaggle-parity-v1`.
+
 ## Purpose
 
-Open a parallel research front whose objective is to discover a prize-class Kaggriculture policy from the game mechanics and economics themselves, rather than from competitor replay lineages.
+Open a research front whose original objective was to discover prize-class Kaggriculture mechanisms from the game mechanics and economics themselves, rather than merely reproducing competitor replay lineages.
 
-This track deliberately differs from CR088. CR088 is allowed to mine current population structure and test operators over coherent top-lineage bases. FP001 is a **zero-lineage design track**: the policy architecture, objectives and operators must be derivable from the official environment, our own experiments and general optimization/game-theory reasoning.
+The experimental distinction from CR088 remains useful: CR088 mines current population structure and tests operators over coherent top-lineage bases; FP001 isolates mechanics/economics so we can tell **why** something works. The two tracks are now explicitly complementary and are expected to be integrated.
 
-## Purity boundary
+## Experimental isolation boundary
 
-Allowed design inputs:
+When a gate is labeled **isolated FP**, allowed design inputs are:
 
 - official `kaggle-environments==1.32.7` rules/source;
 - our own Kculture experiments and diagnostics;
@@ -19,22 +33,21 @@ Allowed design inputs:
 - mechanics-derived simulation, optimization, control and game-theory reasoning;
 - opponent public farm state and shared market/town state at runtime.
 
-Forbidden as policy-construction inputs:
+For those isolated attribution tests only, do not:
 
-- copying or replaying another team's 719/720-action tape;
-- using competitor action sequences as a route template;
-- selecting physical actions from nearest-neighbour replay matching;
-- team/opponent identity, rating, submission ID, EpisodeId or hidden seed;
-- future state or opponent-private runtime state;
-- tuning a mechanic because a named top team happens to use it.
+- copy/replay another team's action tape as the treatment itself;
+- select physical actions by nearest-neighbour replay matching;
+- use team/opponent identity, rating, submission ID, EpisodeId or hidden seed;
+- use future state or opponent-private runtime state;
+- rescue a failed causal hypothesis by silently switching to a replay-derived route.
 
-Public/top agents may later be used only as **adversarial evaluation opponents**, never as teachers.
+Outside an explicitly isolated gate, legal public/top-player evidence is available to the integrated competition program according to the live project roadmap.
 
 ## Why this track exists
 
-The current authoritative project state shows that action-level imitation has poor transfer, local H2H ordering is not a reliable proxy for hosted population strength, and the current top-10 itself is materially state-adaptive. Therefore, another replay reconstruction ladder is not a sufficient path to ~3000+ hosted strength.
+The authoritative project state shows that action-level imitation alone has poor transfer, local H2H ordering is not a reliable proxy for hosted population strength, and the current top-10 is materially state-adaptive. Therefore another replay reconstruction ladder by itself is not a sufficient path to ~3000+ hosted strength.
 
-FP001 attacks the underlying game as a stochastic two-player economy.
+FP001 attacks the underlying game as a stochastic two-player economy and provides primitives that can strengthen coherent competitive backbones.
 
 ## Core economic observation
 
@@ -57,7 +70,7 @@ Economic intuition:
 - the next SELL realizes the price appreciation caused by exogenous demand;
 - if no town/opponent inventory change occurs, the engine's quote convention should make the round trip exactly zero.
 
-This is the first hypothesis to test because it has a mechanics-guaranteed zero-demand control and does not require predicting a competitor.
+This was selected first because it has a mechanics-guaranteed zero-demand control and does not require predicting a competitor.
 
 ### H2 — Regime-aware WHEAT carry
 
@@ -68,7 +81,7 @@ Generalize H1 by optimizing quantity from:
 - cash shadow price for production/land/hiring;
 - shed-capacity shadow price;
 - own near-term feed requirement;
-- estimated opponent net WHEAT market pressure from observable market deltas.
+- estimated opponent net WHEAT market pressure from observable/legal state.
 
 The carry is permitted only when its conservative expected relative value beats the shadow cost of cash and storage.
 
@@ -106,7 +119,7 @@ Build a small exact/approximate model-predictive controller over:
 
 Actions: hold, sell quantity, buy WHEAT/FERTILIZER, or abstain.
 
-This controller should output market decisions from state, not from step-indexed replay commands.
+This controller should output market decisions from state rather than blindly replaying step-indexed market commands.
 
 ### H6 — Shop-conditioned production portfolio
 
@@ -123,17 +136,16 @@ The planner should explicitly price:
 - fertilizer conversion value;
 - time to first yield and remaining harvest cycles.
 
-This is a larger architecture and should not start until the market-only hypotheses have been isolated.
+### H7 — Hierarchical integrated agent
 
-### H7 — Hierarchical first-principles agent
+Integrate successful primitives under layers such as:
 
-If H1-H6 establish useful operators, integrate them under three layers:
+1. macro production/economic planner, informed by mechanics **and legal competitive priors**;
+2. deterministic/state-adaptive task scheduler for movement, watering, feeding, harvest, care, fertilizer and land;
+3. market controller for inventory, timing, adversarial price impact and final liquidation;
+4. population/hosted calibration loop using diverse coherent competitive representatives.
 
-1. macro economic planner (daily target capacities and cash budget);
-2. deterministic task/route scheduler (movement, watering, feeding, harvest, care, fertilizer, land use);
-3. market MPC (inventory, timing, adversarial price impact, final liquidation).
-
-No replay-derived route backbone is allowed.
+For isolated attribution experiments, keep replay-derived physical backbones out of the treatment. For final competition architecture, the live roadmap governs and prior competitive knowledge is allowed.
 
 ## Initial analytical result
 
@@ -149,11 +161,9 @@ Illustrative mechanics-only checks from `I0=10000`:
 - q=50: +6/+12/+22/+37;
 - q=90: +9/+18/+34/+57.
 
-These are **not candidate-performance claims**. They simply establish that the official market mechanics admit positive temporal carry when exogenous town demand occurs between the buy and sell.
+These were never candidate-performance claims; they establish that official mechanics admit positive temporal carry when exogenous town demand occurs between buy and sell.
 
-The same tool contains a premium sequential-sale impact diagnostic, but that metric intentionally omits the shadow value of our inventory and cannot authorize H4 promotion.
-
-## Experimental gates
+## Experimental gates — historical foundation
 
 ### Gate FP0 — mechanics parity
 
@@ -163,58 +173,39 @@ PASS only if the microsim reproduces official price and quote behavior on determ
 
 Build a minimal legal runtime overlay that changes only WHEAT BUY/SELL around deterministic town pulses.
 
-Compare base vs overlay under identical seeds and both seats in an environment where physical actions are held fixed.
+Compare base vs overlay under identical seeds and both seats with physical actions held fixed.
 
-PASS requires:
-
-- zero mechanical errors;
-- intervention actually triggers;
-- positive own-bank causal delta in town-demand regimes;
-- no systematic loss when current shop demand is zero/too small because abstention must fire.
+PASS requires zero mechanical errors, actual interventions, positive own-bank causal delta in demand regimes, and safe abstention when demand is insufficient.
 
 ### Gate FP2 — cash/storage opportunity-cost proof
 
-Add cash and shed shadow prices. Compare against H1 naive carry.
-
-PASS only if the constrained controller improves or preserves W-L / money-gap while materially reducing cases where the trade starves production or causes shed overflow.
+Add cash and shed shadow prices. Compare against H1 naive carry. PASS only if the constrained controller improves/preserves outcomes while reducing production starvation/overflow cases.
 
 ### Gate FP3 — adversarial opponent panel
 
-Test against a heterogeneous set of exact mechanically valid agents, but do not tune from their action tapes.
+For an isolated mechanism test, evaluate against a heterogeneous exact-agent set without changing the treatment based on their action tapes mid-gate.
 
-Metrics:
-
-- paired W/L;
-- mean and median relative bank delta;
-- 10th percentile / CVaR-style tail;
-- intervention frequency and PnL attribution;
-- cash-starvation events;
-- overflow/discard events;
-- price impact on both players.
+Metrics include paired W/L, relative bank, tail risk, intervention attribution, starvation, overflow and price impact.
 
 ### Gate FP4 — hosted sensor
 
-Only after mechanical validity and causal local evidence. Because hosted transfer is weakly correlated with local ordering, a distinct mechanically valid FP candidate may deserve one high-information hosted probe without requiring it to beat every local anchor.
+Only after mechanical validity and causal evidence. Hosted transfer is the population calibration instrument; a distinct valid candidate may deserve a high-information hosted probe without needing to beat every local anchor.
 
 ### Gate FP5 — architecture expansion
 
-Do not start a full zero-lineage physical planner until at least one market operator survives FP1-FP4 or the market-only line is closed with clear evidence.
+Historical gate now superseded by the integrated `FP001_ROADMAP.md`: architecture expansion is active because multiple mechanisms have already passed, including CARE, batched harvest, fertilizer conversion and scale/capacity tests.
 
-## Stop rules
+## Current stop rules
 
-- Do not mutate quantity thresholds endlessly on the same seeds.
-- Do not use top-team replays to rescue an FP hypothesis.
-- Close H1 if exact environment tests show no positive causal value after cash/storage costs across meaningful demand regimes.
+- Do not mutate thresholds endlessly on the same seeds.
+- In isolated FP gates, do not rescue a failed hypothesis by importing replay actions after seeing the result.
+- In integrated gates, **do** use accumulated competitive knowledge deliberately and transparently when it creates a better architecture or prior.
+- Close H1 if exact tests show no positive causal value after cash/storage costs across meaningful demand regimes.
 - Close H3/H4 if relative-value sabotage adds tail risk without repeatable paired benefit.
-- Keep market operators modular; failure of sabotage does not invalidate pure carry.
-- Preserve a fresh held-out seed block for each promoted stage.
+- Keep mechanisms modular enough for attribution.
+- Preserve fresh held-out seed blocks for promoted stages.
+- Do not continue a branch merely to preserve novelty; redirect effort to the highest-information path toward a winning hosted policy.
 
-## Immediate next implementation
+## Current implementation pointer
 
-1. prove the standalone microsim against exact `kaggle-environments==1.32.7` calls;
-2. implement the minimal H1 runtime overlay with no physical-action changes;
-3. create deterministic scenarios spanning zero, low and high WHEAT town demand;
-4. run both seats and attribute every coin of delta;
-5. only then add cash/shed opportunity-cost controls.
-
-The first deliverable is therefore **not** a 720-step farm strategy. It is a falsifiable economic mechanism with an exact null control.
+The historical “first deliverable” sequence is complete and several later mechanisms have passed. Current work is defined by `FP001_ROADMAP.md`: integrated premium-crop/animal hybrids, labor revaluation, elite-macro compatibility, heterogeneous population testing and hosted calibration.
