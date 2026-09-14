@@ -1,0 +1,25 @@
+name: FP001 H8 single-animal runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'candidates/fp001_h8_single_animal_module.py'
+      - 'tools/fp001_h8_single_animal_runtime_test.py'
+      - '.github/workflows/fp001-h8-single-animal-runtime.yml'
+      - 'requirements.txt'
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run H8 single-animal runtime logistics proof
+        run: python tools/fp001_h8_single_animal_runtime_test.py
