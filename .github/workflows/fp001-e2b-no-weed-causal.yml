@@ -1,0 +1,29 @@
+name: FP001 E2B no-weed causal correction
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_e2b_no_weed_causal_test.py'
+      - '.github/workflows/fp001-e2b-no-weed-causal.yml'
+      - 'candidates/fp001_e2_dedicated_strawberry_hand.py'
+      - 'candidates/fp001_e1_strawberry_hybrid.py'
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - 'candidates/fp001_h10_cow_scale_care_wrapper.py'
+      - 'requirements.txt'
+
+jobs:
+  causal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run E2B weed-free matched causal audit
+        run: python tools/fp001_e2b_no_weed_causal_test.py
