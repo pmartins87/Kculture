@@ -1,0 +1,24 @@
+name: FP001 market microsim
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_market_microsim.py'
+      - '.github/workflows/fp001-market-microsim.yml'
+      - 'docs/strategy/FP001_FIRST_PRINCIPLES_INNOVATION_PROTOCOL_2026-09-14.md'
+
+jobs:
+  self-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run FP001 deterministic self-test
+        run: python tools/fp001_market_microsim.py --self-test
+      - name: Print baseline scenarios
+        run: python tools/fp001_market_microsim.py
