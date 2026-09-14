@@ -1,17 +1,19 @@
-# FP001 ROADMAP — first-principles economy
+# FP001 ROADMAP — mechanics/economics integration
 
 Updated: 2026-09-14
 
-Objective: produce a hosted-competitive zero-lineage Kaggriculture agent by deriving policy from official mechanics and runtime state rather than competitor replay imitation.
+Objective: discover and integrate mechanics-derived economic/physical primitives that increase the probability of a prize-winning Kaggriculture policy.
 
 ## Binding rules
 
-- Official environment + our experiments define mechanics.
-- Competitor replays may be evaluation opponents only, never teachers or route templates.
-- Every stage needs a causal hypothesis and control/null where applicable.
+- Official environment + our experiments remain the authority for mechanics and causal attribution.
+- Competitive knowledge is cumulative: legal public opponent/replay/top-player evidence may inform architecture, priors, comparators and policy construction.
+- Use isolated first-principles tests when isolation is needed to identify causality; do **not** elevate isolation into a purity requirement for the final agent.
+- Every stage needs a causal hypothesis and matched control/null where applicable.
 - Use fresh seeds and both seats.
 - No identity/rating/EpisodeId/hidden-seed/future/opponent-private runtime features.
-- Do not rescue failed first-principles hypotheses with replay-derived routes.
+- Do not revive closed representations merely to force a result; preserve their lessons.
+- Promotion objective is hosted/population strength, not novelty.
 
 ## R0 — mechanics parity — PASS
 
@@ -19,7 +21,7 @@ Workflow `34842825909`.
 
 ## R1 — H1 town-pulse WHEAT carry — PASS
 
-Workflow `34843184110`: +916.875 mean paired delta; flat-price null exactly zero. Preserve for later opportunity-cost integration.
+Workflow `34843184110`: +916.875 mean paired delta; flat-price null exactly zero. Preserve for market/economic integration.
 
 ## R1B — owned-inventory pulse sale deferral — PASS
 
@@ -39,111 +41,151 @@ Workflow `34844919444`: COW +4721 mean, SHEEP +3593, GOOSE +3457.
 
 ## R2A2-B2 — multi-animal runtime — PASS
 
-Workflow `34846686427`.
-
-Mean deltas:
-
-- COW3_H0 +12880.75;
-- COW3_H2 +12824.75;
-- COW2_SHEEP1_H2 +11881;
-- COW1_SHEEP2_H2 +10874.75;
-- SHEEP3_H2 +9807;
-- COW2_H0 +8522.25;
-- COW2_H2 +8465.
-
-Routine HIRE was negative marginal value: COW2 -57.25 and COW3 -56.0 for H2-H0.
+Workflow `34846686427`. COW3 main-farmer-only led the tested small modules; routine hands were slightly negative because they created no marginal output.
 
 ## H9 — town-conditioned animal demand — PASS
 
-Workflow `34847099631`. Prior expected full-season animal-product pulls: EGG228, MILK327, WOOL228. Public shop composition materially changes remaining demand, so later expansion should be shop-conditioned.
+Workflow `34847099631`. Prior expected full-season animal-product pulls: EGG228, MILK327, WOOL228. Public shop composition materially changes remaining demand. Preserve for adaptive expansion.
 
-## R2A2-B3 — COW3 CARE overlay — STRONG PASS
+## R2A2-B3 — CARE overlay — STRONG PASS
 
-Workflow **`34847600991`**. Initial run `34847381440` failed before simulation due import-path infrastructure only; rerun used unchanged policy and passed.
+Workflow `34847600991`.
 
-Paired 16 fresh seed/seat cases:
+- NONE +13101.375 mean;
+- SURVIVAL +22103.5;
+- DAILY +27308.5;
+- DAILY − NONE +14207.125, 16/16;
+- DAILY − SURVIVAL +5205, 16/16.
 
-- NONE mean +13101.375;
-- SURVIVAL CARE mean +22103.5;
-- DAILY FEED+CARE mean **+27308.5**.
+CARE is promoted as a core animal-production primitive.
 
-Paired gains:
+## H10 — compact scale + batched harvest — PASS
 
-- SURVIVAL-NONE **+9002.125 mean**, 16/16 wins;
-- DAILY-NONE **+14207.125 mean**, 16/16 wins;
-- DAILY-SURVIVAL **+5205 mean**, 16/16 wins.
+Workflow `34848106237`.
 
-Decision: CARE is promoted. Current provisional production backbone is **COW3 + main farmer only + DAILY FEED/CARE**, with urgent survival/collection/harvest safety retained.
+- compact COW3 scheduler +137.75 over B2, 8/8;
+- threshold6 batching +861.5 over threshold1, 8/8;
+- batching preserved output while cutting harvest action load sharply;
+- no-CARE scale remained positive through COW6 with full survival.
 
-## H10 — compact COW scale + batch harvest — ACTIVE
+Compact routing and batched harvest are promoted.
 
-Workflow **`34848106237`**.
+## H11 — fertilizer conversion into premium crops — PASS
 
-Motivation:
+Workflow `34848464648`.
 
-- B2 COW3 harvested roughly one action per MILK despite COW `max_held=6`;
-- COW3_H0 exceeded COW2_H0 by ~+4358.5 mean, so scale had not saturated at 3;
-- B2 COW3 main farmer still had substantial unused turn budget.
+Exact mechanics show fertilizer should not always be sold. STRAWBERRY is the strongest tested conversion target: two well-timed fertilizer actions add four berries and about +268 nominal value versus selling those two fertilizer units at normal prices. TOMATO also has positive regions.
 
-H10 test ladder:
+Decision: animal fertilizer must be valued against both SELL and crop-conversion alternatives.
 
-1. B2_COW3 control;
-2. H10_COW3 threshold1 — measures new compact scheduler/layout vs B2;
-3. H10_COW3 threshold6 — isolates batching within H10;
-4. H10_COW4 threshold6;
-5. H10_COW5 threshold6;
-6. H10_COW6 threshold6.
+## R2A2-B4 — scale × CARE — PASS / saturation located
 
-Compact zero-lineage layout: `(4,4),(3,4),(2,4),(1,4),(1,3),(2,3)`. Main farmer only. Bulk setup pickup, urgent survival FEED, daily fertilizer collection, MILK hold to threshold where safe.
+Workflow `34848633407`.
 
-### H10 gate
+Controls retained for integration:
 
-- Promote batching only if paired T6 > T1 without survival loss.
-- Increase scale only while marginal realized bank stays positive and full survival is stable.
-- Treat animal loss as scale-saturation evidence, not as a reason to hide/abort the result.
-- Do not add hired hands until a scale level demonstrates congestion that hands can profitably relieve.
+- COW4_DAILY +37949.75 mean;
+- COW5_SURVIVAL +36685.25;
+- COW5_DAILY **+39447.50**, mean-best animal-only;
+- COW6_SURVIVAL +33054.25;
+- COW6_DAILY +35272.75.
 
-## R2A2-B4 — combine winning H10 scale with DAILY CARE — CONDITIONAL NEXT
+Six cows under CARE are decisively worse than five despite full survival:
 
-Once H10 identifies the best stable no-CARE scale, apply the already-proven DAILY CARE mechanism to that scale. Compare against both the H10 no-CARE control and the current COW3 DAILY backbone.
+- COW6_SURVIVAL − COW5_SURVIVAL = −3631, 0/8;
+- COW6_DAILY − COW5_DAILY = −4174.75, 0/8.
 
-PASS requires paired realized improvement without survival or throughput collapse.
+COW5_DAILY is not robustly dominant over COW4_DAILY (only +1497.75 mean, 4–4 paired), so action headroom matters.
 
-## R2A2-B5 — shop-conditioned expansion — CONDITIONAL
+## R2C — integrated premium-crop hybrid — ACTIVE NEXT
 
-Only after physical scale + CARE stabilizes. Use legal public town shops and expected future demand to choose marginal species/capacity. Opening policy remains mechanics-derived; no replay routes.
+Hypothesis:
 
-## R2B — common opportunity-cost controller
+> reallocating part of the animal-only action/fertilizer budget into premium STRAWBERRY production can increase total value, especially when using the H11 fertilizer conversion and when the animal backbone retains enough action headroom.
 
-Combine stable production with H1/H1B under cash, shed, action/labor, horizon, market and town-state shadow prices.
+Matched treatments:
 
-## R3 — adversarial market extensions
+1. COW4_DAILY control;
+2. COW5_SURVIVAL control;
+3. COW5_DAILY control;
+4. COW4_DAILY + small fertilized STRAWBERRY block;
+5. COW5_SURVIVAL + small fertilized STRAWBERRY block;
+6. COW5_DAILY + STRAWBERRY as action-starvation treatment;
+7. winning crop hybrids with bounded dedicated HIRE;
+8. elite-informed mixed COW/SHEEP comparator from CR087 macro families.
 
-H3 WHEAT input squeeze and H4 premium-sale denial / queue-position response as separate causal experiments.
+### R2C measurements
 
-## R4 — event-driven inventory MPC
+For every treatment record:
 
-Short-horizon hold/sell/buy/abstain optimization.
+- final bank;
+- paired delta vs matched control;
+- animal survival and missed FEED/CARE;
+- crop survival, watering misses and harvest count;
+- MILK/WOOL/STRAWBERRY realized output;
+- fertilizer sold vs consumed;
+- wheat/seed/fertilizer input cost;
+- HIRE cost and productive actions per hand;
+- movement and idle-turn budget;
+- terminal shed/inventory losses.
 
-## R5 — crop-vs-animal production economics
+### R2C promotion rule
 
-Compare surviving animal architecture against crop alternatives from first principles under current shops/horizon.
+A hybrid advances only if it increases paired realized value without introducing catastrophe. If STRAWBERRY merely steals actions from more valuable CARE, close that architecture. Do not rescue it with indefinite threshold tuning.
 
-## R6 — full zero-lineage physical scheduler
+## R2D — labor revaluation — CONDITIONAL WITHIN HYBRID
 
-Expand only after economic modules justify capacity.
+The B2 result that routine HIRE was negative is context-specific. Reopen labor only when crop workload exists.
 
-## R7 — hierarchical agent
+Compare the best no-hand hybrid against bounded hand variants. Promote HIRE only if marginal crop/animal output exceeds total hire cost and does not create coordination losses.
 
-Macro planner + physical scheduler + market MPC.
+## R2E — elite-macro compatibility / mixed animals
 
-## Hosted policy
+Use CR087 macro evidence as a competitive prior. Test coherent mixed COW/SHEEP production programs and premium-crop timing against the FP controls. This is not blind tape copying: the goal is to retain proven elite macro structure while substituting better execution/economic primitives where causal evidence supports them.
 
-No FP hosted slot yet. Eligibility begins after a complete mechanically valid zero-lineage policy clears the remaining scale/integration gates.
+## R3 — heterogeneous population gate
+
+R2C/R2E survivors face a diverse panel containing:
+
+- exact historical hosted anchors where bytes are known;
+- multiple CR088/top-family coherent representatives;
+- both seats and fresh seeds.
+
+Do not promote from aggregate mean alone. Require acceptable matchup coverage and no catastrophic family weakness.
+
+## R4 — market/economic integration
+
+Factorial tests on physical survivors:
+
+- own-base control;
+- CR086/CR088 legal latent-supply SELL handling;
+- H1 WHEAT pulse carry;
+- H1B owned-sale deferral;
+- combinations only after individual attribution.
+
+Physical and market layers must remain separable enough to identify which mechanism caused any gain/loss.
+
+## R5 — H9 public-shop adaptive expansion
+
+Use current public town-shop state and expected remaining demand to allocate marginal species/product capacity. Compare adaptive expansion against fixed production controls.
+
+## R6 — hierarchical competitive controller
+
+Macro production prior + physical scheduler + fertilizer/crop opportunity-cost allocator + adaptive market controller + town-conditioned expansion.
+
+The controller may use elite-derived macro priors and all causally proven FP primitives. It may not use forbidden runtime information.
+
+## R7 — hosted calibration
+
+Hosted slots are high-information population sensors. Submit only mechanically valid, strategically distinct candidates that answer a transfer question.
+
+A locally profitable/novel policy is not sufficient. Target remains the ~3000+ class observed at the current top-10 frontier.
 
 ## Stop criteria
 
-- Close H1 if cash/shed opportunity cost consumes alpha.
-- Close H1B if liquidity/intervention risk consumes timing value.
-- Cap COW scale where marginal realized value becomes non-positive or survival becomes unstable.
-- Do not force hired labor if it remains negative marginal value.
+- Close a crop hybrid if matched value is non-positive after the predeclared treatments.
+- Close HIRE again if bounded labor variants fail to create positive marginal value in the crop context.
+- Cap animal scale where action opportunity cost dominates, as already observed at COW6 under CARE.
+- Close a market overlay if it fails own-base causal attribution or hosted transfer.
+- Do not revive modal tape, replay stitching, static market-prefix or 1-NN imitation representations without genuinely new evidence that changes their failure mechanism.
+- Continue integrating successful old and new knowledge until a candidate is plausibly prize-class or the current branch reaches its declared stop gate.
