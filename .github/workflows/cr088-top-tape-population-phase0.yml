@@ -1,0 +1,147 @@
+name: CR088 current-top tape population Phase 0
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr088-top-tape-population-phase0.yml]
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - id: matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/cr088_top_tape_population.py matrix \
+            --metadata source/lineage/episodes.json \
+            --tapes-dir source/lineage/tapes \
+            --output matrix.json
+          echo "matrix=$(jq -c . matrix.json)" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr088-phase0-frozen-matrix
+          path: matrix.json
+          retention-days: 30
+
+  screen:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: exact/hostedpair
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: exact/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr086-latent-supply-gate-a-v1
+          path: exact/cr086
+          run-id: 34800444746
+          github-token: ${{ github.token }}
+      - name: Verify anchors and build deterministic population member
+        shell: bash
+        env:
+          CID: ${{ matrix.candidate_id }}
+          TAPE_FILE: ${{ matrix.tape_file }}
+          EPISODE_ID: ${{ matrix.episode_id }}
+          SUBMISSION_ID: ${{ matrix.submission_id }}
+        run: |
+          set -euo pipefail
+          test "$(sha256sum exact/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz | awk '{print $1}')" = "095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15"
+          test "$(sha256sum exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz | awk '{print $1}')" = "b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d"
+          test "$(sha256sum exact/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          test "$(sha256sum exact/cr086/corpus/CR086.tar.gz | awk '{print $1}')" = "11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888"
+          mkdir -p "result/$CID" build anchors
+          cp exact/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz anchors/CR053_REAL.tar.gz
+          cp exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz anchors/CR052_REAL.tar.gz
+          cp exact/cr083/CR083.tar.gz anchors/CR083.tar.gz
+          cp exact/cr086/corpus/CR086.tar.gz anchors/CR086.tar.gz
+          python tools/cr088_top_tape_population.py build \
+            --metadata source/lineage/episodes.json \
+            --tape "source/lineage/tapes/$TAPE_FILE" \
+            --episode-id "$EPISODE_ID" --submission-id "$SUBMISSION_ID" \
+            --output "build/$CID.tar.gz" --manifest "result/$CID/manifest.json"
+      - name: Fresh exact four-anchor safety screen
+        shell: bash
+        env:
+          CID: ${{ matrix.candidate_id }}
+        run: |
+          set -euo pipefail
+          for anchor in CR053_REAL CR052_REAL CR083 CR086
+          do
+            python tools/kaggle_reference_h2h_v2.py \
+              --a "build/$CID.tar.gz" --b "anchors/$anchor.tar.gz" \
+              --a-id "$CID" --b-id "$anchor" \
+              --seed-count 3 --master-seed 9220881 \
+              --output "result/$CID/vs_$anchor.json" || true
+          done
+          python tools/cr088_top_tape_population.py collect \
+            --result-dir "result/$CID" --manifest "result/$CID/manifest.json" \
+            --output "result/$CID/candidate-summary.json"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr088-phase0-${{ matrix.candidate_id }}
+          path: result/${{ matrix.candidate_id }}/**
+          retention-days: 30
+
+  aggregate:
+    if: always()
+    needs: screen
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr088-phase0-r*
+          path: population-results
+      - run: |
+          python tools/cr088_top_tape_population.py aggregate \
+            --input-dir population-results --output CR088_PHASE0_AGGREGATE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr088-top-tape-population-phase0-aggregate
+          path: CR088_PHASE0_AGGREGATE.json
+          retention-days: 30
