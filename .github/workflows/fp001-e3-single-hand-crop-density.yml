@@ -1,0 +1,29 @@
+name: FP001 E3 single-hand crop density causal gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_e3_single_hand_crop_density_test.py'
+      - 'candidates/fp001_e3_single_hand_crop_density.py'
+      - 'candidates/fp001_e2_dedicated_strawberry_hand.py'
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - 'candidates/fp001_h10_cow_scale_care_wrapper.py'
+      - '.github/workflows/fp001-e3-single-hand-crop-density.yml'
+      - 'requirements.txt'
+
+jobs:
+  causal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run E3 crop-density causal gate
+        run: python tools/fp001_e3_single_hand_crop_density_test.py
