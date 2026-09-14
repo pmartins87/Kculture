@@ -14,40 +14,52 @@ Objective: produce a hosted-competitive zero-lineage Kaggriculture agent by deri
 - No identity/rating/EpisodeId/hidden-seed/future/opponent-private runtime features.
 - Do not retune failed hypotheses indefinitely.
 
-## R0 — FP0 mechanics parity — ACTIVE
+## R0 — FP0 mechanics parity — PASS
 
-Deliverables:
+Exact-engine workflow run **34842825909** against `kaggle-environments==1.32.7`:
 
-- reproduce official price curves;
-- reproduce BUY_PRODUCT post-buy quote semantics;
-- reproduce SELL pre-sell quote semantics;
-- prove unchanged-market WHEAT BUY->SELL PnL = 0;
-- compare microsim outputs against exact `kaggle-environments==1.32.7` deterministic cases.
+- 108/108 price-curve checks matched;
+- 24/24 BUY/SELL transaction checks matched;
+- 90/90 town-carry outcomes matched the microsimulator;
+- unchanged-market/demand-zero round trip = exactly 0;
+- 56/90 carry cases positive;
+- `I0=10000`, `q=90`, demand `7` = **+57** in both engine and microsim.
 
-PASS -> R1. FAIL -> repair simulator only; do not infer strategy.
+Decision: mechanics model is sufficiently exact for H1 causal testing. Advance to R1.
 
-## R1 — H1 town-pulse WHEAT overlay
+## R1 — H1 town-pulse WHEAT overlay — ACTIVE
 
-Build a minimal runtime operator around a fixed physical baseline.
+Build a minimal runtime operator around a PASS-only physical baseline.
 
 Intervention:
 
-- buy WHEAT only immediately before mechanically known town-consumption pulses;
-- sell the carried quantity at the next eligible market turn;
-- include strict cash/shed safety bounds;
-- log attributed cost, town demand, sale revenue and delta.
+- infer step robustly from `step` or `day/hour`;
+- buy WHEAT on a currently known town-consumption pulse;
+- sell carried WHEAT on the next eligible market turn;
+- use only current legal observation/configuration;
+- fixed predeclared quantity for the causal proof; no threshold search;
+- maintain shed-capacity and affordability safety.
 
 Required controls:
 
-- same seed/base without carry;
-- demand-zero regime;
-- both seats.
+- same environment with PASS-only agent;
+- both seats;
+- fresh deterministic seeds;
+- flat-WHEAT-price null where carry actions still occur but town depletion cannot create appreciation.
 
-PASS requires positive causal bank effect in demand regimes, zero mechanical errors and abstention when conditions are unfavorable.
+PASS requires:
+
+- zero mechanical errors / all episodes DONE;
+- intervention actually triggers BUY and SELL;
+- positive paired bank delta under default market mechanics in both seats;
+- exact zero paired delta in the flat-price null;
+- no use of competitor replay data or identity.
+
+R1 does **not** establish prize-class strength. It establishes causal value of the mechanism.
 
 ## R2 — H2 opportunity-cost controller
 
-Add:
+Only after R1 PASS, add:
 
 - cash reserve / shadow price;
 - shed reserve / overflow protection;
