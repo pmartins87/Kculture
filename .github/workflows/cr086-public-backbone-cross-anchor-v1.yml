@@ -1,0 +1,77 @@
+name: CR086 public backbone cross-anchor anomaly audit v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr086-public-backbone-cross-anchor-v1.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  audit:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - candidate: shape_shop_top10
+            artifact: cr086-public-backbone-shape_shop_top10-v1
+          - candidate: adaptive_market_hysteresis
+            artifact: cr086-public-backbone-adaptive_market_hysteresis-v1
+          - candidate: farming_score_v3
+            artifact: cr086-public-backbone-farming_score_v3-v1
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download frozen public package
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: source/public
+          run-id: 34798209070
+          github-token: ${{ github.token }}
+      - name: Download exact CR083 legacy corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/corpus
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - name: Resolve exact package and run cross-anchor panel
+        shell: bash
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        run: |
+          set -euo pipefail
+          mkdir -p result
+          CAND="source/public/build/${CANDIDATE}.tar.gz"
+          test -f "$CAND"
+          for anchor in CR071M CR053 CR061 CR065; do
+            test -f "source/corpus/${anchor}.tar.gz"
+            python tools/kaggle_reference_h2h_v2.py \
+              --a "$CAND" --b "source/corpus/${anchor}.tar.gz" \
+              --a-id "$CANDIDATE" --b-id "$anchor" \
+              --seed-count 8 --master-seed 9180861 \
+              --output "result/${CANDIDATE}_vs_${anchor}.json"
+          done
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          c=os.environ['CANDIDATE']
+          out={'candidate':c,'master_seed':9180861,'seed_count':8,'rows':{}}
+          for a in ['CR071M','CR053','CR061','CR065']:
+              d=json.loads(Path(f'result/{c}_vs_{a}.json').read_text())
+              m=d['metrics_a_vs_b']
+              out['rows'][a]={'wins':m['wins'],'losses':m['losses'],'ties':m['ties'],'score_rate':m['score_rate'],'mean_margin':m['mean_margin_secondary'],'errors':len(d.get('errors') or [])}
+          Path(f'result/{c}_SUMMARY.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr086-cross-anchor-${{ matrix.candidate }}-v1
+          path: result/**
+          retention-days: 30
