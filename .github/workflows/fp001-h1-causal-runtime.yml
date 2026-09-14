@@ -1,0 +1,25 @@
+name: FP001 H1 causal runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'candidates/fp001_h1_town_wheat_carry.py'
+      - 'tools/fp001_h1_causal_test.py'
+      - '.github/workflows/fp001-h1-causal-runtime.yml'
+      - 'requirements.txt'
+
+jobs:
+  causal-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run FP1 causal runtime test
+        run: python tools/fp001_h1_causal_test.py
