@@ -36,9 +36,9 @@ Initial exact cohort:
 - CR083 — ~1619.8 latest authenticated
 - CR086 — active hosted probe
 
-Fresh pair master `9190861`. Goal: determine which local population metrics reproduce known hosted ordering and place CR086 relative to the real strongest historical agent.
+Run `34802917553` completed with zero errors, but the local order is not hosted-calibrated: CR083 and CR086 each beat CR053_REAL 20–4 locally although CR053 remains substantially stronger on Kaggle. CR053_REAL beat CR052_REAL 14–10.
 
-Expand with exact hosted CR029/CR011/CR008/CR071M bytes as they are recovered. Candidate-search fitness will eventually use mean league score, lower-tail matchup strength and diversity/robustness rather than one H2H.
+Decision: do not expand this as if more exact anchors alone will repair transfer. Keep exact packages for mechanics, catastrophe and diversity screens. Hosted probes remain the calibration instrument for population strength.
 
 ## Track B — CR086 latent-supply hosted probe
 
@@ -46,7 +46,7 @@ CR086 SHA `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888`.
 Gate A vs CR083: 26W–6L = 0.8125, mean +260.5625, symmetric seats, zero errors.
 Hosted submission `56220184`, description `CR086_LATENT_SUPPLY_11296A4E`.
 
-One-shot status workflow exists; do not repeatedly poll. Hosted evidence from CR086 is used to learn transfer from local league to real population.
+One-shot run `34802927151` saw COMPLETE at initial rating `600.0` with one episode only. This is not a verdict. Do not repeatedly poll; a later deliberately scheduled checkpoint may be used after meaningful episode accumulation.
 
 ## Track C — CR087 current-top lineage mining
 
@@ -65,15 +65,9 @@ It resolves current top-team active submissions, samples public episodes, and pr
 - medoid coherent route;
 - per-step modal consensus and agreement.
 
-First run `34803046771` failed only on a rankless leaderboard CSV parser. Parser was fixed in commit `666f8f0f3ddce078fc643789a48cd706a69db0ec`; rerun is automatic.
+Corrected run `34803148700` completed: 30/30 tapes recovered, all exact tapes unique, mean pairwise Hamming 702.8/719 and no majority action at any step. Current elite submissions are materially state-adaptive; modal or medoid tape cloning is not the target architecture.
 
-After successful discovery:
-1. screen every coherent top tape as a population, not only the medoid;
-2. compare against exact hosted-calibrated league;
-3. identify current dominant backbone(s);
-4. package the strongest coherent route(s);
-5. add selective latent-supply / market adaptation only where mechanics justify it;
-6. probe hosted early if mechanically valid and not locally catastrophic.
+Macro run `34803658746` recovered repeated production-level families from 26 replays. Preserve at least the five descriptive families recorded in `STATUS.md`; action-level diversity is real, while macro convergence is the useful signal.
 
 ## Track D — CR087 CR053-real + latent-supply overlay
 
@@ -82,23 +76,25 @@ Screen workflow: `.github/workflows/cr087-cr053-latent-supply-screen-v1.yml`.
 
 Candidate preserves the exact hosted CR053 719-action route and market multiset, changing only ordering of existing premium SELLs using the CR086 cash-at-risk layer.
 
-Fast safety screen:
-- deterministic build from exact CR053 SHA;
-- direct candidate vs exact CR053 real;
-- same-seed candidate/base comparison vs exact CR052 real;
-- if zero errors and candidate is not below 0.5 direct, it is eligible for an early hosted probe rather than a long legacy gate chain.
+Run `34803266002` was mechanically safe but demonstrated no result change against CR052: candidate and base were both 10–6 with identical mean margin; direct candidate vs base was 8–8. Do **not** spend a hosted slot on CR087 absent a demonstrated intervention. Retain the generic latent-supply operator for population experiments.
 
-## Automatic policy search — next layer
+## CR088 automatic policy search — ACTIVE
 
-Do not manually create long CR087/CR088/CR089 patch chains. Once the current-top tapes and hosted-calibrated league are available, build a deterministic population-search loop over economically meaningful dimensions:
-- coherent route/backbone selection from current top lineage;
-- premium SELL ordering / tranching;
-- latent opponent supply / glut risk;
-- shop-cycle timing;
-- liquidity reserve / hiring timing;
-- animal/crop portfolio switches that preserve execution coherence.
+Phase-0 protocol: `docs/strategy/CR088_PHASE0_PROTOCOL_2026-09-14.md`.
+Run: **`34806600636`**.
 
-Fitness must be robust across the calibrated league, not optimized against CR083 alone. Top population members then receive hosted probes to calibrate transfer.
+Phase 0 packages and screens all 30 current-top trajectories against four exact project anchors on fresh master `9220881` (720 games). Its only authority is mechanical/catastrophe/diversity screening because local H2H failed hosted-order calibration. It makes no Kaggle submission.
+
+After Phase 0:
+
+1. retain multiple source-team/macro families rather than one local winner;
+2. construct state-coherent members instead of modal tapes, day stitching or market imitation;
+3. apply economically meaningful operators as a factorial population: latent-supply SELL ordering, bounded tranching/reserves, shop-cycle funding, and coherent production-capacity choices;
+4. evaluate robustness and diversity locally without claiming hosted rank;
+5. use remaining hosted slots on materially different, mechanically valid representatives to learn transfer;
+6. update search fitness with hosted evidence, not by retuning spent local seeds.
+
+Stop rules: no CR088A/B manual patch ladder; no raw local champion promotion; no revival of CR080/081/082 representations.
 
 ## Closed hypotheses
 
