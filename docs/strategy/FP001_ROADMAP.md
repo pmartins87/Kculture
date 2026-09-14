@@ -41,7 +41,7 @@ Workflow `34844919444`: COW +4721 mean, SHEEP +3593, GOOSE +3457.
 
 ## R2A2-B2 — multi-animal runtime — PASS
 
-Workflow `34846686427`. COW3 main-farmer-only led the tested small modules; routine hands were slightly negative because they created no marginal output.
+Workflow `34846686427`. COW3 main-farmer-only led the tested small modules; routine hands were slightly negative because they created no marginal output. This result is context-specific and does not close HIRE under crop workload.
 
 ## H9 — town-conditioned animal demand — PASS
 
@@ -74,9 +74,9 @@ Compact routing and batched harvest are promoted.
 
 Workflow `34848464648`.
 
-Exact mechanics show fertilizer should not always be sold. STRAWBERRY is the strongest tested conversion target: two well-timed fertilizer actions add four berries and about +268 nominal value versus selling those two fertilizer units at normal prices. TOMATO also has positive regions.
+Exact mechanics show fertilizer should not always be sold. STRAWBERRY is the strongest tested fertilizer-conversion target: two well-timed fertilizer actions add four berries and about +268 nominal value versus selling those two fertilizer units at normal prices. TOMATO also has positive regions. MELON showed no extra tested fertilizer benefit in this audit.
 
-Decision: animal fertilizer must be valued against both SELL and crop-conversion alternatives.
+Decision: animal fertilizer must be valued against both SELL and crop-conversion alternatives, while crop selection itself must include labor opportunity cost.
 
 ## R2A2-B4 — scale × CARE — PASS / saturation located
 
@@ -97,55 +97,59 @@ Six cows under CARE are decisively worse than five despite full survival:
 
 COW5_DAILY is not robustly dominant over COW4_DAILY (only +1497.75 mean, 4–4 paired), so action headroom matters.
 
-## R2C — integrated premium-crop hybrid — ACTIVE NEXT
+## R2C-E1 — residual-idle STRAWBERRY hybrid — CLOSED AS ARCHITECTURE
 
-Hypothesis:
+Workflow **`34860319522`**. Result: `docs/strategy/FP001_E1_STRAWBERRY_MARGINAL_RESULT_2026-09-14.md`.
 
-> reallocating part of the animal-only action/fertilizer budget into premium STRAWBERRY production can increase total value, especially when using the H11 fertilizer conversion and when the animal backbone retains enough action headroom.
+Question: can one STRAWBERRY be appended only on otherwise-idle main-farmer turns without displacing the animal backbone?
 
-Matched treatments:
+Answer: no.
 
-1. COW4_DAILY control;
-2. COW5_SURVIVAL control;
-3. COW5_DAILY control;
-4. COW4_DAILY + small fertilized STRAWBERRY block;
-5. COW5_SURVIVAL + small fertilized STRAWBERRY block;
-6. COW5_DAILY + STRAWBERRY as action-starvation treatment;
-7. winning crop hybrids with bounded dedicated HIRE;
-8. elite-informed mixed COW/SHEEP comparator from CR087 macro families.
+- COW4_DAILY: +317 mean but 2W-6L, zero berries, crop failed 8/8;
+- COW5_SURVIVAL: −693.5 mean, 4W-4L, four berries/episode but zero H11 fertilizer actions;
+- COW5_DAILY: exactly −100 in 8/8 because zero idle actions existed and the seed was never planted.
 
-### R2C measurements
+**Close only the residual-idle-main-farmer crop architecture. STRAWBERRY remains open as a mechanism/product because H11 and CR087 provide independent positive evidence.**
 
-For every treatment record:
+Failure mechanism: labor/action allocation.
 
-- final bank;
-- paired delta vs matched control;
-- animal survival and missed FEED/CARE;
-- crop survival, watering misses and harvest count;
-- MILK/WOOL/STRAWBERRY realized output;
-- fertilizer sold vs consumed;
-- wheat/seed/fertilizer input cost;
-- HIRE cost and productive actions per hand;
-- movement and idle-turn budget;
-- terminal shed/inventory losses.
+## R2D-E2 — dedicated STRAWBERRY hand — ACTIVE / FROZEN
 
-### R2C promotion rule
+Protocol: `docs/strategy/FP001_E2_DEDICATED_HAND_PROTOCOL_2026-09-14.md`. Workflow run **`34864820833`**.
 
-A hybrid advances only if it increases paired realized value without introducing catastrophe. If STRAWBERRY merely steals actions from more valuable CARE, close that architecture. Do not rescue it with indefinite threshold tuning.
+Official mechanics make this a meaningful revaluation of HIRE: default first daily HIRE costs 1 and the counter resets at end of day. The hand is dismissed daily, so the treatment pays the real repeated labor cost.
 
-## R2D — labor revaluation — CONDITIONAL WITHIN HYBRID
+Matched architectures on each COW4_DAILY, COW5_SURVIVAL and COW5_DAILY backbone:
 
-The B2 result that routine HIRE was negative is context-specific. Reopen labor only when crop workload exists.
+1. `S0H0` animal-only;
+2. `S1H0` exact E1 crop/no-hand;
+3. `S1H1` crop + one bounded dedicated hand.
 
-Compare the best no-hand hybrid against bounded hand variants. Promote HIRE only if marginal crop/animal output exceeds total hire cost and does not create coordination losses.
+Main farmer remains entirely under B4. Hand 0 alone performs opening PLANT, WATER, H11 FERTILIZE ages 9/13 and HARVEST. No CR086/CR088 market layer is added.
 
-## R2E — elite-macro compatibility / mixed animals
+PASS requires S1H1 to beat both S1H0 and S0H0 with full expected cow survival. Non-positive result closes this exact one-hand/one-STRAWBERRY architecture without rescue tuning.
 
-Use CR087 macro evidence as a competitive prior. Test coherent mixed COW/SHEEP production programs and premium-crop timing against the FP controls. This is not blind tape copying: the goal is to retain proven elite macro structure while substituting better execution/economic primitives where causal evidence supports them.
+## R2E — elite-informed lower-labor crop / mixed-animal gate — NEXT CONDITIONAL
+
+CR087 makes this branch mandatory regardless of whether STRAWBERRY survives E2; E2 only determines whether STRAWBERRY remains in the first integrated portfolio.
+
+Priority facts:
+
+- top families repeatedly use substantial MELON capacity;
+- official MELON mechanics: seed 80, base nominal price 250, one-time crop, max yield 6, concentrated watering window;
+- STRAWBERRY: seed 100, base 120, ongoing and labor-intensive;
+- elite animal priors repeatedly include roughly 2 COW + 2/3 SHEEP, not pure COW monoculture.
+
+Execution rule: reuse the historical H8 mixed-species scheduler as infrastructure, but port B3 CARE, H10 compact routing/batched harvest and H9 public-demand logic instead of rewriting from zero. Increase its 3-animal limit only where required by the elite comparator.
+
+Conditional branch:
+
+- **if E2 passes:** compare labor-enabled STRAWBERRY against MELON and coherent mixed COW/SHEEP portfolios; scale only if marginal value remains positive;
+- **if E2 fails:** close that STRAWBERRY labor architecture and immediately prioritize MELON + WHEAT + mixed COW/SHEEP, rather than retuning strawberry thresholds.
 
 ## R3 — heterogeneous population gate
 
-R2C/R2E survivors face a diverse panel containing:
+R2D/R2E survivors face a diverse panel containing:
 
 - exact historical hosted anchors where bytes are known;
 - multiple CR088/top-family coherent representatives;
@@ -183,8 +187,9 @@ A locally profitable/novel policy is not sufficient. Target remains the ~3000+ c
 
 ## Stop criteria
 
-- Close a crop hybrid if matched value is non-positive after the predeclared treatments.
-- Close HIRE again if bounded labor variants fail to create positive marginal value in the crop context.
+- Residual-idle STRAWBERRY E1 is closed; do not threshold-tune it.
+- Close dedicated one-hand/one-STRAWBERRY E2 if paired value is non-positive after the frozen treatments.
+- Do not interpret E2 failure as proof that premium crops are bad; move to lower-labor/elite-informed crop structure.
 - Cap animal scale where action opportunity cost dominates, as already observed at COW6 under CARE.
 - Close a market overlay if it fails own-base causal attribution or hosted transfer.
 - Do not revive modal tape, replay stitching, static market-prefix or 1-NN imitation representations without genuinely new evidence that changes their failure mechanism.
