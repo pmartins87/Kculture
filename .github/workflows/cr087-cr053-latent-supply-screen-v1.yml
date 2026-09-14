@@ -1,0 +1,72 @@
+name: CR087 CR053-real latent-supply screen v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr087-cr053-latent-supply-screen-v1.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  screen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact historically hosted CR052/CR053 bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: exact
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Build deterministic CR087 twice
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build result
+          test "$(sha256sum exact/R4D_CR053_ROUTE106309334_V1.tar.gz | awk '{print $1}')" = "095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15"
+          test "$(sha256sum exact/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz | awk '{print $1}')" = "b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d"
+          python tools/cr087_build_cr053_latent_supply.py --base exact/R4D_CR053_ROUTE106309334_V1.tar.gz --estimator-source tools/cr086_opponent_inventory_estimator_eval.py --output build/CR087.tar.gz --manifest build/MANIFEST.json
+          python tools/cr087_build_cr053_latent_supply.py --base exact/R4D_CR053_ROUTE106309334_V1.tar.gz --estimator-source tools/cr086_opponent_inventory_estimator_eval.py --output build/CR087_REBUILD.tar.gz --manifest build/REBUILD_MANIFEST.json
+          cmp build/CR087.tar.gz build/CR087_REBUILD.tar.gz
+          python - <<'PY'
+          import json
+          m=json.load(open('build/MANIFEST.json'))
+          assert m['base_sha256']=='095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15'
+          assert m['physical_route_modified'] is False and m['market_multiset_modified'] is False and m['market_ordering_only'] is True
+          assert m['uses_identity_rating_episodeid_hidden_seed_future_or_opponent_private'] is False
+          print('CR087 deterministic build PASS',m['candidate_sha256'])
+          PY
+      - name: Direct CR087 vs exact hosted CR053
+        run: |
+          python tools/kaggle_reference_h2h_v2.py --a build/CR087.tar.gz --b exact/R4D_CR053_ROUTE106309334_V1.tar.gz --a-id CR087 --b-id CR053_REAL --seed-count 8 --master-seed 9210871 --output result/direct.json
+      - name: Same-seed population calibration versus exact CR052
+        run: |
+          python tools/kaggle_reference_h2h_v2.py --a build/CR087.tar.gz --b exact/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz --a-id CR087 --b-id CR052_REAL --seed-count 8 --master-seed 9210871 --output result/candidate_vs_CR052.json
+          python tools/kaggle_reference_h2h_v2.py --a exact/R4D_CR053_ROUTE106309334_V1.tar.gz --b exact/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz --a-id CR053_REAL --b-id CR052_REAL --seed-count 8 --master-seed 9210871 --output result/base_vs_CR052.json
+      - name: Basic hosted-probe safety decision
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.load(open('result/direct.json')); m=d['metrics_a_vs_b']
+          c=json.load(open('result/candidate_vs_CR052.json'))['metrics_a_vs_b']
+          b=json.load(open('result/base_vs_CR052.json'))['metrics_a_vs_b']
+          checks={'no_errors':not(d.get('errors') or []) and m['non_done_games']==0,'direct_not_below_half':m['score_rate']>=0.5}
+          out={'checks':checks,'direct':m,'vs_cr052_candidate':c,'vs_cr052_base':b,'cr052_score_rate_delta':c['score_rate']-b['score_rate'],'pass_basic_hosted_probe_safety':all(checks.values())}
+          out['decision']='ELIGIBLE_FOR_FAST_HOSTED_PROBE' if out['pass_basic_hosted_probe_safety'] else 'DO_NOT_HOST_CR087'
+          Path('result/DECISION.json').write_text(json.dumps(out,indent=2,sort_keys=True)); print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr087-cr053-latent-supply-screen-v1
+          path: |
+            build/CR087.tar.gz
+            build/MANIFEST.json
+            result/**
+          retention-days: 30
