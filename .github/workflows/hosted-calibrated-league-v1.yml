@@ -1,0 +1,97 @@
+name: Hosted-calibrated exact-package league v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/hosted-calibrated-league-v1.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  pair:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - pair: CR086_vs_CR053_REAL
+            a: CR086
+            b: CR053_REAL
+          - pair: CR086_vs_CR052_REAL
+            a: CR086
+            b: CR052_REAL
+          - pair: CR083_vs_CR053_REAL
+            a: CR083
+            b: CR053_REAL
+          - pair: CR083_vs_CR052_REAL
+            a: CR083
+            b: CR052_REAL
+          - pair: CR053_REAL_vs_CR052_REAL
+            a: CR053_REAL
+            b: CR052_REAL
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact historically hosted CR052/CR053 bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: exact/hostedpair
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - name: Download exact frozen CR083 bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: exact/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - name: Download exact CR086 hosted-probe bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: cr086-latent-supply-gate-a-v1
+          path: exact/cr086
+          run-id: 34800444746
+          github-token: ${{ github.token }}
+      - name: Verify exact identities and map agents
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(sha256sum exact/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz | awk '{print $1}')" = "095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15"
+          test "$(sha256sum exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz | awk '{print $1}')" = "b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d"
+          test "$(sha256sum exact/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          test "$(sha256sum exact/cr086/corpus/CR086.tar.gz | awk '{print $1}')" = "11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888"
+          mkdir -p league result
+          cp exact/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz league/CR053_REAL.tar.gz
+          cp exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz league/CR052_REAL.tar.gz
+          cp exact/cr083/CR083.tar.gz league/CR083.tar.gz
+          cp exact/cr086/corpus/CR086.tar.gz league/CR086.tar.gz
+      - name: Fresh exact H2H
+        shell: bash
+        env:
+          A: ${{ matrix.a }}
+          B: ${{ matrix.b }}
+          PAIR: ${{ matrix.pair }}
+        run: |
+          set -euo pipefail
+          python tools/kaggle_reference_h2h_v2.py \
+            --a "league/${A}.tar.gz" --b "league/${B}.tar.gz" \
+            --a-id "$A" --b-id "$B" \
+            --seed-count 12 --master-seed 9190861 \
+            --output "result/${PAIR}.json"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p=os.environ['PAIR']; d=json.loads(Path(f'result/{p}.json').read_text()); m=d['metrics_a_vs_b']
+          s={'pair':p,'a':d['a'],'b':d['b'],'games':m['games'],'wins':m['wins'],'losses':m['losses'],'ties':m['ties'],'score_rate':m['score_rate'],'mean_margin':m['mean_margin_secondary'],'errors':len(d.get('errors') or []),'master_seed':9190861}
+          Path(f'result/{p}_SUMMARY.json').write_text(json.dumps(s,indent=2,sort_keys=True)); print(json.dumps(s,indent=2,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hosted-calibrated-${{ matrix.pair }}-v1
+          path: result/**
+          retention-days: 30
