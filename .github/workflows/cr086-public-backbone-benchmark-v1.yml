@@ -1,0 +1,169 @@
+name: CR086 public backbone benchmark v1
+
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths:
+      - '.github/workflows/cr086-public-backbone-benchmark-v1.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  benchmark:
+    strategy:
+      fail-fast: false
+      matrix:
+        candidate:
+          - shape_shop_top10
+          - adaptive_market_hysteresis
+          - farming_score_v3
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/kaggle-parity-v1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install exact reference runtime
+        run: python -m pip install 'kaggle-environments==1.32.7' numpy
+
+      - name: Download frozen public notebook sources
+        uses: actions/download-artifact@v4
+        with:
+          name: cr086-public-backbone-acquisition-v1
+          path: source/public
+          run-id: 34790801576
+          github-token: ${{ github.token }}
+
+      - name: Download exact frozen CR083 corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+
+      - name: Verify incumbent and fresh-seed firewall
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(sha256sum source/cr083/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          mkdir -p build result
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          sys.path.insert(0,'tools')
+          from kaggle_exact_runtime import make_seeds
+          earlier=[
+            9112080,9112081,9120811,9120812,9120813,9120821,
+            9130830,91308309,9130831,9130832,
+            91408409,9140841,9140842,
+            91508509,9150851,9150852,
+            9092026,9092027,9092028,9092029,9092030,9092031,9092032,
+            9102026,20260825,2026082708,2026082711,2026082713,2026082714,
+            2026082815,2026082816,2026082921,4709072026,4809072026,
+            4909072026,5009072026,5009073026,5109072026,5109073026,
+            5109074026,5209072026,5409072026,5809072026
+          ]
+          used=set()
+          for m in earlier: used.update(make_seeds(512,int(m)))
+          bench=set(make_seeds(16,9160861))
+          assert not (bench & used)
+          out={'master_seed':9160861,'seed_count':16,'all_overlaps_zero':True,'earlier_masters':earlier}
+          Path('build/SEED_FIREWALL.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Build exact public package from pulled notebook
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p build/public
+          python - <<'PY'
+          import json, os, pathlib, hashlib, shutil
+          cand=os.environ['CANDIDATE']
+          root=pathlib.Path('source/public')/cand
+          nbs=list(root.glob('*.ipynb'))
+          assert len(nbs)==1,(cand,nbs)
+          nb=json.loads(nbs[0].read_text(encoding='utf-8'))
+          wd=pathlib.Path('build/public')/cand
+          wd.mkdir(parents=True,exist_ok=True)
+          old=os.getcwd(); os.chdir(wd)
+          try:
+              ns={'__name__':'__main__'}
+              for cell in nb.get('cells',[]):
+                  if cell.get('cell_type')=='code':
+                      src=''.join(cell.get('source',[]))
+                      exec(compile(src,str(nbs[0]),'exec'),ns,ns)
+              pkg=pathlib.Path('submission.tar.gz')
+              assert pkg.exists(), f'{cand}: notebook did not produce submission.tar.gz'
+              data=pkg.read_bytes(); sha=hashlib.sha256(data).hexdigest()
+              target=pathlib.Path('../../../build')/f'{cand}.tar.gz'
+              shutil.copy2(pkg,target)
+          finally:
+              os.chdir(old)
+          meta={'candidate':cand,'source_notebook':str(nbs[0]),'package_sha256':sha}
+          pathlib.Path('build') .joinpath(f'{cand}_MANIFEST.json').write_text(json.dumps(meta,indent=2,sort_keys=True))
+          print(json.dumps(meta,indent=2,sort_keys=True))
+          PY
+          tar -tzf "build/${CANDIDATE}.tar.gz" > "build/${CANDIDATE}_MEMBERS.txt"
+          cat "build/${CANDIDATE}_MEMBERS.txt"
+
+      - name: Exact fresh H2H versus CR083
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/kaggle_reference_h2h_v2.py \
+            --a "build/${CANDIDATE}.tar.gz" \
+            --b source/cr083/CR083.tar.gz \
+            --a-id "$CANDIDATE" --b-id CR083 \
+            --seed-count 16 --master-seed 9160861 \
+            --output "result/${CANDIDATE}_vs_CR083.json"
+
+      - name: Apply frozen discovery screen
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          c=os.environ['CANDIDATE']
+          d=json.loads(Path(f'result/{c}_vs_CR083.json').read_text())
+          m=d['metrics_a_vs_b']
+          checks={
+            'exact_32_games_16_seeds':m.get('games')==32 and d.get('seed_count')==16 and d.get('master_seed')==9160861,
+            'no_errors_or_non_done':not (d.get('errors') or []) and m.get('non_done_games')==0,
+            'score_rate_at_least_0_5625':m.get('score_rate',0)>=0.5625,
+            'mean_margin_positive':m.get('mean_margin_secondary',0)>0,
+          }
+          out={'candidate':c,'checks':checks,'metrics':m,'promising':all(checks.values()),'decision':'PROMISING_FOR_CR086_STUDY' if all(checks.values()) else 'BENCHMARK_FAIL_NO_RETUNING'}
+          Path(f'result/{c}_SCREEN.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,indent=2,sort_keys=True))
+          PY
+
+      - name: Freeze provenance
+        env:
+          CANDIDATE: ${{ matrix.candidate }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum build/*.tar.gz build/*_MANIFEST.json source/cr083/CR083.tar.gz > "result/${CANDIDATE}_SHA256SUMS.txt"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr086-public-backbone-${{ matrix.candidate }}-v1
+          path: |
+            build/**
+            result/**
+          retention-days: 30
