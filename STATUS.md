@@ -46,8 +46,9 @@ Approximate older full-snapshot thresholds: rank100 `2782.8`, rank500 `2578.1`, 
 - CR082 state-conditioned teacher 1-NN: catastrophic FAIL / closed.
 - CR084 critical late-livestock rescue: CLOSED / DO NOT RETUNE.
 - CR085 Pareto-guarded adaptive switch: CLOSED / DO NOT RETUNE. Gate A `34761593920`: 3W–3L–26T = `0.5000`, mean `-147.46875` versus CR083.
+- **Direct public-backbone adoption for CR086: CLOSED / DO NOT RETUNE.** Frozen characterization run `34798209070` swept all three public executable agents 0–32 versus exact CR083.
 
-Behavioral imitation/replay stitching, CR084 FEED rescue and CR085 Pareto gating remain closed.
+Behavioral imitation/replay stitching, CR084 FEED rescue, CR085 Pareto gating and direct adoption/retuning of the three screened public backbones remain closed.
 
 ## CR083 local evidence
 
@@ -72,45 +73,45 @@ Evaluator: `tools/cr086_opponent_inventory_estimator_eval.py`.
 
 This proves representation quality only; it does not prove W/L value.
 
-## CR086 — public strong-backbone acquisition COMPLETE
+## CR086 — public strong-backbone characterization COMPLETE / FAIL FOR DIRECT ADOPTION
 
-Read-only acquisition run **`34790801576`**, artifact **`10327672303`**, artifact digest `sha256:69a8e038d50ed86c356243ddf34502ff84a100b5432bf5725c9ab57829823308`.
+Acquisition run `34790801576`, artifact `10327672303`, froze three deterministic executable public packages plus one analytical notebook.
 
-All four requested public notebooks were pulled successfully. Three generate deterministic executable agents:
+Frozen benchmark run **`34798209070`**, master `9160861`, 16 fresh seeds × both seats, exact reference runtime, zero execution errors:
 
-1. **Shape the Shop Work the Pasture (TOP 10)** — deterministic 13-member package, archive SHA-256 `fa9e7eb1a0174a1bf292fb4d47bd209defed929758214d3506e050a68ee5f98f`, entrypoint `kaggriculture_e776_agent`.
-2. **V29-R1 Adaptive Market Hysteresis** — standalone package SHA-256 `8dc512911c0173483211314f63cbf1d7e460cad33dfbc02f0f77d023f6d809fe`, `main.py` SHA `c4a6964cec3c1c99207c32bb1fd91e53c3ec01e6890da5734331cbeab1cc1267`.
-3. **Farming Score V3: Replay Revised** — standalone package SHA-256 `5cde13b09e9506f24b2f5df05719b597fe07ebbb6dead7da12894beda203e419`, `main.py` SHA `d36ae976ad4a6316e6c1a27a5d04e9cc8e30300f21bdd31e749127c67a9311c4`.
+| Public agent | Frozen package SHA-256 | W-L-T vs CR083 | Score rate | Mean margin |
+|---|---|---:|---:|---:|
+| `shape_shop_top10` | `fa9e7eb1a0174a1bf292fb4d47bd209defed929758214d3506e050a68ee5f98f` | **0-32-0** | **0.0000** | **-9416.34375** |
+| `adaptive_market_hysteresis` | `8dc512911c0173483211314f63cbf1d7e460cad33dfbc02f0f77d023f6d809fe` | **0-32-0** | **0.0000** | **-10710.0** |
+| `farming_score_v3` | `5cde13b09e9506f24b2f5df05719b597fe07ebbb6dead7da12894beda203e419` | **0-32-0** | **0.0000** | **-8996.1875** |
 
-The Tetsutani notebook is analytical/visual rather than a standalone agent builder and is excluded from direct H2H.
+All three lost 16/16 from each candidate seat. Decision: **`CLOSE_DIRECT_PUBLIC_BACKBONE_ADOPTION_MOVE_TO_CLEANROOM_MARKET_VALUE_LAYER`**.
 
-Static architecture audit: `docs/strategy/CR086_PUBLIC_BACKBONE_ARCHITECTURE_AUDIT_2026-09-14.md`.
+Result record: `docs/strategy/CR086_PUBLIC_BACKBONE_BENCHMARK_RESULT_2026-09-14.md`.
 
-## CR086 — frozen public-backbone H2H benchmark ACTIVE
+Interpretation: public/historical hosted score is not a substitute for our exact paired H2H, and CR083 is extremely strong locally against these route/heuristic agents. At the same time, CR083 remains far from the hosted ~3000 frontier, so the local-vs-hosted proxy gap is now even more explicit.
 
-Protocol frozen **before results**: `docs/strategy/CR086_PUBLIC_BACKBONE_BENCHMARK_PROTOCOL_2026-09-13.md`.
+The public notebooks remain architecture research evidence only:
 
-Workflow/run: **`34798209070`**, commit `bb4c89fbe1b6b91d673aee8f46bd27367c6ffd4b`.
+- Adaptive Market Hysteresis: public-flow memory, reserves and bounded selling tranches;
+- Shape Shop: structural production adaptation/capacity activation;
+- Farming Score V3: budget guarding.
 
-Frozen design:
+Do not retune these packages on the spent benchmark.
 
-- exact `kaggle-environments==1.32.7`;
-- 16 fresh seeds × both seats = 32 games per public agent;
-- master `9160861` with seed firewall against all prior masters;
-- each unmodified public package vs exact CR083;
-- promising screen: zero errors, score rate `>=0.5625`, mean margin `>0`;
-- no tuning from partial results and no hosted submission.
+## Active CR086 direction — clean-room latent-supply value layer
 
-The run was checked exactly once after creation and was `queued`. **Do not poll again in this turn.**
+CR086 now stays on the exact CR083 physical backbone and uses the independently validated opponent-stock representation as a first-class state variable.
 
-## Static architecture result before H2H
+Before a candidate is frozen:
 
-- CR083: route/tape architecture with market counterplay, room guard, dead-stock liquidation and seed-demand clamp; no explicit opponent-stock model or hysteresis.
-- Adaptive Market Hysteresis: stateful public-flow pressure, reserves, price gates and bounded tranches; natural complement to our hidden-stock estimator.
-- Farming Score V3: two-route policy plus 72-turn affordability guard; closest to existing CR071M/CR083 architecture.
-- TOP 10: structural production adaptation — demand-aligned COW/SHEEP substitution, sale reallocation, latent-pasture activation and extra animal/hand under fail-closed guards.
+1. audit official market transition, pricing and execution-order mechanics;
+2. audit CR083's current SELL / counterplay / room-guard / dead-stock behavior;
+3. derive an explicit economic value quantity from **latent opponent supply**, not another fitted route threshold;
+4. prefer mechanics-derived sell-now/hold, saturation-risk or scarcity/glut logic;
+5. freeze the value rule and fresh evaluation boundaries before testing performance.
 
-No CR086 candidate is frozen yet. If a public backbone passes the benchmark, inspect that exact architecture plus provenance/license before testing an inventory-aware value layer. If none passes, use the mechanisms as design evidence and build a fresh architecture rather than retuning the spent benchmark.
+No CR086 policy candidate is frozen yet and no hosted submission is authorized.
 
 ## Binding policies
 
