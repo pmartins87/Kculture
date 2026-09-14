@@ -71,8 +71,31 @@ reverse the hosted CR053/CR083 order.
   `055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053`;
 - intended description: `CR088B_FEEL_R8P125_055FBBCD`.
 
-Only these two sensors are authorized in this selection. The preflight must rebuild
-the exact bytes, verify both hashes, use the official loader smoke, recount the
-current UTC-day submissions, reject duplicates and require that both submissions
-fit under the five-agent daily cap. Two daily slots remain deliberately unused
-after the expected total reaches three.
+## Hosted submission result
+
+The first dedicated submit workflow run `34809554553` rebuilt the two exact expected
+hashes but stopped before Kaggle because its tar preflight incorrectly required the
+archive listing to equal only `main.py`. The valid packages also contain provenance.
+That failure consumed no Kaggle submission slot and is infrastructure evidence only.
+
+Infrastructure-only commit `761a83b063b11385570ba923e28840d93286e54f` changed the
+preflight to require that `main.py` be present, without changing candidate bytes,
+hashes, descriptions, loader smoke, quota gate or duplicate gate.
+
+Corrected workflow run **`34858890714`** completed SUCCESS and the bounded
+registration checkpoint confirmed both frozen sensors were accepted by Kaggle:
+
+- **CR088A submission `56233701`** — `CR088A_ORBITAL_BASE_24E78D65`;
+- **CR088B submission `56233703`** — `CR088B_FEEL_R8P125_055FBBCD`.
+
+Both were `PENDING` at the single post-submit checkpoint. Do not repeatedly poll or
+resubmit them. Their eventual hosted ratings are calibration evidence and must be
+recorded here/STATUS when observed through a deliberate later checkpoint.
+
+The same authenticated pre-submit snapshot showed that ratings remain dynamic;
+for example CR086 and CR083 had moved from the earlier selection checkpoint. This
+reinforces the rule that one moving snapshot is not a stable architecture ranking.
+
+Only these two sensors were authorized in this selection. Their successful submission
+left the remaining daily capacity intentionally unused rather than spending slots on
+near-duplicate candidates.
