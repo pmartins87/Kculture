@@ -1,6 +1,6 @@
 # ROADMAP — Kculture live plan
 
-Updated: 2026-09-13
+Updated: 2026-09-14
 
 Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Source of truth: branch `fix/kaggle-parity-v1`, `STATUS.md`, and frozen protocols.
 
@@ -20,104 +20,105 @@ Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish
 
 ## Closed architecture classes
 
-- CR078 late mirror breaker.
-- CR079 SpaTaro 1-NN.
-- CR080 replay/route stitching.
-- CR081 time-indexed market transplant.
-- CR082 same-step teacher 1-NN.
-- CR084 critical late-livestock rescue.
-- CR085 public-Pareto gated adaptive switch.
+CR078, CR079, CR080, CR081, CR082, CR084 and CR085 remain closed. Do not retune their spent mechanisms.
 
 ## ACTIVE — CR083 hosted maturation
 
-Frozen SHA: `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`.
-Submission: `56199767`.
-Latest already-frozen checkpoint: CR083 `1660.3`, CR071M `1638.8`, CR083 lead `+21.5`, ~76 public episodes.
+Frozen SHA `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`; submission `56199767`.
+
+Latest already-frozen checkpoint: CR083 `1660.3`, CR071M `1638.8`, lead `+21.5`, about 76 public episodes plus validation.
 
 Do not poll again before the 100-public-episode maturity boundary unless another material decision requires it.
 
-## CLOSED — CR084 / CR085
+## CR086 Stage 1A — opponent-stock representation COMPLETE / PASS
 
-CR084 promotion failed and its temporal proxy found zero real rescue opportunities. Decision `CLOSE_CR084_CRITICAL_FEED_RESCUE`.
-
-CR085 Gate A `34761593920` on master `9150851`: 3W–3L–26T = `0.5000`, mean `-147.46875`. Decision `CLOSE_CR085_PARETO_GUARDED_SWITCH`.
-
-No retuning of either family.
-
-## CR086 — Stage 1A complete: opponent-stock representation feasibility
-
-**PASS.** A legal opponent private-inventory estimator/bounds representation has generalized on an independent strong-agent cohort.
-
-Frozen confirmation metrics over 100,660 commodity-step observations from 10 preselected top-team replays × both seats:
+Independent confirmation over 100,660 commodity-step observations:
 
 - MAE `1.25005`;
 - p95 `9`;
 - interval coverage `0.969462`;
 - `stock >= 10` accuracy `0.956338`.
 
-All frozen feasibility thresholds passed.
+Decision: `OPPONENT_INVENTORY_REPRESENTATION_FEASIBILITY_PASS`.
 
-The estimator covers CARROT/TOMATO/STRAWBERRY/MELON/EGG/MILK/WOOL. Before price floor it uses conservation; once `$1` is observed it represents the loss of identifiability explicitly through point `0` plus a mechanics-derived uncertainty upper bound.
+Implementation/evaluation: `tools/cr086_opponent_inventory_estimator_eval.py`.
 
-Implementation/evaluation source: `tools/cr086_opponent_inventory_estimator_eval.py`.
+This is representation evidence only. No arbitrary stock threshold policy is allowed from this result.
 
-This is **representation evidence only**. Do not build an arbitrary stock threshold policy from it.
+## CR086 Stage 1B — public-backbone acquisition COMPLETE
 
-## CR086 — Stage 1B active: public strong-backbone acquisition
+Read-only run `34790801576`, artifact `10327672303`.
 
-Read-only workflow `34790801576` pulls selected public Kaggriculture notebook sources and freezes hashes/provenance. It contains no submission command.
+Executable deterministic public agents frozen from notebook source:
 
-Targets:
+- Shape the Shop Work the Pasture (TOP 10): archive SHA `fa9e7eb1a0174a1bf292fb4d47bd209defed929758214d3506e050a68ee5f98f`;
+- V29-R1 Adaptive Market Hysteresis: archive SHA `8dc512911c0173483211314f63cbf1d7e460cad33dfbc02f0f77d023f6d809fe`;
+- Farming Score V3 Replay Revised: archive SHA `5cde13b09e9506f24b2f5df05719b597fe07ebbb6dead7da12894beda203e419`.
 
-- `indarkarhana/shape-the-shop-work-the-pasture-top-10`;
-- `boatlee/v29-r1-adaptive-market-hysteresis`;
-- `lynnsakurai/farming-score-v3-replay-revised`;
-- `tetsutani/shape-the-shop-work-the-pasture-kaggriculture` if the slug is distinct/available.
+Tetsutani's pulled notebook is analytical/visual and is not a direct H2H agent.
 
-The workflow was checked once and was still running. Do not poll again in the same turn.
+Static audit: `docs/strategy/CR086_PUBLIC_BACKBONE_ARCHITECTURE_AUDIT_2026-09-14.md`.
 
-### Next action when acquisition is available
+## CR086 Stage 1C — frozen public-backbone H2H ACTIVE
 
-1. freeze exact pulled files/hashes;
-2. inspect notebook metadata/license/attribution;
-3. locate executable `main.py`/submission package if publicly provided;
-4. classify each architecture: static route, hysteresis, market policy, planning, terminal liquidation, state estimation;
-5. run a **benchmark characterization** versus CR083 before modifying public code;
-6. exclude any implementation that depends on forbidden/private runtime information.
+Protocol: `docs/strategy/CR086_PUBLIC_BACKBONE_BENCHMARK_PROTOCOL_2026-09-13.md`.
 
-## CR086 — Stage 2: convert representation into economic value
+Run: **`34798209070`**.
 
-Only after public-backbone characterization, choose one architecture route:
+Frozen benchmark:
 
-### Route A — strong public backbone + legal inventory/value layer
+- each of the three unmodified executable public agents versus exact CR083;
+- 16 fresh seeds × both seats = 32 games per pair;
+- master `9160861` with fresh-seed firewall;
+- exact reference runtime 1.32.7 and isolated package processes;
+- promising screen: zero errors/non-DONE, score rate `>=0.5625`, mean terminal-money margin `>0`;
+- no retuning from partial results;
+- no hosted submission.
 
-Use a public executable backbone only if its license/provenance permits competition use and it materially dominates CR083 locally. Freeze the unmodified backbone first. Then add a separately justified inventory-aware market layer.
+The run was checked once immediately after creation and was queued. Do not check it again until the next user turn/material boundary.
 
-### Route B — clean-room architectural reimplementation
+## Architecture choices after benchmark
 
-If public notebooks expose valuable mechanisms but direct code reuse is undesirable, reimplement the architecture in our own code using public mechanics and the validated opponent-stock representation.
+### If TOP 10 passes
 
-Candidate policy should target an explicit economic quantity, e.g.:
+Treat its productive-structure layer as the leading physical-backbone candidate. Audit provenance/license first. Then design a separately frozen test of whether the validated opponent-stock estimator improves its demand/sale choices. Do not alter the public agent based on benchmark-specific losses before that protocol is frozen.
 
-- expected market-price impact of opponent latent supply;
-- scarcity/glut persistence under estimated opponent stock;
-- sell-now versus hold value under floor risk;
-- terminal liquidation risk;
-- opponent ability to saturate a premium market.
+### If Adaptive Market Hysteresis passes
 
-Do not revert to action imitation or another fixed route threshold.
+This is the most natural host for the inventory representation. Its current controller estimates decaying **public flow pressure** but not hidden current opponent stock. A clean CR086 experiment can test whether inventory estimate/bounds improve sell-now vs hold, glut persistence and saturation risk without replacing its production route.
 
-## CR086 candidate freeze requirements
+### If Farming Score V3 passes
 
-Before CR086 performance testing, freeze:
+Benchmark its 72-turn affordability guard and two-route design, but treat it as lower novelty because it is closest to the existing route architecture. Do not prioritize it over a passing structurally different backbone without stronger evidence.
 
-- exact backbone SHA/provenance;
+### If no public backbone passes
+
+Do not retune the public agents on this spent benchmark. Reimplement the useful mechanisms cleanly in our own architecture, with the opponent-stock representation as a first-class state variable, then freeze a new independent Gate A.
+
+## CR086 Stage 2 — convert opponent stock into explicit economic value
+
+A candidate must map inventory estimate/range to an economically justified action objective. Candidate mechanisms may include:
+
+- expected market-price impact from latent opponent supply;
+- scarcity/glut persistence;
+- sell-now versus hold value;
+- opponent saturation capacity;
+- terminal liquidation/floor risk;
+- demand-aligned production allocation.
+
+Prefer causal action/value logic over another fixed route threshold.
+
+## Candidate freeze requirements
+
+Before any CR086 performance test, freeze:
+
+- exact backbone SHA and provenance;
 - exact inventory estimator implementation;
 - exact value objective/action rule;
-- training/development data boundary if any;
-- fresh Gate A master;
-- fresh legacy-guardrail master;
-- independent high-strength-population stress cohort;
+- development-data boundary if any;
+- fresh Gate A and guardrail masters;
+- independent high-strength stress cohort;
+- runtime-legality audit;
 - license/attribution obligations.
 
 ## Hosted escalation rule
@@ -127,11 +128,11 @@ A CR086 hosted probe requires all:
 1. fresh direct improvement versus incumbent;
 2. broad legacy-anchor guardrails;
 3. frozen high-strength-population stress PASS;
-4. runtime-legality audit;
+4. runtime-legality PASS;
 5. provenance/license PASS.
 
 No hosted slot is spent merely because a public notebook has a high displayed score.
 
 ## Frontier target
 
-Latest already-frozen top-10 checkpoint is roughly 2965–3240. The goal is a ~3000-class architecture, not incremental improvement around a 1600-class incumbent.
+Latest already-frozen top-10 checkpoint is roughly 2965–3240. The objective is a ~3000-class architecture, not incremental improvement around a 1600-class incumbent.
