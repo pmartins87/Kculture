@@ -105,6 +105,25 @@ jobs:
           cp exact/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz anchors/CR052_REAL.tar.gz
           cp exact/cr083/CR083.tar.gz anchors/CR083.tar.gz
           cp exact/cr086/corpus/CR086.tar.gz anchors/CR086.tar.gz
+      - name: Official loader entrypoint smoke
+        shell: bash
+        env:
+          VID: ${{ matrix.variant_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p loader-smoke
+          tar -xzf "build/$VID.tar.gz" -C loader-smoke
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+
+          path = Path('loader-smoke/main.py').resolve()
+          fn = get_last_callable(path.read_text(encoding='utf-8'), path=str(path))
+          argc = getattr(getattr(fn, '__code__', None), 'co_argcount', None)
+          if argc not in (1, 2):
+              raise RuntimeError(f'official loader selected invalid callable {fn!r} argc={argc}')
+          print({'selected': getattr(fn, '__name__', repr(fn)), 'argcount': argc})
+          PY
       - name: Fresh exact direct and four-anchor panel
         shell: bash
         env:
