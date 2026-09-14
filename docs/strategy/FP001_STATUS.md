@@ -8,134 +8,127 @@ Authoritative branch: `research/first-principles-economy-v1`.
 
 Discover a prize-class Kaggriculture policy from official mechanics, our own experiments and legal runtime state, without using competitor action tapes as policy-construction data.
 
-## Source of truth
+## Binding source of truth
 
 Read together:
 
 1. `docs/strategy/FP001_FIRST_PRINCIPLES_INNOVATION_PROTOCOL_2026-09-14.md`
 2. `docs/strategy/FP001_ROADMAP.md`
-3. `tools/fp001_market_microsim.py`
-4. `tools/fp001_engine_parity.py`
-5. `candidates/fp001_h1_town_wheat_carry.py`
-6. `tools/fp001_h1_causal_test.py`
-7. `tools/fp001_h1b_pulse_hold_scan.py`
-8. `tools/fp001_h1b_engine_parity.py`
-9. `tools/fp001_h8_animal_fertilizer_economics.py`
-10. `tools/fp001_h8_control_frontier.py`
-11. `candidates/fp001_h8_single_animal_module.py`
-12. `tools/fp001_h8_single_animal_runtime_test.py`
-13. `candidates/fp001_h8_multi_animal_module.py`
-14. `tools/fp001_h8_multi_animal_runtime_test.py`
-15. `tools/fp001_h9_town_animal_demand.py`
-16. `candidates/fp001_h8_cow3_care_wrapper.py`
-17. `tools/fp001_h8_cow3_care_runtime_test.py`
+3. the FP001/H8/H9/H10 candidates and exact-engine test tools referenced below.
 
-## Proven primitives
+CR088 remains untouched on its authoritative branch. FP001 remains zero-lineage for policy construction.
+
+## Proven market primitives
 
 - **FP0 mechanics parity: PASS** — workflow `34842825909`.
-- **H1 town-pulse WHEAT carry: causal PASS** — workflow `34843184110`; 32 episodes, mean +916.875 vs PASS, flat-price null exactly zero.
-- **H1B owned-sale deferral: mechanics PASS** — workflow `34843556192`; 104/104 positive exact cases. Large isolated timing values include MILK q50/D7 +792, STRAWBERRY q50/D7 +731, WOOL q50/D6 +827.
+- **H1 town-pulse WHEAT carry: causal PASS** — workflow `34843184110`; mean paired +916.875 over 32 episodes; flat-price null exactly zero.
+- **H1B owned-sale deferral: mechanics PASS** — workflow `34843556192`; 104/104 exact positive cases. Large isolated timing values include MILK q50/D7 +792, STRAWBERRY q50/D7 +731, WOOL q50/D6 +827.
 
-## H8 — animal/fertilizer capital engine
+## H8 animal/fertilizer production track
 
 ### R2A exact economics — PASS
 
-Workflow `34844070131`. Minimum-survival feeding can keep animals alive on 15 WHEAT over 30 days while exposing 30 fertilizer units. Three-animal raw day-30 economics before pathing/hire costs: SHEEP +10411, COW +10111, GOOSE +9544.
+Workflow `34844070131`. Minimum-survival feeding keeps animals alive on 15 WHEAT over 30 days while exposing one fertilizer per surviving day. Pre-routing n=3 day-30 economics: SHEEP +10411, COW +10111, GOOSE +9544.
 
 ### R2A2-A exact FEED/CARE frontier — PASS
 
-Workflow `34844616747`. In the abstract exact control frontier, SHEEP was best for n=3 at every tested action shadow 0–80 and horizons 10/20/30. This remains an economics/control result, not a physical runtime ranking.
+Workflow `34844616747`. Abstract action-priced control favored SHEEP across tested horizons/shadow prices. This was correctly treated as economics/control evidence, not physical architecture evidence.
 
 ### R2A2-B1 one-animal runtime — PASS
 
-Workflow `34844919444`, 4 fresh seeds × both seats/species. Mean realized deltas:
+Workflow `34844919444`. Mean realized deltas: COW +4721, SHEEP +3593, GOOSE +3457. Runtime ranking reversed the abstract species ranking.
 
-- COW **+4721**;
-- SHEEP **+3593**;
-- GOOSE **+3457**.
+### R2A2-B2 multi-animal runtime — PASS
 
-All animals survived and every episode was profitable. Runtime ranking therefore differed from the abstract frontier.
+Workflow `34846686427`.
 
-### R2A2-B2 multi-animal runtime — PASS; physical backbone selected
+Mean deltas over 8 fresh seed/seat episodes each:
 
-Workflow **`34846686427`** completed SUCCESS with `H8_MULTI_ANIMAL_RUNTIME_PASS`.
+1. COW3_H0 **+12880.75**;
+2. COW3_H2 +12824.75;
+3. COW2_SHEEP1_H2 +11881.0;
+4. COW1_SHEEP2_H2 +10874.75;
+5. SHEEP3_H2 +9807.0;
+6. COW2_H0 +8522.25;
+7. COW2_H2 +8465.0.
 
-All tested architectures were profitable in all 8 fresh seed/seat episodes. Mean deltas vs starting money:
+Routine daily hands were negative marginal value: COW2 H2-H0 -57.25 and COW3 H2-H0 -56.0. B2 therefore selected 3 COW + main farmer only as the physical backbone.
 
-1. **COW3_H0: +12880.75** — median 12961.5, min 11540, max 14060;
-2. COW3_H2: +12824.75;
-3. COW2_SHEEP1_H2: +11881.0;
-4. COW1_SHEEP2_H2: +10874.75;
-5. SHEEP3_H2: +9807.0;
-6. COW2_H0: +8522.25;
-7. COW2_H2: +8465.0.
+### R2A2-B3 CARE overlay — STRONG PASS
 
-For COW3_H0 across the 8 episodes, aggregate realized operations included 456 WHEAT bought, 688 fertilizer sold, 264 MILK sold, 360 FEED actions, 688 fertilizer collections, 264 harvests and 1816 moves.
+Workflow **`34847600991`** completed SUCCESS with `H8_COW3_CARE_RUNTIME_STABLE` after an initial infrastructure-only import failure in run `34847381440` was fixed without changing policy.
 
-**Daily HIRE did not help.** Two hands reduced movement but made money slightly worse:
+Paired test: 8 fresh seeds × both seats = 16 identical seed/seat cases per mode against PASS.
 
-- COW2 H2-H0 = **-57.25** mean;
-- COW3 H2-H0 = **-56.0** mean.
+Final-bank deltas over starting money:
 
-This is almost pure hire-cost drag because realized feed/collection/harvest/output stayed unchanged. Therefore the provisional first-principles physical backbone is now:
+- `NONE`: mean **+13101.375**, median 13083, min 11701, max 14383;
+- `SURVIVAL`: mean **+22103.5**, median 22139, min 18243, max 24969;
+- `DAILY`: mean **+27308.5**, median 27470, min 20521, max 31843.
 
-> **3 COW, main farmer only, fixed NW micro-layout `(4,4),(3,4),(4,3)`, no routine hired hands.**
+Paired causal deltas:
 
-This architecture is provisional, not a full competitive farm.
+- SURVIVAL minus NONE: **+9002.125 mean**, min +6542, max +10586, **16/16 wins**;
+- DAILY minus NONE: **+14207.125 mean**, min +8820, max +17460, **16/16 wins**;
+- DAILY minus SURVIVAL: **+5205 mean**, min +2278, max +6874, **16/16 wins**.
 
-## H9 — town-conditioned animal demand — PASS
+Aggregate operations across 16 episodes:
 
-Workflow **`34847099631`** completed SUCCESS with `H9_TOWN_ANIMAL_DEMAND_PASS`.
+- NONE: 720 FEED, 0 CARE, 912 WHEAT bought, 1376 fertilizer sold, 528 MILK sold, 3632 moves;
+- SURVIVAL: 720 FEED, 720 CARE, same 912 WHEAT bought, 1376 fertilizer sold, **1152 MILK sold**, 4352 moves;
+- DAILY: 1424 FEED, 1328 CARE, 1536 WHEAT bought, 1392 fertilizer sold, **1648 MILK sold**, 3952 moves.
 
-Under official defaults, expected full-season town pulls for animal products are:
+Interpretation: CARE is a first-order production mechanism, not a marginal refinement. CARE after already-required survival FEED more than doubled realized MILK with no extra WHEAT versus NONE. Additional DAILY FEED+CARE remained highly profitable despite extra feed cost. The provisional production backbone is therefore upgraded to:
 
-- EGG **228**;
-- MILK **327**;
-- WOOL **228**.
+> **COW3 + main farmer only + DAILY FEED/CARE overlay**, preserving urgent survival, fertilizer and harvest priorities.
 
-Thus prior expected MILK demand is **99 units / 43.4% higher than WOOL**, which explains a meaningful part of COW's runtime advantage that the earlier no-town-credit economics model could not see.
+## H9 town-conditioned animal demand — PASS
 
-The public unlocked-shop list is also a powerful adaptive signal. Examples for expected remaining demand:
+Workflow `34847099631`.
 
-- day 3, one `YARN_STORE`: WOOL **508.5**, MILK 263.25;
-- day 3, one `PIZZA_SHOP`: MILK **425.25**, WOOL 184.5;
-- day 6, two `YARN_STORE`: WOOL **721.5**, MILK 206.25;
-- day 6, `PIZZA_SHOP` + `ICE_CREAM_SHOP`: MILK **494.25**, WOOL 145.5.
+Full-season prior expected town pulls: EGG 228, MILK 327, WOOL 228. MILK prior demand is +99 / +43.4% over WOOL. Public shop reveals can reverse local species economics strongly; e.g. day3 YARN_STORE implies expected remaining WOOL 508.5 vs MILK 263.25, while day3 PIZZA_SHOP implies MILK 425.25 vs WOOL 184.5.
 
-Decision: keep COW3 as the opening physical backbone for now, but future capacity expansion should be shop-conditioned rather than hard-coded monoculture.
+Decision: opening COW economics are strongly supported, but future expansion should eventually condition on public shop composition.
 
-## Current active gate — R2A2-B3 CARE overlay on COW3/H0
+## H10 — compact COW scale + batched harvest — ACTIVE
 
-The B3 candidate adds CARE only in otherwise-idle turns on top of the proven B2 safety scheduler, preserving urgent FEED, fertilizer collection and harvest priority.
+The B2 logs exposed an obvious physical inefficiency: COW3 performed roughly one HARVEST per realized MILK unit even though a COW can hold up to 6. At the same time, B2 showed no saturation at the third cow: COW3_H0 exceeded COW2_H0 by about +4358.5 mean.
 
-Paired modes on identical fresh seed/seat pairs:
+New files:
 
-- `NONE`: exact B2-style COW3/H0 baseline;
-- `SURVIVAL`: CARE after baseline survival FEED when idle capacity exists;
-- `DAILY`: use idle capacity for additional daily FEED + CARE to bank more COW production bonus.
+- `candidates/fp001_h10_cow_scale_module.py`
+- `tools/fp001_h10_cow_scale_runtime_test.py`
+- `.github/workflows/fp001-h10-cow-scale-runtime.yml`
 
-Files:
+Current workflow: **`34848106237`**.
 
-- `candidates/fp001_h8_cow3_care_wrapper.py`
-- `tools/fp001_h8_cow3_care_runtime_test.py`
-- `.github/workflows/fp001-h8-cow3-care-runtime.yml`
+Architectures tested on identical fresh seed/seat pairs:
 
-Decision gate: promote CARE only if paired realized bank improves on fresh seeds without animal loss, collection loss or new terminal inventory failure. Do not keep CARE merely because the abstract frontier says it can help.
+- B2_COW3 control;
+- H10_COW3 with harvest threshold 1;
+- H10_COW3 with threshold 6;
+- H10_COW4 threshold 6;
+- H10_COW5 threshold 6;
+- H10_COW6 threshold 6.
 
-## Additional official-mechanics conclusions
+H10 uses a zero-lineage compact NW snake `(4,4),(3,4),(2,4),(1,4),(1,3),(2,3)`, bulk animal pickup during setup, main farmer only, urgent survival FEED, daily fertilizer collection and configurable batched MILK harvest.
 
-- BUILD_COOP / BUILD_PASTURE is free; animal purchase is setup capital.
-- Daily HIRE follows Fibonacci and resets daily, but cheap cash cost does not imply positive marginal value when the main farmer has spare action capacity.
-- SELL/BUY_PRODUCT same-slot prices are quoted from the same pre-commit inventory for both players; no intrinsic seat-0 price edge.
-- CARE needs FEED to bank bonus, and pending CARE is paid only on a fed production day.
+The gate explicitly separates:
 
-## Next architecture decisions
+1. new layout/scheduler effect: H10 COW3 T1 - B2 COW3;
+2. pure batching effect: H10 COW3 T6 - T1;
+3. marginal scale: COW4-COW3, COW5-COW4, COW6-COW5.
 
-1. Close B3 CARE overlay causally.
-2. If CARE passes, freeze a stronger COW3 primitive and add realized-vs-model attribution.
-3. Then test H9 shop-conditioned **expansion** rather than replacing the proven opening COW3 blindly.
-4. Only after the physical production primitive stabilizes, combine it with H1/H1B through a common opportunity-cost controller.
+Animal loss at scale is recorded as evidence rather than turned into a hidden/aborted experiment.
+
+## Decision rules after H10
+
+- If batching is positive, it becomes part of the physical primitive.
+- Scale only while marginal realized bank remains positive and survival remains stable.
+- After the best no-CARE scale is identified, combine **that scale** with the proven DAILY CARE mechanism rather than assuming COW3 is globally optimal.
+- Do not add routine hired hands unless scale congestion creates measurable positive labor value.
+- Only after production scale stabilizes should H9 shop-conditioned expansion and H1/H1B common opportunity-cost integration take priority.
 
 ## Hosted policy
 
-No hosted submission is authorized yet. We now have a strong zero-lineage runtime production primitive, but not yet a complete population-tested competitive farm policy.
+No hosted submission yet. FP001 now has a very strong zero-lineage economic/physical primitive, but the optimal scale and complete competitive policy are not frozen.
