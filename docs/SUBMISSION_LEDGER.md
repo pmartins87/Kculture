@@ -1,3 +1,30 @@
+# Current authenticated submission ledger — 2026-09-14
+
+Hosted scores are moving checkpoints, not final ratings.
+
+| Submission | Agent | Submitted UTC | Exact archive SHA-256 | Latest authenticated checkpoint | Episodes at checkpoint | Interpretation |
+|---|---|---|---|---:|---:|---|
+| **56220184** | **CR086 latent-supply SELL priority** | 2026-09-14 03:21:23 | `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888` | **600.0** | **1** | Initialization only; no strength verdict. |
+| **56199767** | **CR083 Phase-2 seed-demand clamp** | 2026-09-13 | `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8` | ~**1619.8** | mature checkpoint not re-read this cycle | Hosted calibration/reference, not current champion. |
+| **56124705** | **CR071M** | 2026-09-09 14:02:10 | `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652` | ~**1590.1** | historical active run | Hosted calibration/reference. |
+| **56073870** | **CR053 exact route 106309334** | historical | `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15` | **2064.8** | historical | Best known project hosted score; exact bytes recovered. |
+| **56045848** | CR029 | historical | see exact historical artifact | ~**1892** historical | historical | Second-best known project lineage. |
+| **56073867** | CR052 | historical | `b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d` | ~**1700–1750** historical | historical | Exact package recovered. |
+
+CR083 and CR086 are not assumed stronger because they beat CR053 locally. Run `34802917553` proved that even an exact-byte local league reverses the known hosted ordering. Kaggle remains the population-strength sensor.
+
+Before the next hosted probe:
+
+1. finish CR088 Phase 1;
+2. select materially different representatives in hosted-rank/macro-family order;
+3. run a fresh authenticated slot-accounting read;
+4. verify package SHA and duplicate description;
+5. submit only the authorized frozen package and append its identity here.
+
+The historical statement below that “five submissions currently allowed” was a checkpoint, not reusable quota evidence.
+
+---
+
 # Current active submissions — authenticated checkpoint 2026-09-11
 
 Source run 34655053172 / artifact 10284539343. Full parsed evidence in
