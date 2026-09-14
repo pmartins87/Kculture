@@ -1,0 +1,26 @@
+name: FP001 B4 scale CARE runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - 'candidates/fp001_h10_cow_scale_care_wrapper.py'
+      - 'tools/fp001_b4_scale_care_runtime_test.py'
+      - '.github/workflows/fp001-b4-scale-care-runtime.yml'
+      - 'requirements.txt'
+
+jobs:
+  runtime:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run paired scale x CARE gate
+        run: python tools/fp001_b4_scale_care_runtime_test.py
