@@ -1,0 +1,28 @@
+name: FP001 E2C liquidity trace
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_e2c_liquidity_trace.py'
+      - '.github/workflows/fp001-e2c-liquidity-trace.yml'
+      - 'candidates/fp001_e2_dedicated_strawberry_hand.py'
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - 'candidates/fp001_h10_cow_scale_care_wrapper.py'
+      - 'requirements.txt'
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Explain E2B nonlinear deltas
+        run: python tools/fp001_e2c_liquidity_trace.py
