@@ -2,141 +2,110 @@
 
 Updated: 2026-09-14
 
-Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. Source of truth: branch `fix/kaggle-parity-v1`, `STATUS.md`, and frozen protocols.
+Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. The target class is ~3000+ hosted rating.
 
-## Invariants
+## Binding principles
 
-1. Hosted/live evidence and exact-reference W/L both matter.
-2. Submission allowance is a cap, not a quota.
-3. Every candidate family gets a predeclared gate.
-4. Invalid evaluations are quarantined.
-5. No seed, team identity, EpisodeId, future state or opponent-private state as runtime features.
-6. Authenticated Kaggle API is the default current-meta source.
+1. Hosted leaderboard strength is the primary outcome.
+2. Local H2H is for mechanics, catastrophe filtering, causal comparison and **hosted-calibrated league** evidence — never a single-incumbent surrogate for population skill.
+3. A local anchor may represent a hosted agent only if its exact submitted bytes/hash are proven.
+4. Authenticated Kaggle API is the default current-meta source.
+5. Use both seats and `kaggle-environments==1.32.7` for exact local H2H.
+6. No identity, team, rating, EpisodeId, hidden seed, future state or opponent-private runtime features.
 7. Original final holdout remains sealed.
-8. Do not tune failed architectures on spent validation evidence.
-9. Strong CR071M/legacy H2H is necessary but not sufficient.
-10. Hosted promotion requires independent high-strength-population evidence.
-11. **Do not enter polling loops.**
+8. Do not retune closed hypotheses on spent validation evidence.
+9. Do not enter polling loops.
+10. Distinct mechanically valid candidates may be probed hosted earlier; submission slots are experimental sensors as well as final promotion slots.
 
-## Closed architecture classes
+## Critical reset — exact hosted incumbent
 
-CR078, CR079, CR080, CR081, CR082, CR084 and CR085 remain closed. Direct adoption/retuning of the three screened public backbones is also closed after the frozen CR086 characterization sweep.
+Best known historical project agent is **CR053 submission `56073870`**, score checkpoint **2064.8**, exact SHA:
+`095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`.
 
-## ACTIVE — CR083 hosted maturation
+The later `CR053_CONTROL` anchor SHA `a9fea449...bd4c` is a different file and is quarantined as a proxy for hosted CR053.
 
-Frozen SHA `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`; submission `56199767`.
+The exact CR053/CR052 candidate artifact is preserved in run `34105008373`, artifact `10012004237`.
 
-Latest already-frozen checkpoint: CR083 `1660.3`, CR071M `1638.8`, lead `+21.5`, about 76 public episodes plus validation.
+## Track A — hosted-calibrated league
 
-Do not poll again before the 100-public-episode maturity boundary unless another material decision requires it.
+Workflow: `.github/workflows/hosted-calibrated-league-v1.yml`, commit `a42b4589e568e3203ede7dad653e1c000f22b710`.
 
-## CR086 Stage 1A — opponent-stock representation COMPLETE / PASS
+Initial exact cohort:
+- CR053_REAL — 2064.8 hosted
+- CR052_REAL — ~1700–1750 hosted
+- CR083 — ~1619.8 latest authenticated
+- CR086 — active hosted probe
 
-Independent confirmation over 100,660 commodity-step observations:
+Fresh pair master `9190861`. Goal: determine which local population metrics reproduce known hosted ordering and place CR086 relative to the real strongest historical agent.
 
-- MAE `1.25005`;
-- p95 `9`;
-- interval coverage `0.969462`;
-- `stock >= 10` accuracy `0.956338`.
+Expand with exact hosted CR029/CR011/CR008/CR071M bytes as they are recovered. Candidate-search fitness will eventually use mean league score, lower-tail matchup strength and diversity/robustness rather than one H2H.
 
-Decision: `OPPONENT_INVENTORY_REPRESENTATION_FEASIBILITY_PASS`.
+## Track B — CR086 latent-supply hosted probe
 
-Implementation/evaluation: `tools/cr086_opponent_inventory_estimator_eval.py`.
+CR086 SHA `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888`.
+Gate A vs CR083: 26W–6L = 0.8125, mean +260.5625, symmetric seats, zero errors.
+Hosted submission `56220184`, description `CR086_LATENT_SUPPLY_11296A4E`.
 
-This is representation evidence only. No arbitrary stock threshold policy is allowed from this result.
+One-shot status workflow exists; do not repeatedly poll. Hosted evidence from CR086 is used to learn transfer from local league to real population.
 
-## CR086 Stage 1B/1C — public source acquisition and direct-backbone benchmark COMPLETE
+## Track C — CR087 current-top lineage mining
 
-Read-only acquisition run `34790801576`, artifact `10327672303`.
+Goal: reconstruct the current ~3000-class open-loop backbone directly from active top-team public submissions/replays, not notebook titles.
 
-Frozen direct benchmark run `34798209070`, master `9160861`, 16 fresh seeds × both seats per agent:
+Evidence from current community/meta:
+- elite remains predominantly heuristics/fixed-policy lineages;
+- new ~720-action lineages reportedly propagate through the top every few days;
+- strongest design hypothesis is a strong static production backbone plus selective market adaptation.
 
-- `shape_shop_top10` vs CR083: **0W-32L**, score `0.0`, mean margin `-9416.34375`;
-- `adaptive_market_hysteresis` vs CR083: **0W-32L**, score `0.0`, mean margin `-10710.0`;
-- `farming_score_v3` vs CR083: **0W-32L**, score `0.0`, mean margin `-8996.1875`.
+Discovery tool: `tools/cr087_current_top_lineage_miner.py`.
+It resolves current top-team active submissions, samples public episodes, and preserves:
+- every coherent 719-action tape;
+- tape hashes and source metadata;
+- pairwise Hamming matrix statistics;
+- medoid coherent route;
+- per-step modal consensus and agreement.
 
-All rows had zero errors/non-DONE and lost 16/16 from both seats.
+First run `34803046771` failed only on a rankless leaderboard CSV parser. Parser was fixed in commit `666f8f0f3ddce078fc643789a48cd706a69db0ec`; rerun is automatic.
 
-Decision: **`CLOSE_DIRECT_PUBLIC_BACKBONE_ADOPTION_MOVE_TO_CLEANROOM_MARKET_VALUE_LAYER`**.
+After successful discovery:
+1. screen every coherent top tape as a population, not only the medoid;
+2. compare against exact hosted-calibrated league;
+3. identify current dominant backbone(s);
+4. package the strongest coherent route(s);
+5. add selective latent-supply / market adaptation only where mechanics justify it;
+6. probe hosted early if mechanically valid and not locally catastrophic.
 
-Result: `docs/strategy/CR086_PUBLIC_BACKBONE_BENCHMARK_RESULT_2026-09-14.md`.
+## Track D — CR087 CR053-real + latent-supply overlay
 
-Do not retune those packages to beat CR083. Their mechanisms remain public research inputs only.
+Builder: `tools/cr087_build_cr053_latent_supply.py`.
+Screen workflow: `.github/workflows/cr087-cr053-latent-supply-screen-v1.yml`.
 
-## CR086 Stage 2 — clean-room latent-supply market value
+Candidate preserves the exact hosted CR053 719-action route and market multiset, changing only ordering of existing premium SELLs using the CR086 cash-at-risk layer.
 
-This is now the active architecture track.
+Fast safety screen:
+- deterministic build from exact CR053 SHA;
+- direct candidate vs exact CR053 real;
+- same-seed candidate/base comparison vs exact CR052 real;
+- if zero errors and candidate is not below 0.5 direct, it is eligible for an early hosted probe rather than a long legacy gate chain.
 
-### 2A — official mechanics audit
+## Automatic policy search — next layer
 
-Before changing policy, establish exactly:
+Do not manually create long CR087/CR088/CR089 patch chains. Once the current-top tapes and hosted-calibrated league are available, build a deterministic population-search loop over economically meaningful dimensions:
+- coherent route/backbone selection from current top lineage;
+- premium SELL ordering / tranching;
+- latent opponent supply / glut risk;
+- shop-cycle timing;
+- liquidity reserve / hiring timing;
+- animal/crop portfolio switches that preserve execution coherence.
 
-1. price as a function of market inventory / relevant market state;
-2. whether and how premium-product market inventory can fall/reset/recover;
-3. ordering and lockstep semantics when both players SELL in the same turn;
-4. what information about current market order is known before actions;
-5. terminal value and floor-price behavior;
-6. constraints on product carry/shed pressure that affect hold value.
+Fitness must be robust across the calibrated league, not optimized against CR083 alone. Top population members then receive hosted probes to calibrate transfer.
 
-### 2B — CR083 SELL audit
+## Closed hypotheses
 
-Map every current CR083 mechanism that can affect premium SELL decisions:
+CR078, CR079, CR080 replay stitching, CR081 market-prefix transplant, CR082 1-NN teacher imitation, CR084 FEED rescue, CR085 Pareto gating: closed / do not retune.
 
-- base route SELLs;
-- CR053-like market counterplay;
-- sell clamp;
-- room guard;
-- dead-stock liquidation;
-- any endgame liquidation behavior.
+Direct adoption of the three previously screened public notebook packages is closed; their mechanisms remain research inputs.
 
-Quantify where opponent latent stock can alter the economic choice without modifying CR083's physical route.
+## Current frontier
 
-### 2C — derive value, do not fit a threshold
-
-Candidate objective must be a mechanics-derived quantity such as:
-
-- cash at risk from opponent latent supply entering before our next sale;
-- robust sell-now versus hold value under opponent-stock interval;
-- probability-free worst/best-case saturation envelope;
-- floor-risk / terminal-liquidation loss avoided;
-- scarcity persistence when opponent upper stock is near zero.
-
-Do **not** use a replay-fitted `stock > X => SELL` rule as CR086.
-
-### 2D — frozen policy protocol
-
-Only after the value equation is fixed:
-
-- freeze exact CR083 base SHA;
-- freeze exact estimator implementation;
-- freeze exact action scope and value rule;
-- prove no physical-route modifications if market-only;
-- predeclare fresh Gate A master and thresholds;
-- predeclare independent high-strength stress cohort;
-- freeze seed firewall.
-
-## Public architecture ideas retained clean-room
-
-The direct packages failed, but three mechanisms remain useful design evidence:
-
-- Adaptive Market Hysteresis: temporal public-flow memory, reserves, price gates, bounded sale tranches;
-- Shape Shop TOP 10: demand-aligned production structure and latent-capacity activation;
-- Farming Score V3: affordability/budget guard.
-
-They are not candidate backbones and should not be copied/tuned wholesale.
-
-## Hosted escalation rule
-
-A CR086 hosted probe requires all:
-
-1. fresh direct improvement versus incumbent CR083;
-2. broad legacy-anchor guardrails;
-3. frozen high-strength-population stress PASS;
-4. runtime-legality PASS;
-5. provenance/license PASS for any reused public code (clean-room mechanics ideas alone do not require code reuse).
-
-No hosted slot is spent merely because a public notebook has a high displayed score.
-
-## Frontier target
-
-Latest already-frozen top-10 checkpoint is roughly 2965–3240. The objective is a ~3000-class architecture, not incremental improvement around a 1600-class incumbent.
+Fresh frozen top-10 snapshot from 2026-09-14 starts at Majkel1337 `3191.4`; rank 10 redblackbst `2958.4`. Our task is to discover/construct a policy in that class, not optimize the ~1600 CR083 lineage indefinitely.
