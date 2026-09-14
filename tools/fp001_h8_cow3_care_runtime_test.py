@@ -8,6 +8,7 @@ physical backbone.
 from __future__ import annotations
 
 import importlib.util
+import sys
 from collections import Counter
 from pathlib import Path
 from statistics import mean, median
@@ -15,6 +16,8 @@ from statistics import mean, median
 from kaggle_environments import make
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 MODULE_PATH = ROOT / "candidates" / "fp001_h8_cow3_care_wrapper.py"
 SEEDS = list(range(65101, 65109))
 MODES = ("NONE", "SURVIVAL", "DAILY")
