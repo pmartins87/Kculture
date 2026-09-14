@@ -1,0 +1,64 @@
+name: CR087 current top-10 macroeconomic profile v1
+on:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr087-top-macro-profile-v1.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  profile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install requests
+      - name: Download frozen top-lineage discovery artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - name: Fetch each selected public replay once
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p replays profile
+          python - <<'PY'
+          import json,time
+          from pathlib import Path
+          import requests
+          metas=json.loads(Path('source/lineage/episodes.json').read_text())
+          seen=set()
+          for m in metas:
+              eid=int(m['episode_id'])
+              if eid in seen: continue
+              seen.add(eid)
+              url=f'https://www.kaggleusercontent.com/episodes/{eid}.json'
+              last=None
+              for i in range(5):
+                  try:
+                      r=requests.get(url,timeout=120); r.raise_for_status();
+                      data=r.json(); Path(f'replays/{eid}.json').write_text(json.dumps(data,separators=(',',':'))); last=None; break
+                  except Exception as exc:
+                      last=exc; time.sleep(2*(i+1))
+              if last is not None: raise last
+              print('fetched',eid,flush=True)
+          print('unique_replays',len(seen))
+          PY
+      - name: Extract top macroeconomic policy trajectories
+        run: |
+          python tools/cr087_top_macro_profile.py --episodes source/lineage/episodes.json --replays-dir replays --output-dir profile
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr087-top-macro-profile-v1
+          path: |
+            profile/**
+            source/lineage/episodes.json
+            source/top_targets.json
+          retention-days: 30
