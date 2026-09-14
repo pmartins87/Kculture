@@ -88,31 +88,48 @@ Hosted probe submitted exactly once:
 - submission **`56220184`**
 - description `CR086_LATENT_SUPPLY_11296A4E`
 - submitted 2026-09-14 03:21:23 UTC
-- one-shot read-only status workflow `34802927151` was started; do not poll it repeatedly.
+- one-shot read-only status workflow `34802927151` completed: submission COMPLETE at the initial `600.0` rating state with only one public episode. This is initialization only; no strength verdict is permitted.
 
-## Hosted-calibrated league — ACTIVE
+## Hosted-calibrated exact-byte league — COMPLETED / LOCAL ORDER NOT HOSTED-CALIBRATED
 
-Workflow `.github/workflows/hosted-calibrated-league-v1.yml`, commit `a42b4589e568e3203ede7dad653e1c000f22b710`.
+Run `34802917553`, master `9190861`, 24 games per edge, zero errors:
 
-Exact bytes included:
-- CR053_REAL `095080e7...b9a15` (~2064.8 hosted)
-- CR052_REAL `b650a31d...b278d` (~1700–1750 hosted)
-- CR083 `648fbcdb...41b8` (~1619.8 latest authenticated)
-- CR086 `11296a4e...f888` (hosted probe active)
+- CR083 vs CR053_REAL: **20–4**, score `0.8333`, mean +9833.6;
+- CR086 vs CR053_REAL: **20–4**, score `0.8333`, mean +9765.2;
+- CR083 vs CR052_REAL: **24–0**;
+- CR086 vs CR052_REAL: **24–0**;
+- CR053_REAL vs CR052_REAL: **14–10**, score `0.5833`, despite negative mean margin.
 
-Fresh paired tests use master `9190861`. Purpose: calibrate local league structure against known hosted ordering and place CR086 relative to the true CR053, not the false control.
+This local graph reverses the known hosted hierarchy: CR053_REAL (~2064.8) remains materially above CR083 (~1619.8) on Kaggle. Exact bytes fixed the identity error but did not make local single-seed-distribution H2H a hosted population predictor. The league remains useful for mechanics, catastrophe and diversity; its numeric ordering may not directly promote hosted candidates.
 
-## CR087 — current top-lineage mining — ACTIVE
+## CR087 — current top-lineage and macro mining — COMPLETE
 
-Current community/meta evidence indicates top agents remain largely heuristic/fixed-policy lineages with selective market adaptation. The project is therefore mining current top-team active submissions directly via Kaggle `team-submissions` + public episodes rather than relying on notebook titles.
+Corrected discovery run `34803148700` resolved the active submissions of all current top-10 teams and preserved 30 public 719-action tapes, three per team.
 
-First run `34803046771` failed only because current leaderboard CSV is rankless and already sorted; frozen CSV was preserved and confirmed the current top scores above.
+Key result: all 30 exact tapes are unique; median cross-pool Hamming distance is 719/719, mean 702.8. Even within the same active submission, hundreds of physical and market actions change between episodes. No step reaches 50% modal agreement across the pool. A modal/medoid tape is therefore not a faithful reconstruction of the current elite.
 
-Parser fixed in commit `666f8f0f3ddce078fc643789a48cd706a69db0ec` and discovery relaunched automatically. Miner now preserves every individual 719-action tape plus medoid/modal consensus statistics for population search.
+Macroeconomic profile run `34803658746` parsed 26 replays and shows repeated high-level production families despite action-level variability. Descriptive families to preserve in population work are:
+
+- Majkel / DSM / Orbital;
+- Mengfei / feel the agi / redblackbst;
+- ymg_aq / Howard;
+- Otter;
+- SpaTaro.
+
+CR087 CR053-real + latent-supply screen `34803266002` was mechanically safe but economically neutral: 8–8 direct against CR053, and candidate/base were identical at 10–6 against CR052 with the same mean margin. It is **not submitted** absent demonstrated causal impact.
+
+## CR088 — automatic population search — PHASE 0 ACTIVE
+
+Frozen protocol: `docs/strategy/CR088_PHASE0_PROTOCOL_2026-09-14.md`.
+Workflow run: **`34806600636`**.
+
+Phase 0 screens all 30 current-top public tapes against exact CR053_REAL, CR052_REAL, CR083 and CR086 on master `9220881`, three fresh seeds and both seats: 720 games total. It is explicitly a mechanical/catastrophe/diversity screen, not a hosted-rating gate. No Kaggle submission is authorized from Phase 0.
+
+Continuation rule: preserve several source-team/macro families, then build a state-coherent Phase-1 population with economically meaningful operators. Do not select one tape solely because it tops the local score.
 
 ## Public notebook benchmark — characterization only
 
-Run `34798209070`: three public executable agents each lost 0–32 to CR083. This no longer means CR083 is globally stronger; it only characterizes those exact public bytes in that matchup. A cross-anchor diagnostic run `34802342857` was started but still in progress at its one permitted check. Do not poll repeatedly.
+Run `34798209070`: three public executable agents each lost 0–32 to CR083. Cross-anchor run `34802342857` also showed severe non-transfer: none was broadly competitive, and each had multiple 0–16 or near-zero edges. These exact public notebook bytes are closed as direct backbones; their mechanisms remain architectural evidence.
 
 ## Closed / quarantined classes
 
