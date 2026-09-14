@@ -67,7 +67,7 @@ It resolves current top-team active submissions, samples public episodes, and pr
 
 Corrected run `34803148700` completed: 30/30 tapes recovered, all exact tapes unique, mean pairwise Hamming 702.8/719 and no majority action at any step. Current elite submissions are materially state-adaptive; modal or medoid tape cloning is not the target architecture.
 
-Macro run `34803658746` recovered repeated production-level families from 26 replays. Preserve at least the five descriptive families recorded in `STATUS.md`; action-level diversity is real, while macro convergence is the useful signal.
+Macro run `34803658746` recovered repeated production-level families from 26 replays (`docs/strategy/CR087_TOP_MACRO_PROFILE_RESULT_2026-09-14.md`). Preserve at least the five descriptive families recorded in `STATUS.md`; action-level diversity is real, while macro convergence is the useful signal.
 
 ## Track D — CR087 CR053-real + latent-supply overlay
 
@@ -78,23 +78,25 @@ Candidate preserves the exact hosted CR053 719-action route and market multiset,
 
 Run `34803266002` was mechanically safe but demonstrated no result change against CR052: candidate and base were both 10–6 with identical mean margin; direct candidate vs base was 8–8. Do **not** spend a hosted slot on CR087 absent a demonstrated intervention. Retain the generic latent-supply operator for population experiments.
 
-## CR088 automatic policy search — ACTIVE
+## CR088 automatic policy search — PHASE 1 ACTIVE
 
-Phase-0 protocol: `docs/strategy/CR088_PHASE0_PROTOCOL_2026-09-14.md`.
-Run: **`34806600636`**.
+Phase 0 run `34806600636` completed: 30/30 current-top tape seeds were mechanically valid across 720 fresh exact games. Seven diverse bases were retained rather than a single local winner: Majkel, Orbital, feel the agi, redblackbst, ymg_aq, Otter and SpaTaro.
 
-Phase 0 packages and screens all 30 current-top trajectories against four exact project anchors on fresh master `9220881` (720 games). Its only authority is mechanical/catastrophe/diversity screening because local H2H failed hosted-order calibration. It makes no Kaggle submission.
+Phase-1 protocol: `docs/strategy/CR088_PHASE1_PROTOCOL_2026-09-14.md`.
+Run: **`34807533884`**.
 
-After Phase 0:
+The frozen Phase-1 factorial has 42 members: each complete base plus latent-supply ordering and four bounded risk-sale variants (caps 8/16; price floors 1.00x/1.25x). Physical actions remain coherent and unchanged. Every variant receives a direct edge against its own base and the four-anchor safety panel on fresh master `9230881`.
 
-1. retain multiple source-team/macro families rather than one local winner;
-2. construct state-coherent members instead of modal tapes, day stitching or market imitation;
-3. apply economically meaningful operators as a factorial population: latent-supply SELL ordering, bounded tranching/reserves, shop-cycle funding, and coherent production-capacity choices;
-4. evaluate robustness and diversity locally without claiming hosted rank;
-5. use remaining hosted slots on materially different, mechanically valid representatives to learn transfer;
-6. update search fitness with hosted evidence, not by retuning spent local seeds.
+After Phase 1:
 
-Stop rules: no CR088A/B manual patch ladder; no raw local champion promotion; no revival of CR080/081/082 representations.
+1. close any failed operator class without cap/floor retuning;
+2. retain materially different, mechanically valid representatives in hosted-rank/macro-family order, not local-score order;
+3. perform current authenticated slot accounting;
+4. send only high-information hosted sensors; do not spend a slot on the neutral CR087 overlay;
+5. use hosted transfer to update the population objective;
+6. advance production-capacity operators only as linked, execution-coherent bundles.
+
+Stop rules: no CR088A/B manual patch ladder; no raw local-champion promotion; no revival of CR080/081/082 representations.
 
 ## Closed hypotheses
 
