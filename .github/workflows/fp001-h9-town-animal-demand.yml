@@ -1,0 +1,21 @@
+name: FP001 H9 town animal demand
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_h9_town_animal_demand.py'
+      - '.github/workflows/fp001-h9-town-animal-demand.yml'
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run H9 town-conditioned demand audit
+        run: python tools/fp001_h9_town_animal_demand.py
