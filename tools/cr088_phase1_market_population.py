@@ -121,6 +121,11 @@ def agent(obs, config=None):
         queue = _cr086_prioritize(agent, obs, queue)
     out["market"] = queue[:_CR088_MAX_MARKET_ORDERS]
     return out
+
+# Kaggle loads the last newly inserted callable from the module namespace.
+# Rebinding the pre-existing ``agent`` name does not move that key to the end,
+# so expose a fresh final alias after all helper definitions.
+cr088_submission_entrypoint = agent
 '''
     compile(source, "main.py", "exec")
     return source
