@@ -51,8 +51,8 @@ jobs:
             --output frozen/CR088B.tar.gz --manifest frozen/CR088B_MANIFEST.json
           test "$(sha256sum frozen/CR088A.tar.gz | awk '{print $1}')" = "$A_EXPECTED_SHA256"
           test "$(sha256sum frozen/CR088B.tar.gz | awk '{print $1}')" = "$B_EXPECTED_SHA256"
-          test "$(tar -tzf frozen/CR088A.tar.gz)" = "main.py"
-          test "$(tar -tzf frozen/CR088B.tar.gz)" = "main.py"
+          tar -tzf frozen/CR088A.tar.gz | grep -Fxq 'main.py'
+          tar -tzf frozen/CR088B.tar.gz | grep -Fxq 'main.py'
           tar -xzf frozen/CR088A.tar.gz -C smoke/a
           tar -xzf frozen/CR088B.tar.gz -C smoke/b
       - name: Official loader entrypoint smoke
