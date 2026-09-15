@@ -124,7 +124,7 @@ Density tuning is closed. M6S1 is the frozen physical crop module.
 
 ### E5 — elite mixed-animal transfer ACTIVE
 
-Run `34922078827` on `research/first-principles-economy-v1` compares:
+Corrected run `34922557868` on `research/first-principles-economy-v1` compares (initial run `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate):
 
 1. COW5 with/without M6S1;
 2. 3 COW + 2 SHEEP with/without M6S1;

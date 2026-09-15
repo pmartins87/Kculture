@@ -184,7 +184,7 @@ M6S1 is therefore a robust additive physical/economic module. It is not yet a ho
 
 ## Current integration decision
 
-**E5 elite-informed mixed-animal transfer is active on `research/first-principles-economy-v1`, run `34922078827`.** The frozen gate compares COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, over 32 fresh default-environment seeds and both seats.
+**E5 elite-informed mixed-animal transfer is active on `research/first-principles-economy-v1`, corrected run `34922557868`.** Run `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate. The frozen gate compares COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, over 32 fresh default-environment seeds and both seats.
 
 A mixed policy becomes primary only by passing full mechanics/crop transfer and beating COW5+M6S1 under the frozen rule. Otherwise at most one bounded non-inferior mixed architecture is retained as a secondary challenger.
 
