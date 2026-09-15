@@ -180,9 +180,9 @@ Run `34869392514`, 40 fresh seeds × both seats:
 - signs **33–7**; p10 gap **+7,970.6**;
 - 80/80 full survival, exact animal fingerprint and full crop output; zero failures.
 
-M6S1 is therefore a robust additive physical/economic module. It is not yet a hosted candidate.
+M6S1 is therefore a robust additive physical/economic module. It is not itself a hosted candidate.
 
-### E5 — fixed mixed-animal transfer FAIL / C5_M6S1 SURVIVES
+### E5 — fixed mixed-animal transfer FAIL / C5_M6S1 survived economics only
 
 Corrected run `34922557868` first passed 4/4 exact COW5/E4 full-trajectory parity. Over 32 fresh default-environment seeds × both seats:
 
@@ -191,15 +191,41 @@ Corrected run `34922557868` first passed 4/4 exact COW5/E4 full-trajectory parit
 - C2S3_M6S1 produced only 12 MELON + 8 STRAWBERRY and lost **−14,370.72 mean**;
 - neither mixed policy passed full-crop eligibility or the frozen diversity-retention bounds.
 
-Close the fixed C3S2/C2S3 + full-opening-M6S1 grid. Preserve mixed species for future H9 public-shop adaptation; do not run a composition or affordability rescue ladder. Exact C5_M6S1 is the sole physical survivor. Result: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_RESULT_2026-09-15.md`.
+Close the fixed C3S2/C2S3 + full-opening-M6S1 grid. Preserve mixed species for H9 public-shop adaptation. Result: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_RESULT_2026-09-15.md`.
 
-## Current integration decision
+## CR089 — heterogeneous physical population gate COMPLETE / FAIL
 
-**CR089 heterogeneous physical population gate is active (`34923802262`).** It compares exact C5_M6S1 against exact C5_BASE over the same 11-opponent panel: CR053_REAL, CR052_REAL, CR083, CR086 and all seven CR088/current-top macro representatives, 6 fresh seeds × both seats per edge.
+Run `34923802262` completed the exact frozen 11-opponent panel, 6 fresh seeds × both seats per edge, 132 games per candidate.
 
-C5_M6S1 advances only if it clears absolute mechanics/coverage and improves mean edge score by at least +0.05 without creating new catastrophic family weaknesses. This remains a local transfer gate, not a hosted-rating predictor.
+Final aggregate:
 
-If CR089 passes, next is separable CR086/CR088/H1/H1B market integration. If M6S1 is safe but adds no W/L value, move to H9 public-shop adaptation instead. No new Kaggle submission is authorized now.
+- `C5_BASE`: **0W–132L**, mean edge score `0.0`, 11/11 zero-score edges;
+- `C5_M6S1`: **0W–132L**, mean edge score `0.0`, 11/11 zero-score edges;
+- zero errors/non-DONE and both candidates mechanically valid;
+- M6S1 mean/median edge-score delta: `0.0` / `0.0`;
+- population transfer pass: false.
+
+M6S1 improved mean monetary margin on 10/11 edges; across edge means the average improvement was about **+16,566.20**, but it converted **zero** additional wins. This preserves M6S1 as an economic module while decisively falsifying static C5 as a competitive backbone.
+
+Binding verdict: **`M6S1_FAILS_POPULATION_COMPATIBILITY`**.
+
+Close static `C5_BASE` and `C5_M6S1` as direct competitive candidates. No threshold rescue, opponent-specific patch, C5 market factorial or hosted submission is allowed. Full result: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_RESULT_2026-09-15.md`.
+
+## Current integration decision — CR090 / H9 adaptive marginal expansion
+
+The next gate attacks the failure mechanism structurally rather than adding another module to C5.
+
+Use a four-COW DAILY core and defer the **fifth animal slot** until a legal public shop reveal. H9 chooses the marginal species from expected remaining public-town demand. The adaptive policy must be compared against **same-timing delayed-COW and delayed-SHEEP controls** so that species selection is not confounded with purchase timing/liquidity.
+
+Gate order:
+
+1. controlled shop-demand causal test;
+2. exact mechanics/decision audit;
+3. fresh default-environment robustness;
+4. heterogeneous population W/L gate only after causal + robustness pass;
+5. market integration only on an adaptive physical/controller survivor.
+
+If H9 cannot beat timing-matched controls causally, close species adaptation and move to the hierarchical competitive controller. No new Kaggle submission is authorized now.
 
 ## Public notebook benchmark — characterization only
 
@@ -210,6 +236,8 @@ Run `34798209070`: three public executable agents each lost 0–32 to CR083. Cro
 CR078, CR079, CR080 replay stitching, CR081 static market-prefix transplant, CR082 1-NN teacher imitation, CR084 FEED rescue, CR085 Pareto gating: closed / do not retune spent hypotheses.
 
 Direct adoption of the three screened public notebook packages is closed; their ideas remain research evidence.
+
+Static C5 and C5+M6S1 are closed as direct competitive backbones after CR089; CARE, H10, H11 and M6S1 remain reusable modules.
 
 ## Binding operating policy
 
