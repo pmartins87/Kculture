@@ -1,0 +1,173 @@
+name: CR092 broad O1 transfer and router-label gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - candidates/cr091_cr053_market_option.py
+      - tools/cr092_broad_option_edge.py
+      - tools/cr092_aggregate.py
+      - tools/kaggle_exact_runtime.py
+      - .github/workflows/cr092-broad-option-router-label.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download exact frozen CR089 population
+        uses: actions/download-artifact@v4
+        with:
+          name: cr089-frozen-population-packages-v1
+          path: source/cr089
+          run-id: 34923802262
+          github-token: ${{ github.token }}
+
+      - name: Materialize and byte-verify CR092 opponents
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p cr092_runtime
+          cp source/cr089/prepared/opponents/*.tar.gz cr092_runtime/
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+
+          expected = {
+              "CR053_REAL": "095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15",
+              "CR052_REAL": "b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d",
+              "CR083": "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8",
+              "CR086": "11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888",
+              "r01_e108766633_s56156662": "225e078f35213a71e6eb8ff2daa424578e195d6c8a8fa0be6fb9b416ffd7a646",
+              "r02_e108761464_s56114097": "d744c0a660d9c1a6b71cc9ca847c9c6f09c55f79bcce9e897cdfae1542f19b85",
+              "r03_e108766659_s56209748": "7f50916df07cc5d1c81f8d8952eb1c95ee11a2242f48e00b27170fc37a4cb9d4",
+              "r06_e108754069_s56205640": "24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e",
+              "r07_e108766657_s56132899": "dbabe60a1b7e6670eb244f7a060461006e1677a0a8c3bc3cb58aebea3a2ab60e",
+              "r09_e108766659_s56097405": "0c655157e8e62d7055ca12fc80951fcba1b5f9eab3536fd077c0ce3b119e03f6",
+              "r10_e108754200_s56210228": "67916f5819ebb4416cfe0448a61b76c3123194f0ef7aa3aac6ef1d526018f279",
+          }
+          found = {p.name[:-7]: p for p in Path("cr092_runtime").glob("*.tar.gz")}
+          if set(found) != set(expected):
+              raise SystemExit(f"package set mismatch: {sorted(found)}")
+          for name, want in expected.items():
+              got = hashlib.sha256(found[name].read_bytes()).hexdigest()
+              print(name, got)
+              if got != want:
+                  raise SystemExit(f"SHA mismatch {name}: {got} != {want}")
+          PY
+
+      - name: Upload exact frozen CR092 population
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr092-frozen-opponents-v1
+          path: cr092_runtime/*.tar.gz
+          if-no-files-found: error
+          retention-days: 30
+
+  evaluate:
+    needs: prepare
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent:
+          - CR053_REAL
+          - CR052_REAL
+          - CR083
+          - CR086
+          - r01_e108766633_s56156662
+          - r02_e108761464_s56114097
+          - r03_e108766659_s56209748
+          - r06_e108754069_s56205640
+          - r07_e108766657_s56132899
+          - r09_e108766659_s56097405
+          - r10_e108754200_s56210228
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen Kaggriculture engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'kaggle-environments==1.32.7'
+
+      - name: Download exact CR092 population
+        uses: actions/download-artifact@v4
+        with:
+          name: cr092-frozen-opponents-v1
+          path: cr092_runtime
+
+      - name: Evaluate matched BASE versus O1 edge
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts
+          python tools/cr092_broad_option_edge.py \
+            --opponent '${{ matrix.opponent }}' \
+            --runtime cr092_runtime \
+            --output 'artifacts/cr092_edge_${{ matrix.opponent }}.json' \
+            | tee 'cr092_${{ matrix.opponent }}.log'
+
+      - name: Upload CR092 edge
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr092-edge-${{ matrix.opponent }}
+          path: |
+            artifacts/cr092_edge_${{ matrix.opponent }}.json
+            cr092_${{ matrix.opponent }}.log
+          if-no-files-found: warn
+          retention-days: 30
+
+  aggregate:
+    needs: evaluate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download all CR092 edges
+        uses: actions/download-artifact@v4
+        with:
+          pattern: cr092-edge-*
+          path: cr092_edges
+          merge-multiple: true
+
+      - name: Aggregate broad transfer and freeze router labels
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p artifacts
+          python tools/cr092_aggregate.py \
+            --input-dir cr092_edges \
+            --result artifacts/cr092_broad_option_result.json \
+            --labels artifacts/cr092_counterfactual_router_labels.json \
+            | tee cr092_aggregate.log
+
+      - name: Upload frozen CR092 aggregate
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr092-broad-option-router-label-aggregate-v1
+          path: |
+            artifacts/cr092_broad_option_result.json
+            artifacts/cr092_counterfactual_router_labels.json
+            cr092_aggregate.log
+          if-no-files-found: warn
+          retention-days: 90
