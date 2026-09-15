@@ -33,6 +33,8 @@ No adaptive species switching, public-shop conditioning, CR086/CR088 market over
 
 Primary statistical unit is the seed after averaging seats.
 
+Before the grid is admissible, the generic five-pasture implementation must reproduce the exact frozen E4 COW5 baseline and COW5+M6S1 trajectories in four full-game parity cases (crop/no-crop × both seats) on separate seed `69700`. Any mismatch is an infrastructure failure and invalidates the economic grid.
+
 Crop/no-crop comparisons change tile occupancy and therefore the later shop RNG stream; treat them as expected-distribution contrasts. Mixed-vs-COW5 comparisons among the M6S1 policies have equal occupied tiles, so they preserve the shop RNG path and isolate fixed species composition more cleanly.
 
 ## Metrics
@@ -50,6 +52,8 @@ Crop/no-crop comparisons change tile occupancy and therefore the later shop RNG 
 ### Mechanical eligibility
 
 A hybrid is eligible only with zero failures, five correct surviving animals in every case, full crop output in every case, and an exact main-farmer/animal-output fingerprint against its own no-crop base.
+
+The whole gate is eligible only after 4/4 exact COW5 trajectory-parity cases against the original E4 implementation.
 
 ### Crop-transfer PASS
 

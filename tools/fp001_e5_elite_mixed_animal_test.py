@@ -2,6 +2,7 @@
 """FP001 E5 — fixed elite COW/SHEEP composition transfer gate."""
 from __future__ import annotations
 
+import json
 import math
 import sys
 from collections import Counter
@@ -15,6 +16,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from candidates.fp001_e5_elite_mixed_animal import make_agent
+from candidates.fp001_e3_single_hand_crop_density import make_agent as make_e4_agent
 from candidates.fp001_h10_cow_scale_module import TARGET_POSITIONS
 
 SEEDS = tuple(range(69701, 69733))
@@ -119,6 +121,29 @@ def run_one(label, species, crop, seed, seat):
     }
 
 
+def trace_one(fn, seed, seat):
+    actions = []
+
+    def traced(obs, config=None):
+        action = fn(obs, config)
+        actions.append(json.loads(json.dumps(action)))
+        return action
+
+    agents = [traced, pass_agent] if seat == 0 else [pass_agent, traced]
+    env = make(
+        "kaggriculture",
+        configuration={"episodeSteps": 720, "startingMoney": 3000, "seed": seed},
+        debug=True,
+    )
+    env.run(agents)
+    payload = env.toJSON()
+    return {
+        "actions": actions,
+        "statuses": list(payload["statuses"]),
+        "rewards": [float(x) for x in payload["rewards"]],
+    }
+
+
 def percentile(xs, q):
     vals = sorted(float(x) for x in xs)
     pos = (len(vals) - 1) * float(q)
@@ -150,6 +175,21 @@ def comparison(a, b):
 
 
 def main():
+    # The generic species scheduler must preserve the exact frozen E4 COW5
+    # behavior before any mixed-species result is admissible.
+    parity = 0
+    for crop in (False, True):
+        for seat in (0, 1):
+            old = trace_one(make_e4_agent(5, "DAILY", 1 if crop else 0, 6 if crop else 0), 69700, seat)
+            new = trace_one(make_agent(FAMILIES["C5"], "DAILY", 1 if crop else 0, 6 if crop else 0), 69700, seat)
+            ok = old == new
+            parity += int(ok)
+            print("E5_C5_PARITY_CASE", {"crop": crop, "seat": seat, "exact": ok})
+    print("E5_C5_PARITY", {"exact": parity, "total": 4})
+    if parity != 4:
+        print("E5_DECISION INFRASTRUCTURE_FAIL_C5_NOT_E4_EXACT")
+        return
+
     rows = {label: {} for label in POLICIES}
     failures = 0
     for seed in SEEDS:
