@@ -1,0 +1,65 @@
+name: CR091 hierarchical market option gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - candidates/cr091_cr053_market_option.py
+      - tools/cr091_hierarchical_market_option_gate.py
+      - .github/workflows/cr091-hierarchical-market-option.yml
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  gate1:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen Kaggriculture engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'kaggle-environments==1.32.7'
+
+      - name: Materialize exact historical packages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p .cr091_runtime /tmp/cr091_a /tmp/cr091_b
+
+          gh api repos/${{ github.repository }}/actions/artifacts/10012004237/zip > /tmp/cr091_a.zip
+          unzip -q /tmp/cr091_a.zip -d /tmp/cr091_a
+          cp /tmp/cr091_a/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz .cr091_runtime/CR052.tar.gz
+          cp /tmp/cr091_a/R4D_CR053_ROUTE106309334_V1.tar.gz .cr091_runtime/CR053.tar.gz
+
+          gh api repos/${{ github.repository }}/actions/artifacts/10331022592/zip > /tmp/cr091_b.zip
+          unzip -q /tmp/cr091_b.zip -d /tmp/cr091_b
+          cp /tmp/cr091_b/corpus/CR083.tar.gz .cr091_runtime/CR083.tar.gz
+          cp /tmp/cr091_b/corpus/CR086.tar.gz .cr091_runtime/CR086.tar.gz
+
+          sha256sum .cr091_runtime/*.tar.gz
+
+      - name: Run CR091 option-value population gate
+        run: |
+          set -o pipefail
+          python tools/cr091_hierarchical_market_option_gate.py | tee cr091_gate1.log
+
+      - name: Upload frozen result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr091-hierarchical-market-option-gate-v1
+          path: |
+            artifacts/cr091_hierarchical_market_option_result.json
+            cr091_gate1.log
+          if-no-files-found: warn
