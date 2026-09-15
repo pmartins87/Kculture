@@ -88,14 +88,16 @@ registration checkpoint confirmed both frozen sensors were accepted by Kaggle:
 - **CR088A submission `56233701`** — `CR088A_ORBITAL_BASE_24E78D65`;
 - **CR088B submission `56233703`** — `CR088B_FEEL_R8P125_055FBBCD`.
 
-Both were `PENDING` at the single post-submit checkpoint. Do not repeatedly poll or
-resubmit them. Their eventual hosted ratings are calibration evidence and must be
-recorded here/STATUS when observed through a deliberate later checkpoint.
+A later deliberate authenticated checkpoint, workflow `34910849970`, observed:
 
-The same authenticated pre-submit snapshot showed that ratings remain dynamic;
-for example CR086 and CR083 had moved from the earlier selection checkpoint. This
-reinforces the rule that one moving snapshot is not a stable architecture ranking.
+- CR088A COMPLETE at **1252.8**, 59 listed episodes; newest 32 replays **11W–21L**, mean margin −12,062.47, median −7,565.5;
+- CR088B COMPLETE at **1182.3**, 54 listed episodes; newest 32 replays **16W–16L**, mean margin +5,244.78, median −622;
+- zero replay/non-DONE failures in both downloaded windows.
 
-Only these two sensors were authorized in this selection. Their successful submission
-left the remaining daily capacity intentionally unused rather than spending slots on
-near-duplicate candidates.
+Both exact tape backbones are therefore closed as direct hosted candidates. CR088B's
+balanced newest window does not override its low mature rating relative to CR053
+2064.8 and the ~3000 prize frontier. Preserve the legal market operator and macro/replay
+corpus as integration evidence; do not retune/resubmit either tape/cap/floor family.
+
+Full forensic verdict: `docs/strategy/CR088_HOSTED_SENSOR_RESULT_2026-09-15.md`.
+Only these two sensors were authorized, and no further CR088 submission is authorized.

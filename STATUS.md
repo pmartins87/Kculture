@@ -1,6 +1,6 @@
 # STATUS — Kculture live source of truth
 
-Updated: 2026-09-14
+Updated: 2026-09-15
 
 Authoritative branch: `fix/kaggle-parity-v1`.
 
@@ -135,94 +135,60 @@ Cross-family elite convergence worth preserving: early MELON/STRAWBERRY, later W
 
 CR087 CR053-real + latent-supply screen `34803266002` was mechanically safe but economically neutral: 8–8 direct against CR053, and candidate/base were identical at 10–6 against CR052 with the same mean margin. It is **not submitted** absent demonstrated causal impact.
 
-## CR088 — automatic population search — PHASE 1 COMPLETE
+## CR088 — automatic population search — HOSTED SENSOR VERDICT COMPLETE
 
-### Phase 0 — COMPLETE
+Phase 0 run `34806600636`: 720/720 games, 30/30 current-top tape packages mechanically valid. Phase 1 corrected run `34808258927`: 42/42 policies valid and 26 overlays passed the frozen local non-regression filter. Full selection evidence remains in `docs/strategy/CR088_PHASE1_RESULT_AND_HOSTED_SENSOR_SELECTION_2026-09-14.md`.
 
-Run `34806600636`: 720/720 games, 30/30 mechanically valid packages, zero engine failures. Highest local safety seeds were feel the agi `0.4583`, Orbital `0.4167` and Majkel `0.3333`; local scores are not hosted promotion scores.
+Corrected submission workflow `34858890714` sent the two exact frozen packages once:
 
-Seven diverse bases were retained: Majkel, Orbital, feel the agi, redblackbst, ymg_aq, Otter and SpaTaro. This preserves hosted-rank priority, the five descriptive macro families and the distinct redblack four-land path.
+- **CR088A** submission `56233701`, Orbital base, SHA `24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e`;
+- **CR088B** submission `56233703`, feel + `risk8_p125`, SHA `055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053`.
 
-### Phase 1 — COMPLETE after infrastructure correction
+Authenticated checkpoint run `34910849970`:
 
-Frozen protocol: `docs/strategy/CR088_PHASE1_PROTOCOL_2026-09-14.md`.
+- CR088A COMPLETE, **1252.8**, 59 listed episodes; newest 32: **11W–21L**, mean margin −12,062.47, median −7,565.5;
+- CR088B COMPLETE, **1182.3**, 54 listed episodes; newest 32: **16W–16L**, mean margin +5,244.78, median −622;
+- zero replay/non-DONE failures in both downloaded windows.
 
-Initial run `34807533884` is **not economic evidence** for modified overlays: the generated module exposed an internal `_cr088_risk_sale(...)` helper as the Kaggle loader entrypoint, so modified packages failed before valid play.
-
-The branch then fixed only entrypoint/package selection and added official-loader smoke without changing the policy family. Corrected run **`34808258927`** completed with:
-
-- **42/42 mechanically valid policies**;
-- zero engine failures/non-DONE;
-- **26 overlays** passing the frozen Phase-1 non-regression filter;
-- original final holdout still sealed;
-- no automatic Kaggle submission inside the gate.
-
-Result/selection document: `docs/strategy/CR088_PHASE1_RESULT_AND_HOSTED_SENSOR_SELECTION_2026-09-14.md`.
-
-Two high-information frozen hosted sensors were selected:
-
-1. **CR088A — Orbital coherent base**
-   - variant `r06_e108754069_s56205640__base`
-   - SHA-256 `24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e`
-   - description `CR088A_ORBITAL_BASE_24E78D65`.
-2. **CR088B — feel the agi + bounded risk-sale**
-   - variant `r07_e108766657_s56132899__risk8_p125`
-   - legal latent SELL ordering + max-one premium sale, cap 8, price floor 1.25x; physical policy unchanged
-   - SHA-256 `055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053`
-   - description `CR088B_FEEL_R8P125_055FBBCD`.
-
-### Hosted sensor submission pipeline — PRE-SUBMISSION INFRA FIXED
-
-First submission workflow run `34809554553` rebuilt both exact expected hashes but failed **before** loader smoke, quota check or Kaggle submission because the workflow incorrectly required `tar -tzf` output to equal exactly `main.py`; the archives validly also contain provenance. No candidate was submitted by that failed run and it consumed no Kaggle submission slot.
-
-Infrastructure-only fix commit **`761a83b063b11385570ba923e28840d93286e54f`** changes the preflight to assert that `main.py` is present rather than the only member. Candidate bytes, expected SHA-256s, descriptions and quota/duplicate gates are unchanged.
-
-Do not manually patch/rebuild these candidates. The corrected workflow is the only authorized path for these two frozen sensors.
+Verdict: both exact tape backbones are hosted regressions far below CR053 2064.8 and the ~3000 target class. Close CR088A/B as direct candidates and do not retune/resubmit their tape/cap/floor families. Preserve CR088B's legal market operator plus the replay/macro corpus as integration inputs. Full result: `docs/strategy/CR088_HOSTED_SENSOR_RESULT_2026-09-15.md`.
 
 ## FP001 — additive first-principles production/economics track
 
-FP001 is now formally an **additive module-discovery track**, not an alternative history of the project. Its job is to discover causal mechanisms that can strengthen elite-informed/population-tested architectures.
+FP001 remains a module-discovery laboratory, not a replacement for cumulative competitive knowledge.
 
-Strong results already established:
+Proven primitives retained: H1 town-pulse carry, H1B owned-sale deferral, H9 public-shop demand, B3 DAILY CARE, H10 compact routing/batched harvest and H11 fertilizer conversion.
 
-- B3 CARE is first-order: COW3 DAILY mean +27,308.5 vs +13,101.4 NONE, +14,207.1 paired mean, 16/16 wins;
-- H10 compact scheduling + batched milk harvest is positive; batching alone +861.5 paired mean while preserving output;
-- H11 exact engine audit shows selling all fertilizer is not generally optimal: for STRAWBERRY, two well-timed fertilizer applications add four berries and about +268 nominal value versus selling those fertilizer units at normal prices; TOMATO also has positive regions;
-- B4 scale × CARE run **`34848633407`** found a real single-farmer action-capacity frontier.
+B4 run `34848633407` located the animal-only action frontier: COW5_DAILY mean +39,447.5, but only +1,497.75 and 4–4 over COW4_DAILY; COW6_DAILY lost −4,174.75 and 0–8 to COW5_DAILY despite full survival.
 
-### B4 current animal-only frontier
+### E1–E2 — labor mechanism resolved
 
-Mean final-bank delta over starting cash, 8 paired fresh seed/seat cases:
+E1 residual-idle main-farmer STRAWBERRY is closed: it could not execute the crop without displacing higher-value work. E2/E2B initially showed implausible default-environment swings. E2C run `34866389261` traced them to official-engine RNG coupling: crop occupancy changes weed RNG consumption before random shop selection, so identical nominal seeds need not realize identical towns.
 
-- COW4_DAILY **+37,949.75**;
-- COW5_SURVIVAL **+36,685.25**;
-- **COW5_DAILY +39,447.50** — current mean champion, median 41,050.5, min 28,920, max 46,769;
-- COW6_DAILY +35,272.75;
-- COW6_SURVIVAL +33,054.25.
+E2D run `34866890716` removed stochastic shop unlocks without changing policy bytes and proved one dedicated hand additive: full-module gains **+907 to +919**, all 8/8, with exact animal invariants and 8 STRAWBERRY output.
 
-Important nuance:
+### E3 — one-hand crop density PASS
 
-- 5 DAILY vs 4 DAILY is only +1,497.75 mean and **4–4 paired**, so COW5_DAILY is mean-best but not robustly dominant;
-- 5 DAILY vs 5 SURVIVAL is +2,762.25 mean but 6–2, including one negative pair;
-- 6 SURVIVAL vs 5 SURVIVAL is **−3,631 mean, 0–8**;
-- 6 DAILY vs 5 DAILY is **−4,174.75 mean, 0–8**.
+Run `34868854114` selected exact **M6S1**: 6 MELON + 1 STRAWBERRY. In the deterministic-town causal environment it added **+9,533** over COW5_DAILY, produced 36 MELON + 8 STRAWBERRY and preserved the full COW5 fingerprint. The density ladder is closed.
 
-All animals survived, so the six-cow collapse is an **action/opportunity-cost saturation effect**, not mortality. This makes COW4_DAILY, COW5_SURVIVAL and COW5_DAILY three useful controls for the next hybrid rather than declaring five DAILY a universal optimum.
+### E4 — default-environment robustness STRONG PASS
+
+Run `34869392514`, 40 fresh seeds × both seats:
+
+- mean M6S1 improvement **+9,594.5**;
+- median **+8,643**;
+- CI95 **[+6,057.83, +13,131.17]**;
+- signs **33–7**; p10 gap **+7,970.6**;
+- 80/80 full survival, exact animal fingerprint and full crop output; zero failures.
+
+M6S1 is therefore a robust additive physical/economic module. It is not yet a hosted candidate.
 
 ## Current integration decision
 
-Do **not** build a pure COW5 agent and call the search complete. CR087 elite evidence and FP001 independently point toward mixed production: premium crops + durable animal economy + adaptive market handling.
+**E5 elite-informed mixed-animal transfer is active on `research/first-principles-economy-v1`, run `34922078827`.** The frozen gate compares COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, over 32 fresh default-environment seeds and both seats.
 
-Next integrated gate must compare elite-informed mixed/hybrid production programs against the best animal-only controls. Priority treatments:
+A mixed policy becomes primary only by passing full mechanics/crop transfer and beating COW5+M6S1 under the frozen rule. Otherwise at most one bounded non-inferior mixed architecture is retained as a secondary challenger.
 
-- COW4_DAILY + fertilized STRAWBERRY;
-- COW5_SURVIVAL + fertilized STRAWBERRY;
-- COW5_DAILY + STRAWBERRY as an action-starvation control;
-- labor ablation only where crop work creates measurable marginal value;
-- elite-informed mixed-animal priors (not blind tape copying) such as the observed COW/SHEEP families;
-- later H9 public-shop-conditioned expansion and CR088 legal market overlays.
-
-The candidate that advances must first show causal economic/logistics value, then survive heterogeneous population testing and hosted calibration. Originality alone never promotes it.
+After E5, the survivor set enters heterogeneous population testing against exact hosted anchors and multiple CR088/current-top macro representatives. Only then do separable CR086/CR088/H1/H1B market factors and H9 adaptive expansion enter. No new Kaggle submission is authorized now.
 
 ## Public notebook benchmark — characterization only
 

@@ -1,6 +1,6 @@
 # ROADMAP — Kculture live plan
 
-Updated: 2026-09-14
+Updated: 2026-09-15
 
 Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. The target class is ~3000+ hosted rating.
 
@@ -55,31 +55,24 @@ CR087 current-top mining is binding architectural evidence:
 
 This is not a closed knowledge source. It is the competitive prior against which new FP001 primitives are integrated.
 
-## Track C — CR088 automatic population search
+## Track C — CR088 automatic population search — HOSTED SENSOR COMPLETE
 
-### Phase 0 — COMPLETE
+Phase 0 run `34806600636`: 30/30 top-derived tapes mechanically valid. Corrected Phase 1 run `34808258927`: 42/42 valid, 26 overlays passed the frozen local non-regression filter.
 
-Run `34806600636`: 30/30 top-derived seeds mechanically valid across 720 fresh games. Seven diverse bases retained: Majkel, Orbital, feel the agi, redblackbst, ymg_aq, Otter and SpaTaro.
+Corrected submission workflow `34858890714` sent the exact selected sensors:
 
-### Phase 1 — COMPLETE
+- CR088A `56233701`, Orbital base, SHA `24e78d65...16e`;
+- CR088B `56233703`, feel `risk8_p125`, SHA `055fbbcd...053`.
 
-Initial run `34807533884` suffered an entrypoint packaging failure for modified overlays and is not economic evidence.
+Authenticated run `34910849970` closed both as direct candidates:
 
-Corrected frozen rerun **`34808258927`**:
+- CR088A: 1252.8, 59 episodes; newest 32 = 11W–21L;
+- CR088B: 1182.3, 54 episodes; newest 32 = 16W–16L;
+- zero mechanical failures.
 
-- 42/42 policies mechanically valid;
-- zero engine failures/non-DONE;
-- 26 overlays passed the frozen non-regression filter;
-- original holdout sealed.
+Full result: `docs/strategy/CR088_HOSTED_SENSOR_RESULT_2026-09-15.md`.
 
-Selected hosted sensors:
-
-- CR088A Orbital base — SHA `24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e`;
-- CR088B feel `risk8_p125` — SHA `055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053`.
-
-First submit attempt `34809554553` failed before Kaggle submission because the workflow incorrectly required `main.py` to be the only tar member. Infrastructure-only fix commit `761a83b063b11385570ba923e28840d93286e54f` preserves exact candidate bytes and changes only that preflight. Let the authenticated quota/duplicate gate decide whether submission is legal when the corrected workflow executes.
-
-Stop rules: no manual CR088A/B patch ladder, no raw local-champion promotion, no revival of CR080/081/082 representations.
+Decision: no tape/cap/floor retuning and no resubmission. Preserve the legal market operator, seven macro-family representatives and replay corpus for integrated population work.
 
 ## Track D — FP001 additive production/economics discovery
 
@@ -114,44 +107,46 @@ But COW5_DAILY is not a universal optimum:
 
 All animals survive, so the limit is action/opportunity cost. Preserve COW4_DAILY, COW5_SURVIVAL and COW5_DAILY as controls for integration.
 
-## Track E — integrated elite-informed hybrid — ACTIVE NEXT GATE
+## Track E — integrated elite-informed hybrid
 
-This is the new central workstream. The hypothesis is not “FP001 beats all prior knowledge”; it is:
+The architecture hypothesis remains:
 
 > elite-informed macro production + causally proven FP001 execution/economic primitives + legal adaptive market logic can outperform either component alone.
 
-### E1 — physical/economic hybrid gate
+### E1–E4 — production module discovery COMPLETE
 
-Compare on identical fresh seeds/seats:
+- E1 closed residual-idle main-farmer STRAWBERRY.
+- E2D proved dedicated labor/crop value after correcting the crop-occupancy/shop-RNG confound: +907 to +919 over animal controls, all 8/8.
+- E3 run `34868854114` selected M6S1 = 6 MELON + 1 STRAWBERRY, +9,533 in deterministic-town causal testing.
+- E4 run `34869392514` gave **STRONG PASS** under default stochastic environment: +9,594.5 mean, CI95 [+6,057.83,+13,131.17], 33–7 signs, 80/80 complete mechanics/output.
 
-1. `COW4_DAILY` animal-only control;
-2. `COW5_SURVIVAL` animal-only control;
-3. `COW5_DAILY` mean-best animal-only control;
-4. COW4_DAILY + small STRAWBERRY block with H11-optimal fertilizer timing;
-5. COW5_SURVIVAL + small STRAWBERRY block;
-6. COW5_DAILY + STRAWBERRY as explicit action-starvation treatment;
-7. treatments 4/5 with bounded dedicated HIRE only if the crop workload creates positive marginal labor value;
-8. elite-informed COW/SHEEP mixed-capacity comparator, using CR087 macro priors without blindly replaying one tape.
+Density tuning is closed. M6S1 is the frozen physical crop module.
 
-Measure final bank, survival, crop/animal output, fertilizer allocation, labor cost, unused turns, movement, missed care/feed/water and terminal inventory.
+### E5 — elite mixed-animal transfer ACTIVE
 
-PASS: a hybrid must beat its matched animal-only control causally without hidden catastrophe. If crop work simply displaces more valuable CARE, close that architecture rather than tune indefinitely.
+Run `34922078827` on `research/first-principles-economy-v1` compares:
 
-### E2 — population compatibility gate
+1. COW5 with/without M6S1;
+2. 3 COW + 2 SHEEP with/without M6S1;
+3. 2 COW + 3 SHEEP with/without M6S1.
 
-Only E1 survivors enter heterogeneous evaluation against exact historical anchors and multiple CR088/top-family representatives. Use both seats and fresh seeds. Do not promote by one local aggregate score alone; inspect matchup coverage and catastrophic weaknesses.
+All use H10 compact setup/batching and B3 DAILY CARE on 32 fresh default-environment seeds × both seats. The frozen decision permits one primary economic winner or, failing that, at most one bounded non-inferior mixed challenger.
 
-### E3 — market integration
+### E6 — heterogeneous population compatibility NEXT
 
-For physical survivors, factorially test the legal CR088/CR086-style economic operators and FP001 H1/H1B timing primitives. Market overlays must be compared against each candidate's own physical base.
+Test the E5 survivor set against exact historical hosted anchors and multiple CR088/current-top macro representatives, both seats and fresh seeds. Inspect matchup coverage and catastrophic family weaknesses; do not promote on aggregate mean alone.
 
-### E4 — public-shop adaptation
+### E7 — separable market integration
 
-Use H9 public town composition to choose marginal capacity/product mix. This is legal current public state and should be evaluated as an adaptive expansion controller rather than a fixed species rule.
+Factorially test CR086/CR088 legal latent-supply SELL logic plus H1/H1B timing against each surviving physical base. Keep physical and market layers attributable.
 
-### E5 — hosted sensors
+### E8 — H9 public-shop adaptation
 
-Spend hosted slots only on mechanically valid, meaningfully distinct candidates that answer a transfer question. Hosted evidence updates the population objective; it is not reserved only for the locally highest mean.
+Use legal current public town composition to choose marginal species/product capacity. Evaluate adaptive expansion against fixed COW and fixed mixed controls.
+
+### E9 — hosted sensors
+
+Spend a hosted slot only on a mechanically valid, strategically distinct candidate that survives population testing and answers a transfer question. No new submission is authorized at the current E5 stage.
 
 ## Closed hypotheses
 

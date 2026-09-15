@@ -1,31 +1,36 @@
-# Current authenticated submission ledger — 2026-09-14
+# Current authenticated submission ledger — 2026-09-15
 
-Hosted scores are moving checkpoints, not final ratings.
+Hosted scores are moving checkpoints, not final ratings. The table is ordered by submission recency, not strength.
 
 | Submission | Agent | Submitted UTC | Exact archive SHA-256 | Latest authenticated checkpoint | Episodes at checkpoint | Interpretation |
 |---|---|---|---|---:|---:|---|
-| **56220184** | **CR086 latent-supply SELL priority** | 2026-09-14 03:21:23 | `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888` | **600.0** | **1** | Initialization only; no strength verdict. |
-| **56199767** | **CR083 Phase-2 seed-demand clamp** | 2026-09-13 | `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8` | ~**1619.8** | mature checkpoint not re-read this cycle | Hosted calibration/reference, not current champion. |
-| **56124705** | **CR071M** | 2026-09-09 14:02:10 | `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652` | ~**1590.1** | historical active run | Hosted calibration/reference. |
-| **56073870** | **CR053 exact route 106309334** | historical | `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15` | **2064.8** | historical | Best known project hosted score; exact bytes recovered. |
-| **56045848** | CR029 | historical | see exact historical artifact | ~**1892** historical | historical | Second-best known project lineage. |
-| **56073867** | CR052 | historical | `b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d` | ~**1700–1750** historical | historical | Exact package recovered. |
+| **56233703** | **CR088B feel + risk8_p125** | 2026-09-14 14:57:47.663 | `055fbbcd09dc3112bef3ef7a78965ed09f28ec999283dab87641e60d5cf9d053` | **1182.3** | **54** | COMPLETE; newest 32 = 16W–16L, mean +5,244.78, median −622. Mechanically valid but hosted-regressive; direct backbone closed. |
+| **56233701** | **CR088A Orbital base** | 2026-09-14 14:57:45.370 | `24e78d657d6c16371fcc7393fbea4d23ce695fd456e722e37f5398f7866ab16e` | **1252.8** | **59** | COMPLETE; newest 32 = 11W–21L, mean −12,062.47, median −7,565.5. Hosted-regressive; direct backbone closed. |
+| **56220184** | **CR086 latent-supply SELL priority** | 2026-09-14 03:21:23.793 | `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888` | ~**1612.6** | **24** | Matured below CR083 at the same later checkpoint; preserve mechanism, not backbone promotion. |
+| **56199767** | **CR083 Phase-2 seed-demand clamp** | 2026-09-13 05:21:53.853 | `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8` | ~**1619.9** | mature checkpoint | Hosted calibration/reference, not champion. |
+| **56124705** | **CR071M** | 2026-09-09 14:02:10.630 | `dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652` | ~**1590.1** | historical active run | Hosted calibration/reference. |
+| **56073870** | **CR053 exact route 106309334** | 2026-09-07 09:26:47.173 | `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15` | **2064.8** | historical | Best known project hosted score; exact bytes recovered. |
+| **56045848** | CR029 | 2026-09-06 03:30:22.363 | see exact historical artifact | **1847.2** | historical | Second-best known project lineage at this authenticated checkpoint. |
+| **56073867** | CR052 | 2026-09-07 09:26:28.407 | `b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d` | **1749.2** | historical | Exact package recovered. |
 
-CR083 and CR086 are not assumed stronger because they beat CR053 locally. Run `34802917553` proved that even an exact-byte local league reverses the known hosted ordering. Kaggle remains the population-strength sensor.
+Latest CR088 evidence: submission workflow `34858890714`; authenticated forensics run `34910849970`. Full verdict: `docs/strategy/CR088_HOSTED_SENSOR_RESULT_2026-09-15.md`.
+
+The exact-byte local league reversed the known hosted hierarchy, and CR086/CR088 again showed that local causal/safety gains do not establish population strength. Kaggle remains the population sensor.
 
 Before the next hosted probe:
 
-1. finish CR088 Phase 1;
-2. select materially different representatives in hosted-rank/macro-family order;
-3. run a fresh authenticated slot-accounting read;
-4. verify package SHA and duplicate description;
-5. submit only the authorized frozen package and append its identity here.
+1. finish the integrated FP001/CR087 physical gate;
+2. require heterogeneous population compatibility against exact anchors and multiple current-top families;
+3. test market/adaptation layers against each physical base with attribution;
+4. perform a fresh authenticated slot-accounting read;
+5. verify exact package SHA, loader parity and duplicate description;
+6. submit only the authorized frozen package and append its identity here.
 
-The historical statement below that “five submissions currently allowed” was a checkpoint, not reusable quota evidence.
+No CR088 resubmission and no FP001-only submission are authorized now.
 
 ---
 
-# Current active submissions — authenticated checkpoint 2026-09-11
+# Historical authenticated checkpoint — 2026-09-11 (superseded)
 
 Source run 34655053172 / artifact 10284539343. Full parsed evidence in
 `experiments/CR080_MENGFEI_BRIDGE_2026-09-11/kaggle_checkpoint.json`.
@@ -38,11 +43,9 @@ Source run 34655053172 / artifact 10284539343. Full parsed evidence in
 CR071M package SHA256: dbc6fc2b2c3673b1d9fc36e103b8369a53c7f2cc33381e11a3cb5f769bebe652.
 296 episodes listed; newest 32 replays: 7 W / 23 L / 2 T, 0.25 score rate,
 16 games in each seat. Earlier 1841/1887 screenshots remain historical snapshots.
-Five submissions currently allowed; this is a cap, not a quota.
+Five submissions were reported allowed at this old checkpoint; this is historical cap evidence, not current quota.
 
-**CR080 is NOT submitted.** Discovery PASS 10-6; independent confirmation run
-34655496708 pending. If qualified, the next submission retires older CR070A
-56091951 while retaining CR071M 56124705. Do not retire a slot until confirmed.
+**Historical note:** CR080 had not been submitted at this checkpoint. Its later branch is closed; these instructions are not actionable.
 
 The earlier entries below are historical, including statements that authenticated
 replays were unavailable; API-first access is now functional.
