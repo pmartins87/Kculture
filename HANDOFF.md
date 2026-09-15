@@ -1,6 +1,6 @@
 # HANDOFF — Kculture
 
-> **Current update — 2026-09-15:** CR090 is complete and causally failed. The simple first-shop COW/SHEEP selector is closed without threshold rescue. The current binding gate is **CR091 — hierarchical controller, gate 1**, preserving the exact hosted CR053 physical route and testing CR086 latent-supply SELL priority as a separable market option.
+> **Current update — 2026-09-15:** CR090 is closed after causal failure. CR091 is the current binding gate. Its first run `34987640694` is **invalid for strategic inference** because CR052 was executed through a non-package-faithful harness. The corrected hosted-faithful rerun is **`34990757344`** on commit `f49bff2e7adde626b01b9fa3c0413f7fc97d9649`.
 
 ## Mission
 
@@ -17,100 +17,85 @@ Read first:
 2. `ROADMAP.md`
 3. `docs/strategy/CR090_H9_PUBLIC_SHOP_ADAPTIVE_RESULT_2026-09-15.md`
 4. `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_PROTOCOL_2026-09-15.md`
-5. experimental `docs/strategy/FP001_STATUS.md` / `FP001_ROADMAP.md`
+5. `docs/strategy/CR091_RUN1_INVALID_2026-09-15.md`
+6. experimental `docs/strategy/FP001_STATUS.md` / `FP001_ROADMAP.md`
 
 ## Competitive anchors
 
-- **CR053_REAL** remains the strongest exact project-hosted anchor: submission `56073870`, checkpoint ~`2064.8`, package SHA `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`.
-- CR052_REAL checkpoint ~`1749.2`.
-- CR083 checkpoint ~`1619.9`.
-- CR086 checkpoint ~`1612.6`.
-- frozen external frontier snapshot 2026-09-14: top ~`3191`; rank 10 ~`2958`; target remains ~3000+ class.
+- **CR053_REAL**: strongest exact project-hosted anchor; submission `56073870`, checkpoint ~`2064.8`, SHA `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`.
+- CR052_REAL ~`1749.2`, SHA `b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d`.
+- CR083 ~`1619.9`, SHA `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`.
+- CR086 ~`1612.6`, SHA `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888`.
+- frozen external frontier 2026-09-14: top ~3191; rank 10 ~2958; target remains ~3000+.
 
-Critical calibration fact: exact-byte local H2H reverses hosted order (CR083/CR086 beat CR053 locally). Local tests are valid for mechanics, causal interventions, catastrophe and diversity, **not** as direct hosted-rating predictors.
+Critical calibration: exact-byte local H2H reverses hosted order. Use local tests for mechanics, causal interventions, catastrophe and diversity, not as a direct hosted-rating predictor.
 
 ## Closed major routes
 
-Do not revive without new evidence changing the failure mechanism:
-
-- CR078/079 prior closed branches;
-- CR080 replay stitching;
-- CR081 static market-prefix transplant;
-- CR082 1-NN teacher imitation;
-- CR084 FEED rescue;
-- CR085 Pareto gating;
-- direct CR088 tape backbones;
-- static C5/C5+M6S1 competitive backbone after CR089;
-- simple first-shop H9 species selector after CR090.
+Keep closed absent new evidence changing the failure mechanism: CR078/079; CR080 replay stitching; CR081 static market-prefix transplant; CR082 1-NN imitation; CR084 FEED rescue; CR085 Pareto gating; direct CR088 tapes; static C5/C5+M6S1; fixed C3S2/C2S3; CR090 simple first-shop species selector.
 
 ## Retained modules / knowledge
 
-- CR053 hosted-proven macro/physical route knowledge;
-- CR086 legal latent opponent-supply estimator + SELL cash-at-risk priority;
-- CR087/CR088 top-lineage macro corpus and market/replay information;
-- H1 WHEAT town-pulse carry;
-- H1B owned-sale deferral;
-- H8/B3 animal economics + strong DAILY CARE;
-- H9 public-shop demand representation, **but not** the failed simple species rule;
-- H10 compact routing + threshold-6 animal-product batching;
-- H11 fertilizer opportunity-cost conversion;
-- M6S1 premium-crop module as a real economic module, not a standalone competitive backbone.
+CR053 macro/physical route; CR086 latent-supply estimator + SELL priority; CR087/088 elite macro/replay corpus; H1 WHEAT carry; H1B sale deferral; H8/B3+DAILY CARE; H9 public-shop demand representation; H10 compact routing/batching; H11 fertilizer conversion; M6S1 as economic module.
 
 ## CR089 final
 
-Run `34923802262`: C5_BASE and C5_M6S1 each went **0W–132L** over 11 heterogeneous edges. M6S1 improved average monetary edge margin by ~`+16.6k` but produced zero W/L gain. This permanently separates economic-module validity from competitive-backbone validity.
+Run `34923802262`: C5_BASE and C5_M6S1 each 0W–132L. M6S1 improved monetary margins but zero W/L coverage. Static C5 backbone closed; M6S1 retained only as a module.
 
 ## CR090 final
 
-Run `34979280512`, artifact ID `10401171740`, ZIP SHA `407769891c9f8ab7c240c8bb08fd10bfa606a890436cc320d5de6508ba2971ec`.
+Run `34979280512`: mechanics exact. YARN SHEEP-minus-COW mean `-174.46`, median `-451`, 7W/17L. MILK COW-minus-SHEEP mean `+2119.39`, 28/28 positive. Overall adaptive-minus-delayed-COW mean `-32.71`.
 
-Mechanics passed exactly (`128/128` prefix/shop/selector/fifth-animal parity, zero failures), but causal gate failed:
-
-- YARN: adaptive SHEEP minus delayed COW mean `-174.46`, median `-451`, `7W/17L`, positive rate `29.17%`;
-- MILK: adaptive COW minus delayed SHEEP mean `+2119.39`, median `+2151`, `28/28` positive;
-- all cases adaptive minus delayed COW mean `-32.71`, median `0`.
-
-Binding verdict: `CR090_H9_CAUSAL_FAIL_CLOSE_SIMPLE_SPECIES_ADAPTATION`.
-
-Lesson: a correct state/demand representation is not itself an action-value function.
+Binding verdict: `CR090_H9_CAUSAL_FAIL_CLOSE_SIMPLE_SPECIES_ADAPTATION`. Lesson: correct demand representation is not automatically an action-value rule.
 
 ## Current binding experiment — CR091
 
 Protocol: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_PROTOCOL_2026-09-15.md`.
 
-Research implementation:
-
-- `candidates/cr091_cr053_market_option.py`
-- `tools/cr091_hierarchical_market_option_gate.py`
-- `.github/workflows/cr091-hierarchical-market-option.yml`
-- head commit `93e3926581706b10c11f93fbec9ae5559670dc55`
-- active workflow run **`34987640694`**
-
 Treatments:
 
 1. exact `CR053_BASE`;
-2. `CR053_LATENT_PRIORITY`: exact CR053 farmer/hands and exact market-order multiset, with only existing SELL/order sequencing changed by the exact CR086 latent-supply cash-risk operator.
+2. `CR053_LATENT_PRIORITY`: exact CR053 farmer/hands and exact market-order multiset, with only order sequence changed by CR086 latent-supply cash-risk priority.
 
-Exact Phase-1 opponents: CR052_REAL, CR053_REAL, CR083, CR086. Seeds `91301..91308`, both seats, 16 games/edge, 128 total episodes.
+Frozen panel: CR052_REAL, CR053_REAL, CR083, CR086; seeds `91301..91308`; both seats; 128 total episodes. W/L edge-score delta is primary; terminal money diagnostic only.
 
-Primary promotion objective is **W/L edge-score delta**, not terminal money.
+### Run 1 `34987640694` — INVALID
 
-Frozen outcomes:
+The first harness executed package `main.py` via direct Python `exec()`. CR052 requires the hosted package context and all 32 CR052 treatment episodes failed. Therefore the run has **no CR091 PASS/FAIL verdict**.
 
-- broad positive transfer -> retain option and advance router;
-- strong positive and negative edges -> treat as heterogeneous option value and learn a legal public-state router;
-- neither -> close this option without threshold tuning and test the next separable option family;
-- mechanics violation -> repair mechanics only; no strategic inference.
+Non-binding three-edge diagnostic only: +0.1875 W/L score delta vs CR053, zero score delta vs CR083/CR086, with exact physical/order-multiset parity on executable calls.
 
-## Non-negotiable legality / evaluation rules
+Do not promote this partial result.
 
-- engine lock: `kaggle-environments==1.32.7`;
-- no identity, rating, EpisodeId, hidden seed, future state or direct opponent-private runtime features;
-- `town.unlocked_shops` is legal shared public state;
-- original final holdout remains sealed;
-- no automatic Kaggle submission from CR091 Phase 1;
-- hosted slots are high-information sensors, used only after a candidate answers a real transfer question.
+### Corrected rerun — ACTIVE / AUTHORITATIVE
+
+- research commit: `f49bff2e7adde626b01b9fa3c0413f7fc97d9649`
+- workflow: **`34990757344`**
+
+Only execution semantics changed. Frozen seeds, opponents, treatments, option logic and thresholds are unchanged.
+
+The repaired harness uses the validated hosted-faithful path:
+
+- `kaggle_exact_runtime.AgentProcess`
+- fresh spawned process per package per episode
+- official `kaggle_environments.agent.Agent`
+- shared-state observation reconstruction
+- official reference stepping/overage accounting
+- no falsy-action PASS substitution
+- exact CR053 package produces the candidate base action; market option is applied to that exact action
+- failures now retain phase, step and traceback diagnostics
+
+Frozen outcomes after mechanics pass:
+
+- broad positive transfer -> retain O1 and advance router;
+- positive + negative edges -> heterogeneous option value and public-state router discovery;
+- neither -> close option without threshold tuning, move to H1/H1B timing on exact CR053;
+- mechanics failure -> diagnose semantics only, no strategic inference.
+
+## Non-negotiable legality / evaluation
+
+Engine `kaggle-environments==1.32.7`; no identity/rating/EpisodeId/hidden seed/future/direct opponent-private runtime features; `town.unlocked_shops` legal shared state; final holdout sealed; no automatic CR091 hosted submission.
 
 ## Immediate next action
 
-Query workflow `34987640694` once. If complete, read the frozen result and follow its declared branch. Do not start a polling loop and do not submit anything manually to Kaggle while CR091 gate 1 is active.
+Query rerun `34990757344` once. If complete, read the frozen result and follow its declared branch. Do not use run `34987640694` for promotion and do not submit anything manually to Kaggle while the corrected gate is unresolved.
