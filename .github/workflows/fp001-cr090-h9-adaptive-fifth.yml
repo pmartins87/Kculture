@@ -1,0 +1,42 @@
+name: FP001 CR090 H9 adaptive fifth animal
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'candidates/fp001_h9_adaptive_fifth_animal.py'
+      - 'tools/fp001_cr090_h9_adaptive_fifth_test.py'
+      - '.github/workflows/fp001-cr090-h9-adaptive-fifth.yml'
+
+jobs:
+  phase1:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install frozen Kaggriculture engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install 'kaggle-environments==1.32.7'
+
+      - name: Run CR090 H9 causal and natural-robustness gate
+        run: |
+          set -o pipefail
+          python tools/fp001_cr090_h9_adaptive_fifth_test.py | tee cr090_h9_phase1.log
+
+      - name: Upload frozen result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cr090-h9-adaptive-fifth-phase1-v1
+          path: |
+            artifacts/cr090_h9_phase1_result.json
+            cr090_h9_phase1.log
+          if-no-files-found: warn
