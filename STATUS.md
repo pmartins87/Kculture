@@ -182,13 +182,24 @@ Run `34869392514`, 40 fresh seeds × both seats:
 
 M6S1 is therefore a robust additive physical/economic module. It is not yet a hosted candidate.
 
+### E5 — fixed mixed-animal transfer FAIL / C5_M6S1 SURVIVES
+
+Corrected run `34922557868` first passed 4/4 exact COW5/E4 full-trajectory parity. Over 32 fresh default-environment seeds × both seats:
+
+- C5_M6S1 − C5_BASE: **+10,542.09** mean, +10,160 median, CI95 [+7,160.75,+13,923.44], signs 29–3, full 64/64 mechanics;
+- C3S2_M6S1 produced only 18 MELON + 8 STRAWBERRY and lost **−8,392.45 mean** versus C5_M6S1;
+- C2S3_M6S1 produced only 12 MELON + 8 STRAWBERRY and lost **−14,370.72 mean**;
+- neither mixed policy passed full-crop eligibility or the frozen diversity-retention bounds.
+
+Close the fixed C3S2/C2S3 + full-opening-M6S1 grid. Preserve mixed species for future H9 public-shop adaptation; do not run a composition or affordability rescue ladder. Exact C5_M6S1 is the sole physical survivor. Result: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_RESULT_2026-09-15.md`.
+
 ## Current integration decision
 
-**E5 elite-informed mixed-animal transfer is active on `research/first-principles-economy-v1`, corrected run `34922557868`.** Run `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate. The frozen gate compares COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, over 32 fresh default-environment seeds and both seats.
+**CR089 heterogeneous physical population gate is active (`pending workflow trigger`).** It compares exact C5_M6S1 against exact C5_BASE over the same 11-opponent panel: CR053_REAL, CR052_REAL, CR083, CR086 and all seven CR088/current-top macro representatives, 6 fresh seeds × both seats per edge.
 
-A mixed policy becomes primary only by passing full mechanics/crop transfer and beating COW5+M6S1 under the frozen rule. Otherwise at most one bounded non-inferior mixed architecture is retained as a secondary challenger.
+C5_M6S1 advances only if it clears absolute mechanics/coverage and improves mean edge score by at least +0.05 without creating new catastrophic family weaknesses. This remains a local transfer gate, not a hosted-rating predictor.
 
-After E5, the survivor set enters heterogeneous population testing against exact hosted anchors and multiple CR088/current-top macro representatives. Only then do separable CR086/CR088/H1/H1B market factors and H9 adaptive expansion enter. No new Kaggle submission is authorized now.
+If CR089 passes, next is separable CR086/CR088/H1/H1B market integration. If M6S1 is safe but adds no W/L value, move to H9 public-shop adaptation instead. No new Kaggle submission is authorized now.
 
 ## Public notebook benchmark — characterization only
 

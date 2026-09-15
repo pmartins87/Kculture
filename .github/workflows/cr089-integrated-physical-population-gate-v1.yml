@@ -1,0 +1,203 @@
+name: CR089 integrated physical heterogeneous population gate v1
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [fix/kaggle-parity-v1]
+    paths: [.github/workflows/cr089-integrated-physical-population-gate-v1.yml]
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  CANDIDATES: C5_BASE,C5_M6S1
+  OPPONENTS: CR053_REAL,CR052_REAL,CR083,CR086,r01_e108766633_s56156662,r02_e108761464_s56114097,r03_e108766659_s56209748,r06_e108754069_s56205640,r07_e108766657_s56132899,r09_e108766659_s56097405,r10_e108754200_s56210228
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download exact anchor and current-top source artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: cr052-cr053-hosted-candidates
+          path: source/hostedpair
+          run-id: 34105008373
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr083-phase2-frozen-packages-v1
+          path: source/cr083
+          run-id: 34715575445
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr086-latent-supply-gate-a-v1
+          path: source/cr086
+          run-id: 34800444746
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr087-current-top-lineage-discovery-v1
+          path: source/lineage
+          run-id: 34803148700
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr088-top-tape-population-phase0-aggregate
+          path: source/phase0
+          run-id: 34806600636
+          github-token: ${{ github.token }}
+      - name: Build exact frozen candidate and opponent packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p prepared/candidates prepared/opponents manifests
+          cp source/hostedpair/R4D_CR053_ROUTE106309334_V1.tar.gz prepared/opponents/CR053_REAL.tar.gz
+          cp source/hostedpair/R4D_CR052_ADAPTIVE_ROUTE_V2_PUBLIC_EXACT.tar.gz prepared/opponents/CR052_REAL.tar.gz
+          cp source/cr083/CR083.tar.gz prepared/opponents/CR083.tar.gz
+          cp source/cr086/corpus/CR086.tar.gz prepared/opponents/CR086.tar.gz
+          test "$(sha256sum prepared/opponents/CR053_REAL.tar.gz | awk '{print $1}')" = "095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15"
+          test "$(sha256sum prepared/opponents/CR052_REAL.tar.gz | awk '{print $1}')" = "b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d"
+          test "$(sha256sum prepared/opponents/CR083.tar.gz | awk '{print $1}')" = "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"
+          test "$(sha256sum prepared/opponents/CR086.tar.gz | awk '{print $1}')" = "11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888"
+
+          python tools/cr088_phase1_market_population.py matrix \
+            --metadata source/lineage/lineage/episodes.json \
+            --phase0 source/phase0/CR088_PHASE0_AGGREGATE.json \
+            --output top-matrix.json
+          jq -r '.include[] | select(.operator == "base") | [.base_candidate_id,.tape_file,.episode_id,.submission_id] | @tsv' top-matrix.json |
+          while IFS=$'\t' read -r base tape episode submission
+          do
+            python tools/cr088_phase1_market_population.py build \
+              --metadata source/lineage/lineage/episodes.json \
+              --tape "source/lineage/lineage/tapes/$tape" \
+              --episode-id "$episode" --submission-id "$submission" --operator base \
+              --estimator-source tools/cr086_opponent_inventory_estimator_eval.py \
+              --output "prepared/opponents/$base.tar.gz" \
+              --manifest "manifests/$base.json"
+          done
+
+          python tools/cr089_build_physical_packages.py \
+            --candidate-id C5_BASE --composition COW,COW,COW,COW,COW \
+            --strawberries 0 --melons 0 \
+            --output prepared/candidates/C5_BASE.tar.gz --manifest manifests/C5_BASE.json
+          python tools/cr089_build_physical_packages.py \
+            --candidate-id C5_M6S1 --composition COW,COW,COW,COW,COW \
+            --strawberries 1 --melons 6 \
+            --output prepared/candidates/C5_M6S1.tar.gz --manifest manifests/C5_M6S1.json
+      - name: Official-loader smoke for integrated candidates
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os, sys, tarfile, tempfile
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+          archives=[p.resolve() for p in sorted(Path('prepared/candidates').glob('*.tar.gz'))]
+          for archive in archives:
+              previous=Path.cwd()
+              with tempfile.TemporaryDirectory() as td:
+                  with tarfile.open(archive, 'r:*') as tf:
+                      tf.extractall(td)
+                  root=Path(td).resolve(); os.chdir(root); sys.path.insert(0,str(root))
+                  path=root/'main.py'
+                  fn=get_last_callable(path.read_text(encoding='utf-8'),path=str(path))
+                  argc=getattr(getattr(fn,'__code__',None),'co_argcount',None)
+                  if argc not in (1,2): raise RuntimeError((archive,fn,argc))
+                  sys.path.pop(0)
+                  for name in list(sys.modules):
+                      if name == 'candidates' or name.startswith('candidates.'):
+                          del sys.modules[name]
+                  os.chdir(previous)
+                  print({'archive':archive.name,'selected':getattr(fn,'__name__',repr(fn)),'argc':argc})
+          PY
+      - id: matrix
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json, os
+          c=[x for x in os.environ['CANDIDATES'].split(',') if x]
+          o=[x for x in os.environ['OPPONENTS'].split(',') if x]
+          print('matrix='+json.dumps({'include':[{'candidate':a,'opponent':b} for a in c for b in o]},separators=(',',':')))
+          PY
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          c=[x for x in os.environ['CANDIDATES'].split(',') if x]
+          o=[x for x in os.environ['OPPONENTS'].split(',') if x]
+          print('matrix='+json.dumps({'include':[{'candidate':a,'opponent':b} for a in c for b in o]},separators=(',',':')))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cr089-frozen-population-packages-v1
+          path: |
+            prepared/**
+            manifests/**
+          retention-days: 30
+
+  evaluate:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      max-parallel: 20
+      matrix: ${{ fromJson(needs.prepare.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: cr089-frozen-population-packages-v1
+          path: frozen
+      - name: Fresh exact population edge
+        shell: bash
+        run: |
+          mkdir -p result
+          python tools/kaggle_reference_h2h_v2.py \
+            --a "frozen/prepared/candidates/${{ matrix.candidate }}.tar.gz" \
+            --b "frozen/prepared/opponents/${{ matrix.opponent }}.tar.gz" \
+            --a-id "${{ matrix.candidate }}" --b-id "${{ matrix.opponent }}" \
+            --seed-count 6 --master-seed 9270915 --output result/result.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr089-${{ matrix.candidate }}-vs-${{ matrix.opponent }}
+          path: result/**
+          retention-days: 30
+
+  aggregate:
+    if: always()
+    needs: evaluate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: fix/kaggle-parity-v1}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: cr089-*-vs-*
+          path: population-results
+      - name: Aggregate frozen gate
+        run: |
+          python tools/cr089_population_aggregate.py \
+            --input-dir population-results --candidates "$CANDIDATES" \
+            --opponents "$OPPONENTS" --output CR089_POPULATION_AGGREGATE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cr089-integrated-physical-population-aggregate-v1
+          path: CR089_POPULATION_AGGREGATE.json
+          retention-days: 30

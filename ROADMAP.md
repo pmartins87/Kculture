@@ -122,19 +122,17 @@ The architecture hypothesis remains:
 
 Density tuning is closed. M6S1 is the frozen physical crop module.
 
-### E5 — elite mixed-animal transfer ACTIVE
+### E5 — elite fixed mixed-animal transfer COMPLETE / FAIL
 
-Corrected run `34922557868` on `research/first-principles-economy-v1` compares (initial run `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate):
+Corrected run `34922557868` passed 4/4 exact COW5/E4 trajectory parity. C5_M6S1 replicated +10,542.09 mean over C5_BASE with 64/64 full mechanics. Fixed C3S2/C2S3 hybrids produced only partial MELON blocks and lost −8,392.45/−14,370.72 mean versus C5_M6S1, failing the frozen retention rules.
 
-1. COW5 with/without M6S1;
-2. 3 COW + 2 SHEEP with/without M6S1;
-3. 2 COW + 3 SHEEP with/without M6S1.
+Decision: close the static composition grid. C5_M6S1 is the sole E5 survivor; fixed mixed animals remain only as an H9 adaptive prior.
 
-All use H10 compact setup/batching and B3 DAILY CARE on 32 fresh default-environment seeds × both seats. The frozen decision permits one primary economic winner or, failing that, at most one bounded non-inferior mixed challenger.
+### E6 / CR089 — heterogeneous population compatibility ACTIVE
 
-### E6 — heterogeneous population compatibility NEXT
+Workflow run `pending workflow trigger` tests exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
 
-Test the E5 survivor set against exact historical hosted anchors and multiple CR088/current-top macro representatives, both seats and fresh seeds. Inspect matchup coverage and catastrophic family weaknesses; do not promote on aggregate mean alone.
+M6S1 must clear absolute mechanics/coverage and beat its exact control by >= +0.05 mean edge score with bounded family regressions and no new zero-score edge. Full protocol: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_PROTOCOL_2026-09-15.md`.
 
 ### E7 — separable market integration
 
