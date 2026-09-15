@@ -29,118 +29,104 @@ Strongest exact project-hosted anchor:
 - exact SHA `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`
 - source run `34105008373`, artifact `10012004237`
 
-Other exact anchors:
+Other exact anchors: CR052_REAL ~`1749.2`; CR083 ~`1619.9`; CR086 ~`1612.6`.
 
-- CR052_REAL ~`1749.2`, SHA `b650a31d091323f2510aede0265937d3193a82a99109eadc8ab39c6e85db278d`
-- CR083 ~`1619.9`, SHA `648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8`
-- CR086 ~`1612.6`, SHA `11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888`
+Critical warning: exact-byte league `34802917553` locally ranked CR083/CR086 above CR053 although hosted Kaggle ranks CR053 materially higher. Local H2H is useful for mechanics, causal interventions, catastrophe and diversity, **not** as a hosted-rating oracle.
 
-Critical calibration warning: exact-byte league `34802917553` locally ranked CR083/CR086 above CR053 although Kaggle hosted ranks CR053 materially higher. Local H2H is useful for mechanics, causal interventions, catastrophe and diversity, **not** as a hosted-rating oracle.
+## Retained competitive / FP001 knowledge
 
-## Retained competitive knowledge
-
-### CR086
-
-Legal latent-opponent-supply estimator remains validated: 100,660 commodity-step observations, MAE ~`1.25005`, p95 error `9`, interval coverage ~`0.96946`, stock>=10 accuracy ~`0.95634`.
-
-Its candidate preserved route/actions/order multiset and changed SELL priority only. Local Gate A vs exact CR083 was 26W–6L, but hosted checkpoint ~`1612.6` did not improve on CR083. Preserve the estimator/operator; do not use CR086 as preferred backbone.
-
-### CR087 / CR088
-
-Current-top tapes are highly state-variable: 30/30 exact tapes unique, median Hamming 719/719. Modal/stitch/1-NN imitation is not a faithful decision policy.
-
-Useful macro priors remain: early MELON/STRAWBERRY, later WHEAT/CARROT/TOMATO, mixed animals, ~3 early-half lands and adaptive market queues.
-
-Direct hosted tape sensors were weak: CR088A `56233701` ~`1252.8`; CR088B `56233703` ~`1182.3`. Preserve corpus/market knowledge; close direct tape backbones.
-
-## FP001 retained mechanics/economics
-
-Validated reusable knowledge:
-
-- H1 WHEAT town-pulse carry: +`916.875` paired mean (`34843184110`)
-- H1B owned-sale deferral: `104/104` positive exact cases (`34843556192`)
-- H8/B3 + DAILY CARE: COW physically strongest in tested baseline; CARE first-order (`34844919444`, `34847600991`)
-- H9 public-shop demand representation (`34847099631`), but not the failed simple species decision rule
-- H10 compact routing + threshold-6 batching (`34848106237`)
-- H11 fertilizer conversion: STRAWBERRY strong, TOMATO positive regions (`34848464648`)
-- B4: fifth COW marginal, sixth COW beyond action/opportunity-cost frontier (`34848633407`)
-- M6S1 = 6 MELON + 1 STRAWBERRY is a genuine economic module, repeatedly ~+9.5k to +10.5k when scheduler/liquidity preconditions hold
-
-Module validity is not competitive-backbone validity.
+- CR086 legal latent-opponent-supply estimator and SELL-priority operator are retained; CR086 itself is not the preferred backbone.
+- CR087/CR088 elite macro/replay knowledge is retained; direct tape backbones remain closed.
+- H1 WHEAT town-pulse carry, H1B sale deferral, H8/B3+DAILY CARE, H9 demand representation, H10 batching/routing, H11 fertilizer conversion and M6S1 remain reusable primitives/modules.
+- M6S1 is a genuine economic module, not a standalone competitive backbone.
 
 ## CR089 — COMPLETE / FAIL
 
-Run `34923802262`: C5_BASE and C5_M6S1 each **0W–132L**, 11/11 zero-score edges, zero mechanical failures. M6S1 improved monetary margins but zero W/L coverage.
-
-Binding verdict: `M6S1_FAILS_POPULATION_COMPATIBILITY`. Static C5/C5+M6S1 are closed as competitive backbones; M6S1 survives as a module.
+Run `34923802262`: C5_BASE and C5_M6S1 each **0W–132L**, 11/11 zero-score edges, zero mechanical failures. Static C5/C5+M6S1 are closed as competitive backbones; M6S1 survives as a module.
 
 ## CR090 — COMPLETE / FAIL
 
-Run `34979280512`, artifact `10401171740`.
-
-Mechanics exact. YARN adaptive SHEEP minus delayed COW: mean `-174.46`, median `-451`, 7W/17L. MILK adaptive COW minus delayed SHEEP: mean `+2119.39`, median `+2151`, 28/28 positive. Overall adaptive minus delayed COW mean `-32.71`.
+Run `34979280512`. Mechanics exact. YARN adaptive SHEEP minus delayed COW was negative; MILK adaptive COW minus delayed SHEEP strongly positive; natural adaptive policy did not beat delayed COW.
 
 Binding verdict: `CR090_H9_CAUSAL_FAIL_CLOSE_SIMPLE_SPECIES_ADAPTATION`. No threshold rescue; H9 survives only as a state feature/prior.
 
-## Current binding gate — CR091 hierarchical market option
+## CR091 — COMPLETE / PASS
 
-Protocol: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_PROTOCOL_2026-09-15.md`.
+Binding rerun: **`34990757344`**, research commit `f49bff2e7adde626b01b9fa3c0413f7fc97d9649`.
 
-Architecture: keep exact hosted CR053 as physical/macro host and test CR086 latent-supply priority as a separable market option.
+Artifact: `cr091-hierarchical-market-option-gate-v1`, ID `10406926564`, ZIP SHA-256 `d6d9a5a7cb187e48dc4cb187e348adb7fff4d10666f18f27b4030ccc8ad2f3d0`.
 
-Frozen Phase-1 design:
+The earlier run `34987640694` remains invalid/non-binding because its direct-`exec()` harness failed CR052 package semantics.
 
-- `CR053_BASE`: exact CR053
-- `CR053_LATENT_PRIORITY`: exact CR053 farmer/hands and exact market-order multiset; only order sequence may change by the exact CR086 latent-supply cash-risk operator
-- opponents: CR052_REAL, CR053_REAL, CR083, CR086
-- seeds `91301..91308`, both seats
-- 16 games/edge, 64 games/treatment, 128 total
-- W/L edge score primary; terminal money diagnostic only
-- zero mechanics failures/parity violations required
-- no automatic Kaggle submission
+CR091 compared exact CR053 against exact CR053 plus the exact CR086 latent-supply SELL-priority operator, changing only the order of existing market orders.
 
-### CR091 run 1 — INVALID, no strategic verdict
+Mechanics on the valid rerun:
 
-Workflow `34987640694` is **not evidence for PASS or FAIL**. Its harness executed historical `main.py` files directly with `exec()` rather than the hosted-faithful package runner. CR052 therefore failed all 32 of its treatment episodes and had zero valid games.
+- 128/128 episodes valid;
+- failures: **0**;
+- parity violations: **0**;
+- exact farmer/hand parity every call;
+- exact normalized market-order multiset parity every call;
+- exact BASE full-action parity every call;
+- O1 active with **1,075** market reorders.
 
-The remaining three edges were mechanically clean and produced a non-binding diagnostic only:
+Seat-balanced edge-score deltas `O1 - BASE`:
 
-- vs CR053_REAL: base `0.5000` -> latent `0.6875` (`+0.1875`)
-- vs CR083: `0.5000` -> `0.5000`
-- vs CR086: `0.5000` -> `0.5000`
-- physical/multiset/base parity exact on all executable calls; zero violations
+- CR052_REAL: `0.0000`
+- CR053_REAL: `+0.1875`
+- CR083: `0.0000`
+- CR086: `0.0000`
 
-These partial numbers **must not be promoted** because the frozen panel was incomplete.
+Summary: 4/4 nonnegative edges, mean delta `+0.046875`, maximum `+0.1875`, worst regression `0.0`.
 
-Record: `docs/strategy/CR091_RUN1_INVALID_2026-09-15.md`.
+Binding verdict: **`CR091_LATENT_OPTION_TRANSFER_PASS_ADVANCE_ROUTER`**.
 
-### CR091 authoritative rerun — ACTIVE
+Interpretation: CR086 is not promoted as a backbone. Its latent-priority mechanism is promoted as frozen separable option **O1** on exact CR053. No threshold retuning.
 
-Repair commit on research branch: `f49bff2e7adde626b01b9fa3c0413f7fc97d9649`.
+Result: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_RESULT_2026-09-15.md`.
 
-Binding workflow run: **`34990757344`**.
+## Current binding gate — CR092 broad O1 transfer / router labels
 
-The frozen experimental design and thresholds are unchanged. Only execution semantics were repaired to the already validated reference path:
+Protocol: `docs/strategy/CR092_BROAD_OPTION_ROUTER_LABEL_PROTOCOL_2026-09-15.md`.
 
-- `kaggle_exact_runtime.AgentProcess`
-- fresh spawned process per package per episode
-- official `kaggle_environments.agent.Agent`
-- `Environment.__get_shared_state(seat).observation`
-- official reference stepping/overage accounting
-- no falsy-action PASS substitution
-- the exact CR053 package itself now generates the candidate base action; the CR086 option is applied on top of that exact action
-- detailed phase/step/traceback is recorded if any package still fails
+Purpose: test frozen O1 on the broader 11-edge CR089 population and collect causally clean public-state labels for a later router.
 
-Only run `34990757344` may produce the CR091 verdict.
+Frozen population:
 
-Frozen outcomes after a mechanically valid rerun:
+- exact anchors: CR053_REAL, CR052_REAL, CR083, CR086;
+- macro reps: `r01`, `r02`, `r03`, `r06`, `r07`, `r09`, `r10` from the exact CR089 frozen population artifact `10378299284`.
 
-- broad positive transfer -> `CR091_LATENT_OPTION_TRANSFER_PASS_ADVANCE_ROUTER`
-- strong positive + negative edges -> `CR091_HETEROGENEOUS_OPTION_VALUE_ADVANCE_ROUTER_DISCOVERY`
-- neither -> `CR091_LATENT_OPTION_FAIL_CLOSE_OPTION`, no threshold rescue
-- mechanics failure -> diagnose/repair semantics only; no strategic inference
+Fresh evaluation:
 
-If option value survives, Phase 2 learns a **legal public-state option-value router**; runtime opponent identity remains prohibited.
+- seeds `91401..91406`;
+- both seats;
+- 12 games/treatment/edge;
+- 132 games per treatment, 264 total;
+- exact hosted-faithful package runner;
+- no hosted submission.
+
+Counterfactual label rule: for each matched BASE/O1 episode, record O1's legal state immediately before its first actual market reorder. A label is admissible only if that strategic-state hash exactly matches BASE's state hash at the same step. Primary label is `outcome(O1) - outcome(BASE)`; terminal money is diagnostic only. Opponent ID is offline stratification metadata only and is forbidden as a router feature.
+
+Frozen broad-survival gate requires mean edge delta >= `+0.02`, >=8/11 nonnegative edges, worst regression >= `-0.125`, macro mean delta >=0 and no new zero-score catastrophe from a BASE edge >=0.25.
+
+Frozen routing signal requires at least 8 positive and 8 negative hash-valid labels spanning at least two opponent strata per sign.
+
+Implementation on research branch:
+
+- `tools/cr092_broad_option_edge.py`
+- `tools/cr092_aggregate.py`
+- `.github/workflows/cr092-broad-option-router-label.yml`
+- workflow/head commit `b42347617a6967eeb2862fde23737c7538d3b9d3`
+- active run **`35015135956`**
+- prepare job already PASS: all 11 opponent packages downloaded and SHA-verified.
+
+Frozen outcomes:
+
+- broad survivor + heterogeneous labels -> `CR092_BROAD_PASS_HETEROGENEOUS_ADVANCE_ROUTER`
+- broad survivor without downside support -> `CR092_BROAD_PASS_O1_ADVANCE_NEXT_OPTION`
+- broad fail but strong heterogeneous option value -> `CR092_BROAD_FAIL_HETEROGENEOUS_ADVANCE_ROUTER_DISCOVERY`
+- otherwise -> `CR092_BROAD_FAIL_CLOSE_ALWAYS_ON_O1`
+- mechanics failure -> no strategic verdict.
 
 ## Closed / do-not-retune absent new evidence
 
@@ -148,4 +134,4 @@ CR078/079, CR080 replay stitching, CR081 static market-prefix transplant, CR082 
 
 ## Hosted policy
 
-No CR091 Phase-1 hosted submission is authorized. Hosted slots remain high-information population sensors, used only after a mechanically exact candidate answers a real population-transfer question.
+No CR092 outcome automatically authorizes a Kaggle submission. Hosted slots remain high-information population sensors, used only after a mechanically exact state-adaptive or multi-option candidate survives broad fresh-seed evaluation without a major catastrophe edge.
