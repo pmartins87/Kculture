@@ -4,7 +4,7 @@ Updated: 2026-09-15
 
 ## North star
 
-Reach prize/top-10 class and maximize probability of 1st place. Current frozen external target: ~`2958+` top 10 and ~`3000+` frontier class.
+Reach prize/top-10 class and maximize probability of 1st place. Frozen external target: ~`2958+` top 10 and ~`3000+` frontier class.
 
 Optimize **competitive W/L/population value**, not novelty, terminal money or local single-panel rating.
 
@@ -14,112 +14,163 @@ Optimize **competitive W/L/population value**, not novelty, terminal money or lo
 2. Economic/mechanics module validity does not imply competitive-backbone validity.
 3. Exact-engine tests govern mechanics and causal interventions; local H2H ordering is not a hosted-rating oracle.
 4. No post-result threshold ladder for failed architectures without new causal evidence.
-5. Use exact hosted packages whenever possible.
+5. Use exact hosted/frozen packages whenever possible.
 6. No identity/rating/EpisodeId/hidden seed/future/direct opponent-private runtime features.
 7. Original final holdout remains sealed.
 8. Hosted slots answer high-information transfer questions only.
 9. Execution/mechanics failures cannot be interpreted as strategic failures.
+10. Router labels must be counterfactual W/L labels or a defensible competitive surrogate, never terminal money alone.
 
 ## Completed foundation
 
-Competitive: CR053_REAL remains the strongest exact hosted anchor (~2064.8); CR086 latent-supply estimator/operator is retained; CR087/088 elite macro/replay knowledge is retained while direct tape backbones stay closed.
+Competitive: CR053_REAL remains the strongest exact hosted anchor (~2064.8); CR086 estimator/operator retained; CR087/088 elite macro/replay knowledge retained while direct tape backbones stay closed.
 
 FP001: retain H1, H1B, H8/B3+CARE, H9 representation, H10, H11 and M6S1 as reusable primitives/modules.
 
-## Closed integration gates
+Closed integration failures: CR089 static C5/C5+M6S1; CR090 simple H9 species selector.
 
-### CR089 — static C5 population gate FAIL
-
-Run `34923802262`: C5_BASE and C5_M6S1 each 0W–132L. Preserve M6S1 as module; close C5 as backbone.
-
-### CR090 — simple H9 species selector FAIL
-
-Run `34979280512`: mechanics exact; MILK/COW contrast strongly positive but YARN/SHEEP contrast negative. Binding verdict `CR090_H9_CAUSAL_FAIL_CLOSE_SIMPLE_SPECIES_ADAPTATION`. No threshold rescue; H9 remains only a state feature/prior.
-
-## R6 / CR091 — hierarchical competitive controller CURRENT
-
-### Design principle
-
-Use hosted-proven CR053 as initial **host organism** and add separable options valued by competitive W/L.
+## R6 — hierarchical competitive controller
 
 Target architecture:
 
-`legal public state -> option value -> best macro/market option`
+`legal runtime state -> option value -> best separable market/macro option`
 
-not a hand-written proxy rule and not raw tape imitation.
+Use hosted-proven CR053 as the initial host organism instead of repeatedly replacing the whole agent.
 
-### Gate 1 — latent-supply market option
+## CR091 — Gate 1 COMPLETE / PASS
 
-Frozen protocol: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_PROTOCOL_2026-09-15.md`.
+Binding run `34990757344`, result `CR091_LATENT_OPTION_TRANSFER_PASS_ADVANCE_ROUTER`.
 
-Treatments:
+Exact CR053 plus the exact CR086 latent-supply market-priority operator passed mechanics and population transfer on the four-anchor panel:
 
-- exact `CR053_BASE`
-- `CR053_LATENT_PRIORITY`: identical CR053 farmer/hands and market-order multiset; only order sequence changed by CR086 latent-supply cash-risk priority
+- failures 0;
+- violations 0;
+- exact physical and market-multiset parity;
+- 1,075 O1 reorders;
+- edge deltas: CR052 `0`, CR053 `+0.1875`, CR083 `0`, CR086 `0`;
+- mean edge delta `+0.046875`, worst regression `0`.
 
-Frozen panel: CR052_REAL, CR053_REAL, CR083, CR086; seeds `91301..91308`; both seats; 128 episodes total. Primary target is W/L edge-score delta. Money is diagnostic only.
+Freeze this CR086 priority mechanism as option **O1**. Do not retune it.
 
-#### Run 1 INVALID
+Result doc: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_RESULT_2026-09-15.md`.
 
-Run `34987640694` is not a strategic result. The harness executed package `main.py` via direct `exec()` and CR052 failed all 32 treatment episodes. Three-edge partial diagnostics showed +0.1875 vs CR053 and zero W/L change vs CR083/CR086, with clean parity, but the panel was incomplete and these values are non-binding.
+## CR092 — broad O1 transfer + router-label gate CURRENT
 
-Record: `docs/strategy/CR091_RUN1_INVALID_2026-09-15.md`.
+Protocol: `docs/strategy/CR092_BROAD_OPTION_ROUTER_LABEL_PROTOCOL_2026-09-15.md`.
 
-#### Authoritative rerun ACTIVE
+### Question
 
-Repair commit `f49bff2e7adde626b01b9fa3c0413f7fc97d9649` on `research/first-principles-economy-v1`.
+Does frozen O1 survive the broader 11-edge heterogeneous population, and does its value vary enough across hash-matched public states to justify a learned router?
 
-Binding workflow: **`34990757344`**.
+### Frozen population / execution
 
-No design, seed, opponent, option or gate threshold changed. Execution now matches the validated hosted-faithful runner: fresh `AgentProcess` per package/episode, official Kaggle `Agent`, shared-state observation reconstruction, reference stepping, no PASS substitution. Exact CR053 package produces the candidate base action before the market option is applied.
+Use the exact CR089 frozen population artifact `10378299284`:
 
-### Frozen branch after valid CR091 result
+- anchors: CR053_REAL, CR052_REAL, CR083, CR086;
+- seven macro reps: Majkel/r01, SpaTaro/r02, ymg-Howard/r03, Orbital/r06, feel/r07, Otter/r09, redblack/r10.
 
-If broad transfer passes:
+Evaluation:
 
-1. retain latent priority as option O1;
-2. expand to broader heterogeneous population;
-3. collect matched public-state/counterfactual option-value labels;
-4. train/freeze a small legal router;
-5. compare router vs always-BASE vs always-O1;
-6. only after broad population survival consider hosted sensor.
+- seeds `91401..91406`;
+- both seats;
+- BASE and frozen O1;
+- 12 games/treatment/edge;
+- 264 total episodes;
+- 11 edge jobs in parallel;
+- hosted-faithful `kaggle-environments==1.32.7` execution.
 
-If option value is heterogeneous:
+### Counterfactual dataset
 
-1. never use opponent identity at runtime;
-2. use only legal public-state variables such as latent-risk summaries, prices/inventory, shops, clock, own resources, public production/action-load proxies;
-3. freeze features before fitting;
-4. use matched W/L counterfactual labels;
-5. validate on fresh seeds/opponents.
+At O1's first actual market reorder, freeze the legal strategic observation and CR086 derived state. The label is admissible only if BASE has the exact same strategic-state hash at the same step for the same opponent/seed/seat.
 
-If option fails:
+Primary label: `W/L(O1) - W/L(BASE)`.
 
-1. close CR086 priority-on-CR053 without threshold tuning;
-2. move to next separable option family, initially H1/H1B sale timing on exact CR053;
-3. keep W/L-first methodology.
+Opponent name and seed are offline stratification metadata only; never runtime router features.
 
-If mechanics fail again: diagnose execution only; no strategic verdict.
+### Frozen broad-survival rule
 
-## Gate 2 — public-state option-value router CONDITIONAL
+Require all:
 
-Controls: always BASE, always O1, router(BASE/O1), fresh seeds/both seats, heterogeneous population, and feature ablations. Promotion requires broader coverage without new catastrophic edges. Target is counterfactual W/L advantage, not terminal revenue.
+- mechanics pass;
+- mean edge delta >= `+0.02`;
+- >=8/11 nonnegative edges;
+- worst regression >= `-0.125`;
+- seven-macro mean delta >= `0`;
+- no BASE edge >=0.25 becomes O1 score 0.
 
-## Gate 3 — multiple separable options CONDITIONAL
+### Frozen routing signal
 
-After routing architecture transfers, add one at a time: H1 WHEAT carry, H1B sale deferral, CR088/elite market timing, H11 fertilizer decisions where separable. Each needs own-base causal attribution.
+Require all:
 
-## Gate 4 — state-compatible production macro options CONDITIONAL
+- branch-state hash-valid labels only;
+- >=8 positive labels;
+- >=8 negative labels;
+- positives from >=2 opponent strata;
+- negatives from >=2 opponent strata.
 
-Translate CR087/088 macro families and FP001 modules into state-compatible options, not raw tape chunks: wheat/melon core, strawberry-later, mixed animals under learned preconditions, land expansion, M6S1 with labor/liquidity retention, CARE/H10 branches.
+### Frozen outcomes
 
-## Gate 5 — broad population / hosted calibration
+1. `CR092_BROAD_PASS_HETEROGENEOUS_ADVANCE_ROUTER`  
+   Freeze dataset and advance CR093 router(BASE/O1).
 
-Hosted-worthy only after exact mechanics, fresh broad W/L survival, no major catastrophe edge and a strategically distinct transfer question.
+2. `CR092_BROAD_PASS_O1_ADVANCE_NEXT_OPTION`  
+   O1 is broadly safe but lacks sufficient downside heterogeneity; retain it and add next separable option, initially H1/H1B timing.
+
+3. `CR092_BROAD_FAIL_HETEROGENEOUS_ADVANCE_ROUTER_DISCOVERY`  
+   Always-on O1 unsafe, but enough positive/negative causal value exists to justify conditional routing.
+
+4. `CR092_BROAD_FAIL_CLOSE_ALWAYS_ON_O1`  
+   Close always-on O1 without tuning; move to H1/H1B option family.
+
+Mechanics failure means no strategic verdict.
+
+### Active implementation
+
+Research branch:
+
+- `tools/cr092_broad_option_edge.py`
+- `tools/cr092_aggregate.py`
+- `.github/workflows/cr092-broad-option-router-label.yml`
+- head commit `b42347617a6967eeb2862fde23737c7538d3b9d3`
+- active workflow **`35015135956`**
+- prepare job PASS; all 11 frozen packages SHA-verified; edge matrix launched.
+
+## CR093 — public-state router CONDITIONAL
+
+Only if CR092 exposes heterogeneous causal support.
+
+Requirements:
+
+- small auditable feature set frozen before final validation;
+- no opponent identity or hidden metadata;
+- train only on CR092 admissible hash-matched labels;
+- fresh seeds/opponent instances for evaluation;
+- controls: always BASE, always O1, router(BASE/O1);
+- feature ablations;
+- no catastrophe edge.
+
+If CR092 shows O1 is broadly beneficial without meaningful negative support, skip an unnecessary binary router and first add H1/H1B as O2 so routing has a real choice.
+
+## Later separable options
+
+Evaluate one at a time after the current gate:
+
+- H1 town-pulse WHEAT carry;
+- H1B owned-sale deferral;
+- elite/CR088 market timing/competition handling;
+- H11 fertilizer opportunity-cost actions where separable;
+- state-compatible production macro options using CR087/088 priors and FP001 modules.
+
+Never reintroduce raw tape splicing without complete state preconditions.
+
+## Hosted calibration
+
+Hosted-worthy only after exact mechanics, fresh broad W/L survival, no major catastrophe edge and a strategically distinct transfer question. CR092 itself does not automatically authorize submission.
 
 ## Permanent stop list absent new evidence
 
-CR080 replay stitching; CR081 static market-prefix transplant; CR082 1-NN imitation; CR084 FEED rescue; CR085 Pareto gating; direct CR088 tapes; static C5/C5+M6S1; fixed C3S2/C2S3; CR090 simple first-shop species rule.
+CR080 replay stitching; CR081 static market-prefix transplant; CR082 1-NN imitation; CR084 FEED rescue; CR085 Pareto gating; direct CR088 tape backbones; static C5/C5+M6S1; fixed C3S2/C2S3; CR090 simple first-shop species rule.
 
 ## Immediate action
 
-Treat `34990757344` as the only binding CR091 execution. Do not submit anything to Kaggle while it is unresolved. On completion, follow the frozen CR091 branch without retuning thresholds.
+Let CR092 workflow `35015135956` complete. On the next status check, read its aggregate result once and obey the frozen branch. No manual Kaggle submission.
