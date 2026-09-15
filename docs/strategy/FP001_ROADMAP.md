@@ -131,23 +131,23 @@ Run `34869392514`, job `104061255265`.
 
 Across 40 fresh default-environment seeds and both seats, M6S1 improved mean final bank by +9,594.5, median +8,643, CI95 [+6,057.83,+13,131.17], signs 33–7 and p10 by +7,970.6. All 80 candidate cases had full survival, exact animal fingerprint and full crop output. Result: `docs/strategy/FP001_E4_NORMAL_ENVIRONMENT_ROBUSTNESS_RESULT_2026-09-15.md`.
 
-## R2G-E5 — elite-informed mixed-animal transfer — ACTIVE / FROZEN
+## R2G-E5 — elite-informed fixed mixed-animal transfer — FAIL / COMPLETE
 
-Protocol: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_PROTOCOL_2026-09-15.md`.
+Corrected run `34922557868`; 4/4 exact COW5/E4 trajectory parity.
 
-Compare COW5, 3-COW/2-SHEEP and 2-COW/3-SHEEP, each with and without exact M6S1, on 32 fresh default-environment seeds and both seats. All architectures use compact five-pasture routing, threshold-6 animal harvest batching and DAILY CARE.
+C5_M6S1 replicated strongly (+10,542.09 mean over C5_BASE, 29–3 signs, full 64/64 mechanics). C3S2 and C2S3 did not acquire/produce the full M6S1 block and lost −8,392.45 and −14,370.72 mean respectively versus C5_M6S1. Both violate the frozen retention bounds.
 
-A mixed hybrid becomes primary only if it passes full mechanics/crop transfer and beats COW5+M6S1 with positive mean, median and CI95 lower bound. If none wins, retain at most one non-catastrophic mixed policy under the frozen diversity threshold for the population gate. No composition or crop-density retuning follows this result.
+Close the fixed mixed grid. Keep mixed species only as a future H9 public-shop adaptive prior. Advance C5_BASE and C5_M6S1 to population transfer.
 
-## R3 — heterogeneous population gate
+## R3 / CR089 — heterogeneous population gate — NEXT
 
-The E5 survivor set faces a diverse panel containing:
+Exact C5_BASE and C5_M6S1 face a diverse panel containing:
 
 - exact historical hosted anchors where bytes are known;
 - multiple CR088/top-family coherent representatives;
 - both seats and fresh seeds.
 
-Do not promote from aggregate mean alone. Require acceptable matchup coverage and no catastrophic family weakness.
+The gate must compare M6S1 against its exact C5_BASE control on the same opponents/seeds. Require acceptable matchup coverage, bounded per-family regressions and no new catastrophic/zero-score family weakness. This is still a local mechanics/coverage gate, not a hosted rating predictor.
 
 ## R4 — market/economic integration
 

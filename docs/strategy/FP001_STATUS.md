@@ -196,23 +196,34 @@ Across 40 fresh default-environment seeds and both seats:
 
 Every frozen Strong-PASS condition fired. M6S1 is a robust additive production module, but it is not yet a hosted candidate.
 
+## E5 elite-informed fixed mixed-animal transfer — FAIL / C5_M6S1 SURVIVES
+
+Corrected workflow **`34922557868`**; initial `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate. Full result: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_RESULT_2026-09-15.md`.
+
+The generic five-pasture scheduler matched the original E4 COW5 and COW5+M6S1 trajectories exactly in 4/4 full-game parity cases. On 32 fresh default-environment seeds × both seats:
+
+- C5_M6S1 − C5_BASE: **+10,542.09** mean, +10,160 median, CI95 [+7,160.75,+13,923.44], 29–3 signs, 64/64 full animal/crop mechanics;
+- C3S2_M6S1 produced only 18 MELON + 8 STRAWBERRY, never the full block, and lost **−8,392.45 mean** versus C5_M6S1;
+- C2S3_M6S1 produced only 12 MELON + 8 STRAWBERRY and lost **−14,370.72 mean** versus C5_M6S1;
+- both mixed families exceeded every frozen diversity-retention loss limit.
+
+Decision: close the fixed C3S2/C2S3 + full-opening-M6S1 architectures. Preserve mixed species as an H9 adaptive-controller prior, not a fixed opening. C5_M6S1 is the sole E5 physical survivor.
+
 ## Competitive convergence with CR087
 
 Accumulated elite macro evidence independently supports mixed production: current ~3000-class policies commonly combine premium crops such as MELON/STRAWBERRY with durable mixed animals and state-adaptive market behavior.
 
 Important labor-adjusted prior: official mechanics give MELON seed cost 80, nominal base sale 250, one-time crop, max yield 6; STRAWBERRY seed cost 100, base 120 and ongoing maintenance. This does **not** settle the comparison, but together with CR087's strong MELON prevalence it makes MELON a high-priority next comparator rather than endlessly retuning STRAWBERRY.
 
-The historical H8 mixed scheduler remains reusable infrastructure, but its original 3-animal form predates B3 CARE and H10 batching. Future mixed COW/SHEEP work should port those proven primitives into the known scheduler rather than rewrite it from scratch.
+E5 already ported B3 CARE and H10 batching into fixed five-animal COW/SHEEP controls. Those fixed mixes failed under the frozen opening/liquidity policy; the remaining elite-mix hypothesis is conditional H9 public-shop adaptation, not another static composition ladder.
 
 ## Current active decision
 
-**E5 elite-informed mixed-animal transfer is active and frozen.** Protocol: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_PROTOCOL_2026-09-15.md`.
+Advance exact **C5_M6S1** and exact **C5_BASE** control to CR089 heterogeneous population testing. This is the required test of whether M6S1's large passive-opponent bank gain converts into win/loss coverage against exact hosted anchors and all seven CR088/current-top macro representatives.
 
-The gate compares exact COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, on 32 fresh default-environment seeds and both seats. It ports H10 compact setup/batching and B3 DAILY CARE without adding H9 adaptation or CR086/CR088 market logic.
+No mixed fixed policy advances. No crop-density or composition rescue is authorized. H9 adaptive species allocation and separable CR086/CR088/H1/H1B market factors remain later branches, conditional on CR089 evidence.
 
-Only a mixed hybrid with full mechanics and robust crop transfer may advance. A fixed mix can become the primary survivor only by beating COW5+M6S1 under the frozen paired rule; otherwise at most one bounded non-inferior mixed architecture is retained as a heterogeneous-population challenger.
-
-After E5, the survivor set faces exact hosted anchors and multiple CR088/current-top macro representatives. No FP001-only hosted submission is authorized.
+No FP001-only hosted submission is authorized.
 
 ## Hosted policy
 
