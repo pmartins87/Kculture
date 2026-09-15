@@ -126,25 +126,59 @@ Density tuning is closed. M6S1 is the frozen physical crop module.
 
 Corrected run `34922557868` passed 4/4 exact COW5/E4 trajectory parity. C5_M6S1 replicated +10,542.09 mean over C5_BASE with 64/64 full mechanics. Fixed C3S2/C2S3 hybrids produced only partial MELON blocks and lost −8,392.45/−14,370.72 mean versus C5_M6S1, failing the frozen retention rules.
 
-Decision: close the static composition grid. C5_M6S1 is the sole E5 survivor; fixed mixed animals remain only as an H9 adaptive prior.
+Decision: close the static composition grid. C5_M6S1 was the sole E5 physical survivor; fixed mixed animals remain only as an H9 adaptive prior.
 
-### E6 / CR089 — heterogeneous population compatibility ACTIVE
+### E6 / CR089 — heterogeneous population compatibility COMPLETE / FAIL
 
-Workflow run `34923802262` tests exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
+Run `34923802262` tested exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
 
-M6S1 must clear absolute mechanics/coverage and beat its exact control by >= +0.05 mean edge score with bounded family regressions and no new zero-score edge. Full protocol: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_PROTOCOL_2026-09-15.md`.
+Final result:
 
-### E7 — separable market integration
+- C5_BASE: **0W–132L**, 11/11 zero-score edges;
+- C5_M6S1: **0W–132L**, 11/11 zero-score edges;
+- zero errors/non-DONE and both mechanically valid;
+- mean/median edge-score delta from M6S1: `0.0`;
+- M6S1 improved monetary mean margin on 10/11 edges, averaging about +16,566 across edge means, but converted zero additional wins.
 
-Factorially test CR086/CR088 legal latent-supply SELL logic plus H1/H1B timing against each surviving physical base. Keep physical and market layers attributable.
+Verdict: `M6S1_FAILS_POPULATION_COMPATIBILITY`. Full result: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_RESULT_2026-09-15.md`.
 
-### E8 — H9 public-shop adaptation
+Binding stop: close static C5/C5+M6S1 as direct competitive backbones. Do not threshold-rescue, opponent-patch, run the market factorial on C5, or submit C5. Preserve M6S1/CARE/H10/H11 as reusable modules.
 
-Use legal current public town composition to choose marginal species/product capacity. Evaluate adaptive expansion against fixed COW and fixed mixed controls.
+### E7 / CR090 — H9 public-shop adaptive marginal expansion CURRENT
 
-### E9 — hosted sensors
+Use the legal current public town-shop state to allocate the **marginal fifth animal slot** after a shop reveal instead of buying another fixed opening composition.
 
-Spend a hosted slot only on a mechanically valid, strategically distinct candidate that survives population testing and answers a transfer question. No new submission is authorized at the current E5 stage.
+Why this slot:
+
+- COW5_DAILY beat COW4_DAILY by only +1,497.75 mean with a 4–4 paired sign split;
+- a sixth CARE animal is already decisively negative;
+- H9 proves public shop composition can reverse MILK vs WOOL remaining demand;
+- E5 proves a fixed opening sheep mix can damage liquidity and crop completion.
+
+Frozen experimental hierarchy:
+
+1. four-COW DAILY core;
+2. defer the fifth animal until the first legal public-shop signal is available;
+3. compare adaptive COW/SHEEP choice against **same-timing delayed-COW and delayed-SHEEP controls**;
+4. first causal test uses controlled shop-demand regimes and must prove that the adaptive selector chooses the economically correct species without mechanical regression;
+5. only then run fresh default-environment robustness;
+6. only after robustness run a heterogeneous population W/L gate.
+
+No rescue threshold may be selected after seeing the population result. If H9 cannot beat timing-matched controls causally, close species adaptation and move to the higher-level hierarchical controller.
+
+### E8 — separable market integration CONDITIONAL
+
+Only on an adaptive physical/controller survivor, factorially test CR086/CR088 legal latent-supply SELL logic plus H1/H1B timing. Keep physical and market layers attributable.
+
+Do **not** run this factorial on the failed static C5 backbone.
+
+### E9 — hierarchical competitive controller
+
+Combine elite-derived macro priors, passing physical modules, H9 town conditioning, fertilizer/crop opportunity-cost allocation and adaptive market logic. This is the intended path toward a genuinely state-adaptive architecture rather than another fixed tape or fixed farm.
+
+### E10 — hosted sensors
+
+Spend a hosted slot only on a mechanically valid, strategically distinct candidate that survives its declared causal/robustness gate and answers a population-transfer question. CR089 authorizes no submission.
 
 ## Closed hypotheses
 
@@ -152,9 +186,11 @@ CR078, CR079, CR080 replay stitching, CR081 market-prefix transplant, CR082 1-NN
 
 Direct adoption of the three previously screened public notebook packages is closed; their mechanisms remain research inputs.
 
+Static C5 and C5+M6S1 are closed as direct competitive backbones after CR089. Their passing submodules remain reusable.
+
 ## Current frontier and stop condition
 
-Fresh frozen top-10 snapshot from 2026-09-14 starts at Majkel1337 `3191.4`; rank 10 redblackbst `2958.4`. Our task is to construct a policy in that class, not optimize a ~1600 lineage indefinitely.
+Fresh frozen top-10 snapshot from 2026-09-14 starts at Majkel1337 `3191.4`; rank 10 redblackbst `2958.4`. Our task is to construct a policy in that class, not optimize a ~1600 or zero-coverage lineage indefinitely.
 
 Do not stop at a merely profitable or novel farm. Stop only when evidence says either:
 
