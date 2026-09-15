@@ -1,24 +1,42 @@
 #!/usr/bin/env python3
-"""CR091 gate 1 — exact CR053 physical backbone + CR086 latent-supply market option."""
+"""CR091 gate 1 — exact CR053 physical backbone + CR086 latent-supply market option.
+
+Rerun note: all submission packages execute through the hosted-faithful
+kaggle_exact_runtime AgentProcess path. The frozen CR091 design, seeds, panel,
+option logic, and promotion thresholds are unchanged from the preregistered gate.
+"""
 from __future__ import annotations
 
 import hashlib
 import json
-import math
+import multiprocessing as mp
 import sys
 import tarfile
+import tempfile
+import time
+import traceback
 import types
-from collections import Counter, defaultdict
+from collections import defaultdict
 from pathlib import Path
 from statistics import mean, median
-
-from kaggle_environments import make
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
+TOOLS = ROOT / "tools"
+if str(TOOLS) not in sys.path:
+    sys.path.insert(0, str(TOOLS))
 
 from candidates.cr091_cr053_market_option import make_agent
+from kaggle_exact_runtime import (
+    AgentProcess,
+    agent_visible_observation,
+    done_status,
+    extract,
+    make_reference_env,
+    reference_config,
+    reference_step,
+)
 
 RUNTIME = ROOT / ".cr091_runtime"
 SEEDS = tuple(range(91301, 91309))
@@ -30,6 +48,8 @@ PACKAGES = {
     "CR083": (RUNTIME / "CR083.tar.gz", "648fbcdb370f7e48fafda18a1112c5f1b57a17a81b7191f010fe4058f41a41b8"),
     "CR086": (RUNTIME / "CR086.tar.gz", "11296a4e658f37c109a2cc953be0ea7db8e2fbde6286ac483e0466f52f4af888"),
 }
+
+CR086_SOURCE = ""
 
 
 def sha256(path: Path) -> str:
@@ -49,28 +69,19 @@ def source_from_tar(path: Path) -> str:
         return fh.read().decode("utf-8")
 
 
-SOURCES = {}
-
-
-def load_fresh(name: str):
-    source = SOURCES[name]
-    mod = types.ModuleType(f"cr091_{name}_{id(source)}_{load_fresh.counter}")
-    load_fresh.counter += 1
-    mod.__file__ = f"<{name}:main.py>"
-    exec(compile(source, mod.__file__, "exec"), mod.__dict__)
-    if not callable(mod.__dict__.get("agent")):
-        raise RuntimeError(f"{name} has no callable agent")
+def load_cr086_helpers():
+    """Fresh donor helper state per episode; no donor action is executed here."""
+    mod = types.ModuleType(f"cr091_cr086_helpers_{load_cr086_helpers.counter}")
+    load_cr086_helpers.counter += 1
+    mod.__file__ = "<CR086_REAL:main.py>"
+    exec(compile(CR086_SOURCE, mod.__file__, "exec"), mod.__dict__)
+    for name in ("_cr086_update", "_cr086_prioritize"):
+        if not callable(mod.__dict__.get(name)):
+            raise RuntimeError(f"CR086 helper absent: {name}")
     return mod
 
 
-load_fresh.counter = 0
-
-
-def call_agent(fn, obs, config=None):
-    try:
-        return fn(obs, config)
-    except TypeError:
-        return fn(obs)
+load_cr086_helpers.counter = 0
 
 
 def freeze(obj):
@@ -84,10 +95,30 @@ def market_multiset(market):
     return tuple(sorted(rows))
 
 
+class ExactBaseProxy:
+    """Expose the exact CR053 package action to the frozen option wrapper."""
+
+    def __init__(self, process: AgentProcess):
+        self.process = process
+        self.last_action = None
+        self.last_duration = 0.0
+        self.last_ipc_wall = 0.0
+
+    def __call__(self, obs, config=None):
+        t0 = time.perf_counter()
+        action, duration = self.process.call(obs, config)
+        self.last_ipc_wall = time.perf_counter() - t0
+        self.last_action = freeze(action)
+        self.last_duration = float(duration)
+        return action
+
+
 class ParityChecker:
-    def __init__(self, candidate, reference, treatment):
+    """Compare the option output to the exact CR053 action it actually wrapped."""
+
+    def __init__(self, candidate, base_proxy: ExactBaseProxy, treatment: str):
         self.candidate = candidate
-        self.reference = reference
+        self.base_proxy = base_proxy
         self.treatment = treatment
         self.calls = 0
         self.physical_ok = 0
@@ -96,9 +127,11 @@ class ParityChecker:
         self.reorders = 0
         self.violations = []
 
-    def __call__(self, obs, config=None):
-        ref = freeze(call_agent(self.reference, obs, config))
-        act = freeze(call_agent(self.candidate, obs, config))
+    def call(self, obs, config):
+        t0 = time.perf_counter()
+        act = freeze(self.candidate(obs, config))
+        total_wall = time.perf_counter() - t0
+        ref = freeze(self.base_proxy.last_action)
         self.calls += 1
 
         physical = act.get("farmer") == ref.get("farmer") and act.get("hands") == ref.get("hands")
@@ -117,42 +150,87 @@ class ParityChecker:
                 "ref": ref,
                 "act": act,
             })
-        return act
+
+        wrapper_extra = max(0.0, total_wall - self.base_proxy.last_ipc_wall)
+        duration = self.base_proxy.last_duration + wrapper_extra
+        return act, duration
 
 
-def make_candidate(treatment: str):
-    base_mod = load_fresh("CR053_REAL")
-    ref_mod = load_fresh("CR053_REAL")
-    if treatment == "CR053_BASE":
-        candidate = base_mod.agent
-    elif treatment == "CR053_LATENT_PRIORITY":
-        donor_mod = load_fresh("CR086")
-        candidate = make_agent(base_mod.agent, donor_mod, enabled=True)
-    else:
+def make_candidate(treatment: str, base_process: AgentProcess):
+    base_proxy = ExactBaseProxy(base_process)
+    donor_mod = load_cr086_helpers()
+    enabled = treatment == "CR053_LATENT_PRIORITY"
+    if treatment not in TREATMENTS:
         raise ValueError(treatment)
-    return ParityChecker(candidate, ref_mod.agent, treatment)
+    candidate = make_agent(base_proxy, donor_mod, enabled=enabled)
+    return ParityChecker(candidate, base_proxy, treatment)
 
 
-def run_one(treatment: str, opponent_name: str, seed: int, seat: int):
-    checked = make_candidate(treatment)
-    opponent_mod = load_fresh(opponent_name)
-    opponent = opponent_mod.agent
-    agents = [checked, opponent] if seat == 0 else [opponent, checked]
-    env = make(
-        "kaggriculture",
-        configuration={"episodeSteps": 720, "startingMoney": 3000, "seed": seed},
-        debug=True,
-    )
+def reward_value(x):
+    return None if x is None else float(x)
+
+
+def run_one(treatment: str, opponent_name: str, seed: int, seat: int, package_dirs):
+    env = make_reference_env(seed)
+    config = reference_config(env)
+    ctx = mp.get_context("spawn")
+    base_process = None
+    opponent_process = None
+    checked = None
     err = None
+    err_tb = None
+    err_phase = None
+    err_step = None
+    steps = 0
+
     try:
-        env.run(agents)
+        base_process = AgentProcess(
+            ctx, package_dirs["CR053_REAL"],
+            f"cr091_base_{treatment}_{opponent_name}_{seed}_{seat}",
+        )
+        opponent_process = AgentProcess(
+            ctx, package_dirs[opponent_name],
+            f"cr091_opp_{opponent_name}_{seed}_{seat}",
+        )
+        checked = make_candidate(treatment, base_process)
+
+        while not all(done_status(s.status) for s in env.state):
+            cand_obs = agent_visible_observation(env, seat)
+            opp_seat = 1 - seat
+            opp_obs = agent_visible_observation(env, opp_seat)
+
+            err_phase = "candidate_call"
+            cand_action, cand_duration = checked.call(cand_obs, config)
+            err_phase = "opponent_call"
+            opp_action, opp_duration = opponent_process.call(opp_obs, config)
+
+            actions = [None, None]
+            durations = [0.0, 0.0]
+            actions[seat] = cand_action
+            durations[seat] = cand_duration
+            actions[opp_seat] = opp_action
+            durations[opp_seat] = opp_duration
+
+            err_phase = "reference_step"
+            reference_step(env, actions, durations)
+            steps += 1
+            if steps > 725:
+                raise RuntimeError("Kaggle environment exceeded expected episode length")
+
+        err_phase = None
     except Exception as exc:
         err = f"{type(exc).__name__}: {exc}"
+        err_tb = traceback.format_exc()[-12000:]
+        err_step = steps
+    finally:
+        if base_process is not None:
+            base_process.close()
+        if opponent_process is not None:
+            opponent_process.close()
 
-    payload = env.toJSON()
-    statuses = list(payload.get("statuses") or [])
-    rewards = list(payload.get("rewards") or [])
-    done = statuses == ["DONE", "DONE"] and len(rewards) == 2 and all(x is not None for x in rewards)
+    statuses = [str(env.state[p].status) for p in (0, 1)]
+    rewards = [reward_value(env.state[p].reward) for p in (0, 1)]
+    done = err is None and statuses == ["DONE", "DONE"] and all(x is not None for x in rewards)
 
     if done:
         cand_reward = float(rewards[seat])
@@ -173,16 +251,20 @@ def run_one(treatment: str, opponent_name: str, seed: int, seat: int):
         "done": done,
         "statuses": statuses,
         "error": err,
+        "error_phase": err_phase,
+        "error_step": err_step,
+        "error_traceback": err_tb,
         "candidate_reward": cand_reward,
         "opponent_reward": opp_reward,
         "margin": margin,
         "outcome": outcome,
-        "calls": checked.calls,
-        "physical_ok": checked.physical_ok,
-        "multiset_ok": checked.multiset_ok,
-        "exact_ok": checked.exact_ok,
-        "reorders": checked.reorders,
-        "violations": checked.violations[:3],
+        "steps": steps,
+        "calls": checked.calls if checked is not None else 0,
+        "physical_ok": checked.physical_ok if checked is not None else 0,
+        "multiset_ok": checked.multiset_ok if checked is not None else 0,
+        "exact_ok": checked.exact_ok if checked is not None else 0,
+        "reorders": checked.reorders if checked is not None else 0,
+        "violations": checked.violations[:3] if checked is not None else [],
     }
 
 
@@ -202,37 +284,55 @@ def summarize_edge(rows):
         "mean_margin": mean(margins) if margins else None,
         "median_margin": median(margins) if margins else None,
         "seat_scores": {
-            str(seat): (sum(r["outcome"] for r in valid if r["seat"] == seat) /
-                        max(1, sum(1 for r in valid if r["seat"] == seat)))
-            for seat in (0, 1)
+            str(s): (
+                sum(r["outcome"] for r in valid if r["seat"] == s)
+                / max(1, sum(1 for r in valid if r["seat"] == s))
+            )
+            for s in (0, 1)
         },
         "reorders": sum(r["reorders"] for r in rows),
     }
 
 
 def main():
+    global CR086_SOURCE
+
     package_receipt = {}
     for name, (path, expected) in PACKAGES.items():
         if not path.exists():
             raise SystemExit(f"missing runtime package {path}")
         actual = sha256(path)
-        package_receipt[name] = {"path": str(path.relative_to(ROOT)), "sha256": actual, "expected": expected}
+        package_receipt[name] = {
+            "path": str(path.relative_to(ROOT)),
+            "sha256": actual,
+            "expected": expected,
+        }
         if actual != expected:
             raise SystemExit(f"SHA mismatch {name}: {actual} != {expected}")
-        SOURCES[name] = source_from_tar(path)
+
+    CR086_SOURCE = source_from_tar(PACKAGES["CR086"][0])
 
     rows = []
-    for opponent in PACKAGES:
-        for seed in SEEDS:
-            for seat in (0, 1):
-                for treatment in TREATMENTS:
-                    row = run_one(treatment, opponent, seed, seat)
-                    rows.append(row)
-                    print(
-                        "CR091_CASE", treatment, opponent, seed, seat,
-                        "done", row["done"], "outcome", row["outcome"],
-                        "margin", row["margin"], "reorders", row["reorders"],
-                    )
+    with tempfile.TemporaryDirectory(prefix="cr091-reference-rerun-") as td:
+        extract_root = Path(td)
+        package_dirs = {
+            name: extract(path, extract_root, f"pkg_{name}")
+            for name, (path, _) in PACKAGES.items()
+        }
+
+        for opponent in PACKAGES:
+            for seed in SEEDS:
+                for seat in (0, 1):
+                    for treatment in TREATMENTS:
+                        row = run_one(treatment, opponent, seed, seat, package_dirs)
+                        rows.append(row)
+                        print(
+                            "CR091_CASE", treatment, opponent, seed, seat,
+                            "done", row["done"], "outcome", row["outcome"],
+                            "margin", row["margin"], "reorders", row["reorders"],
+                            "error", row["error"],
+                            flush=True,
+                        )
 
     by = defaultdict(list)
     for row in rows:
@@ -301,6 +401,15 @@ def main():
     result = {
         "schema": "cr091-hierarchical-market-option-gate-v1",
         "engine": "kaggle-environments==1.32.7",
+        "runner": {
+            "reference_backend": "kaggle_exact_runtime.AgentProcess",
+            "reference_agent_wrapper": "kaggle_environments.agent.Agent",
+            "reference_observation_path": "Environment.__get_shared_state(seat).observation",
+            "agent_process_isolation": "fresh_spawned_process_per_package_per_episode",
+            "falsy_action_pass_substitution": False,
+            "design_changed_from_frozen_protocol": False,
+            "rerun_reason": "first run invalid: CR052 package was executed via direct main.py exec instead of package-faithful runner",
+        },
         "seeds": [SEEDS[0], SEEDS[-1]],
         "opponents": list(PACKAGES),
         "treatments": list(TREATMENTS),
@@ -315,6 +424,20 @@ def main():
             "latent_reorders": latent_reorders,
             "mechanics_pass": mechanics_pass,
             "option_active": option_active,
+            "failure_examples": [
+                {
+                    "treatment": r["treatment"],
+                    "opponent": r["opponent"],
+                    "seed": r["seed"],
+                    "seat": r["seat"],
+                    "statuses": r["statuses"],
+                    "error": r["error"],
+                    "error_phase": r["error_phase"],
+                    "error_step": r["error_step"],
+                    "error_traceback": r["error_traceback"],
+                }
+                for r in failures[:4]
+            ],
         },
         "edges": edges,
         "edge_score_deltas_latent_minus_base": deltas,
