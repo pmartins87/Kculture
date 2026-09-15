@@ -1,6 +1,6 @@
 # FP001 ROADMAP — mechanics/economics integration
 
-Updated: 2026-09-14
+Updated: 2026-09-15
 
 Objective: discover and integrate mechanics-derived economic/physical primitives that increase the probability of a prize-winning Kaggriculture policy.
 
@@ -113,43 +113,35 @@ Answer: no.
 
 Failure mechanism: labor/action allocation.
 
-## R2D-E2 — dedicated STRAWBERRY hand — ACTIVE / FROZEN
+## R2D-E2 — dedicated STRAWBERRY hand — CAUSAL PASS
 
-Protocol: `docs/strategy/FP001_E2_DEDICATED_HAND_PROTOCOL_2026-09-14.md`. Workflow run **`34864820833`**.
+Runs `34864820833`, `34865508451`, `34866389261`, `34866890716`.
 
-Official mechanics make this a meaningful revaluation of HIRE: default first daily HIRE costs 1 and the counter resets at end of day. The hand is dismissed daily, so the treatment pays the real repeated labor cost.
+E2C discovered that changing crop occupancy changes weed RNG consumption before random shop selection, so same-seed crop/no-crop comparisons do not preserve the realized town environment. E2D removed stochastic shop unlocks without changing policy bytes and proved the one-hand STRAWBERRY module additive: +907 to +919 versus animal-only across all three backbones, with full animal invariants.
 
-Matched architectures on each COW4_DAILY, COW5_SURVIVAL and COW5_DAILY backbone:
+## R2E-E3 — one-hand crop density — PASS / M6S1 SELECTED
 
-1. `S0H0` animal-only;
-2. `S1H0` exact E1 crop/no-hand;
-3. `S1H1` crop + one bounded dedicated hand.
+Run `34868854114`.
 
-Main farmer remains entirely under B4. Hand 0 alone performs opening PLANT, WATER, H11 FERTILIZE ages 9/13 and HARVEST. No CR086/CR088 market layer is added.
+The frozen density grid selected 6 MELON + 1 STRAWBERRY. M6S1 added +9,533 over COW5_DAILY in the deterministic-town environment, reached 36 MELON + 8 STRAWBERRY and preserved the complete animal fingerprint. The density ladder is closed.
 
-PASS requires S1H1 to beat both S1H0 and S0H0 with full expected cow survival. Non-positive result closes this exact one-hand/one-STRAWBERRY architecture without rescue tuning.
+## R2F-E4 — normal-environment robustness — STRONG PASS
 
-## R2E — elite-informed lower-labor crop / mixed-animal gate — NEXT CONDITIONAL
+Run `34869392514`, job `104061255265`.
 
-CR087 makes this branch mandatory regardless of whether STRAWBERRY survives E2; E2 only determines whether STRAWBERRY remains in the first integrated portfolio.
+Across 40 fresh default-environment seeds and both seats, M6S1 improved mean final bank by +9,594.5, median +8,643, CI95 [+6,057.83,+13,131.17], signs 33–7 and p10 by +7,970.6. All 80 candidate cases had full survival, exact animal fingerprint and full crop output. Result: `docs/strategy/FP001_E4_NORMAL_ENVIRONMENT_ROBUSTNESS_RESULT_2026-09-15.md`.
 
-Priority facts:
+## R2G-E5 — elite-informed mixed-animal transfer — ACTIVE / FROZEN
 
-- top families repeatedly use substantial MELON capacity;
-- official MELON mechanics: seed 80, base nominal price 250, one-time crop, max yield 6, concentrated watering window;
-- STRAWBERRY: seed 100, base 120, ongoing and labor-intensive;
-- elite animal priors repeatedly include roughly 2 COW + 2/3 SHEEP, not pure COW monoculture.
+Protocol: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_PROTOCOL_2026-09-15.md`.
 
-Execution rule: reuse the historical H8 mixed-species scheduler as infrastructure, but port B3 CARE, H10 compact routing/batched harvest and H9 public-demand logic instead of rewriting from zero. Increase its 3-animal limit only where required by the elite comparator.
+Compare COW5, 3-COW/2-SHEEP and 2-COW/3-SHEEP, each with and without exact M6S1, on 32 fresh default-environment seeds and both seats. All architectures use compact five-pasture routing, threshold-6 animal harvest batching and DAILY CARE.
 
-Conditional branch:
-
-- **if E2 passes:** compare labor-enabled STRAWBERRY against MELON and coherent mixed COW/SHEEP portfolios; scale only if marginal value remains positive;
-- **if E2 fails:** close that STRAWBERRY labor architecture and immediately prioritize MELON + WHEAT + mixed COW/SHEEP, rather than retuning strawberry thresholds.
+A mixed hybrid becomes primary only if it passes full mechanics/crop transfer and beats COW5+M6S1 with positive mean, median and CI95 lower bound. If none wins, retain at most one non-catastrophic mixed policy under the frozen diversity threshold for the population gate. No composition or crop-density retuning follows this result.
 
 ## R3 — heterogeneous population gate
 
-R2D/R2E survivors face a diverse panel containing:
+The E5 survivor set faces a diverse panel containing:
 
 - exact historical hosted anchors where bytes are known;
 - multiple CR088/top-family coherent representatives;

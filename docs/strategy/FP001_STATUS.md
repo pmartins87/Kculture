@@ -1,6 +1,6 @@
 # FP001 STATUS — mechanics/economics innovation track
 
-Updated: 2026-09-14
+Updated: 2026-09-15
 
 Authoritative branch: `research/first-principles-economy-v1`.
 
@@ -164,21 +164,37 @@ Results over 8 paired fresh seed/seat observations per backbone:
 
 Decision: **close only the residual-idle-main-farmer STRAWBERRY architecture. Do not close STRAWBERRY or premium crops.** E1 identifies labor/action allocation as the failure mechanism.
 
-## E2 dedicated STRAWBERRY hand — ACTIVE / FROZEN
+## E2 dedicated STRAWBERRY hand — CAUSAL PASS AFTER RNG CORRECTION
 
-Protocol: `docs/strategy/FP001_E2_DEDICATED_HAND_PROTOCOL_2026-09-14.md`.
+Runs `34864820833`, `34865508451`, `34866389261` and `34866890716`.
 
-Workflow run: **`34864820833`**.
+The raw/default-environment E2 comparisons contained implausible ±10k–20k swings despite unchanged animal actions/output. E2C traced this to an official-engine RNG coupling: crop occupancy changes the number of weed RNG draws before random shop selection, which changes town demand and market prices. Same nominal seed is therefore not a common-random-number control when tile occupancy changes.
 
-E2 keeps the main farmer completely under the B4 animal scheduler and assigns one opening STRAWBERRY to a bounded dedicated farm hand. The official default first HIRE costs 1 per day and resets daily. No CR086/CR088 market overlay is mixed into this causal gate.
+E2D reused the frozen policy with weeds disabled and stochastic shop unlocks removed. One dedicated first-cost hand then produced 8 STRAWBERRY with two H11 fertilizer applications while preserving the animal fingerprint. Full-module gains versus animal-only were **+907** on COW4_DAILY, **+919** on COW5_SURVIVAL and **+919** on COW5_DAILY, all 8/8.
 
-Matched architectures for each COW4_DAILY, COW5_SURVIVAL and COW5_DAILY backbone:
+Decision: dedicated labor can make premium crop conversion genuinely additive, but one plant severely under-uses the hand.
 
-1. animal-only `S0H0`;
-2. exact E1 crop/no-hand `S1H0`;
-3. crop + dedicated hand `S1H1`.
+## E3 single-hand crop density — PASS / M6S1 SELECTED
 
-Promotion requires S1H1 to beat both its S1H0 crop control and its S0H0 animal control while preserving expected cows. Otherwise this one-hand/one-STRAWBERRY architecture closes without threshold rescue.
+Workflow **`34868854114`**. Full result: `docs/strategy/FP001_E3_SINGLE_HAND_CROP_DENSITY_RESULT_2026-09-14.md`.
+
+In the deterministic-town causal environment, the frozen grid showed MELON dominating STRAWBERRY as the dense hand workload. The selected **M6S1** block — 6 MELON + 1 STRAWBERRY — added **+9,533** over COW5_DAILY, reached full 36 MELON + 8 STRAWBERRY output and preserved 5/5 cows plus the exact FEED/CARE/movement/MILK fingerprint. No M7/M8 or post-result density retuning was authorized.
+
+## E4 normal-environment robustness — STRONG PASS
+
+Workflow **`34869392514`**, job `104061255265`. Full result: `docs/strategy/FP001_E4_NORMAL_ENVIRONMENT_ROBUSTNESS_RESULT_2026-09-15.md`.
+
+Across 40 fresh default-environment seeds and both seats:
+
+- base mean final-bank delta: **36,810.8**;
+- M6S1 mean: **46,405.3**;
+- mean difference: **+9,594.5**; median **+8,643**;
+- approximate CI95 **[+6,057.83, +13,131.17]**;
+- signs **33 positive / 7 negative**;
+- p10 gap **+7,970.6**;
+- zero failures; 80/80 survival, exact animal fingerprint and full crop output.
+
+Every frozen Strong-PASS condition fired. M6S1 is a robust additive production module, but it is not yet a hosted candidate.
 
 ## Competitive convergence with CR087
 
@@ -190,11 +206,13 @@ The historical H8 mixed scheduler remains reusable infrastructure, but its origi
 
 ## Current active decision
 
-1. Complete frozen E2 and record causal labor value.
-2. If E2 passes, test bounded scale / crop portfolio rather than immediately hosted-promoting it.
-3. If E2 fails, close this labor-enabled STRAWBERRY architecture and move directly to lower-labor elite-informed production, led by MELON + mixed COW/SHEEP/WHEAT structure.
-4. Regardless of E2, elite-macro integration must reuse B3 CARE, H10 batching/compact routing, H9 demand adaptation and preserved CR086/CR088/H1/H1B market knowledge where causal tests justify them.
-5. Survivors must face heterogeneous population testing and hosted calibration. FP001 alone never authorizes hosted promotion.
+**E5 elite-informed mixed-animal transfer is active and frozen.** Protocol: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_PROTOCOL_2026-09-15.md`.
+
+The gate compares exact COW5+M6S1 with 3-COW/2-SHEEP+M6S1 and 2-COW/3-SHEEP+M6S1, plus own no-crop controls, on 32 fresh default-environment seeds and both seats. It ports H10 compact setup/batching and B3 DAILY CARE without adding H9 adaptation or CR086/CR088 market logic.
+
+Only a mixed hybrid with full mechanics and robust crop transfer may advance. A fixed mix can become the primary survivor only by beating COW5+M6S1 under the frozen paired rule; otherwise at most one bounded non-inferior mixed architecture is retained as a heterogeneous-population challenger.
+
+After E5, the survivor set faces exact hosted anchors and multiple CR088/current-top macro representatives. No FP001-only hosted submission is authorized.
 
 ## Hosted policy
 

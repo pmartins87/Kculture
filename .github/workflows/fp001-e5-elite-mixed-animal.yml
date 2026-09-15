@@ -1,0 +1,28 @@
+name: FP001 E5 elite mixed-animal transfer gate
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/first-principles-economy-v1
+    paths:
+      - 'tools/fp001_e5_elite_mixed_animal_test.py'
+      - 'candidates/fp001_e5_elite_mixed_animal.py'
+      - 'candidates/fp001_e3_single_hand_crop_density.py'
+      - 'candidates/fp001_h10_cow_scale_module.py'
+      - '.github/workflows/fp001-e5-elite-mixed-animal.yml'
+      - 'requirements.txt'
+
+jobs:
+  transfer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact Kaggriculture environment
+        run: pip install -r requirements.txt
+      - name: Run E5 elite mixed-animal transfer gate
+        run: python tools/fp001_e5_elite_mixed_animal_test.py
