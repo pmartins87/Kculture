@@ -2,197 +2,175 @@
 
 Updated: 2026-09-15
 
-Objective: maximize probability of a prize-winning / top-10 Kaggriculture finish. The target class is ~3000+ hosted rating.
+## North star
 
-## Binding principles
+Reach prize/top-10 class and ultimately maximize probability of 1st place. Current external target is roughly `2958+` for top 10 and `3000+` for true frontier-class strength.
 
-1. Hosted leaderboard strength is the primary outcome.
-2. Local H2H is for mechanics, catastrophe filtering, causal comparison and hosted-calibrated league evidence — never a single-incumbent surrogate for population skill.
-3. A local anchor may represent a hosted agent only if its exact submitted bytes/hash are proven.
-4. Authenticated Kaggle API is the default current-meta source.
-5. Use both seats and `kaggle-environments==1.32.7` for exact local H2H.
-6. No identity, team, rating, EpisodeId, hidden seed, future state or opponent-private runtime features.
+The project must optimize **competitive W/L/population value**, not novelty, terminal money or local single-panel rating.
+
+## Binding methodological rules
+
+1. Preserve successful historical knowledge unless stronger evidence supersedes it.
+2. A valid economic/mechanics module is not automatically a valid competitive backbone.
+3. Local exact-engine tests are authoritative for mechanics and causal interventions, but local H2H numeric ordering is not a hosted-rating oracle.
+4. No failed architecture gets a post-result threshold ladder unless new evidence changes its failure mechanism.
+5. Use exact hosted packages whenever possible for calibration.
+6. No identity/rating/EpisodeId/hidden seed/future/direct opponent-private runtime features.
 7. Original final holdout remains sealed.
-8. Do not retune closed hypotheses on spent validation evidence.
-9. Do not enter polling loops.
-10. Distinct mechanically valid candidates may be probed hosted earlier; submission slots are experimental sensors as well as final promotion slots.
-11. **Competitive knowledge is cumulative.** New research tracks do not erase prior opponent/replay/top-player knowledge. Proven architectures, mechanisms, baselines and failure lessons remain available until superseded by better evidence.
-12. **Innovation has no intrinsic promotion value.** A new idea advances only if it increases expected population/hosted performance or information value toward winning.
+8. Hosted slots are used only for high-information transfer questions.
 
-## Critical reset — exact hosted incumbent
+## Completed / retained foundation
 
-Best known historical project agent is **CR053 submission `56073870`**, score checkpoint **2064.8**, exact SHA:
-`095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`.
+### Competitive knowledge
 
-The later `CR053_CONTROL` anchor SHA `a9fea449...bd4c` is a different file and is quarantined as a proxy for hosted CR053.
+- CR053_REAL: strongest exact project-hosted anchor, ~`2064.8`.
+- CR086: legal latent-supply estimator/operator retained; hosted candidate itself not stronger than CR083.
+- CR087/088: elite macro families and replay corpus retained; direct tape backbones closed.
+- Local exact-byte league proved local ordering can reverse hosted order.
 
-The exact CR053/CR052 candidate artifact is preserved in run `34105008373`, artifact `10012004237`.
+### FP001 causal modules
 
-## Track A — hosted-calibrated league
+Retain H1, H1B, H8/B3 + CARE, H9 representation, H10, H11 and M6S1. Details remain in experimental `FP001_STATUS.md` / `FP001_ROADMAP.md` and dedicated result docs.
 
-Workflow: `.github/workflows/hosted-calibrated-league-v1.yml`, commit `a42b4589e568e3203ede7dad653e1c000f22b710`.
+## Closed integration gates
 
-Initial exact cohort:
-- CR053_REAL — 2064.8 hosted
-- CR052_REAL — ~1700–1750 hosted
-- CR083 — ~1619.9 latest authenticated
-- CR086 — hosted probe later around ~1612.6
+### CR089 — static C5/C5+M6S1 population compatibility FAIL
 
-Run `34802917553` completed with zero errors, but the local order is not hosted-calibrated: CR083 and CR086 each beat CR053_REAL 20–4 locally although CR053 remains substantially stronger on Kaggle. CR053_REAL beat CR052_REAL 14–10.
+Run `34923802262`: both candidates `0W–132L`; M6S1 improved monetary margins but zero W/L. Close static C5 backbones; preserve M6S1 as module.
 
-Decision: keep exact packages for mechanics, catastrophe and diversity screens. Hosted probes remain the calibration instrument for population strength.
+### CR090 — simple first-shop species adaptation FAIL
 
-## Track B — preserved competitive mechanisms from CR086/CR087
+Run `34979280512`.
 
-CR086 proved that legal latent-opponent-supply estimation is technically strong, but its locally strong SELL-priority overlay did not translate into a hosted gain over CR083. Preserve the estimator/market mechanism as a module; do not treat its original candidate as a promoted backbone.
+Mechanics exact, but YARN branch failed: SHEEP minus COW mean `-174.46`, median `-451`, only `7/24` positive. MILK COW branch was strongly positive, but natural adaptive policy did not beat delayed COW.
 
-CR087 current-top mining is binding architectural evidence:
+Verdict: `CR090_H9_CAUSAL_FAIL_CLOSE_SIMPLE_SPECIES_ADAPTATION`.
 
-- exact action tapes are highly variable and should not be reconstructed by modal/stitch/1-NN imitation;
-- elite macro production programs nevertheless converge in useful families;
-- recurring structure includes early MELON/STRAWBERRY, later WHEAT/CARROT/TOMATO, durable mixed animals, usually 3 lands in the first half, and state-adaptive market queues;
-- five macro families from `docs/strategy/CR087_TOP_MACRO_PROFILE_RESULT_2026-09-14.md` must remain represented in population research.
+Do not tune the simple `WOOL > MILK => SHEEP` rule. Preserve H9 only as a state feature/prior.
 
-This is not a closed knowledge source. It is the competitive prior against which new FP001 primitives are integrated.
+## R6 / CR091 — hierarchical competitive controller CURRENT
 
-## Track C — CR088 automatic population search — HOSTED SENSOR COMPLETE
+### Design principle
 
-Phase 0 run `34806600636`: 30/30 top-derived tapes mechanically valid. Corrected Phase 1 run `34808258927`: 42/42 valid, 26 overlays passed the frozen local non-regression filter.
+Stop trying to build each new idea as a complete replacement agent. Use hosted-proven CR053 as the initial **host organism** and add separable options whose value is measured by W/L.
 
-Corrected submission workflow `34858890714` sent the exact selected sensors:
+The long-run controller is:
 
-- CR088A `56233701`, Orbital base, SHA `24e78d65...16e`;
-- CR088B `56233703`, feel `risk8_p125`, SHA `055fbbcd...053`.
+`legal public state -> option value -> best macro/market option`
 
-Authenticated run `34910849970` closed both as direct candidates:
+not:
 
-- CR088A: 1252.8, 59 episodes; newest 32 = 11W–21L;
-- CR088B: 1182.3, 54 episodes; newest 32 = 16W–16L;
-- zero mechanical failures.
+`one proxy statistic -> hand-written action`
 
-Full result: `docs/strategy/CR088_HOSTED_SENSOR_RESULT_2026-09-15.md`.
+and not:
 
-Decision: no tape/cap/floor retuning and no resubmission. Preserve the legal market operator, seven macro-family representatives and replay corpus for integrated population work.
+`state -> imitate one historical action tape`.
 
-## Track D — FP001 additive production/economics discovery
+### Gate 1 — CR053 market option ACTIVE
 
-FP001 is no longer treated as a purity-separated alternative agent. It is a module-discovery laboratory whose passing mechanisms may be inserted into elite-informed competitive architectures.
+Protocol: `docs/strategy/CR091_HIERARCHICAL_MARKET_OPTION_PROTOCOL_2026-09-15.md`.
 
-Passed primitives to preserve:
+Treatments:
+
+- exact `CR053_BASE`;
+- exact CR053 physical actions + exact market-order multiset with CR086 latent-supply SELL-priority sequencing.
+
+Exact anchor panel: CR052_REAL, CR053_REAL, CR083, CR086. Seeds `91301..91308`, both seats, 128 episodes total.
+
+Active workflow: **`34987640694`**.
+
+Promotion target is edge W/L score delta. Money is diagnostic only.
+
+#### Outcome A — broad option transfer
+
+If `CR091_LATENT_OPTION_TRANSFER_PASS_ADVANCE_ROUTER`:
+
+1. retain latent-priority as option O1;
+2. expand to broader heterogeneous CR087/CR088 macro panel;
+3. collect public-state/counterfactual option-value labels;
+4. train/freeze a small public-state router;
+5. compare router vs always-BASE vs always-O1;
+6. only after broad population survival consider hosted sensor.
+
+#### Outcome B — heterogeneous option value
+
+If `CR091_HETEROGENEOUS_OPTION_VALUE_ADVANCE_ROUTER_DISCOVERY`:
+
+1. do **not** use opponent identity at runtime;
+2. identify legal public-state variables correlated with O1 advantage: latent risk, prices/inventory, shop sequence, own liquidity/inventory, public production, clock/action load;
+3. freeze candidate feature set before fitting;
+4. use matched W/L counterfactual labels;
+5. test router on fresh seeds/opponent instances.
+
+#### Outcome C — option fails
+
+If `CR091_LATENT_OPTION_FAIL_CLOSE_OPTION`:
+
+1. close CR086 ordering transplanted onto CR053;
+2. do not tune cash-risk thresholds post hoc;
+3. move to the next separable option family, initially H1/H1B sale timing on exact CR053;
+4. keep the same W/L-first hierarchical methodology.
+
+### Gate 2 — option-value router CONDITIONAL
+
+The first router must be intentionally small and interpretable enough to audit. Candidate state features may use only legal runtime information. Selection target is **counterfactual W/L advantage**, not terminal revenue.
+
+Required controls:
+
+- exact CR053 base;
+- each always-on option individually;
+- router;
+- fresh seeds + both seats;
+- heterogeneous exact/macro population;
+- feature ablations for any promoted selector.
+
+A router advances only if it improves population coverage without creating catastrophic zero-score edges.
+
+### Gate 3 — production macro options CONDITIONAL
+
+Only after market-option routing proves the architecture can transfer:
+
+- encode elite-informed macro production families as **state-compatible options**, not raw tape splices;
+- use CR087/088 families as priors: wheat/melon, strawberry later, mixed animals, land expansion;
+- integrate validated FP001 primitives (CARE/H10/H11/M6S1) inside options where their scheduler preconditions are satisfied;
+- use causal rollouts / matched branches to value each option.
+
+Never splice physical tape chunks whose preconditions are not guaranteed.
+
+### Gate 4 — broad population / hosted calibration
+
+A candidate enters hosted testing only after:
+
+- mechanics exact;
+- broad W/L coverage over diverse anchors/macros;
+- no major catastrophe edge;
+- strategically distinct question worth a hosted slot.
+
+Hosted response then updates calibration; it is not treated as a blind parameter-search endpoint.
+
+## Later integration candidates
+
+Once a hierarchical survivor exists, evaluate separably:
 
 - H1 WHEAT town-pulse carry;
-- H1B owned-inventory sale deferral;
-- H9 public-shop-conditioned animal demand;
-- B3 FEED/CARE production bonus;
-- H10 compact routing + batched animal harvest;
-- H11 fertilizer conversion into premium crops, especially STRAWBERRY;
-- B4 action-capacity frontier.
+- H1B owned-sale deferral;
+- CR086/CR088 market competition handling;
+- H11 fertilizer conversion;
+- M6S1/crop scheduling where labor/liquidity preconditions hold;
+- H9 public demand as a feature, not a standalone species rule.
 
-### B4 action-capacity decision
+## Permanent stop list absent new evidence
 
-Run `34848633407`:
+- CR080 replay stitching
+- CR081 static market-prefix transplant
+- CR082 1-NN imitation
+- CR084 FEED rescue
+- CR085 Pareto gating
+- direct CR088 tape backbones
+- static C5/C5+M6S1 backbone
+- fixed C3S2/C2S3 mixed opening grid
+- CR090 simple first-shop species selector
 
-- COW4_DAILY mean +37,949.75;
-- COW5_SURVIVAL +36,685.25;
-- **COW5_DAILY +39,447.50** — mean-best animal-only policy;
-- COW6_SURVIVAL +33,054.25;
-- COW6_DAILY +35,272.75.
+## Immediate action
 
-But COW5_DAILY is not a universal optimum:
-
-- vs COW4_DAILY it is only +1,497.75 mean and 4–4 paired;
-- vs COW5_SURVIVAL +2,762.25 mean and 6–2;
-- sixth cow under SURVIVAL loses −3,631 mean, 0–8 vs COW5;
-- sixth cow under DAILY loses −4,174.75 mean, 0–8 vs COW5.
-
-All animals survive, so the limit is action/opportunity cost. Preserve COW4_DAILY, COW5_SURVIVAL and COW5_DAILY as controls for integration.
-
-## Track E — integrated elite-informed hybrid
-
-The architecture hypothesis remains:
-
-> elite-informed macro production + causally proven FP001 execution/economic primitives + legal adaptive market logic can outperform either component alone.
-
-### E1–E4 — production module discovery COMPLETE
-
-- E1 closed residual-idle main-farmer STRAWBERRY.
-- E2D proved dedicated labor/crop value after correcting the crop-occupancy/shop-RNG confound: +907 to +919 over animal controls, all 8/8.
-- E3 run `34868854114` selected M6S1 = 6 MELON + 1 STRAWBERRY, +9,533 in deterministic-town causal testing.
-- E4 run `34869392514` gave **STRONG PASS** under default stochastic environment: +9,594.5 mean, CI95 [+6,057.83,+13,131.17], 33–7 signs, 80/80 complete mechanics/output.
-
-Density tuning is closed. M6S1 is the frozen physical crop module.
-
-### E5 — elite fixed mixed-animal transfer COMPLETE / FAIL
-
-Corrected run `34922557868` passed 4/4 exact COW5/E4 trajectory parity. C5_M6S1 replicated +10,542.09 mean over C5_BASE with 64/64 full mechanics. Fixed C3S2/C2S3 hybrids produced only partial MELON blocks and lost −8,392.45/−14,370.72 mean versus C5_M6S1, failing the frozen retention rules.
-
-Decision: close the static composition grid. C5_M6S1 was the sole E5 physical survivor; fixed mixed animals remain only as an H9 adaptive prior.
-
-### E6 / CR089 — heterogeneous population compatibility COMPLETE / FAIL
-
-Run `34923802262` tested exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
-
-Final result:
-
-- C5_BASE: **0W–132L**, 11/11 zero-score edges;
-- C5_M6S1: **0W–132L**, 11/11 zero-score edges;
-- zero errors/non-DONE and both mechanically valid;
-- mean/median edge-score delta from M6S1: `0.0`;
-- M6S1 improved monetary mean margin on 10/11 edges, averaging about +16,566 across edge means, but converted zero additional wins.
-
-Verdict: `M6S1_FAILS_POPULATION_COMPATIBILITY`. Full result: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_RESULT_2026-09-15.md`.
-
-Binding stop: close static C5/C5+M6S1 as direct competitive backbones. Do not threshold-rescue, opponent-patch, run the market factorial on C5, or submit C5. Preserve M6S1/CARE/H10/H11 as reusable modules.
-
-### E7 / CR090 — H9 public-shop adaptive marginal expansion CURRENT
-
-Use the legal current public town-shop state to allocate the **marginal fifth animal slot** after a shop reveal instead of buying another fixed opening composition.
-
-Why this slot:
-
-- COW5_DAILY beat COW4_DAILY by only +1,497.75 mean with a 4–4 paired sign split;
-- a sixth CARE animal is already decisively negative;
-- H9 proves public shop composition can reverse MILK vs WOOL remaining demand;
-- E5 proves a fixed opening sheep mix can damage liquidity and crop completion.
-
-Frozen experimental hierarchy:
-
-1. four-COW DAILY core;
-2. defer the fifth animal until the first legal public-shop signal is available;
-3. compare adaptive COW/SHEEP choice against **same-timing delayed-COW and delayed-SHEEP controls**;
-4. first causal test uses controlled shop-demand regimes and must prove that the adaptive selector chooses the economically correct species without mechanical regression;
-5. only then run fresh default-environment robustness;
-6. only after robustness run a heterogeneous population W/L gate.
-
-No rescue threshold may be selected after seeing the population result. If H9 cannot beat timing-matched controls causally, close species adaptation and move to the higher-level hierarchical controller.
-
-### E8 — separable market integration CONDITIONAL
-
-Only on an adaptive physical/controller survivor, factorially test CR086/CR088 legal latent-supply SELL logic plus H1/H1B timing. Keep physical and market layers attributable.
-
-Do **not** run this factorial on the failed static C5 backbone.
-
-### E9 — hierarchical competitive controller
-
-Combine elite-derived macro priors, passing physical modules, H9 town conditioning, fertilizer/crop opportunity-cost allocation and adaptive market logic. This is the intended path toward a genuinely state-adaptive architecture rather than another fixed tape or fixed farm.
-
-### E10 — hosted sensors
-
-Spend a hosted slot only on a mechanically valid, strategically distinct candidate that survives its declared causal/robustness gate and answers a population-transfer question. CR089 authorizes no submission.
-
-## Closed hypotheses
-
-CR078, CR079, CR080 replay stitching, CR081 market-prefix transplant, CR082 1-NN teacher imitation, CR084 FEED rescue, CR085 Pareto gating: closed / do not retune.
-
-Direct adoption of the three previously screened public notebook packages is closed; their mechanisms remain research inputs.
-
-Static C5 and C5+M6S1 are closed as direct competitive backbones after CR089. Their passing submodules remain reusable.
-
-## Current frontier and stop condition
-
-Fresh frozen top-10 snapshot from 2026-09-14 starts at Majkel1337 `3191.4`; rank 10 redblackbst `2958.4`. Our task is to construct a policy in that class, not optimize a ~1600 or zero-coverage lineage indefinitely.
-
-Do not stop at a merely profitable or novel farm. Stop only when evidence says either:
-
-- we have a hosted/top-population candidate plausibly in prize contention; or
-- a defined branch has exhausted its predeclared causal gates and should be closed in favor of the next highest-information branch.
+Finish CR091 Gate 1 and obey its frozen decision. No Kaggle submission while run `34987640694` is unresolved.
