@@ -70,9 +70,11 @@ A mechanics failure produces no strategic verdict; repair runner semantics only.
 
 For each `(opponent, seed, seat)` pair, BASE and O1 are run from the same environment seed and seat.
 
-For O1, record the **legal observation immediately before the first call on which O1 changes the ordering of CR053's market orders**. Until that point, BASE and O1 actions are identical, so the state is a clean common branch point.
+For O1, record the **legal observation immediately before the first call on which O1 changes the ordering of CR053's market orders**. Until that point, BASE and O1 actions should be identical, so the state is intended to be a common causal branch point.
 
-Pair that branch state with:
+To prove that premise rather than assume it, both treatments must record a hash of the strategic observation at each controlled-agent call. The strategic hash excludes only framework timing bookkeeping such as `remainingOverageTime`; it retains the game state visible to the agent. An O1 branch label is admissible only if the O1 first-reorder strategic-state hash exactly equals the BASE strategic-state hash at the same step for the same `(opponent, seed, seat)` pair.
+
+Pair each hash-validated branch state with:
 
 - `wl_delta = outcome(O1) - outcome(BASE)` as the primary label;
 - terminal-margin delta as diagnostic only;
@@ -103,7 +105,7 @@ Also report:
 - number of positive/nonnegative/regressed edges;
 - maximum improvement and worst regression;
 - any new zero-score/catastrophe edge;
-- paired counterfactual label counts (`positive`, `zero`, `negative`) and the number of distinct opponent strata contributing each sign.
+- paired counterfactual label counts (`positive`, `zero`, `negative`), distinct opponent strata contributing each sign, and count of rejected labels due to branch-state mismatch.
 
 ## Frozen broad-survival rule
 
@@ -123,7 +125,8 @@ These thresholds test broad safety/transfer, not hosted-rating prediction.
 
 `ROUTING_SIGNAL = true` only if all are true:
 
-- at least 8 matched branch-state labels have `wl_delta > 0`;
+- every label used for routing passed branch-state hash parity;
+- at least 8 hash-validated matched branch-state labels have `wl_delta > 0`;
 - at least 8 have `wl_delta < 0`;
 - positive labels occur in at least 2 distinct opponent strata;
 - negative labels occur in at least 2 distinct opponent strata.
