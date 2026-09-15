@@ -1,230 +1,157 @@
-# FP001 STATUS — mechanics/economics innovation track
+# FP001 STATUS — mechanics/economics integration track
 
 Updated: 2026-09-15
 
-Authoritative branch: `research/first-principles-economy-v1`.
+Authoritative experimental branch: `research/first-principles-economy-v1`.  
+Competition-level source of truth: `STATUS.md` / `ROADMAP.md` on `fix/kaggle-parity-v1`.
 
 ## Mission
 
-Discover causally defensible Kaggriculture mechanics, economic primitives and physical schedulers that can increase the probability of winning the competition when integrated with the project's accumulated competitive knowledge.
+Discover causally defensible Kaggriculture mechanics, economic primitives and controllers that improve prize probability when integrated with the project's accumulated competitive knowledge.
 
-**FP001 is not a replacement for opponent/replay/top-player knowledge.** Its earlier zero-lineage isolation was useful experimentally because it made attribution clean, but it is no longer a binding architecture restriction. Proven FP001 primitives may now be combined with CR053/CR086/CR087/CR088 knowledge, elite macro priors and legal public replay evidence whenever the combination improves competitive performance.
+**FP001 is not a replacement for opponent/replay/top-player knowledge.** Isolation is used only when needed for causal attribution. Final architecture may combine every legal mechanism supported by evidence.
 
-Originality is not an objective. Hosted/population strength is.
+## Proven primitives retained
 
-## Binding source of truth
+### H1 — town-pulse WHEAT carry
 
-Read together:
+Workflow `34843184110`: causal PASS, +916.875 mean paired value; flat-price null exactly zero.
 
-1. `docs/strategy/FP001_FIRST_PRINCIPLES_INNOVATION_PROTOCOL_2026-09-14.md` for the experimental-origin protocol and mechanics work;
-2. `docs/strategy/FP001_ROADMAP.md` for current integration gates;
-3. live `STATUS.md` / `ROADMAP.md` on `fix/kaggle-parity-v1` for the competition-level source of truth;
-4. the FP001 candidates/test tools referenced below.
+### H1B — owned-inventory sale deferral
 
-Where the original protocol says competitor evidence cannot construct policy, that restriction now applies only when a test explicitly needs isolation for causal attribution. It is not a global ban on using accumulated competitive knowledge.
+Workflow `34843556192`: 104/104 exact positive mechanics cases. Preserve as sale-timing primitive.
 
-## Proven market primitives
+### H8/B3 — animal production + CARE
 
-- **FP0 mechanics parity: PASS** — workflow `34842825909`.
-- **H1 town-pulse WHEAT carry: causal PASS** — workflow `34843184110`; mean paired +916.875 over 32 episodes; flat-price null exactly zero.
-- **H1B owned-sale deferral: mechanics PASS** — workflow `34843556192`; 104/104 exact positive cases. Large isolated timing values include MILK q50/D7 +792, STRAWBERRY q50/D7 +731, WOOL q50/D6 +827.
+Key progression:
 
-These are preserved as economic operators for later competitive integration, not promoted as standalone strategy.
+- one-animal runtime `34844919444`: COW +4721 mean, SHEEP +3593, GOOSE +3457;
+- multi-animal runtime `34846686427`: COW3 led tested small modules;
+- DAILY CARE `34847600991`: +14,207.125 over NONE and +5,205 over SURVIVAL, both 16/16 where applicable.
 
-## H8 animal/fertilizer production track
+CARE remains a first-order production primitive.
 
-### R2A exact economics — PASS
+### H9 — public-town animal-product demand
 
-Workflow `34844070131`. Minimum-survival feeding keeps animals alive on 15 WHEAT over 30 days while exposing one fertilizer per surviving day. Pre-routing n=3 day-30 economics: SHEEP +10411, COW +10111, GOOSE +9544.
+Workflow `34847099631` proved the causal demand prior:
 
-### R2A2-A exact FEED/CARE frontier — PASS
+- full-season expected pulls: EGG 228, MILK 327, WOOL 228;
+- day-3 `YARN_STORE` can reverse local economics strongly toward WOOL;
+- day-3 `PIZZA_SHOP` / other milk shops strongly favor MILK demand.
 
-Workflow `34844616747`. Abstract action-priced control favored SHEEP across tested horizons/shadow prices. This was correctly treated as economics/control evidence, not physical architecture evidence.
+The official public observation is `town.unlocked_shops`; names may repeat and the list is shared/legal runtime state.
 
-### R2A2-B1 one-animal runtime — PASS
+### H10 — compact routing + batched animal harvest
 
-Workflow `34844919444`. Mean realized deltas: COW +4721, SHEEP +3593, GOOSE +3457. Runtime ranking reversed the abstract species ranking.
+Workflow `34848106237`: compact routing and threshold-6 batching preserved output while reducing action load. No-CARE scaling remained positive through COW6.
 
-### R2A2-B2 multi-animal runtime — PASS
+### H11 — fertilizer conversion
 
-Workflow `34846686427`.
+Workflow `34848464648`: fertilizer is not always best sold. STRAWBERRY has a strong positive conversion region; TOMATO also has positive regions. Preserve fertilizer opportunity-cost logic.
 
-Mean deltas over 8 fresh seed/seat episodes each:
+### B4 — scale × CARE frontier
 
-1. COW3_H0 **+12880.75**;
-2. COW3_H2 +12824.75;
-3. COW2_SHEEP1_H2 +11881.0;
-4. COW1_SHEEP2_H2 +10874.75;
-5. SHEEP3_H2 +9807.0;
-6. COW2_H0 +8522.25;
-7. COW2_H2 +8465.0.
+Workflow `34848633407`:
 
-Routine daily hands were negative marginal value in the animal-only small module: COW2 H2-H0 -57.25 and COW3 H2-H0 -56.0. This result does **not** globally close HIRE; crop workload creates a new context where labor can have positive marginal value and is being retested causally.
+- COW4_DAILY +37,949.75;
+- COW5_DAILY +39,447.50;
+- COW5_DAILY − COW4_DAILY only +1,497.75 mean, 4–4 paired;
+- COW6_DAILY − COW5_DAILY −4,174.75, 0–8;
+- all animals survived.
 
-### R2A2-B3 CARE overlay — STRONG PASS
+Interpretation: the fifth animal is marginal; the sixth is beyond the action/opportunity-cost frontier under DAILY CARE.
 
-Workflow **`34847600991`**.
+## Premium crop integration history
 
-Paired 16 fresh seed/seat cases:
+### E1 — residual-idle crop overlay CLOSED
 
-- `NONE`: mean **+13101.375**;
-- `SURVIVAL`: mean **+22103.5**;
-- `DAILY`: mean **+27308.5**.
+Run `34860319522`. Main-farmer idle capacity was insufficient; this closes only that architecture, not premium crops.
 
-Paired causal deltas:
+### E2 — dedicated crop hand CAUSAL PASS
 
-- SURVIVAL minus NONE: **+9002.125**, 16/16 wins;
-- DAILY minus NONE: **+14207.125**, 16/16 wins;
-- DAILY minus SURVIVAL: **+5205**, 16/16 wins.
+Runs through `34866890716`. After correcting the weed/shop RNG confound, dedicated labor made the premium-crop module additive: +907 to +919 over matched controls.
 
-CARE is therefore a first-order production mechanism and remains promoted.
+### E3 — density selection PASS
 
-## H9 town-conditioned animal demand — PASS
+Run `34868854114` selected frozen M6S1 = 6 MELON + 1 STRAWBERRY, +9,533 over COW5_DAILY in deterministic-town causal testing with full output and animal fingerprint preservation.
 
-Workflow `34847099631`.
+### E4 — normal-environment robustness STRONG PASS
 
-Full-season prior expected town pulls: EGG 228, MILK 327, WOOL 228. MILK prior demand is +99 / +43.4% over WOOL. Public shop reveals can strongly reverse local species economics; e.g. day3 YARN_STORE implies expected remaining WOOL 508.5 vs MILK 263.25, while day3 PIZZA_SHOP implies MILK 425.25 vs WOOL 184.5.
+Run `34869392514`:
 
-Decision: expansion/product mix should eventually use public shop composition rather than a fixed monoculture rule.
+- +9,594.5 mean;
+- +8,643 median;
+- CI95 [+6,057.83,+13,131.17];
+- signs 33–7;
+- p10 +7,970.6;
+- 80/80 full mechanics/output.
 
-## H10 compact COW scale + batched harvest — PASS
+M6S1 is a genuine reusable economic/physical module.
 
-Workflow **`34848106237`**.
+### E5 — fixed COW/SHEEP transfer FAIL
 
-Key causal results over 8 paired cases:
+Corrected run `34922557868` passed exact COW5 trajectory parity. C5_M6S1 replicated +10,542.09 over C5_BASE, but fixed C3S2/C2S3 openings damaged M6S1 completion and lost heavily versus C5_M6S1.
 
-- compact H10 COW3 threshold1 vs B2 COW3: **+137.75 mean**, 8/8 wins;
-- harvest threshold6 vs threshold1: **+861.5 mean**, 8/8 wins;
-- batching preserved realized milk while cutting animal HARVEST actions from roughly 33/episode to ~7/episode;
-- COW4 vs COW3: +4108.5 mean, 8/8;
-- COW5 vs COW4: +3354.75 mean, 8/8;
-- COW6 vs COW5: +4435.25 mean, 8/8;
-- all animals survived at all tested no-CARE scales.
+Close the fixed mixed opening grid. Mixed species survive only as an adaptive H9 prior.
 
-Mean no-CARE COW6 result: **+26764.5**. Thus no-CARE scaling had not saturated at six; the action frontier appears only once CARE intensity is added.
+## CR089 population compatibility — COMPLETE / FAIL
 
-## H11 fertilizer conversion audit — PASS / hybrid mechanism discovered
+Authoritative run `34923802262` tested C5_BASE and C5_M6S1 against 11 heterogeneous opponent edges, 12 seat-balanced games per edge.
 
-Workflow **`34848464648`**.
+- C5_BASE: **0W–132L**, 11/11 zero-score edges;
+- C5_M6S1: **0W–132L**, 11/11 zero-score edges;
+- zero mechanical failures;
+- M6S1 improved monetary margin on 10/11 edges and by about +16.6k averaged over edge means, but created zero W/L gain.
 
-Exact-engine audit disproved the implicit assumption that fertilizer should always be sold.
+Binding verdict: `M6S1_FAILS_POPULATION_COMPATIBILITY`.
 
-At nominal market values:
+Interpretation:
 
-- WHEAT/CARROT fertilizer use is generally inferior to selling fertilizer;
-- TOMATO has positive conversion regions;
-- **STRAWBERRY is strongly attractive**: two well-timed fertilizer applications produce +4 additional strawberries and approximately **+268 nominal conversion value** versus selling those two fertilizer units at normal prices;
-- under product scarcity / fertilizer abundance the advantage can become much larger;
-- MELON showed no additional tested fertilizer benefit in this exact setup.
+- M6S1 remains valid knowledge;
+- static C5/C5+M6S1 are closed as competitive backbones;
+- no C5 threshold rescue, opponent patch, market factorial or hosted submission.
 
-This creates a high-priority integration hypothesis: animals can be fertilizer factories feeding premium crop production. It does not imply that STRAWBERRY is the best labor-adjusted premium crop.
+Competition result: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_RESULT_2026-09-15.md` on `fix/kaggle-parity-v1`.
 
-## B4 scale × CARE — PASS; action-capacity frontier located
+## Current active experiment — CR090 / H9 adaptive fifth animal
 
-Workflow **`34848633407`**.
+Phase-1 implementation:
 
-Mean final-bank deltas over starting cash, 8 fresh paired seed/seat cases:
+- candidate: `candidates/fp001_h9_adaptive_fifth_animal.py`;
+- test: `tools/fp001_cr090_h9_adaptive_fifth_test.py`;
+- workflow: `.github/workflows/fp001-cr090-h9-adaptive-fifth.yml`;
+- workflow run: `34979280512`;
+- commit: `abe2829ab553fc7cc2b854d3df80f7eee3f89027`.
 
-- COW3_NONE +14201.75
-- COW3_SURVIVAL +23440.25
-- COW3_DAILY +29633.0
-- COW4_NONE +18959.25
-- COW4_SURVIVAL +31551.75
-- **COW4_DAILY +37949.75**
-- COW5_NONE +22630.75
-- **COW5_SURVIVAL +36685.25**
-- **COW5_DAILY +39447.50** — current mean-best animal-only architecture
-- COW6_NONE +25406.75
-- COW6_SURVIVAL +33054.25
-- COW6_DAILY +35272.75
+Frozen design:
 
-Critical paired interpretation:
+1. all treatments use the exact four-COW DAILY H10/B4 core before the first public shop;
+2. fifth purchase is deferred to the same first-shop boundary;
+3. `DELAY_COW` always adds COW;
+4. `DELAY_SHEEP` always adds SHEEP;
+5. `H9_ADAPT` uses only `unlocked_shops[0]`, choosing SHEEP iff expected remaining WOOL demand exceeds MILK; otherwise COW;
+6. 64 fresh seeds (`90201..90264`) × both seats × all three policies;
+7. exact pre-reveal action-prefix parity is mandatory;
+8. no automatic Kaggle submission; original final holdout untouched.
 
-- COW5_DAILY − COW5_NONE: **+16816.75**, 8/8;
-- COW5_DAILY − COW5_SURVIVAL: **+2762.25**, 6/2;
-- COW5_DAILY − COW4_DAILY: **+1497.75**, only 4/4;
-- COW6_SURVIVAL − COW5_SURVIVAL: **−3631.0**, 0/8;
-- COW6_DAILY − COW5_DAILY: **−4174.75**, 0/8.
+The natural seed set is stratified by the pre-treatment first-shop realization after execution; outcomes do not select the strata.
 
-All animals survived. Therefore six cows under CARE lose due to **action/opportunity-cost saturation**, not mortality.
+Promotion requires mechanical parity, adequate YARN/MILK support, positive causal value in the corresponding regimes, and positive natural-distribution mean versus both timing-matched fixed controls according to the frozen CR090 protocol.
 
-Decision: preserve COW4_DAILY, COW5_SURVIVAL and COW5_DAILY as animal-only controls for integration rather than declaring one universal optimum.
+## Next conditional steps
 
-## E1 marginal STRAWBERRY overlay — MECHANICAL PASS / ARCHITECTURE CLOSED
+If CR090 Phase 1 passes:
 
-Workflow **`34860319522`**. Full result: `docs/strategy/FP001_E1_STRAWBERRY_MARGINAL_RESULT_2026-09-14.md`.
+1. freeze the selector;
+2. integrate M6S1 with exact retention/affordability control;
+3. require full crop/animal mechanics;
+4. then run heterogeneous population W/L testing;
+5. only on a surviving adaptive physical/controller base, run separable CR086/CR088/H1/H1B market factors.
 
-E1 allowed one early STRAWBERRY to use only main-farmer actions that the animal backbone would otherwise PASS. It never overwrote a non-PASS animal action.
+If Phase 1 fails causally, close simple first-shop species adaptation without threshold tuning and move to the hierarchical controller.
 
-Results over 8 paired fresh seed/seat observations per backbone:
-
-- **COW4_DAILY**: S1-control `+317` mean but median `-2474`, only **2W-6L**; crop planted 8/8 but received only one WATER per episode, produced zero berries and failed 8/8. The positive mean is variance, not crop value.
-- **COW5_SURVIVAL**: S1-control **`-693.5` mean**, 4W-4L; crop planted 8/8, received 72 WATER total and sold 32 berries = 4/episode, but executed zero fertilizer actions. Animal output/survival stayed intact.
-- **COW5_DAILY**: S1-control **exactly `-100` in 8/8**; the control had zero idle PASS. The hybrid bought the 100-cost seed but never obtained a turn to plant it.
-
-Decision: **close only the residual-idle-main-farmer STRAWBERRY architecture. Do not close STRAWBERRY or premium crops.** E1 identifies labor/action allocation as the failure mechanism.
-
-## E2 dedicated STRAWBERRY hand — CAUSAL PASS AFTER RNG CORRECTION
-
-Runs `34864820833`, `34865508451`, `34866389261` and `34866890716`.
-
-The raw/default-environment E2 comparisons contained implausible ±10k–20k swings despite unchanged animal actions/output. E2C traced this to an official-engine RNG coupling: crop occupancy changes the number of weed RNG draws before random shop selection, which changes town demand and market prices. Same nominal seed is therefore not a common-random-number control when tile occupancy changes.
-
-E2D reused the frozen policy with weeds disabled and stochastic shop unlocks removed. One dedicated first-cost hand then produced 8 STRAWBERRY with two H11 fertilizer applications while preserving the animal fingerprint. Full-module gains versus animal-only were **+907** on COW4_DAILY, **+919** on COW5_SURVIVAL and **+919** on COW5_DAILY, all 8/8.
-
-Decision: dedicated labor can make premium crop conversion genuinely additive, but one plant severely under-uses the hand.
-
-## E3 single-hand crop density — PASS / M6S1 SELECTED
-
-Workflow **`34868854114`**. Full result: `docs/strategy/FP001_E3_SINGLE_HAND_CROP_DENSITY_RESULT_2026-09-14.md`.
-
-In the deterministic-town causal environment, the frozen grid showed MELON dominating STRAWBERRY as the dense hand workload. The selected **M6S1** block — 6 MELON + 1 STRAWBERRY — added **+9,533** over COW5_DAILY, reached full 36 MELON + 8 STRAWBERRY output and preserved 5/5 cows plus the exact FEED/CARE/movement/MILK fingerprint. No M7/M8 or post-result density retuning was authorized.
-
-## E4 normal-environment robustness — STRONG PASS
-
-Workflow **`34869392514`**, job `104061255265`. Full result: `docs/strategy/FP001_E4_NORMAL_ENVIRONMENT_ROBUSTNESS_RESULT_2026-09-15.md`.
-
-Across 40 fresh default-environment seeds and both seats:
-
-- base mean final-bank delta: **36,810.8**;
-- M6S1 mean: **46,405.3**;
-- mean difference: **+9,594.5**; median **+8,643**;
-- approximate CI95 **[+6,057.83, +13,131.17]**;
-- signs **33 positive / 7 negative**;
-- p10 gap **+7,970.6**;
-- zero failures; 80/80 survival, exact animal fingerprint and full crop output.
-
-Every frozen Strong-PASS condition fired. M6S1 is a robust additive production module, but it is not yet a hosted candidate.
-
-## E5 elite-informed fixed mixed-animal transfer — FAIL / C5_M6S1 SURVIVES
-
-Corrected workflow **`34922557868`**; initial `34922078827` is infrastructure-only because it lacked the pre-result exact COW5/E4 trajectory-parity gate. Full result: `docs/strategy/FP001_E5_ELITE_MIXED_ANIMAL_RESULT_2026-09-15.md`.
-
-The generic five-pasture scheduler matched the original E4 COW5 and COW5+M6S1 trajectories exactly in 4/4 full-game parity cases. On 32 fresh default-environment seeds × both seats:
-
-- C5_M6S1 − C5_BASE: **+10,542.09** mean, +10,160 median, CI95 [+7,160.75,+13,923.44], 29–3 signs, 64/64 full animal/crop mechanics;
-- C3S2_M6S1 produced only 18 MELON + 8 STRAWBERRY, never the full block, and lost **−8,392.45 mean** versus C5_M6S1;
-- C2S3_M6S1 produced only 12 MELON + 8 STRAWBERRY and lost **−14,370.72 mean** versus C5_M6S1;
-- both mixed families exceeded every frozen diversity-retention loss limit.
-
-Decision: close the fixed C3S2/C2S3 + full-opening-M6S1 architectures. Preserve mixed species as an H9 adaptive-controller prior, not a fixed opening. C5_M6S1 is the sole E5 physical survivor.
-
-## Competitive convergence with CR087
-
-Accumulated elite macro evidence independently supports mixed production: current ~3000-class policies commonly combine premium crops such as MELON/STRAWBERRY with durable mixed animals and state-adaptive market behavior.
-
-Important labor-adjusted prior: official mechanics give MELON seed cost 80, nominal base sale 250, one-time crop, max yield 6; STRAWBERRY seed cost 100, base 120 and ongoing maintenance. This does **not** settle the comparison, but together with CR087's strong MELON prevalence it makes MELON a high-priority next comparator rather than endlessly retuning STRAWBERRY.
-
-E5 already ported B3 CARE and H10 batching into fixed five-animal COW/SHEEP controls. Those fixed mixes failed under the frozen opening/liquidity policy; the remaining elite-mix hypothesis is conditional H9 public-shop adaptation, not another static composition ladder.
-
-## Current active decision
-
-Advance exact **C5_M6S1** and exact **C5_BASE** control to CR089 heterogeneous population testing. This is the required test of whether M6S1's large passive-opponent bank gain converts into win/loss coverage against exact hosted anchors and all seven CR088/current-top macro representatives.
-
-No mixed fixed policy advances. No crop-density or composition rescue is authorized. H9 adaptive species allocation and separable CR086/CR088/H1/H1B market factors remain later branches, conditional on CR089 evidence.
-
-No FP001-only hosted submission is authorized.
+If causal value exists but natural robustness fails, preserve H9 as a situational signal but also move to the hierarchical controller rather than tuning a threshold ladder.
 
 ## Hosted policy
 
-No FP001-only hosted submission is authorized. The track's value is its library of proven primitives and its contribution to an integrated competitive policy. A hosted candidate should be strategically distinct, mechanically valid and answer a population-transfer question.
+No FP001/CR090 hosted submission is currently authorized. Hosted slots are reserved for mechanically valid, strategically distinct candidates that answer a real population-transfer question.
