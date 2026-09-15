@@ -195,7 +195,7 @@ Close the fixed C3S2/C2S3 + full-opening-M6S1 grid. Preserve mixed species for f
 
 ## Current integration decision
 
-**CR089 heterogeneous physical population gate is active (`pending workflow trigger`).** It compares exact C5_M6S1 against exact C5_BASE over the same 11-opponent panel: CR053_REAL, CR052_REAL, CR083, CR086 and all seven CR088/current-top macro representatives, 6 fresh seeds × both seats per edge.
+**CR089 heterogeneous physical population gate is active (`34923802262`).** It compares exact C5_M6S1 against exact C5_BASE over the same 11-opponent panel: CR053_REAL, CR052_REAL, CR083, CR086 and all seven CR088/current-top macro representatives, 6 fresh seeds × both seats per edge.
 
 C5_M6S1 advances only if it clears absolute mechanics/coverage and improves mean edge score by at least +0.05 without creating new catastrophic family weaknesses. This remains a local transfer gate, not a hosted-rating predictor.
 

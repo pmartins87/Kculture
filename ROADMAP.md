@@ -130,7 +130,7 @@ Decision: close the static composition grid. C5_M6S1 is the sole E5 survivor; fi
 
 ### E6 / CR089 — heterogeneous population compatibility ACTIVE
 
-Workflow run `pending workflow trigger` tests exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
+Workflow run `34923802262` tests exact C5_BASE and C5_M6S1 against four exact hosted anchors plus all seven CR088/current-top macro representatives, 12 seat-balanced games per edge.
 
 M6S1 must clear absolute mechanics/coverage and beat its exact control by >= +0.05 mean edge score with bounded family regressions and no new zero-score edge. Full protocol: `docs/strategy/CR089_INTEGRATED_PHYSICAL_POPULATION_PROTOCOL_2026-09-15.md`.
 
