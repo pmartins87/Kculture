@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import json
-import math
 import sys
 from pathlib import Path
 
@@ -13,21 +12,10 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from kaggle_environments import make
-from solver.prize_solver_v0 import PrizeSolver, ValueModel
+from solver.prize_solver_v0 import PrizeSolver
+from solver.value_features import FEATURE_NAMES, encode_value_features
 from candidates.fp001_h10_cow_scale_module import make_agent as make_cow_agent
 from candidates.fp001_e5_elite_mixed_animal import make_agent as make_e5_agent
-
-
-FEATURES = (
-    "money_diff",
-    "own_land",
-    "own_hands",
-    "survival_risk",
-    "shed_value",
-    "field_value",
-    "opp_field_value",
-    "terminal_liquidity",
-)
 
 
 def plain(x):
@@ -59,7 +47,6 @@ def extract_rows(env, opponent_name, seed):
     final_margin = float(rewards[0]) - float(rewards[1])
     cfg = plain(env.configuration)
     rows = []
-    vm = ValueModel()
     for i, pair in enumerate(payload.get("steps") or []):
         if i % 24 != 0 or not pair:
             continue
@@ -70,12 +57,12 @@ def extract_rows(env, opponent_name, seed):
         obs = plain(obs)
         obs.setdefault("player", 0)
         obs.setdefault("step", i)
-        feats = vm.state_features(obs, cfg)
+        feats = encode_value_features(obs, cfg)
         rows.append({
             "seed": int(seed),
             "opponent": opponent_name,
             "step_index": i,
-            "features": {k: float(feats[k]) for k in FEATURES},
+            "features": {k: float(feats[k]) for k in FEATURE_NAMES},
             "target_margin": final_margin,
         })
     return rows
@@ -95,12 +82,12 @@ def run_game(seed, opponent_name, opponent):
 
 
 def design(rows):
-    X = np.asarray([[r["features"][k] for k in FEATURES] for r in rows], dtype=np.float64)
+    X = np.asarray([[r["features"][k] for k in FEATURE_NAMES] for r in rows], dtype=np.float64)
     y = np.asarray([r["target_margin"] for r in rows], dtype=np.float64)
     return X, y
 
 
-def fit_ridge(train_rows, alpha=1e-3):
+def fit_ridge(train_rows, alpha=25.0):
     X, y = design(train_rows)
     mu = X.mean(axis=0)
     sigma = X.std(axis=0)
@@ -134,14 +121,15 @@ def metrics(y, pred):
     return {"mae": mae, "rmse": rmse, "corr": corr, "sign_acc": sign_acc}
 
 
-def baseline_metrics(rows):
-    y = np.asarray([r["target_margin"] for r in rows], dtype=np.float64)
-    p = np.asarray([r["features"]["money_diff"] for r in rows], dtype=np.float64)
-    # Calibrate a single affine money-diff baseline on the same rows for a fair yardstick.
-    A = np.vstack([np.ones(len(p)), p]).T
-    coef, *_ = np.linalg.lstsq(A, y, rcond=None)
-    pred = A @ coef
-    out = metrics(y, pred)
+def fit_money_baseline(train_rows, test_rows):
+    xtr = np.asarray([r["features"]["money_diff"] for r in train_rows], dtype=np.float64)
+    ytr = np.asarray([r["target_margin"] for r in train_rows], dtype=np.float64)
+    A = np.vstack([np.ones(len(xtr)), xtr]).T
+    coef, *_ = np.linalg.lstsq(A, ytr, rcond=None)
+    xte = np.asarray([r["features"]["money_diff"] for r in test_rows], dtype=np.float64)
+    yte = np.asarray([r["target_margin"] for r in test_rows], dtype=np.float64)
+    pred = coef[0] + coef[1] * xte
+    out = metrics(yte, pred)
     out["intercept"] = float(coef[0])
     out["money_coef"] = float(coef[1])
     return out
@@ -160,26 +148,29 @@ def main():
 
     if not rows:
         raise SystemExit("no training rows extracted")
+
+    # Split by entire seeds, never by states, so near-identical states from one game
+    # cannot leak across train/test.
     train = [r for r in rows if r["seed"] % 3 != 0]
     test = [r for r in rows if r["seed"] % 3 == 0]
-    intercept, beta = fit_ridge(train, alpha=10.0)
+    intercept, beta = fit_ridge(train)
     ytr, ptr = predict(train, intercept, beta)
     yte, pte = predict(test, intercept, beta)
 
     train_m = metrics(ytr, ptr)
     test_m = metrics(yte, pte)
-    baseline = baseline_metrics(test)
-    weights = {k: float(v) for k, v in zip(FEATURES, beta)}
+    baseline = fit_money_baseline(train, test)
+    weights = {k: float(v) for k, v in zip(FEATURE_NAMES, beta)}
 
-    # PS1 is intentionally strict: the learned representation must add information
-    # beyond current bank balance on held-out seeds.
     beats_baseline = (
         test_m["mae"] < baseline["mae"]
         and test_m["sign_acc"] >= baseline["sign_acc"]
+        and test_m["corr"] >= baseline["corr"]
     )
     result = {
-        "schema": "prize-solver-value-v0-v1",
+        "schema": "prize-solver-value-v0-v2",
         "engine": "kaggle-environments==1.32.7",
+        "feature_names": list(FEATURE_NAMES),
         "games": len(game_receipts),
         "samples": len(rows),
         "train_samples": len(train),
@@ -200,8 +191,6 @@ def main():
         "beats_baseline": beats_baseline,
     }, sort_keys=True), flush=True)
 
-    # Training failure does not mean the solver architecture fails. The artifact is
-    # still useful diagnostic evidence, so only mechanical game failures hard-fail.
     if any(not g["ok"] for g in game_receipts):
         raise SystemExit("one or more value-training games did not finish cleanly")
 
