@@ -14,7 +14,7 @@ if str(TOOLS) not in sys.path:
     sys.path.insert(0, str(TOOLS))
 
 from kaggle_exact_runtime import agent_visible_observation, done_status, make_reference_env, reference_config, reference_step
-from solver.prize_solver_v1 import PrizeSolverV1
+from solver.prize_solver_v3 import PrizeSolverV3
 
 PASS = {"farmer": ["PASS"], "hands": [], "market": []}
 
@@ -77,7 +77,7 @@ def main():
     seed = 92101
     env = make_reference_env(seed)
     cfg = reference_config(env)
-    solver = PrizeSolverV1()
+    solver = PrizeSolverV3()
     trace = []
     op_counts = Counter()
     market_counts = Counter()
@@ -101,7 +101,7 @@ def main():
     final_obs = agent_visible_observation(env, 0)
     trace.append(summarize(final_obs, solver, last_action))
     result = {
-        "schema": "prize-solver-v1-day-trace-v1",
+        "schema": "prize-solver-v3-day-trace-v1",
         "seed": seed,
         "final_rewards": [env.state[0].reward, env.state[1].reward],
         "unit_op_counts": dict(op_counts),
