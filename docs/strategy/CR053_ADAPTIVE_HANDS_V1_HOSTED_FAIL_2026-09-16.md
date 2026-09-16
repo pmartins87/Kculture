@@ -2,7 +2,7 @@
 
 ## Hosted observation
 
-Submission `56282257` (Adaptive Hands V1) collapsed to approximately `136` rating in the current hosted population. This is a catastrophic regression, not a marginal loss.
+Submission `56282257` (Adaptive Hands V1) shows a strong downward hosted trajectory after 136 games in the user-provided Game History view. The screenshot does not expose a sufficiently unambiguous current rating value to record one here. The result is nevertheless clearly a catastrophic competitive regression rather than a marginal loss.
 
 ## Root cause
 
