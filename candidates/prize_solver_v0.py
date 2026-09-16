@@ -1,4 +1,4 @@
-"""Hosted-facing candidate wrapper for Prize Solver V3."""
-from solver.prize_solver_v3 import agent
+"""Hosted-facing candidate wrapper for Prize Solver V4."""
+from solver.prize_solver_v4 import agent
 
 __all__ = ["agent"]
