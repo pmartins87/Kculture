@@ -11,6 +11,8 @@ Use Kaggle hosted evaluation as the competitive arbiter. This round deliberately
 - This is the exact historical CR053 artifact recovered from workflow run `34105008373`, artifact `10012004237` (`cr052-cr053-hosted-candidates`).
 - Historical hosted submission: `56073870`.
 - Historical checkpoint: ~2064.8.
+- Current hosted submission (2026-09-16): `56270504`.
+- Screenshot-mapped observed episode: `109556633`.
 
 ## Slot 2 — CR053 + frozen O1
 
@@ -24,6 +26,17 @@ Use Kaggle hosted evaluation as the competitive arbiter. This round deliberately
 - Mechanism: execute exact CR053 action; update the exact CR086 latent-supply state; apply only `_cr086_prioritize` to the CR053 market order list.
 - CR086 route/backbone is not executed.
 - No threshold retuning.
+- Current hosted submission (2026-09-16): `56270485`.
+- User-confirmed mapping: Latent Priority/O1 is the submission whose shown episode ends in `626`, i.e. observed episode `109556626`.
+
+## First hosted execution evidence
+
+Both packages have already entered real Kaggle game execution, so packaging/runtime viability is confirmed at the hosted level.
+
+Observed from user screenshots while the round was still in progress:
+- O1 / submission `56270485`: completed visible win against Zafer Liu in episode `109556626`; displayed terminal game score `600` vs `479` in the selected game.
+- CR053 control / submission `56270504`: completed visible win against fred mahinay in episode `109556633`; displayed terminal game score `600` vs `620` in the selected game, with Kaggle UI marking Paulo Martins as the winner.
+- These individual episodes are execution evidence only and must not be interpreted as final hosted rating evidence.
 
 ## Existing evidence for O1
 
@@ -60,4 +73,4 @@ No additional local tournament is required before hosted submission.
 
 ## Stable decision rule
 
-Submit both packages in the same hosted round. Interpret the new CR053 submission as the contemporaneous control and CR053+O1 as the isolated intervention. The next development step must use hosted evidence from this round rather than opening another validation framework.
+Treat `56270504` as the contemporaneous CR053 control and `56270485` as the isolated O1 intervention. Do not infer promotion from individual games. The primary comparison is the hosted rating/checkpoint after both submissions accumulate enough games under the same population/time window. The next development step must use hosted evidence from this round rather than opening another validation framework.
