@@ -1,0 +1,87 @@
+name: Prize Solver S0 V4 package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - 'solver/prize_solver_v0.py'
+      - 'solver/prize_solver_v1.py'
+      - 'solver/prize_solver_v2.py'
+      - 'solver/prize_solver_v3.py'
+      - 'solver/prize_solver_v4.py'
+      - 'solver/__init__.py'
+      - 'candidates/prize_solver_v0.py'
+      - 'tools/prize_solver_s0_package_test.py'
+      - '.github/workflows/prize-solver-s0-package.yml'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install pinned engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Build hosted package
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf .s0_package
+          mkdir -p .s0_package/solver
+          cp candidates/prize_solver_v0.py .s0_package/main.py
+          cp solver/__init__.py .s0_package/solver/__init__.py
+          cp solver/prize_solver_v0.py .s0_package/solver/prize_solver_v0.py
+          cp solver/prize_solver_v1.py .s0_package/solver/prize_solver_v1.py
+          cp solver/prize_solver_v2.py .s0_package/solver/prize_solver_v2.py
+          cp solver/prize_solver_v3.py .s0_package/solver/prize_solver_v3.py
+          cp solver/prize_solver_v4.py .s0_package/solver/prize_solver_v4.py
+          tar -C .s0_package -czf R4D_PRIZE_SOLVER_S0_V4.tar.gz .
+          python -m py_compile .s0_package/main.py .s0_package/solver/*.py
+      - name: Hosted-faithful package smoke
+        run: python tools/prize_solver_s0_package_test.py
+      - name: Freeze receipt
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root=Path('.')
+          pkg=root/'R4D_PRIZE_SOLVER_S0_V4.tar.gz'
+          files=[
+            'candidates/prize_solver_v0.py',
+            'solver/prize_solver_v0.py','solver/prize_solver_v1.py','solver/prize_solver_v2.py',
+            'solver/prize_solver_v3.py','solver/prize_solver_v4.py'
+          ]
+          sha=lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+          smoke=json.loads((root/'PRIZE_SOLVER_S0_PACKAGE_SMOKE.json').read_text())
+          receipt={
+            'schema':'prize-solver-s0-v4-receipt-v1',
+            'source_commit':os.environ.get('GITHUB_SHA'),
+            'package':'R4D_PRIZE_SOLVER_S0_V4.tar.gz',
+            'package_sha256':sha(pkg),
+            'source_sha256':{f:sha(f) for f in files},
+            'engine':'kaggle-environments==1.32.7',
+            'package_smoke':smoke,
+            'architecture':'end-to-end adaptive solver only; no replay/tape; no trained value; no CR086 opponent model',
+            'intended_hosted_sensor':'S0'
+          }
+          (root/'PRIZE_SOLVER_S0_V4_RECEIPT.json').write_text(json.dumps(receipt,indent=2,sort_keys=True))
+          print(json.dumps(receipt,sort_keys=True))
+          PY
+      - name: Upload S0 hosted candidate
+        uses: actions/upload-artifact@v4
+        with:
+          name: prize-solver-s0-v4-hosted-candidate
+          path: |
+            R4D_PRIZE_SOLVER_S0_V4.tar.gz
+            PRIZE_SOLVER_S0_V4_RECEIPT.json
+            PRIZE_SOLVER_S0_PACKAGE_SMOKE.json
+          if-no-files-found: error
