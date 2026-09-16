@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from kaggle_environments import make
-from solver.prize_solver_v1 import PrizeSolverV1
+from solver.prize_solver_v2 import PrizeSolverV2
 
 
 def wrap(solver):
@@ -26,14 +26,14 @@ def wrap(solver):
 
 
 def one(seed, opponent):
-    a = PrizeSolverV1()
+    a = PrizeSolverV2()
     env = make(
         "kaggriculture",
         configuration={"episodeSteps": 720, "seed": int(seed)},
         debug=False,
     )
     if opponent == "self":
-        b = PrizeSolverV1()
+        b = PrizeSolverV2()
         agents = [wrap(a), wrap(b)]
     else:
         agents = [wrap(a), opponent]
@@ -68,7 +68,7 @@ def main():
     economic_bootstrap_pass = positive_pass >= 1 and nonzero_rewards >= 6
 
     result = {
-        "schema": "prize-solver-v1-smoke-v2",
+        "schema": "prize-solver-v2-smoke-v1",
         "games": len(rows),
         "failures": len(failures),
         "all_done": not failures,
