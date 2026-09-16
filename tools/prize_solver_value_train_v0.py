@@ -12,7 +12,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from kaggle_environments import make
-from solver.prize_solver_v0 import PrizeSolver
+from solver.prize_solver_v1 import PrizeSolverV1
 from solver.value_features import FEATURE_NAMES, encode_value_features
 from candidates.fp001_h10_cow_scale_module import make_agent as make_cow_agent
 from candidates.fp001_e5_elite_mixed_animal import make_agent as make_e5_agent
@@ -23,7 +23,7 @@ def plain(x):
 
 
 def solver_fn():
-    solver = PrizeSolver()
+    solver = PrizeSolverV1()
     def fn(obs, config=None):
         return solver.act(obs, config or {})
     return fn
@@ -149,8 +149,6 @@ def main():
     if not rows:
         raise SystemExit("no training rows extracted")
 
-    # Split by entire seeds, never by states, so near-identical states from one game
-    # cannot leak across train/test.
     train = [r for r in rows if r["seed"] % 3 != 0]
     test = [r for r in rows if r["seed"] % 3 == 0]
     intercept, beta = fit_ridge(train)
@@ -168,7 +166,7 @@ def main():
         and test_m["corr"] >= baseline["corr"]
     )
     result = {
-        "schema": "prize-solver-value-v0-v2",
+        "schema": "prize-solver-value-v1-v1",
         "engine": "kaggle-environments==1.32.7",
         "feature_names": list(FEATURE_NAMES),
         "games": len(game_receipts),
