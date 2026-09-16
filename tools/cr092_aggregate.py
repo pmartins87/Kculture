@@ -22,7 +22,10 @@ EXPECTED_OPPONENTS = EXACT | MACROS
 
 def load_edges(root: Path):
     payloads = []
-    for path in sorted(root.glob("*.json")):
+    # actions/download-artifact with merge-multiple may retain a nested
+    # `artifacts/` directory from each uploaded edge. Search recursively so the
+    # aggregation semantics are invariant to that transport-only layout.
+    for path in sorted(root.rglob("*.json")):
         data = json.loads(path.read_text(encoding="utf-8"))
         if data.get("schema") == "cr092-broad-option-edge-v1":
             payloads.append((path, data))
