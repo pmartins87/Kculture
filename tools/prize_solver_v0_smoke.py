@@ -10,7 +10,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from kaggle_environments import make
-from solver.prize_solver_v0 import PrizeSolver
+from solver.prize_solver_v1 import PrizeSolverV1
 
 
 def wrap(solver):
@@ -26,14 +26,14 @@ def wrap(solver):
 
 
 def one(seed, opponent):
-    a = PrizeSolver()
+    a = PrizeSolverV1()
     env = make(
         "kaggriculture",
         configuration={"episodeSteps": 720, "seed": int(seed)},
         debug=False,
     )
     if opponent == "self":
-        b = PrizeSolver()
+        b = PrizeSolverV1()
         agents = [wrap(a), wrap(b)]
     else:
         agents = [wrap(a), opponent]
@@ -62,17 +62,32 @@ def main():
             print("PRIZE_SOLVER_SMOKE", json.dumps(row, sort_keys=True), flush=True)
 
     failures = [r for r in rows if not r["ok"]]
+    pass_rows = [r for r in rows if r["opponent"] == "pass" and r["ok"]]
+    positive_pass = sum(1 for r in pass_rows if float(r["rewards"][0]) > 3000.0)
+    nonzero_rewards = sum(1 for r in rows if r["ok"] and float(r["rewards"][0]) > 0.0)
+    economic_bootstrap_pass = positive_pass >= 1 and nonzero_rewards >= 6
+
     result = {
-        "schema": "prize-solver-v0-smoke-v1",
+        "schema": "prize-solver-v1-smoke-v2",
         "games": len(rows),
         "failures": len(failures),
         "all_done": not failures,
+        "positive_pass_games": positive_pass,
+        "nonzero_reward_games": nonzero_rewards,
+        "economic_bootstrap_pass": economic_bootstrap_pass,
         "rows": rows,
     }
     out = ROOT / "PRIZE_SOLVER_V0_SMOKE.json"
     out.write_text(json.dumps(result, indent=2, sort_keys=True), encoding="utf-8")
-    print("PRIZE_SOLVER_RESULT", json.dumps({k: result[k] for k in ("games", "failures", "all_done")}, sort_keys=True))
-    if failures:
+    print("PRIZE_SOLVER_RESULT", json.dumps({
+        "games": result["games"],
+        "failures": result["failures"],
+        "all_done": result["all_done"],
+        "positive_pass_games": positive_pass,
+        "nonzero_reward_games": nonzero_rewards,
+        "economic_bootstrap_pass": economic_bootstrap_pass,
+    }, sort_keys=True))
+    if failures or not economic_bootstrap_pass:
         raise SystemExit(1)
 
 
