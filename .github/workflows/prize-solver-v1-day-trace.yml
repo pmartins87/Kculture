@@ -1,0 +1,35 @@
+name: Prize Solver V1 economic trace
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - 'solver/**'
+      - 'tools/prize_solver_v1_day_trace.py'
+      - '.github/workflows/prize-solver-v1-day-trace.yml'
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install pinned engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Trace one full V1 game against pass
+        run: python tools/prize_solver_v1_day_trace.py
+      - name: Upload trace
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: prize-solver-v1-day-trace
+          path: PRIZE_SOLVER_V1_DAY_TRACE.json
+          if-no-files-found: error
