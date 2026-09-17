@@ -1,0 +1,59 @@
+name: Prize Solver PS2 runner v2 smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - 'tools/prize_solver_rollout_ryzen.py'
+      - 'tools/prize_solver_rollout_ryzen_v2.py'
+      - 'solver/prize_solver_v2.py'
+      - 'solver/prize_solver_v4.py'
+      - 'solver/rollout_search.py'
+      - 'solver/value_features.py'
+      - '.github/workflows/prize-solver-ps2-runner-v2-smoke.yml'
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - name: Install pinned engine
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run corrected tiny PS2 batch
+        run: |
+          python tools/prize_solver_rollout_ryzen_v2.py \
+            --out runs/ps2_runner_v2_smoke \
+            --seed-count 2 \
+            --branch-days 6,12 \
+            --force-days 3 \
+            --workers 2
+      - name: Verify usable labels
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path('runs/ps2_runner_v2_smoke/SUMMARY.json').read_text())
+          assert d['branch_states'] == 4, d
+          assert d['rollouts'] == 20, d
+          assert not d['failures'], d['failures']
+          assert d['mean_heuristic_regret'] is not None, d
+          assert d['max_heuristic_regret'] is not None, d
+          plans=set(d['manifest']['plans'])
+          assert plans == {'COW_HEAVY_S2','COW_MELON_S2','MIXED_HEDGE_S2','CROP_PRESSURE_S2','CONSERVE_S2'}, plans
+          print('PS2_V2_SMOKE_PASS', {
+              'states': d['branch_states'],
+              'rollouts': d['rollouts'],
+              'match_rate': d['heuristic_oracle_match_rate'],
+              'mean_regret': d['mean_heuristic_regret'],
+              'max_regret': d['max_heuristic_regret'],
+          })
+          PY
