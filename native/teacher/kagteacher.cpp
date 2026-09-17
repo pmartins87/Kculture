@@ -137,8 +137,13 @@ int occupied_unlocked(const Farm& f) {
     return n;
 }
 int available_unlocked(const Farm& f) {
-    int n=0; for(int y=0;y<BOARD;++y) for(int x=0;x<BOARD;++x)
-        if(f.tiles[y][x].kind!=T_LOCKED) ++n; return n;
+    int n = 0;
+    for (int y = 0; y < BOARD; ++y) {
+        for (int x = 0; x < BOARD; ++x) {
+            if (f.tiles[y][x].kind != T_LOCKED) ++n;
+        }
+    }
+    return n;
 }
 
 // Visible opponent productive pressure. No private inventory is inspected.
@@ -431,12 +436,64 @@ std::pair<double,double> play_one(const Params& pa,const Params& pb,uint64_t see
 }
 
 void parallel_for(size_t n,int threads,const std::function<void(size_t)>& fn) {
-    if(n==0)return; unsigned hw=std::thread::hardware_concurrency();
+    if (n == 0) return;
+    unsigned hw = std::thread::hardware_concurrency();
     int nt=threads>0?threads:static_cast<int>(hw?hw:1u); nt=std::max(1,std::min<int>(nt,n));
     if(nt==1){for(size_t i=0;i<n;++i)fn(i);return;}
     std::atomic<size_t> next{0}; std::vector<std::thread> pool; pool.reserve(nt);
     for(int t=0;t<nt;++t)pool.emplace_back([&]{for(;;){size_t i=next.fetch_add(1);if(i>=n)return;fn(i);}});
     for(auto& th:pool)th.join();
+}
+
+constexpr int TAPE_ORDER_SLOTS = 16;
+constexpr int TAPE_ACTION_WIDTH = 1 + MAX_UNITS * 3 + 1 + TAPE_ORDER_SLOTS * 3;
+
+Action decode_tape_action(const int32_t* row) {
+    Action a;
+    a.clear();
+    int nu = std::max(1, std::min(MAX_UNITS, static_cast<int>(row[0])));
+    a.n_units = nu;
+    for (int u = 0; u < nu; ++u) {
+        int off = 1 + u * 3;
+        int op = static_cast<int>(row[off]);
+        int arg = static_cast<int>(row[off + 1]);
+        int n = static_cast<int>(row[off + 2]);
+        a.units[u].op = static_cast<uint8_t>((op >= OP_PASS && op <= OP_INVALID) ? op : OP_INVALID);
+        a.units[u].arg = static_cast<uint8_t>((arg >= 0 && arg < N_ITEMS) ? arg : 255);
+        a.units[u].n = static_cast<int16_t>(std::max(-32768, std::min(32767, n)));
+    }
+    int order_base = 1 + MAX_UNITS * 3;
+    int no = std::max(0, std::min(TAPE_ORDER_SLOTS, static_cast<int>(row[order_base])));
+    a.n_orders = no;
+    for (int o = 0; o < no; ++o) {
+        int off = order_base + 1 + o * 3;
+        int op = static_cast<int>(row[off]);
+        int item = static_cast<int>(row[off + 1]);
+        int n = static_cast<int>(row[off + 2]);
+        a.orders[o].op = static_cast<uint8_t>((op >= M_NONE && op <= M_SELL) ? op : M_NONE);
+        a.orders[o].item = static_cast<uint8_t>((item >= 0 && item < N_ITEMS) ? item : 255);
+        a.orders[o].n = n;
+    }
+    return a;
+}
+
+std::pair<double,double> play_tape_one(const Params& pc,const int32_t* tape,int tape_steps,
+                                       uint64_t seed,int cand_seat,EvalRow* tel) {
+    Config c;
+    c.seed = seed;
+    c.episode_steps = 720;
+    Sim sim(c);
+    Controller cc(pc.z.data());
+    while (!sim.st.done) {
+        int si = std::max(0, std::min(tape_steps - 1, sim.st.step));
+        Action ta = decode_tape_action(tape + static_cast<size_t>(si) * TAPE_ACTION_WIDTH);
+        Action a0 = cand_seat == 0 ? cc.act(sim, 0) : ta;
+        Action a1 = cand_seat == 1 ? cc.act(sim, 1) : ta;
+        sim.step(a0, a1);
+    }
+    double own = sim.reward(cand_seat), other = sim.reward(1 - cand_seat);
+    if (tel) add_telemetry(sim.st.farms[cand_seat], *tel);
+    return {own, other};
 }
 
 } // namespace
@@ -485,7 +542,76 @@ PYBIND11_MODULE(kagteacher,m) {
         d["games_per_candidate"]=static_cast<int>(M*seeds.size()*2);
         return d;
     },py::arg("candidates"),py::arg("opponents"),py::arg("seeds"),py::arg("threads")=0);
+    m.def("evaluate_tapes",[](py::array_t<double,py::array::c_style|py::array::forcecast> candidates,
+                               py::array_t<int32_t,py::array::c_style|py::array::forcecast> tapes,
+                               const std::vector<uint64_t>& seeds,int threads) {
+        auto cb=candidates.request(), tb=tapes.request();
+        if(cb.ndim!=2||cb.shape[1]!=P) throw std::invalid_argument("candidates must be [N,32]");
+        if(tb.ndim!=3||tb.shape[2]!=TAPE_ACTION_WIDTH) throw std::invalid_argument("tapes must be [K,T,170]");
+        size_t N=cb.shape[0], K=tb.shape[0]; int T=static_cast<int>(tb.shape[1]);
+        if(K==0||T<719||seeds.empty()) throw std::invalid_argument("need >=1 tape, >=719 steps, and seeds");
+        const double* cp=static_cast<const double*>(cb.ptr);
+        const int32_t* tp=static_cast<const int32_t*>(tb.ptr);
+        std::vector<EvalRow> rows(N);
+        std::vector<double> tape_wr(N*K,0.0), tape_margin(N*K,0.0), tape_worst(N*K,std::numeric_limits<double>::infinity());
+        auto t0=std::chrono::steady_clock::now();
+        {
+            py::gil_scoped_release rel;
+            parallel_for(N,threads,[&](size_t i){
+                Params pc(cp+i*P); EvalRow total;
+                for(size_t k=0;k<K;++k){
+                    double wins=0.0, margin_sum=0.0, worst=std::numeric_limits<double>::infinity();
+                    int games=0;
+                    const int32_t* tape = tp + (k*static_cast<size_t>(T))*TAPE_ACTION_WIDTH;
+                    for(uint64_t seed:seeds) for(int seat=0;seat<2;++seat){
+                        auto [own,other]=play_tape_one(pc,tape,T,seed,seat,&total);
+                        double margin=own-other;
+                        total.mean_margin+=margin; total.mean_own+=own; total.mean_opp+=other;
+                        total.worst_margin=std::min(total.worst_margin,margin); ++total.games;
+                        if(margin>0){ total.win_rate+=1; wins+=1; }
+                        else if(margin==0) total.tie_rate+=1;
+                        margin_sum += margin; worst=std::min(worst,margin); ++games;
+                    }
+                    tape_wr[i*K+k]=wins/std::max(1,games);
+                    tape_margin[i*K+k]=margin_sum/std::max(1,games);
+                    tape_worst[i*K+k]=worst;
+                }
+                double g=std::max(1,total.games);
+                total.mean_margin/=g; total.mean_own/=g; total.mean_opp/=g; total.win_rate/=g; total.tie_rate/=g;
+                total.silent_loss/=g; total.dead_actions/=g; total.hand_pass/=g; total.animals_escaped/=g; total.plants_dry/=g;
+                rows[i]=total;
+            });
+        }
+        double sec=std::chrono::duration<double>(std::chrono::steady_clock::now()-t0).count();
+        auto arr=[&](auto getter){py::array_t<double> a(N);double* p=a.mutable_data();for(size_t i=0;i<N;++i)p[i]=getter(rows[i]);return a;};
+        py::array_t<double> per_wr({static_cast<py::ssize_t>(N),static_cast<py::ssize_t>(K)});
+        py::array_t<double> per_margin({static_cast<py::ssize_t>(N),static_cast<py::ssize_t>(K)});
+        py::array_t<double> per_worst({static_cast<py::ssize_t>(N),static_cast<py::ssize_t>(K)});
+        std::copy(tape_wr.begin(),tape_wr.end(),per_wr.mutable_data());
+        std::copy(tape_margin.begin(),tape_margin.end(),per_margin.mutable_data());
+        std::copy(tape_worst.begin(),tape_worst.end(),per_worst.mutable_data());
+        py::dict d;
+        d["mean_margin"]=arr([](const EvalRow&r){return r.mean_margin;});
+        d["win_rate"]=arr([](const EvalRow&r){return r.win_rate;});
+        d["tie_rate"]=arr([](const EvalRow&r){return r.tie_rate;});
+        d["mean_own_bank"]=arr([](const EvalRow&r){return r.mean_own;});
+        d["mean_opp_bank"]=arr([](const EvalRow&r){return r.mean_opp;});
+        d["worst_margin"]=arr([](const EvalRow&r){return r.worst_margin;});
+        d["silent_loss_coins"]=arr([](const EvalRow&r){return r.silent_loss;});
+        d["dead_actions"]=arr([](const EvalRow&r){return r.dead_actions;});
+        d["hand_pass_turns"]=arr([](const EvalRow&r){return r.hand_pass;});
+        d["animals_escaped"]=arr([](const EvalRow&r){return r.animals_escaped;});
+        d["plants_dry"]=arr([](const EvalRow&r){return r.plants_dry;});
+        d["per_tape_win_rate"]=std::move(per_wr);
+        d["per_tape_mean_margin"]=std::move(per_margin);
+        d["per_tape_worst_margin"]=std::move(per_worst);
+        d["seconds"]=sec;
+        d["episodes_per_second"]=(N*K*seeds.size()*2)/std::max(1e-9,sec);
+        d["games_per_candidate"]=static_cast<int>(K*seeds.size()*2);
+        return d;
+    },py::arg("candidates"),py::arg("tapes"),py::arg("seeds"),py::arg("threads")=0);
     m.attr("PARAM_WIDTH")=P;
     m.attr("ENGINE_VERSION")="1.32.7";
-    m.attr("SCHEMA")="kculture-native-teacher-v0";
+    m.attr("SCHEMA")="kculture-native-teacher-v1";
+    m.attr("TAPE_ACTION_WIDTH")=TAPE_ACTION_WIDTH;
 }
