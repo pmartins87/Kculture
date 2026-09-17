@@ -26,16 +26,19 @@ fi
 )
 
 cd "${ROOT}"
+set +e
 "${PY}" tools/prize_solver_l2_vec_gate.py \
   --batches 256,1024,4096 \
   --steps 720 \
   --threads 0 \
   --out "${OUT_REL}"
-
 rc=$?
+set -e
+
 if [[ -f "${OUT}" && -d /mnt/c/Users/Rz9/Downloads ]]; then
   cp "${OUT}" /mnt/c/Users/Rz9/Downloads/L2_VEC_GATE.json
 fi
 
 echo "L2_RC=${rc}"
 echo "L2_RESULT=${OUT}"
+exit "${rc}"
