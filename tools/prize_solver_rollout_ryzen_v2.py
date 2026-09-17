@@ -13,6 +13,13 @@ For the first training dataset, do not branch at day >= 24 because V4 switches t
 dynamic TERMINAL plan there. Use pre-terminal branch days (e.g. 3,6,9,12,15,18,21,23).
 """
 
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
 import tools.prize_solver_rollout_ryzen as runner
 from solver.prize_solver_v2 import PLANS_V2
 
