@@ -21,7 +21,13 @@ setup(
             [str(Path(__file__).with_name("kagvec.cpp"))],
             include_dirs=[str(SIM_INCLUDE)],
             cxx_std=17,
-            extra_compile_args=["-O3", "-DNDEBUG"],
+            # `-include` keeps the prototype source minimal while making its
+            # standard-library dependencies explicit across GCC toolchains.
+            extra_compile_args=[
+                "-O3", "-DNDEBUG",
+                "-include", "functional",
+                "-include", "stdexcept",
+            ],
         )
     ],
     cmdclass={"build_ext": build_ext},
