@@ -23,8 +23,15 @@ pull_one () {
   local tag="$2"
   mkdir -p "${OUT}/${tag}"
   echo "PUBLIC_FRONTIER_PULL ${spec}"
-  kaggle kernels pull "${spec}" -m -p "${OUT}/${tag}"
+  if kaggle kernels pull "${spec}" -m -p "${OUT}/${tag}"; then
+    echo "OK,${spec},${tag}" >> "${OUT}/index/pull_status.csv"
+  else
+    echo "FAIL,${spec},${tag}" >> "${OUT}/index/pull_status.csv"
+    echo "PUBLIC_FRONTIER_WARN failed=${spec}" >&2
+  fi
 }
+
+echo "status,spec,tag" > "${OUT}/index/pull_status.csv"
 
 # Current/high-scoring public families and historically best versions.
 pull_one "lynnsakurai/farming-score-v4-a-better-shop/7" "farming_score_v4_v7"
