@@ -30,5 +30,65 @@
   "package_parity_pairs": 8,
   "package_action_parity": "8/8",
   "package_reward_parity": "8/8",
-  "decision": "ORW1_HOSTED_AB_R2_SUBMITTED_AWAIT_BOTH_RESULTS"
+  "decision": "ORW1_HOSTED_AB_R2_COMPLETE_BUT_UNMATURE_NO_EXTERNAL_EVIDENCE",
+  "status_checkpoints": [
+    {
+      "snapshot_utc": "2026-09-18 17:20:55",
+      "control_status": "PENDING",
+      "control_rating": null,
+      "treatment_status": "PENDING",
+      "treatment_rating": null
+    },
+    {
+      "snapshot_utc": "2026-09-18 17:22:05",
+      "control_status": "PENDING",
+      "control_rating": null,
+      "treatment_status": "PENDING",
+      "treatment_rating": null
+    },
+    {
+      "snapshot_utc": "2026-09-18 17:23:18",
+      "control_status": "COMPLETE",
+      "control_rating": 600,
+      "treatment_status": "PENDING",
+      "treatment_rating": null
+    },
+    {
+      "snapshot_utc": "2026-09-18 17:23:55",
+      "control_status": "COMPLETE",
+      "control_rating": 600,
+      "treatment_status": "PENDING",
+      "treatment_rating": null
+    },
+    {
+      "snapshot_utc": "2026-09-18 17:24:36",
+      "control_status": "COMPLETE",
+      "control_rating": 600,
+      "treatment_status": "COMPLETE",
+      "treatment_rating": 600
+    }
+  ],
+  "forensics": {
+    "workflow_run": 35374217511,
+    "artifact_id": 10559931321,
+    "artifact_digest": "sha256:d45849eac73c6c1cc1237c07dd519dc9311de9c53a1a61751ddc387271e6ad31",
+    "snapshot_utc": "2026-09-18 17:25:34",
+    "control": {
+      "listed_episode_count": 1,
+      "resolved_external_games": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "score_rate": null
+    },
+    "treatment": {
+      "listed_episode_count": 1,
+      "resolved_external_games": 0,
+      "wins": 0,
+      "losses": 0,
+      "ties": 0,
+      "score_rate": null
+    }
+  },
+  "interpretation": "Both arms are mechanically valid and COMPLETE at the initial 600.0 rating field, but each has only one listed episode and zero externally attributable resolved games. 600 vs 600 is not evidence of competitive neutrality or promotion."
 }
