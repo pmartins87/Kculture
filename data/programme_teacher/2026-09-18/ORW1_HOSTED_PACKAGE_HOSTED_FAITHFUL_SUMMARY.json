@@ -1,0 +1,40 @@
+{
+  "schema": "kculture-orw1-hosted-package-hosted-faithful-v2",
+  "date": "2026-09-18",
+  "workflow_run": 35372969031,
+  "workflow_head_sha": "2b76a1524cefdcd8c68dc78ec1a1a4789d91e6c4",
+  "artifact_id": 10559606269,
+  "artifact_digest": "sha256:fa1f40aef1792b1500b684ed9912f1ab694bdc356426ee5bd4654a769405a0e9",
+  "candidate": "KCULTURE_V47_ORW1_ONESHOT_V1",
+  "archive_sha256": "997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9",
+  "archive_bytes": 146690,
+  "candidate_main_sha256": "39c524b453c2f141758513668cd167e2b30b29cfbbaba3699a9248318f79cf0a",
+  "wrapper_sha256": "9a0e9e1690684ff6f58c15089a1b6d8bda73b8f38fca9d576e61f7cb52e1d32f",
+  "base": {
+    "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
+    "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "hosted_entrypoint": "_y_agent_shopherd"
+  },
+  "candidate_hosted_entrypoint": "_kc_orw1_entrypoint",
+  "parity": {
+    "mechanical_pass": true,
+    "fresh_seeds": [
+      66001,
+      66002
+    ],
+    "opponents": [
+      "v47",
+      "tactical_memory"
+    ],
+    "pairs": 8,
+    "episodes": 16,
+    "failures": 0,
+    "exact_action_parity_all": true,
+    "exact_reward_parity_all": true,
+    "action_calls_per_episode": 719,
+    "package_parity_sha256": "e23eee387e8a33711acf4943a30d1df7602f0c8e0d1b28e88ff98b8d8d4a87a7"
+  },
+  "decision": "ORW1_HOSTED_PACKAGE_HOSTED_FAITHFUL_PASS_READY_FOR_CORRECTED_AB",
+  "automatic_kaggle_submission": false
+}
