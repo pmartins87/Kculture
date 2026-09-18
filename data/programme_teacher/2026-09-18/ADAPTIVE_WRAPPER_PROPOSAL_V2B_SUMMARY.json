@@ -1,0 +1,55 @@
+{
+  "schema": "kculture-adaptive-wrapper-proposal-oracle-v2b-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35310754131,
+  "workflow_head_sha": "fe01b17bce8654393a8cd3cba4afadc1b1a3f31e",
+  "artifact_id": 10533820019,
+  "artifact_digest": "sha256:6b061d9873e0773fe2275cafacaecaa61461ae34b3570708a4cde2804efcfff1",
+  "engine": "1.32.7",
+  "mechanical_pass": true,
+  "branch_states": 16,
+  "candidate_rollouts": 16,
+  "base_score_rate": 0.5,
+  "oracle_score_rate": 0.625,
+  "score_delta": 0.125,
+  "nonwin_to_win_flips": 4,
+  "loss_to_win_flips": 0,
+  "mean_oracle_margin_delta": 4,
+  "median_oracle_margin_delta": 0.5,
+  "positive_margin_headroom_states": 8,
+  "oracle_source_counts": {
+    "ready_stock": 8
+  },
+  "key_causal_pattern": {
+    "rejected_opening": {
+      "step": 1,
+      "v47": "BUY_PRODUCT WHEAT 30",
+      "proposal": "BUY_PRODUCT WHEAT 8",
+      "sources": [
+        "market_smart",
+        "shop_aware"
+      ],
+      "outcome": "catastrophic; oracle retained V47"
+    },
+    "promoted_ready_stock": {
+      "steps": [
+        161,
+        172
+      ],
+      "v47_market": "[]",
+      "proposal_market": [
+        [
+          "SELL",
+          "WOOL",
+          2
+        ]
+      ],
+      "source": "ready_stock",
+      "seed_63001": "tie -> win (+15 margin)",
+      "seed_63002": "same W/L, +1 margin"
+    }
+  },
+  "decision": "WRAPPER_PROPOSAL_WL_HEADROOM_PASS",
+  "next": "Causally isolate an own-state ready-stock early-sale transform on fresh seeds before training a selector.",
+  "automatic_kaggle_submission": false
+}
