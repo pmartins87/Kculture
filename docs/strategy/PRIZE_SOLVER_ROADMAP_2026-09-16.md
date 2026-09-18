@@ -2,22 +2,42 @@
 
 ## Current solver handoff — 2026-09-18
 
-Active solver branch: `research/prize-solver-v0`. This section supersedes older
-CR092/V4 next-action instructions below for the solver campaign.
-Top-30 extraction reproduced: 30 notebooks / 23 sources / 61 programmes.
-Programme teacher executed: 89,304 games, 51 prefix groups, 74,664 decision records.
-Infrastructure PASS only; tree W/L 55.8939% vs train-selected static 55.5931%.
-No strategic promotion or scale-up. Observation parity now PASS (128 vectors, 16 games).
-Leave-one-bank-out tree gains are positive in all 3 blocks. A complete single-decision
-router is implemented: group 0, checkpoint 144, selected on train only. Its 64-game fresh
-static-opponent panel is neutral (both W/L 0.9375). Next: two adaptive expert wrappers,
-router vs exact static control; no threshold tuning. If neutral, close this standalone
-router and move to bounded transaction/market proposals on strong adaptive programmes.
-Current report: `docs/strategy/PROGRAMME_ROUTER_PROGRESS_2026-09-18.md`.
-Prior dataset/result: `docs/strategy/PROGRAMME_TEACHER_RESULT_2026-09-18.md`.
-Evidence: `data/programme_teacher/2026-09-18/`. No Ryzen action required.
-The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently
-create competing copies or change other branches as part of this solver update.
+Active branch: `research/prize-solver-v0`.
+
+The Top-30 programme teacher and observation parity infrastructure remain valid, but the
+standalone exact-prefix router is now **closed as a competitive candidate**.
+
+Binding adaptive-expert gate:
+- workflow `35307879368`, engine `1.32.7`;
+- 64 paired matchups / 128 complete episodes;
+- exact current V47 and V39 source identities verified;
+- static control W/L `5/64 = 0.078125`;
+- router W/L `5/64 = 0.078125`; W/L delta `0.0`;
+- mean paired terminal-margin improvement `+2770.47`;
+- V47 block: `0/32 -> 0/32`, margin `-9784.63 -> -6970.75`;
+- V39 block: `5/32 -> 5/32`, margin `-7807.22 -> -5080.16`.
+
+Binding decision:
+`CLOSE_STANDALONE_ROUTER_OPEN_BOUNDED_TRANSACTION_MARKET_SEARCH`.
+
+Interpretation: route selection contains real economic signal, but it does not explain the
+competitive gap to full adaptive agents. Do not rescue the tree with more depth, seeds or
+checkpoint tuning. The solver architecture remains active, now focused on the control
+surface actually used by the public frontier: transaction guards, sale timing/queue
+microstructure, funding/storage repairs and bounded state-conditioned transformations on
+top of a strong adaptive programme.
+
+Current result:
+`docs/strategy/PROGRAMME_ADAPTIVE_EXPERT_GATE_RESULT_2026-09-18.md`.
+Machine-readable summary:
+`data/programme_teacher/2026-09-18/ADAPTIVE_EXPERT_GATE_SUMMARY.json`.
+
+Immediate gate: measure oracle W/L headroom from one bounded transaction/market
+intervention on a complete strong adaptive backbone before training another selector.
+No Kaggle submission and no Ryzen action are currently required.
+
+The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
+competing copies or change other branches as part of this solver update.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
