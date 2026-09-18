@@ -167,7 +167,9 @@ def main():
 
     result={
         "schema":"kculture-orw1-package-parity-v1",
-        "candidate":Path(args.candidate).name,\n        "base_hosted_entrypoint":base_entrypoint,\n        "candidate_hosted_entrypoint":candidate_entrypoint,
+        "candidate":Path(args.candidate).name,
+        "base_hosted_entrypoint":base_entrypoint,
+        "candidate_hosted_entrypoint":candidate_entrypoint,
         "fresh_seeds":SEEDS,
         "opponents":[x["key"] for x in OPPONENTS],
         "pairs":len(rows),
