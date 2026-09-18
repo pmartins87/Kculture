@@ -1,0 +1,75 @@
+{
+  "schema": "kculture-programme-adaptive-expert-gate-summary-v1",
+  "date": "2026-09-18",
+  "workflow_run": 35307879368,
+  "workflow_head_sha": "f8a78088263539ef62be621ced666dde96a684fd",
+  "artifact_id": 10532661922,
+  "artifact_digest": "sha256:82527e65e8bd9d45e130e1fd0ee71676830e2bda298a21217ba46778ce57c341",
+  "engine": "1.32.7",
+  "pass_mechanical": true,
+  "paired_matchups": 64,
+  "episodes": 128,
+  "static": {
+    "wins": 5,
+    "losses": 59,
+    "ties": 0,
+    "score_rate": 0.078125,
+    "mean_margin": -8795.921875,
+    "median_margin": -5478
+  },
+  "router": {
+    "wins": 5,
+    "losses": 59,
+    "ties": 0,
+    "score_rate": 0.078125,
+    "mean_margin": -6025.453125,
+    "median_margin": -5028
+  },
+  "score_delta": 0,
+  "mean_paired_margin_delta": 2770.46875,
+  "by_expert": {
+    "modern_v47": {
+      "static": {
+        "wins": 0,
+        "losses": 32,
+        "score_rate": 0,
+        "mean_margin": -9784.625
+      },
+      "router": {
+        "wins": 0,
+        "losses": 32,
+        "score_rate": 0,
+        "mean_margin": -6970.75
+      },
+      "score_delta": 0,
+      "mean_paired_margin_delta": 2813.875,
+      "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+    },
+    "legacy_v39": {
+      "static": {
+        "wins": 5,
+        "losses": 27,
+        "score_rate": 0.15625,
+        "mean_margin": -7807.21875
+      },
+      "router": {
+        "wins": 5,
+        "losses": 27,
+        "score_rate": 0.15625,
+        "mean_margin": -5080.15625
+      },
+      "score_delta": 0,
+      "mean_paired_margin_delta": 2727.0625,
+      "main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8"
+    }
+  },
+  "frozen_gate": {
+    "promote_min_score_delta": 0.0625,
+    "max_block_regression": 0.03125,
+    "requires_positive_mean_paired_margin_delta": true
+  },
+  "decision": "CLOSE_STANDALONE_ROUTER_OPEN_BOUNDED_TRANSACTION_MARKET_SEARCH",
+  "interpretation": "The router extracts economic continuation value but route selection alone does not convert losses against full adaptive agents. Move search to bounded transaction/market interventions on a strong adaptive backbone.",
+  "third_party_code_persisted": false,
+  "automatic_kaggle_submission": false
+}
