@@ -1,0 +1,29 @@
+{
+  "schema": "kculture-orw1-hosted-ab-submission-v1",
+  "date": "2026-09-18",
+  "workflow_run": 35361531672,
+  "status_snapshot_run": 35361737759,
+  "competition": "kaggriculture",
+  "preflight": {
+    "observed_today_before_pair": 0,
+    "projected_after_pair": 2,
+    "max_daily": 5
+  },
+  "control": {
+    "submission_id": 56333577,
+    "registered_at_utc": "2026-09-18 15:18:48.850000",
+    "description": "PS_ORW1_CONTROL_EXACT_V47_08E56C43",
+    "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
+    "status_at_snapshot": "PENDING"
+  },
+  "treatment": {
+    "submission_id": 56333579,
+    "registered_at_utc": "2026-09-18 15:18:50.740000",
+    "description": "PS_ORW1_TREATMENT_V47_ORW1_B994E00D",
+    "archive_sha256": "b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f",
+    "status_at_snapshot": "PENDING"
+  },
+  "registration_separation_seconds": 1.89,
+  "first_status_snapshot_utc": "2026-09-18 15:19:54",
+  "decision": "ORW1_HOSTED_AB_SUBMITTED_AWAIT_BOTH_RESULTS"
+}
