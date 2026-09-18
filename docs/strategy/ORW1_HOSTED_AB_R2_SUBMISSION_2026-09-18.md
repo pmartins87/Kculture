@@ -96,3 +96,27 @@ Binding state:
 
 Preserve the fifth daily submission slot. Do not tune O-RW1 or open a nearby hosted
 variant from this checkpoint.
+
+## Exposure-asymmetry checkpoint
+
+Authenticated status at approximately `2026-09-18 17:28:18 UTC`:
+- CONTROL: `COMPLETE`, rating `718.3`;
+- TREATMENT: `COMPLETE`, rating `600.0`.
+
+Replay refresh at approximately `17:28:59 UTC` explains the gap:
+- CONTROL listed episodes: **2**;
+- CONTROL externally resolved games: **1**;
+- CONTROL W-L: **1-0**;
+- CONTROL mean/median margin: **+57,846**;
+- TREATMENT listed episodes: **1**;
+- TREATMENT externally resolved games: **0**.
+
+Therefore the current rating difference is **exposure asymmetry**, not evidence of an
+O-RW1 regression. The treatment has not yet received an externally attributable game.
+
+Binding state:
+`ORW1_HOSTED_AB_R2_VALID_BUT_EXPOSURE_ASYMMETRIC_AWAIT_BALANCED_EXTERNAL_GAMES`.
+
+Do not poll minute-by-minute. The next informative checkpoint remains frozen at at least
+32 externally attributable completed public games per arm. Preserve the fifth daily
+submission slot.
