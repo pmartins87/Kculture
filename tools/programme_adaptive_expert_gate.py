@@ -25,6 +25,7 @@ from pathlib import Path
 import kagglehub
 import numpy as np
 from kaggle_environments import make
+from kaggle_environments.agent import get_last_callable
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -234,24 +235,26 @@ def purge_package_modules(root: Path) -> None:
 
 
 def load_public_agent(main_py: Path):
+    """Load exactly the callable selected by Kaggle's hosted entrypoint loader.
+
+    Public Kaggriculture packages frequently retain an older `agent` symbol and append
+    later wrappers under different function names. Importing `mod.agent` is therefore
+    not hosted-faithful. Kaggle selects the last callable created by executing main.py;
+    mirror that behavior with the official `get_last_callable`.
+    """
     root = main_py.parent.resolve()
     purge_package_modules(root)
-    name = f"public_expert_{time.time_ns()}"
-    spec = importlib.util.spec_from_file_location(name, main_py)
-    if spec is None or spec.loader is None:
-        raise RuntimeError(f"cannot import {main_py}")
-    mod = importlib.util.module_from_spec(spec)
+    src = main_py.read_text(encoding="utf-8")
     sys.path.insert(0, str(root))
     try:
-        spec.loader.exec_module(mod)
+        agent = get_last_callable(src, path=str(main_py.resolve()))
     finally:
         try:
             sys.path.remove(str(root))
         except ValueError:
             pass
-    agent = getattr(mod, "agent", None)
     if not callable(agent):
-        raise RuntimeError(f"{main_py} exports no callable agent")
+        raise RuntimeError(f"{main_py} official loader returned no callable")
     return agent
 
 
