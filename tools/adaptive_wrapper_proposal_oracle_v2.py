@@ -82,9 +82,9 @@ OPPONENTS = [
         "expected_main_sha256": BASE["expected_main_sha256"],
     },
     {
-        "key": "v39",
-        "handle": "ahmedberatozer/kaggriculture-v39-ready-before-the-rush",
-        "expected_main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8",
+        "key": "v48_opponent",
+        "handle": "ahmedberatozer/kaggriculture-v48-clear-the-queue",
+        "expected_main_sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96",
     },
 ]
 SEEDS = [63001, 63002]
@@ -395,6 +395,9 @@ def main() -> None:
                 provenance[spec["key"]] = rec
 
             opponent_paths: dict[str, Path] = {}
+            proposer_by_sha = {
+                spec["expected_main_sha256"]: spec["key"] for spec in PROPOSERS
+            }
             for spec in OPPONENTS:
                 if spec["expected_main_sha256"] == BASE["expected_main_sha256"]:
                     opponent_paths[spec["key"]] = base_main
@@ -403,6 +406,15 @@ def main() -> None:
                         "key": spec["key"],
                         "role": "opponent",
                         "reused_exact_base_bytes": True,
+                    }
+                elif spec["expected_main_sha256"] in proposer_by_sha:
+                    src_key = proposer_by_sha[spec["expected_main_sha256"]]
+                    opponent_paths[spec["key"]] = proposer_paths[src_key]
+                    provenance[spec["key"]] = {
+                        **provenance[src_key],
+                        "key": spec["key"],
+                        "role": "opponent",
+                        "reused_exact_proposer_bytes": src_key,
                     }
                 else:
                     p, rec = acquire(spec, tmp / f"opponent_{spec['key']}")
@@ -566,7 +578,7 @@ def main() -> None:
         decision = "WRAPPER_PROPOSAL_MECHANICS_INVALID"
 
     result = {
-        "schema": "kculture-adaptive-wrapper-proposal-oracle-v2",
+        "schema": "kculture-adaptive-wrapper-proposal-oracle-v2b",
         "engine": EXPECTED_ENGINE,
         "base": BASE,
         "proposers": PROPOSERS,
