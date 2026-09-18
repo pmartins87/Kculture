@@ -47,6 +47,7 @@ from tools.first_party_ready_wool_causal_gate import (
 )
 
 EXPECTED_ENGINE = "1.32.7"
+LOADER_CONTRACT = "official_get_last_callable"
 BASE = {
     "key": "v47",
     "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
@@ -278,6 +279,12 @@ def main() -> None:
         with tempfile.TemporaryDirectory(prefix="ready-wool-runtime-") as td:
             tmp = Path(td)
             base_main, provenance["base"] = acquire(BASE, tmp/"base")
+            probe = load_public_agent(base_main)
+            hosted_entrypoint = getattr(probe, "__name__", None)
+            purge_package_modules(base_main.parent)
+            if hosted_entrypoint != "_y_agent_shopherd":
+                raise RuntimeError(f"unexpected exact V47 hosted entrypoint: {hosted_entrypoint}")
+            provenance["base"]["hosted_entrypoint"] = hosted_entrypoint
             opp_paths = {}
             for spec in OPPONENTS:
                 if spec["expected_main_sha256"] == BASE["expected_main_sha256"]:
@@ -392,6 +399,7 @@ def main() -> None:
     result={
         "schema":"kculture-ready-wool-oneshot-runtime-v1",
         "engine":EXPECTED_ENGINE,
+        "loader_contract":LOADER_CONTRACT,
         "base":BASE,
         "opponents":OPPONENTS,
         "seeds":SEEDS,
