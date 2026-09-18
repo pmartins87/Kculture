@@ -4,42 +4,30 @@
 
 Active branch: `research/prize-solver-v0`.
 
-The standalone programme router is closed. Synthetic one-turn SELL reorder/deferral also
-closed. The important solver line is now the first-party ready-stock option discovered
-through exact wrapper-proposal search.
+The standalone programme router is closed. The synthetic one-turn SELL reorder/deferral
+family is closed. The active Prize-Solver line is the first-party ready-WOOL option O-RW1.
 
 ### V2b wrapper-proposal oracle — PASS
 
-Workflow `35310754131`, exact engine `1.32.7`:
-- 16 valid branch states / zero failures;
+Workflow `35310754131`:
 - BASE score rate `0.500`;
-- oracle score rate `0.625`;
+- exact oracle score rate `0.625`;
 - W/L delta **+0.125**;
 - four non-win -> win flips;
-- every promoted proposal came from Ready Stock;
-- useful proposal: V47 market empty -> `SELL WOOL 2`, farmer/hands unchanged.
-
-Result:
-`docs/strategy/ADAPTIVE_WRAPPER_PROPOSAL_V2B_RESULT_2026-09-18.md`.
+- all promoted proposals came from Ready Stock;
+- useful proposal: exact V47 market empty -> `SELL WOOL 2`.
 
 ### O-RW1 first-party causal isolation — PASS SAFE OPTION
 
-Workflow `35311750191`, artifact `10533792019`, exact engine `1.32.7`:
-- 48 valid counterfactual branch states;
-- mean W/L score delta **+0.1666667**;
-- 16 non-win -> win flips;
+Workflow `35311750191`:
+- 48 valid branch states / zero failures;
+- mean score delta **+0.1666667**;
+- **16 non-win -> win flips**;
 - **0 negative-W/L states**;
-- **0 win -> non-win regressions**;
-- mean terminal-margin delta **+14.9583**;
+- mean margin delta **+14.9583**;
 - **0 negative-margin states**.
 
-By opponent:
-- V47 mirror: score delta `+0.25`;
-- V48: score delta `+0.25`;
-- Tactical Memory: score delta `0.0`, mean margin delta `+35.125`.
-
-Frozen first-party option **O-RW1**:
-
+Frozen first-party option:
 ```
 if V47 market == []
 and own private shed.WOOL >= 2
@@ -47,33 +35,53 @@ and step <= 671:
     proposal = SELL WOOL 2
 ```
 
-This uses current legal own state only. No Ready Stock code, opponent identity, future,
-seed or hidden opponent state is needed.
+### O-RW1 one-shot runtime transfer — PASS
 
-Binding result:
-`docs/strategy/FIRST_PARTY_READY_WOOL_CAUSAL_RESULT_2026-09-18.md`.
+Workflow `35313204723`, artifact `10534778422`, exact engine `1.32.7`:
+- 64 paired matchups / 128 complete episodes;
+- zero mechanical failures;
+- BASE score rate **0.5000**;
+- V47 + O-RW1 score rate **0.6875**;
+- W/L delta **+0.1875**;
+- **28 non-win -> win flips**;
+- **0 win -> non-win regressions**;
+- all 4 opponent blocks nonnegative in W/L;
+- worst block W/L delta `0.0`.
+
+Per opponent:
+- V47 mirror: `0.500 -> 0.875`, delta **+0.375**;
+- V48: `0.500 -> 0.875`, delta **+0.375**;
+- Tactical Memory: `1.000 -> 1.000`;
+- Ready Stock: `0.000 -> 0.000`.
+
+Important diagnostic: mean money-margin delta was `-743.5` because of a few large
+negative-margin Tactical Memory episodes that still remained wins. Primary objective
+remains W/L; do not optimize this option using money alone.
+
+Binding runtime result:
+`docs/strategy/READY_WOOL_ONESHOT_RUNTIME_RESULT_2026-09-18.md`.
 Machine-readable:
-`data/programme_teacher/2026-09-18/READY_WOOL_CAUSAL_GATE_SUMMARY.json`.
+`data/programme_teacher/2026-09-18/READY_WOOL_RUNTIME_GATE_SUMMARY.json`.
 
-### Current binding gate — O-RW1 one-shot runtime transfer
+### Current binding gate — reproducible hosted package
 
-Protocol:
-`docs/strategy/READY_WOOL_ONESHOT_RUNTIME_GATE_2026-09-18.md`.
+O-RW1 is frozen exactly; no quantity/product/step/threshold tuning.
 
-Treatment is exact V47 plus O-RW1 firing **at most once**, at the first eligible state.
-No parameter/product/quantity/step tuning.
+The package builder:
+- downloads the exact current V47 output package transiently;
+- requires V47 `main.py` SHA
+  `f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`;
+- appends only the frozen O-RW1 one-shot wrapper;
+- builds a deterministic archive and provenance receipt;
+- does not persist upstream source in the repository.
 
-Fresh seeds `65001..65008`, both seats, four opponents:
-V47, V48, Tactical Memory and Ready Stock.
+The package parity gate compares the archive **action-for-action and reward-for-reward**
+against the reference OneShotReadyWool implementation on fresh seeds.
 
-64 paired matchups / 128 complete episodes planned. Pre-trigger observation and exact V47
-base-action parity are checked. No-trigger episodes must be exactly identical.
+Active workflow: **`35359994519`**.
 
-Active workflow: **`35313204723`**.
-
-A PASS freezes O-RW1 as a runtime-safe first-party solver option and authorizes building a
-reproducible candidate package plus hosted-probe proposal. It does not automatically
-submit to Kaggle.
+A mechanical package PASS makes the artifact technically ready for a hosted-probe
+decision. No automatic Kaggle submission is authorized.
 
 No Ryzen action and no manual Kaggle submission are currently required.
 
