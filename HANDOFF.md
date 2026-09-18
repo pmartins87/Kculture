@@ -4,86 +4,89 @@
 
 Active branch: `research/prize-solver-v0`.
 
-The standalone programme router is closed. The synthetic one-turn SELL reorder/deferral
-family is closed. The active Prize-Solver line is the first-party ready-WOOL option O-RW1.
+The active Prize-Solver line is frozen first-party option **O-RW1** on exact public V47.
 
-### V2b wrapper-proposal oracle — PASS
+### Offline / exact-engine evidence
 
-Workflow `35310754131`:
-- BASE score rate `0.500`;
-- exact oracle score rate `0.625`;
-- W/L delta **+0.125**;
-- four non-win -> win flips;
-- all promoted proposals came from Ready Stock;
-- useful proposal: exact V47 market empty -> `SELL WOOL 2`.
+1. Wrapper-proposal oracle V2b — PASS:
+   - BASE `0.500` -> oracle `0.625`;
+   - W/L delta **+0.125**;
+   - useful proposal was V47 market empty -> `SELL WOOL 2`.
 
-### O-RW1 first-party causal isolation — PASS SAFE OPTION
+2. First-party causal O-RW1 — PASS SAFE OPTION:
+   - 48 branch states;
+   - mean score delta **+0.1666667**;
+   - 16 non-win -> win flips;
+   - 0 negative-W/L states.
 
-Workflow `35311750191`:
-- 48 valid branch states / zero failures;
-- mean score delta **+0.1666667**;
-- **16 non-win -> win flips**;
-- **0 negative-W/L states**;
-- mean margin delta **+14.9583**;
-- **0 negative-margin states**.
+3. Autonomous one-shot runtime transfer — PASS:
+   - 64 paired matchups / 128 episodes;
+   - BASE `0.5000`;
+   - V47 + O-RW1 `0.6875`;
+   - W/L delta **+0.1875**;
+   - 28 non-win -> win flips;
+   - 0 win -> non-win regressions;
+   - all 4 opponent blocks nonnegative in W/L.
 
-Frozen first-party option:
+Frozen O-RW1:
 ```
-if V47 market == []
+if not used
+and V47 current market == []
 and own private shed.WOOL >= 2
 and step <= 671:
-    proposal = SELL WOOL 2
+    execute SELL WOOL 2
+    used = True
 ```
 
-### O-RW1 one-shot runtime transfer — PASS
+### Hosted package — PASS
 
-Workflow `35313204723`, artifact `10534778422`, exact engine `1.32.7`:
-- 64 paired matchups / 128 complete episodes;
-- zero mechanical failures;
-- BASE score rate **0.5000**;
-- V47 + O-RW1 score rate **0.6875**;
-- W/L delta **+0.1875**;
-- **28 non-win -> win flips**;
-- **0 win -> non-win regressions**;
-- all 4 opponent blocks nonnegative in W/L;
-- worst block W/L delta `0.0`.
+Workflow `35360173417`, artifact `10554278438`.
 
-Per opponent:
-- V47 mirror: `0.500 -> 0.875`, delta **+0.375**;
-- V48: `0.500 -> 0.875`, delta **+0.375**;
-- Tactical Memory: `1.000 -> 1.000`;
-- Ready Stock: `0.000 -> 0.000`.
+Candidate:
+`KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
 
-Important diagnostic: mean money-margin delta was `-743.5` because of a few large
-negative-margin Tactical Memory episodes that still remained wins. Primary objective
-remains W/L; do not optimize this option using money alone.
+Archive SHA-256:
+`b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`
 
-Binding runtime result:
-`docs/strategy/READY_WOOL_ONESHOT_RUNTIME_RESULT_2026-09-18.md`.
+Candidate `main.py` SHA:
+`f65be27b47839eb0cb6b44b217fc1edb33f63796bf5bc0bdd4f0bd311d3c2ff4`
+
+Exact V47 base main SHA:
+`f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`
+
+Fresh package smoke:
+- 8 package/reference pairs;
+- 16 complete episodes;
+- exact action parity 8/8;
+- exact reward parity 8/8;
+- 0 failures.
+
+The packaged source retains the upstream Apache-2.0 license text, SPDX notice and V47
+attribution/modification notice.
+
+Binding package result:
+`docs/strategy/ORW1_HOSTED_PACKAGE_RESULT_2026-09-18.md`.
 Machine-readable:
-`data/programme_teacher/2026-09-18/READY_WOOL_RUNTIME_GATE_SUMMARY.json`.
+`data/programme_teacher/2026-09-18/ORW1_HOSTED_PACKAGE_SUMMARY.json`.
 
-### Current binding gate — reproducible hosted package
+### Current next step — explicit authorization required
 
-O-RW1 is frozen exactly; no quantity/product/step/threshold tuning.
+Frozen hosted sensor:
+`docs/strategy/ORW1_HOSTED_AB_PROBE_PROTOCOL_2026-09-18.md`.
 
-The package builder:
-- downloads the exact current V47 output package transiently;
-- requires V47 `main.py` SHA
-  `f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`;
-- appends only the frozen O-RW1 one-shot wrapper;
-- builds a deterministic archive and provenance receipt;
-- does not persist upstream source in the repository.
+Submit in the same operational window:
+- CONTROL: exact public V47 output archive, SHA
+  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`;
+- TREATMENT: exact frozen O-RW1 archive, SHA
+  `b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`.
 
-The package parity gate compares the archive **action-for-action and reward-for-reward**
-against the reference OneShotReadyWool implementation on fresh seeds.
+No other variant between the pair. Hosted result is a population sensor; do not retune
+O-RW1 from one noisy rating.
 
-Active workflow: **`35359994519`**.
+**No Kaggle submission has been sent. Await explicit user authorization for the A/B
+hosted probe.**
 
-A mechanical package PASS makes the artifact technically ready for a hosted-probe
-decision. No automatic Kaggle submission is authorized.
-
-No Ryzen action and no manual Kaggle submission are currently required.
+No Ryzen action is required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
 competing copies or change other branches as part of this solver update.
