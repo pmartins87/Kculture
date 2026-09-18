@@ -1,14 +1,33 @@
 # Programme router progress — 2026-09-18
 
 ## Outcome and next decision
-The project remains active toward prize probability. The exact-prefix router now runs
-end to end. No hosted-strength claim and no strategic promotion yet.
-Next bounded work: integrate two recovered adaptive expert wrappers (modern and legacy)
-as opponents, retaining their source provenance and own-state memory. Compare the frozen
-single-decision router against its exact static control. Do not tune this tree against
-these results; if it remains neutral, close this standalone candidate and use the strong
-wrapper's transaction repairs/market proposals for the next search intervention.
-The pure-tape panel cannot establish competitiveness against the adaptive public agents.
+
+The standalone exact-prefix router is now CLOSED as a competitive candidate.
+
+Binding adaptive-expert gate: workflow `35307879368`, 64 paired matchups / 128 complete
+episodes, official engine 1.32.7. Against the exact current public V47 and V39 adaptive
+agents, W/L stayed `5/64 -> 5/64` (delta zero). The router did improve paired terminal
+margin by `+2770.47` on average, including about +2.8k in both expert blocks, but V47
+remained `0/32` for both treatments.
+
+Binding verdict:
+`CLOSE_STANDALONE_ROUTER_OPEN_BOUNDED_TRANSACTION_MARKET_SEARCH`.
+
+Do not tune tree depth, checkpoints, seeds or programme membership to rescue this
+candidate. The result says route continuation choice carries economic information but the
+missing competitive control surface is the adaptive wrapper itself: transaction guards,
+market timing/order, funding/storage repair and bounded visible-state transforms.
+
+Next bounded work is an **oracle-headroom gate** on a complete strong adaptive backbone.
+At matched public states, permit only one small transaction/market intervention, evaluate
+the candidate set counterfactually in the exact engine, and ask whether the oracle can
+actually convert losses to wins rather than merely increase terminal money. Only then
+train an observation-only selector/value model.
+
+Result:
+`docs/strategy/PROGRAMME_ADAPTIVE_EXPERT_GATE_RESULT_2026-09-18.md`.
+Summary:
+`data/programme_teacher/2026-09-18/ADAPTIVE_EXPERT_GATE_SUMMARY.json`.
 
 ## Completed parity
 16 complete games, eight representative programmes, both seats, eight checkpoints:
