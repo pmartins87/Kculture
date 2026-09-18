@@ -6,95 +6,100 @@ Active branch: `research/prize-solver-v0`.
 
 ### Hosted-entrypoint correction remains binding
 
-Public agents must be loaded with:
+All public-agent execution for promotion must use
 `kaggle_environments.agent.get_last_callable`.
 
 Exact public V47 hosted entrypoint:
 `_y_agent_shopherd`.
 
-Hosted treatment submission `56333579` from the first A/B is mechanically invalid and
-must never be interpreted as O-RW1 competitive evidence.
+The first hosted treatment submission `56333579` is mechanically invalid and must
+never be interpreted as O-RW1 evidence.
 
-### O-RW1 hosted-faithful causal gate — PASS
+### O-RW1 hosted-faithful evidence
 
-Workflow `35363453097`, artifact `10555907821`:
+Causal gate `35363453097`:
 - 48 valid branch states;
-- mean score delta **+0.0833333**;
+- score delta **+0.0833333**;
 - 8 non-win -> win flips;
-- 0 win -> non-win regressions;
-- 0 negative-W/L states;
-- mean margin delta +14.9583.
+- 0 negative-W/L states.
 
-### O-RW1 hosted-faithful autonomous runtime — PASS
-
-Workflow `35367785929`, artifact `10558221804`, exact engine `1.32.7`.
-
-BASE is exact public V47 resolved through the official hosted loader to
-`_y_agent_shopherd`.
-
-Results:
-- 64 paired matchups / 128 complete episodes;
-- zero failures;
-- BASE score rate **0.6250**;
-- V47 + O-RW1 score rate **0.71875**;
+Runtime gate `35367785929`:
+- 64 pairs / 128 episodes;
+- BASE `0.6250`;
+- O-RW1 `0.71875`;
 - W/L delta **+0.09375**;
-- **14 non-win -> win flips**;
-- **0 win -> non-win regressions**;
-- 14 positive-score pairs;
-- 2 negative-score pairs;
-- 48 neutral pairs;
-- all 4 opponent blocks had nonnegative mean score delta;
-- worst block mean score delta 0.0.
+- 14 non-win -> win flips;
+- 0 win -> non-win regressions;
+- 2 tie->loss pair regressions;
+- all 4 opponent blocks nonnegative in mean W/L.
 
-Per opponent:
-- V47 mirror: `0.500 -> 0.875`, delta **+0.375**;
-- V48: `0.000 -> 0.000`;
-- Tactical Memory: `1.000 -> 1.000`;
-- Ready Stock: `1.000 -> 1.000`.
+### Corrected hosted package — PASS
 
-Important: O-RW1 is **not universally safe**. Seed 65008 versus V47 mirror produced two
-tie->loss regressions. It is nevertheless positive on the frozen aggregate gate and had
-no win->non-win regressions.
+Workflow `35372969031`, artifact `10559606269`.
 
-Money margin is diagnostic only:
-- mean margin delta -805.78125;
-- median +10;
-- Tactical Memory generated large negative money deltas without changing W/L wins.
+Corrected candidate:
+`KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
 
-Binding verdict:
-`READY_WOOL_RUNTIME_PASS`.
+Archive SHA:
+`997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`
+
+Candidate hosted entrypoint:
+`_kc_orw1_entrypoint`.
+
+Package parity:
+- 8/8 exact action parity;
+- 8/8 exact reward parity;
+- 719 action calls per episode;
+- 0 failures.
 
 Result:
-`docs/strategy/READY_WOOL_RUNTIME_HOSTED_FAITHFUL_RESULT_2026-09-18.md`.
+`docs/strategy/ORW1_HOSTED_PACKAGE_HOSTED_FAITHFUL_RESULT_2026-09-18.md`.
+
+### Corrected hosted A/B R2 — SUBMITTED
+
+Submission workflow:
+`35373555439`.
+
+Immediate pre-submit verification:
+- CONTROL SHA:
+  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`;
+- TREATMENT SHA:
+  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
+- CONTROL loader:
+  `_y_agent_shopherd`;
+- TREATMENT loader:
+  `_kc_orw1_entrypoint`;
+- daily quota before pair: 2;
+- projected after pair: **4/5**.
+
+CONTROL R2:
+- submission **56336025**;
+- registered `2026-09-18 17:19:39.130000 UTC`.
+
+TREATMENT R2:
+- submission **56336027**;
+- registered `2026-09-18 17:19:40.807000 UTC`.
+
+Registration separation:
+**1.677 seconds**.
+
+First authenticated R2 snapshot:
+- workflow `35373770020`;
+- snapshot around `2026-09-18 17:20:55 UTC`;
+- CONTROL: `PENDING`;
+- TREATMENT: `PENDING`.
+
+Binding state:
+`ORW1_HOSTED_AB_R2_SUBMITTED_AWAIT_BOTH_RESULTS`.
+
+Do not submit another candidate today without explicit information-value justification.
+Do not tune O-RW1 while either R2 arm is pending.
+
+Submission receipt:
+`docs/strategy/ORW1_HOSTED_AB_R2_SUBMISSION_2026-09-18.md`.
 Machine-readable:
-`data/programme_teacher/2026-09-18/READY_WOOL_RUNTIME_HOSTED_FAITHFUL_SUMMARY.json`.
+`data/programme_teacher/2026-09-18/ORW1_HOSTED_AB_R2_SUBMISSION.json`.
 
-Frozen O-RW1 remains unchanged:
-```
-if not used
-and hosted-faithful V47 market == []
-and own private shed.WOOL >= 2
-and step <= 671:
-    execute SELL WOOL 2
-    used = True
-```
-
-### Current binding gate — corrected hosted package parity
-
-Active workflow:
-**`35372564746`**, head
-`a8830bef5b930f5178c836e9f9c8dbedbc4e5245`.
-
-The package gate now requires:
-- exact base hosted entrypoint `_y_agent_shopherd`;
-- exact candidate hosted entrypoint `_kc_orw1_entrypoint`;
-- exact action parity vs the hosted-faithful reference implementation;
-- exact reward parity;
-- deterministic archive/SHA manifest.
-
-No new Kaggle submission is authorized until this package gate passes.
-
-No O-RW1 retuning is authorized.
 No Ryzen action is required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
