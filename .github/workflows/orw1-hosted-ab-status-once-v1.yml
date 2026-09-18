@@ -1,0 +1,47 @@
+name: orw1-hosted-ab-status-once-v1
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/orw1-hosted-ab-status-once-v1.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      CONTROL_DESCRIPTION: PS_ORW1_CONTROL_EXACT_V47_08E56C43
+      TREATMENT_DESCRIPTION: PS_ORW1_TREATMENT_V47_ORW1_B994E00D
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture one authenticated status snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee snapshot_utc.txt
+          kaggle competitions submissions "$COMPETITION" -v -q | tee submissions.csv
+          echo "CONTROL:"
+          grep -F "$CONTROL_DESCRIPTION" submissions.csv | head -1 | tee control_row.txt
+          echo "TREATMENT:"
+          grep -F "$TREATMENT_DESCRIPTION" submissions.csv | head -1 | tee treatment_row.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: orw1-hosted-ab-status-once-v1
+          path: |
+            snapshot_utc.txt
+            submissions.csv
+            control_row.txt
+            treatment_row.txt
+          retention-days: 30
