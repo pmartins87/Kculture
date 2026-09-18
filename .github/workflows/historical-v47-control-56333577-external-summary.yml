@@ -1,0 +1,41 @@
+name: historical-v47-control-56333577-external-summary
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/historical-v47-control-56333577-external-summary.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  summarize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - name: Download frozen historical audit artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: historical-v47-control-56333577-audit
+          path: historical
+          run-id: 35381296543
+          github-token: ${{ github.token }}
+      - name: Summarize external games
+        shell: bash
+        run: |
+          set -euo pipefail
+          find historical -maxdepth 4 -type f | sort | head -100
+          REPLAY_ROOT="$(find historical -type d -path '*/historical/replays' | head -1)"
+          test -n "$REPLAY_ROOT"
+          python tools/cr083_hosted_forensics.py             --replay-root "$REPLAY_ROOT"             --target-team-name "Paulo Martins"             --target-submission "56333577"             --output historical/HISTORICAL_EXTERNAL_SUMMARY.json
+          cat historical/HISTORICAL_EXTERNAL_SUMMARY.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: historical-v47-control-56333577-external-summary
+          path: historical/HISTORICAL_EXTERNAL_SUMMARY.json
+          retention-days: 30
