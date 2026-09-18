@@ -103,6 +103,21 @@ def main():
         if not candidate_main.is_file():
             raise RuntimeError("candidate root main.py missing")
 
+        # Hosted-entrypoint parity is part of the package contract.
+        purge_package_modules(base_main.parent)
+        base_probe=load_public_agent(base_main)
+        base_entrypoint=getattr(base_probe,"__name__",None)
+        purge_package_modules(base_main.parent)
+        if base_entrypoint!="_y_agent_shopherd":
+            raise RuntimeError(f"unexpected exact V47 hosted entrypoint: {base_entrypoint}")
+
+        purge_package_modules(candidate_main.parent)
+        cand_probe=load_public_agent(candidate_main)
+        candidate_entrypoint=getattr(cand_probe,"__name__",None)
+        purge_package_modules(candidate_main.parent)
+        if candidate_entrypoint!="_kc_orw1_entrypoint":
+            raise RuntimeError(f"candidate hosted entrypoint mismatch: {candidate_entrypoint}")
+
         opp_paths={}
         provenance={"base":base_rec}
         for spec in OPPONENTS:
@@ -152,7 +167,7 @@ def main():
 
     result={
         "schema":"kculture-orw1-package-parity-v1",
-        "candidate":Path(args.candidate).name,
+        "candidate":Path(args.candidate).name,\n        "base_hosted_entrypoint":base_entrypoint,\n        "candidate_hosted_entrypoint":candidate_entrypoint,
         "fresh_seeds":SEEDS,
         "opponents":[x["key"] for x in OPPONENTS],
         "pairs":len(rows),
