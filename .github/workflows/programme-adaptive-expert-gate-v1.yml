@@ -5,6 +5,8 @@ name: programme-adaptive-expert-gate-v1
       - research/prize-solver-v0
     paths:
       - '.github/workflows/programme-adaptive-expert-gate-v1.yml'
+      - 'tools/programme_adaptive_expert_gate.py'
+      - 'docs/strategy/PROGRAMME_ADAPTIVE_EXPERT_GATE_2026-09-18.md'
   workflow_dispatch:
 
 permissions:
