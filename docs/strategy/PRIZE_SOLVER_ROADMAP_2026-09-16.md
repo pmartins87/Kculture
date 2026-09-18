@@ -4,36 +4,43 @@
 
 Active branch: `research/prize-solver-v0`.
 
-The Top-30 programme teacher and observation parity infrastructure remain valid, but the
-standalone exact-prefix router is now **closed as a competitive candidate**.
+The standalone programme router remains closed. The first synthetic one-turn transaction
+family (SELL reordering / one-turn deferral) also closed with no headroom.
 
-Binding adaptive-expert gate:
-- workflow `35307879368`, engine `1.32.7`;
-- 64 paired matchups / 128 complete episodes;
-- exact current V47 and V39 source identities verified;
-- static control W/L `5/64 = 0.078125`;
-- router W/L `5/64 = 0.078125`; W/L delta `0.0`;
-- mean paired terminal-margin improvement `+2770.47`;
-- V47 block: `0/32 -> 0/32`, margin `-9784.63 -> -6970.75`;
-- V39 block: `5/32 -> 5/32`, margin `-7807.22 -> -5080.16`.
+The important new result is **Adaptive Wrapper Proposal Oracle V2b PASS**:
+- workflow `35310754131`, exact engine `1.32.7`;
+- 16 valid branch states / 16 exact proposal rollouts / zero failures;
+- BASE score rate `0.500`;
+- offline oracle score rate `0.625`;
+- **W/L delta `+0.125`**;
+- four non-win -> win flips;
+- mean terminal-margin delta `+4.0`;
+- all promoted proposals came from the Ready Stock wrapper.
 
-Binding decision:
-`CLOSE_STANDALONE_ROUTER_OPEN_BOUNDED_TRANSACTION_MARKET_SEARCH`.
+The causal proposal was simple: while V47 farmer/hands stayed identical and V47 market
+was empty, Ready Stock proposed `SELL WOOL 2`. In seed 63001 this changed ties to wins
+against both V47-mirror and V48; in seed 63002 it improved margin without changing W/L.
+The unrelated step-1 proposal `BUY WHEAT 30 -> 8` was catastrophic and rejected by the
+oracle. This is the first Prize-Solver result showing exact bounded search has **W/L
+headroom on top of a strong complete adaptive policy**, not merely money headroom.
 
-Interpretation: route selection contains real economic signal, but it does not explain the
-competitive gap to full adaptive agents. Do not rescue the tree with more depth, seeds or
-checkpoint tuning. The solver architecture remains active, now focused on the control
-surface actually used by the public frontier: transaction guards, sale timing/queue
-microstructure, funding/storage repairs and bounded state-conditioned transformations on
-top of a strong adaptive programme.
-
-Current result:
-`docs/strategy/PROGRAMME_ADAPTIVE_EXPERT_GATE_RESULT_2026-09-18.md`.
+Binding result:
+`docs/strategy/ADAPTIVE_WRAPPER_PROPOSAL_V2B_RESULT_2026-09-18.md`.
 Machine-readable summary:
-`data/programme_teacher/2026-09-18/ADAPTIVE_EXPERT_GATE_SUMMARY.json`.
+`data/programme_teacher/2026-09-18/ADAPTIVE_WRAPPER_PROPOSAL_V2B_SUMMARY.json`.
 
-Immediate gate: measure oracle W/L headroom from one bounded transaction/market
-intervention on a complete strong adaptive backbone before training another selector.
+Current binding gate is a first-party causal isolation of that intervention:
+`docs/strategy/FIRST_PARTY_READY_WOOL_CAUSAL_GATE_2026-09-18.md`.
+It tests only the legal own-state rule
+`V47 market == [] && own shed.WOOL >= 2 -> add SELL WOOL 2`
+for one turn, on fresh seeds `64001..64004`, both seats, against V47, V48 and Tactical
+Memory. No Ready Stock code is used by the treatment.
+
+Active workflow: `35311750191`.
+Do not tune thresholds or steps from its outcome. If the rule transfers safely, freeze it
+as a first-party solver option; if heterogeneous, learn/derive a state selector; if it
+fails, retain V2b as proof of search headroom and move to richer proposal-trigger labels.
+
 No Kaggle submission and no Ryzen action are currently required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
