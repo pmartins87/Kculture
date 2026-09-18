@@ -179,7 +179,9 @@ def main() -> None:
             "archive_sha256": sha256_file(archive),
             "archive_bytes": archive.stat().st_size,
             "members": ["ATTRIBUTION.txt", "main.py"],
-            "base_hosted_entrypoint": "_y_agent_shopherd",\n            "candidate_hosted_entrypoint": "_kc_orw1_entrypoint",\n            "automatic_kaggle_submission": False,
+            "base_hosted_entrypoint": "_y_agent_shopherd",
+            "candidate_hosted_entrypoint": "_kc_orw1_entrypoint",
+            "automatic_kaggle_submission": False,
             "license_note": (
                 "Upstream source provenance is pinned. Exact upstream license must be "
                 "confirmed from the source notebook before hosted submission."
