@@ -15,6 +15,7 @@ import json
 import math
 import os
 import statistics
+import subprocess
 import sys
 import tarfile
 import tempfile
@@ -29,7 +30,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from solver.programme_router import ProgrammeRouter
-from tools.build_public_programme_corpus_v1 import encode_tape, json_blobs, reconstruct_routes
+from tools.build_public_programme_corpus_v1 import encode_tape, extract_source_and_extra, json_blobs, reconstruct_routes
 
 EXPECTED_ENGINE = "1.32.7"
 EXPERTS = [
@@ -85,6 +86,72 @@ def find_public_package(handle: str, out: Path) -> tuple[Path, dict]:
         raise RuntimeError(f"expected one unique root-main package for {handle}; got {[(x[0].name,x[2]) for x in rows]}")
     p, names, ah = next(iter(unique.values()))
     return p, {"archive_sha256": ah, "archive_bytes": p.stat().st_size, "members": names}
+
+
+def pull_notebook_main(handle: str, out: Path, dst: Path) -> tuple[Path, dict]:
+    """Recover the submission source from the public notebook itself.
+
+    Some public notebooks do not publish a tar.gz output. This uses the same static
+    extractor that built the frozen Top-30 corpus and never executes notebook cells.
+    """
+    out.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        ["kaggle", "kernels", "pull", handle, "-p", str(out), "-m"],
+        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True,
+    )
+    meta_path = out / "kernel-metadata.json"
+    if not meta_path.is_file():
+        raise RuntimeError(f"kernel-metadata.json absent after pulling {handle}")
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    code_file = meta.get("code_file")
+    nb_path = out / str(code_file) if code_file else None
+    if nb_path is None or not nb_path.is_file():
+        nbs = sorted(out.glob("*.ipynb"))
+        if len(nbs) != 1:
+            raise RuntimeError(f"cannot resolve notebook source for {handle}: {nbs}")
+        nb_path = nbs[0]
+    nb = json.loads(nb_path.read_text(encoding="utf-8"))
+    src, method, extra = extract_source_and_extra(nb)
+    if not src:
+        raise RuntimeError(f"static source extractor found no runnable source for {handle}")
+
+    dst.mkdir(parents=True, exist_ok=True)
+    main = dst / "main.py"
+    main.write_bytes(src)
+    support = []
+    for name, data in extra.items():
+        rel = Path(name)
+        if rel.is_absolute() or ".." in rel.parts or rel.name == "main.py":
+            continue
+        target = dst / rel
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(data)
+        support.append({"path": rel.as_posix(), "bytes": len(data), "sha256": sha256_bytes(data)})
+    return main, {
+        "acquisition": "static_notebook_source",
+        "extract_method": method,
+        "notebook_ref": str(meta.get("id") or handle),
+        "notebook_code_file": nb_path.name,
+        "support_files": support,
+    }
+
+
+def acquire_public_main(handle: str, tmp: Path) -> tuple[Path, dict]:
+    """Prefer the exact notebook output package; fall back to static notebook source."""
+    dl = tmp / "output"
+    pkg = tmp / "package"
+    try:
+        archive, receipt = find_public_package(handle, dl)
+        main = unpack_package(archive, pkg)
+        return main, {"acquisition": "output_package", **receipt}
+    except RuntimeError as exc:
+        source_dir = tmp / "source_pull"
+        main, receipt = pull_notebook_main(handle, source_dir, pkg)
+        receipt["output_package_fallback_reason"] = str(exc)
+        return main, receipt
 
 
 def unpack_package(archive: Path, dst: Path) -> Path:
@@ -266,10 +333,8 @@ def main() -> None:
         extracted = {}
         modern_tapes = None
         for spec in EXPERTS:
-            dl = tmp / f"download_{spec['key']}"
-            archive, receipt = find_public_package(spec["handle"], dl)
-            pkg = tmp / f"pkg_{spec['key']}"
-            main_py = unpack_package(archive, pkg)
+            target_tmp = tmp / spec["key"]
+            main_py, receipt = acquire_public_main(spec["handle"], target_tmp)
             main_sha = sha256_bytes(main_py.read_bytes())
             if main_sha != spec["expected_main_sha256"]:
                 raise RuntimeError(
