@@ -1,0 +1,51 @@
+{
+  "schema": "kculture-orw1-hosted-package-gate-v1-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35360173417,
+  "workflow_head_sha": "94bc26fffae6ef9816b6d0b0f0653772417b4e64",
+  "artifact_id": 10554278438,
+  "artifact_digest": "sha256:46f3e047ba52e1bc76f7d3a935f6018c85ab4d5ca9622c08a56b009922bab0aa",
+  "candidate": "KCULTURE_V47_ORW1_ONESHOT_V1",
+  "candidate_archive": "KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz",
+  "candidate_archive_sha256": "b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f",
+  "candidate_archive_bytes": 146722,
+  "candidate_main_sha256": "f65be27b47839eb0cb6b44b217fc1edb33f63796bf5bc0bdd4f0bd311d3c2ff4",
+  "wrapper_sha256": "34dfca26ebc0fa36163ed22028299dcfb70e42d6112e4ea6675a63cfad4079fc",
+  "base": {
+    "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
+    "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "members": [
+      "main.py"
+    ]
+  },
+  "package_members": [
+    "ATTRIBUTION.txt",
+    "main.py"
+  ],
+  "parity": {
+    "mechanical_pass": true,
+    "fresh_seeds": [
+      66001,
+      66002
+    ],
+    "opponents": [
+      "v47",
+      "tactical_memory"
+    ],
+    "pairs": 8,
+    "episodes": 16,
+    "failures": 0,
+    "exact_action_parity_all": true,
+    "exact_reward_parity_all": true,
+    "action_calls_per_episode": 719
+  },
+  "license_audit": {
+    "exact_patched_main_contains_full_apache_2_0_text": true,
+    "exact_patched_main_contains_spdx_apache_2_0": true,
+    "exact_patched_main_contains_v47_attribution_and_modification_notice": true,
+    "original_upstream_source_retained_verbatim_before_wrapper": true
+  },
+  "decision": "ORW1_HOSTED_PACKAGE_PASS_READY_FOR_PROBE_AUTHORIZATION",
+  "automatic_kaggle_submission": false
+}
