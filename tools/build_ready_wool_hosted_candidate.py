@@ -16,7 +16,12 @@ import json
 import shutil
 import tarfile
 import tempfile
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.programme_adaptive_expert_gate import acquire_public_main, sha256_bytes
 
