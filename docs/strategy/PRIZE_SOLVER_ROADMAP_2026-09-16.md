@@ -15,7 +15,7 @@ Exact public V47 hosted entrypoint:
 The original treatment submission `56333579` is mechanically invalid and must never be
 interpreted as O-RW1 competitive evidence.
 
-### O-RW1 hosted-faithful evidence
+### O-RW1 hosted-faithful offline evidence
 
 Causal gate `35363453097`:
 - score delta **+0.0833333**;
@@ -32,87 +32,104 @@ Autonomous runtime gate `35367785929`:
 - 2 tie->loss pair regressions;
 - all 4 opponent blocks nonnegative in mean W/L.
 
-### Corrected hosted package — PASS
-
-Workflow `35372969031`, artifact `10559606269`.
-
-Candidate archive:
-`KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
-
-SHA:
-`997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`
-
-Hosted entrypoint:
-`_kc_orw1_entrypoint`.
-
-Package parity:
+Corrected package `35372969031`:
+- candidate archive SHA
+  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
+- hosted entrypoint `_kc_orw1_entrypoint`;
 - 8/8 exact action parity;
 - 8/8 exact reward parity;
-- 719 action calls per episode;
 - 0 failures.
 
-### Corrected hosted A/B R2 — VALID BUT IMMATURE
-
-Submission workflow:
-`35373555439`.
+### Corrected O-RW1 hosted A/B R2 — balanced early exposure, still immature
 
 CONTROL:
 - submission **56336025**;
-- exact V47 archive;
-- entrypoint `_y_agent_shopherd`;
-- registered `2026-09-18 17:19:39.130000 UTC`.
+- exact V47;
+- entrypoint `_y_agent_shopherd`.
 
 TREATMENT:
 - submission **56336027**;
-- corrected O-RW1 archive SHA
-  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
-- entrypoint `_kc_orw1_entrypoint`;
-- registered `2026-09-18 17:19:40.807000 UTC`.
+- corrected V47 + O-RW1;
+- entrypoint `_kc_orw1_entrypoint`.
 
-Registration separation: **1.677 seconds**.
+Registered only **1.677 seconds** apart and SHA/loader checked immediately before submit.
 
-Both passed hashes and official-loader checks immediately before submit.
-Daily usage after pair: **4/5**.
+Latest replay/status checkpoint around `2026-09-18 18:01 UTC`:
 
-First joint COMPLETE checkpoint (`2026-09-18 17:24:36 UTC`):
-- CONTROL: `COMPLETE`, rating field `600.0`;
-- TREATMENT: `COMPLETE`, rating field `600.0`.
+CONTROL:
+- rating **1457.7**;
+- listed episodes **9**;
+- externally resolved games **8**;
+- W-L-T **8-0-0**;
+- mean margin **+36,006.875**;
+- median margin **+32,461.5**;
+- unique external opponents **8**.
 
-Replay forensics workflow `35374217511`, artifact `10559931321`:
-- CONTROL listed episodes: **1**;
-- TREATMENT listed episodes: **1**;
-- externally attributable resolved games: **0 / 0**.
+TREATMENT:
+- rating **1458.2**;
+- listed episodes **10**;
+- externally resolved games **9**;
+- W-L-T **9-0-0**;
+- mean margin **+47,125.222**;
+- median margin **+40,053**;
+- unique external opponents **9**.
 
-Therefore `600.0 vs 600.0` is **not evidence of neutrality or promotion**.
+The earlier exposure asymmetry has largely disappeared. Both arms are undefeated and
+nearly equal in rating, so there is no early catastrophic hosted signal against O-RW1.
+However, the frozen informative threshold has **not** been reached.
 
-Binding state:
-`ORW1_HOSTED_AB_R2_VALID_BUT_EXPOSURE_ASYMMETRIC_AWAIT_BALANCED_EXTERNAL_GAMES`.
+Binding hosted state:
+`ORW1_HOSTED_AB_R2_BALANCED_EARLY_EXPOSURE_AWAIT_32_PER_ARM`.
 
-Latest authenticated checkpoint:
-- CONTROL rating `718.3`, 2 listed episodes, **1 external game resolved**, record **1-0**, margin **+57,846**;
-- TREATMENT rating `600.0`, 1 listed episode, **0 external games resolved**.
+Frozen maturity rule:
+- first informative hosted comparison only after **>=32 externally resolved games per arm**;
+- promotion/regression verdict only after **>=100 public episodes per arm**;
+- no O-RW1 tuning from intermediate hosted results;
+- preserve the fifth daily submission slot.
 
-The current rating gap is therefore **exposure asymmetry**, not O-RW1 regression
-evidence. Do not compare the ratings until both arms have meaningful external exposure.
+### New orthogonal option — O-TW1 town-WHEAT pulse hold
 
-### Frozen hosted maturity rule for R2
+To avoid idling while R2 matures, the solver opened the next separable timing family
+already frozen by CR092/H1/H1B. This is **not** an O-RW1 variant.
 
-To prevent score-watching, freeze this before external outcomes accumulate:
+Historical priors:
+- H1 runtime causal proof commit
+  `ab951727a195dce2992a07bf3e8b08992187fdf6`;
+- H1B exact-engine proof commit
+  `a00d2ffce9656b83df263f407ed9b92a718502db`.
 
-1. First **informative** R2 hosted checkpoint requires at least **32 externally attributable
-   completed public games per arm**. At that checkpoint compare rating, W/L/T, seat split,
-   opponent-strength distribution and matched/current population context.
-2. Final **promotion/regression** verdict must not be made before **100 completed public
-   episodes per arm**, consistent with the project's earlier hosted maturity discipline.
-3. A rating field without supporting episode maturity is diagnostic only.
-4. Do not tune O-RW1 from intermediate hosted outcomes.
-5. Preserve the fifth daily submission slot; no nearby O-RW1 variant is authorized.
+Frozen O-TW1 operator:
+- host exact hosted-faithful V47;
+- if the current public town state implies WHEAT consumption this turn and exact V47
+  intends to `SELL WHEAT` already owned in the current shed;
+- suppress only those current-turn `SELL WHEAT` orders;
+- preserve exact V47 farmer, hands and every other market order;
+- exact V47 resumes next turn with no forced follow-up sale.
 
-Submission receipt:
-`docs/strategy/ORW1_HOSTED_AB_R2_SUBMISSION_2026-09-18.md`.
-Machine-readable:
-`data/programme_teacher/2026-09-18/ORW1_HOSTED_AB_R2_SUBMISSION.json`.
+Fresh causal panel:
+- seeds `67001..67004`;
+- both seats;
+- V47 mirror, V48 and Tactical Memory;
+- max 2 selected events/matchup, separated by >=72 turns;
+- minimum 12 valid branch states;
+- no automatic hosted submission.
 
+Protocol:
+`docs/strategy/FIRST_PARTY_TOWN_WHEAT_DEFERRAL_CAUSAL_GATE_2026-09-18.md`.
+
+Implementation:
+`tools/first_party_town_wheat_deferral_causal_gate.py`.
+
+Active binding workflow:
+**`35378191104`**, head
+`c06114f4c519a64e752989a2b58f880e9e5ecb1a`.
+
+Current run state:
+- install PASS;
+- syntax PASS;
+- causal gate **in progress**.
+
+No 5th Kaggle slot is authorized by O-TW1.
 No Ryzen action is required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
