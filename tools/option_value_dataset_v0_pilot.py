@@ -78,12 +78,12 @@ OPPONENTS = [
 SEEDS = [69001, 69002]
 
 OPTION_CONTEXT_NAMES = (
-    "opt_orw1",
-    "opt_otw1",
     "base_market_orders",
     "base_market_empty",
     "base_market_sell_orders",
     "base_sell_wheat_qty",
+    "opt_orw1",
+    "opt_otw1",
     "own_wool_units",
     "own_wheat_units",
     "town_wheat_demand_now",
