@@ -97,7 +97,7 @@ def unpack_package(archive: Path, dst: Path) -> Path:
     return main
 
 
-def recover_modern_tapes(main_py: Path) -> np.ndarray:
+def recover_modern_tapes(main_py: Path) -> tuple[np.ndarray, list[str]]:
     src = main_py.read_bytes()
     banks = []
     for _enc, _comp, obj, _objsha in json_blobs(src):
@@ -108,11 +108,35 @@ def recover_modern_tapes(main_py: Path) -> np.ndarray:
     if len(banks) != 1:
         raise RuntimeError(f"expected exactly one 41-route modern bank, found {len(banks)}")
     rr = banks[0]
+    arr = np.stack([encode_tape(tape) for _name, tape in rr]).astype(np.int16)
     names = [name for name, _ in rr]
-    expected = [f"route_{i}" for i in range(41)]
-    if names != expected:
-        raise RuntimeError(f"unexpected modern route order: {names[:5]} ... {names[-5:]}")
-    return np.stack([encode_tape(tape) for _name, tape in rr]).astype(np.int16)
+
+    # Programme IDs in the teacher were assigned from this exact numerically sorted
+    # modern bank. Verify the complete order against the frozen corpus instead of
+    # assuming contiguous public route labels (the source uses sparse ids up to 128).
+    manifest = json.loads(
+        (ROOT / "data/programme_teacher/2026-09-18/PROGRAMME_CORPUS.json").read_text()
+    )
+    frozen = manifest["programmes"][:41]
+    if [int(p["program_id"]) for p in frozen] != list(range(41)):
+        raise RuntimeError("frozen modern programme ids are not 0..40")
+    if not all(str(p["origin_label"]).startswith("modern41:") for p in frozen):
+        raise RuntimeError("first 41 frozen programmes are not the modern41 bank")
+    expected_hashes = [str(p["sha256"]) for p in frozen]
+    observed_hashes = [sha256_bytes(tape.tobytes()) for tape in arr]
+    if observed_hashes != expected_hashes:
+        mismatches = [
+            {
+                "program_id": i,
+                "route_label": names[i],
+                "expected": expected_hashes[i],
+                "observed": observed_hashes[i],
+            }
+            for i in range(41)
+            if observed_hashes[i] != expected_hashes[i]
+        ]
+        raise RuntimeError(f"modern programme order/hash mismatch: {mismatches[:5]}")
+    return arr, names
 
 
 def purge_package_modules(root: Path) -> None:
@@ -247,7 +271,9 @@ def main() -> None:
             }
             extracted[spec["key"]] = main_py
             if spec["key"] == "modern_v47":
-                modern_tapes = recover_modern_tapes(main_py)
+                modern_tapes, route_labels = recover_modern_tapes(main_py)
+                provenance[spec["key"]]["route_labels"] = route_labels
+                provenance[spec["key"]]["programme_hash_order_verified"] = True
 
         if modern_tapes is None or modern_tapes.shape[0] != 41:
             raise RuntimeError("modern tape bank not recovered")
