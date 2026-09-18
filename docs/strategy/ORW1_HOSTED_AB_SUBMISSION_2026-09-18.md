@@ -60,3 +60,10 @@ evaluations have left PENDING and exposed comparable result fields.
 
 Do not submit another O-RW1 variant between these arms. Do not tune O-RW1 from partial
 or one-arm results.
+
+## Subsequent authenticated status checkpoints
+
+- `2026-09-18 15:22:16 UTC`: CONTROL `PENDING`; TREATMENT `COMPLETE`, rating field `600.0`.
+- `2026-09-18 15:23:11 UTC`: CONTROL `PENDING`; TREATMENT `COMPLETE`, rating field `600.0`.
+
+This asymmetric processing state is **not interpretable as an A/B result**. The protocol remains frozen: do not compare ratings until CONTROL has also left PENDING. The treatment's initial `600.0` field is recorded only as API state, not as a competitive verdict.
