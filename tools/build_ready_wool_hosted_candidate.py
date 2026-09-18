@@ -83,7 +83,7 @@ def agent(obs, config=None):
         _KC_ORW1_USED = True
         return out
     return base
-# === end Kculture O-RW1 wrapper ===
+# Hosted loader contract: _kc_orw1_entrypoint must remain the final newly-created callable.\n# === end Kculture O-RW1 wrapper ===
 '''.lstrip("\n")
 
 
@@ -179,7 +179,7 @@ def main() -> None:
             "archive_sha256": sha256_file(archive),
             "archive_bytes": archive.stat().st_size,
             "members": ["ATTRIBUTION.txt", "main.py"],
-            "automatic_kaggle_submission": False,
+            "base_hosted_entrypoint": "_y_agent_shopherd",\n            "candidate_hosted_entrypoint": "_kc_orw1_entrypoint",\n            "automatic_kaggle_submission": False,
             "license_note": (
                 "Upstream source provenance is pinned. Exact upstream license must be "
                 "confirmed from the source notebook before hosted submission."
