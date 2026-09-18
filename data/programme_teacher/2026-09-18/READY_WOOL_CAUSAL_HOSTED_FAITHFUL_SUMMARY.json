@@ -1,0 +1,50 @@
+{
+  "schema": "kculture-first-party-ready-wool-causal-hosted-faithful-v1",
+  "date": "2026-09-18",
+  "workflow_run": 35363453097,
+  "workflow_head_sha": "8110923009830bd584eb523113d9eaa35a68f374",
+  "artifact_id": 10555907821,
+  "artifact_digest": "sha256:0d941dfff1a750ea84b41f46924da6750f66204bb384b5d51548c75362c61a1a",
+  "engine": "1.32.7",
+  "loader_contract": "kaggle_environments.agent.get_last_callable",
+  "exact_v47_hosted_entrypoint": "_y_agent_shopherd",
+  "mechanical_pass": true,
+  "branch_states": 48,
+  "mean_score_delta": 0.08333333333333333,
+  "mean_margin_delta": 14.958333333333334,
+  "median_margin_delta": 4.5,
+  "positive_wl_states": 8,
+  "negative_wl_states": 0,
+  "neutral_wl_states": 40,
+  "nonwin_to_win_flips": 8,
+  "win_to_nonwin_regressions": 0,
+  "positive_margin_states": 26,
+  "negative_margin_states": 0,
+  "by_opponent": {
+    "v47_mirror": {
+      "branch_states": 16,
+      "mean_score_delta": 0.25,
+      "mean_margin_delta": 4.875,
+      "nonwin_to_win_flips": 8,
+      "negative_wl_states": 0
+    },
+    "v48": {
+      "branch_states": 16,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 4.875,
+      "nonwin_to_win_flips": 0,
+      "negative_wl_states": 0
+    },
+    "tactical_memory": {
+      "branch_states": 16,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 35.125,
+      "nonwin_to_win_flips": 0,
+      "negative_wl_states": 0
+    }
+  },
+  "decision": "READY_WOOL_CAUSAL_PASS_SAFE_OPTION",
+  "interpretation": "Hosted-faithful rerun preserves causal safety but reduces the W/L effect versus the earlier mod.agent result. Promotion evidence is now +0.0833 overall score delta, concentrated in V47 mirror, with no W/L or margin regressions.",
+  "next": "Run autonomous one-shot runtime transfer with official hosted loader. Do not retune O-RW1.",
+  "automatic_kaggle_submission": false
+}
