@@ -24,6 +24,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from tools.programme_adaptive_expert_gate import acquire_public_main, sha256_bytes
+from kaggle_environments.agent import get_last_callable
 
 BASE_HANDLE = "ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
 BASE_MAIN_SHA256 = "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
@@ -32,8 +33,8 @@ CANDIDATE_NAME = "KCULTURE_V47_ORW1_ONESHOT_V1"
 WRAPPER = r'''
 
 # === Kculture O-RW1 one-shot wrapper — frozen 2026-09-18 ===
-# Base policy above remains unchanged. This wrapper uses only current own legal state.
-_KC_ORW1_BASE_AGENT = agent
+# Exact pinned V47 hosted entrypoint is _y_agent_shopherd.
+_KC_ORW1_BASE_AGENT = _y_agent_shopherd
 _KC_ORW1_USED = False
 
 def _kc_orw1_get(obj, key, default=None):
@@ -62,10 +63,9 @@ def _kc_orw1_wool(obs):
     except Exception:
         return 0
 
-def agent(obs, config=None):
+def _kc_orw1_entrypoint(obs, config=None):
     global _KC_ORW1_USED
     step = _kc_orw1_step(obs)
-    # Robust reset if the same module object is reused for another episode.
     if step <= 1:
         _KC_ORW1_USED = False
 
@@ -83,7 +83,9 @@ def agent(obs, config=None):
         _KC_ORW1_USED = True
         return out
     return base
-# Hosted loader contract: _kc_orw1_entrypoint must remain the final newly-created callable.\n# === end Kculture O-RW1 wrapper ===
+
+# IMPORTANT: no callable definitions may appear after _kc_orw1_entrypoint.
+# === end Kculture O-RW1 wrapper ===
 '''.lstrip("\n")
 
 
@@ -146,7 +148,17 @@ def main() -> None:
         compile(original, "<v47-original>", "exec")
         patched = original.rstrip() + "\n\n" + WRAPPER.rstrip() + "\n"
         compile(patched, "<v47-orw1>", "exec")
-        (stage / "main.py").write_text(patched, encoding="utf-8")
+        staged_main = stage / "main.py"
+        staged_main.write_text(patched, encoding="utf-8")
+
+        base_entry = get_last_callable(original, path=str(base_main.resolve()))
+        cand_entry = get_last_callable(patched, path=str(staged_main.resolve()))
+        base_entry_name = getattr(base_entry, "__name__", None)
+        cand_entry_name = getattr(cand_entry, "__name__", None)
+        if base_entry_name != "_y_agent_shopherd":
+            raise RuntimeError(f"unexpected exact V47 hosted entrypoint: {base_entry_name}")
+        if cand_entry_name != "_kc_orw1_entrypoint":
+            raise RuntimeError(f"candidate staged hosted entrypoint mismatch: {cand_entry_name}")
 
         attribution = (
             "Kculture hosted candidate provenance\n"
@@ -174,13 +186,13 @@ def main() -> None:
             "base_main_sha256": BASE_MAIN_SHA256,
             "base_acquisition": acquisition,
             "wrapper_sha256": hashlib.sha256(WRAPPER.encode("utf-8")).hexdigest(),
-            "candidate_main_sha256": sha256_file(stage / "main.py"),
+            "candidate_main_sha256": sha256_file(staged_main),
             "archive": archive.name,
             "archive_sha256": sha256_file(archive),
             "archive_bytes": archive.stat().st_size,
             "members": ["ATTRIBUTION.txt", "main.py"],
-            "base_hosted_entrypoint": "_y_agent_shopherd",
-            "candidate_hosted_entrypoint": "_kc_orw1_entrypoint",
+            "base_hosted_entrypoint": base_entry_name,
+            "candidate_hosted_entrypoint": cand_entry_name,
             "automatic_kaggle_submission": False,
             "license_note": (
                 "Upstream source provenance is pinned. Exact upstream license must be "
