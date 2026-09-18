@@ -1,0 +1,42 @@
+name: ready-wool-oneshot-runtime-gate
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/ready-wool-oneshot-runtime-gate.yml'
+      - 'tools/ready_wool_oneshot_runtime_gate.py'
+      - 'docs/strategy/READY_WOOL_ONESHOT_RUNTIME_GATE_2026-09-18.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax check
+        run: python -m py_compile tools/ready_wool_oneshot_runtime_gate.py
+      - name: Run one-shot runtime transfer gate
+        run: |
+          mkdir -p artifacts/ready-wool-runtime
+          python tools/ready_wool_oneshot_runtime_gate.py \
+            --out artifacts/ready-wool-runtime/READY_WOOL_ONESHOT_RUNTIME_GATE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ready-wool-oneshot-runtime-gate
+          path: artifacts/ready-wool-runtime/*.json
+          retention-days: 30
+          if-no-files-found: warn
