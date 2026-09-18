@@ -1,0 +1,58 @@
+name: orw1-active-episode-count-now
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/orw1-active-episode-count-now.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Count active episodes
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv, io, json, re, subprocess, datetime
+
+          def count(sid):
+              p=subprocess.run(["kaggle","competitions","episodes",str(sid),"-v","-q"],text=True,capture_output=True,check=True)
+              lines=[x for x in p.stdout.splitlines() if x.strip()]
+              for start in range(len(lines)):
+                  rows=list(csv.DictReader(io.StringIO("\n".join(lines[start:]))))
+                  if not rows: continue
+                  keys={str(k).lower().replace("_",""):k for k in rows[0] if k}
+                  for norm,key in keys.items():
+                      if norm in ("id","episodeid","episode") or ("episode" in norm and "id" in norm):
+                          vals=[]
+                          ok=True
+                          for row in rows:
+                              v=str(row.get(key,"")).strip()
+                              if not re.fullmatch(r"\d+",v):
+                                  ok=False; break
+                              vals.append(int(v))
+                          if ok and vals:
+                              return len(set(vals))
+              raise RuntimeError("episode count parse failed")
+
+          out={
+            "snapshot_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "control":count(56336025),
+            "treatment":count(56336027),
+          }
+          print("ACTIVE_EPISODE_COUNTS",json.dumps(out,sort_keys=True))
+          PY
