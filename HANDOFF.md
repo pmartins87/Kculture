@@ -10,8 +10,7 @@ The active Prize-Solver line is frozen first-party option **O-RW1** on exact pub
 
 1. Wrapper-proposal oracle V2b — PASS:
    - BASE `0.500` -> oracle `0.625`;
-   - W/L delta **+0.125**;
-   - useful proposal was V47 market empty -> `SELL WOOL 2`.
+   - W/L delta **+0.125**.
 
 2. First-party causal O-RW1 — PASS SAFE OPTION:
    - 48 branch states;
@@ -25,8 +24,7 @@ The active Prize-Solver line is frozen first-party option **O-RW1** on exact pub
    - V47 + O-RW1 `0.6875`;
    - W/L delta **+0.1875**;
    - 28 non-win -> win flips;
-   - 0 win -> non-win regressions;
-   - all 4 opponent blocks nonnegative in W/L.
+   - 0 win -> non-win regressions.
 
 Frozen O-RW1:
 ```
@@ -40,51 +38,58 @@ and step <= 671:
 
 ### Hosted package — PASS
 
-Workflow `35360173417`, artifact `10554278438`.
-
 Candidate:
 `KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
 
 Archive SHA-256:
 `b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`
 
-Candidate `main.py` SHA:
-`f65be27b47839eb0cb6b44b217fc1edb33f63796bf5bc0bdd4f0bd311d3c2ff4`
-
-Exact V47 base main SHA:
-`f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`
-
-Fresh package smoke:
-- 8 package/reference pairs;
-- 16 complete episodes;
-- exact action parity 8/8;
-- exact reward parity 8/8;
+Package parity:
+- 8/8 exact action parity;
+- 8/8 exact reward parity;
 - 0 failures.
 
-The packaged source retains the upstream Apache-2.0 license text, SPDX notice and V47
-attribution/modification notice.
+### Hosted A/B — SUBMITTED, AWAIT BOTH RESULTS
 
-Binding package result:
-`docs/strategy/ORW1_HOSTED_PACKAGE_RESULT_2026-09-18.md`.
-Machine-readable:
-`data/programme_teacher/2026-09-18/ORW1_HOSTED_PACKAGE_SUMMARY.json`.
-
-### Current next step — explicit authorization required
-
-Frozen hosted sensor:
+Authorized protocol:
 `docs/strategy/ORW1_HOSTED_AB_PROBE_PROTOCOL_2026-09-18.md`.
 
-Submit in the same operational window:
-- CONTROL: exact public V47 output archive, SHA
-  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`;
-- TREATMENT: exact frozen O-RW1 archive, SHA
-  `b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`.
+Submission workflow:
+`35361531672`.
 
-No other variant between the pair. Hosted result is a population sensor; do not retune
-O-RW1 from one noisy rating.
+CONTROL:
+- submission **56333577**
+- exact public V47 archive SHA
+  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`
+- registered `2026-09-18 15:18:48.850000 UTC`
+- description `PS_ORW1_CONTROL_EXACT_V47_08E56C43`.
 
-**No Kaggle submission has been sent. Await explicit user authorization for the A/B
-hosted probe.**
+TREATMENT:
+- submission **56333579**
+- frozen V47+O-RW1 archive SHA
+  `b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`
+- registered `2026-09-18 15:18:50.740000 UTC`
+- description `PS_ORW1_TREATMENT_V47_ORW1_B994E00D`.
+
+The two registrations were ~1.89 seconds apart. Daily preflight observed 0 earlier
+submissions that UTC day; pair projected 2/5.
+
+First authenticated snapshot:
+- workflow `35361737759`;
+- snapshot `2026-09-18 15:19:54 UTC`;
+- CONTROL: `PENDING`;
+- TREATMENT: `PENDING`.
+
+Binding state:
+`ORW1_HOSTED_AB_SUBMITTED_AWAIT_BOTH_RESULTS`.
+
+Do not interpret one arm alone, do not submit another O-RW1 variant between them, and do
+not tune O-RW1 while either arm is PENDING.
+
+Submission receipt:
+`docs/strategy/ORW1_HOSTED_AB_SUBMISSION_2026-09-18.md`.
+Machine-readable:
+`data/programme_teacher/2026-09-18/ORW1_HOSTED_AB_SUBMISSION.json`.
 
 No Ryzen action is required.
 
