@@ -30,7 +30,7 @@
   "package_parity_pairs": 8,
   "package_action_parity": "8/8",
   "package_reward_parity": "8/8",
-  "decision": "ORW1_HOSTED_AB_R2_BALANCED_EARLY_EXPOSURE_AWAIT_32_PER_ARM",
+  "decision": "ORW1_HOSTED_AB_R2_TREATMENT_LEADS_EARLY_AWAIT_32_PER_ARM",
   "status_checkpoints": [
     {
       "snapshot_utc": "2026-09-18 17:20:55",
@@ -140,5 +140,42 @@
     "maturity_threshold_external_games_per_arm": 32,
     "threshold_reached": false,
     "interpretation": "BALANCED_EARLY_EXPOSURE_BOTH_UNDEFEATED_NO_PROMOTION_VERDICT"
+  },
+  "latest_checkpoint_2026_09_18T18_25Z": {
+    "snapshot_utc": "2026-09-18 18:25:16",
+    "control": {
+      "rating": 1765.8,
+      "listed_episode_count": 16,
+      "resolved_external_games": 15,
+      "wins": 14,
+      "losses": 1,
+      "ties": 0,
+      "score_rate": 0.9333333333333333,
+      "mean_margin": 22338.133333333335,
+      "median_margin": 12254,
+      "opponents_unique": 15
+    },
+    "treatment": {
+      "rating": 1982.7,
+      "listed_episode_count": 14,
+      "resolved_external_games": 13,
+      "wins": 13,
+      "losses": 0,
+      "ties": 0,
+      "score_rate": 1,
+      "mean_margin": 37250.38461538462,
+      "median_margin": 25018,
+      "opponents_unique": 13
+    },
+    "informative_threshold_external_games_per_arm": 32,
+    "threshold_reached": false,
+    "rating_motion": {
+      "treatment_previous_rating_utc_182341": 1894.8,
+      "treatment_current_rating_utc_182516": 1982.7,
+      "delta_in_under_two_minutes": 87.9,
+      "interpretation": "rating still moving materially; not stabilized"
+    },
+    "historical_project_anchor_rating": 2064.8,
+    "interpretation": "Treatment is currently ahead of contemporaneous control and undefeated in 13 external games, but still below frozen 32-game informative threshold. Any UI peak near 2400 would be a transient project-high peak, not yet a stabilized rating."
   }
 }
