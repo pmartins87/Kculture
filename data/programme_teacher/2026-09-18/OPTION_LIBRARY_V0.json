@@ -1,0 +1,76 @@
+{
+  "schema": "kculture-option-library-v0",
+  "date": "2026-09-18",
+  "host": {
+    "name": "exact_public_v47",
+    "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "hosted_entrypoint": "_y_agent_shopherd",
+    "loader_contract": "kaggle_environments.agent.get_last_callable"
+  },
+  "options": [
+    {
+      "option_id": "O-RW1",
+      "family": "market_timing_ready_stock",
+      "eligibility": "step<=671 AND exact V47 market==[] AND own private shed.WOOL>=2",
+      "treatment": "preserve exact V47 farmer/hands; replace empty market with SELL WOOL 2 for current turn only",
+      "max_fires_per_episode": 1,
+      "legality_inputs": [
+        "current step",
+        "current exact V47 action",
+        "own private shed.WOOL"
+      ],
+      "forbidden_runtime_inputs": [
+        "seed",
+        "future state",
+        "opponent private",
+        "opponent identity",
+        "rating",
+        "EpisodeId"
+      ],
+      "causal_run": 35363453097,
+      "runtime_run": 35367785929,
+      "runtime_score_delta": 0.09375,
+      "runtime_nonwin_to_win_flips": 14,
+      "runtime_win_to_nonwin_regressions": 0,
+      "hosted_submission": 56336027,
+      "status": "HOSTED_ACTIVE_AND_OFFLINE_LIBRARY"
+    },
+    {
+      "option_id": "O-TW1",
+      "family": "market_timing_town_consumption",
+      "eligibility": "public town WHEAT demand this turn AND exact V47 SELLs already-owned WHEAT",
+      "treatment": "preserve exact V47 farmer/hands and non-WHEAT market orders; suppress current-turn SELL WHEAT only; exact V47 resumes next turn",
+      "max_fires_per_episode": 1,
+      "legality_inputs": [
+        "current step",
+        "public town unlocked_shops",
+        "public config intervals",
+        "current exact V47 action",
+        "own private shed.WHEAT"
+      ],
+      "forbidden_runtime_inputs": [
+        "seed",
+        "future state",
+        "opponent private",
+        "opponent identity",
+        "rating",
+        "EpisodeId"
+      ],
+      "causal_run": 35378191104,
+      "runtime_run": 35395548699,
+      "runtime_score_delta": 0.09375,
+      "runtime_nonwin_to_win_flips": 14,
+      "runtime_win_to_nonwin_regressions": 0,
+      "hosted_submission": null,
+      "status": "OFFLINE_LIBRARY_RUNTIME_PASS"
+    }
+  ],
+  "primary_value_target": "counterfactual score_delta in {-1,-0.5,0,0.5,1}",
+  "diagnostic_targets": [
+    "margin_delta",
+    "terminal reward delta"
+  ],
+  "next_stage": "state-conditioned option-value dataset and selector/value learning",
+  "no_automatic_kaggle_submission": true
+}
