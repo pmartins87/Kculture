@@ -1,0 +1,7 @@
+{
+  "pass_gate": true,
+  "games": 16,
+  "feature_vectors": 128,
+  "feature_values": 14592,
+  "scope": "kagprog vs pinned kagsim observation/action serialization; official hosted not rechecked"
+}

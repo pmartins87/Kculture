@@ -7,12 +7,15 @@ CR092/V4 next-action instructions below for the solver campaign.
 Top-30 extraction reproduced: 30 notebooks / 23 sources / 61 programmes.
 Programme teacher executed: 89,304 games, 51 prefix groups, 74,664 decision records.
 Infrastructure PASS only; tree W/L 55.8939% vs train-selected static 55.5931%.
-No strategic promotion, no Kaggle submission, no scale-up; four positive and two
-negative test-seed deltas. Next gate: runtime feature/action parity, then held-out
-opponent-family evaluation. Full findings, corrections, gate branches and evidence:
-`docs/strategy/PROGRAMME_TEACHER_RESULT_2026-09-18.md`.
-Data and checksums: `data/programme_teacher/2026-09-18/`.
-Do not rerun the Ryzen bootstrap merely to reproduce the completed workspace run.
+No strategic promotion or scale-up. Observation parity now PASS (128 vectors, 16 games).
+Leave-one-bank-out tree gains are positive in all 3 blocks. A complete single-decision
+router is implemented: group 0, checkpoint 144, selected on train only. Its 64-game fresh
+static-opponent panel is neutral (both W/L 0.9375). Next: two adaptive expert wrappers,
+router vs exact static control; no threshold tuning. If neutral, close this standalone
+router and move to bounded transaction/market proposals on strong adaptive programmes.
+Current report: `docs/strategy/PROGRAMME_ROUTER_PROGRESS_2026-09-18.md`.
+Prior dataset/result: `docs/strategy/PROGRAMME_TEACHER_RESULT_2026-09-18.md`.
+Evidence: `data/programme_teacher/2026-09-18/`. No Ryzen action required.
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently
 create competing copies or change other branches as part of this solver update.
 

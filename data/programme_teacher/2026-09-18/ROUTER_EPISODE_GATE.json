@@ -1,0 +1,326 @@
+{
+  "model": {
+    "group": 0,
+    "checkpoint": 144,
+    "members": [
+      0,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ],
+    "static_program": 15,
+    "tree": {
+      "action": 14,
+      "feature": 36,
+      "gain_per_sample": 0.1489666091662419,
+      "left": {
+        "action": 14,
+        "feature": 19,
+        "gain_per_sample": 0.002257985135460449,
+        "left": {
+          "action": 33,
+          "n": 160
+        },
+        "n": 434,
+        "right": {
+          "action": 14,
+          "n": 274
+        },
+        "threshold": 10032.0
+      },
+      "n": 732,
+      "right": {
+        "action": 36,
+        "feature": 34,
+        "gain_per_sample": 0.03413819741423985,
+        "left": {
+          "action": 11,
+          "feature": 3,
+          "gain_per_sample": 0.0014589662943074006,
+          "left": {
+            "action": 11,
+            "n": 160
+          },
+          "n": 208,
+          "right": {
+            "action": 2,
+            "n": 48
+          },
+          "threshold": 802.0
+        },
+        "n": 298,
+        "right": {
+          "action": 36,
+          "n": 90
+        },
+        "threshold": 0.0
+      },
+      "threshold": 0.0
+    },
+    "selection": "highest train-only best-static utility; earliest checkpoint tie break"
+  },
+  "episodes": 64,
+  "seconds": 4.883607256000005,
+  "static_wr": 0.9375,
+  "router_wr": 0.9375,
+  "rows": [
+    {
+      "opponent": 0,
+      "seed": 53001,
+      "seat": 0,
+      "static": -9161.0,
+      "router": -9161.0
+    },
+    {
+      "opponent": 0,
+      "seed": 53001,
+      "seat": 1,
+      "static": -6699.0,
+      "router": -6699.0
+    },
+    {
+      "opponent": 0,
+      "seed": 53002,
+      "seat": 0,
+      "static": 4059.0,
+      "router": 5264.0
+    },
+    {
+      "opponent": 0,
+      "seed": 53002,
+      "seat": 1,
+      "static": 4059.0,
+      "router": 5264.0
+    },
+    {
+      "opponent": 38,
+      "seed": 53001,
+      "seat": 0,
+      "static": 76014.0,
+      "router": 87082.0
+    },
+    {
+      "opponent": 38,
+      "seed": 53001,
+      "seat": 1,
+      "static": 76537.0,
+      "router": 88423.0
+    },
+    {
+      "opponent": 38,
+      "seed": 53002,
+      "seat": 0,
+      "static": 99925.0,
+      "router": 101264.0
+    },
+    {
+      "opponent": 38,
+      "seed": 53002,
+      "seat": 1,
+      "static": 99925.0,
+      "router": 101264.0
+    },
+    {
+      "opponent": 51,
+      "seed": 53001,
+      "seat": 0,
+      "static": 46934.0,
+      "router": 46934.0
+    },
+    {
+      "opponent": 51,
+      "seed": 53001,
+      "seat": 1,
+      "static": 46934.0,
+      "router": 46934.0
+    },
+    {
+      "opponent": 51,
+      "seed": 53002,
+      "seat": 0,
+      "static": 45252.0,
+      "router": 59562.0
+    },
+    {
+      "opponent": 51,
+      "seed": 53002,
+      "seat": 1,
+      "static": 45252.0,
+      "router": 59562.0
+    },
+    {
+      "opponent": 52,
+      "seed": 53001,
+      "seat": 0,
+      "static": 42505.0,
+      "router": 42505.0
+    },
+    {
+      "opponent": 52,
+      "seed": 53001,
+      "seat": 1,
+      "static": 34431.0,
+      "router": 34431.0
+    },
+    {
+      "opponent": 52,
+      "seed": 53002,
+      "seat": 0,
+      "static": 40921.0,
+      "router": 58124.0
+    },
+    {
+      "opponent": 52,
+      "seed": 53002,
+      "seat": 1,
+      "static": 40921.0,
+      "router": 58124.0
+    },
+    {
+      "opponent": 54,
+      "seed": 53001,
+      "seat": 0,
+      "static": 37006.0,
+      "router": 53276.0
+    },
+    {
+      "opponent": 54,
+      "seed": 53001,
+      "seat": 1,
+      "static": 37006.0,
+      "router": 53276.0
+    },
+    {
+      "opponent": 54,
+      "seed": 53002,
+      "seat": 0,
+      "static": 34881.0,
+      "router": 53029.0
+    },
+    {
+      "opponent": 54,
+      "seed": 53002,
+      "seat": 1,
+      "static": 34881.0,
+      "router": 53029.0
+    },
+    {
+      "opponent": 55,
+      "seed": 53001,
+      "seat": 0,
+      "static": 65172.0,
+      "router": 125254.0
+    },
+    {
+      "opponent": 55,
+      "seed": 53001,
+      "seat": 1,
+      "static": 63415.0,
+      "router": 116524.0
+    },
+    {
+      "opponent": 55,
+      "seed": 53002,
+      "seat": 0,
+      "static": 80353.0,
+      "router": 116404.0
+    },
+    {
+      "opponent": 55,
+      "seed": 53002,
+      "seat": 1,
+      "static": 80353.0,
+      "router": 116404.0
+    },
+    {
+      "opponent": 58,
+      "seed": 53001,
+      "seat": 0,
+      "static": 38507.0,
+      "router": 38507.0
+    },
+    {
+      "opponent": 58,
+      "seed": 53001,
+      "seat": 1,
+      "static": 38507.0,
+      "router": 38507.0
+    },
+    {
+      "opponent": 58,
+      "seed": 53002,
+      "seat": 0,
+      "static": 41386.0,
+      "router": 54723.0
+    },
+    {
+      "opponent": 58,
+      "seed": 53002,
+      "seat": 1,
+      "static": 41386.0,
+      "router": 54723.0
+    },
+    {
+      "opponent": 59,
+      "seed": 53001,
+      "seat": 0,
+      "static": 4227.0,
+      "router": 4227.0
+    },
+    {
+      "opponent": 59,
+      "seed": 53001,
+      "seat": 1,
+      "static": 6788.0,
+      "router": 6788.0
+    },
+    {
+      "opponent": 59,
+      "seed": 53002,
+      "seat": 0,
+      "static": 8340.0,
+      "router": 20486.0
+    },
+    {
+      "opponent": 59,
+      "seed": 53002,
+      "seat": 1,
+      "static": 8340.0,
+      "router": 20486.0
+    }
+  ],
+  "scope": "fresh-seed fixed-tape mechanical/transfer panel; not hosted strength"
+}
