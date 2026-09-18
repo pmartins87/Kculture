@@ -1,0 +1,211 @@
+name: orw1-hosted-ab-submit-v1
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/orw1-hosted-ab-submit-v1.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit-ab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      MAX_DAILY: '5'
+      CONTROL_DESCRIPTION: PS_ORW1_CONTROL_EXACT_V47_08E56C43
+      TREATMENT_DESCRIPTION: PS_ORW1_TREATMENT_V47_ORW1_B994E00D
+      CONTROL_EXPECTED_SHA256: 08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01
+      TREATMENT_EXPECTED_SHA256: b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f
+      V47_MAIN_EXPECTED_SHA256: f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Require authenticated Kaggle access
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3' 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7'
+          kaggle competitions list --group entered -v | tee entered.csv
+          grep -qi 'kaggriculture' entered.csv
+
+      - name: Download exact frozen treatment artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: orw1-hosted-candidate-v1
+          path: treatment_artifact
+          run-id: 35360173417
+          github-token: ${{ github.token }}
+
+      - name: Recover exact public V47 control bytes and verify both arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p frozen
+          python - <<'PY'
+          import hashlib, shutil, tarfile
+          from pathlib import Path
+          import kagglehub
+
+          expected_archive = "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01"
+          expected_main = "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+          handle = "ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
+
+          out = Path("v47_public_output")
+          kagglehub.notebook_output_download(handle, output_dir=str(out), force_download=True)
+
+          candidates = []
+          for p in sorted(out.rglob("*")):
+              if not p.is_file() or not p.name.lower().endswith((".tar.gz",".tgz",".tar")):
+                  continue
+              blob = p.read_bytes()
+              ah = hashlib.sha256(blob).hexdigest()
+              try:
+                  with tarfile.open(p, "r:*") as tf:
+                      names = sorted(m.name for m in tf.getmembers() if m.isfile())
+                      if names != ["main.py"]:
+                          continue
+                      data = tf.extractfile("main.py").read()
+              except Exception:
+                  continue
+              mh = hashlib.sha256(data).hexdigest()
+              candidates.append((p, ah, mh))
+
+          hits = [x for x in candidates if x[1] == expected_archive and x[2] == expected_main]
+          if len(hits) != 1:
+              raise SystemExit(f"expected one exact V47 archive hit, got {hits}")
+          shutil.copyfile(hits[0][0], "frozen/CONTROL_EXACT_V47.tar.gz")
+          print({"control_source": str(hits[0][0]), "archive_sha256": hits[0][1], "main_sha256": hits[0][2]})
+          PY
+
+          test -f treatment_artifact/KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz
+          cp treatment_artifact/KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz frozen/TREATMENT_V47_ORW1.tar.gz
+
+          CONTROL_SHA="$(sha256sum frozen/CONTROL_EXACT_V47.tar.gz | awk '{print $1}')"
+          TREATMENT_SHA="$(sha256sum frozen/TREATMENT_V47_ORW1.tar.gz | awk '{print $1}')"
+          echo "CONTROL_SHA=$CONTROL_SHA"
+          echo "TREATMENT_SHA=$TREATMENT_SHA"
+          test "$CONTROL_SHA" = "$CONTROL_EXPECTED_SHA256"
+          test "$TREATMENT_SHA" = "$TREATMENT_EXPECTED_SHA256"
+
+          tar -tzf frozen/CONTROL_EXACT_V47.tar.gz | grep -Fxq 'main.py'
+          tar -tzf frozen/TREATMENT_V47_ORW1.tar.gz | grep -Fxq 'main.py'
+
+          {
+            echo "$CONTROL_SHA  CONTROL_EXACT_V47.tar.gz"
+            echo "$TREATMENT_SHA  TREATMENT_V47_ORW1.tar.gz"
+          } | tee frozen/SHA256SUMS.txt
+
+      - name: Official loader smoke both arms
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p smoke/control smoke/treatment
+          tar -xzf frozen/CONTROL_EXACT_V47.tar.gz -C smoke/control
+          tar -xzf frozen/TREATMENT_V47_ORW1.tar.gz -C smoke/treatment
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+
+          for label in ("control","treatment"):
+              path = Path("smoke")/label/"main.py"
+              fn = get_last_callable(path.read_text(encoding="utf-8"), path=str(path.resolve()))
+              argc = getattr(getattr(fn,"__code__",None),"co_argcount",None)
+              if argc not in (1,2):
+                  raise RuntimeError(f"{label}: loader selected {fn!r}, argc={argc}")
+              print(label, getattr(fn,"__name__",repr(fn)), argc)
+          PY
+
+      - name: Authenticated quota and duplicate preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q | tee before_submissions.csv
+          python - <<'PY'
+          import csv, io, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          text = Path("before_submissions.csv").read_text(encoding="utf-8", errors="replace")
+          lines = [line for line in text.splitlines() if line.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if "," not in line:
+                  continue
+              cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              if cand and any(k and ("date" in k.lower() or "ref" in k.lower()) for k in cand[0]):
+                  rows=cand
+                  break
+
+          today=datetime.now(timezone.utc).date().isoformat()
+          today_rows=[row for row in rows if next((str(v) for k,v in row.items() if k and "date" in k.lower()),"").startswith(today)]
+          descriptions={str(v) for row in rows for k,v in row.items() if k and "description" in k.lower()}
+          wanted=[os.environ["CONTROL_DESCRIPTION"],os.environ["TREATMENT_DESCRIPTION"]]
+          duplicates=sorted(set(wanted)&descriptions)
+          if duplicates:
+              raise SystemExit(f"duplicate descriptions already exist: {duplicates}")
+          projected=len(today_rows)+2
+          maximum=int(os.environ["MAX_DAILY"])
+          print({"today_utc":today,"observed_today":len(today_rows),"projected":projected,"maximum":maximum})
+          if projected>maximum:
+              raise SystemExit(f"daily cap would be exceeded: {projected}>{maximum}")
+          PY
+
+      - name: Submit frozen CONTROL then TREATMENT
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_window_start_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f frozen/CONTROL_EXACT_V47.tar.gz -m "$CONTROL_DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee control_submit_return_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f frozen/TREATMENT_V47_ORW1.tar.gz -m "$TREATMENT_DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee treatment_submit_return_utc.txt
+
+      - name: Bounded registration checkpoint and IDs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 12); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after_submissions.csv
+            if grep -Fq "$CONTROL_DESCRIPTION" after_submissions.csv && grep -Fq "$TREATMENT_DESCRIPTION" after_submissions.csv; then
+              echo "CONTROL:"
+              grep -F "$CONTROL_DESCRIPTION" after_submissions.csv | head -1 | tee control_registered_row.txt
+              echo "TREATMENT:"
+              grep -F "$TREATMENT_DESCRIPTION" after_submissions.csv | head -1 | tee treatment_registered_row.txt
+              exit 0
+            fi
+            sleep 5
+          done
+          echo "Both submissions were not visible within the bounded registration checkpoint."
+          cat after_submissions.csv
+          exit 93
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: orw1-hosted-ab-submit-v1-provenance
+          path: |
+            entered.csv
+            before_submissions.csv
+            after_submissions.csv
+            frozen/SHA256SUMS.txt
+            submit_window_start_utc.txt
+            control_submit_return_utc.txt
+            treatment_submit_return_utc.txt
+            control_registered_row.txt
+            treatment_registered_row.txt
+          retention-days: 30
+          if-no-files-found: warn
