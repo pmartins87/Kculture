@@ -4,44 +4,78 @@
 
 Active branch: `research/prize-solver-v0`.
 
-The standalone programme router remains closed. The first synthetic one-turn transaction
-family (SELL reordering / one-turn deferral) also closed with no headroom.
+The standalone programme router is closed. Synthetic one-turn SELL reorder/deferral also
+closed. The important solver line is now the first-party ready-stock option discovered
+through exact wrapper-proposal search.
 
-The important new result is **Adaptive Wrapper Proposal Oracle V2b PASS**:
-- workflow `35310754131`, exact engine `1.32.7`;
-- 16 valid branch states / 16 exact proposal rollouts / zero failures;
+### V2b wrapper-proposal oracle — PASS
+
+Workflow `35310754131`, exact engine `1.32.7`:
+- 16 valid branch states / zero failures;
 - BASE score rate `0.500`;
-- offline oracle score rate `0.625`;
-- **W/L delta `+0.125`**;
+- oracle score rate `0.625`;
+- W/L delta **+0.125**;
 - four non-win -> win flips;
-- mean terminal-margin delta `+4.0`;
-- all promoted proposals came from the Ready Stock wrapper.
+- every promoted proposal came from Ready Stock;
+- useful proposal: V47 market empty -> `SELL WOOL 2`, farmer/hands unchanged.
 
-The causal proposal was simple: while V47 farmer/hands stayed identical and V47 market
-was empty, Ready Stock proposed `SELL WOOL 2`. In seed 63001 this changed ties to wins
-against both V47-mirror and V48; in seed 63002 it improved margin without changing W/L.
-The unrelated step-1 proposal `BUY WHEAT 30 -> 8` was catastrophic and rejected by the
-oracle. This is the first Prize-Solver result showing exact bounded search has **W/L
-headroom on top of a strong complete adaptive policy**, not merely money headroom.
+Result:
+`docs/strategy/ADAPTIVE_WRAPPER_PROPOSAL_V2B_RESULT_2026-09-18.md`.
+
+### O-RW1 first-party causal isolation — PASS SAFE OPTION
+
+Workflow `35311750191`, artifact `10533792019`, exact engine `1.32.7`:
+- 48 valid counterfactual branch states;
+- mean W/L score delta **+0.1666667**;
+- 16 non-win -> win flips;
+- **0 negative-W/L states**;
+- **0 win -> non-win regressions**;
+- mean terminal-margin delta **+14.9583**;
+- **0 negative-margin states**.
+
+By opponent:
+- V47 mirror: score delta `+0.25`;
+- V48: score delta `+0.25`;
+- Tactical Memory: score delta `0.0`, mean margin delta `+35.125`.
+
+Frozen first-party option **O-RW1**:
+
+```
+if V47 market == []
+and own private shed.WOOL >= 2
+and step <= 671:
+    proposal = SELL WOOL 2
+```
+
+This uses current legal own state only. No Ready Stock code, opponent identity, future,
+seed or hidden opponent state is needed.
 
 Binding result:
-`docs/strategy/ADAPTIVE_WRAPPER_PROPOSAL_V2B_RESULT_2026-09-18.md`.
-Machine-readable summary:
-`data/programme_teacher/2026-09-18/ADAPTIVE_WRAPPER_PROPOSAL_V2B_SUMMARY.json`.
+`docs/strategy/FIRST_PARTY_READY_WOOL_CAUSAL_RESULT_2026-09-18.md`.
+Machine-readable:
+`data/programme_teacher/2026-09-18/READY_WOOL_CAUSAL_GATE_SUMMARY.json`.
 
-Current binding gate is a first-party causal isolation of that intervention:
-`docs/strategy/FIRST_PARTY_READY_WOOL_CAUSAL_GATE_2026-09-18.md`.
-It tests only the legal own-state rule
-`V47 market == [] && own shed.WOOL >= 2 -> add SELL WOOL 2`
-for one turn, on fresh seeds `64001..64004`, both seats, against V47, V48 and Tactical
-Memory. No Ready Stock code is used by the treatment.
+### Current binding gate — O-RW1 one-shot runtime transfer
 
-Active workflow: `35311750191`.
-Do not tune thresholds or steps from its outcome. If the rule transfers safely, freeze it
-as a first-party solver option; if heterogeneous, learn/derive a state selector; if it
-fails, retain V2b as proof of search headroom and move to richer proposal-trigger labels.
+Protocol:
+`docs/strategy/READY_WOOL_ONESHOT_RUNTIME_GATE_2026-09-18.md`.
 
-No Kaggle submission and no Ryzen action are currently required.
+Treatment is exact V47 plus O-RW1 firing **at most once**, at the first eligible state.
+No parameter/product/quantity/step tuning.
+
+Fresh seeds `65001..65008`, both seats, four opponents:
+V47, V48, Tactical Memory and Ready Stock.
+
+64 paired matchups / 128 complete episodes planned. Pre-trigger observation and exact V47
+base-action parity are checked. No-trigger episodes must be exactly identical.
+
+Active workflow: **`35313204723`**.
+
+A PASS freezes O-RW1 as a runtime-safe first-party solver option and authorizes building a
+reproducible candidate package plus hosted-probe proposal. It does not automatically
+submit to Kaggle.
+
+No Ryzen action and no manual Kaggle submission are currently required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
 competing copies or change other branches as part of this solver update.
