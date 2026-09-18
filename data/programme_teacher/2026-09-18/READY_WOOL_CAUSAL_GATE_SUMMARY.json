@@ -1,0 +1,64 @@
+{
+  "schema": "kculture-first-party-ready-wool-causal-v1-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35311750191,
+  "workflow_head_sha": "68be81b72b0c42c190119d447abe7e1a790f7c38",
+  "artifact_id": 10533792019,
+  "artifact_digest": "sha256:7310fb345a231dc0d83ea18823342e63e4254077288f300a68bb501dd7662462",
+  "engine": "1.32.7",
+  "mechanical_pass": true,
+  "branch_states": 48,
+  "mean_score_delta": 0.16666666666666666,
+  "mean_margin_delta": 14.958333333333334,
+  "median_margin_delta": 4.5,
+  "positive_wl_states": 16,
+  "negative_wl_states": 0,
+  "neutral_wl_states": 32,
+  "nonwin_to_win_flips": 16,
+  "win_to_nonwin_regressions": 0,
+  "positive_margin_states": 26,
+  "negative_margin_states": 0,
+  "by_opponent": {
+    "v47_mirror": {
+      "branch_states": 16,
+      "mean_score_delta": 0.25,
+      "mean_margin_delta": 4.875,
+      "nonwin_to_win_flips": 8,
+      "win_to_nonwin_regressions": 0
+    },
+    "v48": {
+      "branch_states": 16,
+      "mean_score_delta": 0.25,
+      "mean_margin_delta": 4.875,
+      "nonwin_to_win_flips": 8,
+      "win_to_nonwin_regressions": 0
+    },
+    "tactical_memory": {
+      "branch_states": 16,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 35.125,
+      "nonwin_to_win_flips": 0,
+      "win_to_nonwin_regressions": 0
+    }
+  },
+  "observed_steps": [
+    151,
+    153,
+    155,
+    344
+  ],
+  "operator": {
+    "eligibility": "V47 market exactly empty and current own private shed WOOL >= 2",
+    "treatment_market": [
+      [
+        "SELL",
+        "WOOL",
+        2
+      ]
+    ],
+    "single_intervention_per_counterfactual": true
+  },
+  "decision": "READY_WOOL_CAUSAL_PASS_SAFE_OPTION",
+  "next": "Freeze O-RW1 and validate a one-shot runtime candidate that fires at the first eligible state on fresh seeds.",
+  "automatic_kaggle_submission": false
+}
