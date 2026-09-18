@@ -1,4 +1,4 @@
-name: orw1-hosted-ab-status-once-v1
+name: orw1-hosted-ab-r2-status-once-v1
 'on':
   push:
     branches:
@@ -16,8 +16,8 @@ jobs:
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       COMPETITION: kaggriculture
-      CONTROL_DESCRIPTION: PS_ORW1_CONTROL_EXACT_V47_08E56C43
-      TREATMENT_DESCRIPTION: PS_ORW1_TREATMENT_V47_ORW1_B994E00D
+      CONTROL_DESCRIPTION: PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43
+      TREATMENT_DESCRIPTION: PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -38,7 +38,7 @@ jobs:
           grep -F "$TREATMENT_DESCRIPTION" submissions.csv | head -1 | tee treatment_row.txt
       - uses: actions/upload-artifact@v4
         with:
-          name: orw1-hosted-ab-status-once-v1
+          name: orw1-hosted-ab-r2-status-once-v1
           path: |
             snapshot_utc.txt
             submissions.csv
