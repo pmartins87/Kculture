@@ -72,3 +72,27 @@ Do not submit another candidate today without explicit information-value justifi
 `ORW1_HOSTED_AB_R2_SUBMITTED_AWAIT_BOTH_RESULTS`.
 
 Do not interpret one arm alone and do not tune O-RW1 while either arm remains PENDING.
+
+## First comparable hosted checkpoint and replay maturity
+
+Authenticated status at `2026-09-18 17:24:36 UTC`:
+- CONTROL `56336025`: `COMPLETE`, rating field `600.0`;
+- TREATMENT `56336027`: `COMPLETE`, rating field `600.0`.
+
+This equality is **not evidence of neutrality**.
+
+Replay forensics:
+- workflow `35374217511`;
+- artifact `10559931321`;
+- CONTROL listed episodes: **1**;
+- TREATMENT listed episodes: **1**;
+- externally attributable resolved games: **0 / 0**.
+
+Therefore there is currently no hosted W/L evidence with which to compare the valid R2
+arms. The displayed 600.0 values are initial/immature rating state only.
+
+Binding state:
+`ORW1_HOSTED_AB_R2_COMPLETE_BUT_UNMATURE_NO_EXTERNAL_EVIDENCE`.
+
+Preserve the fifth daily submission slot. Do not tune O-RW1 or open a nearby hosted
+variant from this checkpoint.
