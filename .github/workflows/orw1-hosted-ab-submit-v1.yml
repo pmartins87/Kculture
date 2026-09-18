@@ -18,10 +18,10 @@ jobs:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       COMPETITION: kaggriculture
       MAX_DAILY: '5'
-      CONTROL_DESCRIPTION: PS_ORW1_CONTROL_EXACT_V47_08E56C43
-      TREATMENT_DESCRIPTION: PS_ORW1_TREATMENT_V47_ORW1_B994E00D
+      CONTROL_DESCRIPTION: PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43
+      TREATMENT_DESCRIPTION: PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273
       CONTROL_EXPECTED_SHA256: 08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01
-      TREATMENT_EXPECTED_SHA256: b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f
+      TREATMENT_EXPECTED_SHA256: 997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9
       V47_MAIN_EXPECTED_SHA256: f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842
 
     steps:
@@ -47,7 +47,7 @@ jobs:
         with:
           name: orw1-hosted-candidate-v1
           path: treatment_artifact
-          run-id: 35360173417
+          run-id: 35372969031
           github-token: ${{ github.token }}
 
       - name: Recover exact public V47 control bytes and verify both arms
@@ -120,13 +120,20 @@ jobs:
           from pathlib import Path
           from kaggle_environments.agent import get_last_callable
 
+          expected = {
+              "control": "_y_agent_shopherd",
+              "treatment": "_kc_orw1_entrypoint",
+          }
           for label in ("control","treatment"):
               path = Path("smoke")/label/"main.py"
               fn = get_last_callable(path.read_text(encoding="utf-8"), path=str(path.resolve()))
+              name = getattr(fn,"__name__",None)
               argc = getattr(getattr(fn,"__code__",None),"co_argcount",None)
+              if name != expected[label]:
+                  raise RuntimeError(f"{label}: loader selected {name!r}, expected {expected[label]!r}")
               if argc not in (1,2):
                   raise RuntimeError(f"{label}: loader selected {fn!r}, argc={argc}")
-              print(label, getattr(fn,"__name__",repr(fn)), argc)
+              print(label, name, argc)
           PY
 
       - name: Authenticated quota and duplicate preflight
