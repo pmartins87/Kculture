@@ -1,0 +1,34 @@
+{
+  "schema": "kculture-orw1-hosted-ab-r2-submission-v1",
+  "date": "2026-09-18",
+  "submission_workflow": 35373555439,
+  "competition": "kaggriculture",
+  "preflight": {
+    "observed_today_before_pair": 2,
+    "projected_after_pair": 4,
+    "max_daily": 5
+  },
+  "control": {
+    "submission_id": 56336025,
+    "registered_at_utc": "2026-09-18 17:19:39.130000",
+    "description": "PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43",
+    "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
+    "hosted_entrypoint": "_y_agent_shopherd",
+    "status_initial": "PENDING"
+  },
+  "treatment": {
+    "submission_id": 56336027,
+    "registered_at_utc": "2026-09-18 17:19:40.807000",
+    "description": "PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273",
+    "archive_sha256": "997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9",
+    "hosted_entrypoint": "_kc_orw1_entrypoint",
+    "status_initial": "PENDING"
+  },
+  "registration_separation_seconds": 1.677,
+  "package_gate_run": 35372969031,
+  "package_artifact_id": 10559606269,
+  "package_parity_pairs": 8,
+  "package_action_parity": "8/8",
+  "package_reward_parity": "8/8",
+  "decision": "ORW1_HOSTED_AB_R2_SUBMITTED_AWAIT_BOTH_RESULTS"
+}
