@@ -28,7 +28,7 @@
   },
   "registration_separation_seconds": 1.89,
   "first_status_snapshot_utc": "2026-09-18 15:19:54",
-  "decision": "ORW1_HOSTED_AB_AWAIT_CONTROL_NOT_INTERPRETABLE",
+  "decision": "ORW1_HOSTED_AB_INVALID_ENTRYPOINT_DO_NOT_INTERPRET",
   "status_checkpoints": [
     {
       "snapshot_utc": "2026-09-18 15:19:54",
@@ -49,5 +49,48 @@
       "treatment_rating": 600
     }
   ],
-  "latest_snapshot_utc": "2026-09-18 15:23:11"
+  "latest_snapshot_utc": "2026-09-18 15:23:11",
+  "mechanical_audit": {
+    "control_official_entrypoint": "_y_agent_shopherd",
+    "treatment_official_entrypoint": "_kc_orw1_wool",
+    "intended_treatment_entrypoint": "_kc_orw1_entrypoint",
+    "treatment_valid": false,
+    "hosted_external_treatment_episode": 110482337,
+    "hosted_external_treatment_actions": "PASS-only from step 0 through end",
+    "hosted_external_treatment_reward": 3000,
+    "hosted_self_team_treatment_episode": 110481069,
+    "hosted_self_team_rewards": [
+      3000,
+      3000
+    ]
+  },
+  "first_comparable_rating_checkpoint": {
+    "snapshot_utc": "2026-09-18 15:30:23",
+    "control_status": "COMPLETE",
+    "control_rating": 714.8,
+    "treatment_status": "COMPLETE",
+    "treatment_rating": 503.9,
+    "interpretation": "NOT_AN_ORW1_AB_RESULT_TREATMENT_ENTRYPOINT_INVALID"
+  },
+  "replay_forensics": {
+    "workflow_run": 35362899791,
+    "artifact_id": 10555098067,
+    "control": {
+      "listed_episodes": 2,
+      "externally_resolved_games": 1,
+      "wins": 1,
+      "losses": 0,
+      "opponent": "Cedoque BAGBONON",
+      "margin": 78354
+    },
+    "treatment": {
+      "listed_episodes": 2,
+      "externally_resolved_games": 1,
+      "wins": 0,
+      "losses": 1,
+      "opponent": "Kiệt Lưu",
+      "margin": -119601,
+      "mechanically_valid_orw1": false
+    }
+  }
 }
