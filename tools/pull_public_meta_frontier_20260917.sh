@@ -60,6 +60,11 @@ tar -czf "${WIN}" -C "${ROOT}/external" public_frontier_20260917
 ok_count=$(awk -F, 'NR>1 && $1=="OK"{n++} END{print n+0}' "${OUT}/index/pull_status.csv")
 fail_count=$(awk -F, 'NR>1 && $1=="FAIL"{n++} END{print n+0}' "${OUT}/index/pull_status.csv")
 
+if [[ -d /mnt/c/Users/Rz9/Downloads ]]; then
+  cp "${OUT}/index/pull_status.csv" /mnt/c/Users/Rz9/Downloads/PUBLIC_FRONTIER_PULL_STATUS.csv
+  cp "${OUT}/index/kernels_score_desc.csv" /mnt/c/Users/Rz9/Downloads/PUBLIC_FRONTIER_INDEX.csv
+fi
+
 echo "PUBLIC_FRONTIER_RESULT ok=${ok_count} fail=${fail_count}"
 echo "PUBLIC_FRONTIER_DONE ${WIN}"
 ls -lh "${WIN}"
