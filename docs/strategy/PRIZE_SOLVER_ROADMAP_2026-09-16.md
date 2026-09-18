@@ -4,93 +4,81 @@
 
 Active branch: `research/prize-solver-v0`.
 
-The active Prize-Solver line is frozen first-party option **O-RW1** on exact public V47.
+### Critical hosted-entrypoint correction
 
-### Offline / exact-engine evidence
+The first authorized O-RW1 hosted A/B exposed a loader mismatch.
 
-1. Wrapper-proposal oracle V2b — PASS:
-   - BASE `0.500` -> oracle `0.625`;
-   - W/L delta **+0.125**.
+Exact public V47 CONTROL submission `56333577` loaded as the true hosted entrypoint:
+`_y_agent_shopherd`.
 
-2. First-party causal O-RW1 — PASS SAFE OPTION:
-   - 48 branch states;
-   - mean score delta **+0.1666667**;
-   - 16 non-win -> win flips;
-   - 0 negative-W/L states.
+The O-RW1 TREATMENT submission `56333579` loaded as:
+`_kc_orw1_wool`
+instead of the intended wrapper. Its hosted replay emitted PASS-only actions and therefore
+is mechanically invalid as an O-RW1 competitive sensor.
 
-3. Autonomous one-shot runtime transfer — PASS:
-   - 64 paired matchups / 128 episodes;
-   - BASE `0.5000`;
-   - V47 + O-RW1 `0.6875`;
-   - W/L delta **+0.1875**;
-   - 28 non-win -> win flips;
-   - 0 win -> non-win regressions.
+The root cause is broader than packaging: Kculture helper
+`tools.programme_adaptive_expert_gate.load_public_agent()` used `mod.agent`, while
+Kaggle uses `kaggle_environments.agent.get_last_callable`. Public V47 retains an older
+`agent` symbol and appends later wrappers, so `mod.agent` is not hosted-faithful.
 
-Frozen O-RW1:
+Correction commit:
+`b78477bdd80d51bfb63333ab2017c6242131d6d2`.
+
+Correction record:
+`docs/strategy/HOSTED_ENTRYPOINT_PARITY_CORRECTION_2026-09-18.md`.
+
+Until rerun with the official hosted loader, the following are **not valid promotion
+evidence**:
+- Wrapper Proposal Oracle V2b run `35310754131`;
+- O-RW1 causal run `35311750191`;
+- O-RW1 runtime run `35313204723`;
+- O-RW1 package parity run `35360173417`;
+- hosted treatment submission `56333579`.
+
+Exact public V47 CONTROL submission `56333577` remains valid as a hosted sensor.
+
+### Current recovery gate
+
+No O-RW1 tuning is allowed.
+
+Frozen O-RW1 hypothesis remains:
 ```
-if not used
-and V47 current market == []
+if V47 hosted base market == []
 and own private shed.WOOL >= 2
 and step <= 671:
-    execute SELL WOOL 2
-    used = True
+    one-turn proposal = SELL WOOL 2
 ```
 
-### Hosted package — PASS
+Recovery order:
+1. causal gate with official `get_last_callable`;
+2. only if PASS, autonomous one-shot runtime transfer with official loader;
+3. only if PASS, corrected package with unique final callable
+   `_kc_orw1_entrypoint` and exact official-loader parity;
+4. only then consider another hosted sensor.
 
-Candidate:
-`KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
+Active corrected causal workflow:
+**`35363269856`**, head
+`807dc922751120fd3bea375793f9ff3fa9ff0172`.
 
-Archive SHA-256:
-`b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`
+### Current hosted A/B evidence
 
-Package parity:
-- 8/8 exact action parity;
-- 8/8 exact reward parity;
-- 0 failures.
+Submission pair:
+- CONTROL `56333577` — exact public V47;
+- TREATMENT `56333579` — invalid treatment entrypoint.
 
-### Hosted A/B — SUBMITTED, AWAIT BOTH RESULTS
+First comparable rating checkpoint:
+- CONTROL `714.8`;
+- TREATMENT `503.9`.
 
-Authorized protocol:
-`docs/strategy/ORW1_HOSTED_AB_PROBE_PROTOCOL_2026-09-18.md`.
+Do **not** interpret this as an O-RW1 A/B result.
 
-Submission workflow:
-`35361531672`.
+Replay forensics workflow `35362899791` found only 2 listed episodes per arm at the
+checkpoint and only one externally-attributable game each:
+- CONTROL: 1W-0L, margin +78,354 vs Cedoque BAGBONON;
+- invalid TREATMENT: 0W-1L, margin -119,601 vs Kiệt Lưu.
+The treatment replay was PASS-only from step 0, confirming mechanical invalidity.
 
-CONTROL:
-- submission **56333577**
-- exact public V47 archive SHA
-  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`
-- registered `2026-09-18 15:18:48.850000 UTC`
-- description `PS_ORW1_CONTROL_EXACT_V47_08E56C43`.
-
-TREATMENT:
-- submission **56333579**
-- frozen V47+O-RW1 archive SHA
-  `b994e00d7adba05827eb8839b806211c2c8199dd0ad09a28b63815b58479c80f`
-- registered `2026-09-18 15:18:50.740000 UTC`
-- description `PS_ORW1_TREATMENT_V47_ORW1_B994E00D`.
-
-The two registrations were ~1.89 seconds apart. Daily preflight observed 0 earlier
-submissions that UTC day; pair projected 2/5.
-
-First authenticated snapshot:
-- workflow `35361737759`;
-- snapshot `2026-09-18 15:19:54 UTC`;
-- CONTROL: `PENDING`;
-- TREATMENT: `PENDING`.
-
-Binding state:
-`ORW1_HOSTED_AB_SUBMITTED_AWAIT_BOTH_RESULTS`.
-
-Do not interpret one arm alone, do not submit another O-RW1 variant between them, and do
-not tune O-RW1 while either arm is PENDING.
-
-Submission receipt:
-`docs/strategy/ORW1_HOSTED_AB_SUBMISSION_2026-09-18.md`.
-Machine-readable:
-`data/programme_teacher/2026-09-18/ORW1_HOSTED_AB_SUBMISSION.json`.
-
+No new Kaggle submission is authorized during recovery.
 No Ryzen action is required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
