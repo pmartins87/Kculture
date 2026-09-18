@@ -30,7 +30,7 @@
   "package_parity_pairs": 8,
   "package_action_parity": "8/8",
   "package_reward_parity": "8/8",
-  "decision": "ORW1_HOSTED_AB_R2_TREATMENT_LEADS_EARLY_AWAIT_32_PER_ARM",
+  "decision": "ORW1_HOSTED_AB_R2_FIRST_INFORMATIVE_32X32_REACHED_AWAIT_100",
   "status_checkpoints": [
     {
       "snapshot_utc": "2026-09-18 17:20:55",
@@ -177,5 +177,34 @@
     },
     "historical_project_anchor_rating": 2064.8,
     "interpretation": "Treatment is currently ahead of contemporaneous control and undefeated in 13 external games, but still below frozen 32-game informative threshold. Any UI peak near 2400 would be a transient project-high peak, not yet a stabilized rating."
+  },
+  "first_informative_32x32_checkpoint": {
+    "snapshot_utc": "2026-09-18 20:14:59",
+    "control": {
+      "rating": 2313.3,
+      "listed_episode_count": 49,
+      "resolved_external_games_sampled": 32,
+      "wins": 24,
+      "losses": 8,
+      "ties": 0,
+      "score_rate": 0.75,
+      "mean_margin": 1617.21875,
+      "median_margin": 1317,
+      "opponents_unique": 32
+    },
+    "treatment": {
+      "rating": 2546.9,
+      "listed_episode_count": 49,
+      "resolved_external_games_sampled": 32,
+      "wins": 20,
+      "losses": 12,
+      "ties": 0,
+      "score_rate": 0.625,
+      "mean_margin": 120.3125,
+      "median_margin": 25.5,
+      "opponents_unique": 31
+    },
+    "threshold_reached": true,
+    "interpretation": "First informative threshold reached. Treatment has higher BT rating despite lower raw W/L in the newest 32-game sample, implying opponent-strength/order effects are materially important. Do not equate raw W/L with hosted rating. Continue both active agents to >=100 public episodes before voluntary replacement."
   }
 }
