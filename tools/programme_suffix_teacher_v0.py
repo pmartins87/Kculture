@@ -129,6 +129,8 @@ def main():
     ap.add_argument("--out", default="runs/programme_suffix_teacher_v0/PROGRAMME_SUFFIX_TEACHER.json")
     args = ap.parse_args()
 
+    if args.train_seeds < 1 or args.holdout_seeds < 1:
+        raise ValueError("train and holdout seeds must both be positive")
     corpus = np.load(ROOT / args.corpus)
     tapes = np.asarray(corpus["tapes"], dtype=np.int32)
     manifest = json.loads((ROOT / args.manifest).read_text(encoding="utf-8"))
@@ -175,6 +177,7 @@ def main():
     holdout_mask = ~train_mask
 
     group_rows = []
+    counterfactual_targets = {}
     ds_features = []
     ds_checkpoint = []
     ds_group = []
@@ -214,6 +217,10 @@ def main():
                 M * S * 2, len(members)
             )
             U = utility(R)
+            if not np.isfinite(X).all() or not np.isfinite(R).all():
+                raise RuntimeError("non-finite features or counterfactual returns")
+            counterfactual_targets[f"group_{group_id}_programs"] = members
+            counterfactual_targets[f"group_{group_id}_margins"] = R.astype(np.float32)
 
             train_idx = np.flatnonzero(train_mask)
             test_idx = np.flatnonzero(holdout_mask)
@@ -306,6 +313,10 @@ def main():
 
     result = {
         "schema": "kculture-programme-suffix-teacher-v0",
+        "gate_scope": "infrastructure_only_not_strategic_promotion",
+        "generalization_scope": "new_seeds_same_static_opponent_bank",
+        "corpus_sha256": hashlib.sha256((ROOT / args.corpus).read_bytes()).hexdigest(),
+        "feature_runtime_parity": "pending",
         "engine_version": str(kagprog.ENGINE_VERSION),
         "programmes": M,
         "source_notebooks": manifest["notebooks"],
@@ -329,6 +340,7 @@ def main():
 
     np.savez_compressed(
         out.with_name("PROGRAMME_TEACHER_DATA.npz"),
+        **counterfactual_targets,
         features=np.concatenate(ds_features),
         checkpoint=np.concatenate(ds_checkpoint),
         group=np.concatenate(ds_group),

@@ -1,5 +1,23 @@
 # Prize Solver Roadmap — 2026-09-16
 
+## Current solver handoff — 2026-09-18
+
+Active solver branch: `research/prize-solver-v0`. This section supersedes older
+CR092/V4 next-action instructions below for the solver campaign.
+Top-30 extraction reproduced: 30 notebooks / 23 sources / 61 programmes.
+Programme teacher executed: 89,304 games, 51 prefix groups, 74,664 decision records.
+Infrastructure PASS only; tree W/L 55.8939% vs train-selected static 55.5931%.
+No strategic promotion, no Kaggle submission, no scale-up; four positive and two
+negative test-seed deltas. Next gate: runtime feature/action parity, then held-out
+opponent-family evaluation. Full findings, corrections, gate branches and evidence:
+`docs/strategy/PROGRAMME_TEACHER_RESULT_2026-09-18.md`.
+Data and checksums: `data/programme_teacher/2026-09-18/`.
+Do not rerun the Ryzen bootstrap merely to reproduce the completed workspace run.
+The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently
+create competing copies or change other branches as part of this solver update.
+
+## Historical record (superseded where inconsistent with the current handoff)
+
 ## Objective
 Build and submit a competitive Kaggriculture agent based on **Solver + Opponent Model + Value Learning**, optimizing for hosted Kaggle performance and prize probability. The roadmap is frozen unless empirical evidence shows a milestone is infeasible.
 
@@ -90,7 +108,7 @@ Use the daily submission budget intentionally. Whenever there are mature single-
 
 ## Definition of the first "solver-ready" Kaggle file
 A package counts as the first full trained-solver candidate when all are true:
-1. no replay/tape dependence;
+1. strong programmes may serve as proposals/priors; current-state selection must be active;
 2. current-state solver/search is active;
 3. learned value/policy is active;
 4. opponent model is active;

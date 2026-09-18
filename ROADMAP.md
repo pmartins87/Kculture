@@ -1,5 +1,23 @@
 # ROADMAP — Kculture live plan
 
+## Current solver handoff — 2026-09-18
+
+Active solver branch: `research/prize-solver-v0`. This section supersedes older
+CR092/V4 next-action instructions below for the solver campaign.
+Top-30 extraction reproduced: 30 notebooks / 23 sources / 61 programmes.
+Programme teacher executed: 89,304 games, 51 prefix groups, 74,664 decision records.
+Infrastructure PASS only; tree W/L 55.8939% vs train-selected static 55.5931%.
+No strategic promotion, no Kaggle submission, no scale-up; four positive and two
+negative test-seed deltas. Next gate: runtime feature/action parity, then held-out
+opponent-family evaluation. Full findings, corrections, gate branches and evidence:
+`docs/strategy/PROGRAMME_TEACHER_RESULT_2026-09-18.md`.
+Data and checksums: `data/programme_teacher/2026-09-18/`.
+Do not rerun the Ryzen bootstrap merely to reproduce the completed workspace run.
+The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently
+create competing copies or change other branches as part of this solver update.
+
+## Historical record (superseded where inconsistent with the current handoff)
+
 Updated: 2026-09-15
 
 ## North star

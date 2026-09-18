@@ -1,0 +1,13 @@
+{
+  "input_archive_sha256": "0565496a38d2810db0a342163772bbe5d2e27160686d546f51774c6a8d6cebd7",
+  "engine_commit": "f0084b916343c37bbcbdc7de9d833dc96caff78f",
+  "files": {
+    "PROGRAMME_SUFFIX_TEACHER.json": "31860ac1f6dc9d10be533c8c1f6a51907f8c9a8a0db8d26b87c4ed04ffbe49e6",
+    "PROGRAMME_CORPUS.json": "edbd949ee9504ab1d41399fe0bb9505373d99fb18d712bddf25731b76998e06c",
+    "PROGRAMME_TEACHER_DATA.npz": "06373fb5ac4c20049583f687138cda23d9087eebcb9bde58397722e9bbb8a234"
+  },
+  "payload_checksums": "62/62 match; SHA256SUMS.txt self-entry excluded (self-hash mismatch)",
+  "pre_visibility_fix_run": "non-binding; regenerated after public-field masking",
+  "runtime_feature_parity": "pending",
+  "independent_families_holdout": "pending"
+}

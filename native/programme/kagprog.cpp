@@ -131,12 +131,18 @@ void fill_features(const Sim& sim, int player, float* f) {
                     int w = static_cast<int>(t.what);
                     if (w >= 0 && w < N_ITEMS) what[w] += 1.0f;
                 }
-                sums[0] += static_cast<float>(t.yield_units);
-                sums[1] += static_cast<float>(t.consecutive_dry);
-                sums[2] += t.watered_today ? 1.0f : 0.0f;
-                sums[3] += t.fed_today ? 1.0f : 0.0f;
-                sums[4] += t.cared_today ? 1.0f : 0.0f;
-                sums[5] += t.fertilizer_available ? 1.0f : 0.0f;
+                // Match public ser_tile fields, excluding stale internal values.
+                if (t.kind == T_PLANT) {
+                    sums[0] += static_cast<float>(t.yield_units);
+                    sums[1] += static_cast<float>(t.consecutive_dry);
+                    sums[2] += t.watered_today ? 1.0f : 0.0f;
+                } else if ((t.kind == T_COOP || t.kind == T_PASTURE) && t.has_animal) {
+                    sums[0] += static_cast<float>(t.yield_units);
+                    sums[1] += static_cast<float>(t.consecutive_dry);
+                    sums[3] += t.fed_today ? 1.0f : 0.0f;
+                    sums[4] += t.cared_today ? 1.0f : 0.0f;
+                    sums[5] += t.fertilizer_available ? 1.0f : 0.0f;
+                }
             }
         }
         for (float v : kinds) f[k++] = v;
@@ -168,9 +174,9 @@ PYBIND11_MODULE(kagprog, m) {
             auto tb = tapes.request();
             auto ob = opponents.request();
             if (tb.ndim != 3 || ob.ndim != 3 ||
-                tb.shape[1] < 719 || ob.shape[1] < 719 ||
+                tb.shape[1] != 719 || ob.shape[1] != 719 ||
                 tb.shape[2] != ACTION_WIDTH || ob.shape[2] != ACTION_WIDTH) {
-                throw std::invalid_argument("tapes/opponents must be [N,>=719,170]");
+                throw std::invalid_argument("tapes/opponents must be [N,719,170]");
             }
 
             size_t N = static_cast<size_t>(tb.shape[0]);
@@ -231,9 +237,9 @@ PYBIND11_MODULE(kagprog, m) {
            int threads) {
             auto bb = base.request();
             auto ob = opponents.request();
-            if (bb.ndim != 2 || bb.shape[0] < 719 || bb.shape[1] != ACTION_WIDTH ||
-                ob.ndim != 3 || ob.shape[1] < 719 || ob.shape[2] != ACTION_WIDTH) {
-                throw std::invalid_argument("base must be [>=719,170], opponents [M,>=719,170]");
+            if (bb.ndim != 2 || bb.shape[0] != 719 || bb.shape[1] != ACTION_WIDTH ||
+                ob.ndim != 3 || ob.shape[1] != 719 || ob.shape[2] != ACTION_WIDTH) {
+                throw std::invalid_argument("base must be [719,170], opponents [M,719,170]");
             }
             if (checkpoint < 0 || checkpoint > 719) throw std::invalid_argument("checkpoint out of range");
 
