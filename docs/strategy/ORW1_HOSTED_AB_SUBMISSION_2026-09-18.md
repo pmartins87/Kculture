@@ -67,3 +67,24 @@ or one-arm results.
 - `2026-09-18 15:23:11 UTC`: CONTROL `PENDING`; TREATMENT `COMPLETE`, rating field `600.0`.
 
 This asymmetric processing state is **not interpretable as an A/B result**. The protocol remains frozen: do not compare ratings until CONTROL has also left PENDING. The treatment's initial `600.0` field is recorded only as API state, not as a competitive verdict.
+
+## Mechanical invalidation
+
+Subsequent hosted-loader and replay audit invalidated the TREATMENT arm.
+
+Official loader names from the actual submission workflow:
+- CONTROL: `_y_agent_shopherd` — correct exact V47 hosted entrypoint.
+- TREATMENT: `_kc_orw1_wool` — helper function, **not** the intended O-RW1 wrapper.
+
+Replay `110482337` confirms the treatment side emitted PASS-only actions from step 0
+through the end and finished at reward 3000. Replay `110481069` was a same-team
+PASS-only 3000-3000 game.
+
+The later rating checkpoint CONTROL `714.8` vs TREATMENT `503.9` is therefore
+**not an O-RW1 A/B result**.
+
+Binding state:
+`ORW1_HOSTED_AB_INVALID_ENTRYPOINT_DO_NOT_INTERPRET`.
+
+See:
+`docs/strategy/HOSTED_ENTRYPOINT_PARITY_CORRECTION_2026-09-18.md`.
