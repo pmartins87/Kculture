@@ -40,7 +40,7 @@ from tools.bounded_transaction_oracle_v1 import (
     score,
 )
 
-EXPECTED_ENGINE = "1.32.7"
+EXPECTED_ENGINE = "1.32.7"\nLOADER_CONTRACT = "official_get_last_callable"
 BASE = {
     "key": "v47",
     "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
@@ -405,7 +405,7 @@ def main() -> None:
 
     result = {
         "schema":"kculture-first-party-ready-wool-causal-v1",
-        "engine":EXPECTED_ENGINE,
+        "engine":EXPECTED_ENGINE,\n        "loader_contract":LOADER_CONTRACT,
         "base":BASE,
         "opponents":OPPONENTS,
         "seeds":SEEDS,
