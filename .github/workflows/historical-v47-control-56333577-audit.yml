@@ -1,0 +1,70 @@
+name: historical-v47-control-56333577-audit
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/historical-v47-control-56333577-audit.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      SID: '56333577'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Current historical submission row
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions kaggriculture -v -q | tee submissions.csv
+          grep -F "$SID" submissions.csv | tee historical_row.txt
+      - name: Collect all listed public episodes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/historical-v47-control
+          python tools/collect_submission_replays_cli_v2.py             --submission historical:$SID             --output-dir artifacts/historical-v47-control             --max-per-submission 500             --selection newest             --delay-seconds 0.10             --retries 4             --retry-backoff-seconds 0.5
+      - name: Summarize count
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('artifacts/historical-v47-control/collector_report.json')
+          d=json.loads(p.read_text())
+          x=d['submissions']['historical']
+          out={
+            'submission_id':56333577,
+            'listed_episode_count':x.get('listed_episode_count'),
+            'selected_episode_count':x.get('selected_episode_count'),
+            'downloaded_ok':x.get('downloaded_ok'),
+            'download_failures':x.get('download_failures'),
+          }
+          Path('artifacts/historical-v47-control/HISTORICAL_SUMMARY.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print('HISTORICAL_V47_CONTROL',json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: historical-v47-control-56333577-audit
+          path: |
+            submissions.csv
+            historical_row.txt
+            artifacts/historical-v47-control/**
+          retention-days: 30
+          if-no-files-found: warn
