@@ -1,0 +1,40 @@
+{
+  "schema": "kculture-bounded-transaction-oracle-v1-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35309837210,
+  "workflow_head_sha": "9c6ddefc571cc905e61edb4a3a9d729c319a8e79",
+  "artifact_id": 10532858435,
+  "artifact_digest": "sha256:0bd9a18c7f240924fe8b72c4ffe01bb51f413e0fb7b5f2382157426fbf50ee10",
+  "engine": "1.32.7",
+  "branch_states": 16,
+  "candidate_rollouts": 16,
+  "mechanical_pass": true,
+  "base_score_rate": 0.75,
+  "oracle_score_rate": 0.75,
+  "score_delta": 0,
+  "mean_oracle_margin_delta": 0,
+  "median_oracle_margin_delta": 0,
+  "loss_to_win_flips": 0,
+  "loss_to_nonloss_flips": 0,
+  "positive_margin_headroom_states": 0,
+  "by_opponent": {
+    "modern_v47_mirror": {
+      "branch_states": 8,
+      "base_score_rate": 0.5,
+      "oracle_score_rate": 0.5,
+      "score_delta": 0,
+      "mean_oracle_margin_delta": 0
+    },
+    "legacy_v39": {
+      "branch_states": 8,
+      "base_score_rate": 1,
+      "oracle_score_rate": 1,
+      "score_delta": 0,
+      "mean_oracle_margin_delta": 0
+    }
+  },
+  "oracle_nonbase_transform_counts": {},
+  "decision": "TRANSACTION_ORACLE_NO_HEADROOM",
+  "interpretation": "At the selected V47 sale states the market action exposed only one effective SELL, so the bounded proposal family collapsed to BASE versus one-turn deferral. Deferral never improved margin or W/L. Close simple sale deferral on V47; advance to proposal generation from full adaptive wrapper diversity.",
+  "automatic_kaggle_submission": false
+}
