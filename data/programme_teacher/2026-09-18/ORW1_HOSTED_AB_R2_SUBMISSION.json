@@ -30,7 +30,7 @@
   "package_parity_pairs": 8,
   "package_action_parity": "8/8",
   "package_reward_parity": "8/8",
-  "decision": "ORW1_HOSTED_AB_R2_COMPLETE_BUT_UNMATURE_NO_EXTERNAL_EVIDENCE",
+  "decision": "ORW1_HOSTED_AB_R2_VALID_BUT_EXPOSURE_ASYMMETRIC_AWAIT_BALANCED_EXTERNAL_GAMES",
   "status_checkpoints": [
     {
       "snapshot_utc": "2026-09-18 17:20:55",
@@ -90,5 +90,25 @@
       "score_rate": null
     }
   },
-  "interpretation": "Both arms are mechanically valid and COMPLETE at the initial 600.0 rating field, but each has only one listed episode and zero externally attributable resolved games. 600 vs 600 is not evidence of competitive neutrality or promotion."
+  "interpretation": "Both arms are mechanically valid and COMPLETE at the initial 600.0 rating field, but each has only one listed episode and zero externally attributable resolved games. 600 vs 600 is not evidence of competitive neutrality or promotion.",
+  "latest_checkpoint": {
+    "snapshot_utc": "2026-09-18 17:28:59",
+    "control_status": "COMPLETE",
+    "control_rating": 718.3,
+    "treatment_status": "COMPLETE",
+    "treatment_rating": 600,
+    "control_listed_episode_count": 2,
+    "treatment_listed_episode_count": 1,
+    "control_resolved_external_games": 1,
+    "treatment_resolved_external_games": 0,
+    "control_external_wins": 1,
+    "control_external_losses": 0,
+    "control_external_mean_margin": 57846,
+    "interpretation": "EXPOSURE_ASYMMETRY_NOT_ORW1_REGRESSION_EVIDENCE"
+  },
+  "next_checkpoint_rule": {
+    "informative_min_external_games_per_arm": 32,
+    "final_maturity_min_public_episodes_per_arm": 100,
+    "preserve_daily_slot_5": true
+  }
 }
