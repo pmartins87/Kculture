@@ -1,0 +1,68 @@
+{
+  "schema": "kculture-ready-wool-oneshot-runtime-v1-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35313204723,
+  "workflow_head_sha": "bacd643ea595e0cfa5c223f3bb2ea0ee3c1afc80",
+  "artifact_id": 10534778422,
+  "artifact_digest": "sha256:2ccf014a7fd93d9c5d99ac00f5586ee8d678604e72e02c215b2091a1a0f28f88",
+  "engine": "1.32.7",
+  "mechanical_pass": true,
+  "pairs": 64,
+  "episodes": 128,
+  "base_score_rate": 0.5,
+  "treatment_score_rate": 0.6875,
+  "score_delta": 0.1875,
+  "nonwin_to_win_flips": 28,
+  "win_to_nonwin_regressions": 0,
+  "positive_score_pairs": 28,
+  "negative_score_pairs": 4,
+  "neutral_score_pairs": 32,
+  "mean_margin_delta": -743.5,
+  "median_margin_delta": 10,
+  "triggered_pairs": 64,
+  "trigger_rate": 1,
+  "trigger_steps": [
+    151,
+    153,
+    155
+  ],
+  "by_opponent": {
+    "v47_mirror": {
+      "base_score_rate": 0.5,
+      "treatment_score_rate": 0.875,
+      "score_delta": 0.375,
+      "mean_margin_delta": 6,
+      "nonwin_to_win_flips": 14,
+      "negative_score_pairs": 2
+    },
+    "v48": {
+      "base_score_rate": 0.5,
+      "treatment_score_rate": 0.875,
+      "score_delta": 0.375,
+      "mean_margin_delta": 6,
+      "nonwin_to_win_flips": 14,
+      "negative_score_pairs": 2
+    },
+    "tactical_memory": {
+      "base_score_rate": 1,
+      "treatment_score_rate": 1,
+      "score_delta": 0,
+      "mean_margin_delta": -3000,
+      "win_to_nonwin_regressions": 0
+    },
+    "ready_stock": {
+      "base_score_rate": 0,
+      "treatment_score_rate": 0,
+      "score_delta": 0,
+      "mean_margin_delta": 14
+    }
+  },
+  "gate_diagnostics": {
+    "nonnegative_blocks": 4,
+    "worst_block_score_delta": 0
+  },
+  "decision": "READY_WOOL_RUNTIME_PASS",
+  "interpretation": "O-RW1 transfers as an autonomous one-shot runtime option. The W/L signal is strong against V47/V48 and non-regressive in W/L against Tactical Memory/Ready Stock. Large negative money deltas against Tactical Memory are diagnostic and motivate hosted calibration; W/L remains the primary objective.",
+  "next": "Build a reproducible hosted candidate package with exact V47 provenance and O-RW1 wrapper, then run package mechanics/parity smoke before any submission.",
+  "automatic_kaggle_submission": false
+}
