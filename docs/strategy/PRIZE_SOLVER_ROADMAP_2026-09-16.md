@@ -135,6 +135,23 @@ No Ryzen action is required.
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
 competing copies or change other branches as part of this solver update.
 
+
+### HOSTED SLOT PRESERVATION — BINDING
+
+Kaggriculture keeps only the two most recent submissions active. A third submission retires the oldest active bot, and retired bots do not remain in the final active pair. Therefore hosted submissions are scarce state, not cheap experiments.
+
+Historical lesson: exact V47 submission `56333577` retired at **2387.9** after only **35 external games** (29-5-1). It had passed the 32-game informative threshold but had not reached the 100-episode maturity standard. Retiring it was strategically premature; its later trajectory is unknowable.
+
+Current policy:
+- do not use hosted for exploratory variants;
+- do all causal/runtime/package screening offline;
+- do not voluntarily replace a strong or record-setting active bot before >=100 public episodes and a materially calmer rating trajectory, unless deadline/critical-bug pressure requires it;
+- 32 games is informative only, not a replacement trigger;
+- current active pair `56336025` + `56336027` is protected while maturing;
+- O-TW1 remains offline even after causal PASS until it earns the right to displace an active slot.
+
+Policy: `docs/strategy/HOSTED_SLOT_PRESERVATION_POLICY_2026-09-18.md`.
+
 ## Historical record (superseded where inconsistent with the current handoff)
 
 ## Objective
