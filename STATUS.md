@@ -86,7 +86,14 @@ Replay forensics workflow `35374217511`, artifact `10559931321`:
 Therefore `600.0 vs 600.0` is **not evidence of neutrality or promotion**.
 
 Binding state:
-`ORW1_HOSTED_AB_R2_COMPLETE_BUT_UNMATURE_NO_EXTERNAL_EVIDENCE`.
+`ORW1_HOSTED_AB_R2_VALID_BUT_EXPOSURE_ASYMMETRIC_AWAIT_BALANCED_EXTERNAL_GAMES`.
+
+Latest authenticated checkpoint:
+- CONTROL rating `718.3`, 2 listed episodes, **1 external game resolved**, record **1-0**, margin **+57,846**;
+- TREATMENT rating `600.0`, 1 listed episode, **0 external games resolved**.
+
+The current rating gap is therefore **exposure asymmetry**, not O-RW1 regression
+evidence. Do not compare the ratings until both arms have meaningful external exposure.
 
 ### Frozen hosted maturity rule for R2
 
