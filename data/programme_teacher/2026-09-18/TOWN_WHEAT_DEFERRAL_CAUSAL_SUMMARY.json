@@ -1,0 +1,47 @@
+{
+  "schema": "kculture-first-party-town-wheat-deferral-causal-v1-summary",
+  "date": "2026-09-18",
+  "workflow_run": 35378191104,
+  "engine": "1.32.7",
+  "loader_contract": "official_get_last_callable",
+  "exact_v47_hosted_entrypoint": "_y_agent_shopherd",
+  "mechanical_pass": true,
+  "branch_states": 48,
+  "mean_score_delta": 0.125,
+  "mean_margin_delta": -397.8541666666667,
+  "median_margin_delta": 30,
+  "positive_wl_states": 14,
+  "negative_wl_states": 2,
+  "neutral_wl_states": 32,
+  "nonwin_to_win_flips": 14,
+  "win_to_nonwin_regressions": 0,
+  "positive_margin_states": 42,
+  "negative_margin_states": 6,
+  "by_opponent": {
+    "v47_mirror": {
+      "branch_states": 16,
+      "mean_score_delta": 0.375,
+      "nonwin_to_win_flips": 14,
+      "negative_wl_states": 2,
+      "mean_margin_delta": 34.625
+    },
+    "v48": {
+      "branch_states": 16,
+      "mean_score_delta": 0,
+      "nonwin_to_win_flips": 0,
+      "negative_wl_states": 0,
+      "mean_margin_delta": 38
+    },
+    "tactical_memory": {
+      "branch_states": 16,
+      "mean_score_delta": 0,
+      "nonwin_to_win_flips": 0,
+      "negative_wl_states": 0,
+      "mean_margin_delta": -1266.1875
+    }
+  },
+  "decision": "TOWN_WHEAT_DEFERRAL_CAUSAL_PASS_SAFE_OPTION",
+  "interpretation": "Competitive causal headroom exists, concentrated in V47 mirror. Two tie->loss regressions mean the option is not universally safe; Tactical Memory shows large money-margin downside with unchanged W/L. Advance to autonomous one-shot runtime gate without retuning.",
+  "next": "Build autonomous one-shot O-TW1 runtime transfer gate on fresh seeds. No Kaggle submission.",
+  "automatic_kaggle_submission": false
+}
