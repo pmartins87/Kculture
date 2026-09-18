@@ -30,7 +30,7 @@
   "package_parity_pairs": 8,
   "package_action_parity": "8/8",
   "package_reward_parity": "8/8",
-  "decision": "ORW1_HOSTED_AB_R2_VALID_BUT_EXPOSURE_ASYMMETRIC_AWAIT_BALANCED_EXTERNAL_GAMES",
+  "decision": "ORW1_HOSTED_AB_R2_BALANCED_EARLY_EXPOSURE_AWAIT_32_PER_ARM",
   "status_checkpoints": [
     {
       "snapshot_utc": "2026-09-18 17:20:55",
@@ -110,5 +110,35 @@
     "informative_min_external_games_per_arm": 32,
     "final_maturity_min_public_episodes_per_arm": 100,
     "preserve_daily_slot_5": true
+  },
+  "latest_balanced_checkpoint": {
+    "snapshot_utc": "2026-09-18 18:01:01",
+    "control": {
+      "rating": 1457.7,
+      "listed_episode_count": 9,
+      "resolved_external_games": 8,
+      "wins": 8,
+      "losses": 0,
+      "ties": 0,
+      "score_rate": 1,
+      "mean_margin": 36006.875,
+      "median_margin": 32461.5,
+      "opponents_unique": 8
+    },
+    "treatment": {
+      "rating": 1458.2,
+      "listed_episode_count": 10,
+      "resolved_external_games": 9,
+      "wins": 9,
+      "losses": 0,
+      "ties": 0,
+      "score_rate": 1,
+      "mean_margin": 47125.22222222222,
+      "median_margin": 40053,
+      "opponents_unique": 9
+    },
+    "maturity_threshold_external_games_per_arm": 32,
+    "threshold_reached": false,
+    "interpretation": "BALANCED_EARLY_EXPOSURE_BOTH_UNDEFEATED_NO_PROMOTION_VERDICT"
   }
 }
