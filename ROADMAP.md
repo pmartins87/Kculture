@@ -4,81 +4,85 @@
 
 Active branch: `research/prize-solver-v0`.
 
-### Critical hosted-entrypoint correction
+### Hosted-entrypoint correction is binding
 
-The first authorized O-RW1 hosted A/B exposed a loader mismatch.
+The first O-RW1 hosted A/B exposed that Kculture had been loading public agents with
+`mod.agent`, while Kaggle hosted uses the last callable selected by
+`kaggle_environments.agent.get_last_callable`.
 
-Exact public V47 CONTROL submission `56333577` loaded as the true hosted entrypoint:
+Exact public V47 hosted entrypoint:
 `_y_agent_shopherd`.
 
-The O-RW1 TREATMENT submission `56333579` loaded as:
-`_kc_orw1_wool`
-instead of the intended wrapper. Its hosted replay emitted PASS-only actions and therefore
-is mechanically invalid as an O-RW1 competitive sensor.
-
-The root cause is broader than packaging: Kculture helper
-`tools.programme_adaptive_expert_gate.load_public_agent()` used `mod.agent`, while
-Kaggle uses `kaggle_environments.agent.get_last_callable`. Public V47 retains an older
-`agent` symbol and appends later wrappers, so `mod.agent` is not hosted-faithful.
-
-Correction commit:
-`b78477bdd80d51bfb63333ab2017c6242131d6d2`.
+The invalid hosted treatment submission `56333579` loaded helper
+`_kc_orw1_wool` and emitted PASS-only actions. Its rating is **not O-RW1 evidence**.
+CONTROL `56333577` remains a valid exact-V47 hosted sensor.
 
 Correction record:
 `docs/strategy/HOSTED_ENTRYPOINT_PARITY_CORRECTION_2026-09-18.md`.
 
-Until rerun with the official hosted loader, the following are **not valid promotion
-evidence**:
-- Wrapper Proposal Oracle V2b run `35310754131`;
-- O-RW1 causal run `35311750191`;
-- O-RW1 runtime run `35313204723`;
-- O-RW1 package parity run `35360173417`;
-- hosted treatment submission `56333579`.
+### O-RW1 hosted-faithful causal gate — PASS SAFE OPTION
 
-Exact public V47 CONTROL submission `56333577` remains valid as a hosted sensor.
+Corrected workflow:
+`35363453097`, artifact `10555907821`, exact engine `1.32.7`.
 
-### Current recovery gate
+Loader contract:
+`kaggle_environments.agent.get_last_callable`.
 
-No O-RW1 tuning is allowed.
+Results:
+- 48 valid branch states;
+- zero failures;
+- mean W/L score delta **+0.0833333**;
+- **8 non-win -> win flips**;
+- **0 win -> non-win regressions**;
+- **0 negative-W/L states**;
+- mean terminal-margin delta **+14.9583**;
+- **0 negative-margin states**.
 
-Frozen O-RW1 hypothesis remains:
+By opponent:
+- exact V47 mirror: score delta **+0.25**, 8 positive flips;
+- exact hosted V48 entrypoint: W/L delta **0.0**, mean margin +4.875;
+- Tactical Memory: W/L delta **0.0**, mean margin +35.125.
+
+Binding verdict:
+`READY_WOOL_CAUSAL_PASS_SAFE_OPTION`.
+
+This supersedes the earlier pre-correction causal result for promotion purposes. The
+hosted-faithful W/L effect is **smaller and concentrated in V47 mirror**, but remains
+causal and non-regressive in the tested panel.
+
+Result:
+`docs/strategy/READY_WOOL_CAUSAL_HOSTED_FAITHFUL_RESULT_2026-09-18.md`.
+Machine-readable:
+`data/programme_teacher/2026-09-18/READY_WOOL_CAUSAL_HOSTED_FAITHFUL_SUMMARY.json`.
+
+Frozen hypothesis remains unchanged:
 ```
-if V47 hosted base market == []
+if hosted-faithful V47 base market == []
 and own private shed.WOOL >= 2
 and step <= 671:
-    one-turn proposal = SELL WOOL 2
+    one-shot proposal = SELL WOOL 2
 ```
 
-Recovery order:
-1. causal gate with official `get_last_callable`;
-2. only if PASS, autonomous one-shot runtime transfer with official loader;
-3. only if PASS, corrected package with unique final callable
-   `_kc_orw1_entrypoint` and exact official-loader parity;
-4. only then consider another hosted sensor.
+### Current binding gate — hosted-faithful autonomous runtime
 
-Active corrected causal workflow:
-**`35363269856`**, head
-`807dc922751120fd3bea375793f9ff3fa9ff0172`.
+Run:
+**`35367785929`**, head
+`8914d6f8fced00966510c87b4c7299d583c40636`.
 
-### Current hosted A/B evidence
+Protocol remains the original one-shot runtime transfer:
+- fresh seeds `65001..65008`;
+- both seats;
+- V47 mirror, V48, Tactical Memory and Ready Stock;
+- 64 paired matchups / 128 episodes;
+- first legal eligible state only;
+- no threshold/product/quantity/step tuning.
 
-Submission pair:
-- CONTROL `56333577` — exact public V47;
-- TREATMENT `56333579` — invalid treatment entrypoint.
+The script now fails closed unless exact V47 resolves to hosted entrypoint
+`_y_agent_shopherd`.
 
-First comparable rating checkpoint:
-- CONTROL `714.8`;
-- TREATMENT `503.9`.
+Only a runtime PASS may advance to corrected package parity. No new Kaggle submission is
+authorized during recovery.
 
-Do **not** interpret this as an O-RW1 A/B result.
-
-Replay forensics workflow `35362899791` found only 2 listed episodes per arm at the
-checkpoint and only one externally-attributable game each:
-- CONTROL: 1W-0L, margin +78,354 vs Cedoque BAGBONON;
-- invalid TREATMENT: 0W-1L, margin -119,601 vs Kiệt Lưu.
-The treatment replay was PASS-only from step 0, confirming mechanical invalidity.
-
-No new Kaggle submission is authorized during recovery.
 No Ryzen action is required.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
