@@ -4,153 +4,131 @@
 
 Active branch: `research/prize-solver-v0`.
 
-### Hosted-entrypoint correction is binding
+### Hosted slot preservation remains binding
 
-All public-agent promotion work must use
-`kaggle_environments.agent.get_last_callable`.
+Kaggriculture keeps only the two newest submissions active. Do not submit a third agent
+while the current pair is still maturing.
 
-Exact public V47 hosted entrypoint:
-`_y_agent_shopherd`.
+Current active pair:
 
-The original treatment submission `56333579` is mechanically invalid and must never be
-interpreted as O-RW1 competitive evidence.
+CONTROL:
+- submission `56336025`;
+- exact public V47;
+- latest authenticated rating snapshot: **2399.6**;
+- current listed episodes at `2026-09-18 22:16:32 UTC`: **80**.
 
-### O-RW1 hosted-faithful offline evidence
+TREATMENT:
+- submission `56336027`;
+- hosted-faithful V47 + O-RW1;
+- latest authenticated rating snapshot: **2536.2**;
+- current listed episodes at `2026-09-18 22:16:32 UTC`: **83**.
+
+The pair has already crossed the first informative 32/32 external-game threshold.
+The normal maturity target remains **>=100 public episodes per arm plus a materially
+calmer rating trajectory** before any voluntary replacement.
+
+Historical exact V47 submission `56333577` froze at **2387.9** after 36 listed /
+35 external games (29-5-1). It was retired too early; current policy prevents repeating
+that mistake.
+
+### O-RW1 hosted-faithful evidence
 
 Causal gate `35363453097`:
-- score delta **+0.0833333**;
-- 8 non-win -> win flips;
-- 0 negative-W/L states.
+- score delta +0.0833333;
+- 8 positive flips;
+- 0 win->nonwin regressions.
 
 Autonomous runtime gate `35367785929`:
 - 64 pairs / 128 episodes;
-- BASE `0.6250`;
-- O-RW1 `0.71875`;
+- `0.6250 -> 0.71875`;
 - score delta **+0.09375**;
 - 14 non-win -> win flips;
-- 0 win -> non-win regressions;
-- 2 tie->loss pair regressions;
-- all 4 opponent blocks nonnegative in mean W/L.
+- 0 win -> nonwin regressions.
 
-Corrected package `35372969031`:
-- candidate archive SHA
-  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
+Corrected package parity `35372969031`:
 - hosted entrypoint `_kc_orw1_entrypoint`;
 - 8/8 exact action parity;
-- 8/8 exact reward parity;
-- 0 failures.
+- 8/8 exact reward parity.
 
-### Corrected O-RW1 hosted A/B R2 — balanced early exposure, still immature
+### O-TW1 — SECOND INDEPENDENT OPTION / RUNTIME PASS
 
-CONTROL:
-- submission **56336025**;
-- exact V47;
-- entrypoint `_y_agent_shopherd`.
+Causal gate `35378191104`:
+- 48 branch states;
+- mean score delta **+0.125**;
+- 14 non-win -> win flips;
+- 0 win -> nonwin regressions.
 
-TREATMENT:
-- submission **56336027**;
-- corrected V47 + O-RW1;
-- entrypoint `_kc_orw1_entrypoint`.
+Autonomous runtime gate:
+**`35395548699`**, artifact `10569241095`.
 
-Registered only **1.677 seconds** apart and SHA/loader checked immediately before submit.
-
-Latest replay/status checkpoint around `2026-09-18 18:01 UTC`:
-
-CONTROL:
-- rating **1457.7**;
-- listed episodes **9**;
-- externally resolved games **8**;
-- W-L-T **8-0-0**;
-- mean margin **+36,006.875**;
-- median margin **+32,461.5**;
-- unique external opponents **8**.
-
-TREATMENT:
-- rating **1458.2**;
-- listed episodes **10**;
-- externally resolved games **9**;
-- W-L-T **9-0-0**;
-- mean margin **+47,125.222**;
-- median margin **+40,053**;
-- unique external opponents **9**.
-
-The earlier exposure asymmetry has largely disappeared. Both arms are undefeated and
-nearly equal in rating, so there is no early catastrophic hosted signal against O-RW1.
-However, the frozen informative threshold has **not** been reached.
-
-Binding hosted state:
-`ORW1_HOSTED_AB_R2_BALANCED_EARLY_EXPOSURE_AWAIT_32_PER_ARM`.
-
-Frozen maturity rule:
-- first informative hosted comparison only after **>=32 externally resolved games per arm**;
-- promotion/regression verdict only after **>=100 public episodes per arm**;
-- no O-RW1 tuning from intermediate hosted results;
-- preserve the fifth daily submission slot.
-
-### New orthogonal option — O-TW1 town-WHEAT pulse hold
-
-To avoid idling while R2 matures, the solver opened the next separable timing family
-already frozen by CR092/H1/H1B. This is **not** an O-RW1 variant.
-
-Historical priors:
-- H1 runtime causal proof commit
-  `ab951727a195dce2992a07bf3e8b08992187fdf6`;
-- H1B exact-engine proof commit
-  `a00d2ffce9656b83df263f407ed9b92a718502db`.
-
-Frozen O-TW1 operator:
-- host exact hosted-faithful V47;
-- if the current public town state implies WHEAT consumption this turn and exact V47
-  intends to `SELL WHEAT` already owned in the current shed;
-- suppress only those current-turn `SELL WHEAT` orders;
-- preserve exact V47 farmer, hands and every other market order;
-- exact V47 resumes next turn with no forced follow-up sale.
-
-Fresh causal panel:
-- seeds `67001..67004`;
+Fresh panel:
+- seeds `68001..68008`;
 - both seats;
-- V47 mirror, V48 and Tactical Memory;
-- max 2 selected events/matchup, separated by >=72 turns;
-- minimum 12 valid branch states;
-- no automatic hosted submission.
+- V47 mirror, V48, Tactical Memory, Ready Stock;
+- 64 paired matchups / 128 episodes.
 
-Protocol:
-`docs/strategy/FIRST_PARTY_TOWN_WHEAT_DEFERRAL_CAUSAL_GATE_2026-09-18.md`.
+Results:
+- BASE score rate **0.6250**;
+- O-TW1 score rate **0.71875**;
+- score delta **+0.09375**;
+- 14 non-win -> win flips;
+- 0 win -> nonwin regressions;
+- 14 positive-score pairs;
+- 2 negative-score pairs;
+- 48 neutral pairs;
+- all 4 opponent blocks nonnegative mean W/L;
+- worst block delta 0.0;
+- mean margin delta +9.28125;
+- median margin delta +18.
+
+Binding verdict:
+`TOWN_WHEAT_RUNTIME_PASS`.
+
+O-TW1 is promoted into the **offline option library**, not to Kaggle.
+
+Result:
+`docs/strategy/TOWN_WHEAT_ONESHOT_RUNTIME_RESULT_2026-09-18.md`.
+
+### Current development gate — unified option-value dataset V0
+
+The project now has two independently proven first-party options on hosted-faithful V47:
+- O-RW1: ready-WOOL sale;
+- O-TW1: town-WHEAT pulse hold.
+
+Next architecture:
+```
+legal current state + eligible option
+        -> counterfactual ΔW/L label
+        -> value dataset
+        -> state-conditioned selector/value model
+        -> later bounded search
+```
+
+Frozen pilot:
+`docs/strategy/OPTION_VALUE_DATASET_V0_PILOT_2026-09-18.md`.
 
 Implementation:
-`tools/first_party_town_wheat_deferral_causal_gate.py`.
+`tools/option_value_dataset_v0_pilot.py`.
 
-Active binding workflow:
-**`35378191104`**, head
-`c06114f4c519a64e752989a2b58f880e9e5ecb1a`.
+Active workflow:
+**`35401011776`**, head
+`3e60477caa17d42675529a8e04be5bd91ac91165`.
 
-Current run state:
-- install PASS;
-- syntax PASS;
-- causal gate **in progress**.
+Pilot uses fresh seeds `69001,69002`, both seats, V47/V48/Tactical Memory, and requires:
+- exact hosted V47 entrypoint;
+- discovery/base reward parity;
+- legal feature contract only;
+- no seed/opponent/rating/hidden/future metadata inside model features;
+- at least 8 labeled rows and >=2 rows/option.
 
-No 5th Kaggle slot is authorized by O-TW1.
-No Ryzen action is required.
+A PASS validates the data pipeline only. Only after PASS should a resumable Ryzen-scale
+multiprocessing label generator be built and run.
 
-The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not silently create
-competing copies or change other branches as part of this solver update.
+No Kaggle submission is authorized.
+No Ryzen action is required yet.
 
-
-### HOSTED SLOT PRESERVATION — BINDING
-
-Kaggriculture keeps only the two most recent submissions active. A third submission retires the oldest active bot, and retired bots do not remain in the final active pair. Therefore hosted submissions are scarce state, not cheap experiments.
-
-Historical lesson: exact V47 submission `56333577` retired at **2387.9** after only **35 external games** (29-5-1). It had passed the 32-game informative threshold but had not reached the 100-episode maturity standard. Retiring it was strategically premature; its later trajectory is unknowable.
-
-Current policy:
-- do not use hosted for exploratory variants;
-- do all causal/runtime/package screening offline;
-- do not voluntarily replace a strong or record-setting active bot before >=100 public episodes and a materially calmer rating trajectory, unless deadline/critical-bug pressure requires it;
-- 32 games is informative only, not a replacement trigger;
-- current active pair `56336025` + `56336027` is protected while maturing;
-- O-TW1 remains offline even after causal PASS until it earns the right to displace an active slot.
-
-Policy: `docs/strategy/HOSTED_SLOT_PRESERVATION_POLICY_2026-09-18.md`.
+The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not create competing
+copies.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
