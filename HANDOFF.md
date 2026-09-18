@@ -4,30 +4,29 @@
 
 Active branch: `research/prize-solver-v0`.
 
-### Hosted-entrypoint correction remains binding
+### Hosted-entrypoint correction is binding
 
-All public-agent execution for promotion must use
+All public-agent promotion work must use
 `kaggle_environments.agent.get_last_callable`.
 
 Exact public V47 hosted entrypoint:
 `_y_agent_shopherd`.
 
-The first hosted treatment submission `56333579` is mechanically invalid and must
-never be interpreted as O-RW1 evidence.
+The original treatment submission `56333579` is mechanically invalid and must never be
+interpreted as O-RW1 competitive evidence.
 
 ### O-RW1 hosted-faithful evidence
 
 Causal gate `35363453097`:
-- 48 valid branch states;
 - score delta **+0.0833333**;
 - 8 non-win -> win flips;
 - 0 negative-W/L states.
 
-Runtime gate `35367785929`:
+Autonomous runtime gate `35367785929`:
 - 64 pairs / 128 episodes;
 - BASE `0.6250`;
 - O-RW1 `0.71875`;
-- W/L delta **+0.09375**;
+- score delta **+0.09375**;
 - 14 non-win -> win flips;
 - 0 win -> non-win regressions;
 - 2 tie->loss pair regressions;
@@ -37,13 +36,13 @@ Runtime gate `35367785929`:
 
 Workflow `35372969031`, artifact `10559606269`.
 
-Corrected candidate:
+Candidate archive:
 `KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz`
 
-Archive SHA:
+SHA:
 `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`
 
-Candidate hosted entrypoint:
+Hosted entrypoint:
 `_kc_orw1_entrypoint`.
 
 Package parity:
@@ -52,48 +51,55 @@ Package parity:
 - 719 action calls per episode;
 - 0 failures.
 
-Result:
-`docs/strategy/ORW1_HOSTED_PACKAGE_HOSTED_FAITHFUL_RESULT_2026-09-18.md`.
-
-### Corrected hosted A/B R2 — SUBMITTED
+### Corrected hosted A/B R2 — VALID BUT IMMATURE
 
 Submission workflow:
 `35373555439`.
 
-Immediate pre-submit verification:
-- CONTROL SHA:
-  `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`;
-- TREATMENT SHA:
-  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
-- CONTROL loader:
-  `_y_agent_shopherd`;
-- TREATMENT loader:
-  `_kc_orw1_entrypoint`;
-- daily quota before pair: 2;
-- projected after pair: **4/5**.
-
-CONTROL R2:
+CONTROL:
 - submission **56336025**;
+- exact V47 archive;
+- entrypoint `_y_agent_shopherd`;
 - registered `2026-09-18 17:19:39.130000 UTC`.
 
-TREATMENT R2:
+TREATMENT:
 - submission **56336027**;
+- corrected O-RW1 archive SHA
+  `997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9`;
+- entrypoint `_kc_orw1_entrypoint`;
 - registered `2026-09-18 17:19:40.807000 UTC`.
 
-Registration separation:
-**1.677 seconds**.
+Registration separation: **1.677 seconds**.
 
-First authenticated R2 snapshot:
-- workflow `35373770020`;
-- snapshot around `2026-09-18 17:20:55 UTC`;
-- CONTROL: `PENDING`;
-- TREATMENT: `PENDING`.
+Both passed hashes and official-loader checks immediately before submit.
+Daily usage after pair: **4/5**.
+
+First joint COMPLETE checkpoint (`2026-09-18 17:24:36 UTC`):
+- CONTROL: `COMPLETE`, rating field `600.0`;
+- TREATMENT: `COMPLETE`, rating field `600.0`.
+
+Replay forensics workflow `35374217511`, artifact `10559931321`:
+- CONTROL listed episodes: **1**;
+- TREATMENT listed episodes: **1**;
+- externally attributable resolved games: **0 / 0**.
+
+Therefore `600.0 vs 600.0` is **not evidence of neutrality or promotion**.
 
 Binding state:
-`ORW1_HOSTED_AB_R2_SUBMITTED_AWAIT_BOTH_RESULTS`.
+`ORW1_HOSTED_AB_R2_COMPLETE_BUT_UNMATURE_NO_EXTERNAL_EVIDENCE`.
 
-Do not submit another candidate today without explicit information-value justification.
-Do not tune O-RW1 while either R2 arm is pending.
+### Frozen hosted maturity rule for R2
+
+To prevent score-watching, freeze this before external outcomes accumulate:
+
+1. First **informative** R2 hosted checkpoint requires at least **32 externally attributable
+   completed public games per arm**. At that checkpoint compare rating, W/L/T, seat split,
+   opponent-strength distribution and matched/current population context.
+2. Final **promotion/regression** verdict must not be made before **100 completed public
+   episodes per arm**, consistent with the project's earlier hosted maturity discipline.
+3. A rating field without supporting episode maturity is diagnostic only.
+4. Do not tune O-RW1 from intermediate hosted outcomes.
+5. Preserve the fifth daily submission slot; no nearby O-RW1 variant is authorized.
 
 Submission receipt:
 `docs/strategy/ORW1_HOSTED_AB_R2_SUBMISSION_2026-09-18.md`.
