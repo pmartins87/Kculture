@@ -120,3 +120,35 @@ Binding state:
 Do not poll minute-by-minute. The next informative checkpoint remains frozen at at least
 32 externally attributable completed public games per arm. Preserve the fifth daily
 submission slot.
+
+## Balanced early-exposure checkpoint
+
+Authenticated/replay snapshot at approximately `2026-09-18 18:01 UTC`:
+
+CONTROL `56336025`:
+- rating `1457.7`;
+- listed episodes: **9**;
+- externally resolved games: **8**;
+- record: **8-0-0**;
+- mean margin: **+36,006.875**;
+- median margin: **+32,461.5**;
+- unique external opponents: **8**.
+
+TREATMENT `56336027`:
+- rating `1458.2`;
+- listed episodes: **10**;
+- externally resolved games: **9**;
+- record: **9-0-0**;
+- mean margin: **+47,125.222**;
+- median margin: **+40,053**;
+- unique external opponents: **9**.
+
+The exposure asymmetry has largely disappeared and both arms are undefeated in the
+small early sample. The treatment is not showing an early catastrophic hosted failure.
+
+However, the frozen informative threshold of **32 externally resolved games per arm has
+not been reached**, so this checkpoint does **not** authorize promotion, tuning or a fifth
+submission.
+
+Binding state:
+`ORW1_HOSTED_AB_R2_BALANCED_EARLY_EXPOSURE_AWAIT_32_PER_ARM`.
