@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import statistics
+import sys
 import tempfile
 import time
 from collections import Counter
@@ -23,6 +24,10 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 
 from tools.adaptive_wrapper_proposal_oracle_v2 import (
     EXPECTED_ENGINE,
