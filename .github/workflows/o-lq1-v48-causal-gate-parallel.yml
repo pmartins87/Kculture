@@ -1,0 +1,72 @@
+name: o-lq1-v48-causal-gate-parallel
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-lq1-v48-causal-gate-parallel.yml'
+      - 'tools/first_party_lq1_v48_causal_shard.py'
+      - 'tools/aggregate_first_party_lq1_v48_causal.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [74301,74302,74303,74304,74305,74306,74307,74308]
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/first_party_lq1_v48_causal_shard.py
+      - name: Run O-LQ1 causal shard
+        run: |
+          mkdir -p artifacts/o-lq1-shard
+          python tools/first_party_lq1_v48_causal_shard.py \
+            --seed ${{ matrix.seed }} \
+            --out artifacts/o-lq1-shard/O_LQ1_${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq1-shard-${{ matrix.seed }}
+          path: artifacts/o-lq1-shard/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: o-lq1-shard-*
+          path: artifacts/o-lq1-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/o-lq1-parallel
+          python tools/aggregate_first_party_lq1_v48_causal.py \
+            --input-dir artifacts/o-lq1-shards \
+            --out artifacts/o-lq1-parallel/O_LQ1_V48_CAUSAL_PARALLEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq1-v48-causal-parallel
+          path: artifacts/o-lq1-parallel/*.json
+          retention-days: 30
+          if-no-files-found: warn
