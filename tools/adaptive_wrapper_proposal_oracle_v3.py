@@ -64,11 +64,6 @@ PROPOSERS = [
         "expected_main_sha256": "4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96",
     },
     {
-        "key": "shop_aware",
-        "handle": "tetsutani/shop-aware-farming-kaggriculture",
-        "expected_main_sha256": "411875c97d6a178ec4df59b696b13708ba2fac754cae924851395a0578ca983d",
-    },
-    {
         "key": "router_2715",
         "handle": "nusrati/2715-6",
         "expected_main_sha256": "66585d1a5dbfe11c946a3c400278592f860342bc4a8f5e5f87f2a9293348984b",
