@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "run unchanged V4A bounded multi-turn V48 market oracle; if W/L headroom exists, causalize recurring sequence into first-party option; otherwise close short-horizon market imitation and reopen mechanism search",
+  "next_stage": "run V4B long-horizon V48 market-only upper bound; if W/L headroom exists, study cumulative market-state mechanism; if not, close simple market imitation under fixed V47 physical policy",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -193,6 +193,32 @@
       },
       "validation_status": "SKIPPED_BY_PRE_REGISTERED_GATE",
       "result_doc": "docs/strategy/CQ2_PROJECTED_QUEUE_DEV_RESULT_2026-09-19.md"
+    },
+    "v4a": {
+      "workflow": 35444529719,
+      "decision": "V48_V4A_MARGIN_ONLY",
+      "contexts": 12,
+      "hard_base_nonwins": 11,
+      "base_score_rate": 0.08333333333333333,
+      "oracle_score_rate": 0.08333333333333333,
+      "score_delta": 0,
+      "nonwin_to_win_flips": 0,
+      "mean_oracle_margin_delta": 0.25,
+      "result_doc": "docs/strategy/V48_MULTITURN_MARKET_V4A_RESULT_2026-09-19.md"
+    },
+    "fallback_v4b": {
+      "tool": "tools/v48_market_upper_bound_v4b.py",
+      "workflow": ".github/workflows/v48-market-upper-bound-v4b.yml",
+      "status": "ACTIVATING_AFTER_V4A_MARGIN_ONLY",
+      "seeds": [
+        74101,
+        74102,
+        74103,
+        74104,
+        74105,
+        74106
+      ],
+      "purpose": "long-horizon market-only upper bound under exact V47 physical policy"
     }
   }
 }
