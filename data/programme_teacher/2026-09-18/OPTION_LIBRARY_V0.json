@@ -540,8 +540,8 @@
       "result_doc": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md"
     },
     "v6a_hard_context_census": {
-      "workflow": 35472681958,
-      "status": "ACTIVE",
+      "workflow": 35472777632,
+      "status": "ACTIVE_CORRECTED",
       "seeds": [
         75101,
         75102,
@@ -562,7 +562,11 @@
         "best_market"
       ],
       "purpose": "find fresh ALL3 non-win contexts before bounded 2-3-turn physical continuation oracle",
-      "protocol": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md"
+      "protocol": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md",
+      "nonbinding_run": {
+        "id": 35472681958,
+        "reason": "mechanical bug in module purge helper; zero episode contexts in affected shards"
+      }
     }
   },
   "current_hosted_pair": {
