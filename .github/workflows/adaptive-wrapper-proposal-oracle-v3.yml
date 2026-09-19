@@ -1,0 +1,41 @@
+name: adaptive-wrapper-proposal-oracle-v3
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/adaptive-wrapper-proposal-oracle-v3.yml'
+      - 'tools/adaptive_wrapper_proposal_oracle_v3.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/adaptive_wrapper_proposal_oracle_v3.py
+      - name: Run diverse adaptive-wrapper proposal oracle
+        run: |
+          mkdir -p artifacts/adaptive-wrapper-proposal-v3
+          python tools/adaptive_wrapper_proposal_oracle_v3.py \
+            --out artifacts/adaptive-wrapper-proposal-v3/ADAPTIVE_WRAPPER_PROPOSAL_V3.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: adaptive-wrapper-proposal-oracle-v3
+          path: artifacts/adaptive-wrapper-proposal-v3/*.json
+          retention-days: 30
+          if-no-files-found: warn
