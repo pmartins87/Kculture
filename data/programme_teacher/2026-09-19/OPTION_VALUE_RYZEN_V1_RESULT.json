@@ -1,0 +1,66 @@
+{
+  "schema": "kculture-option-value-dataset-ryzen-v1-result",
+  "date": "2026-09-19",
+  "source_commit": "6cab6bc2773ec3406e717c1e68cb4971a9d4432f",
+  "config_sha256": "a36e81074ebc31803f161dbbfee7e02430537dcd37288e40c5cca465d93aa457",
+  "engine": "1.32.7",
+  "completed_seeds": 250,
+  "matchups": 1500,
+  "rows": 3000,
+  "unique_state_hashes": 584,
+  "failures": 0,
+  "mechanical_pass": true,
+  "opponents": [
+    "v47_mirror",
+    "v48",
+    "tactical_memory"
+  ],
+  "rows_by_opponent": {
+    "v47_mirror": {
+      "rows": 1000,
+      "mean_score_delta": 0.354,
+      "positive": 806,
+      "negative": 98
+    },
+    "v48": {
+      "rows": 1000,
+      "mean_score_delta": 0,
+      "positive": 0,
+      "negative": 0
+    },
+    "tactical_memory": {
+      "rows": 1000,
+      "mean_score_delta": 0,
+      "positive": 0,
+      "negative": 0
+    }
+  },
+  "rows_by_option": {
+    "O-RW1": {
+      "rows": 1500,
+      "unique_state_hashes": 348,
+      "mean_score_delta": 0.096,
+      "positive": 370,
+      "negative": 82,
+      "neutral": 1048,
+      "mean_margin_delta": -161.64933333333335
+    },
+    "O-TW1": {
+      "rows": 1500,
+      "unique_state_hashes": 236,
+      "mean_score_delta": 0.14,
+      "positive": 436,
+      "negative": 16,
+      "neutral": 1048,
+      "mean_margin_delta": 35.717333333333336
+    }
+  },
+  "interpretation": [
+    "Both options retain positive aggregate W/L value on a much larger fresh-seed corpus.",
+    "O-TW1 is materially cleaner than O-RW1 in this corpus: fewer negative score labels and positive mean margin delta.",
+    "All nonzero W/L signal is concentrated in the V47 mirror block; V48 and Tactical Memory are W/L neutral for both options in this corpus.",
+    "Therefore trainability and population generalization must be audited before fitting a production selector."
+  ],
+  "binding_next_gate": "OPTION_VALUE_SELECTOR_AUDIT_V1",
+  "automatic_kaggle_submission": false
+}
