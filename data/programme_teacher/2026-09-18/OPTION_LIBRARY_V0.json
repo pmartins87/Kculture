@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V6A census; >=4 fresh nonwins => freeze hard contexts and run V6 bounded 2-3-turn localized physical continuation oracle; otherwise expand untouched seed census",
+  "next_stage": "resolve V6A Batch B 35473134791; combine with Batch A; >=4 nonwins => freeze configs/all3_v6_hard_contexts.json and auto-launch V6; otherwise reconsider/expand without substituting close wins",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -540,33 +540,57 @@
       "result_doc": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md"
     },
     "v6a_hard_context_census": {
-      "workflow": 35472777632,
-      "status": "ACTIVE_CORRECTED",
-      "seeds": [
-        75101,
-        75102,
-        75103,
-        75104,
-        75105,
-        75106,
-        75107,
-        75108
-      ],
-      "opponents": [
-        "v47_mirror",
-        "ready_stock",
-        "v48",
-        "router_2715",
-        "conditional_memory",
-        "tactical_memory",
-        "best_market"
-      ],
-      "purpose": "find fresh ALL3 non-win contexts before bounded 2-3-turn physical continuation oracle",
-      "protocol": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md",
-      "nonbinding_run": {
-        "id": 35472681958,
-        "reason": "mechanical bug in module purge helper; zero episode contexts in affected shards"
-      }
+      "batch_a": {
+        "nonbinding_run": 35472681958,
+        "binding_run": 35472777632,
+        "decision": "V6A_EXPAND_HARD_CENSUS",
+        "mechanical_pass": true,
+        "contexts": 112,
+        "wins": 111,
+        "losses": 1,
+        "ties": 0,
+        "nonwins": [
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75103,
+            "seat": 1,
+            "margin": -86,
+            "score": 0
+          }
+        ],
+        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_BATCH_A_RESULT_2026-09-19.md"
+      },
+      "batch_b": {
+        "workflow": 35473134791,
+        "status": "ACTIVE",
+        "seeds": [
+          75109,
+          75110,
+          75111,
+          75112,
+          75113,
+          75114,
+          75115,
+          75116
+        ],
+        "opponents": [
+          "v47_mirror",
+          "ready_stock",
+          "v48",
+          "router_2715",
+          "conditional_memory",
+          "tactical_memory",
+          "best_market"
+        ]
+      },
+      "combined_gate": "need >=4 total nonwins before V6; close wins forbidden as substitutes"
+    },
+    "v6_continuation": {
+      "status": "DORMANT_WAITING_FOR_HARD_CONTEXTS",
+      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md",
+      "workflow": ".github/workflows/all3-v6-bounded-continuation.yml",
+      "trigger_config": "configs/all3_v6_hard_contexts.json"
     }
   },
   "current_hosted_pair": {
