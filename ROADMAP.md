@@ -62,38 +62,92 @@ This establishes learnability across fresh whole seeds in the V1 sampled populat
 yet establish transfer to an unseen opponent family: the original leave-one-opponent-out diagnostic
 still failed to recover the V47-mirror gains when that family was fully withheld.
 
-### V2 opponent league — preflight + smoke PASS
+### Ryzen V2 option-value production — COMPLETE / MECHANICS PASS / COVERAGE LIMIT FOUND
 
-The full seven-agent diverse league is frozen and mechanically validated:
-- V47 mirror;
-- Ready Stock;
-- V48;
-- `2715.6` multi-program router;
-- Conditional Memory;
-- Tactical Memory;
-- Best Market Agent.
+Binding user Ryzen run from source commit
+`2c402f54462bb31be4f1061c64efe11613b24253`:
 
-Hosted-faithful package/entrypoint preflight: **7/7 PASS**.
+- 150/150 fresh seeds;
+- 7 opponents;
+- both seats;
+- O-RW1 + O-TW1;
+- 2,100 base matchups;
+- **4,200 counterfactual labels**;
+- **1,238 unique state hashes**;
+- **0 failures**;
+- exact engine `1.32.7`.
 
-Binding smoke:
-- workflow **`35421692326`**;
-- conclusion **SUCCESS**;
-- pinned `kaggle-environments==1.32.7`;
-- syntax PASS;
-- one-seed seven-opponent generator execution PASS;
-- artifact upload PASS.
+O-RW1:
+- mean score delta **+0.0352381**;
+- 208 positive / 60 negative / 1,832 neutral;
+- mean margin delta **-88.5776**.
+
+O-TW1:
+- mean score delta **+0.0571429**;
+- 253 positive / 16 negative / 1,831 neutral;
+- mean margin delta **+85.7710**.
+
+Critical population result:
+- V47 mirror: **458 positive / 76 negative**, mean score delta **+0.3183333**;
+- Ready Stock: 2 positive / 0 negative;
+- `2715.6`: 1 positive / 0 negative;
+- V48, Conditional Memory, Tactical Memory, Best Market: W/L-neutral.
+
+Thus **458/461 positive labels (99.35%) are V47-mirror labels**.
+Outside V47 there are only **3 positives in 3,600 rows** and no negative W/L labels.
+
+Binding interpretation:
+- V1 seed-holdout learnability was real;
+- more seeds on the same two-option library are **not** the current bottleneck;
+- a production multi-family selector is blocked by **option coverage**, not raw model capacity;
+- do not scale this exact dataset merely by brute force.
+
+Result:
+`docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md`.
+
+### Current parallel gates
+
+#### G1 — option-library composition
+
+Question: do frozen O-RW1 and O-TW1 stack safely on one V47 organism?
+
+Workflow **`35424958961`**:
+`option-library-combo-runtime-v0`.
+
+Fresh seeds `71001..71004`, seven-opponent V2 league, both seats.
+Matched variants: BASE / O-RW1 / O-TW1 / BOTH.
+
+State: **in progress** at this handoff.
+
+#### G2 — diverse wrapper proposal oracle V3
+
+Question: can real market proposals from a larger strong-agent panel expose one-turn
+counterfactual W/L headroom **outside the modern V47 family**?
+
+Workflow **`35425004728`**:
+`adaptive-wrapper-proposal-oracle-v3`.
+
+Proposers include Ready Stock, Market Smart, V46 microstructure, V48 queue,
+Shop-Aware, `2715.6`, Conditional Memory, Tactical Memory and Best Market.
+
+Frozen fresh seeds: `72001,72002`; both seats; full seven-opponent V2 league.
+
+State: **queued** at this handoff.
+
+If V3 finds non-V47 headroom, convert the recurring transformation into a first-party
+causal option before training. If V3 is mirror-only/no-headroom, move to bounded
+**multi-turn transaction/guard** proposals rather than enlarging the ridge/MLP.
 
 ### Binding next steps
 
-1. Run the resumable Ryzen V2 production dataset:
-   **150 fresh seeds × 7 opponents × 2 seats × 2 options**, maximum about **4,200 labels**.
-2. Do not fit/freeze a production selector merely because V1 passed.
-3. After V2 completes, rerun train/dev/test with whole-seed isolation and add leave-family-out
-   evaluation over the expanded league.
-4. Promote a selector to autonomous runtime gates only if V2 held-out value remains positive
-   and cross-family behavior is defensible; otherwise expand/revise the option/feature set rather
-   than brute-force more training.
-5. No new Kaggle submission; preserve both active hosted slots while this offline work proceeds.
+1. Let G1 and G2 finish; no extra Ryzen workload is needed while they run.
+2. Do **not** fit/freeze a production selector from V2 alone.
+3. If G1 shows safe incremental composition, retain BOTH as the current option-library host.
+4. If G2 shows non-modern41 W/L headroom, causalize the winning transformation(s) first-party
+   on fresh seeds and add them to the machine-readable option library.
+5. Only after the option library has meaningful support across multiple unrelated opponent
+   families should whole-seed + leave-family-out selector training resume.
+6. No new Kaggle submission; preserve both currently active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
