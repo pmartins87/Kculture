@@ -92,7 +92,7 @@ def main():
         failures.append({"phase":"setup","error":f"{type(exc).__name__}: {exc}"})
 
     summary=summarize(rows)
-    mech=not failures and len(rows)>=1 and all(m.get("replay_parity") for m in matchups)
+    mech=not failures and len(matchups)==2 and all(m.get("replay_parity") for m in matchups)
     result={
       "schema":"kculture-all3-physical-proposal-v5-seed-shard",
       "opponent":args.opponent,"family":opp_spec.get("family"),"seed":args.seed,
