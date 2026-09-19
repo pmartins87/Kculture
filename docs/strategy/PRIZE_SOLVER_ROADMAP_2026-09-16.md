@@ -257,59 +257,82 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4A bounded multi-turn V48 market oracle — BINDING RESULT
+### V4B long-horizon V48 market upper bound — BINDING RESULT
 
-Workflow **`35444529719`** completed SUCCESS.
+Workflow **`35448761774`** completed SUCCESS.
 
-Decision: **`V48_V4A_MARGIN_ONLY`**.
+Raw runner label:
+**`V48_V4B_LONG_HORIZON_MARGIN_ONLY`**.
 
-12 fresh contexts:
-- 11 hard BASE non-wins;
-- BASE score rate **0.0833333**;
-- oracle score rate **0.0833333**;
-- score delta **0.0**;
-- nonwin→win flips **0**;
-- positive-score contexts **0**;
-- mean oracle margin delta **+0.25**;
-- zero failures.
+Binding interpretation:
+**`V48_V4B_LOSS_TO_TIE_WL_HEADROOM`**.
 
-Only one hard context preferred a non-BASE branch:
-seed 74003 / seat 1 / step 409 / horizon 1, improving margin only `-238 -> -235`.
+Reason:
+the runner's flip counter only counted transitions all the way to score 1.0, but every paired context
+improved from loss (0.0) to tie (0.5).
+
+12/12 contexts:
+- BASE score rate **0.0**;
+- upper-bound score rate **0.5**;
+- paired score delta **+0.5**;
+- nonwin->win flips **0** only because all improvements stopped at tie;
+- mean margin delta **+585.67**;
+- mean V48-market substitutions **50.17 turns**;
+- mean physical fallback turns **0**.
+
+Per-seed paired margin deltas:
+- 74101: +324;
+- 74102: +303;
+- 74103: +1,930;
+- 74104: +172;
+- 74105: +286;
+- 74106: +499.
 
 Conclusion:
-exact V48 market substitutions over 1-3 turns do not expose meaningful W/L headroom.
+- cumulative market behavior contains genuine competitive headroom;
+- the physical V47 policy remains fully compatible: **zero physical fallbacks**;
+- do not activate V4C;
+- do not copy V48 wholesale;
+- localize the smallest temporal interval that reproduces loss->tie.
 
 Result:
-`docs/strategy/V48_MULTITURN_MARKET_V4A_RESULT_2026-09-19.md`.
+`docs/strategy/V48_MARKET_UPPER_BOUND_V4B_RESULT_2026-09-19.md`.
 
-### V4B long-horizon V48 market upper bound — ACTIVE
+### V4D temporal localization — ACTIVE
 
-Workflow **`35448761774`**:
-`v48-market-upper-bound-v4b`.
+Workflow **`35449731037`**:
+`v48-market-temporal-localization-v4d`.
 
-Frozen design:
-- fresh seeds `74101..74106`, both seats;
-- exact V47 farmer/hands are always the executed physical policy;
-- exact V48 is an offline shadow market proposal source;
-- whenever current V47/V48 physical actions match and their markets differ, substitute V48 market;
-- continue this for the remaining episode;
-- if the altered trajectory causes V47/V48 physical actions to diverge, fall back to exact V47 physical+market for that turn and record a `physical_fallback_turn`.
+It uses the same V4B discovery seeds `74101..74106`, both seats, sharded by seed.
 
-Interpretation rule:
-1. V4B W/L headroom + low physical fallback -> cumulative market-state mechanism exists.
-2. V4B W/L headroom + many physical fallbacks -> market intervention is enough to enter a better
-   state basin even while V47 physical policy is retained.
-3. V4B no W/L + low physical fallback -> close simple V48-market imitation under fixed V47 physical policy.
-4. V4B no W/L + many physical fallbacks -> market changes induce future physical-policy divergence;
-   next search must study the coupled state transition rather than declaring market irrelevant.
+Frozen single windows:
+- W0 = 0–215
+- W1 = 216–335
+- W2 = 336–431
+- W3 = 432–527
+- W4 = 528–623
+- W5 = 624–718
+
+Frozen cumulative suffixes:
+- W4+ = 528–718
+- W3+ = 432–718
+- W2+ = 336–718
+- W1+ = 216–718
+
+Per context, select the smallest predeclared interval that reproduces the V4B W/L improvement,
+breaking ties by fewer actual substituted market turns and then later start.
 
 ### Binding next steps
 
-1. Read workflow `35448761774`.
-2. Apply the four-way V4B interpretation above using both W/L and physical fallback count.
-3. Do not extend horizon beyond V4B.
-4. Keep O-RW1 + O-TW1 as current offline host.
-5. No new Kaggle submission; preserve active hosted slots.
+1. Read workflow `35449731037`.
+2. If a global interval reproduces all 12 loss->tie gains, inspect recurring action transforms inside
+   its minimal interval and rewrite them first-party.
+3. If localization is context-specific, cluster minimal reproducer labels/steps and derive the
+   smallest legal-state trigger shared by winning contexts.
+4. Fresh causal validation is mandatory before option-library admission.
+5. Do not activate V4C: V4B had zero physical fallbacks.
+6. Keep O-RW1 + O-TW1 as current offline host.
+7. No new Kaggle submission.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
