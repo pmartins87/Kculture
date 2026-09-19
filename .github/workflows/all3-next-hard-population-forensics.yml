@@ -1,0 +1,83 @@
+name: all3-next-hard-population-forensics
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-next-hard-population-forensics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_TEAM_NAME: Paulo Martins
+      SOURCE_SID: '56336027'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Collect mature O-RW1 public replays
+        run: |
+          mkdir -p artifacts/all3-next-hard-population
+          python tools/collect_submission_replays_cli_v2.py \
+            --submission orw1:$SOURCE_SID \
+            --output-dir artifacts/all3-next-hard-population \
+            --max-per-submission 128 \
+            --selection newest \
+            --delay-seconds 0.10 \
+            --retries 4 \
+            --retry-backoff-seconds 0.5
+      - name: Summarize full mature population
+        run: |
+          python tools/cr083_hosted_forensics.py \
+            --replay-root artifacts/all3-next-hard-population/orw1/replays \
+            --target-team-name "$TARGET_TEAM_NAME" \
+            --target-submission "$SOURCE_SID" \
+            --output artifacts/all3-next-hard-population/orw1_full_summary.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          p=Path("artifacts/all3-next-hard-population/orw1_full_summary.json")
+          d=json.loads(p.read_text())
+          losses=[g for g in d.get("games",[]) if g.get("result")=="L"]
+          losses=sorted(losses,key=lambda x:x.get("margin",0))
+          by=[]
+          for row in d.get("by_opponent",[]):
+              if row.get("losses",0)>0:
+                  by.append(row)
+          by=sorted(by,key=lambda x:(-x.get("losses",0),x.get("mean_margin",0),x.get("opponent_team","")))
+          digest={
+            "submission_id":56336027,
+            "resolved_games":d.get("resolved_games"),
+            "wins":d.get("wins"),"losses":d.get("losses"),"ties":d.get("ties"),
+            "score_rate":d.get("score_rate"),
+            "opponents_unique":d.get("opponents_unique"),
+            "loss_opponents":by,
+            "worst_losses":losses[:20],
+          }
+          Path("artifacts/all3-next-hard-population/hard_population_digest.json").write_text(
+              json.dumps(digest,indent=2,sort_keys=True)
+          )
+          print("ALL3_NEXT_HARD_POPULATION",json.dumps(digest,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-next-hard-population-forensics
+          path: artifacts/all3-next-hard-population/**
+          retention-days: 30
+          if-no-files-found: warn
