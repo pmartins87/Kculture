@@ -71,6 +71,20 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "state-conditioned option-value dataset and selector/value learning",
-  "no_automatic_kaggle_submission": true
+  "next_stage": "expand causal option coverage across unrelated opponent families; test O-RW1+O-TW1 composition; resume selector/value learning only after diverse-family W/L support exists",
+  "no_automatic_kaggle_submission": true,
+  "option_value_v2": {
+    "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
+    "seeds": 150,
+    "opponents": 7,
+    "rows": 4200,
+    "unique_state_hashes": 1238,
+    "failures": 0,
+    "positive_labels_total": 461,
+    "positive_labels_v47_mirror": 458,
+    "positive_labels_outside_v47": 3,
+    "outside_v47_rows": 3600,
+    "interpretation": "MECHANICS_PASS_OPTION_COVERAGE_INSUFFICIENT_FOR_PRODUCTION_MULTI_FAMILY_SELECTOR",
+    "result_doc": "docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md"
+  }
 }
