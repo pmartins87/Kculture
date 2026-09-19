@@ -55,5 +55,12 @@
   ],
   "close_wins_substituted": false,
   "runtime_identity_features": false,
-  "automatic_kaggle_submission": false
+  "automatic_kaggle_submission": false,
+  "mechanics_revision": {
+    "revision": "v2_hand_day_lifecycle",
+    "tool_commit": "90d98d1f3ebe51a80806ed6b22914aac36cfd744",
+    "protocol_commit": "a61ebfd185c318a36a2f45bd30aa7bb9f3199dbd",
+    "rule": "skip hand:i H2/H3 candidate before rollout if horizon crosses turnsPerDay boundary",
+    "prior_run_nonbinding": 35473389439
+  }
 }
