@@ -257,110 +257,106 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### O-LQ2 / ALL3 — CURRENT BINDING STATE
+### ALL3 — CURRENT HOSTED STATE / FIRST INFORMATIVE CHECKPOINT
 
-#### O-LQ2 fresh causal PASS
-
-Workflow **`35456018489`**:
-**`O_LQ2_V48_CAUSAL_PASS`**.
-
-Fresh seeds `74401..74408`, both seats:
-- 16/16 BASE losses -> treatment wins;
-- score rate **0.0 -> 1.0**;
-- mean score delta **+1.0**;
-- mean margin delta **+567**;
-- negative-score contexts **0**.
-
-#### O-LQ2 broad SAFE PASS
-
-Workflow **`35456201059`**:
-**`O_LQ2_BROAD_SAFE_PASS`**.
-
-56 fresh contexts / seven families:
-- overall mean score delta **+0.1607143**;
-- mean margin delta **+212.82**;
-- negative-score contexts **0**;
-- V48 delta **+0.75**;
-- V47 mirror **+0.375**;
-- other five families W/L-neutral.
-
-#### ALL3 composition PASS
-
-Workflow **`35456535323`**:
-**`TRIPLE_COMBO_SAFE_ADVANCE`**.
-
-ALL3 = exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2.
-
-Fresh seven-family score rates:
-- BASE **0.7857143**;
-- old RW1+TW1 **0.8392857**;
-- LQ2 **0.9464286**;
-- ALL3 **0.9464286**.
-
-ALL3 negative-score contexts vs BASE: **0**.
-ALL3 preserves LQ2 W/L and improves aggregate terminal margin.
-
-#### ALL3 hosted package parity PASS
-
-Workflow **`35457146455`**:
-**`ALL3_HOSTED_PACKAGE_PARITY_PASS`**.
-
-Frozen candidate:
-- `KCULTURE_V47_ALL3_V1.tar.gz`;
-- tar SHA-256 **`204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`**;
-- candidate main SHA-256 `92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f`;
-- hosted entrypoint **`_kc_all3_entrypoint`**;
-- 12/12 exact action parity;
-- 12/12 exact reward parity;
-- zero failures.
-
-#### Hosted-readiness audit PASS
-
-Current mature pair before replacement:
-- CONTROL `56336025`: **2344.6**;
-- O-RW1 `56336027`: **2383.9**.
-
-Two successive authenticated checkpoints were unchanged.
-Both arms had already exceeded 100 public episodes.
-
-Decision:
-**`ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL`**.
-
-#### ALL3 hosted submission COMPLETE / ACTIVE
-
-Submission workflow **`35459415491`** completed SUCCESS.
-
-ALL3:
-- submission ID **`56367770`**;
-- description `PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4`;
-- registered UTC `2026-09-19 17:53:18.930000`;
-- hosted status **COMPLETE**;
-- initial public rating **600.0**;
-- preflight daily usage **0 -> 1 / 5**.
-
-O-RW1 `56336027` remains COMPLETE at **2383.9**.
-
-Intended active pair after ALL3 activation:
+Current intended active pair:
 1. O-RW1 `56336027`;
 2. ALL3 `56367770`.
 
-Do not submit any nearby ALL3 variant.
+ALL3 package:
+- exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2;
+- package SHA-256 `204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`;
+- hosted entrypoint `_kc_all3_entrypoint`;
+- package parity **12/12 exact actions + 12/12 exact rewards**.
 
-Result docs:
-- `docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`
-- `docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`
-- `docs/strategy/O_LQ2_TRIPLE_COMPOSITION_RESULT_2026-09-19.md`
-- `docs/strategy/ALL3_HOSTED_PACKAGE_PARITY_RESULT_2026-09-19.md`
-- `docs/strategy/ALL3_HOSTED_READINESS_AUDIT_2026-09-19.md`
-- `docs/strategy/ALL3_HOSTED_SUBMISSION_2026-09-19.md`.
+Current hosted snapshot around 19:47 UTC:
+- ALL3: **2395.4**;
+- retained O-RW1: **2364.1**.
+
+Do not compare these ratings causally; the live populations/histories differ.
+
+Exposure:
+- 35 listed ALL3 public episodes;
+- **34 resolved external games**;
+- **28W / 6L / 0T**;
+- raw score rate **0.8235294**;
+- 33 unique opponents;
+- mean margin **+13,626.97**;
+- median margin **+1,676.5**.
+
+This clears the project's first-informative threshold (~32 resolved external games).
+
+ALL3 observed losses:
+- qinsuikang: -11,923;
+- Timothy Adeyemi: -8,554;
+- cooked: -1,863;
+- Vishal Kishore: -1,499 and -288;
+- Nat Bel ML Fun: -83.
+
+Result:
+`docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md`.
+
+### Mature O-RW1 loss coverage — SECONDARY FORENSIC EVIDENCE
+
+Workflow **`35465395838`** reconstructed ALL3 changes over 128 mature O-RW1 replays.
+
+This is coverage-only, not a counterfactual outcome simulation.
+
+Among 82 O-RW1 losses:
+- mean reconstructed ALL3 changed turns: 152.02;
+- zero losses with no ALL3 changes: 0;
+- only **9/82** satisfy the conservative early residual-hard definition
+  (already behind around step 336 with first ALL3 change at/after 336).
+
+Therefore old O-RW1 losses are no longer the preferred ALL3 failure set.
+The six actual ALL3 hosted losses are now primary.
+
+Result:
+`docs/strategy/ALL3_HOSTED_LOSS_COVERAGE_RESULT_2026-09-19.md`.
+
+### O-HV1 High-Value Stock Flush — ACTIVE DEVELOPMENT
+
+Hosted replay discovery identified repeated local missed-sale mechanics:
+
+- Vishal Kishore step 348: own WOOL 11, public price 239, ALL3 no SELL;
+- Vishal Kishore step 299: own MILK 6, public price 177, ALL3 no SELL;
+- qinsuikang step 553: own MILK 15, public price 254, ALL3 does not sell MILK.
+
+O-HV1 is a legal-state market-only proposal:
+- preserve ALL3 farmer/hands;
+- consider finished goods only:
+  MILK, WOOL, EGG, CARROT, STRAWBERRY, MELON, TOMATO;
+- reserve inventory already queued for ALL3 SELLs;
+- select at most one remaining product by max `price * remaining_qty`;
+- add one SELL only when the public unit price clears the frozen threshold;
+- no opponent identity/rating/EpisodeId/hidden seed/future/private-opponent input.
+
+Frozen development matrix:
+- D1: step>=240, price>=175;
+- D2: step>=240, price>=200;
+- D3: step>=336, price>=175;
+- D4: step>=336, price>=200.
+
+Development opponents:
+V47 mirror, V48, Ready Stock.
+
+Seeds:
+`74801..74804`, both seats.
+
+Active workflow:
+**`35465868923`**.
+
+Protocol:
+`docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_PROTOCOL_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Preserve O-RW1 `56336027` + ALL3 `56367770`.
-2. Treat ALL3 rating 600.0 only as initial hosted activation, not competitive evidence.
-3. Do not replace/reroll ALL3 on early rating noise.
-4. First informative hosted checkpoint requires substantial exposure (project standard: ~32 resolved external games).
-5. Retain offline causal/broad evidence as the strategic basis while hosted exposure accumulates.
+1. Resolve O-HV1 workflow `35465868923`.
+2. If no frozen config satisfies the predeclared safety rule: close O-HV1 without threshold rescue.
+3. If one config is selected: freeze exactly that config.
+4. Run untouched seven-family fresh validation before option-library admission.
+5. Do not submit O-HV1 or any ALL3 variant to Kaggle from development evidence.
+6. Preserve O-RW1 + ALL3 while ALL3 hosted exposure continues.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
