@@ -26,11 +26,24 @@ WINDOWS={
 }
 
 def acquire(spec,tmp):
-    main,receipt=acquire_public_main(spec["handle"],tmp)
-    observed=sha256_bytes(main.read_bytes())
-    if observed!=spec["expected_main_sha256"]:
-        raise RuntimeError(f"{spec['key']} identity mismatch {observed}")
-    return main,{"key":spec["key"],"handle":spec["handle"],"observed_main_sha256":observed,**receipt}
+    last=None
+    for attempt in range(1,4):
+        try:
+            attempt_dir=tmp/f"attempt-{attempt}"
+            main,receipt=acquire_public_main(spec["handle"],attempt_dir)
+            observed=sha256_bytes(main.read_bytes())
+            if observed!=spec["expected_main_sha256"]:
+                raise RuntimeError(f"{spec['key']} identity mismatch {observed}")
+            return main,{
+                "key":spec["key"],"handle":spec["handle"],
+                "observed_main_sha256":observed,
+                "acquisition_attempt":attempt,**receipt,
+            }
+        except Exception as exc:
+            last=exc
+            if attempt<3:
+                time.sleep(2*attempt)
+    raise RuntimeError(f"{spec['key']} acquisition failed after 3 attempts: {type(last).__name__}: {last}")
 
 def same_physical(a,b):
     return a["farmer"]==b["farmer"] and a["hands"]==b["hands"]
