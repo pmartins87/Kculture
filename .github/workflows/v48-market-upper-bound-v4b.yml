@@ -1,5 +1,11 @@
 name: v48-market-upper-bound-v4b
 'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v48-market-upper-bound-v4b.yml'
+      - 'tools/v48_market_upper_bound_v4b.py'
   workflow_dispatch:
 
 permissions:
