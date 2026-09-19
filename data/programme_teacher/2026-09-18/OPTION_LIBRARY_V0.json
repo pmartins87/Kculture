@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "expand causal option coverage across unrelated opponent families; test O-RW1+O-TW1 composition; resume selector/value learning only after diverse-family W/L support exists",
+  "next_stage": "fresh V47-vs-V48 divergence census; then target hard BASE non-win strata with bounded multi-turn or physical/macro option search according to the observed divergence surface",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -86,5 +86,34 @@
     "outside_v47_rows": 3600,
     "interpretation": "MECHANICS_PASS_OPTION_COVERAGE_INSUFFICIENT_FOR_PRODUCTION_MULTI_FAMILY_SELECTOR",
     "result_doc": "docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md"
+  },
+  "composition_gate_2026_09_19": {
+    "binding_source": "seven successful shards from workflow 35426256016",
+    "serial_run": 35424958961,
+    "serial_status": "CANCELLED_NON_BINDING",
+    "parallel_run": 35426256016,
+    "shard_contexts": 56,
+    "mechanical_shards_pass": "7/7",
+    "aggregate_harness_status": "FAILED_MISSING_KAGGLE_ENV_DEPENDENCY_NON_STRATEGIC",
+    "base_score_rate": 0.7857142857142857,
+    "rw1_score_rate": 0.8392857142857143,
+    "tw1_score_rate": 0.8392857142857143,
+    "both_score_rate": 0.8392857142857143,
+    "both_vs_base_score_delta": 0.0535714285714286,
+    "both_vs_best_single_score_delta": 0,
+    "nonnegative_score_blocks": 7,
+    "score_regressing_blocks": 0,
+    "decision": "OPTION_LIBRARY_COMBO_ADVANCE",
+    "interpretation": "BOTH is W/L-safe on this gate and retains the mirror gain, but adds no W/L over the best single option; use as offline host, not as evidence for immediate hosted submission.",
+    "result_doc": "docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_RESULT_2026-09-19.md"
+  },
+  "current_offline_host": {
+    "base": "exact_public_v47",
+    "active_options": [
+      "O-RW1",
+      "O-TW1"
+    ],
+    "composition_mode": "BOTH_AVAILABLE_ONE_SHOT_EACH",
+    "status": "OFFLINE_HOST_ADVANCE_NO_HOSTED_SUBMISSION"
   }
 }
