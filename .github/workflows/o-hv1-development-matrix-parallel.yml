@@ -1,0 +1,74 @@
+name: o-hv1-development-matrix-parallel
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-hv1-development-matrix-parallel.yml'
+      - 'tools/o_hv1_dev_single_variant_shard.py'
+      - 'tools/aggregate_o_hv1_dev_parallel.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,v48,ready_stock]
+        variant: [D1,D2,D3,D4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/o_hv1_dev_single_variant_shard.py
+      - name: Run O-HV1 config-opponent shard
+        run: |
+          mkdir -p artifacts/hv1-single
+          python tools/o_hv1_dev_single_variant_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --variant ${{ matrix.variant }} \
+            --out artifacts/hv1-single/HV1_${{ matrix.opponent }}_${{ matrix.variant }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: hv1-single-${{ matrix.opponent }}-${{ matrix.variant }}
+          path: artifacts/hv1-single/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: hv1-single-*
+          path: artifacts/hv1-single-shards
+          merge-multiple: false
+      - name: Aggregate frozen O-HV1 development matrix
+        run: |
+          mkdir -p artifacts/hv1-parallel
+          python tools/aggregate_o_hv1_dev_parallel.py \
+            --input-dir artifacts/hv1-single-shards \
+            --out artifacts/hv1-parallel/O_HV1_DEVELOPMENT_PARALLEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-hv1-development-matrix-parallel
+          path: artifacts/hv1-parallel/*.json
+          retention-days: 30
+          if-no-files-found: warn
