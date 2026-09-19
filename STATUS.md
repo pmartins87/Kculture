@@ -257,84 +257,109 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### O-LQ2 canonical SELL queue — FRESH CAUSAL PASS
+### O-LQ2 / ALL3 — CURRENT BINDING STATE
 
-Workflow **`35456018489`** completed SUCCESS.
+#### O-LQ2 fresh causal PASS
 
-Decision: **`O_LQ2_V48_CAUSAL_PASS`**.
+Workflow **`35456018489`**:
+**`O_LQ2_V48_CAUSAL_PASS`**.
 
 Fresh seeds `74401..74408`, both seats:
-- 16/16 contexts;
-- BASE score rate **0.0**;
-- treatment score rate **1.0**;
+- 16/16 BASE losses -> treatment wins;
+- score rate **0.0 -> 1.0**;
 - mean score delta **+1.0**;
 - mean margin delta **+567**;
-- positive-score contexts **16/16**;
-- negative-score contexts **0/16**;
-- loss->win **16/16**.
-
-Result:
-`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`.
-
-### O-LQ2 broad fresh regression — BINDING RESULT
-
-Workflow **`35456201059`** completed SUCCESS.
-
-Decision: **`O_LQ2_BROAD_SAFE_PASS`**.
-
-56 fresh paired contexts across seven opponent families:
-- overall mean score delta **+0.1607143**;
-- overall mean margin delta **+212.82**;
-- positive-score contexts **12**;
 - negative-score contexts **0**.
 
-By opponent:
-- V48: **+0.75** mean score delta;
-- V47 mirror: **+0.375**;
-- Ready Stock: **0.0**;
-- router_2715: **0.0**;
-- conditional_memory: **0.0**;
-- tactical_memory: **0.0**;
-- best_market: **0.0**.
+#### O-LQ2 broad SAFE PASS
 
-No W/L regressions in any block.
+Workflow **`35456201059`**:
+**`O_LQ2_BROAD_SAFE_PASS`**.
 
-Result:
-`docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`.
+56 fresh contexts / seven families:
+- overall mean score delta **+0.1607143**;
+- mean margin delta **+212.82**;
+- negative-score contexts **0**;
+- V48 delta **+0.75**;
+- V47 mirror **+0.375**;
+- other five families W/L-neutral.
 
-### O-LQ2 + O-RW1 + O-TW1 triple composition — ACTIVE
+#### ALL3 composition PASS
 
-Frozen protocol:
-`docs/strategy/O_LQ2_TRIPLE_COMPOSITION_PROTOCOL_2026-09-19.md`.
+Workflow **`35456535323`**:
+**`TRIPLE_COMBO_SAFE_ADVANCE`**.
 
-Workflow **`35456535323`**.
+ALL3 = exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2.
 
-Fresh seeds:
-`74601..74604`, both seats, seven-family league.
+Fresh seven-family score rates:
+- BASE **0.7857143**;
+- old RW1+TW1 **0.8392857**;
+- LQ2 **0.9464286**;
+- ALL3 **0.9464286**.
 
-Variants:
-- BASE;
-- OLD = O-RW1 + O-TW1;
-- LQ2;
-- ALL3 = O-RW1 + O-TW1 + O-LQ2.
+ALL3 negative-score contexts vs BASE: **0**.
+ALL3 preserves LQ2 W/L and improves aggregate terminal margin.
 
-ALL3 operator order:
-1. exact V47 action;
-2. frozen TW1 if eligible;
-3. else frozen RW1 if eligible;
-4. O-LQ2 canonicalization from step 336 onward.
+#### ALL3 hosted package parity PASS
 
-Goal:
-determine whether the three validated options can form one safe deterministic host before
-runtime/package parity.
+Workflow **`35457146455`**:
+**`ALL3_HOSTED_PACKAGE_PARITY_PASS`**.
+
+Frozen candidate:
+- `KCULTURE_V47_ALL3_V1.tar.gz`;
+- tar SHA-256 **`204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`**;
+- candidate main SHA-256 `92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f`;
+- hosted entrypoint **`_kc_all3_entrypoint`**;
+- 12/12 exact action parity;
+- 12/12 exact reward parity;
+- zero failures.
+
+#### Hosted-readiness audit PASS
+
+Current mature pair before replacement:
+- CONTROL `56336025`: **2344.6**;
+- O-RW1 `56336027`: **2383.9**.
+
+Two successive authenticated checkpoints were unchanged.
+Both arms had already exceeded 100 public episodes.
+
+Decision:
+**`ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL`**.
+
+#### ALL3 hosted submission REGISTERED / PENDING
+
+Submission workflow **`35459415491`** completed SUCCESS.
+
+ALL3:
+- submission ID **`56367770`**;
+- description `PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4`;
+- registered UTC `2026-09-19 17:53:18.930000`;
+- initial/current observed status **PENDING**;
+- preflight daily usage **0 -> 1 / 5**.
+
+O-RW1 `56336027` remains COMPLETE at **2383.9**.
+
+Intended active pair after ALL3 activation:
+1. O-RW1 `56336027`;
+2. ALL3 `56367770`.
+
+Do not submit any nearby ALL3 variant.
+
+Result docs:
+- `docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_TRIPLE_COMPOSITION_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_PACKAGE_PARITY_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_READINESS_AUDIT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_SUBMISSION_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Resolve workflow `35456535323`.
-2. SAFE_ADVANCE -> freeze integrated host and run runtime/package parity.
-3. SAFE_NO_INCREMENT -> retain safest best constituent host; do not force composition.
-4. ROUTER_REQUIRED -> admit O-LQ2 as option but use legal-state router rather than global composition.
-5. No Kaggle submission yet.
+1. Confirm ALL3 `56367770` becomes COMPLETE without runtime error.
+2. Capture initial rating/exposure only as a mechanics/readiness checkpoint.
+3. Preserve O-RW1 + ALL3 after activation.
+4. Do not replace/reroll ALL3 on early rating noise.
+5. First meaningful hosted evaluation requires a substantial exposure checkpoint; retain offline evidence as the causal basis.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
