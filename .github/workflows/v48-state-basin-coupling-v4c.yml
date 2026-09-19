@@ -1,0 +1,35 @@
+name: v48-state-basin-coupling-v4c
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/v48_state_basin_coupling_v4c.py
+      - name: Run V48 market-physical coupling diagnostic
+        run: |
+          mkdir -p artifacts/v48-state-basin-v4c
+          python tools/v48_state_basin_coupling_v4c.py \
+            --out artifacts/v48-state-basin-v4c/V48_STATE_BASIN_V4C.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v48-state-basin-v4c
+          path: artifacts/v48-state-basin-v4c/*.json
+          retention-days: 30
+          if-no-files-found: warn
