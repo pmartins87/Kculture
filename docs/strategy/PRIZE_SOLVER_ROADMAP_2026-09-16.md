@@ -257,86 +257,109 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4E semantic-category decomposition — BINDING RESULT
+### O-LQ2 / ALL3 — CURRENT BINDING STATE
 
-Workflow **`35450703737`** completed SUCCESS.
-
-Decision: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
-
-FULL exact V48 market inside W2+:
-- reproduced contexts: **12/12**;
-- score rate: **0.5**;
-- mean score delta: **+0.5**;
-- mean margin delta: **+585.67**.
-
-ONLY_SANITATION = CLEAR + QTY_DOWN:
-- reproduced: **2/12**;
-- score rate: 0.1667;
-- mean margin delta: +18.67.
-
-ONLY_STRUCTURAL = REPLACE + QTY_UP + OTHER:
-- reproduced: **10/12**;
-- score rate: **0.5**;
-- mean margin delta: **+587.17**.
-
-FULL_MINUS_SANITATION:
-- reproduced: **10/12**;
-- score rate: **0.5**.
-
-Necessity ablations:
-- FULL_MINUS_REPLACE: **0/12**;
-- FULL_MINUS_QTY_UP: **2/12**;
-- FULL_MINUS_STRUCTURAL: **2/12**.
-
-Necessary categories:
-- **REPLACE**;
-- **QTY_UP**;
-- their structural interaction.
-
-Mechanistic interpretation:
-- QTY_UP is primarily merging duplicate SELLs of the same product;
-- REPLACE is primarily compaction/movement of later effective SELLs after canonicalization;
-- examples include `MILK 6 + MILK 1 -> MILK 7` and `EGG 6 + EGG 4 -> EGG 10`.
-
-Result:
-`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md`.
-
-### O-LQ2 Late Canonical SELL Queue — ACTIVE
-
-Frozen protocol:
-`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
-
-First-party rule from step 336:
-- exact V47 farmer/hands;
-- split market into consecutive SELL runs;
-- aggregate all duplicate SELL demand per product;
-- preserve first-product occurrence order;
-- cap aggregate demand to projected available own inventory;
-- emit at most one SELL per product;
-- drop zero-effective products;
-- compact surviving SELLs left inside the run;
-- preserve non-SELL orders exactly;
-- no V48 runtime input.
-
-Fresh seeds:
-`74401..74408`, both seats.
+#### O-LQ2 fresh causal PASS
 
 Workflow **`35456018489`**:
-`o-lq2-v48-causal-gate`.
+**`O_LQ2_V48_CAUSAL_PASS`**.
 
-PASS requires:
-- mean score delta >= +0.125;
-- >=4 positive-score contexts;
-- 0 negative-score contexts;
-- positive mean margin delta.
+Fresh seeds `74401..74408`, both seats:
+- 16/16 BASE losses -> treatment wins;
+- score rate **0.0 -> 1.0**;
+- mean score delta **+1.0**;
+- mean margin delta **+567**;
+- negative-score contexts **0**.
+
+#### O-LQ2 broad SAFE PASS
+
+Workflow **`35456201059`**:
+**`O_LQ2_BROAD_SAFE_PASS`**.
+
+56 fresh contexts / seven families:
+- overall mean score delta **+0.1607143**;
+- mean margin delta **+212.82**;
+- negative-score contexts **0**;
+- V48 delta **+0.75**;
+- V47 mirror **+0.375**;
+- other five families W/L-neutral.
+
+#### ALL3 composition PASS
+
+Workflow **`35456535323`**:
+**`TRIPLE_COMBO_SAFE_ADVANCE`**.
+
+ALL3 = exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2.
+
+Fresh seven-family score rates:
+- BASE **0.7857143**;
+- old RW1+TW1 **0.8392857**;
+- LQ2 **0.9464286**;
+- ALL3 **0.9464286**.
+
+ALL3 negative-score contexts vs BASE: **0**.
+ALL3 preserves LQ2 W/L and improves aggregate terminal margin.
+
+#### ALL3 hosted package parity PASS
+
+Workflow **`35457146455`**:
+**`ALL3_HOSTED_PACKAGE_PARITY_PASS`**.
+
+Frozen candidate:
+- `KCULTURE_V47_ALL3_V1.tar.gz`;
+- tar SHA-256 **`204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`**;
+- candidate main SHA-256 `92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f`;
+- hosted entrypoint **`_kc_all3_entrypoint`**;
+- 12/12 exact action parity;
+- 12/12 exact reward parity;
+- zero failures.
+
+#### Hosted-readiness audit PASS
+
+Current mature pair before replacement:
+- CONTROL `56336025`: **2344.6**;
+- O-RW1 `56336027`: **2383.9**.
+
+Two successive authenticated checkpoints were unchanged.
+Both arms had already exceeded 100 public episodes.
+
+Decision:
+**`ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL`**.
+
+#### ALL3 hosted submission REGISTERED / PENDING
+
+Submission workflow **`35459415491`** completed SUCCESS.
+
+ALL3:
+- submission ID **`56367770`**;
+- description `PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4`;
+- registered UTC `2026-09-19 17:53:18.930000`;
+- initial/current observed status **PENDING**;
+- preflight daily usage **0 -> 1 / 5**.
+
+O-RW1 `56336027` remains COMPLETE at **2383.9**.
+
+Intended active pair after ALL3 activation:
+1. O-RW1 `56336027`;
+2. ALL3 `56367770`.
+
+Do not submit any nearby ALL3 variant.
+
+Result docs:
+- `docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_TRIPLE_COMPOSITION_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_PACKAGE_PARITY_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_READINESS_AUDIT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_SUBMISSION_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Resolve workflow `35456018489`.
-2. O-LQ2 PASS -> broad fresh multi-family regression.
-3. O-LQ2 WEAK -> confirm only the structural mechanism, not generic threshold search.
-4. O-LQ2 FAIL -> inspect structural rule mismatch; do not return to sanitation.
-5. No Kaggle submission yet.
+1. Confirm ALL3 `56367770` becomes COMPLETE without runtime error.
+2. Capture initial rating/exposure only as a mechanics/readiness checkpoint.
+3. Preserve O-RW1 + ALL3 after activation.
+4. Do not replace/reroll ALL3 on early rating noise.
+5. First meaningful hosted evaluation requires a substantial exposure checkpoint; retain offline evidence as the causal basis.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
