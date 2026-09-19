@@ -257,6 +257,46 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
+### O-CQ2 projected queue sanitation — DEVELOPMENT RUN ACTIVE
+
+Protocol frozen before result:
+`docs/strategy/CQ2_PROJECTED_QUEUE_DEV_PROTOCOL_2026-09-19.md`.
+
+Binding development workflow: **`35440530160`**.
+
+Frozen design:
+- development seeds `73301..73304`, both seats;
+- expected 5,752 agent decisions;
+- four queue rewrite languages;
+- twelve predeclared activation thresholds;
+- projected own shed includes current-turn V47 DROP / shed-PLACE / PICKUP before market;
+- earlier BUY_PRODUCT / BUY_ANIMAL slots are projected before later SELLs;
+- no opponent identity/private state, seed, rating, EpisodeId or future state.
+
+Two earlier CQ2 workflow attempts are **non-binding**:
+- `35440356236`: original harness had incorrect expected call count (720 instead of 719 decisions/episode);
+- `35440396122`: corrected count but uncached repeated physical projection; superseded for execution efficiency, with identical scientific grid.
+
+Run `35440530160` caches the deterministic physical projection once per state; rules, seeds,
+thresholds and ranking metric are unchanged.
+
+A separate frozen validation harness already exists:
+- `tools/cq2_projected_queue_validate.py`;
+- `.github/workflows/cq2-projected-queue-validation.yml`;
+- untouched validation seeds `73401..73404`;
+- validation cannot run until one candidate config + implementation SHA-256 is frozen.
+
+### Binding next steps
+
+1. Read run `35440530160`.
+2. If development is STRONG/PROMISING, freeze exactly its best mode/min_step + implementation SHA.
+3. Run untouched CQ2 validation; do not retune on validation seeds.
+4. Validation PASS -> open causal V48 W/L gate.
+5. Validation FAIL -> activate prepared V4A bounded multi-turn V48 market oracle.
+6. No causal O-CQ1 run; CQ1 is permanently closed at parity.
+7. Keep O-RW1 + O-TW1 as current offline host.
+8. No new Kaggle submission; preserve active hosted slots.
+
 ## Historical record (superseded where inconsistent with the current handoff)
 
 Updated: 2026-09-15
