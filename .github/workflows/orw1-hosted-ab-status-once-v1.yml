@@ -1,4 +1,4 @@
-# snapshot refresh 2026-09-19 ALL3 readiness
+# snapshot refresh 2026-09-19 ALL3 readiness checkpoint 2
 name: orw1-hosted-ab-r2-status-once-v1
 'on':
   push:
