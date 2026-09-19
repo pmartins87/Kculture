@@ -531,7 +531,10 @@
       ],
       "proposal_scope": "single localized farmer or one-hand physical substitution for one turn; exact ALL3 market preserved; ALL3 resumes immediately",
       "runtime_identity_features": false,
-      "protocol": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md"
+      "protocol": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md",
+      "workflow_original": 35469830232,
+      "workflow_parallel": 35469942461,
+      "binding_rule": "first mechanically valid aggregate is binding; if both valid they must agree"
     }
   },
   "current_hosted_pair": {
