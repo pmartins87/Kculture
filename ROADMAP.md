@@ -257,95 +257,109 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4E semantic-category decomposition — BINDING RESULT
+### O-LQ2 / ALL3 — CURRENT BINDING STATE
 
-Workflow **`35450703737`**: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
+#### O-LQ2 fresh causal PASS
 
-Binding causal structure:
-- FULL V48 W2+ reproduces 12/12 loss->tie;
-- ONLY_SANITATION reproduces 2/12;
-- ONLY_STRUCTURAL reproduces 10/12;
-- FULL_MINUS_REPLACE reproduces 0/12;
-- FULL_MINUS_QTY_UP reproduces 2/12.
+Workflow **`35456018489`**:
+**`O_LQ2_V48_CAUSAL_PASS`**.
 
-Conclusion: the effective mechanism is structural SELL canonicalization (duplicate aggregation +
-compaction), not visible clear/clamp sanitation.
-
-### O-LQ2 Late Canonical SELL Queue — CAUSAL + BROAD PASS
-
-First-party rule:
-- exact V47 farmer/hands;
-- from step 336, aggregate duplicate product demand inside each consecutive SELL run;
-- cap aggregate quantity to projected own available inventory;
-- emit at most one SELL/product;
-- remove zero-effective products and compact survivors left;
-- preserve non-SELL orders.
-
-Fresh causal workflow **`35456018489`**:
-- decision **`O_LQ2_V48_CAUSAL_PASS`**;
-- 16/16 fresh V48 losses -> **wins**;
-- score rate 0.0 -> **1.0**;
+Fresh seeds `74401..74408`, both seats:
+- 16/16 BASE losses -> treatment wins;
+- score rate **0.0 -> 1.0**;
 - mean score delta **+1.0**;
 - mean margin delta **+567**;
-- 0 negative contexts.
+- negative-score contexts **0**.
 
-Broad workflow **`35456201059`**:
-- decision **`O_LQ2_BROAD_SAFE_PASS`**;
-- 56 fresh contexts / 7 families;
-- overall score delta **+0.1607143**;
+#### O-LQ2 broad SAFE PASS
+
+Workflow **`35456201059`**:
+**`O_LQ2_BROAD_SAFE_PASS`**.
+
+56 fresh contexts / seven families:
+- overall mean score delta **+0.1607143**;
+- mean margin delta **+212.82**;
 - negative-score contexts **0**;
-- V48 +0.75;
-- V47 mirror +0.375;
+- V48 delta **+0.75**;
+- V47 mirror **+0.375**;
 - other five families W/L-neutral.
 
-### ALL3 deterministic host — COMPOSITION PASS
+#### ALL3 composition PASS
 
 Workflow **`35456535323`**:
-decision **`TRIPLE_COMBO_SAFE_ADVANCE`**.
+**`TRIPLE_COMBO_SAFE_ADVANCE`**.
 
-Host:
-**exact V47 + O-RW1 + O-TW1 + O-LQ2**.
+ALL3 = exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2.
 
-56 fresh contexts:
-- BASE score rate 0.7857143;
-- old RW1+TW1 0.8392857;
-- LQ2 0.9464286;
-- ALL3 **0.9464286**;
-- ALL3 vs BASE +0.1607143;
-- ALL3 vs LQ2 0.0;
-- ALL3 vs old +0.1071429;
-- ALL3 negative vs BASE **0**.
+Fresh seven-family score rates:
+- BASE **0.7857143**;
+- old RW1+TW1 **0.8392857**;
+- LQ2 **0.9464286**;
+- ALL3 **0.9464286**.
 
-ALL3 preserves LQ2 W/L and adds terminal-margin value.
+ALL3 negative-score contexts vs BASE: **0**.
+ALL3 preserves LQ2 W/L and improves aggregate terminal margin.
 
-Integrated reference implementation:
-`tools/first_party_option_host_v1.py`.
+#### ALL3 hosted package parity PASS
 
-### Hosted-faithful package parity — ACTIVE
+Workflow **`35457146455`**:
+**`ALL3_HOSTED_PACKAGE_PARITY_PASS`**.
 
-Workflow **`35457146455`**.
+Frozen candidate:
+- `KCULTURE_V47_ALL3_V1.tar.gz`;
+- tar SHA-256 **`204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`**;
+- candidate main SHA-256 `92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f`;
+- hosted entrypoint **`_kc_all3_entrypoint`**;
+- 12/12 exact action parity;
+- 12/12 exact reward parity;
+- zero failures.
 
-Candidate name:
-`KCULTURE_V47_ALL3_V1`.
+#### Hosted-readiness audit PASS
 
-Mandatory package gate:
-- exact public V47 output package SHA-pinned;
-- official Kaggle last-callable loader;
-- unique final entrypoint `_kc_all3_entrypoint`;
-- fresh seeds `74701,74702`;
-- opponents V47 mirror, V48, Tactical Memory;
-- both seats;
-- exact action-for-action and reward-for-reward parity against the in-process ALL3 reference.
+Current mature pair before replacement:
+- CONTROL `56336025`: **2344.6**;
+- O-RW1 `56336027`: **2383.9**.
 
-No hosted submission is authorized until this gate passes and a later hosted-use decision is frozen.
+Two successive authenticated checkpoints were unchanged.
+Both arms had already exceeded 100 public episodes.
+
+Decision:
+**`ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL`**.
+
+#### ALL3 hosted submission REGISTERED / PENDING
+
+Submission workflow **`35459415491`** completed SUCCESS.
+
+ALL3:
+- submission ID **`56367770`**;
+- description `PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4`;
+- registered UTC `2026-09-19 17:53:18.930000`;
+- initial/current observed status **PENDING**;
+- preflight daily usage **0 -> 1 / 5**.
+
+O-RW1 `56336027` remains COMPLETE at **2383.9**.
+
+Intended active pair after ALL3 activation:
+1. O-RW1 `56336027`;
+2. ALL3 `56367770`.
+
+Do not submit any nearby ALL3 variant.
+
+Result docs:
+- `docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`
+- `docs/strategy/O_LQ2_TRIPLE_COMPOSITION_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_PACKAGE_PARITY_RESULT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_READINESS_AUDIT_2026-09-19.md`
+- `docs/strategy/ALL3_HOSTED_SUBMISSION_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Resolve package workflow `35457146455`.
-2. Package PASS -> freeze ALL3 package receipt and current option-library host.
-3. Run final integrated maturity/hosted-readiness audit before consuming any live Kaggle slot.
-4. Preserve current hosted CONTROL/O-RW1 slots until that audit explicitly authorizes replacement.
-5. No Kaggle submission yet.
+1. Confirm ALL3 `56367770` becomes COMPLETE without runtime error.
+2. Capture initial rating/exposure only as a mechanics/readiness checkpoint.
+3. Preserve O-RW1 + ALL3 after activation.
+4. Do not replace/reroll ALL3 on early rating noise.
+5. First meaningful hosted evaluation requires a substantial exposure checkpoint; retain offline evidence as the causal basis.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
