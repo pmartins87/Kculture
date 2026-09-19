@@ -140,7 +140,7 @@ def train_dev_test(rows: list[dict], feature_names: list[str]) -> dict:
     best = sorted(
         candidates,
         key=lambda x: (
-            -(x["realized_selector_delta"] or -1e9),
+            -float(x["realized_selector_delta"]),
             x["negative_fires"],
             x["fire_rate"] if x["fire_rate"] is not None else 1.0,
             x["lambda"],
