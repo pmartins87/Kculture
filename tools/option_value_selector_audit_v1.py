@@ -106,6 +106,70 @@ def prepare(rows: list[dict], feature_names: list[str]):
     return X, y
 
 
+
+def train_dev_test_by_seed(rows: list[dict], feature_names: list[str]) -> dict:
+    # Stronger split: every row from a seed stays in exactly one partition.
+    splits = {"train": [], "dev": [], "test": []}
+    for r in rows:
+        seed = str(r["metadata"]["seed"])
+        b = stable_bucket(seed, 10)
+        target = "train" if b < 6 else ("dev" if b < 8 else "test")
+        splits[target].append(r)
+
+    if min(len(v) for v in splits.values()) == 0:
+        raise RuntimeError(f"empty seed-grouped split: { {k:len(v) for k,v in splits.items()} }")
+
+    Xtr, ytr = prepare(splits["train"], feature_names)
+    Xdv, ydv = prepare(splits["dev"], feature_names)
+    Xte, yte = prepare(splits["test"], feature_names)
+
+    candidates = []
+    models = {}
+    for lam in LAMBDA_GRID:
+        model = fit_ridge(Xtr, ytr, lam)
+        models[lam] = model
+        pdv = predict(model, Xdv)
+        for threshold in THRESHOLD_GRID:
+            m = metrics(ydv, pdv, threshold)
+            candidates.append({
+                "lambda": lam,
+                "threshold": threshold,
+                **m,
+            })
+
+    best = sorted(
+        candidates,
+        key=lambda x: (
+            -float(x["realized_selector_delta"]),
+            x["negative_fires"],
+            x["fire_rate"] if x["fire_rate"] is not None else 1.0,
+            x["lambda"],
+            x["threshold"],
+        ),
+    )[0]
+    model = models[best["lambda"]]
+    ptr = predict(model, Xtr)
+    pdv = predict(model, Xdv)
+    pte = predict(model, Xte)
+
+    split_seeds = {
+        k: sorted({int(r["metadata"]["seed"]) for r in v})
+        for k, v in splits.items()
+    }
+    return {
+        "split_rows": {k: len(v) for k, v in splits.items()},
+        "split_seed_counts": {k: len(v) for k, v in split_seeds.items()},
+        "selection": {
+            "lambda": best["lambda"],
+            "threshold": best["threshold"],
+            "dev_realized_selector_delta": best["realized_selector_delta"],
+        },
+        "train": metrics(ytr, ptr, best["threshold"]),
+        "dev": metrics(ydv, pdv, best["threshold"]),
+        "test": metrics(yte, pte, best["threshold"]),
+    }
+
+
 def train_dev_test(rows: list[dict], feature_names: list[str]) -> dict:
     # Group split by exact legal state + option. Same state never crosses splits.
     splits = {"train": [], "dev": [], "test": []}
@@ -287,6 +351,7 @@ def main() -> None:
             ])
 
     model = train_dev_test(rows, feature_names)
+    seed_model = train_dev_test_by_seed(rows, feature_names)
     loo = leave_one_opponent_out(
         rows,
         feature_names,
@@ -307,20 +372,30 @@ def main() -> None:
         "state_option_conflicts": grouped_conflicts(rows),
         "feature_alias_conflicts": feature_alias_conflicts(rows, feature_names),
         "grouped_ridge_gate": model,
+        "seed_grouped_ridge_gate": seed_model,
         "leave_one_opponent_out": loo,
         "automatic_kaggle_submission": False,
     }
 
-    # Gate interpretation: require positive held-out selector delta and not more
-    # negative fires than always-fire negative labels in the test set.
-    test = result["grouped_ridge_gate"]["test"]
-    selector_positive = (test["realized_selector_delta"] or 0.0) > 0.0
-    captures = int(test["positive_captures"])
-    negfires = int(test["negative_fires"])
+    # Binding gate uses the stricter whole-seed holdout. The state-hash split remains
+    # a diagnostic for feature learnability, while seed isolation guards against
+    # same-environment leakage across opponents/seats.
+    state_test = result["grouped_ridge_gate"]["test"]
+    seed_test = result["seed_grouped_ridge_gate"]["test"]
+    state_ok = (
+        float(state_test["realized_selector_delta"] or 0.0) > 0.0
+        and int(state_test["positive_captures"]) >= 2
+        and int(state_test["negative_fires"]) <= max(1, int(state_test["positive_captures"]) // 2)
+    )
+    seed_ok = (
+        float(seed_test["realized_selector_delta"] or 0.0) > 0.0
+        and int(seed_test["positive_captures"]) >= 2
+        and int(seed_test["negative_fires"]) <= max(1, int(seed_test["positive_captures"]) // 2)
+    )
     result["decision"] = (
-        "OPTION_VALUE_SELECTOR_AUDIT_PASS_LEARNABLE"
-        if selector_positive and captures >= 2 and negfires <= max(1, captures // 2)
-        else "OPTION_VALUE_SELECTOR_AUDIT_INSUFFICIENT_GENERALIZATION"
+        "OPTION_VALUE_SELECTOR_AUDIT_PASS_LEARNABLE_SEED_HOLDOUT"
+        if state_ok and seed_ok
+        else "OPTION_VALUE_SELECTOR_AUDIT_INSUFFICIENT_SEED_GENERALIZATION"
     )
 
     out = Path(args.out)
@@ -333,8 +408,10 @@ def main() -> None:
         "unique_state_hashes": result["unique_state_hashes"],
         "state_option_conflicts": result["state_option_conflicts"],
         "feature_alias_conflicts": result["feature_alias_conflicts"],
-        "selection": model["selection"],
-        "test": model["test"],
+        "state_grouped_selection": model["selection"],
+        "state_grouped_test": model["test"],
+        "seed_grouped_selection": seed_model["selection"],
+        "seed_grouped_test": seed_model["test"],
         "leave_one_opponent_out": loo,
     }
     print("OPTION_VALUE_SELECTOR_AUDIT", json.dumps(compact, sort_keys=True))
