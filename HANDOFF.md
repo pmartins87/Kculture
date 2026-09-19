@@ -38,69 +38,62 @@ Population decomposition:
 - V48: W/L delta 0;
 - Tactical Memory: W/L delta 0.
 
-### Selector Audit V1 — within-population learnability PASS, production gate still OPEN
+### Selector Audit V1 — whole-seed PASS; cross-family gate still OPEN
 
-Original grouped-state audit:
-`OPTION_VALUE_SELECTOR_AUDIT_PASS_LEARNABLE`.
+Binding local rerun on 2026-09-19:
+`OPTION_VALUE_SELECTOR_AUDIT_PASS_LEARNABLE_SEED_HOLDOUT`.
 
-Held-out state-group test:
-- 681 rows;
+Whole-seed held-out test:
+- 492 rows;
+- selector realized delta **+0.1341463**;
+- always-fire delta **+0.1138211**;
+- row oracle **+0.1382114**;
+- **132/136** positive rows captured;
+- **0/24** negative rows fired;
+- nonzero sign accuracy **0.9625**;
+- selected ridge lambda **0.1**, threshold **0.1**.
+
+The state-grouped diagnostic remains strong:
 - selector realized delta **+0.1372981**;
-- always-fire **+0.1248164**;
-- row oracle **+0.1372981**;
-- captured **187/187** positive rows;
-- fired **0/17** negative rows;
-- nonzero sign accuracy **0.9607843**.
+- **187/187** positive rows captured;
+- **0/17** negative rows fired.
 
-Conflict diagnostics:
-- exact state+option: 230/584 groups have some label disagreement, but only 2 have both positive and negative labels;
-- feature aliases: 107/283 groups have some label disagreement, but only 1 has both positive and negative labels.
+This establishes learnability across fresh whole seeds in the V1 sampled population. It does **not**
+yet establish transfer to an unseen opponent family: the original leave-one-opponent-out diagnostic
+still failed to recover the V47-mirror gains when that family was fully withheld.
 
-However leave-one-opponent-out shows **no demonstrated cross-family transfer**:
-- V47 mirror held out: 0% fire, 0/806 positive captures;
-- V48 held out: high fire rate but held-out W/L labels all neutral;
-- Tactical Memory held out: high fire rate but held-out W/L labels all neutral.
+### V2 opponent league — preflight + smoke PASS
 
-Therefore the state-group PASS proves legal-feature learnability **inside the sampled mixed
-population**, not deployable opponent-family generalization.
-
-Result:
-`docs/strategy/OPTION_VALUE_SELECTOR_AUDIT_V1_RESULT_2026-09-19.md`.
-
-### Stricter selector gate — whole-seed holdout
-
-`tools/option_value_selector_audit_v1.py` has been hardened:
-- every seed belongs wholly to train, dev or test;
-- no seed can appear across partitions;
-- the binding decision now requires positive held-out value under the whole-seed split;
-- the state-hash split remains diagnostic only.
-
-The local audit must be rerun before any model is frozen.
-
-### V2 opponent league
-
-Six diverse public agents have already passed hosted-faithful package/entrypoint preflight:
+The full seven-agent diverse league is frozen and mechanically validated:
 - V47 mirror;
 - Ready Stock;
 - V48;
+- `2715.6` multi-program router;
 - Conditional Memory;
 - Tactical Memory;
 - Best Market Agent.
 
-Old V39 and V38 legacy notebooks are no longer retrievable through the current Kaggle CLI path.
-A seventh candidate, the rank-25 `2715.6` multi-program router, is currently being tested
-as the diversity replacement.
+Hosted-faithful package/entrypoint preflight: **7/7 PASS**.
+
+Binding smoke:
+- workflow **`35421692326`**;
+- conclusion **SUCCESS**;
+- pinned `kaggle-environments==1.32.7`;
+- syntax PASS;
+- one-seed seven-opponent generator execution PASS;
+- artifact upload PASS.
 
 ### Binding next steps
 
-1. Rerun the lightweight selector audit with whole-seed holdout.
-2. Complete the V2 diverse-league preflight.
-3. If seed-holdout remains positive, expand labels with the V2 league before fitting the
-   production selector.
-4. Only after V2 train/dev/test + leave-family-out PASS should a candidate selector enter
-   autonomous runtime gates.
-5. No new Kaggle submission.
-6. Preserve both active hosted slots.
+1. Run the resumable Ryzen V2 production dataset:
+   **150 fresh seeds × 7 opponents × 2 seats × 2 options**, maximum about **4,200 labels**.
+2. Do not fit/freeze a production selector merely because V1 passed.
+3. After V2 completes, rerun train/dev/test with whole-seed isolation and add leave-family-out
+   evaluation over the expanded league.
+4. Promote a selector to autonomous runtime gates only if V2 held-out value remains positive
+   and cross-family behavior is defensible; otherwise expand/revise the option/feature set rather
+   than brute-force more training.
+5. No new Kaggle submission; preserve both active hosted slots while this offline work proceeds.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
