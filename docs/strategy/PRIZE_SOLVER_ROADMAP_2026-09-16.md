@@ -203,52 +203,59 @@ huge V47 quantities (for example `SELL WHEAT 1000`) to feasible current inventor
 Result doc:
 `docs/strategy/V47_V48_DIVERGENCE_CENSUS_V1_RESULT_2026-09-19.md`.
 
-### New first-party hypothesis — O-CQ1 Queue Clamp/Clear
+### O-CQ1 Queue Clamp/Clear — CLOSED AT PARITY
 
-Because V48 and V47 have **identical physical actions across all 458 observed divergences**,
-the project does not need a physical/macro search yet.
+Workflow **`35439945148`** completed mechanically clean.
 
-O-CQ1 hypothesis:
-- preserve exact V47 farmer/hands;
-- preserve all non-SELL market slots;
-- sequentially clamp each SELL quantity to currently available own private shed inventory;
-- replace a zero-available SELL slot with `[]`;
-- preserve market slot structure;
-- legal runtime inputs only.
+Binding decision: **`CQ1_PARITY_FAIL`**.
 
-Binding first gate is an action-parity audit against exact V48, measuring both precision and recall.
+Against exact V48 action output on fresh audit seeds:
+- V48 market-divergence rows: **456**;
+- CQ1 changed rows: **1,356**;
+- exact V48 matches: **288**;
+- false-positive changes: **900**;
+- changed-but-not-exact: **168**;
+- missed V48 changes: **0**;
+- precision: **0.21239**;
+- recall: **0.63158**;
+- failures: **0**.
 
-Workflow **`35439945148`**:
-`cq1-queue-clamp-parity-audit`.
+The prepared O-CQ1 causal workflow is **NOT RUN** and remains dormant/non-binding.
 
-State: **in progress** at this handoff.
+Mechanistic diagnosis:
+- current pre-action shed alone is the wrong availability state;
+- Kaggriculture resolves farmer/hand actions before market;
+- `DROP`, shed-adjacent `PLACE`, and `PICKUP` can alter shed before SELL;
+- market slots execute in order, so an earlier `BUY_PRODUCT` can feed a later SELL;
+- V48 also selectively clears/compacts the queue rather than applying a universal clamp.
 
-Promotion sequence if parity passes:
-1. fresh causal full-episode BASE vs O-CQ1 against V48;
-2. fresh broad regression gate including V47 mirror / Ready Stock / unrelated families;
-3. autonomous runtime + package parity;
-4. option-library admission;
-5. only then selector/value integration and hosted consideration.
+### O-CQ2 — projected queue sanitation
 
-### V4A multi-turn market oracle
+New development hypothesis:
+1. project own shed through the exact current V47 farmer/hands actions using only legal own state;
+2. project earlier market inventory-changing slots before later SELLs;
+3. test alternative SELL sanitation forms:
+   - slotwise clamp;
+   - clamp + compaction;
+   - same-product shortage merge + compaction;
+4. evaluate a small pre-frozen activation-threshold grid;
+5. choose one configuration only on development seeds;
+6. freeze it and validate on separate untouched seeds before any causal W/L gate.
 
-Tool/workflow have been prepared:
-- `tools/v48_multiturn_market_oracle_v4a.py`;
-- `.github/workflows/v48-multiturn-market-oracle-v4a.yml`.
+This is still a **parity/mechanism** stage, not a performance-training stage.
 
-The workflow is **manual/dormant**.
-
-Do not run V4A while O-CQ1 remains plausible. Activate V4A only if the queue-clamp parity/causal
-line fails or captures only a small subset of the V48 advantage.
+The generic V4A multi-turn market oracle remains prepared but **dormant pending CQ2**.
+It should run only if a compact first-party sanitation mechanism cannot explain enough of V48.
 
 ### Binding next steps
 
-1. Read workflow `35439945148`.
-2. If **CQ1_PARITY_PASS**, open a fresh causal O-CQ1 V48 gate immediately.
-3. If **CQ1_PARITY_PARTIAL_REFINE**, inspect mismatch classes before changing the rule.
-4. If **CQ1_PARITY_FAIL**, activate the already-prepared V4A multi-turn oracle.
-5. Keep O-RW1 + O-TW1 as the current offline host while new option coverage is discovered.
-6. No new Kaggle submission; preserve active hosted slots.
+1. Run O-CQ2 development parity matrix.
+2. Freeze exactly one sanitation rule + activation condition from that development result.
+3. Validate the frozen rule on separate fresh seeds.
+4. If validation parity is strong, open fresh causal V48 W/L gate.
+5. If validation parity is weak, activate the already-prepared V4A bounded multi-turn oracle.
+6. Keep O-RW1 + O-TW1 as current offline host.
+7. No new Kaggle submission; preserve active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
