@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "while ALL3 hosted exposure accumulates, finish workflow 35459722091 and target next ALL3 option discovery at mature hosted loss population",
+  "next_stage": "resolve O-HV1 development; if eligible freeze exactly one config and run untouched seven-family validation; meanwhile preserve O-RW1 + ALL3 hosted pair",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -399,6 +399,32 @@
         "initial_status_workflow": 35459613689,
         "retained_pair_submission": 56336027,
         "retained_pair_rating": 2383.9
+      },
+      "first_informative": {
+        "status_workflow": 35465432144,
+        "exposure_workflow": 35465480222,
+        "forensics_workflow": 35465520238,
+        "listed_episodes": 35,
+        "resolved_external_games": 34,
+        "wins": 28,
+        "losses": 6,
+        "ties": 0,
+        "score_rate": 0.8235294117647058,
+        "unique_opponents": 33,
+        "mean_margin": 13626.970588235294,
+        "median_margin": 1676.5,
+        "rating_snapshot": 2395.4,
+        "retained_orw1_rating_snapshot": 2364.1,
+        "result_doc": "docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md"
+      },
+      "loss_coverage_proxy": {
+        "workflow": 35465395838,
+        "source_submission": 56336027,
+        "source_replays": 128,
+        "source_losses": 82,
+        "residual_hard_count": 9,
+        "note": "coverage census only; not counterfactual outcome",
+        "result_doc": "docs/strategy/ALL3_HOSTED_LOSS_COVERAGE_RESULT_2026-09-19.md"
       }
     },
     "all3_next_option": {
@@ -408,6 +434,39 @@
       "status": "ACTIVE_COLLECTING_PUBLIC_REPLAYS",
       "max_public_replays": 128,
       "identity_use": "offline forensic only; prohibited as runtime feature"
+    },
+    "o_hv1": {
+      "status": "ACTIVE_DEVELOPMENT",
+      "workflow": 35465868923,
+      "configs": {
+        "D1": {
+          "min_step": 240,
+          "min_price": 175
+        },
+        "D2": {
+          "min_step": 240,
+          "min_price": 200
+        },
+        "D3": {
+          "min_step": 336,
+          "min_price": 175
+        },
+        "D4": {
+          "min_step": 336,
+          "min_price": 200
+        }
+      },
+      "products": [
+        "MILK",
+        "WOOL",
+        "EGG",
+        "CARROT",
+        "STRAWBERRY",
+        "MELON",
+        "TOMATO"
+      ],
+      "runtime_identity_features": false,
+      "protocol": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
