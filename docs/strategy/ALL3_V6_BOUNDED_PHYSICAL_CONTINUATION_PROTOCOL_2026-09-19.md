@@ -44,6 +44,31 @@ Same transient SHA-pinned proposer panel as V5:
 
 Third-party code is offline discovery-only.
 
+## Mechanical amendment — hired-hand day boundary
+
+Added before any V6 result is allowed to bind.
+
+Official Kaggriculture mechanics remove all hired hands at the end of each day. Therefore a
+continuation on a `hand:i` locus cannot represent the same actor across a day boundary.
+
+Deterministic eligibility rule:
+- farmer continuations may cross a day boundary;
+- a `hand:i` H2/H3 candidate is eligible only if
+  `floor(target_step / turnsPerDay) == floor((target_step + horizon - 1) / turnsPerDay)`;
+- an ineligible hand/day-boundary candidate is skipped **before rollout** and is not counted as an
+  episode/mechanical failure.
+
+This amendment does not use outcomes and does not alter:
+- frozen hard contexts;
+- event ranking;
+- proposer ranking;
+- source/locus identity;
+- H2/H3 horizons;
+- strategic gate.
+
+Run `35473389439` is non-binding because the initial harness treated these lifecycle-ineligible
+candidates as continuation-length failures.
+
 ## Candidate continuation
 
 A candidate is:
