@@ -413,7 +413,10 @@ def main():
         reverse=True,
     )
     best=ranked[0] if ranked else None
-    mechanical_pass=not failures and len(episode_rows)==len(SEEDS)*2*720
+    # episodeSteps=720 records 720 states but the agent is called for 719 decisions
+    # (steps 0..718). CQ1's clean audit independently observed exactly 719 calls/episode.
+    expected_action_rows=len(SEEDS)*2*719
+    mechanical_pass=not failures and len(episode_rows)==expected_action_rows
 
     if mechanical_pass and best and best["precision"]>=0.80 and best["recall"]>=0.80:
         decision="CQ2_DEV_STRONG_FREEZE_FOR_VALIDATION"
@@ -432,6 +435,7 @@ def main():
         "min_steps":MIN_STEPS,
         "episodes":len(SEEDS)*2,
         "row_count":len(episode_rows),
+        "expected_action_rows":expected_action_rows,
         "mechanical_pass":mechanical_pass,
         "best":best,
         "top10":ranked[:10],
