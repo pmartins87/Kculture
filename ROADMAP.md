@@ -257,82 +257,88 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4B long-horizon V48 market upper bound — BINDING RESULT
+### V4D temporal localization — BINDING RESULT
 
-Workflow **`35448761774`** completed SUCCESS.
+Workflow **`35449982864`** completed SUCCESS after a robust acquisition retry.
+The prior workflow `35449731037` is non-binding because seed 74102 failed during package download
+before strategic execution.
 
-Raw runner label:
-**`V48_V4B_LONG_HORIZON_MARGIN_ONLY`**.
+Decision: **`V48_V4D_GLOBAL_INTERVAL_FOUND`**.
+
+Global smallest predeclared interval reproducing V4B loss->tie in all 12 contexts:
+
+**W2+ = steps 336–718**.
+
+W2+:
+- reproduced contexts **12/12**;
+- score rate **0.5**;
+- mean score delta **+0.5**;
+- mean margin delta **+585.67**;
+- mean substituted market turns **49.0**;
+- physical fallback turns **0**.
+
+W3+ (432–718) reproduces only **8/12**, so four contexts require intervention beginning by step 336.
+
+Per-context minimal suffix:
+- W2+: 4 contexts;
+- W3+: 6 contexts;
+- W4+: 2 contexts.
+
+Transform analysis inside minimal winning suffixes:
+- SELL slot clears: **1,332**;
+- same SELL quantity reductions: **262**;
+- unchanged slots: 706;
+- remaining changes are much smaller.
 
 Binding interpretation:
-**`V48_V4B_LOSS_TO_TIE_WL_HEADROOM`**.
-
-Reason:
-the runner's flip counter only counted transitions all the way to score 1.0, but every paired context
-improved from loss (0.0) to tie (0.5).
-
-12/12 contexts:
-- BASE score rate **0.0**;
-- upper-bound score rate **0.5**;
-- paired score delta **+0.5**;
-- nonwin->win flips **0** only because all improvements stopped at tie;
-- mean margin delta **+585.67**;
-- mean V48-market substitutions **50.17 turns**;
-- mean physical fallback turns **0**.
-
-Per-seed paired margin deltas:
-- 74101: +324;
-- 74102: +303;
-- 74103: +1,930;
-- 74104: +172;
-- 74105: +286;
-- 74106: +499.
-
-Conclusion:
-- cumulative market behavior contains genuine competitive headroom;
-- the physical V47 policy remains fully compatible: **zero physical fallbacks**;
-- do not activate V4C;
-- do not copy V48 wholesale;
-- localize the smallest temporal interval that reproduces loss->tie.
+the headroom is cumulative, tail-weighted market queue sanitation, not a physical-policy change and
+not a single local event.
 
 Result:
-`docs/strategy/V48_MARKET_UPPER_BOUND_V4B_RESULT_2026-09-19.md`.
+`docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md`.
 
-### V4D temporal localization — ACTIVE
+### New first-party causal hypothesis — O-LQ1
 
-Workflow **`35449731037`**:
-`v48-market-temporal-localization-v4d`.
+**O-LQ1 — Late Queue Sanitation** is frozen before fresh causal results.
 
-It uses the same V4B discovery seeds `74101..74106`, both seats, sharded by seed.
+Rule:
+- exact V47 farmer/hands always;
+- exact V47 market before step 336;
+- from step 336 onward, project own current shed through exact current physical actions and earlier
+  market inventory effects;
+- sequentially cap each V47 SELL slot to projected remaining own inventory;
+- zero-available SELL becomes `[]`;
+- preserve slot order and non-SELL orders;
+- no V48 code or identity at runtime.
 
-Frozen single windows:
-- W0 = 0–215
-- W1 = 216–335
-- W2 = 336–431
-- W3 = 432–527
-- W4 = 528–623
-- W5 = 624–718
+This is a new causal hypothesis opened by V4D outcome localization. CQ2 remains closed as an exact
+V48 parity model.
 
-Frozen cumulative suffixes:
-- W4+ = 528–718
-- W3+ = 432–718
-- W2+ = 336–718
-- W1+ = 216–718
+Frozen protocol:
+`docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
 
-Per context, select the smallest predeclared interval that reproduces the V4B W/L improvement,
-breaking ties by fewer actual substituted market turns and then later start.
+Fresh seeds: `74301..74308`, both seats.
+
+Active executions:
+- serial workflow **`35450394649`**;
+- parallel-equivalent workflow **`35450434666`**.
+
+The first mechanically valid completed execution is binding; if both complete validly, results must
+agree.
+
+PASS requires:
+- mean score delta >= +0.125;
+- >=4 positive-score contexts;
+- 0 negative-score contexts;
+- positive mean margin delta.
 
 ### Binding next steps
 
-1. Read workflow `35449731037`.
-2. If a global interval reproduces all 12 loss->tie gains, inspect recurring action transforms inside
-   its minimal interval and rewrite them first-party.
-3. If localization is context-specific, cluster minimal reproducer labels/steps and derive the
-   smallest legal-state trigger shared by winning contexts.
-4. Fresh causal validation is mandatory before option-library admission.
-5. Do not activate V4C: V4B had zero physical fallbacks.
-6. Keep O-RW1 + O-TW1 as current offline host.
-7. No new Kaggle submission.
+1. Resolve O-LQ1 fresh causal gate.
+2. PASS -> broad fresh regression across V47 mirror, Ready Stock, V48 and unrelated families.
+3. Only after broad safety: autonomous/runtime parity and option-library admission.
+4. Then test composition with O-RW1 + O-TW1 and resume value/router work.
+5. No Kaggle submission yet.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
