@@ -257,26 +257,15 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### ALL3 — CURRENT HOSTED STATE / FIRST INFORMATIVE CHECKPOINT
+### ALL3 — FIRST INFORMATIVE HOSTED STATE
 
 Current intended active pair:
 1. O-RW1 `56336027`;
 2. ALL3 `56367770`.
 
-ALL3 package:
-- exact hosted-faithful V47 + O-RW1 + O-TW1 + O-LQ2;
-- package SHA-256 `204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8`;
-- hosted entrypoint `_kc_all3_entrypoint`;
-- package parity **12/12 exact actions + 12/12 exact rewards**.
-
-Current hosted snapshot around 19:47 UTC:
-- ALL3: **2395.4**;
-- retained O-RW1: **2364.1**.
-
-Do not compare these ratings causally; the live populations/histories differ.
-
-Exposure:
-- 35 listed ALL3 public episodes;
+ALL3 current informative checkpoint:
+- hosted rating snapshot: **2395.4**;
+- 35 listed public episodes;
 - **34 resolved external games**;
 - **28W / 6L / 0T**;
 - raw score rate **0.8235294**;
@@ -284,79 +273,82 @@ Exposure:
 - mean margin **+13,626.97**;
 - median margin **+1,676.5**.
 
-This clears the project's first-informative threshold (~32 resolved external games).
-
-ALL3 observed losses:
-- qinsuikang: -11,923;
-- Timothy Adeyemi: -8,554;
-- cooked: -1,863;
-- Vishal Kishore: -1,499 and -288;
-- Nat Bel ML Fun: -83.
-
 Result:
 `docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md`.
 
-### Mature O-RW1 loss coverage — SECONDARY FORENSIC EVIDENCE
+Do not treat the live rating or 28-6 record as a converged final estimate.
 
-Workflow **`35465395838`** reconstructed ALL3 changes over 128 mature O-RW1 replays.
+### O-HV1 High-Value Stock Flush — CLOSED
 
-This is coverage-only, not a counterfactual outcome simulation.
+Binding original workflow: `35465868923`.
+Execution-equivalent parallel workflow: `35466170602`.
 
-Among 82 O-RW1 losses:
-- mean reconstructed ALL3 changed turns: 152.02;
-- zero losses with no ALL3 changes: 0;
-- only **9/82** satisfy the conservative early residual-hard definition
-  (already behind around step 336 with first ALL3 change at/after 336).
+Both aggregates:
+**`O_HV1_DEV_CLOSE`**.
 
-Therefore old O-RW1 losses are no longer the preferred ALL3 failure set.
-The six actual ALL3 hosted losses are now primary.
+All four frozen configs:
+- mean score delta **-0.58333**;
+- negative score contexts **14/24**;
+- positive score contexts **0/24**;
+- mean margin delta approximately **-28k to -30k**.
+
+Even D4 (step>=336, price>=200) is strongly harmful.
+
+Conclusion:
+current high public sale price alone is not a sufficient liquidation rule.
+No threshold/product rescue is permitted.
 
 Result:
-`docs/strategy/ALL3_HOSTED_LOSS_COVERAGE_RESULT_2026-09-19.md`.
+`docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md`.
 
-### O-HV1 High-Value Stock Flush — ACTIVE DEVELOPMENT
+### O-PC1 Profit-Dominant Crop Rotation — ACTIVE
 
-Hosted replay discovery identified repeated local missed-sale mechanics:
+Discovery from actual ALL3 losses:
+- Timothy Adeyemi shifts WHEAT -> CARROT while ALL3 stays on WHEAT;
+- public price at a concrete divergence: CARROT 59, WHEAT 37;
+- opponent had accumulated CARROT seeds in advance;
+- by late game the opponent carried much more CARROT crop area.
 
-- Vishal Kishore step 348: own WOOL 11, public price 239, ALL3 no SELL;
-- Vishal Kishore step 299: own MILK 6, public price 177, ALL3 no SELL;
-- qinsuikang step 553: own MILK 15, public price 254, ALL3 does not sell MILK.
+Official engine mechanics:
+- WHEAT: seed 10, max yield 6, max-yield day 4;
+- CARROT: seed 20, max yield 4, max-yield day 3;
+- physical PLANT executes **before** current-turn market BUY_SEED;
+- PLANT demand is atomically blocked when current private seeds are insufficient.
 
-O-HV1 is a legal-state market-only proposal:
-- preserve ALL3 farmer/hands;
-- consider finished goods only:
-  MILK, WOOL, EGG, CARROT, STRAWBERRY, MELON, TOMATO;
-- reserve inventory already queued for ALL3 SELLs;
-- select at most one remaining product by max `price * remaining_qty`;
-- add one SELL only when the public unit price clears the frozen threshold;
-- no opponent identity/rating/EpisodeId/hidden seed/future/private-opponent input.
+Frozen legal-state signal:
+`4 * P_carrot - 20 > 6 * P_wheat - 10`.
 
-Frozen development matrix:
-- D1: step>=240, price>=175;
-- D2: step>=240, price>=200;
-- D3: step>=336, price>=175;
-- D4: step>=336, price>=200.
+O-PC1:
+- redistributes part of ALL3's requested WHEAT seed purchases toward CARROT during the profit-dominant regime;
+- never increases total requested seed units;
+- uses only currently owned CARROT seeds for current-turn WHEAT->CARROT PLANT substitutions;
+- preserves every non-PLANT physical action;
+- requires enough season remaining for CARROT max-yield maturity;
+- no identity/rating/EpisodeId/hidden seed/future/opponent-private inputs.
 
-Development opponents:
-V47 mirror, V48, Ready Stock.
+Hosted replay coverage check (descriptive only):
+- mean frozen-regime turns in six ALL3 losses: ~101;
+- mean in 28 ALL3 wins: ~37;
+- Timothy loss: regime from ~step 377, 64 WHEAT seed-purchase turns eligible for redirection.
 
-Seeds:
-`74801..74804`, both seats.
+This does not establish causal value.
 
-Active workflow:
-**`35465868923`**.
+Fresh development:
+- seeds `74901..74904`;
+- both seats;
+- V47 mirror, V48, Ready Stock;
+- active workflow **`35469344185`**.
 
 Protocol:
-`docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_PROTOCOL_2026-09-19.md`.
+`docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_PROTOCOL_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Resolve O-HV1 workflow `35465868923`.
-2. If no frozen config satisfies the predeclared safety rule: close O-HV1 without threshold rescue.
-3. If one config is selected: freeze exactly that config.
-4. Run untouched seven-family fresh validation before option-library admission.
-5. Do not submit O-HV1 or any ALL3 variant to Kaggle from development evidence.
-6. Preserve O-RW1 + ALL3 while ALL3 hosted exposure continues.
+1. Resolve O-PC1 workflow `35469344185`.
+2. PASS or SAFE_MARGIN -> freeze O-PC1 exactly and run untouched seven-family validation.
+3. CLOSE -> do not tune price ratios/start steps; move to the next macro mechanism.
+4. Preserve O-RW1 + ALL3 hosted pair.
+5. No new Kaggle submission from development evidence.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
