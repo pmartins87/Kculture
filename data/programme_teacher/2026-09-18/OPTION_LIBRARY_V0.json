@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve O-PC1 development; PASS/SAFE_MARGIN => freeze exactly and run untouched seven-family validation; CLOSE => move to next macro mechanism without ratio tuning",
+  "next_stage": "resolve V5 physical proposal oracle; PASS/WEAK => causalize recurring localized transform first-party; NO_HEADROOM => bounded 2-3-turn physical macro oracle; preserve O-RW1 + ALL3 hosted",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -479,22 +479,59 @@
       "result_doc": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md"
     },
     "o_pc1": {
-      "workflow": 35469344185,
-      "status": "ACTIVE_DEVELOPMENT",
-      "signal": "4*CARROT_PRICE-20 > 6*WHEAT_PRICE-10",
+      "workflow_original": 35469344185,
+      "workflow_parallel": 35469497089,
+      "decision": "O_PC1_DEV_CLOSE",
+      "mechanical_pass": true,
+      "contexts": 24,
+      "fire_contexts": 6,
+      "mean_fire_count": 3.25,
+      "plant_replacements": 54,
+      "seed_units_redirected": 54,
+      "mean_score_delta": -0.25,
+      "mean_margin_delta": -217.83333333333334,
+      "negative_score_contexts": 6,
+      "positive_score_contexts": 0,
+      "by_opponent": {
+        "v47_mirror": {
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0,
+          "mean_margin_delta": -204.25
+        },
+        "v48": {
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0,
+          "mean_margin_delta": -146.25
+        },
+        "ready_stock": {
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0,
+          "mean_margin_delta": -303
+        }
+      },
+      "status": "CLOSED_NO_RETUNING",
+      "result_doc": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md"
+    },
+    "v5_physical_oracle": {
+      "workflow": 35469830232,
+      "status": "ACTIVE",
+      "base": "ALL3",
       "seeds": [
-        74901,
-        74902,
-        74903,
-        74904
+        75001,
+        75002
       ],
       "opponents": [
         "v47_mirror",
         "v48",
-        "ready_stock"
+        "router_2715",
+        "tactical_memory"
       ],
-      "protocol": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_PROTOCOL_2026-09-19.md",
-      "runtime_identity_features": false
+      "proposal_scope": "single localized farmer or one-hand physical substitution for one turn; exact ALL3 market preserved; ALL3 resumes immediately",
+      "runtime_identity_features": false,
+      "protocol": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
