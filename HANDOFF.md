@@ -322,6 +322,26 @@ The run is **queued/in progress** at this handoff.
 5. Keep O-RW1 + O-TW1 as current offline host.
 6. No new Kaggle submission; preserve active hosted slots.
 
+### Dormant contingency — V4B long-horizon market upper bound
+
+Prepared but **not running**:
+- `tools/v48_market_upper_bound_v4b.py`;
+- `.github/workflows/v48-market-upper-bound-v4b.yml`;
+- fresh seeds `74101..74106`, both seats.
+
+Purpose only if V4A returns MARGIN_ONLY / NO_HEADROOM:
+- preserve exact V47 farmer/hands every turn;
+- use V48 market as an offline shadow proposal whenever physical actions still match;
+- allow the market substitution to persist over the remaining episode;
+- measure whether long-horizon market imitation can produce W/L headroom.
+
+Interpretation:
+- V4B W/L headroom -> V4A horizon was too short; inspect cumulative market-state mechanism;
+- V4B no W/L -> close simple V48 market imitation under fixed V47 physical policy and reopen
+  mechanism discovery rather than extending horizon indefinitely.
+
+V4B is an upper-bound diagnostic only and never a deployable runtime policy.
+
 ## Historical record (superseded where inconsistent with the current handoff)
 
 > **Current update — 2026-09-15:** CR091 completed with a valid PASS. The frozen CR086 latent-supply SELL-priority mechanism is now option **O1** on exact CR053. The current binding gate is **CR092 — broad O1 transfer + counterfactual router labels**, workflow `35015135956`.
