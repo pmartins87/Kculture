@@ -16,7 +16,7 @@ Frozen candidate:
 Kaggle submission:
 - **ID: `56367770`**;
 - registered UTC: **2026-09-19 17:53:18.930000**;
-- initial status: **PENDING**.
+- initial registration status: **PENDING**.
 
 Preflight:
 - authenticated Kaggle access PASS;
@@ -49,8 +49,23 @@ The intended active pair is:
 
 No nearby variant is authorized.
 
+## Initial hosted execution checkpoint
+
+Workflow `35459613689` at 2026-09-19 17:56 UTC:
+
+- ALL3 `56367770`: **SubmissionStatus.COMPLETE**;
+- initial public rating: **600.0**;
+- O-RW1 `56336027`: **COMPLETE**, rating **2383.9**;
+- no hosted runtime error was observed.
+
+This closes the hosted mechanics gate.
+
+The 600.0 ALL3 rating is the initial field immediately after activation and is **not** a competitive
+maturity estimate.
+
 ## Next checkpoint
 
-Confirm ALL3 reaches COMPLETE without runtime error and capture its initial hosted rating/exposure.
+Preserve O-RW1 + ALL3 and allow ALL3 to accumulate public exposure.
 
-Do not interpret the first rating as a mature competitive estimate.
+First informative threshold remains a substantial external-game sample (historically 32 resolved
+external games for this project). Do not replace or reroll ALL3 based on the initial 600.0 field.
