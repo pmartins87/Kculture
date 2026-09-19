@@ -1,0 +1,48 @@
+name: all3-hosted-loss-coverage
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-hosted-loss-coverage.yml'
+      - 'tools/all3_hosted_loss_coverage.py'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - name: Download mature O-RW1 replay corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-next-hard-population-forensics
+          path: replay_artifact
+          run-id: 35459722091
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_hosted_loss_coverage.py
+      - name: Analyze ALL3 coverage of mature O-RW1 replay population
+        run: |
+          mkdir -p artifacts/all3-hosted-loss-coverage
+          python tools/all3_hosted_loss_coverage.py \
+            --replay-root replay_artifact/orw1/replays \
+            --out artifacts/all3-hosted-loss-coverage/ALL3_HOSTED_LOSS_COVERAGE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-hosted-loss-coverage
+          path: artifacts/all3-hosted-loss-coverage/*.json
+          retention-days: 30
+          if-no-files-found: warn
