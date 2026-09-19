@@ -344,32 +344,55 @@ Therefore:
 Result:
 `docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md`.
 
-### V6A hard-context census — Batch A COMPLETE / Batch B ACTIVE
+### V6A hard-context census — COMPLETE
 
-Batch A binding workflow: `35472777632`.
+Binding runs:
+- Batch A `35472777632`;
+- Batch B `35473134791`.
 
-Batch A:
+Combined:
+- 224 exact ALL3 games;
+- **220W / 4L / 0T**;
 - mechanical PASS;
-- 112 exact ALL3 games;
-- **111W / 1L / 0T**;
-- only fresh non-win: V48, seed `75103`, seat 1, margin **-86**;
-- decision: **`V6A_EXPAND_HARD_CENSUS`**.
+- decision **`V6A_HARD_CONTEXTS_READY`**.
+
+Frozen hard contexts:
+1. V47 mirror — seed `75113`, seat 1, margin -263;
+2. V48 — seed `75103`, seat 1, margin -86;
+3. V48 — seed `75110`, seat 0, margin -484;
+4. V48 — seed `75113`, seat 1, margin -794.
+
+Config:
+`configs/all3_v6_hard_contexts.json`.
 
 Result:
-`docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_BATCH_A_RESULT_2026-09-19.md`.
+`docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_AB_RESULT_2026-09-19.md`.
 
-Batch B:
-- workflow **`35473134791`**;
-- untouched seeds `75109..75116`;
-- same seven-family V2 panel;
-- both seats.
+### V6 bounded physical continuation — ACTIVE
 
-Combined gate:
-- need >=4 total non-wins before launching V6;
-- close wins remain diagnostics only and cannot substitute for non-wins.
+Workflow:
+**`35473389439`**.
 
-V6 bounded 2–3-turn continuation tooling/workflow is ready but dormant.
-It triggers only when `configs/all3_v6_hard_contexts.json` is frozen.
+Frozen method:
+- exact ALL3 base;
+- same transient public proposer panel as V5;
+- one selected physical locus only;
+- horizon H2 or H3;
+- exact ALL3 market preserved every branch turn;
+- all other physical loci exact ALL3;
+- exact ALL3 resumes after horizon.
+
+Strategic objective:
+- W/L first;
+- margin only tie-breaks equal outcome class.
+
+PASS/NARROW:
+derive a minimal first-party mechanism from winning continuation(s), then fresh causal validation.
+
+MARGIN_ONLY/NO_HEADROOM:
+close this bounded continuation family as a W/L source.
+
+No Kaggle submission is authorized by V6 discovery.
 
 ### Binding next steps
 
