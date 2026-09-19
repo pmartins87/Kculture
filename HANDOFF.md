@@ -105,70 +105,108 @@ Binding interpretation:
 Result:
 `docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md`.
 
-### Current parallel gates
+### G1 — option-library composition: BINDING RESULT
 
-#### G1 — option-library composition
+Binding evidence comes from the seven successful shards of workflow **`35426256016`**.
+The aggregate job failed only because the lightweight aggregate environment omitted
+`kaggle-environments`; the seven strategy shards themselves were all mechanically clean.
 
-Question: do frozen O-RW1 and O-TW1 stack safely on one V47 organism?
+56 matched contexts total:
+- BASE score rate: **0.7857143**;
+- O-RW1: **0.8392857**;
+- O-TW1: **0.8392857**;
+- BOTH: **0.8392857**;
+- BOTH vs BASE: **+0.0535714**;
+- score-regressing opponent blocks: **0/7**.
 
-Original serial workflow **`35424958961`** remains in progress:
-`option-library-combo-runtime-v0`.
+Mirror block:
+- BASE **0.500**;
+- RW1/TW1/BOTH **0.875**.
 
-Because the serial official-engine run is long, an **exactly equivalent execution-only
-parallelization** was launched, without changing seeds, variants, opponents or thresholds:
+Binding decision: **`OPTION_LIBRARY_COMBO_ADVANCE`**.
 
-- parallel workflow **`35426256016`**;
-- 7 shards, one per opponent;
-- each shard uses the same fresh seeds `71001..71004`, both seats, and variants
-  BASE / O-RW1 / O-TW1 / BOTH;
-- aggregator applies the same frozen decision rule.
+Interpretation:
+- retain O-RW1 + O-TW1 together as the current **offline option-library host**;
+- composition is W/L-safe on this gate;
+- BOTH adds no W/L over the best single option in this sample;
+- no hosted Kaggle submission follows from this alone.
 
-The first mechanically valid completed execution is binding; if both complete validly,
-their summaries must agree.
+Result doc:
+`docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_RESULT_2026-09-19.md`.
 
-#### G2 — diverse wrapper proposal oracle V3
+### G2 — adaptive wrapper proposal oracle V3: BINDING RESULT
 
-Question: can real market proposals from a larger strong-agent panel expose one-turn
-counterfactual W/L headroom **outside the modern V47 family**?
+Valid workflow **`35426189093`**:
+- 56 branch states;
+- 84 exact candidate rollouts;
+- zero failures;
+- exact engine `1.32.7`;
+- mechanical PASS.
 
-Two earlier attempts are **mechanically invalid / non-binding**:
-- `35425004728`: import bootstrap failure before hypothesis execution;
-- `35426094440`: package acquisition stopped on inaccessible Shop-Aware (403) before
-  any branch state was evaluated.
+Decision: **`WRAPPER_PROPOSAL_OUTSIDE_MARGIN_ONLY`**.
 
-No strategic conclusion may be drawn from those runs.
+Overall:
+- score delta **0.0**;
+- nonwin→win flips **0**;
+- 8 positive-margin states;
+- mean oracle margin delta **+393.39**.
 
-Current binding attempt:
-- workflow **`35426189093`**;
-- identical seeds/opponents/thresholds;
-- inaccessible Shop-Aware removed only as an unavailable proposal source;
-- remaining proposer panel: Ready Stock, Market Smart, V46 Microstructure, V48 Queue,
-  `2715.6`, Conditional Memory, Tactical Memory and Best Market;
-- state: in progress at this handoff.
+Outside modern41:
+- BASE and oracle score rate both **1.0**;
+- score delta **0.0**;
+- 8/32 positive-margin states;
+- mean oracle margin delta **+688.44**.
 
-#### Conditional fallback — V4 multi-turn transaction search
+All promoted proposals came from `router_2715`, at step 0:
+- V47: `BUY_PRODUCT WHEAT 7; SELL WHEAT 2`;
+- router proposal: `BUY_PRODUCT WHEAT 13; SELL WHEAT 13; BUY_PRODUCT WHEAT 13`.
 
-Protocol frozen at:
+That proposal improved margin against weaker outside blocks but was harmful against the
+hard strata V47 mirror, Ready Stock and V48. It is **not** a promotable generic option.
+
+Result doc:
+`docs/strategy/ADAPTIVE_WRAPPER_PROPOSAL_V3_RESULT_2026-09-19.md`.
+
+### V4 activation — hard-stratum discovery
+
+The conditional V4 protocol is now **activated in staged form** because valid V3 produced
+no W/L headroom.
+
+Evidence-driven amendment made before V4 execution:
+- discovery now targets hard BASE non-win strata rather than arbitrary family diversity;
+- highest priority is **V48**, where valid V3 lost by small margins and one-turn proposals
+  did not flip the result;
+- broad family testing moves to the regression/generalization stage after a causal option
+  is discovered.
+
+Protocol:
 `docs/strategy/ADAPTIVE_TRANSACTION_SEARCH_V4_PROTOCOL_2026-09-19.md`.
 
-It is **dormant**. Activate only after V3 is mechanically valid and fails to show
-meaningful W/L headroom outside modern V47-family opponents.
+### V4 Stage 0 — fresh V47×V48 divergence census
 
-V4 permits bounded market-only transaction sequences of up to 3 turns, with exact V47
-farmer/hands preservation and mandatory exact-engine counterfactual evaluation.
-Promotion requires gains in at least two unrelated non-V47 opponent families.
+Workflow **`35439729714`** is running on fresh seeds `73001..73004`, both seats.
+
+It measures:
+- BASE V47 score/margin vs V48;
+- same-farmer/hands but different-market divergences;
+- physical farmer/hands divergences;
+- first divergence steps and repeated action-pair patterns.
+
+Decision rule:
+1. market/queue divergence dominates hard contexts -> build targeted multi-turn
+   market V4 against V48;
+2. material physical divergence -> open bounded physical/macro guard search instead of
+   forcing a transaction-only search.
 
 ### Binding next steps
 
-1. Obtain a mechanically valid G1 result; prefer the parallel equivalent if it finishes first.
-2. Obtain the mechanically valid V3 result from `35426189093`.
-3. If G1 shows safe incremental composition, retain BOTH as the current option-library host.
-4. If V3 shows non-modern41 W/L headroom, causalize the recurring winning transformation(s)
-   as first-party options on fresh seeds before any model training.
-5. If valid V3 is mirror-only/no-headroom, activate the already-frozen V4 protocol.
-6. Resume whole-seed + leave-family-out selector training only after the option library has
-   meaningful W/L support across multiple unrelated opponent families.
-7. No new Kaggle submission; preserve both currently active hosted slots.
+1. Read workflow `35439729714` and freeze the divergence-surface verdict.
+2. If `V48_CENSUS_MARKET_SEARCHABLE`, implement the targeted 2–3 turn V48 transaction
+   oracle with V47 mirror and Ready Stock as regression controls.
+3. If `V48_CENSUS_PHYSICAL_SEARCH_REQUIRED`, redirect V4 to bounded physical/macro guards.
+4. Keep O-RW1 + O-TW1 as the current offline host while new options are discovered.
+5. Resume selector/value training only after new W/L-supporting option coverage exists.
+6. No new Kaggle submission; preserve active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
