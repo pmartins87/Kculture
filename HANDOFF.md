@@ -263,8 +263,8 @@ Current intended active pair:
 1. O-RW1 `56336027`;
 2. ALL3 `56367770`.
 
-ALL3 current informative checkpoint:
-- hosted rating snapshot: **2395.4**;
+ALL3 first-informative checkpoint:
+- rating snapshot **2395.4**;
 - 35 listed public episodes;
 - **34 resolved external games**;
 - **28W / 6L / 0T**;
@@ -276,79 +276,106 @@ ALL3 current informative checkpoint:
 Result:
 `docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md`.
 
-Do not treat the live rating or 28-6 record as a converged final estimate.
+Do not interpret the live rating or 28-6 record as converged final performance.
 
-### O-HV1 High-Value Stock Flush — CLOSED
+### O-HV1 — CLOSED
 
-Binding original workflow: `35465868923`.
-Execution-equivalent parallel workflow: `35466170602`.
+Original workflow `35465868923` and execution-equivalent parallel workflow `35466170602`
+agree exactly:
 
-Both aggregates:
 **`O_HV1_DEV_CLOSE`**.
 
-All four frozen configs:
+Every frozen high-value flush configuration:
 - mean score delta **-0.58333**;
-- negative score contexts **14/24**;
-- positive score contexts **0/24**;
-- mean margin delta approximately **-28k to -30k**.
+- 14/24 negative-score contexts;
+- 0 positive-score contexts;
+- mean margin approximately -28k to -30k.
 
-Even D4 (step>=336, price>=200) is strongly harmful.
-
-Conclusion:
-current high public sale price alone is not a sufficient liquidation rule.
 No threshold/product rescue is permitted.
 
 Result:
 `docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md`.
 
-### O-PC1 Profit-Dominant Crop Rotation — ACTIVE
+### O-PC1 — CLOSED
 
-Discovery from actual ALL3 losses:
-- Timothy Adeyemi shifts WHEAT -> CARROT while ALL3 stays on WHEAT;
-- public price at a concrete divergence: CARROT 59, WHEAT 37;
-- opponent had accumulated CARROT seeds in advance;
-- by late game the opponent carried much more CARROT crop area.
+Original workflow **`35469344185`** and execution-equivalent parallel workflow
+**`35469497089`** agree exactly:
 
-Official engine mechanics:
-- WHEAT: seed 10, max yield 6, max-yield day 4;
-- CARROT: seed 20, max yield 4, max-yield day 3;
-- physical PLANT executes **before** current-turn market BUY_SEED;
-- PLANT demand is atomically blocked when current private seeds are insufficient.
+**`O_PC1_DEV_CLOSE`**.
 
-Frozen legal-state signal:
+Frozen official-mechanics rule:
 `4 * P_carrot - 20 > 6 * P_wheat - 10`.
 
-O-PC1:
-- redistributes part of ALL3's requested WHEAT seed purchases toward CARROT during the profit-dominant regime;
-- never increases total requested seed units;
-- uses only currently owned CARROT seeds for current-turn WHEAT->CARROT PLANT substitutions;
-- preserves every non-PLANT physical action;
-- requires enough season remaining for CARROT max-yield maturity;
-- no identity/rating/EpisodeId/hidden seed/future/opponent-private inputs.
+Fresh 24-context development result:
+- firing contexts: 6;
+- mean score delta **-0.25**;
+- negative-score contexts **6**;
+- positive-score contexts **0**;
+- mean margin delta **-217.83**;
+- 54 WHEAT->CARROT plant substitutions;
+- 54 seed units redirected.
 
-Hosted replay coverage check (descriptive only):
-- mean frozen-regime turns in six ALL3 losses: ~101;
-- mean in 28 ALL3 wins: ~37;
-- Timothy loss: regime from ~step 377, 64 WHEAT seed-purchase turns eligible for redirection.
+Every tested opponent family regressed:
+- V47 mirror: -0.25 mean score delta;
+- V48: -0.25;
+- Ready Stock: -0.25.
 
-This does not establish causal value.
+This reproduces the CR090 lesson:
+**a valid public economic signal is not automatically a valid physical action rule**.
 
-Fresh development:
-- seeds `74901..74904`;
-- both seats;
-- V47 mirror, V48, Ready Stock;
-- active workflow **`35469344185`**.
+No price-ratio/start-step/yield rescue is permitted.
+
+Result:
+`docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md`.
+
+### ALL3 Physical Proposal Oracle V5 — ACTIVE
 
 Protocol:
-`docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_PROTOCOL_2026-09-19.md`.
+`docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md`.
+
+Workflow:
+**`35469830232`**.
+
+Method:
+- executed organism is exact ALL3;
+- transient strong public policies act only as shadow proposers;
+- each candidate branch changes exactly one physical action:
+  farmer OR one hand;
+- exact ALL3 market remains unchanged;
+- branch executes once;
+- exact ALL3 resumes immediately afterward;
+- third-party code/actions are discovery-only and can never be promoted directly.
+
+Frozen proposer panel:
+Ready Stock, Market Smart, V46 Microstructure, V48 Queue, router_2715,
+Conditional Memory, Tactical Memory, Best Market.
+
+Fresh discovery:
+- seeds `75001,75002`;
+- both seats;
+- opponents V47 mirror, V48, router_2715, Tactical Memory;
+- steps 120..647;
+- max 2 branch states/matchup;
+- >=96-step separation;
+- max 6 localized proposals/event.
+
+Strategic gate:
+- PASS: >=2 nonwin->win flips and W/L headroom in >=2 opponent families;
+- WEAK: >=1 flip or W/L headroom in one family;
+- MARGIN_ONLY: no W/L headroom but positive mean oracle margin;
+- otherwise NO_HEADROOM.
+
+PASS/WEAK does not authorize deployment:
+the recurring transform must first be rewritten first-party and fresh-causally validated.
 
 ### Binding next steps
 
-1. Resolve O-PC1 workflow `35469344185`.
-2. PASS or SAFE_MARGIN -> freeze O-PC1 exactly and run untouched seven-family validation.
-3. CLOSE -> do not tune price ratios/start steps; move to the next macro mechanism.
-4. Preserve O-RW1 + ALL3 hosted pair.
-5. No new Kaggle submission from development evidence.
+1. Resolve V5 workflow `35469830232`.
+2. Mechanical failure -> repair mechanics only, preserve protocol.
+3. PASS/WEAK -> inspect recurring winning localized transforms and causalize first-party.
+4. NO_HEADROOM -> close one-turn physical substitutions and advance only to bounded 2–3-turn physical macro oracle.
+5. Preserve O-RW1 + ALL3 hosted pair.
+6. No new Kaggle submission from V5 discovery evidence.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
