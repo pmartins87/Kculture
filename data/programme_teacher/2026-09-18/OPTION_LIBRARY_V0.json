@@ -219,6 +219,27 @@
         74106
       ],
       "purpose": "long-horizon market-only upper bound under exact V47 physical policy"
+    },
+    "v4b": {
+      "workflow": 35448761774,
+      "status": "IN_PROGRESS",
+      "tool": "tools/v48_market_upper_bound_v4b.py",
+      "seeds": [
+        74101,
+        74102,
+        74103,
+        74104,
+        74105,
+        74106
+      ],
+      "purpose": "long-horizon market-only upper bound under exact V47 physical policy"
+    },
+    "v4c": {
+      "status": "DORMANT_CONDITIONAL",
+      "tool": "tools/v48_state_basin_coupling_v4c.py",
+      "workflow": ".github/workflows/v48-state-basin-coupling-v4c.yml",
+      "activate_if": "V4B no W/L headroom AND material physical_fallback_turns",
+      "purpose": "measure whether market substitutions induce future V48-vs-V47 physical policy divergence"
     }
   }
 }
