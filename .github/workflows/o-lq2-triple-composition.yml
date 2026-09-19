@@ -1,0 +1,73 @@
+name: o-lq2-triple-composition
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-lq2-triple-composition.yml'
+      - 'tools/o_lq2_triple_combo_shard.py'
+      - 'tools/aggregate_o_lq2_triple_combo.py'
+      - 'tools/first_party_lq2_canonical_sell_queue.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,ready_stock,v48,router_2715,conditional_memory,tactical_memory,best_market]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/o_lq2_triple_combo_shard.py
+      - name: Run triple composition shard
+        run: |
+          mkdir -p artifacts/triple-shard
+          python tools/o_lq2_triple_combo_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --out artifacts/triple-shard/TRIPLE_${{ matrix.opponent }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: triple-${{ matrix.opponent }}
+          path: artifacts/triple-shard/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: triple-*
+          path: artifacts/triple-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/triple-aggregate
+          python tools/aggregate_o_lq2_triple_combo.py \
+            --input-dir artifacts/triple-shards \
+            --out artifacts/triple-aggregate/TRIPLE_COMPOSITION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq2-triple-composition
+          path: artifacts/triple-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
