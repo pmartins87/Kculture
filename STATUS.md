@@ -259,85 +259,93 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 
 ### V4D temporal localization — BINDING RESULT
 
-Workflow **`35449982864`** completed SUCCESS after a robust acquisition retry.
-The prior workflow `35449731037` is non-binding because seed 74102 failed during package download
-before strategic execution.
+Workflow **`35449982864`** completed SUCCESS.
 
 Decision: **`V48_V4D_GLOBAL_INTERVAL_FOUND`**.
 
 Global smallest predeclared interval reproducing V4B loss->tie in all 12 contexts:
-
 **W2+ = steps 336–718**.
 
-W2+:
-- reproduced contexts **12/12**;
-- score rate **0.5**;
-- mean score delta **+0.5**;
-- mean margin delta **+585.67**;
-- mean substituted market turns **49.0**;
-- physical fallback turns **0**.
+- reproduced contexts: 12/12;
+- score rate: 0.5;
+- mean score delta: +0.5;
+- mean margin delta: +585.67;
+- mean substituted market turns: 49.0;
+- physical fallback turns: 0.
 
-W3+ (432–718) reproduces only **8/12**, so four contexts require intervention beginning by step 336.
-
-Per-context minimal suffix:
-- W2+: 4 contexts;
-- W3+: 6 contexts;
-- W4+: 2 contexts.
+W3+ reproduces only 8/12.
 
 Transform analysis inside minimal winning suffixes:
 - SELL slot clears: **1,332**;
-- same SELL quantity reductions: **262**;
-- unchanged slots: 706;
-- remaining changes are much smaller.
-
-Binding interpretation:
-the headroom is cumulative, tail-weighted market queue sanitation, not a physical-policy change and
-not a single local event.
+- same-product quantity reductions: **262**;
+- SELL product replacement / movement: 88;
+- quantity increases: 28.
 
 Result:
 `docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md`.
 
-### New first-party causal hypothesis — O-LQ1
+### O-LQ1 first-party late sanitation — BINDING RESULT
 
-**O-LQ1 — Late Queue Sanitation** is frozen before fresh causal results.
+Parallel workflow **`35450434666`** completed SUCCESS first and is binding.
 
-Rule:
-- exact V47 farmer/hands always;
-- exact V47 market before step 336;
-- from step 336 onward, project own current shed through exact current physical actions and earlier
-  market inventory effects;
-- sequentially cap each V47 SELL slot to projected remaining own inventory;
-- zero-available SELL becomes `[]`;
-- preserve slot order and non-SELL orders;
-- no V48 code or identity at runtime.
+Decision: **`O_LQ1_V48_CAUSAL_FAIL`**.
 
-This is a new causal hypothesis opened by V4D outcome localization. CQ2 remains closed as an exact
-V48 parity model.
+Fresh seeds `74301..74308`, both seats:
+- 16/16 contexts;
+- BASE score rate **0.0**;
+- treatment score rate **0.0**;
+- mean score delta **0.0**;
+- mean margin delta **0.0**;
+- positive-score contexts **0**;
+- negative-score contexts **0**;
+- changed slots **3,480**;
+- cleared slots **2,770**;
+- quantity-down slots **710**.
 
-Frozen protocol:
-`docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
+Therefore thousands of projected clear/clamp changes are engine-semantic no-ops relative to exact V47.
 
-Fresh seeds: `74301..74308`, both seats.
+O-LQ1 is closed:
+- no broad regression;
+- no option-library admission;
+- no threshold retuning.
 
-Active executions:
-- serial workflow **`35450394649`**;
-- parallel-equivalent workflow **`35450434666`**.
+Result:
+`docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_RESULT_2026-09-19.md`.
 
-The first mechanically valid completed execution is binding; if both complete validly, results must
-agree.
+### V4E exact semantic-category decomposition — ACTIVE
 
-PASS requires:
-- mean score delta >= +0.125;
-- >=4 positive-score contexts;
-- 0 negative-score contexts;
-- positive mean margin delta.
+Protocol:
+`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_PROTOCOL_2026-09-19.md`.
+
+Workflow **`35450703737`**.
+
+Using V4B/V4D discovery seeds `74101..74106`, both seats, inside W2+ only.
+
+Exact current-state V47->V48 market differences are decomposed into:
+- CLEAR;
+- QTY_DOWN;
+- QTY_UP;
+- REPLACE;
+- OTHER.
+
+Frozen variants include:
+- FULL positive control;
+- ONLY_SANITATION;
+- ONLY_REPLACE;
+- ONLY_QTY_UP;
+- ONLY_STRUCTURAL;
+- FULL-minus-category necessity ablations.
+
+Goal:
+identify which exact category or interaction actually carries loss->tie headroom before writing another
+first-party approximation.
 
 ### Binding next steps
 
-1. Resolve O-LQ1 fresh causal gate.
-2. PASS -> broad fresh regression across V47 mirror, Ready Stock, V48 and unrelated families.
-3. Only after broad safety: autonomous/runtime parity and option-library admission.
-4. Then test composition with O-RW1 + O-TW1 and resume value/router work.
+1. Resolve V4E.
+2. If a category/bundle is sufficient, rewrite only that mechanism first-party and fresh-causal test.
+3. If an ablation identifies a necessary interaction, inspect only that interaction.
+4. Do not return to generic queue clamp/clear.
 5. No Kaggle submission yet.
 
 ## Historical record (superseded where inconsistent with the current handoff)
