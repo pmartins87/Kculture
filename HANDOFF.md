@@ -182,30 +182,72 @@ Evidence-driven amendment made before V4 execution:
 Protocol:
 `docs/strategy/ADAPTIVE_TRANSACTION_SEARCH_V4_PROTOCOL_2026-09-19.md`.
 
-### V4 Stage 0 — fresh V47×V48 divergence census
+### V47×V48 divergence census: BINDING RESULT
 
-Workflow **`35439729714`** is running on fresh seeds `73001..73004`, both seats.
+Workflow **`35439729714`** completed SUCCESS on fresh seeds `73001..73004`, both seats.
 
-It measures:
-- BASE V47 score/margin vs V48;
-- same-farmer/hands but different-market divergences;
-- physical farmer/hands divergences;
-- first divergence steps and repeated action-pair patterns.
+Decision: **`V48_CENSUS_MARKET_SEARCHABLE`**.
 
-Decision rule:
-1. market/queue divergence dominates hard contexts -> build targeted multi-turn
-   market V4 against V48;
-2. material physical divergence -> open bounded physical/macro guard search instead of
-   forcing a transaction-only search.
+Hard-block result:
+- V47 score rate vs V48: **0.0**;
+- **0W / 0T / 8L**;
+- mean margin **-454.0**;
+- **458** same-farmer/hands market divergences;
+- **0** farmer/hands divergences;
+- zero failures.
+
+The first market divergence appears around step 253/323, with many recurrent later
+divergences. The observed V48 pattern repeatedly clears impossible/stale SELL slots or caps
+huge V47 quantities (for example `SELL WHEAT 1000`) to feasible current inventory.
+
+Result doc:
+`docs/strategy/V47_V48_DIVERGENCE_CENSUS_V1_RESULT_2026-09-19.md`.
+
+### New first-party hypothesis — O-CQ1 Queue Clamp/Clear
+
+Because V48 and V47 have **identical physical actions across all 458 observed divergences**,
+the project does not need a physical/macro search yet.
+
+O-CQ1 hypothesis:
+- preserve exact V47 farmer/hands;
+- preserve all non-SELL market slots;
+- sequentially clamp each SELL quantity to currently available own private shed inventory;
+- replace a zero-available SELL slot with `[]`;
+- preserve market slot structure;
+- legal runtime inputs only.
+
+Binding first gate is an action-parity audit against exact V48, measuring both precision and recall.
+
+Workflow **`35439945148`**:
+`cq1-queue-clamp-parity-audit`.
+
+State: **in progress** at this handoff.
+
+Promotion sequence if parity passes:
+1. fresh causal full-episode BASE vs O-CQ1 against V48;
+2. fresh broad regression gate including V47 mirror / Ready Stock / unrelated families;
+3. autonomous runtime + package parity;
+4. option-library admission;
+5. only then selector/value integration and hosted consideration.
+
+### V4A multi-turn market oracle
+
+Tool/workflow have been prepared:
+- `tools/v48_multiturn_market_oracle_v4a.py`;
+- `.github/workflows/v48-multiturn-market-oracle-v4a.yml`.
+
+The workflow is **manual/dormant**.
+
+Do not run V4A while O-CQ1 remains plausible. Activate V4A only if the queue-clamp parity/causal
+line fails or captures only a small subset of the V48 advantage.
 
 ### Binding next steps
 
-1. Read workflow `35439729714` and freeze the divergence-surface verdict.
-2. If `V48_CENSUS_MARKET_SEARCHABLE`, implement the targeted 2–3 turn V48 transaction
-   oracle with V47 mirror and Ready Stock as regression controls.
-3. If `V48_CENSUS_PHYSICAL_SEARCH_REQUIRED`, redirect V4 to bounded physical/macro guards.
-4. Keep O-RW1 + O-TW1 as the current offline host while new options are discovered.
-5. Resume selector/value training only after new W/L-supporting option coverage exists.
+1. Read workflow `35439945148`.
+2. If **CQ1_PARITY_PASS**, open a fresh causal O-CQ1 V48 gate immediately.
+3. If **CQ1_PARITY_PARTIAL_REFINE**, inspect mismatch classes before changing the rule.
+4. If **CQ1_PARITY_FAIL**, activate the already-prepared V4A multi-turn oracle.
+5. Keep O-RW1 + O-TW1 as the current offline host while new option coverage is discovered.
 6. No new Kaggle submission; preserve active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
