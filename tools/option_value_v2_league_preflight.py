@@ -13,7 +13,7 @@ SPECS=[
   {"key":"v47_mirror","handle":"ahmedberatozer/kaggriculture-v47-reactive-market-coordination","sha":"f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842","family":"modern41_v47"},
   {"key":"ready_stock","handle":"alperen5252525/kaggriculture-ready-stock-earlier-sales","sha":"45628c719dc967f81655c19f70e579c55a5758b9fe75a5fcdad9193eebf6a017","family":"modern41_ready_stock"},
   {"key":"v48","handle":"ahmedberatozer/kaggriculture-v48-clear-the-queue","sha":"4b5402888feeb4170dce38f34bebe56788b62ca287139fce7db72df8eb89bb96","family":"modern41_queue"},
-  {"key":"v38","handle":"ahmedberatozer/kaggriculture-v38-smarter-feed-stronger-margins","sha":"a2047ebd8ca5720221e1421529655d9c67a7b2fedb74e874c7d3c55a8970ac7e","family":"legacy13"},
+  {"key":"router_2715","handle":"nusrati/2715-6","sha":"66585d1a5dbfe11c946a3c400278592f860342bc4a8f5e5f87f2a9293348984b","family":"multi_program_router"},
   {"key":"conditional_memory","handle":"ravi123a321at/177-180-fresh-top-30-v21-1-conditional-memory","sha":"d9dc24ce5429ec628ead0621a160bee90725350683d7dfcc4686fcaf511f3aab","family":"literal_conditional_memory"},
   {"key":"tactical_memory","handle":"web3cainiao/kaggriculture-v21-tactical-memory","sha":"630125b3f592fdb773f1fac6532b08e97e829ae188180ea17540b702b606a054","family":"literal_tactical_memory"},
   {"key":"best_market","handle":"reyhanksatria/best-market-agent-high-strategy","sha":"d39dba50793d9777c990347443bf0c481c78adaea86055f6f6b0600dcfcd9f2e","family":"literal_market_strategy"},
