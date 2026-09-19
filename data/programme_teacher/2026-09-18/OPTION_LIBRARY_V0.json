@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve O-CQ1 action parity; if PASS run fresh V48 causal gate; if partial inspect mismatch classes; if fail activate V4A",
+  "next_stage": "run O-CQ2 development parity matrix on fresh development seeds; freeze one rule; validate on separate seeds; only then consider causal W/L gate or V4A",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -133,17 +133,33 @@
     "candidate_option": {
       "option_id": "O-CQ1",
       "family": "market_queue_inventory_clamp",
-      "hypothesis": "preserve V47 farmer/hands and non-SELL slots; sequentially cap each SELL slot to remaining own current shed inventory; zero becomes []",
-      "status": "PARITY_GATE_RUNNING",
+      "hypothesis": "clamp each V47 SELL slot to current pre-action own shed inventory; zero becomes []",
+      "status": "PARITY_FAIL_CLOSED",
       "parity_workflow": 35439945148,
-      "causal_tool": "tools/cq1_v48_causal_gate.py",
-      "causal_workflow": ".github/workflows/cq1-v48-causal-gate.yml",
-      "runtime_uses_opponent_identity": false
+      "decision": "CQ1_PARITY_FAIL",
+      "metrics": {
+        "v48_market_divergence_rows": 456,
+        "cq1_changed_rows": 1356,
+        "exact_v48_matches": 288,
+        "false_positive_changes": 900,
+        "missed_v48_changes": 0,
+        "changed_but_not_exact": 168,
+        "precision": 0.21238938053097345,
+        "recall": 0.631578947368421
+      },
+      "causal_workflow_status": "NOT_RUN",
+      "close_reason": "pre-action shed is the wrong availability state; physical shed operations and earlier market orders resolve before later SELLs, and V48 queue sanitation is selectively activated"
     },
     "fallback_v4a": {
       "tool": "tools/v48_multiturn_market_oracle_v4a.py",
       "workflow": ".github/workflows/v48-multiturn-market-oracle-v4a.yml",
-      "status": "DORMANT_WHILE_CQ1_PLAUSIBLE"
+      "status": "DORMANT_PENDING_CQ2"
+    },
+    "next_candidate": {
+      "option_id": "O-CQ2",
+      "family": "market_queue_projected_availability",
+      "status": "DEVELOPMENT_PARITY_MATRIX",
+      "hypothesis": "project own shed through current V47 physical actions and earlier market slots, then sanitize overcommitted SELL queue; learn activation/compaction form on development seeds and freeze before fresh validation"
     }
   }
 }
