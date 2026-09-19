@@ -1,0 +1,74 @@
+name: all3-physical-proposal-oracle-v5-parallel
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-physical-proposal-oracle-v5-parallel.yml'
+      - 'tools/all3_physical_proposal_oracle_v5_seed_shard.py'
+      - 'tools/aggregate_all3_physical_proposal_oracle_v5_parallel.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,v48,router_2715,tactical_memory]
+        seed: [75001,75002]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/all3_physical_proposal_oracle_v5_seed_shard.py
+      - name: Run V5 opponent-seed shard
+        run: |
+          mkdir -p artifacts/v5-seed
+          python tools/all3_physical_proposal_oracle_v5_seed_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --seed ${{ matrix.seed }} \
+            --out artifacts/v5-seed/V5_${{ matrix.opponent }}_${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v5-seed-${{ matrix.opponent }}-${{ matrix.seed }}
+          path: artifacts/v5-seed/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v5-seed-*
+          path: artifacts/v5-seed-shards
+          merge-multiple: false
+      - name: Aggregate V5 physical oracle
+        run: |
+          mkdir -p artifacts/v5-parallel
+          python tools/aggregate_all3_physical_proposal_oracle_v5_parallel.py \
+            --input-dir artifacts/v5-seed-shards \
+            --out artifacts/v5-parallel/ALL3_PHYSICAL_PROPOSAL_V5_PARALLEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-physical-proposal-oracle-v5-parallel
+          path: artifacts/v5-parallel/*.json
+          retention-days: 30
+          if-no-files-found: warn
