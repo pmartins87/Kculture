@@ -259,83 +259,92 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 
 ### V4E semantic-category decomposition — BINDING RESULT
 
-Workflow **`35450703737`** completed SUCCESS.
+Workflow **`35450703737`**: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
 
-Decision: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
+Binding causal structure:
+- FULL V48 W2+ reproduces 12/12 loss->tie;
+- ONLY_SANITATION reproduces 2/12;
+- ONLY_STRUCTURAL reproduces 10/12;
+- FULL_MINUS_REPLACE reproduces 0/12;
+- FULL_MINUS_QTY_UP reproduces 2/12.
 
-FULL exact V48 market inside W2+:
-- reproduced contexts: **12/12**;
-- score rate: **0.5**;
-- mean score delta: **+0.5**;
-- mean margin delta: **+585.67**.
+Conclusion: the effective mechanism is structural SELL canonicalization (duplicate aggregation +
+compaction), not visible clear/clamp sanitation.
 
-ONLY_SANITATION = CLEAR + QTY_DOWN:
-- reproduced: **2/12**;
-- score rate: 0.1667;
-- mean margin delta: +18.67.
+### O-LQ2 Late Canonical SELL Queue — CAUSAL + BROAD PASS
 
-ONLY_STRUCTURAL = REPLACE + QTY_UP + OTHER:
-- reproduced: **10/12**;
-- score rate: **0.5**;
-- mean margin delta: **+587.17**.
-
-FULL_MINUS_SANITATION:
-- reproduced: **10/12**;
-- score rate: **0.5**.
-
-Necessity ablations:
-- FULL_MINUS_REPLACE: **0/12**;
-- FULL_MINUS_QTY_UP: **2/12**;
-- FULL_MINUS_STRUCTURAL: **2/12**.
-
-Necessary categories:
-- **REPLACE**;
-- **QTY_UP**;
-- their structural interaction.
-
-Mechanistic interpretation:
-- QTY_UP is primarily merging duplicate SELLs of the same product;
-- REPLACE is primarily compaction/movement of later effective SELLs after canonicalization;
-- examples include `MILK 6 + MILK 1 -> MILK 7` and `EGG 6 + EGG 4 -> EGG 10`.
-
-Result:
-`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md`.
-
-### O-LQ2 Late Canonical SELL Queue — ACTIVE
-
-Frozen protocol:
-`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
-
-First-party rule from step 336:
+First-party rule:
 - exact V47 farmer/hands;
-- split market into consecutive SELL runs;
-- aggregate all duplicate SELL demand per product;
-- preserve first-product occurrence order;
-- cap aggregate demand to projected available own inventory;
-- emit at most one SELL per product;
-- drop zero-effective products;
-- compact surviving SELLs left inside the run;
-- preserve non-SELL orders exactly;
-- no V48 runtime input.
+- from step 336, aggregate duplicate product demand inside each consecutive SELL run;
+- cap aggregate quantity to projected own available inventory;
+- emit at most one SELL/product;
+- remove zero-effective products and compact survivors left;
+- preserve non-SELL orders.
 
-Fresh seeds:
-`74401..74408`, both seats.
+Fresh causal workflow **`35456018489`**:
+- decision **`O_LQ2_V48_CAUSAL_PASS`**;
+- 16/16 fresh V48 losses -> **wins**;
+- score rate 0.0 -> **1.0**;
+- mean score delta **+1.0**;
+- mean margin delta **+567**;
+- 0 negative contexts.
 
-Workflow **`35456018489`**:
-`o-lq2-v48-causal-gate`.
+Broad workflow **`35456201059`**:
+- decision **`O_LQ2_BROAD_SAFE_PASS`**;
+- 56 fresh contexts / 7 families;
+- overall score delta **+0.1607143**;
+- negative-score contexts **0**;
+- V48 +0.75;
+- V47 mirror +0.375;
+- other five families W/L-neutral.
 
-PASS requires:
-- mean score delta >= +0.125;
-- >=4 positive-score contexts;
-- 0 negative-score contexts;
-- positive mean margin delta.
+### ALL3 deterministic host — COMPOSITION PASS
+
+Workflow **`35456535323`**:
+decision **`TRIPLE_COMBO_SAFE_ADVANCE`**.
+
+Host:
+**exact V47 + O-RW1 + O-TW1 + O-LQ2**.
+
+56 fresh contexts:
+- BASE score rate 0.7857143;
+- old RW1+TW1 0.8392857;
+- LQ2 0.9464286;
+- ALL3 **0.9464286**;
+- ALL3 vs BASE +0.1607143;
+- ALL3 vs LQ2 0.0;
+- ALL3 vs old +0.1071429;
+- ALL3 negative vs BASE **0**.
+
+ALL3 preserves LQ2 W/L and adds terminal-margin value.
+
+Integrated reference implementation:
+`tools/first_party_option_host_v1.py`.
+
+### Hosted-faithful package parity — ACTIVE
+
+Workflow **`35457146455`**.
+
+Candidate name:
+`KCULTURE_V47_ALL3_V1`.
+
+Mandatory package gate:
+- exact public V47 output package SHA-pinned;
+- official Kaggle last-callable loader;
+- unique final entrypoint `_kc_all3_entrypoint`;
+- fresh seeds `74701,74702`;
+- opponents V47 mirror, V48, Tactical Memory;
+- both seats;
+- exact action-for-action and reward-for-reward parity against the in-process ALL3 reference.
+
+No hosted submission is authorized until this gate passes and a later hosted-use decision is frozen.
 
 ### Binding next steps
 
-1. Resolve workflow `35456018489`.
-2. O-LQ2 PASS -> broad fresh multi-family regression.
-3. O-LQ2 WEAK -> confirm only the structural mechanism, not generic threshold search.
-4. O-LQ2 FAIL -> inspect structural rule mismatch; do not return to sanitation.
+1. Resolve package workflow `35457146455`.
+2. Package PASS -> freeze ALL3 package receipt and current option-library host.
+3. Run final integrated maturity/hosted-readiness audit before consuming any live Kaggle slot.
+4. Preserve current hosted CONTROL/O-RW1 slots until that audit explicitly authorizes replacement.
 5. No Kaggle submission yet.
 
 ## Historical record (superseded where inconsistent with the current handoff)
