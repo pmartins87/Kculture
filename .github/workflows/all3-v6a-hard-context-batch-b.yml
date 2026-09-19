@@ -1,0 +1,81 @@
+name: all3-v6a-hard-context-batch-b
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v6a-hard-context-batch-b.yml'
+      - 'tools/all3_v6a_batch_b_hard_context_shard.py'
+      - 'tools/aggregate_all3_v6a_batches_ab.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,ready_stock,v48,router_2715,conditional_memory,tactical_memory,best_market]
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v6a_batch_b_hard_context_shard.py
+          python -m py_compile tools/aggregate_all3_v6a_batches_ab.py
+      - name: Run Batch B census shard
+        run: |
+          mkdir -p artifacts/v6b
+          python tools/all3_v6a_batch_b_hard_context_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --out artifacts/v6b/V6B_${{ matrix.opponent }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v6b-${{ matrix.opponent }}
+          path: artifacts/v6b/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: all3-v6a-hard-context-census
+          path: artifacts/v6a-prior
+          run-id: 35472777632
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v6b-*
+          path: artifacts/v6b-shards
+          merge-multiple: false
+      - name: Aggregate A+B
+        run: |
+          mkdir -p artifacts/v6ab
+          python tools/aggregate_all3_v6a_batches_ab.py \
+            --prior artifacts/v6a-prior/ALL3_V6A_HARD_CONTEXTS.json \
+            --input-dir artifacts/v6b-shards \
+            --out artifacts/v6ab/ALL3_V6A_HARD_CONTEXTS_AB.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v6a-hard-contexts-ab
+          path: artifacts/v6ab/*.json
+          retention-days: 30
+          if-no-files-found: warn
