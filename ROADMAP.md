@@ -4,81 +4,93 @@
 
 Active branch: `research/prize-solver-v0`.
 
-### Hosted pair has crossed 100 episodes
+### Hosted pair — preserve both slots
 
-Latest authenticated count at `2026-09-19 03:03 UTC`:
-- CONTROL `56336025`: **103 listed episodes**, rating **2429.1**;
-- O-RW1 `56336027`: **105 listed episodes**, rating **2506.7**.
+Maturity snapshot around 100 episodes:
+- CONTROL `56336025`: rating **2429.1**, 103 listed / 102 resolved external, 76-24-2;
+- O-RW1 `56336027`: rating **2506.7**, 106 listed / 105 resolved external, 60-44-1.
 
-The O-RW1 treatment remains ahead of the exact V47 control but has eased from the
-~2550 peak, while the control has risen. The pair must remain active until the full
-100-episode audit completes and the rating trajectory is judged sufficiently calm.
+These are not matched opponent populations. Raw W/L is not a causal A/B comparison.
+The hosted treatment remains higher-rated; do not replace either slot while offline
+selector/value work proceeds.
 
-Do **not** submit a third agent yet.
+Audit:
+`docs/strategy/ORW1_HOSTED_R2_MATURITY_100_AUDIT_2026-09-19.md`.
 
-### O-RW1
+### Option-value Ryzen V1 — production PASS
 
-Hosted-faithful causal/runtime/package gates remain PASS.
-Active hosted treatment: `56336027`.
+User Ryzen run completed on exact engine `1.32.7`:
+- 250/250 fresh seeds;
+- 1,500 BASE matchups;
+- **3,000 counterfactual option labels**;
+- **584 unique state hashes**;
+- **0 failures**;
+- opponents: V47 mirror, V48, Tactical Memory;
+- both seats.
 
-### O-TW1
+O-RW1:
+- 1,500 rows;
+- mean score delta **+0.096**;
+- 370 positive / 82 negative / 1,048 neutral;
+- mean margin delta **-161.6493**.
 
-Causal gate PASS.
-Autonomous runtime gate `35395548699` PASS:
-- 64 pairs / 128 episodes;
-- `0.6250 -> 0.71875`;
-- score delta **+0.09375**;
-- 14 non-win -> win flips;
-- 0 win -> nonwin regressions;
-- all 4 opponent blocks nonnegative mean W/L.
+O-TW1:
+- 1,500 rows;
+- mean score delta **+0.14**;
+- 436 positive / 16 negative / 1,048 neutral;
+- mean margin delta **+35.7173**.
 
-O-TW1 is now an offline option-library member. It is not submitted.
+Population decomposition:
+- V47 mirror: mean score delta **+0.354**, 806 positive / 98 negative;
+- V48: W/L delta 0 throughout;
+- Tactical Memory: W/L delta 0 throughout.
 
-### Option-value dataset V0 — PASS
-
-Pilot workflow:
-`35401131591`.
-
-Results:
-- 24 counterfactual state-option rows;
-- 12 O-RW1 + 12 O-TW1;
-- 0 failures;
-- replay parity PASS;
-- feature contract PASS;
-- no seed/opponent/rating/hidden/future leakage into model features.
-
-Binding verdict:
-`OPTION_VALUE_DATASET_V0_PILOT_PASS`.
+Conclusion:
+the options have real large-sample headroom, but W/L signal is currently concentrated in
+V47-mirror states. Do **not** train/deploy a production selector until learnability and
+population generalization are audited.
 
 Result:
-`docs/strategy/OPTION_VALUE_DATASET_V0_PILOT_RESULT_2026-09-18.md`.
+`docs/strategy/OPTION_VALUE_RYZEN_V1_RESULT_2026-09-19.md`.
 
-### Current development work
+### Current gate — OPTION_VALUE_SELECTOR_AUDIT_V1
 
-1. Hosted maturity audit:
-   `35417548071` — collecting complete available histories around the 100-episode mark.
+Tool:
+`tools/option_value_selector_audit_v1.py`
 
-2. Ryzen production generator:
-   `tools/option_value_dataset_ryzen_v1.py`
-   - resumable;
-   - multiprocessing;
-   - one atomic shard per seed;
-   - legal V47-visible features only;
-   - exact counterfactual W/L labels;
-   - no Kaggle submission.
+One-command runner:
+`tools/run_option_value_selector_audit_v1.sh`
 
-3. Ryzen smoke:
-   `35417513885` — one seed / one opponent / one seat before authorizing the local
-   production run.
+The audit measures:
+- repeated state+option label conflicts;
+- legal-feature alias conflicts;
+- grouped train/dev/test split with state-hash isolation;
+- ridge selector realized delta versus BASE / always-fire / row-oracle;
+- leave-one-opponent-out transfer.
 
-4. Local resumable runner:
-   `tools/run_option_value_v1_ryzen.sh`.
+No opponent identity, seed, seat, rating, hidden/future state is a model feature.
 
-No Ryzen production run should start until the smoke passes.
-No Kaggle submission is authorized.
+### V2 opponent league preflight
 
-The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not create competing
-copies.
+Workflow `35420988150` is validating a more diverse seven-agent public league:
+- V47 mirror;
+- Ready Stock;
+- V48;
+- V39 legacy;
+- Conditional Memory;
+- Tactical Memory;
+- Best Market Agent.
+
+This preflight is cloud-only and does not consume Ryzen or Kaggle submission slots.
+
+### Binding rules
+
+- No new Kaggle submission yet.
+- Preserve both hosted slots.
+- No further heavy Ryzen batch until selector audit is read.
+- If V1 selector generalizes, fit a conservative selector and validate offline.
+- If V1 signal is population-bound, expand labels with the validated V2 league first.
+- FP001_STATUS/FP001_ROADMAP remain absent; do not create competing copies.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
