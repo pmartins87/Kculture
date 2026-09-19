@@ -1,3 +1,4 @@
+# snapshot refresh 2026-09-19 ALL3 readiness
 name: orw1-hosted-ab-r2-status-once-v1
 'on':
   push:
