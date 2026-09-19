@@ -1,0 +1,72 @@
+name: v4e-semantic-category-decomposition
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v4e-semantic-category-decomposition.yml'
+      - 'tools/v4e_semantic_decomposition_shard.py'
+      - 'tools/aggregate_v4e_semantic_decomposition.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [74101,74102,74103,74104,74105,74106]
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/v4e_semantic_decomposition_shard.py
+      - name: Run V4E semantic decomposition shard
+        run: |
+          mkdir -p artifacts/v4e-shard
+          python tools/v4e_semantic_decomposition_shard.py \
+            --seed ${{ matrix.seed }} \
+            --out artifacts/v4e-shard/V4E_${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4e-shard-${{ matrix.seed }}
+          path: artifacts/v4e-shard/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v4e-shard-*
+          path: artifacts/v4e-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/v4e-aggregate
+          python tools/aggregate_v4e_semantic_decomposition.py \
+            --input-dir artifacts/v4e-shards \
+            --out artifacts/v4e-aggregate/V4E_SEMANTIC_DECOMPOSITION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v4e-semantic-category-decomposition
+          path: artifacts/v4e-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
