@@ -1,4 +1,4 @@
-# checkpoint 2
+# checkpoint 3
 name: all3-hosted-status-once-v1
 'on':
   push:
