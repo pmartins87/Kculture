@@ -1,5 +1,11 @@
 name: v48-multiturn-market-oracle-v4a
 'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v48-multiturn-market-oracle-v4a.yml'
+      - 'tools/v48_multiturn_market_oracle_v4a.py'
   workflow_dispatch:
 
 permissions:
