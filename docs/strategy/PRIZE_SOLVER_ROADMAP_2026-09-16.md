@@ -1,131 +1,81 @@
 # Prize Solver Roadmap — 2026-09-16
 
-## Current solver handoff — 2026-09-18
+## Current solver handoff — 2026-09-19
 
 Active branch: `research/prize-solver-v0`.
 
-### Hosted slot preservation remains binding
+### Hosted pair has crossed 100 episodes
 
-Kaggriculture keeps only the two newest submissions active. Do not submit a third agent
-while the current pair is still maturing.
+Latest authenticated count at `2026-09-19 03:03 UTC`:
+- CONTROL `56336025`: **103 listed episodes**, rating **2429.1**;
+- O-RW1 `56336027`: **105 listed episodes**, rating **2506.7**.
 
-Current active pair:
+The O-RW1 treatment remains ahead of the exact V47 control but has eased from the
+~2550 peak, while the control has risen. The pair must remain active until the full
+100-episode audit completes and the rating trajectory is judged sufficiently calm.
 
-CONTROL:
-- submission `56336025`;
-- exact public V47;
-- latest authenticated rating snapshot: **2399.6**;
-- current listed episodes at `2026-09-18 22:16:32 UTC`: **80**.
+Do **not** submit a third agent yet.
 
-TREATMENT:
-- submission `56336027`;
-- hosted-faithful V47 + O-RW1;
-- latest authenticated rating snapshot: **2536.2**;
-- current listed episodes at `2026-09-18 22:16:32 UTC`: **83**.
+### O-RW1
 
-The pair has already crossed the first informative 32/32 external-game threshold.
-The normal maturity target remains **>=100 public episodes per arm plus a materially
-calmer rating trajectory** before any voluntary replacement.
+Hosted-faithful causal/runtime/package gates remain PASS.
+Active hosted treatment: `56336027`.
 
-Historical exact V47 submission `56333577` froze at **2387.9** after 36 listed /
-35 external games (29-5-1). It was retired too early; current policy prevents repeating
-that mistake.
+### O-TW1
 
-### O-RW1 hosted-faithful evidence
-
-Causal gate `35363453097`:
-- score delta +0.0833333;
-- 8 positive flips;
-- 0 win->nonwin regressions.
-
-Autonomous runtime gate `35367785929`:
+Causal gate PASS.
+Autonomous runtime gate `35395548699` PASS:
 - 64 pairs / 128 episodes;
 - `0.6250 -> 0.71875`;
 - score delta **+0.09375**;
 - 14 non-win -> win flips;
-- 0 win -> nonwin regressions.
+- 0 win -> nonwin regressions;
+- all 4 opponent blocks nonnegative mean W/L.
 
-Corrected package parity `35372969031`:
-- hosted entrypoint `_kc_orw1_entrypoint`;
-- 8/8 exact action parity;
-- 8/8 exact reward parity.
+O-TW1 is now an offline option-library member. It is not submitted.
 
-### O-TW1 — SECOND INDEPENDENT OPTION / RUNTIME PASS
+### Option-value dataset V0 — PASS
 
-Causal gate `35378191104`:
-- 48 branch states;
-- mean score delta **+0.125**;
-- 14 non-win -> win flips;
-- 0 win -> nonwin regressions.
-
-Autonomous runtime gate:
-**`35395548699`**, artifact `10569241095`.
-
-Fresh panel:
-- seeds `68001..68008`;
-- both seats;
-- V47 mirror, V48, Tactical Memory, Ready Stock;
-- 64 paired matchups / 128 episodes.
+Pilot workflow:
+`35401131591`.
 
 Results:
-- BASE score rate **0.6250**;
-- O-TW1 score rate **0.71875**;
-- score delta **+0.09375**;
-- 14 non-win -> win flips;
-- 0 win -> nonwin regressions;
-- 14 positive-score pairs;
-- 2 negative-score pairs;
-- 48 neutral pairs;
-- all 4 opponent blocks nonnegative mean W/L;
-- worst block delta 0.0;
-- mean margin delta +9.28125;
-- median margin delta +18.
+- 24 counterfactual state-option rows;
+- 12 O-RW1 + 12 O-TW1;
+- 0 failures;
+- replay parity PASS;
+- feature contract PASS;
+- no seed/opponent/rating/hidden/future leakage into model features.
 
 Binding verdict:
-`TOWN_WHEAT_RUNTIME_PASS`.
-
-O-TW1 is promoted into the **offline option library**, not to Kaggle.
+`OPTION_VALUE_DATASET_V0_PILOT_PASS`.
 
 Result:
-`docs/strategy/TOWN_WHEAT_ONESHOT_RUNTIME_RESULT_2026-09-18.md`.
+`docs/strategy/OPTION_VALUE_DATASET_V0_PILOT_RESULT_2026-09-18.md`.
 
-### Current development gate — unified option-value dataset V0
+### Current development work
 
-The project now has two independently proven first-party options on hosted-faithful V47:
-- O-RW1: ready-WOOL sale;
-- O-TW1: town-WHEAT pulse hold.
+1. Hosted maturity audit:
+   `35417548071` — collecting complete available histories around the 100-episode mark.
 
-Next architecture:
-```
-legal current state + eligible option
-        -> counterfactual ΔW/L label
-        -> value dataset
-        -> state-conditioned selector/value model
-        -> later bounded search
-```
+2. Ryzen production generator:
+   `tools/option_value_dataset_ryzen_v1.py`
+   - resumable;
+   - multiprocessing;
+   - one atomic shard per seed;
+   - legal V47-visible features only;
+   - exact counterfactual W/L labels;
+   - no Kaggle submission.
 
-Frozen pilot:
-`docs/strategy/OPTION_VALUE_DATASET_V0_PILOT_2026-09-18.md`.
+3. Ryzen smoke:
+   `35417513885` — one seed / one opponent / one seat before authorizing the local
+   production run.
 
-Implementation:
-`tools/option_value_dataset_v0_pilot.py`.
+4. Local resumable runner:
+   `tools/run_option_value_v1_ryzen.sh`.
 
-Active workflow:
-**`35401011776`**, head
-`3e60477caa17d42675529a8e04be5bd91ac91165`.
-
-Pilot uses fresh seeds `69001,69002`, both seats, V47/V48/Tactical Memory, and requires:
-- exact hosted V47 entrypoint;
-- discovery/base reward parity;
-- legal feature contract only;
-- no seed/opponent/rating/hidden/future metadata inside model features;
-- at least 8 labeled rows and >=2 rows/option.
-
-A PASS validates the data pipeline only. Only after PASS should a resumable Ryzen-scale
-multiprocessing label generator be built and run.
-
+No Ryzen production run should start until the smoke passes.
 No Kaggle submission is authorized.
-No Ryzen action is required yet.
 
 The FP001_STATUS/FP001_ROADMAP files are absent on this branch; do not create competing
 copies.
