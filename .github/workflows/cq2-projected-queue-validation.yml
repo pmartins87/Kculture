@@ -1,0 +1,36 @@
+name: cq2-projected-queue-validation
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/cq2_projected_queue_validate.py
+      - name: Run frozen CQ2 validation
+        run: |
+          mkdir -p artifacts/cq2-validation
+          python tools/cq2_projected_queue_validate.py \
+            --config configs/cq2_frozen_candidate.json \
+            --out artifacts/cq2-validation/CQ2_VALIDATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cq2-validation
+          path: artifacts/cq2-validation/*.json
+          retention-days: 30
+          if-no-files-found: warn
