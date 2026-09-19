@@ -1,0 +1,74 @@
+name: o-pc1-development-parallel
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-pc1-development-parallel.yml'
+      - 'tools/o_pc1_dev_seed_shard.py'
+      - 'tools/aggregate_o_pc1_dev_parallel.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,v48,ready_stock]
+        seed: [74901,74902,74903,74904]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/o_pc1_dev_seed_shard.py
+      - name: Run O-PC1 opponent-seed shard
+        run: |
+          mkdir -p artifacts/pc1-seed
+          python tools/o_pc1_dev_seed_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --seed ${{ matrix.seed }} \
+            --out artifacts/pc1-seed/PC1_${{ matrix.opponent }}_${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: pc1-seed-${{ matrix.opponent }}-${{ matrix.seed }}
+          path: artifacts/pc1-seed/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: pc1-seed-*
+          path: artifacts/pc1-seed-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/pc1-parallel
+          python tools/aggregate_o_pc1_dev_parallel.py \
+            --input-dir artifacts/pc1-seed-shards \
+            --out artifacts/pc1-parallel/O_PC1_DEVELOPMENT_PARALLEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-pc1-development-parallel
+          path: artifacts/pc1-parallel/*.json
+          retention-days: 30
+          if-no-files-found: warn
