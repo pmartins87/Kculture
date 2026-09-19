@@ -257,90 +257,59 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### O-CQ2 projected queue sanitation — BINDING RESULT
+### V4A bounded multi-turn V48 market oracle — BINDING RESULT
 
-Binding workflow **`35440530160`** completed SUCCESS.
-The prior corrected-count run `35440396122` independently produced the same ranking and metrics.
+Workflow **`35444529719`** completed SUCCESS.
 
-Decision: **`CQ2_DEV_WEAK_USE_V4A`**.
+Decision: **`V48_V4A_MARGIN_ONLY`**.
 
-Best development configuration:
-- mode `slot_projected`;
-- `min_step=336`;
-- exact V48 divergence matches **424 / 488**;
-- precision **0.5273632**;
-- recall **0.8688525**;
-- F1 **0.6563467**;
-- false-positive rewrites **332**;
-- changed-but-not-exact **48**;
-- missed V48 changes **16**;
-- whole-action accuracy **0.9311544**.
+12 fresh contexts:
+- 11 hard BASE non-wins;
+- BASE score rate **0.0833333**;
+- oracle score rate **0.0833333**;
+- score delta **0.0**;
+- nonwin→win flips **0**;
+- positive-score contexts **0**;
+- mean oracle margin delta **+0.25**;
+- zero failures.
 
-This misses the frozen PROMISING gate because precision < 0.60.
-Therefore:
-- do **not** freeze a CQ2 candidate;
-- do **not** run CQ2 validation;
-- do **not** causalize CQ2;
-- do not tune thresholds after seeing the matrix.
+Only one hard context preferred a non-BASE branch:
+seed 74003 / seat 1 / step 409 / horizon 1, improving margin only `-238 -> -235`.
+
+Conclusion:
+exact V48 market substitutions over 1-3 turns do not expose meaningful W/L headroom.
 
 Result:
-`docs/strategy/CQ2_PROJECTED_QUEUE_DEV_RESULT_2026-09-19.md`.
+`docs/strategy/V48_MULTITURN_MARKET_V4A_RESULT_2026-09-19.md`.
 
-### V4A bounded multi-turn V48 market oracle — ACTIVE
+### V4B long-horizon V48 market upper bound — ACTIVE
 
-The fallback implementation was written before the CQ2 result and is being executed unchanged.
-
-Workflow **`35444529719`**:
-`v48-multiturn-market-oracle-v4a`.
+Workflow **`35448761774`**:
+`v48-market-upper-bound-v4b`.
 
 Frozen design:
-- fresh seeds `74001..74006`, both seats;
-- exact V47 physical actions preserved;
-- exact V48 is an **offline shadow proposal source only**;
-- select first 3 replay-verified V47/V48 market divergences, separated by >=36 turns;
-- test horizons 1, 2, 3 turns;
-- exact V47 resumes after the bounded window;
-- only hard BASE non-win contexts spend branch rollout compute.
+- fresh seeds `74101..74106`, both seats;
+- exact V47 farmer/hands are always the executed physical policy;
+- exact V48 is an offline shadow market proposal source;
+- whenever current V47/V48 physical actions match and their markets differ, substitute V48 market;
+- continue this for the remaining episode;
+- if the altered trajectory causes V47/V48 physical actions to diverge, fall back to exact V47 physical+market for that turn and record a `physical_fallback_turn`.
 
-Primary PASS:
-- >=4 hard BASE non-win contexts;
-- >=2 nonwin→win flips;
-- positive score delta.
-
-The run is **queued/in progress** at this handoff.
+Interpretation rule:
+1. V4B W/L headroom + low physical fallback -> cumulative market-state mechanism exists.
+2. V4B W/L headroom + many physical fallbacks -> market intervention is enough to enter a better
+   state basin even while V47 physical policy is retained.
+3. V4B no W/L + low physical fallback -> close simple V48-market imitation under fixed V47 physical policy.
+4. V4B no W/L + many physical fallbacks -> market changes induce future physical-policy divergence;
+   next search must study the coupled state transition rather than declaring market irrelevant.
 
 ### Binding next steps
 
-1. Read workflow `35444529719`.
-2. If **V48_V4A_WL_HEADROOM_PASS**, inspect recurring winning event/horizon patterns and
-   rewrite them as first-party legal-state options before any selector training.
-3. If **V48_V4A_WL_HEADROOM_WEAK**, enlarge fresh confirmation around the winning bounded pattern,
-   not the whole search space.
-4. If **V48_V4A_MARGIN_ONLY** or **NO_HEADROOM**, do not extend horizon blindly; first run a
-   long-horizon market-only upper-bound diagnostic to decide whether the missing advantage is
-   cumulative market state or a different mechanism.
-5. Keep O-RW1 + O-TW1 as current offline host.
-6. No new Kaggle submission; preserve active hosted slots.
-
-### Dormant contingency — V4B long-horizon market upper bound
-
-Prepared but **not running**:
-- `tools/v48_market_upper_bound_v4b.py`;
-- `.github/workflows/v48-market-upper-bound-v4b.yml`;
-- fresh seeds `74101..74106`, both seats.
-
-Purpose only if V4A returns MARGIN_ONLY / NO_HEADROOM:
-- preserve exact V47 farmer/hands every turn;
-- use V48 market as an offline shadow proposal whenever physical actions still match;
-- allow the market substitution to persist over the remaining episode;
-- measure whether long-horizon market imitation can produce W/L headroom.
-
-Interpretation:
-- V4B W/L headroom -> V4A horizon was too short; inspect cumulative market-state mechanism;
-- V4B no W/L -> close simple V48 market imitation under fixed V47 physical policy and reopen
-  mechanism discovery rather than extending horizon indefinitely.
-
-V4B is an upper-bound diagnostic only and never a deployable runtime policy.
+1. Read workflow `35448761774`.
+2. Apply the four-way V4B interpretation above using both W/L and physical fallback count.
+3. Do not extend horizon beyond V4B.
+4. Keep O-RW1 + O-TW1 as current offline host.
+5. No new Kaggle submission; preserve active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
