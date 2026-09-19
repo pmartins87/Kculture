@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve O-LQ2 fresh causal gate; PASS => broad multi-family regression, otherwise inspect structural mismatch only",
+  "next_stage": "complete ALL3 hosted registration, capture submission ID, then preserve O-RW1 + ALL3 and monitor first informative hosted exposure",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -107,15 +107,7 @@
     "interpretation": "BOTH is W/L-safe on this gate and retains the mirror gain, but adds no W/L over the best single option; use as offline host, not as evidence for immediate hosted submission.",
     "result_doc": "docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_RESULT_2026-09-19.md"
   },
-  "current_offline_host": {
-    "base": "exact_public_v47",
-    "active_options": [
-      "O-RW1",
-      "O-TW1"
-    ],
-    "composition_mode": "BOTH_AVAILABLE_ONE_SHOT_EACH",
-    "status": "OFFLINE_HOST_ADVANCE_NO_HOSTED_SUBMISSION"
-  },
+  "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "discovery_2026_09_19": {
     "v47_v48_census": {
       "workflow": 35439729714,
@@ -316,7 +308,7 @@
     },
     "o_lq2": {
       "workflow": 35456018489,
-      "status": "ACTIVE_FRESH_CAUSAL",
+      "status": "BROAD_SAFE_PACKAGE_READY",
       "seeds": [
         74401,
         74402,
@@ -328,7 +320,76 @@
         74408
       ],
       "rule": "from step 336, canonicalize each consecutive SELL run by always aggregating duplicate products, capping aggregate demand to projected own inventory, dropping zero-effective products, and compacting survivors left",
-      "runtime_uses_v48_code": false
+      "runtime_uses_v48_code": false,
+      "causal": {
+        "workflow": 35456018489,
+        "decision": "O_LQ2_V48_CAUSAL_PASS",
+        "pairs": 16,
+        "base_score_rate": 0,
+        "treatment_score_rate": 1,
+        "mean_score_delta": 1,
+        "mean_margin_delta": 567,
+        "negative_score_contexts": 0
+      },
+      "broad": {
+        "workflow": 35456201059,
+        "decision": "O_LQ2_BROAD_SAFE_PASS",
+        "contexts": 56,
+        "mean_score_delta": 0.16071428571428573,
+        "mean_margin_delta": 212.82142857142858,
+        "negative_score_contexts": 0,
+        "by_opponent": {
+          "v48": 0.75,
+          "v47_mirror": 0.375,
+          "ready_stock": 0,
+          "router_2715": 0,
+          "conditional_memory": 0,
+          "tactical_memory": 0,
+          "best_market": 0
+        }
+      },
+      "result_docs": [
+        "docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md",
+        "docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md"
+      ]
+    },
+    "all3": {
+      "composition": {
+        "workflow": 35456535323,
+        "decision": "TRIPLE_COMBO_SAFE_ADVANCE",
+        "contexts": 56,
+        "base_score_rate": 0.7857142857142857,
+        "old_score_rate": 0.8392857142857143,
+        "lq2_score_rate": 0.9464285714285714,
+        "all3_score_rate": 0.9464285714285714,
+        "all3_negative_vs_base": 0
+      },
+      "package": {
+        "workflow": 35457146455,
+        "decision": "ALL3_HOSTED_PACKAGE_PARITY_PASS",
+        "candidate": "KCULTURE_V47_ALL3_V1.tar.gz",
+        "archive_sha256": "204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8",
+        "candidate_main_sha256": "92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f",
+        "entrypoint": "_kc_all3_entrypoint",
+        "parity_pairs": 12,
+        "action_parity": "12/12",
+        "reward_parity": "12/12"
+      },
+      "readiness": {
+        "decision": "ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL",
+        "current_control_submission": 56336025,
+        "retained_orw1_submission": 56336027,
+        "checkpoint_1": {
+          "control_rating": 2344.6,
+          "orw1_rating": 2383.9
+        },
+        "checkpoint_2": {
+          "control_rating": 2344.6,
+          "orw1_rating": 2383.9
+        }
+      },
+      "submission_workflow": 35459415491,
+      "status": "SUBMISSION_WORKFLOW_ACTIVE"
     }
   }
 }
