@@ -21,6 +21,16 @@ MAX_EVENTS=2
 MAX_SOURCE_LOCUS=4
 HORIZONS=(2,3)
 
+def continuation_lifecycle_valid(step,locus,horizon,turns_per_day=24):
+    """A hired-hand locus cannot persist across an end-of-day boundary.
+
+    Kaggriculture removes all hired hands at end of day. A farmer locus persists.
+    """
+    if not str(locus).startswith("hand:"):
+        return True
+    step=int(step);horizon=int(horizon);tpd=max(1,int(turns_per_day))
+    return step//tpd == (step+horizon-1)//tpd
+
 def all3_from(base_agent,host_state,obs,config):
     raw=canonical_action(call_agent(base_agent,obs,config))
     return apply_option_host(obs,config,raw,host_state)
@@ -224,7 +234,7 @@ def main():
     ctx=contexts[args.index]
     opp_key=str(ctx["opponent"]);seed=int(ctx["seed"]);seat=int(ctx["seat"])
     spec=next(x for x in V2_OPPONENTS if x["key"]==opp_key)
-    failures=[];branches=[];provenance={};started=time.perf_counter()
+    failures=[];branches=[];skipped_lifecycle=[];provenance={};started=time.perf_counter()
     try:
       with tempfile.TemporaryDirectory(prefix=f"v6-{args.index}-{opp_key}-") as td:
         tmp=Path(td)
@@ -257,6 +267,13 @@ def main():
             candidates=source_locus_candidates(event)
             for cand in candidates:
                 for horizon in HORIZONS:
+                    if not continuation_lifecycle_valid(event["step"],cand["locus"],horizon,24):
+                        skipped_lifecycle.append({
+                          "step":int(event["step"]),"source":cand["source"],
+                          "locus":cand["locus"],"horizon":int(horizon),
+                          "reason":"hired_hand_does_not_persist_across_end_of_day"
+                        })
+                        continue
                     try:
                         purge(all_paths)
                         r=run_branch(base_main,proposer_paths[cand["source"]],opp_main,seed,seat,event,cand,horizon)
@@ -281,14 +298,16 @@ def main():
           "schema":"kculture-v6-continuation-context-v1","active":True,"index":args.index,
           "context":ctx,"base":base,"discovery_parity":disc["rewards"]==base["rewards"],
           "selected_events":[{"step":e["step"],"candidates":source_locus_candidates(e)} for e in events],
-          "branches":branches,"oracle":best,"mechanical_pass":mech,"failures":failures,
+          "branches":branches,"skipped_lifecycle":skipped_lifecycle,
+          "oracle":best,"mechanical_pass":mech,"failures":failures,
           "provenance":provenance,"seconds":time.perf_counter()-started,
         }
     except Exception as exc:
       failures.append({"phase":"setup_or_base","error":f"{type(exc).__name__}: {exc}"})
       result={
         "schema":"kculture-v6-continuation-context-v1","active":True,"index":args.index,
-        "context":ctx,"mechanical_pass":False,"branches":branches,"failures":failures,
+        "context":ctx,"mechanical_pass":False,"branches":branches,
+        "skipped_lifecycle":skipped_lifecycle,"failures":failures,
         "seconds":time.perf_counter()-started,
       }
     p=Path(args.out);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
@@ -297,6 +316,7 @@ def main():
       "mechanical_pass":result.get("mechanical_pass"),"branch_count":len(branches),
       "base_score":result.get("base",{}).get("score"),"base_margin":result.get("base",{}).get("margin"),
       "oracle":result.get("oracle"),"failures":len(failures),
+      "skipped_lifecycle":len(result.get("skipped_lifecycle",[])),
     },sort_keys=True),flush=True)
     if not result.get("mechanical_pass"):raise SystemExit(2)
 if __name__=="__main__":main()
