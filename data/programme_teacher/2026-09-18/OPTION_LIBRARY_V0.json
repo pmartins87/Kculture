@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "complete ALL3 hosted registration, capture submission ID, then preserve O-RW1 + ALL3 and monitor first informative hosted exposure",
+  "next_stage": "preserve O-RW1 + ALL3; wait for substantial ALL3 hosted exposure (~32 resolved external games) before competitive interpretation",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -389,7 +389,30 @@
         }
       },
       "submission_workflow": 35459415491,
-      "status": "SUBMISSION_WORKFLOW_ACTIVE"
+      "status": "HOSTED_COMPLETE_INITIAL_600",
+      "hosted": {
+        "submission_id": 56367770,
+        "description": "PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4",
+        "registered_utc": "2026-09-19 17:53:18.930000",
+        "status": "COMPLETE",
+        "initial_rating": 600,
+        "initial_status_workflow": 35459613689,
+        "retained_pair_submission": 56336027,
+        "retained_pair_rating": 2383.9
+      }
+    }
+  },
+  "current_hosted_pair": {
+    "orw1": {
+      "submission_id": 56336027,
+      "rating": 2383.9,
+      "status": "COMPLETE"
+    },
+    "all3": {
+      "submission_id": 56367770,
+      "rating": 600,
+      "status": "COMPLETE",
+      "note": "initial activation rating only"
     }
   }
 }
