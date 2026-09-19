@@ -1,0 +1,93 @@
+name: orw1-hosted-r2-maturity-100-audit
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/orw1-hosted-r2-maturity-100-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_TEAM_NAME: Paulo Martins
+      CONTROL_SID: '56336025'
+      TREATMENT_SID: '56336027'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Freeze current status
+        run: |
+          mkdir -p artifacts/orw1-r2-maturity-100
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee artifacts/orw1-r2-maturity-100/snapshot_utc.txt
+          kaggle competitions submissions kaggriculture -v -q | tee artifacts/orw1-r2-maturity-100/submissions.csv
+      - name: Collect up to 120 episodes per active submission
+        run: |
+          python tools/collect_submission_replays_cli_v2.py             --submission control:$CONTROL_SID             --submission treatment:$TREATMENT_SID             --output-dir artifacts/orw1-r2-maturity-100             --max-per-submission 120             --selection newest             --delay-seconds 0.05             --retries 4             --retry-backoff-seconds 0.5
+      - name: Summarize complete available histories
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/cr083_hosted_forensics.py             --replay-root artifacts/orw1-r2-maturity-100/control/replays             --target-team-name "$TARGET_TEAM_NAME"             --target-submission "$CONTROL_SID"             --output artifacts/orw1-r2-maturity-100/control_summary.json
+          python tools/cr083_hosted_forensics.py             --replay-root artifacts/orw1-r2-maturity-100/treatment/replays             --target-team-name "$TARGET_TEAM_NAME"             --target-submission "$TREATMENT_SID"             --output artifacts/orw1-r2-maturity-100/treatment_summary.json
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+
+          c=json.loads(Path('artifacts/orw1-r2-maturity-100/control_summary.json').read_text())
+          t=json.loads(Path('artifacts/orw1-r2-maturity-100/treatment_summary.json').read_text())
+          r=json.loads(Path('artifacts/orw1-r2-maturity-100/collector_report.json').read_text())
+
+          ratings={}
+          rows=list(csv.DictReader(Path('artifacts/orw1-r2-maturity-100/submissions.csv').read_text().splitlines()))
+          for row in rows:
+              desc=row.get('description') or row.get('Description') or ''
+              if 'PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43' in desc:
+                  ratings['control']=row
+              if 'PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273' in desc:
+                  ratings['treatment']=row
+
+          out={
+            "control":{
+              "submission_id":56336025,
+              "listed_episode_count":r["submissions"]["control"].get("listed_episode_count"),
+              "sampled_episode_count":r["submissions"]["control"].get("selected_episode_count"),
+              "resolved_games":c["resolved_games"],
+              "wins":c["wins"],"losses":c["losses"],"ties":c["ties"],
+              "score_rate":c["score_rate"],"mean_margin":c["mean_margin"],"median_margin":c["median_margin"],
+              "opponents_unique":c["opponents_unique"]
+            },
+            "treatment":{
+              "submission_id":56336027,
+              "listed_episode_count":r["submissions"]["treatment"].get("listed_episode_count"),
+              "sampled_episode_count":r["submissions"]["treatment"].get("selected_episode_count"),
+              "resolved_games":t["resolved_games"],
+              "wins":t["wins"],"losses":t["losses"],"ties":t["ties"],
+              "score_rate":t["score_rate"],"mean_margin":t["mean_margin"],"median_margin":t["median_margin"],
+              "opponents_unique":t["opponents_unique"]
+            }
+          }
+          Path('artifacts/orw1-r2-maturity-100/MATURITY_100_SUMMARY.json').write_text(json.dumps(out,indent=2,sort_keys=True))
+          print("ORW1_R2_MATURITY_100",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: orw1-hosted-r2-maturity-100-audit
+          path: artifacts/orw1-r2-maturity-100/**
+          retention-days: 30
+          if-no-files-found: warn
