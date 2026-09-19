@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V4E semantic decomposition; causalize only effective category/bundle first-party on fresh seeds",
+  "next_stage": "resolve O-LQ2 fresh causal gate; PASS => broad multi-family regression, otherwise inspect structural mismatch only",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -278,8 +278,57 @@
     },
     "v4e": {
       "workflow": 35450703737,
-      "status": "ACTIVE",
-      "purpose": "decompose exact V48 W2+ market headroom into CLEAR/QTY_DOWN/QTY_UP/REPLACE/OTHER sufficiency and necessity ablations"
+      "decision": "V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY",
+      "full": {
+        "reproduced_contexts": 12,
+        "score_rate": 0.5,
+        "mean_score_delta": 0.5,
+        "mean_margin_delta": 585.6666666666666
+      },
+      "only_sanitation": {
+        "reproduced_contexts": 2,
+        "score_rate": 0.16666666666666666,
+        "mean_margin_delta": 18.666666666666668
+      },
+      "only_structural": {
+        "reproduced_contexts": 10,
+        "score_rate": 0.5,
+        "mean_margin_delta": 587.1666666666666
+      },
+      "full_minus_sanitation": {
+        "reproduced_contexts": 10,
+        "score_rate": 0.5
+      },
+      "full_minus_replace": {
+        "reproduced_contexts": 0,
+        "score_rate": 0
+      },
+      "full_minus_qty_up": {
+        "reproduced_contexts": 2,
+        "score_rate": 0.16666666666666666
+      },
+      "necessary_categories": [
+        "REPLACE",
+        "QTY_UP",
+        "STRUCTURAL"
+      ],
+      "result_doc": "docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md"
+    },
+    "o_lq2": {
+      "workflow": 35456018489,
+      "status": "ACTIVE_FRESH_CAUSAL",
+      "seeds": [
+        74401,
+        74402,
+        74403,
+        74404,
+        74405,
+        74406,
+        74407,
+        74408
+      ],
+      "rule": "from step 336, canonicalize each consecutive SELL run by always aggregating duplicate products, capping aggregate demand to projected own inventory, dropping zero-effective products, and compacting survivors left",
+      "runtime_uses_v48_code": false
     }
   }
 }
