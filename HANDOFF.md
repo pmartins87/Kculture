@@ -14,83 +14,93 @@ These are not matched opponent populations. Raw W/L is not a causal A/B comparis
 The hosted treatment remains higher-rated; do not replace either slot while offline
 selector/value work proceeds.
 
-Audit:
-`docs/strategy/ORW1_HOSTED_R2_MATURITY_100_AUDIT_2026-09-19.md`.
-
 ### Option-value Ryzen V1 — production PASS
 
-User Ryzen run completed on exact engine `1.32.7`:
+User Ryzen run completed:
 - 250/250 fresh seeds;
 - 1,500 BASE matchups;
 - **3,000 counterfactual option labels**;
 - **584 unique state hashes**;
-- **0 failures**;
-- opponents: V47 mirror, V48, Tactical Memory;
-- both seats.
+- **0 failures**.
 
 O-RW1:
-- 1,500 rows;
 - mean score delta **+0.096**;
 - 370 positive / 82 negative / 1,048 neutral;
 - mean margin delta **-161.6493**.
 
 O-TW1:
-- 1,500 rows;
 - mean score delta **+0.14**;
 - 436 positive / 16 negative / 1,048 neutral;
 - mean margin delta **+35.7173**.
 
 Population decomposition:
-- V47 mirror: mean score delta **+0.354**, 806 positive / 98 negative;
-- V48: W/L delta 0 throughout;
-- Tactical Memory: W/L delta 0 throughout.
+- V47 mirror: mean score delta **+0.354**;
+- V48: W/L delta 0;
+- Tactical Memory: W/L delta 0.
 
-Conclusion:
-the options have real large-sample headroom, but W/L signal is currently concentrated in
-V47-mirror states. Do **not** train/deploy a production selector until learnability and
-population generalization are audited.
+### Selector Audit V1 — within-population learnability PASS, production gate still OPEN
+
+Original grouped-state audit:
+`OPTION_VALUE_SELECTOR_AUDIT_PASS_LEARNABLE`.
+
+Held-out state-group test:
+- 681 rows;
+- selector realized delta **+0.1372981**;
+- always-fire **+0.1248164**;
+- row oracle **+0.1372981**;
+- captured **187/187** positive rows;
+- fired **0/17** negative rows;
+- nonzero sign accuracy **0.9607843**.
+
+Conflict diagnostics:
+- exact state+option: 230/584 groups have some label disagreement, but only 2 have both positive and negative labels;
+- feature aliases: 107/283 groups have some label disagreement, but only 1 has both positive and negative labels.
+
+However leave-one-opponent-out shows **no demonstrated cross-family transfer**:
+- V47 mirror held out: 0% fire, 0/806 positive captures;
+- V48 held out: high fire rate but held-out W/L labels all neutral;
+- Tactical Memory held out: high fire rate but held-out W/L labels all neutral.
+
+Therefore the state-group PASS proves legal-feature learnability **inside the sampled mixed
+population**, not deployable opponent-family generalization.
 
 Result:
-`docs/strategy/OPTION_VALUE_RYZEN_V1_RESULT_2026-09-19.md`.
+`docs/strategy/OPTION_VALUE_SELECTOR_AUDIT_V1_RESULT_2026-09-19.md`.
 
-### Current gate — OPTION_VALUE_SELECTOR_AUDIT_V1
+### Stricter selector gate — whole-seed holdout
 
-Tool:
-`tools/option_value_selector_audit_v1.py`
+`tools/option_value_selector_audit_v1.py` has been hardened:
+- every seed belongs wholly to train, dev or test;
+- no seed can appear across partitions;
+- the binding decision now requires positive held-out value under the whole-seed split;
+- the state-hash split remains diagnostic only.
 
-One-command runner:
-`tools/run_option_value_selector_audit_v1.sh`
+The local audit must be rerun before any model is frozen.
 
-The audit measures:
-- repeated state+option label conflicts;
-- legal-feature alias conflicts;
-- grouped train/dev/test split with state-hash isolation;
-- ridge selector realized delta versus BASE / always-fire / row-oracle;
-- leave-one-opponent-out transfer.
+### V2 opponent league
 
-No opponent identity, seed, seat, rating, hidden/future state is a model feature.
-
-### V2 opponent league preflight
-
-Workflow `35420988150` is validating a more diverse seven-agent public league:
+Six diverse public agents have already passed hosted-faithful package/entrypoint preflight:
 - V47 mirror;
 - Ready Stock;
 - V48;
-- V39 legacy;
 - Conditional Memory;
 - Tactical Memory;
 - Best Market Agent.
 
-This preflight is cloud-only and does not consume Ryzen or Kaggle submission slots.
+Old V39 and V38 legacy notebooks are no longer retrievable through the current Kaggle CLI path.
+A seventh candidate, the rank-25 `2715.6` multi-program router, is currently being tested
+as the diversity replacement.
 
-### Binding rules
+### Binding next steps
 
-- No new Kaggle submission yet.
-- Preserve both hosted slots.
-- No further heavy Ryzen batch until selector audit is read.
-- If V1 selector generalizes, fit a conservative selector and validate offline.
-- If V1 signal is population-bound, expand labels with the validated V2 league first.
-- FP001_STATUS/FP001_ROADMAP remain absent; do not create competing copies.
+1. Rerun the lightweight selector audit with whole-seed holdout.
+2. Complete the V2 diverse-league preflight.
+3. If seed-holdout remains positive, expand labels with the V2 league before fitting the
+   production selector.
+4. Only after V2 train/dev/test + leave-family-out PASS should a candidate selector enter
+   autonomous runtime gates.
+5. No new Kaggle submission.
+6. Preserve both active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
