@@ -257,85 +257,83 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4E semantic-category decomposition — BINDING RESULT
+### O-LQ2 canonical SELL queue — FRESH CAUSAL PASS
 
-Workflow **`35450703737`** completed SUCCESS.
+Workflow **`35456018489`** completed SUCCESS.
 
-Decision: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
+Decision: **`O_LQ2_V48_CAUSAL_PASS`**.
 
-FULL exact V48 market inside W2+:
-- reproduced contexts: **12/12**;
-- score rate: **0.5**;
-- mean score delta: **+0.5**;
-- mean margin delta: **+585.67**.
-
-ONLY_SANITATION = CLEAR + QTY_DOWN:
-- reproduced: **2/12**;
-- score rate: 0.1667;
-- mean margin delta: +18.67.
-
-ONLY_STRUCTURAL = REPLACE + QTY_UP + OTHER:
-- reproduced: **10/12**;
-- score rate: **0.5**;
-- mean margin delta: **+587.17**.
-
-FULL_MINUS_SANITATION:
-- reproduced: **10/12**;
-- score rate: **0.5**.
-
-Necessity ablations:
-- FULL_MINUS_REPLACE: **0/12**;
-- FULL_MINUS_QTY_UP: **2/12**;
-- FULL_MINUS_STRUCTURAL: **2/12**.
-
-Necessary categories:
-- **REPLACE**;
-- **QTY_UP**;
-- their structural interaction.
-
-Mechanistic interpretation:
-- QTY_UP is primarily merging duplicate SELLs of the same product;
-- REPLACE is primarily compaction/movement of later effective SELLs after canonicalization;
-- examples include `MILK 6 + MILK 1 -> MILK 7` and `EGG 6 + EGG 4 -> EGG 10`.
+Fresh seeds `74401..74408`, both seats:
+- 16/16 contexts;
+- BASE score rate **0.0**;
+- treatment score rate **1.0**;
+- mean score delta **+1.0**;
+- mean margin delta **+567**;
+- positive-score contexts **16/16**;
+- negative-score contexts **0/16**;
+- loss->win **16/16**.
 
 Result:
-`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md`.
+`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md`.
 
-### O-LQ2 Late Canonical SELL Queue — ACTIVE
+### O-LQ2 broad fresh regression — BINDING RESULT
+
+Workflow **`35456201059`** completed SUCCESS.
+
+Decision: **`O_LQ2_BROAD_SAFE_PASS`**.
+
+56 fresh paired contexts across seven opponent families:
+- overall mean score delta **+0.1607143**;
+- overall mean margin delta **+212.82**;
+- positive-score contexts **12**;
+- negative-score contexts **0**.
+
+By opponent:
+- V48: **+0.75** mean score delta;
+- V47 mirror: **+0.375**;
+- Ready Stock: **0.0**;
+- router_2715: **0.0**;
+- conditional_memory: **0.0**;
+- tactical_memory: **0.0**;
+- best_market: **0.0**.
+
+No W/L regressions in any block.
+
+Result:
+`docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md`.
+
+### O-LQ2 + O-RW1 + O-TW1 triple composition — ACTIVE
 
 Frozen protocol:
-`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
+`docs/strategy/O_LQ2_TRIPLE_COMPOSITION_PROTOCOL_2026-09-19.md`.
 
-First-party rule from step 336:
-- exact V47 farmer/hands;
-- split market into consecutive SELL runs;
-- aggregate all duplicate SELL demand per product;
-- preserve first-product occurrence order;
-- cap aggregate demand to projected available own inventory;
-- emit at most one SELL per product;
-- drop zero-effective products;
-- compact surviving SELLs left inside the run;
-- preserve non-SELL orders exactly;
-- no V48 runtime input.
+Workflow **`35456535323`**.
 
 Fresh seeds:
-`74401..74408`, both seats.
+`74601..74604`, both seats, seven-family league.
 
-Workflow **`35456018489`**:
-`o-lq2-v48-causal-gate`.
+Variants:
+- BASE;
+- OLD = O-RW1 + O-TW1;
+- LQ2;
+- ALL3 = O-RW1 + O-TW1 + O-LQ2.
 
-PASS requires:
-- mean score delta >= +0.125;
-- >=4 positive-score contexts;
-- 0 negative-score contexts;
-- positive mean margin delta.
+ALL3 operator order:
+1. exact V47 action;
+2. frozen TW1 if eligible;
+3. else frozen RW1 if eligible;
+4. O-LQ2 canonicalization from step 336 onward.
+
+Goal:
+determine whether the three validated options can form one safe deterministic host before
+runtime/package parity.
 
 ### Binding next steps
 
-1. Resolve workflow `35456018489`.
-2. O-LQ2 PASS -> broad fresh multi-family regression.
-3. O-LQ2 WEAK -> confirm only the structural mechanism, not generic threshold search.
-4. O-LQ2 FAIL -> inspect structural rule mismatch; do not return to sanitation.
+1. Resolve workflow `35456535323`.
+2. SAFE_ADVANCE -> freeze integrated host and run runtime/package parity.
+3. SAFE_NO_INCREMENT -> retain safest best constituent host; do not force composition.
+4. ROUTER_REQUIRED -> admit O-LQ2 as option but use legal-state router rather than global composition.
 5. No Kaggle submission yet.
 
 ## Historical record (superseded where inconsistent with the current handoff)
