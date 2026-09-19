@@ -1,0 +1,170 @@
+name: all3-hosted-submit-v1
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-hosted-submit-v1.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit-all3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      MAX_DAILY: '5'
+      ALL3_DESCRIPTION: PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4
+      ALL3_EXPECTED_SHA256: 204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8
+      ALL3_EXPECTED_ENTRYPOINT: _kc_all3_entrypoint
+      CONTROL_DESCRIPTION: PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43
+      TREATMENT_DESCRIPTION: PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Require authenticated Kaggle access
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7'
+          kaggle competitions list --group entered -v | tee entered.csv
+          grep -qi 'kaggriculture' entered.csv
+
+      - name: Download frozen ALL3 artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-hosted-package-parity
+          path: all3_artifact
+          run-id: 35457146455
+          github-token: ${{ github.token }}
+
+      - name: Verify frozen ALL3 bytes and official loader
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f all3_artifact/KCULTURE_V47_ALL3_V1.tar.gz
+          cp all3_artifact/KCULTURE_V47_ALL3_V1.tar.gz ALL3_V47_RW1_TW1_LQ2.tar.gz
+          SHA="$(sha256sum ALL3_V47_RW1_TW1_LQ2.tar.gz | awk '{print $1}')"
+          echo "ALL3_SHA=$SHA" | tee SHA256SUMS.txt
+          test "$SHA" = "$ALL3_EXPECTED_SHA256"
+
+          mkdir smoke
+          tar -xzf ALL3_V47_RW1_TW1_LQ2.tar.gz -C smoke
+          test -f smoke/main.py
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+
+          p=Path("smoke/main.py")
+          fn=get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          name=getattr(fn,"__name__",None)
+          argc=getattr(getattr(fn,"__code__",None),"co_argcount",None)
+          expected=os.environ["ALL3_EXPECTED_ENTRYPOINT"]
+          if name!=expected:
+              raise SystemExit(f"loader selected {name!r}, expected {expected!r}")
+          if argc not in (1,2):
+              raise SystemExit(f"unexpected argc={argc}")
+          print({"entrypoint":name,"argc":argc})
+          PY
+
+      - name: Authenticated slot and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q | tee before_submissions.csv
+          python - <<'PY'
+          import csv, io, os
+          from datetime import datetime, timezone
+          from pathlib import Path
+
+          text=Path("before_submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in text.splitlines() if x.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if "," not in line:
+                  continue
+              cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              if cand and any(k and ("date" in k.lower() or "ref" in k.lower()) for k in cand[0]):
+                  rows=cand
+                  break
+
+          def description(row):
+              return next((str(v) for k,v in row.items() if k and "description" in k.lower()),"")
+
+          descs={description(r) for r in rows}
+          required=[os.environ["CONTROL_DESCRIPTION"],os.environ["TREATMENT_DESCRIPTION"]]
+          missing=[x for x in required if x not in descs]
+          if missing:
+              raise SystemExit(f"current pair preflight missing: {missing}")
+
+          wanted=os.environ["ALL3_DESCRIPTION"]
+          if wanted in descs:
+              raise SystemExit(f"ALL3 description already exists: {wanted}")
+
+          today=datetime.now(timezone.utc).date().isoformat()
+          today_rows=[]
+          for row in rows:
+              d=next((str(v) for k,v in row.items() if k and "date" in k.lower()),"")
+              if d.startswith(today):
+                  today_rows.append(row)
+          maximum=int(os.environ["MAX_DAILY"])
+          projected=len(today_rows)+1
+          print({"today_utc":today,"observed_today":len(today_rows),"projected":projected,"maximum":maximum})
+          if projected>maximum:
+              raise SystemExit(f"daily cap would be exceeded: {projected}>{maximum}")
+          PY
+
+      - name: Submit frozen ALL3 once
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_start_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f ALL3_V47_RW1_TW1_LQ2.tar.gz -m "$ALL3_DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_return_utc.txt
+
+      - name: Bounded registration checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 12); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after_submissions.csv
+            if grep -Fq "$ALL3_DESCRIPTION" after_submissions.csv; then
+              grep -F "$ALL3_DESCRIPTION" after_submissions.csv | head -1 | tee all3_registered_row.txt
+              grep -F "$TREATMENT_DESCRIPTION" after_submissions.csv | head -1 | tee retained_treatment_row.txt || true
+              grep -F "$CONTROL_DESCRIPTION" after_submissions.csv | head -1 | tee prior_control_row.txt || true
+              exit 0
+            fi
+            sleep 5
+          done
+          cat after_submissions.csv
+          exit 93
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-hosted-submit-v1-provenance
+          path: |
+            entered.csv
+            before_submissions.csv
+            after_submissions.csv
+            SHA256SUMS.txt
+            submit_start_utc.txt
+            submit_return_utc.txt
+            all3_registered_row.txt
+            retained_treatment_row.txt
+            prior_control_row.txt
+          retention-days: 30
+          if-no-files-found: warn
