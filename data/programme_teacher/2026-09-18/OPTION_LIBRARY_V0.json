@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "fresh V47-vs-V48 divergence census; then target hard BASE non-win strata with bounded multi-turn or physical/macro option search according to the observed divergence surface",
+  "next_stage": "resolve O-CQ1 action parity; if PASS run fresh V48 causal gate; if partial inspect mismatch classes; if fail activate V4A",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -115,5 +115,35 @@
     ],
     "composition_mode": "BOTH_AVAILABLE_ONE_SHOT_EACH",
     "status": "OFFLINE_HOST_ADVANCE_NO_HOSTED_SUBMISSION"
+  },
+  "discovery_2026_09_19": {
+    "v47_v48_census": {
+      "workflow": 35439729714,
+      "decision": "V48_CENSUS_MARKET_SEARCHABLE",
+      "contexts": 8,
+      "v47_score_rate": 0,
+      "wins": 0,
+      "ties": 0,
+      "losses": 8,
+      "mean_margin": -454,
+      "market_only_divergences": 458,
+      "physical_divergences": 0,
+      "result_doc": "docs/strategy/V47_V48_DIVERGENCE_CENSUS_V1_RESULT_2026-09-19.md"
+    },
+    "candidate_option": {
+      "option_id": "O-CQ1",
+      "family": "market_queue_inventory_clamp",
+      "hypothesis": "preserve V47 farmer/hands and non-SELL slots; sequentially cap each SELL slot to remaining own current shed inventory; zero becomes []",
+      "status": "PARITY_GATE_RUNNING",
+      "parity_workflow": 35439945148,
+      "causal_tool": "tools/cq1_v48_causal_gate.py",
+      "causal_workflow": ".github/workflows/cq1-v48-causal-gate.yml",
+      "runtime_uses_opponent_identity": false
+    },
+    "fallback_v4a": {
+      "tool": "tools/v48_multiturn_market_oracle_v4a.py",
+      "workflow": ".github/workflows/v48-multiturn-market-oracle-v4a.yml",
+      "status": "DORMANT_WHILE_CQ1_PLAUSIBLE"
+    }
   }
 }
