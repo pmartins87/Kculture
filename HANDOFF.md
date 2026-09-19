@@ -344,31 +344,32 @@ Therefore:
 Result:
 `docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md`.
 
-### V6A Hard-Context Census — ACTIVE
+### V6A hard-context census — Batch A COMPLETE / Batch B ACTIVE
 
-Workflow:
-**`35472681958`**.
+Batch A binding workflow: `35472777632`.
 
-Purpose:
-find fresh ALL3 non-win contexts before spending compute on a 2–3-turn localized physical
-continuation oracle.
+Batch A:
+- mechanical PASS;
+- 112 exact ALL3 games;
+- **111W / 1L / 0T**;
+- only fresh non-win: V48, seed `75103`, seat 1, margin **-86**;
+- decision: **`V6A_EXPAND_HARD_CENSUS`**.
 
-Fresh seed batch:
-`75101..75108`.
+Result:
+`docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_BATCH_A_RESULT_2026-09-19.md`.
 
-Seven-family V2 opponent panel:
-V47 mirror, Ready Stock, V48, router_2715, Conditional Memory, Tactical Memory, Best Market.
+Batch B:
+- workflow **`35473134791`**;
+- untouched seeds `75109..75116`;
+- same seven-family V2 panel;
+- both seats.
 
-Both seats:
-112 exact ALL3 base games.
+Combined gate:
+- need >=4 total non-wins before launching V6;
+- close wins remain diagnostics only and cannot substitute for non-wins.
 
-Gate:
-- >=4 fresh nonwins -> freeze at most 12 diverse hard contexts and open V6 continuation oracle;
-- <4 -> expand with a second untouched seed batch;
-- close wins are diagnostics only and cannot substitute for nonwins.
-
-Protocol:
-`docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md`.
+V6 bounded 2–3-turn continuation tooling/workflow is ready but dormant.
+It triggers only when `configs/all3_v6_hard_contexts.json` is frozen.
 
 ### Binding next steps
 
