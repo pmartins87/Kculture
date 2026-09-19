@@ -257,95 +257,85 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### V4D temporal localization — BINDING RESULT
+### V4E semantic-category decomposition — BINDING RESULT
 
-Workflow **`35449982864`** completed SUCCESS.
+Workflow **`35450703737`** completed SUCCESS.
 
-Decision: **`V48_V4D_GLOBAL_INTERVAL_FOUND`**.
+Decision: **`V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY`**.
 
-Global smallest predeclared interval reproducing V4B loss->tie in all 12 contexts:
-**W2+ = steps 336–718**.
+FULL exact V48 market inside W2+:
+- reproduced contexts: **12/12**;
+- score rate: **0.5**;
+- mean score delta: **+0.5**;
+- mean margin delta: **+585.67**.
 
-- reproduced contexts: 12/12;
-- score rate: 0.5;
-- mean score delta: +0.5;
-- mean margin delta: +585.67;
-- mean substituted market turns: 49.0;
-- physical fallback turns: 0.
+ONLY_SANITATION = CLEAR + QTY_DOWN:
+- reproduced: **2/12**;
+- score rate: 0.1667;
+- mean margin delta: +18.67.
 
-W3+ reproduces only 8/12.
+ONLY_STRUCTURAL = REPLACE + QTY_UP + OTHER:
+- reproduced: **10/12**;
+- score rate: **0.5**;
+- mean margin delta: **+587.17**.
 
-Transform analysis inside minimal winning suffixes:
-- SELL slot clears: **1,332**;
-- same-product quantity reductions: **262**;
-- SELL product replacement / movement: 88;
-- quantity increases: 28.
+FULL_MINUS_SANITATION:
+- reproduced: **10/12**;
+- score rate: **0.5**.
 
-Result:
-`docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md`.
+Necessity ablations:
+- FULL_MINUS_REPLACE: **0/12**;
+- FULL_MINUS_QTY_UP: **2/12**;
+- FULL_MINUS_STRUCTURAL: **2/12**.
 
-### O-LQ1 first-party late sanitation — BINDING RESULT
+Necessary categories:
+- **REPLACE**;
+- **QTY_UP**;
+- their structural interaction.
 
-Parallel workflow **`35450434666`** completed SUCCESS first and is binding.
-
-Decision: **`O_LQ1_V48_CAUSAL_FAIL`**.
-
-Fresh seeds `74301..74308`, both seats:
-- 16/16 contexts;
-- BASE score rate **0.0**;
-- treatment score rate **0.0**;
-- mean score delta **0.0**;
-- mean margin delta **0.0**;
-- positive-score contexts **0**;
-- negative-score contexts **0**;
-- changed slots **3,480**;
-- cleared slots **2,770**;
-- quantity-down slots **710**.
-
-Therefore thousands of projected clear/clamp changes are engine-semantic no-ops relative to exact V47.
-
-O-LQ1 is closed:
-- no broad regression;
-- no option-library admission;
-- no threshold retuning.
+Mechanistic interpretation:
+- QTY_UP is primarily merging duplicate SELLs of the same product;
+- REPLACE is primarily compaction/movement of later effective SELLs after canonicalization;
+- examples include `MILK 6 + MILK 1 -> MILK 7` and `EGG 6 + EGG 4 -> EGG 10`.
 
 Result:
-`docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_RESULT_2026-09-19.md`.
+`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md`.
 
-### V4E exact semantic-category decomposition — ACTIVE
+### O-LQ2 Late Canonical SELL Queue — ACTIVE
 
-Protocol:
-`docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_PROTOCOL_2026-09-19.md`.
+Frozen protocol:
+`docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_PROTOCOL_2026-09-19.md`.
 
-Workflow **`35450703737`**.
+First-party rule from step 336:
+- exact V47 farmer/hands;
+- split market into consecutive SELL runs;
+- aggregate all duplicate SELL demand per product;
+- preserve first-product occurrence order;
+- cap aggregate demand to projected available own inventory;
+- emit at most one SELL per product;
+- drop zero-effective products;
+- compact surviving SELLs left inside the run;
+- preserve non-SELL orders exactly;
+- no V48 runtime input.
 
-Using V4B/V4D discovery seeds `74101..74106`, both seats, inside W2+ only.
+Fresh seeds:
+`74401..74408`, both seats.
 
-Exact current-state V47->V48 market differences are decomposed into:
-- CLEAR;
-- QTY_DOWN;
-- QTY_UP;
-- REPLACE;
-- OTHER.
+Workflow **`35456018489`**:
+`o-lq2-v48-causal-gate`.
 
-Frozen variants include:
-- FULL positive control;
-- ONLY_SANITATION;
-- ONLY_REPLACE;
-- ONLY_QTY_UP;
-- ONLY_STRUCTURAL;
-- FULL-minus-category necessity ablations.
-
-Goal:
-identify which exact category or interaction actually carries loss->tie headroom before writing another
-first-party approximation.
+PASS requires:
+- mean score delta >= +0.125;
+- >=4 positive-score contexts;
+- 0 negative-score contexts;
+- positive mean margin delta.
 
 ### Binding next steps
 
-1. Resolve V4E.
-2. If a category/bundle is sufficient, rewrite only that mechanism first-party and fresh-causal test.
-3. If an ablation identifies a necessary interaction, inspect only that interaction.
-4. Do not return to generic queue clamp/clear.
+1. Resolve workflow `35456018489`.
+2. O-LQ2 PASS -> broad fresh multi-family regression.
+3. O-LQ2 WEAK -> confirm only the structural mechanism, not generic threshold search.
+4. O-LQ2 FAIL -> inspect structural rule mismatch; do not return to sanitation.
 5. No Kaggle submission yet.
 
 ## Historical record (superseded where inconsistent with the current handoff)
