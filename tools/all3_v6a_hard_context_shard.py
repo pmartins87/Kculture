@@ -23,11 +23,7 @@ def run(base_main,opp_main,seed,seat):
     return finish(env,seat)
 
 def purge_paths(paths):
-    seen=set()
-    for p in paths:
-        k=str(p.parent.resolve())
-        if k in seen: continue
-        seen.add(k);purge(p.parent)
+    purge(paths)
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("--opponent",required=True);ap.add_argument("--out",required=True);args=ap.parse_args()
