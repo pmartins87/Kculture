@@ -259,13 +259,17 @@ def sanitize_sell_run(run,shed,mode):
     return rewritten
 
 
-def cq2_action(obs,config,base_action,mode,min_step):
+def cq2_action(obs,config,base_action,mode,min_step,projected_shed=None):
     b=canonical_action(base_action)
     step=as_int(getv(plain(obs),"step",0),0)
     if step<min_step:
         return b
 
-    shed=projected_shed_after_physical(obs,config,b)
+    shed=(
+        copy.deepcopy(projected_shed)
+        if projected_shed is not None
+        else projected_shed_after_physical(obs,config,b)
+    )
     capacity=max(0,as_int(getv(config or {},"shedCapacity",100),100))
     market=copy.deepcopy(b["market"])
     out=[]
@@ -332,7 +336,10 @@ def metrics(rows,mode,min_step):
     step_fp=defaultdict(int); step_exact=defaultdict(int); step_mismatch=defaultdict(int)
     for r in rows:
         b=r["base"]; v=r["v48"]
-        c=cq2_action(r["obs"],r["config"],b,mode,min_step)
+        c=cq2_action(
+            r["obs"],r["config"],b,mode,min_step,
+            projected_shed=r.get("projected_shed"),
+        )
         bk=action_key(b); vk=action_key(v); ck=action_key(c)
         vd=vk!=bk; cd=ck!=bk
         if ck==vk:
@@ -403,6 +410,13 @@ def main():
 
     grid=[]
     if not failures:
+        # Projection is deterministic from legal current state + exact V47 action.
+        # Cache it once per decision; the 48 candidate configurations then differ
+        # only in queue rewrite/activation semantics.
+        for r in episode_rows:
+            r["projected_shed"]=projected_shed_after_physical(
+                r["obs"],r["config"],r["base"]
+            )
         for mode in MODES:
             for min_step in MIN_STEPS:
                 grid.append(metrics(episode_rows,mode,min_step))
