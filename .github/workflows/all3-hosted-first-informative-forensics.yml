@@ -1,0 +1,72 @@
+name: all3-hosted-first-informative-forensics
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-hosted-first-informative-forensics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_TEAM_NAME: Paulo Martins
+      SID: '56367770'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Collect current ALL3 public replays
+        run: |
+          mkdir -p artifacts/all3-first-informative
+          python tools/collect_submission_replays_cli_v2.py \
+            --submission all3:$SID \
+            --output-dir artifacts/all3-first-informative \
+            --max-per-submission 64 \
+            --selection newest \
+            --delay-seconds 0.10 \
+            --retries 4 \
+            --retry-backoff-seconds 0.5
+      - name: Summarize ALL3
+        run: |
+          python tools/cr083_hosted_forensics.py \
+            --replay-root artifacts/all3-first-informative/all3/replays \
+            --target-team-name "$TARGET_TEAM_NAME" \
+            --target-submission "$SID" \
+            --output artifacts/all3-first-informative/ALL3_FIRST_INFORMATIVE_SUMMARY.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d=json.loads(Path("artifacts/all3-first-informative/ALL3_FIRST_INFORMATIVE_SUMMARY.json").read_text())
+          out={
+            "submission_id":56367770,
+            "resolved_games":d.get("resolved_games"),
+            "wins":d.get("wins"),"losses":d.get("losses"),"ties":d.get("ties"),
+            "score_rate":d.get("score_rate"),
+            "mean_margin":d.get("mean_margin"),"median_margin":d.get("median_margin"),
+            "min_margin":d.get("min_margin"),"max_margin":d.get("max_margin"),
+            "opponents_unique":d.get("opponents_unique"),
+            "worst":d.get("worst",[])[:10],
+          }
+          print("ALL3_FIRST_INFORMATIVE",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-hosted-first-informative-forensics
+          path: artifacts/all3-first-informative/**
+          retention-days: 30
+          if-no-files-found: warn
