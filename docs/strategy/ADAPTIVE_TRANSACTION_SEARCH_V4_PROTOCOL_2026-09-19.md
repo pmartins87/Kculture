@@ -154,3 +154,52 @@ A longer horizon requires a new causal hypothesis showing why 3 turns are insuff
 
 No Kaggle submission is authorized by V4 itself.
 Active hosted slots remain preserved while offline search proceeds.
+
+
+---
+
+## Evidence-driven amendment after valid V3
+
+This amendment was made **before any V4 execution**.
+
+Valid V3 run `35426189093` showed:
+- 56 branch states / 84 exact counterfactual rollouts;
+- zero W/L improvement overall;
+- eight positive-margin states outside modern41, all from `router_2715`;
+- those outside-modern41 states were already BASE wins.
+
+Therefore the original V4 requirement of W/L gains across multiple arbitrary non-V47 families
+would target strata with no available nonwin→win headroom and is no longer the primary gate.
+
+### Revised primary target
+
+V4 must prioritize **hard BASE non-win strata**, not family diversity for its own sake.
+
+Current highest-priority block is V48 because:
+- valid V3 fresh seeds produced BASE losses vs V48 with small margins (`-303`, `-240`);
+- one-turn proposals failed to flip them;
+- the G1 composition gate also left V48 W/L unchanged.
+
+Before V4 multi-turn search, run a V47×V48 divergence census on fresh seeds. Then:
+
+1. If V47 and V48 mostly share farmer/hands while differing in market/queue decisions,
+   launch market-only multi-turn V4 against V48 first, with V47 mirror and Ready Stock as
+   regression controls.
+2. If physical divergences are material before/around the competitive separation point,
+   do **not** force a market-only V4. Open a bounded physical/macro guard search instead.
+3. Cross-family validation remains required **after** a hard-stratum option is discovered,
+   but it is a regression/generalization gate, not the discovery target.
+
+### Revised promotion requirement
+
+For the first V4 hard-stratum discovery gate, promote a causal hypothesis if:
+- exact BASE has at least four non-win contexts in the targeted hard block;
+- the candidate produces >=2 nonwin→win flips or a target-block score delta >= +0.125;
+- no control block regresses by more than `-0.0625`;
+- the winning mechanism can be expressed from legal runtime state without opponent identity,
+  hidden seed, rating, EpisodeId, future state, or opponent-private state.
+
+Only after causalization must the option pass broader unrelated-family regression tests.
+
+This amendment replaces the earlier requirement that the *discovery* gate itself improve at least
+two unrelated non-V47 families.
