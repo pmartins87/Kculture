@@ -326,7 +326,7 @@ Both arms had already exceeded 100 public episodes.
 Decision:
 **`ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL`**.
 
-#### ALL3 hosted submission REGISTERED / PENDING
+#### ALL3 hosted submission COMPLETE / ACTIVE
 
 Submission workflow **`35459415491`** completed SUCCESS.
 
@@ -334,7 +334,8 @@ ALL3:
 - submission ID **`56367770`**;
 - description `PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4`;
 - registered UTC `2026-09-19 17:53:18.930000`;
-- initial/current observed status **PENDING**;
+- hosted status **COMPLETE**;
+- initial public rating **600.0**;
 - preflight daily usage **0 -> 1 / 5**.
 
 O-RW1 `56336027` remains COMPLETE at **2383.9**.
@@ -355,11 +356,11 @@ Result docs:
 
 ### Binding next steps
 
-1. Confirm ALL3 `56367770` becomes COMPLETE without runtime error.
-2. Capture initial rating/exposure only as a mechanics/readiness checkpoint.
-3. Preserve O-RW1 + ALL3 after activation.
-4. Do not replace/reroll ALL3 on early rating noise.
-5. First meaningful hosted evaluation requires a substantial exposure checkpoint; retain offline evidence as the causal basis.
+1. Preserve O-RW1 `56336027` + ALL3 `56367770`.
+2. Treat ALL3 rating 600.0 only as initial hosted activation, not competitive evidence.
+3. Do not replace/reroll ALL3 on early rating noise.
+4. First informative hosted checkpoint requires substantial exposure (project standard: ~32 resolved external games).
+5. Retain offline causal/broad evidence as the strategic basis while hosted exposure accumulates.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
