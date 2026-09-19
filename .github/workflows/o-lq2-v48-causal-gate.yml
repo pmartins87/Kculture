@@ -1,0 +1,75 @@
+name: o-lq2-v48-causal-gate
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-lq2-v48-causal-gate.yml'
+      - 'tools/first_party_lq2_canonical_sell_queue.py'
+      - 'tools/first_party_lq2_v48_causal_shard.py'
+      - 'tools/aggregate_first_party_lq2_v48_causal.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        seed: [74401,74402,74403,74404,74405,74406,74407,74408]
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/first_party_lq2_canonical_sell_queue.py
+          python -m py_compile tools/first_party_lq2_v48_causal_shard.py
+      - name: Run O-LQ2 causal shard
+        run: |
+          mkdir -p artifacts/o-lq2-shard
+          python tools/first_party_lq2_v48_causal_shard.py \
+            --seed ${{ matrix.seed }} \
+            --out artifacts/o-lq2-shard/O_LQ2_${{ matrix.seed }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq2-shard-${{ matrix.seed }}
+          path: artifacts/o-lq2-shard/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: o-lq2-shard-*
+          path: artifacts/o-lq2-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/o-lq2-aggregate
+          python tools/aggregate_first_party_lq2_v48_causal.py \
+            --input-dir artifacts/o-lq2-shards \
+            --out artifacts/o-lq2-aggregate/O_LQ2_V48_CAUSAL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq2-v48-causal
+          path: artifacts/o-lq2-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
