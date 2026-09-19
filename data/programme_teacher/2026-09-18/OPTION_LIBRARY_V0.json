@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "preserve O-RW1 + ALL3; wait for substantial ALL3 hosted exposure (~32 resolved external games) before competitive interpretation",
+  "next_stage": "while ALL3 hosted exposure accumulates, finish workflow 35459722091 and target next ALL3 option discovery at mature hosted loss population",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -400,6 +400,14 @@
         "retained_pair_submission": 56336027,
         "retained_pair_rating": 2383.9
       }
+    },
+    "all3_next_option": {
+      "source_submission_id": 56336027,
+      "purpose": "mine mature O-RW1 hosted losses/opponents to target next ALL3 option discovery",
+      "workflow": 35459722091,
+      "status": "ACTIVE_COLLECTING_PUBLIC_REPLAYS",
+      "max_public_replays": 128,
+      "identity_use": "offline forensic only; prohibited as runtime feature"
     }
   },
   "current_hosted_pair": {
