@@ -1,0 +1,59 @@
+{
+  "schema": "kculture-all3-v6-frozen-hard-contexts-v1",
+  "frozen_from": {
+    "batch_a_run": 35472777632,
+    "batch_b_run": 35473134791,
+    "decision": "V6A_HARD_CONTEXTS_READY",
+    "combined_contexts": 224,
+    "nonwin_count": 4
+  },
+  "selected_hard_contexts": [
+    {
+      "family": "modern41_v47",
+      "margin": -263,
+      "opponent": "v47_mirror",
+      "opponent_reward": 74596,
+      "reward": 74333,
+      "score": 0,
+      "seat": 1,
+      "seed": 75113,
+      "steps": 720
+    },
+    {
+      "family": "modern41_queue",
+      "margin": -86,
+      "opponent": "v48",
+      "opponent_reward": 97273,
+      "reward": 97187,
+      "score": 0,
+      "seat": 1,
+      "seed": 75103,
+      "steps": 720
+    },
+    {
+      "family": "modern41_queue",
+      "margin": -484,
+      "opponent": "v48",
+      "opponent_reward": 128007,
+      "reward": 127523,
+      "score": 0,
+      "seat": 0,
+      "seed": 75110,
+      "steps": 720
+    },
+    {
+      "family": "modern41_queue",
+      "margin": -794,
+      "opponent": "v48",
+      "opponent_reward": 74873,
+      "reward": 74079,
+      "score": 0,
+      "seat": 1,
+      "seed": 75113,
+      "steps": 720
+    }
+  ],
+  "close_wins_substituted": false,
+  "runtime_identity_features": false,
+  "automatic_kaggle_submission": false
+}
