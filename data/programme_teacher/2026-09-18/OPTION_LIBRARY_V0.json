@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V6A Batch B 35473134791; combine with Batch A; >=4 nonwins => freeze configs/all3_v6_hard_contexts.json and auto-launch V6; otherwise reconsider/expand without substituting close wins",
+  "next_stage": "resolve V6 workflow 35473389439; PASS/NARROW => inspect winning continuation and derive first-party option; MARGIN_ONLY/NO_HEADROOM => close bounded continuation",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -563,34 +563,90 @@
       },
       "batch_b": {
         "workflow": 35473134791,
-        "status": "ACTIVE",
-        "seeds": [
-          75109,
-          75110,
-          75111,
-          75112,
-          75113,
-          75114,
-          75115,
-          75116
-        ],
-        "opponents": [
-          "v47_mirror",
-          "ready_stock",
-          "v48",
-          "router_2715",
-          "conditional_memory",
-          "tactical_memory",
-          "best_market"
+        "status": "COMPLETE",
+        "contexts": 112,
+        "nonwins": [
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75110,
+            "seat": 0,
+            "margin": -484,
+            "score": 0
+          },
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75113,
+            "seat": 1,
+            "margin": -794,
+            "score": 0
+          },
+          {
+            "opponent": "v47_mirror",
+            "family": "modern41_v47",
+            "seed": 75113,
+            "seat": 1,
+            "margin": -263,
+            "score": 0
+          }
         ]
       },
-      "combined_gate": "need >=4 total nonwins before V6; close wins forbidden as substitutes"
+      "combined_gate": "need >=4 total nonwins before V6; close wins forbidden as substitutes",
+      "combined": {
+        "decision": "V6A_HARD_CONTEXTS_READY",
+        "contexts": 224,
+        "wins": 220,
+        "losses": 4,
+        "ties": 0,
+        "selected_hard_contexts": [
+          {
+            "opponent": "v47_mirror",
+            "family": "modern41_v47",
+            "seed": 75113,
+            "seat": 1,
+            "margin": -263,
+            "score": 0
+          },
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75103,
+            "seat": 1,
+            "margin": -86,
+            "score": 0
+          },
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75110,
+            "seat": 0,
+            "margin": -484,
+            "score": 0
+          },
+          {
+            "opponent": "v48",
+            "family": "modern41_queue",
+            "seed": 75113,
+            "seat": 1,
+            "margin": -794,
+            "score": 0
+          }
+        ],
+        "config": "configs/all3_v6_hard_contexts.json",
+        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_AB_RESULT_2026-09-19.md"
+      }
     },
     "v6_continuation": {
-      "status": "DORMANT_WAITING_FOR_HARD_CONTEXTS",
-      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md",
-      "workflow": ".github/workflows/all3-v6-bounded-continuation.yml",
-      "trigger_config": "configs/all3_v6_hard_contexts.json"
+      "workflow": 35473389439,
+      "status": "ACTIVE",
+      "config": "configs/all3_v6_hard_contexts.json",
+      "horizons": [
+        2,
+        3
+      ],
+      "scope": "one physical locus, exact ALL3 market/other loci, ALL3 resumes after horizon",
+      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
