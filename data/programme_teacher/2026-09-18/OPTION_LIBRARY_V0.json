@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V4D temporal localization; derive first-party legal-state market transform from minimal winning interval; fresh causal validation before option-library admission",
+  "next_stage": "resolve V4E semantic decomposition; causalize only effective category/bundle first-party on fresh seeds",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -241,17 +241,45 @@
       "purpose": "measure whether market substitutions induce future V48-vs-V47 physical policy divergence"
     },
     "v4d": {
-      "workflow": 35449731037,
+      "workflow": 35449982864,
+      "decision": "V48_V4D_GLOBAL_INTERVAL_FOUND",
+      "global_interval": {
+        "label": "W2_PLUS",
+        "start": 336,
+        "end": 718,
+        "reproduced_contexts": 12,
+        "contexts": 12,
+        "score_rate": 0.5,
+        "mean_score_delta": 0.5,
+        "mean_margin_delta": 585.6666666666666,
+        "mean_applied_market_turns": 49,
+        "physical_fallback_turns": 0
+      },
+      "minimal_reproducer_label_counts": {
+        "W2_PLUS": 4,
+        "W3_PLUS": 6,
+        "W4_PLUS": 2
+      },
+      "result_doc": "docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md"
+    },
+    "o_lq1": {
+      "binding_workflow": 35450434666,
+      "decision": "O_LQ1_V48_CAUSAL_FAIL",
+      "pairs": 16,
+      "base_score_rate": 0,
+      "treatment_score_rate": 0,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 0,
+      "total_changed_slots": 3480,
+      "total_cleared_slots": 2770,
+      "total_qty_down_slots": 710,
+      "status": "CLOSED_ENGINE_SEMANTIC_NOOP",
+      "result_doc": "docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_RESULT_2026-09-19.md"
+    },
+    "v4e": {
+      "workflow": 35450703737,
       "status": "ACTIVE",
-      "seeds": [
-        74101,
-        74102,
-        74103,
-        74104,
-        74105,
-        74106
-      ],
-      "purpose": "localize smallest predeclared temporal market interval reproducing V4B loss-to-tie headroom"
+      "purpose": "decompose exact V48 W2+ market headroom into CLEAR/QTY_DOWN/QTY_UP/REPLACE/OTHER sufficiency and necessity ablations"
     }
   }
 }
