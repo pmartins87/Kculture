@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve O-HV1 development; if eligible freeze exactly one config and run untouched seven-family validation; meanwhile preserve O-RW1 + ALL3 hosted pair",
+  "next_stage": "resolve O-PC1 development; PASS/SAFE_MARGIN => freeze exactly and run untouched seven-family validation; CLOSE => move to next macro mechanism without ratio tuning",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -436,37 +436,65 @@
       "identity_use": "offline forensic only; prohibited as runtime feature"
     },
     "o_hv1": {
-      "status": "ACTIVE_DEVELOPMENT",
-      "workflow": 35465868923,
+      "workflow_original": 35465868923,
+      "workflow_parallel": 35466170602,
+      "decision": "O_HV1_DEV_CLOSE",
+      "mechanical_pass": true,
+      "eligible": [],
       "configs": {
         "D1": {
           "min_step": 240,
-          "min_price": 175
+          "min_price": 175,
+          "mean_score_delta": -0.5833333333333334,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0,
+          "mean_margin_delta": -30170.666666666668
         },
         "D2": {
           "min_step": 240,
-          "min_price": 200
+          "min_price": 200,
+          "mean_score_delta": -0.5833333333333334,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0,
+          "mean_margin_delta": -28698.416666666668
         },
         "D3": {
           "min_step": 336,
-          "min_price": 175
+          "min_price": 175,
+          "mean_score_delta": -0.5833333333333334,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0,
+          "mean_margin_delta": -29900.458333333332
         },
         "D4": {
           "min_step": 336,
-          "min_price": 200
+          "min_price": 200,
+          "mean_score_delta": -0.5833333333333334,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0,
+          "mean_margin_delta": -28424.458333333332
         }
       },
-      "products": [
-        "MILK",
-        "WOOL",
-        "EGG",
-        "CARROT",
-        "STRAWBERRY",
-        "MELON",
-        "TOMATO"
+      "status": "CLOSED_NO_RETUNING",
+      "result_doc": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md"
+    },
+    "o_pc1": {
+      "workflow": 35469344185,
+      "status": "ACTIVE_DEVELOPMENT",
+      "signal": "4*CARROT_PRICE-20 > 6*WHEAT_PRICE-10",
+      "seeds": [
+        74901,
+        74902,
+        74903,
+        74904
       ],
-      "runtime_identity_features": false,
-      "protocol": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_PROTOCOL_2026-09-19.md"
+      "opponents": [
+        "v47_mirror",
+        "v48",
+        "ready_stock"
+      ],
+      "protocol": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_PROTOCOL_2026-09-19.md",
+      "runtime_identity_features": false
     }
   },
   "current_hosted_pair": {
