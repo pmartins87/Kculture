@@ -1,0 +1,73 @@
+name: o-lq2-broad-regression
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-lq2-broad-regression.yml'
+      - 'tools/o_lq2_broad_regression_shard.py'
+      - 'tools/aggregate_o_lq2_broad_regression.py'
+      - 'tools/first_party_lq2_canonical_sell_queue.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror,ready_stock,v48,router_2715,conditional_memory,tactical_memory,best_market]
+    runs-on: ubuntu-latest
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/o_lq2_broad_regression_shard.py
+      - name: Run broad regression shard
+        run: |
+          mkdir -p artifacts/o-lq2-broad-shard
+          python tools/o_lq2_broad_regression_shard.py \
+            --opponent ${{ matrix.opponent }} \
+            --out artifacts/o-lq2-broad-shard/O_LQ2_BROAD_${{ matrix.opponent }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq2-broad-${{ matrix.opponent }}
+          path: artifacts/o-lq2-broad-shard/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: o-lq2-broad-*
+          path: artifacts/o-lq2-broad-shards
+          merge-multiple: false
+      - name: Aggregate
+        run: |
+          mkdir -p artifacts/o-lq2-broad-aggregate
+          python tools/aggregate_o_lq2_broad_regression.py \
+            --input-dir artifacts/o-lq2-broad-shards \
+            --out artifacts/o-lq2-broad-aggregate/O_LQ2_BROAD_REGRESSION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq2-broad-regression
+          path: artifacts/o-lq2-broad-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
