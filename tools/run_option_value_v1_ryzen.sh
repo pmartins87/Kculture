@@ -11,10 +11,16 @@ OUT="${OPTION_VALUE_OUT:-runs/option_value_v1_250}"
 SEEDS="${OPTION_VALUE_SEEDS:-250}"
 MASTER="${OPTION_VALUE_MASTER_SEED:-26091802}"
 
+if [[ -x "$ROOT/.venv-ps2/bin/python" ]]; then
+  PY="$ROOT/.venv-ps2/bin/python"
+else
+  PY="${PYTHON:-python3}"
+fi
+
 if [[ -n "${OPTION_VALUE_WORKERS:-}" ]]; then
   WORKERS="$OPTION_VALUE_WORKERS"
 else
-  CPU="$(python3 - <<'PY'
+  CPU="$("$PY" - <<'PY'
 import os
 print(os.cpu_count() or 8)
 PY
@@ -28,14 +34,14 @@ fi
 
 echo "OPTION_VALUE_RYZEN_RUN root=$ROOT out=$OUT seeds=$SEEDS workers=$WORKERS"
 
-python3 - <<'PY'
+"$PY" - <<'PY'
 import importlib.metadata as m
 v=m.version("kaggle-environments")
 assert v=="1.32.7", f"kaggle-environments must be 1.32.7, got {v}"
 print("runtime_ok kaggle-environments",v)
 PY
 
-python3 tools/option_value_dataset_ryzen_v1.py \
+"$PY" tools/option_value_dataset_ryzen_v1.py \
   --out "$OUT" \
   --seed-count "$SEEDS" \
   --master-seed "$MASTER" \
