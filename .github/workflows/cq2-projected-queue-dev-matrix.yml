@@ -1,0 +1,41 @@
+name: cq2-projected-queue-dev-matrix
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/cq2-projected-queue-dev-matrix.yml'
+      - 'tools/cq2_projected_queue_dev_matrix.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  dev:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/cq2_projected_queue_dev_matrix.py
+      - name: Run O-CQ2 development matrix
+        run: |
+          mkdir -p artifacts/cq2-dev-matrix
+          python tools/cq2_projected_queue_dev_matrix.py \
+            --out artifacts/cq2-dev-matrix/CQ2_DEV_MATRIX.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cq2-dev-matrix
+          path: artifacts/cq2-dev-matrix/*.json
+          retention-days: 30
+          if-no-files-found: warn
