@@ -257,45 +257,70 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### O-CQ2 projected queue sanitation — DEVELOPMENT RUN ACTIVE
+### O-CQ2 projected queue sanitation — BINDING RESULT
 
-Protocol frozen before result:
-`docs/strategy/CQ2_PROJECTED_QUEUE_DEV_PROTOCOL_2026-09-19.md`.
+Binding workflow **`35440530160`** completed SUCCESS.
+The prior corrected-count run `35440396122` independently produced the same ranking and metrics.
 
-Binding development workflow: **`35440530160`**.
+Decision: **`CQ2_DEV_WEAK_USE_V4A`**.
+
+Best development configuration:
+- mode `slot_projected`;
+- `min_step=336`;
+- exact V48 divergence matches **424 / 488**;
+- precision **0.5273632**;
+- recall **0.8688525**;
+- F1 **0.6563467**;
+- false-positive rewrites **332**;
+- changed-but-not-exact **48**;
+- missed V48 changes **16**;
+- whole-action accuracy **0.9311544**.
+
+This misses the frozen PROMISING gate because precision < 0.60.
+Therefore:
+- do **not** freeze a CQ2 candidate;
+- do **not** run CQ2 validation;
+- do **not** causalize CQ2;
+- do not tune thresholds after seeing the matrix.
+
+Result:
+`docs/strategy/CQ2_PROJECTED_QUEUE_DEV_RESULT_2026-09-19.md`.
+
+### V4A bounded multi-turn V48 market oracle — ACTIVE
+
+The fallback implementation was written before the CQ2 result and is being executed unchanged.
+
+Workflow **`35444529719`**:
+`v48-multiturn-market-oracle-v4a`.
 
 Frozen design:
-- development seeds `73301..73304`, both seats;
-- expected 5,752 agent decisions;
-- four queue rewrite languages;
-- twelve predeclared activation thresholds;
-- projected own shed includes current-turn V47 DROP / shed-PLACE / PICKUP before market;
-- earlier BUY_PRODUCT / BUY_ANIMAL slots are projected before later SELLs;
-- no opponent identity/private state, seed, rating, EpisodeId or future state.
+- fresh seeds `74001..74006`, both seats;
+- exact V47 physical actions preserved;
+- exact V48 is an **offline shadow proposal source only**;
+- select first 3 replay-verified V47/V48 market divergences, separated by >=36 turns;
+- test horizons 1, 2, 3 turns;
+- exact V47 resumes after the bounded window;
+- only hard BASE non-win contexts spend branch rollout compute.
 
-Two earlier CQ2 workflow attempts are **non-binding**:
-- `35440356236`: original harness had incorrect expected call count (720 instead of 719 decisions/episode);
-- `35440396122`: corrected count but uncached repeated physical projection; superseded for execution efficiency, with identical scientific grid.
+Primary PASS:
+- >=4 hard BASE non-win contexts;
+- >=2 nonwin→win flips;
+- positive score delta.
 
-Run `35440530160` caches the deterministic physical projection once per state; rules, seeds,
-thresholds and ranking metric are unchanged.
-
-A separate frozen validation harness already exists:
-- `tools/cq2_projected_queue_validate.py`;
-- `.github/workflows/cq2-projected-queue-validation.yml`;
-- untouched validation seeds `73401..73404`;
-- validation cannot run until one candidate config + implementation SHA-256 is frozen.
+The run is **queued/in progress** at this handoff.
 
 ### Binding next steps
 
-1. Read run `35440530160`.
-2. If development is STRONG/PROMISING, freeze exactly its best mode/min_step + implementation SHA.
-3. Run untouched CQ2 validation; do not retune on validation seeds.
-4. Validation PASS -> open causal V48 W/L gate.
-5. Validation FAIL -> activate prepared V4A bounded multi-turn V48 market oracle.
-6. No causal O-CQ1 run; CQ1 is permanently closed at parity.
-7. Keep O-RW1 + O-TW1 as current offline host.
-8. No new Kaggle submission; preserve active hosted slots.
+1. Read workflow `35444529719`.
+2. If **V48_V4A_WL_HEADROOM_PASS**, inspect recurring winning event/horizon patterns and
+   rewrite them as first-party legal-state options before any selector training.
+3. If **V48_V4A_WL_HEADROOM_WEAK**, enlarge fresh confirmation around the winning bounded pattern,
+   not the whole search space.
+4. If **V48_V4A_MARGIN_ONLY** or **NO_HEADROOM**, do not extend horizon blindly; first run a
+   long-horizon market-only upper-bound diagnostic to decide whether the missing advantage is
+   cumulative market state or a different mechanism.
+5. Keep O-RW1 + O-TW1 as current offline host.
+6. No new Kaggle submission; preserve active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
