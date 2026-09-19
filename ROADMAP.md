@@ -111,43 +111,64 @@ Result:
 
 Question: do frozen O-RW1 and O-TW1 stack safely on one V47 organism?
 
-Workflow **`35424958961`**:
+Original serial workflow **`35424958961`** remains in progress:
 `option-library-combo-runtime-v0`.
 
-Fresh seeds `71001..71004`, seven-opponent V2 league, both seats.
-Matched variants: BASE / O-RW1 / O-TW1 / BOTH.
+Because the serial official-engine run is long, an **exactly equivalent execution-only
+parallelization** was launched, without changing seeds, variants, opponents or thresholds:
 
-State: **in progress** at this handoff.
+- parallel workflow **`35426256016`**;
+- 7 shards, one per opponent;
+- each shard uses the same fresh seeds `71001..71004`, both seats, and variants
+  BASE / O-RW1 / O-TW1 / BOTH;
+- aggregator applies the same frozen decision rule.
+
+The first mechanically valid completed execution is binding; if both complete validly,
+their summaries must agree.
 
 #### G2 — diverse wrapper proposal oracle V3
 
 Question: can real market proposals from a larger strong-agent panel expose one-turn
 counterfactual W/L headroom **outside the modern V47 family**?
 
-Workflow **`35425004728`**:
-`adaptive-wrapper-proposal-oracle-v3`.
+Two earlier attempts are **mechanically invalid / non-binding**:
+- `35425004728`: import bootstrap failure before hypothesis execution;
+- `35426094440`: package acquisition stopped on inaccessible Shop-Aware (403) before
+  any branch state was evaluated.
 
-Proposers include Ready Stock, Market Smart, V46 microstructure, V48 queue,
-Shop-Aware, `2715.6`, Conditional Memory, Tactical Memory and Best Market.
+No strategic conclusion may be drawn from those runs.
 
-Frozen fresh seeds: `72001,72002`; both seats; full seven-opponent V2 league.
+Current binding attempt:
+- workflow **`35426189093`**;
+- identical seeds/opponents/thresholds;
+- inaccessible Shop-Aware removed only as an unavailable proposal source;
+- remaining proposer panel: Ready Stock, Market Smart, V46 Microstructure, V48 Queue,
+  `2715.6`, Conditional Memory, Tactical Memory and Best Market;
+- state: in progress at this handoff.
 
-State: **queued** at this handoff.
+#### Conditional fallback — V4 multi-turn transaction search
 
-If V3 finds non-V47 headroom, convert the recurring transformation into a first-party
-causal option before training. If V3 is mirror-only/no-headroom, move to bounded
-**multi-turn transaction/guard** proposals rather than enlarging the ridge/MLP.
+Protocol frozen at:
+`docs/strategy/ADAPTIVE_TRANSACTION_SEARCH_V4_PROTOCOL_2026-09-19.md`.
+
+It is **dormant**. Activate only after V3 is mechanically valid and fails to show
+meaningful W/L headroom outside modern V47-family opponents.
+
+V4 permits bounded market-only transaction sequences of up to 3 turns, with exact V47
+farmer/hands preservation and mandatory exact-engine counterfactual evaluation.
+Promotion requires gains in at least two unrelated non-V47 opponent families.
 
 ### Binding next steps
 
-1. Let G1 and G2 finish; no extra Ryzen workload is needed while they run.
-2. Do **not** fit/freeze a production selector from V2 alone.
+1. Obtain a mechanically valid G1 result; prefer the parallel equivalent if it finishes first.
+2. Obtain the mechanically valid V3 result from `35426189093`.
 3. If G1 shows safe incremental composition, retain BOTH as the current option-library host.
-4. If G2 shows non-modern41 W/L headroom, causalize the winning transformation(s) first-party
-   on fresh seeds and add them to the machine-readable option library.
-5. Only after the option library has meaningful support across multiple unrelated opponent
-   families should whole-seed + leave-family-out selector training resume.
-6. No new Kaggle submission; preserve both currently active hosted slots.
+4. If V3 shows non-modern41 W/L headroom, causalize the recurring winning transformation(s)
+   as first-party options on fresh seeds before any model training.
+5. If valid V3 is mirror-only/no-headroom, activate the already-frozen V4 protocol.
+6. Resume whole-seed + leave-family-out selector training only after the option library has
+   meaningful W/L support across multiple unrelated opponent families.
+7. No new Kaggle submission; preserve both currently active hosted slots.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
