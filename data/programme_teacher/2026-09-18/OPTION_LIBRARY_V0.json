@@ -517,7 +517,7 @@
     },
     "v5_physical_oracle": {
       "workflow": 35469830232,
-      "status": "ACTIVE",
+      "status": "ACTIVE_CORRECTED_EXECUTIONS",
       "base": "ALL3",
       "seeds": [
         75001,
@@ -534,7 +534,19 @@
       "protocol": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md",
       "workflow_original": 35469830232,
       "workflow_parallel": 35469942461,
-      "binding_rule": "first mechanically valid aggregate is binding; if both valid they must agree"
+      "binding_rule": "first mechanically valid corrected aggregate is binding; if both corrected aggregates are valid they must agree",
+      "nonbinding_runs": [
+        {
+          "id": 35469830232,
+          "reason": "per-shard local branch-state minimum stricter than frozen aggregate protocol"
+        },
+        {
+          "id": 35469942461,
+          "reason": "parallel per-seed local branch-state minimum inconsistent with frozen aggregate protocol"
+        }
+      ],
+      "workflow_original_corrected": 35470046629,
+      "workflow_parallel_corrected": 35470051852
     }
   },
   "current_hosted_pair": {
