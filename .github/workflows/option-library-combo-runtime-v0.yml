@@ -1,0 +1,42 @@
+name: option-library-combo-runtime-v0
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/option-library-combo-runtime-v0.yml'
+      - 'tools/option_library_combo_runtime_v0.py'
+      - 'docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_2026-09-19.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/option_library_combo_runtime_v0.py
+      - name: Run broad option-library composition gate
+        run: |
+          mkdir -p artifacts/option-library-combo-v0
+          python tools/option_library_combo_runtime_v0.py \
+            --out artifacts/option-library-combo-v0/OPTION_LIBRARY_COMBO_V0.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: option-library-combo-runtime-v0
+          path: artifacts/option-library-combo-v0/*.json
+          retention-days: 30
+          if-no-files-found: warn
