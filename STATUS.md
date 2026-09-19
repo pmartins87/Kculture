@@ -257,130 +257,127 @@ It should run only if a compact first-party sanitation mechanism cannot explain 
 6. Keep O-RW1 + O-TW1 as current offline host.
 7. No new Kaggle submission; preserve active hosted slots.
 
-### ALL3 — FIRST INFORMATIVE HOSTED STATE
+### ALL3 — HOSTED STATE
 
 Current intended active pair:
 1. O-RW1 `56336027`;
 2. ALL3 `56367770`.
 
-ALL3 first-informative checkpoint:
-- rating snapshot **2395.4**;
+Latest hosted snapshot:
+- ALL3 **2412.1**;
+- O-RW1 **2361.6**.
+
+These live ratings are observational and come from different histories/populations.
+
+ALL3 first-informative checkpoint remains:
 - 35 listed public episodes;
-- **34 resolved external games**;
-- **28W / 6L / 0T**;
-- raw score rate **0.8235294**;
+- 34 resolved external games;
+- 28W / 6L / 0T;
+- raw score rate 0.8235294;
 - 33 unique opponents;
-- mean margin **+13,626.97**;
-- median margin **+1,676.5**.
-
-Result:
-`docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md`.
-
-Do not interpret the live rating or 28-6 record as converged final performance.
+- mean margin +13,626.97.
 
 ### O-HV1 — CLOSED
 
-Original workflow `35465868923` and execution-equivalent parallel workflow `35466170602`
-agree exactly:
+Binding:
+`O_HV1_DEV_CLOSE`.
 
-**`O_HV1_DEV_CLOSE`**.
-
-Every frozen high-value flush configuration:
-- mean score delta **-0.58333**;
-- 14/24 negative-score contexts;
-- 0 positive-score contexts;
-- mean margin approximately -28k to -30k.
-
-No threshold/product rescue is permitted.
+No threshold/product rescue.
 
 Result:
 `docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md`.
 
 ### O-PC1 — CLOSED
 
-Original workflow **`35469344185`** and execution-equivalent parallel workflow
-**`35469497089`** agree exactly:
+Binding:
+`O_PC1_DEV_CLOSE`.
 
-**`O_PC1_DEV_CLOSE`**.
+Fresh paired result:
+- mean score delta -0.25;
+- 6 negative-score contexts;
+- 0 positive-score contexts.
 
-Frozen official-mechanics rule:
-`4 * P_carrot - 20 > 6 * P_wheat - 10`.
-
-Fresh 24-context development result:
-- firing contexts: 6;
-- mean score delta **-0.25**;
-- negative-score contexts **6**;
-- positive-score contexts **0**;
-- mean margin delta **-217.83**;
-- 54 WHEAT->CARROT plant substitutions;
-- 54 seed units redirected.
-
-Every tested opponent family regressed:
-- V47 mirror: -0.25 mean score delta;
-- V48: -0.25;
-- Ready Stock: -0.25.
-
-This reproduces the CR090 lesson:
-**a valid public economic signal is not automatically a valid physical action rule**.
-
-No price-ratio/start-step/yield rescue is permitted.
+No ratio/start-step/yield rescue.
 
 Result:
 `docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md`.
 
-### ALL3 Physical Proposal Oracle V5 — ACTIVE
+### V5 Physical Proposal Oracle — CLOSED MARGIN-ONLY
+
+Corrected binding runs:
+- `35470046629`;
+- `35470051852`.
+
+Both agree exactly:
+**`V5_PHYSICAL_MARGIN_ONLY`**.
+
+Overall:
+- 32 branch states;
+- base score rate 0.9375;
+- oracle score rate 0.9375;
+- score delta 0;
+- nonwin->win flips 0;
+- loss->win flips 0;
+- mean oracle margin delta +505.65625;
+- median 0;
+- 14 positive-margin states.
+
+By opponent:
+- router_2715: +1,317.625 mean margin, no W/L gain;
+- Tactical Memory: +694, no W/L gain;
+- V47 mirror: +11, no W/L gain;
+- V48: 0 margin gain, no W/L gain.
+
+Only non-winning V5 base trajectory:
+- V48;
+- seed 75002;
+- seat 0;
+- final margin -26.
+
+No one-turn physical branch changed that result.
+
+Therefore:
+- do not promote V5 transforms;
+- do not first-party PASS/movement micro-patches;
+- close one-turn localized physical substitution as an option source.
+
+Result:
+`docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md`.
+
+### V6A Hard-Context Census — ACTIVE
+
+Workflow:
+**`35472681958`**.
+
+Purpose:
+find fresh ALL3 non-win contexts before spending compute on a 2–3-turn localized physical
+continuation oracle.
+
+Fresh seed batch:
+`75101..75108`.
+
+Seven-family V2 opponent panel:
+V47 mirror, Ready Stock, V48, router_2715, Conditional Memory, Tactical Memory, Best Market.
+
+Both seats:
+112 exact ALL3 base games.
+
+Gate:
+- >=4 fresh nonwins -> freeze at most 12 diverse hard contexts and open V6 continuation oracle;
+- <4 -> expand with a second untouched seed batch;
+- close wins are diagnostics only and cannot substitute for nonwins.
 
 Protocol:
-`docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md`.
-
-Initial runs `35469830232` / `35469942461` are NON-BINDING because their shard-local branch-state minima were stricter/inconsistent with the frozen aggregate-only `>=12` rule.
-
-Corrected binding executions:
-- original-layout: **`35470046629`**;
-- opponent×seed parallel: **`35470051852`**.
-
-First mechanically valid corrected aggregate is binding; if both corrected runs are valid, they must agree.
-
-Method:
-- executed organism is exact ALL3;
-- transient strong public policies act only as shadow proposers;
-- each candidate branch changes exactly one physical action:
-  farmer OR one hand;
-- exact ALL3 market remains unchanged;
-- branch executes once;
-- exact ALL3 resumes immediately afterward;
-- third-party code/actions are discovery-only and can never be promoted directly.
-
-Frozen proposer panel:
-Ready Stock, Market Smart, V46 Microstructure, V48 Queue, router_2715,
-Conditional Memory, Tactical Memory, Best Market.
-
-Fresh discovery:
-- seeds `75001,75002`;
-- both seats;
-- opponents V47 mirror, V48, router_2715, Tactical Memory;
-- steps 120..647;
-- max 2 branch states/matchup;
-- >=96-step separation;
-- max 6 localized proposals/event.
-
-Strategic gate:
-- PASS: >=2 nonwin->win flips and W/L headroom in >=2 opponent families;
-- WEAK: >=1 flip or W/L headroom in one family;
-- MARGIN_ONLY: no W/L headroom but positive mean oracle margin;
-- otherwise NO_HEADROOM.
-
-PASS/WEAK does not authorize deployment:
-the recurring transform must first be rewritten first-party and fresh-causally validated.
+`docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md`.
 
 ### Binding next steps
 
-1. Resolve corrected V5 workflows `35470046629` / `35470051852`.
-2. Mechanical failure -> repair mechanics only, preserve protocol.
-3. PASS/WEAK -> inspect recurring winning localized transforms and causalize first-party.
-4. NO_HEADROOM -> close one-turn physical substitutions and advance only to bounded 2–3-turn physical macro oracle.
+1. Resolve V6A `35472681958`.
+2. If >=4 fresh nonwins: freeze selected hard-context list exactly.
+3. Run bounded 2–3-turn localized physical continuation oracle only on those contexts.
+4. If <4: expand untouched seed census before branching.
 5. Preserve O-RW1 + ALL3 hosted pair.
-6. No new Kaggle submission from V5 discovery evidence.
+6. No new Kaggle submission from V5/V6A discovery evidence.
 
 ## Historical record (superseded where inconsistent with the current handoff)
 
