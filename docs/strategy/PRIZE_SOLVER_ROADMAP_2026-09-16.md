@@ -333,8 +333,13 @@ Result:
 Protocol:
 `docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md`.
 
-Workflow:
-**`35469830232`**.
+Initial runs `35469830232` / `35469942461` are NON-BINDING because their shard-local branch-state minima were stricter/inconsistent with the frozen aggregate-only `>=12` rule.
+
+Corrected binding executions:
+- original-layout: **`35470046629`**;
+- opponent×seed parallel: **`35470051852`**.
+
+First mechanically valid corrected aggregate is binding; if both corrected runs are valid, they must agree.
 
 Method:
 - executed organism is exact ALL3;
@@ -370,7 +375,7 @@ the recurring transform must first be rewritten first-party and fresh-causally v
 
 ### Binding next steps
 
-1. Resolve V5 workflow `35469830232`.
+1. Resolve corrected V5 workflows `35470046629` / `35470051852`.
 2. Mechanical failure -> repair mechanics only, preserve protocol.
 3. PASS/WEAK -> inspect recurring winning localized transforms and causalize first-party.
 4. NO_HEADROOM -> close one-turn physical substitutions and advance only to bounded 2–3-turn physical macro oracle.
