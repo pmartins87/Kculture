@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V5 physical proposal oracle; PASS/WEAK => causalize recurring localized transform first-party; NO_HEADROOM => bounded 2-3-turn physical macro oracle; preserve O-RW1 + ALL3 hosted",
+  "next_stage": "resolve V6A census; >=4 fresh nonwins => freeze hard contexts and run V6 bounded 2-3-turn localized physical continuation oracle; otherwise expand untouched seed census",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -516,50 +516,66 @@
       "result_doc": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md"
     },
     "v5_physical_oracle": {
-      "workflow": 35469830232,
-      "status": "ACTIVE_CORRECTED_EXECUTIONS",
-      "base": "ALL3",
+      "corrected_workflow_original": 35470046629,
+      "corrected_workflow_parallel": 35470051852,
+      "decision": "V5_PHYSICAL_MARGIN_ONLY",
+      "mechanical_pass": true,
+      "branch_states": 32,
+      "base_score_rate": 0.9375,
+      "oracle_score_rate": 0.9375,
+      "score_delta": 0,
+      "nonwin_to_win_flips": 0,
+      "loss_to_win_flips": 0,
+      "mean_oracle_margin_delta": 505.65625,
+      "median_oracle_margin_delta": 0,
+      "positive_margin_states": 14,
+      "v48_mean_margin_delta": 0,
+      "only_nonwin": {
+        "opponent": "v48",
+        "seed": 75002,
+        "seat": 0,
+        "margin": -26
+      },
+      "status": "CLOSED_MARGIN_ONLY_NO_FIRST_PARTY_PROMOTION",
+      "result_doc": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md"
+    },
+    "v6a_hard_context_census": {
+      "workflow": 35472681958,
+      "status": "ACTIVE",
       "seeds": [
-        75001,
-        75002
+        75101,
+        75102,
+        75103,
+        75104,
+        75105,
+        75106,
+        75107,
+        75108
       ],
       "opponents": [
         "v47_mirror",
+        "ready_stock",
         "v48",
         "router_2715",
-        "tactical_memory"
+        "conditional_memory",
+        "tactical_memory",
+        "best_market"
       ],
-      "proposal_scope": "single localized farmer or one-hand physical substitution for one turn; exact ALL3 market preserved; ALL3 resumes immediately",
-      "runtime_identity_features": false,
-      "protocol": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_PROTOCOL_2026-09-19.md",
-      "workflow_original": 35469830232,
-      "workflow_parallel": 35469942461,
-      "binding_rule": "first mechanically valid corrected aggregate is binding; if both corrected aggregates are valid they must agree",
-      "nonbinding_runs": [
-        {
-          "id": 35469830232,
-          "reason": "per-shard local branch-state minimum stricter than frozen aggregate protocol"
-        },
-        {
-          "id": 35469942461,
-          "reason": "parallel per-seed local branch-state minimum inconsistent with frozen aggregate protocol"
-        }
-      ],
-      "workflow_original_corrected": 35470046629,
-      "workflow_parallel_corrected": 35470051852
+      "purpose": "find fresh ALL3 non-win contexts before bounded 2-3-turn physical continuation oracle",
+      "protocol": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
     "orw1": {
       "submission_id": 56336027,
-      "rating": 2383.9,
+      "rating": 2361.6,
       "status": "COMPLETE"
     },
     "all3": {
       "submission_id": 56367770,
-      "rating": 600,
+      "rating": 2412.1,
       "status": "COMPLETE",
-      "note": "initial activation rating only"
+      "note": "latest observed snapshot; histories differ from O-RW1"
     }
   }
 }
