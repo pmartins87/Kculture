@@ -1,5 +1,62 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V13A MODERATE DRIFT / V13B EXECUTABLE REFRESH ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V13A — COMPLETE
+
+Binding workflow: **`35520373817`**  
+Binding head: `9fb21773f4b7318dbc12605d49e680296de3898a`.
+
+Earlier workflow `35520312252` is NON-BINDING mechanical failure (repository import path before strategic data read).
+
+Decision: **`V13A_FRONTIER_MODERATE_DRIFT_REFRESH_ALL_CURRENT`**.
+
+Current score-sorted public Top-30 versus frozen 2026-09-18 corpus:
+- overlap: **15/30**;
+- new current refs: **15**;
+- dropped frozen refs: **15**;
+- unknown current source identities: **15**.
+
+Binding action: refresh/extract all current Top-30 rather than reuse the old seven-agent league or only patch new entrants.
+
+Frozen refs:
+`configs/all3_v13b_current_top30_refs.json`.
+
+Result:
+`docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_RESULT_2026-09-20.md`.
+
+### V13B — ACTIVE
+
+Workflow: **`35520463598`**  
+Launch commit: `79e14f85382c8f4d68fba2fab19bcae25c4d9437`.
+
+For all 30 frozen current refs:
+- acquire exact public package or static notebook source;
+- compute current `main.py` SHA;
+- deduplicate exact sources;
+- remove Kaggle credentials before third-party execution;
+- smoke one unique-source representative in both seats vs starter on exact engine 1.32.7;
+- persist provenance/results only, never public source code.
+
+READY gate:
+- >=24/30 refs acquired;
+- >=12 unique sources;
+- >=10 unique sources pass both-seat smoke;
+- >=5 current Top-10 refs map to smoke-passing sources.
+
+Local smoke W/L is mechanically diagnostic only and must never be used as hosted-strength evidence.
+
+No Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35520463598`**.
+
+
 ## Binding update — 2026-09-20 — V12A CLOSED / V13A CURRENT FRONTIER DRIFT ACTIVE
 
 **This block supersedes lower stale current-action sections.**
