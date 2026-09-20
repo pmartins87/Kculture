@@ -447,26 +447,58 @@ Config:
 Result:
 `docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_RESULT_2026-09-19.md`.
 
-### V8B LQ2 SELL-order oracle — ACTIVE
+### V8B LQ2 SELL-order oracle — COMPLETE
 
 Workflow:
-**`35479783995`**.
+`35479783995`.
 
-Frozen intervention:
-- pairwise transposition of two complete SELL orders inside one selected LQ2 run;
-- exact products and quantities preserved;
-- market outside the run preserved;
-- farmer/hands preserved;
-- only one turn changes;
-- ALL3 resumes next turn.
+Decision:
+**`V8B_ORDER_HEADROOM_NARROW`**.
+
+Mechanical:
+- PASS;
+- zero failures;
+- 1 / 4 hard-context loss->win flip;
+- mean best-branch margin delta +96.
+
+Strongest results:
+- V48 75103/seat1, step 600: FERTILIZER 11 <-> WOOL 7, **-86 -> +10**;
+- V48 75110/seat0, step 600: WOOL 7 <-> MILK 16, **-484 -> -220**.
+
+The shared local direction is:
+**MILK -> WOOL -> FERTILIZER**.
+
+Result:
+`docs/strategy/ALL3_V8B_LQ2_SELL_ORDER_ORACLE_RESULT_2026-09-19.md`.
+
+### O-LQ3 priority SELL ordering — STAGE A ACTIVE
+
+Workflow:
+**`35480144515`**.
+
+Candidate:
+within each post-LQ2 SELL run, stable-sort only orders currently occupying MILK/WOOL/FERTILIZER
+slots by fixed public priority:
+
+`MILK -> WOOL -> FERTILIZER`.
+
+Invariants:
+- non-target products remain in their original slots;
+- quantities unchanged;
+- non-SELL slots unchanged;
+- farmer/hands unchanged;
+- market multiset unchanged;
+- no opponent identity.
+
+Stage A:
+exact paired ALL3 vs ALL3+LQ3 replay on the four frozen hard contexts.
 
 Gate:
-- >=2 hard-context loss->win flips => repeatable order headroom;
-- exactly 1 => narrow headroom;
-- zero flips + positive aggregate best-margin delta => margin-only;
-- otherwise no-headroom.
+- >=1 loss->win and positive mean margin delta -> Stage A PASS and fresh paired Stage B;
+- zero flips but positive mean delta -> directional-only, narrow the legal-state condition;
+- nonpositive mean or mechanics invalid -> fail.
 
-No Kaggle submission is authorized by V8B.
+No Kaggle submission is authorized by Stage A.
 
 ### Binding next steps
 
