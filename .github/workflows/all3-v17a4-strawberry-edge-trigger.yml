@@ -1,0 +1,44 @@
+name: all3-v17a4-strawberry-edge-trigger
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v17a4-strawberry-edge-trigger.yml'
+      - 'tools/all3_v17a4_strawberry_edge_trigger.py'
+      - 'docs/strategy/ALL3_V17A4_STRAWBERRY_EDGE_TRIGGER_PROTOCOL_2026-09-20.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download V17A3 binding aggregate
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v17a3-strawberry-trigger-audit
+          path: artifacts/v17a3-source
+          run-id: 35539020930
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_v17a4_strawberry_edge_trigger.py
+      - name: Audit rising-edge triggers
+        run: |
+          mkdir -p artifacts/v17a4
+          python tools/all3_v17a4_strawberry_edge_trigger.py             --v17a3 artifacts/v17a3-source/ALL3_V17A3_STRAWBERRY_TRIGGER_AUDIT.json             --out artifacts/v17a4/ALL3_V17A4_STRAWBERRY_EDGE_TRIGGER.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v17a4-strawberry-edge-trigger
+          path: artifacts/v17a4/*.json
+          retention-days: 30
+          if-no-files-found: warn
