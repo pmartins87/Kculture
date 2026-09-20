@@ -1,5 +1,90 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V14B REORDER TRANSLATED / V15A O-LQ4E CAUSAL ACTIVE
+
+**This block supersedes lower stale V14B/V15 current-action sections.**
+
+### V14B — COMPLETE
+
+Phenotype atlas workflow: **`35526759114`**.
+
+Decision:
+**`V14B_RECURRENT_DOMAIN_PHENOTYPE_READY`**.
+
+Selected phenotype by pre-registered deterministic ordering:
+- `EARLY|REORDER`;
+- 24/24 hard contexts;
+- 10/10 source SHAs;
+- 148 occurrences;
+- direction share 1.0;
+- median turn 150.
+
+Outcome-free directional translation workflow:
+**`35532446891`**.
+
+Translation decision:
+**`V14B_REORDER_DIRECTION_READY`**.
+
+Selected pairwise precedence:
+- earlier: **SELL FERTILIZER**;
+- later: **HIRE**;
+- 24/24 contexts;
+- 10/10 sources;
+- 48 occurrences;
+- direction share 1.0;
+- observed turns 96 and 120;
+- median turn 108.
+
+The candidate does not whitelist turns 96/120. It generalizes the selected EARLY structural phenotype:
+step <336 + both target order types present + HIRE precedes SELL FERTILIZER.
+
+Binding result:
+`docs/strategy/ALL3_V14B_MARKET_PHENOTYPE_RESULT_2026-09-20.md`.
+
+### O-LQ4E — FROZEN FIRST-PARTY CANDIDATE
+
+**Early Fertilizer-before-Hire**.
+
+Semantics:
+- input exact ALL3;
+- step <336;
+- identify only target slots whose order is SELL FERTILIZER or HIRE;
+- stable-sort target slots with SELL FERTILIZER first, HIRE second;
+- preserve all non-target slots;
+- preserve all quantities;
+- preserve market multiset;
+- preserve farmer/hands;
+- no opponent identity or future information.
+
+Implementation:
+`tools/first_party_lq4e_early_fertilizer_before_hire.py`.
+
+### V15A — ACTIVE
+
+Workflow: **`35532585508`**  
+Launch commit: `de0242ec264047517dd4974419cf75cee8dbbf46`.
+
+Population:
+- all 24 binding V13C hard contexts;
+- BASE exact ALL3 vs exact ALL3 + O-LQ4E;
+- same frozen source SHA / seed / seat.
+
+Frozen W/L discovery PASS requires:
+- mechanics clean;
+- fire coverage >=8 contexts across >=2 sources;
+- loss-to-win flips >=4 across >=2 sources;
+- mean score delta >0;
+- mean margin delta >0.
+
+Margin-only closes the option.
+
+Fresh V15B validation population/seeds are already pre-registered in the V15A protocol and cannot change after this result.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35532585508`**.
+
+
 ## Binding update — 2026-09-20 — V14A MARKET HEADROOM / V14B MARKET ATLAS ACTIVE
 
 **This block supersedes lower stale V14A/V14B current-action sections.**
