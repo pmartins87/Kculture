@@ -1,0 +1,73 @@
+name: o-lq3c-v8d-e1-extension
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/o-lq3c-v8d-e1-extension.yml'
+      - 'tools/o_lq3c_v8d_extension_shard.py'
+      - 'tools/aggregate_o_lq3c_v8d_extension.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v48, v47_mirror, ready_stock]
+        block: [D, E, F]
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/first_party_lq3c_conditional_sell_order.py
+          python -m py_compile tools/o_lq3c_v8d_validation_shard.py
+          python -m py_compile tools/o_lq3c_v8d_extension_shard.py
+          python -m py_compile tools/aggregate_o_lq3c_v8d_extension.py
+      - name: Run V8D-E1 shard
+        run: |
+          mkdir -p artifacts/v8d-e1
+          python tools/o_lq3c_v8d_extension_shard.py             --opponent ${{ matrix.opponent }}             --block ${{ matrix.block }}             --out artifacts/v8d-e1/V8D_E1_${{ matrix.opponent }}_${{ matrix.block }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v8d-e1-${{ matrix.opponent }}-${{ matrix.block }}
+          path: artifacts/v8d-e1/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v8d-e1-*
+          path: artifacts/v8d-e1-shards
+          merge-multiple: false
+      - name: Aggregate V8D-E1
+        run: |
+          mkdir -p artifacts/v8d-e1-aggregate
+          python tools/aggregate_o_lq3c_v8d_extension.py             --input-dir artifacts/v8d-e1-shards             --out artifacts/v8d-e1-aggregate/O_LQ3C_V8D_E1_EXTENSION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: o-lq3c-v8d-e1-extension
+          path: artifacts/v8d-e1-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
