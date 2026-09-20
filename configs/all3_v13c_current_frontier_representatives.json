@@ -64,8 +64,15 @@
     },
     {
       "rank": 14,
-      "ref": "tetsutani/demand-preserving-turn-sale-timing",
-      "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f"
+      "ref": "tetsutani/demand-preserving-turn-sale-timing/versions/4",
+      "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f",
+      "unversioned_ref": "tetsutani/demand-preserving-turn-sale-timing",
+      "version_pin": 4,
+      "pin_provenance": {
+        "workflow": 35523343530,
+        "archive_sha256": "24250d6de0e1bf143ea0cc1b2bdab541aa94ee12c09b9f2f6e98e8afb7097610",
+        "reason": "unversioned notebook changed after V13B; immutable version 4 reproduces frozen V13B bytes exactly"
+      }
     },
     {
       "rank": 15,
@@ -107,5 +114,12 @@
       "ref": "nathanjacob/kaggriculture-pipe-5-terminal-boost",
       "main_sha256": "a5cb643b0516906fb7660613a4eebe00a6cc949a8de98d7744a7071038da824c"
     }
-  ]
+  ],
+  "mechanical_amendment": {
+    "date": "2026-09-20",
+    "strategic_population_changed": false,
+    "strategic_gate_changed": false,
+    "seeds_changed": false,
+    "rank14_only": "pin mutable current ref to immutable /versions/4 that exactly reproduces frozen V13B SHA"
+  }
 }
