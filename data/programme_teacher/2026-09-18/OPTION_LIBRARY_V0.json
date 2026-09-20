@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V16B workflow 35533510437 for frozen one-shot O-LQ5F; only V16B_LQ5F_WL_HEADROOM may activate the pre-frozen V16C config on seeds 78301..78304",
+  "next_stage": "resolve V17A workflow 35538621223; if a recurrent joint W2 market bundle exists, freeze exactly one bundle translation before any causal run",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1475,13 +1475,23 @@
       "result_doc": "docs/strategy/ALL3_V16A_W2_SELL_QUANTITY_RESULT_2026-09-20.md"
     },
     "v16b_lq5f_causal": {
-      "status": "ACTIVE",
+      "status": "CLOSED_MARGIN_ONLY",
       "workflow": 35533510437,
       "launch_commit": "12c3b9ea4c481c3e640688ca87cd346cd2777259",
       "hard_contexts": 24,
       "pass_gate": "coverage>=8 across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
       "protocol": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "decision": "V16B_LQ5F_MARGIN_ONLY_CLOSE",
+      "mechanical_pass": true,
+      "coverage_pass": true,
+      "fire_contexts": 24,
+      "fire_sources": 10,
+      "loss_to_win_flips": 0,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 11.5,
+      "result_doc": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_RESULT_2026-09-20.md",
+      "fresh_validation_activated": false
     },
     "v16c_lq5f_fresh_validation": {
       "status": "DORMANT_PRE_FROZEN",
@@ -1495,6 +1505,15 @@
       ],
       "sources": 10,
       "pairs": 80,
+      "automatic_kaggle_submission": false
+    },
+    "v17a_w2_joint_market_bundle": {
+      "status": "ACTIVE",
+      "workflow": 35538621223,
+      "launch_commit": "1baf3e1abbb51368841caff6d3f5f34a2f6e0c5d",
+      "source_workflow": 35526759114,
+      "selection": "max sources; max contexts; max occurrences; earliest median turn; lexical bundle key",
+      "protocol": "docs/strategy/ALL3_V17A_W2_JOINT_MARKET_BUNDLE_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
