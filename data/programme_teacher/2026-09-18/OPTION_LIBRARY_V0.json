@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V9B workflow 35517836947; only W/L headroom can advance residual one-turn structural imitation; margin-only closes this family",
+  "next_stage": "resolve V11A hosted ALL3 hard-population refresh workflow 35518801971; if sample ready, derive next mechanism hypotheses from actual ALL3 loss replay structure rather than V48 residual imitation or duplicate H1/H1B timing",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -430,10 +430,15 @@
     "all3_next_option": {
       "source_submission_id": 56336027,
       "purpose": "mine mature O-RW1 hosted losses/opponents to target next ALL3 option discovery",
-      "workflow": 35459722091,
-      "status": "ACTIVE_COLLECTING_PUBLIC_REPLAYS",
+      "workflow": 35518801971,
+      "status": "V11A_CURRENT_ALL3_REFRESH_ACTIVE",
       "max_public_replays": 128,
-      "identity_use": "offline forensic only; prohibited as runtime feature"
+      "identity_use": "offline forensic only; prohibited as runtime policy feature",
+      "previous_orw1_forensics_workflow": 35459722091,
+      "previous_orw1_forensics_status": "COMPLETE_STALE_PROXY",
+      "current_all3_submission_id": 56367770,
+      "launch_commit": "bbc4a9d74e930bf4fb334a0f5217ab3cb43133c0",
+      "protocol": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_PROTOCOL_2026-09-20.md"
     },
     "o_hv1": {
       "workflow_original": 35465868923,
@@ -771,7 +776,7 @@
       "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md"
     },
     "v9_residual_structural_decomposition": {
-      "status": "V9A_COMPLETE_V9B_ACTIVE",
+      "status": "CLOSED_ONE_TURN_NO_WL",
       "activate_if": "binding V8C closes without reusable W/L headroom",
       "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
       "categories": [
@@ -808,7 +813,9 @@
       "v9b_workflow": 35517836947,
       "v9b_launch_commit": "fefc69744fb0b12bdd1c71141c53d0ff1083bd17",
       "v9b_state_config": "configs/all3_v9b_representative_states.json",
-      "v9b_protocol": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_PROTOCOL_2026-09-20.md"
+      "v9b_protocol": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_PROTOCOL_2026-09-20.md",
+      "v9b_decision": "V9B_NO_WL_HEADROOM_CLOSE_ONE_TURN_STRUCTURAL",
+      "v9b_result_doc": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_RESULT_2026-09-20.md"
     },
     "o_lq3c": {
       "status": "CLOSED_NO_FRESH_WL_CONFIRMATION",
@@ -1061,6 +1068,60 @@
           "negative_score_contexts": 0
         }
       }
+    },
+    "v10a_residual_cumulative_market": {
+      "status": "CLOSED",
+      "workflow": 35518110487,
+      "head_commit": "291442310a0397da0d7a670a5b20954b8450c06b",
+      "decision": "V10A_RESIDUAL_MARKET_UPPER_BOUND_CLOSED",
+      "mechanical_pass": true,
+      "by_mode": {
+        "FULL_ALL": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -205.25,
+          "mean_substitutions": 59.25
+        },
+        "FULL_W2PLUS": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -191.5,
+          "mean_substitutions": 55.25
+        },
+        "STRUCT_W2PLUS": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -191.5,
+          "mean_substitutions": 53
+        },
+        "INSERT_W2PLUS": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -191.5,
+          "mean_substitutions": 37.75
+        },
+        "QTY_W2PLUS": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 0,
+          "mean_substitutions": 15.75
+        },
+        "REORDER_W2PLUS": {
+          "positive_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 0,
+          "mean_substitutions": 2.25
+        }
+      },
+      "result_doc": "docs/strategy/ALL3_V10A_RESIDUAL_CUMULATIVE_MARKET_RESULT_2026-09-20.md",
+      "close_reason": "remaining V48 market behavior has no cumulative W/L upper-bound headroom over ALL3"
+    },
+    "h1_h1b_clarification": {
+      "status": "ALREADY_ABSORBED",
+      "mechanism": "public town-WHEAT sell deferral",
+      "current_option": "O-TW1",
+      "included_in": "ALL3",
+      "decision": "do not reopen H1/H1B as a duplicate option family"
     }
   },
   "current_hosted_pair": {
