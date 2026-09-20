@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve binding V14A workflow 35525689199 over all 24 frozen V13C hard contexts; select next architecture strictly from preregistered MARKET/PHYSICAL/FULL W/L gate; no Kaggle submission",
+  "next_stage": "resolve binding V14A mechanical completion workflow 35526276641; require exact 144 context-mode grid before applying preregistered MARKET/PHYSICAL/FULL decision",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1322,7 +1322,7 @@
       "local_h2h_hosted_rating_use": false
     },
     "v14a_current_frontier_domain_upper_bound": {
-      "status": "ACTIVE",
+      "status": "ACTIVE_BINDING_MECHANICAL_COMPLETION",
       "activate_if": "V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY",
       "modes": [
         "BASE",
@@ -1338,7 +1338,24 @@
       "launch_commit": "73f6dfdfc3e773c4b20bc9a3a888b2627c507521",
       "hard_contexts": 24,
       "hard_sources": 10,
-      "hard_context_config": "configs/all3_v14a_hard_contexts.json"
+      "hard_context_config": "configs/all3_v14a_hard_contexts.json",
+      "nonbinding_original_workflow": 35525689199,
+      "nonbinding_valid_rows": 126,
+      "nonbinding_missing_contexts": [
+        "v13c_hard_14",
+        "v13c_hard_16",
+        "v13c_hard_18"
+      ],
+      "nonbinding_failure_reason": "Kaggle HTTP 429 during teacher acquisition only",
+      "binding_workflow": 35526276641,
+      "binding_launch_commit": "efc82c77060fe44025eee86cb239b698d6201229",
+      "expected_complete_rows": 144,
+      "supplement_config": "configs/all3_v14a_mechanical_supplement.json"
+    },
+    "v14b_domain_phenotype": {
+      "status": "DORMANT_PRE_REGISTERED_BEFORE_V14A_RESULT",
+      "protocol": "docs/strategy/ALL3_V14B_DOMAIN_PHENOTYPE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
