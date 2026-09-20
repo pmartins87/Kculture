@@ -1,5 +1,70 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — O-LQ3C CLOSED / V9A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V8D FINAL CUMULATIVE — COMPLETE
+
+Runs:
+- V8D `35516560425`;
+- E1 `35516899185`;
+- E2 `35517228393`.
+
+Across 216 paired contexts:
+- failures 0;
+- no score regressions;
+- O-LQ3C unchanged throughout.
+
+Final V48:
+- 72 contexts;
+- **6 fire contexts**;
+- coverage minimum 4 => PASS;
+- positive-score contexts 0;
+- nonwin->win 0;
+- negative-score contexts 0;
+- mean score delta 0.
+
+Decision: **`V8D_CONDITIONAL_ORDER_NO_WL_CONFIRMATION`**.
+
+O-LQ3C is **CLOSED**:
+- no more seeds;
+- no threshold tuning;
+- no modification of 4-SELL+6-HIRE eligibility;
+- V8E remains dormant/not activated.
+
+Result:
+`docs/strategy/O_LQ3C_V8D_FINAL_CUMULATIVE_RESULT_2026-09-20.md`.
+
+### V9A — ACTIVE
+
+Pre-registered residual structural decomposition is now activated.
+
+Workflow: **`35517515758`**  
+Launch commit: `a551a38023ee268b43f71ed442b998a99d547a40`.
+
+V9A is descriptive only:
+- exact ALL3 baseline on the four frozen hard contexts;
+- exact V48 shadow on the same candidate observations;
+- V48 shadow action is never applied;
+- classify residual differences as REORDER_ONLY, QTY_UP, QTY_DOWN, REPLACE, INSERT_DROP, MIXED_STRUCTURAL, OTHER;
+- verify exact ALL3 replay against frozen hard-context margins/scores.
+
+Gate:
+- structural residuals in >=2 hard contexts => V9B causal category isolation;
+- order-only residual => close richer structural imitation path accordingly;
+- no residual difference => close this line;
+- mechanics invalid => repair mechanics only.
+
+No automatic Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35517515758`**.
+
+
 ## Binding update — 2026-09-20 — V8D-E1 UNDERPOWERED / V8D-E2 FINAL ACTIVE
 
 **This block supersedes lower stale current-action sections.**
