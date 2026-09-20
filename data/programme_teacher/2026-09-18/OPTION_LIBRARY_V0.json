@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V13B workflow 35520463598; if executable frontier READY, freeze one current representative per unique smoke-passing source and use it only for hard-context/mechanism discovery, not hosted rating estimation",
+  "next_stage": "resolve V13C workflow 35520875702; use only frozen nonwin contexts for later causal mechanism discovery; local H2H cannot estimate hosted rating",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1265,7 +1265,7 @@
       "result_doc": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_RESULT_2026-09-20.md"
     },
     "v13b_current_top30_executable_refresh": {
-      "status": "ACTIVE",
+      "status": "COMPLETE_READY",
       "workflow": 35520463598,
       "launch_commit": "79e14f85382c8f4d68fba2fab19bcae25c4d9437",
       "refs_config": "configs/all3_v13b_current_top30_refs.json",
@@ -1273,6 +1273,32 @@
       "third_party_code_persisted": false,
       "local_smoke_wl_strategic_use": false,
       "protocol": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V13B_EXECUTABLE_FRONTIER_READY",
+      "refs_acquired": 26,
+      "refs_failed": 4,
+      "unique_sources": 19,
+      "unique_both_seat_smoke_pass": 19,
+      "top10_refs_on_passing_source": 10,
+      "failures_reason": "four Kaggle HTTP 429 acquisition failures at ranks 27-30",
+      "reps_config": "configs/all3_v13c_current_frontier_representatives.json",
+      "result_doc": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_RESULT_2026-09-20.md"
+    },
+    "v13c_current_frontier_hard_context": {
+      "status": "ACTIVE",
+      "workflow": 35520875702,
+      "launch_commit": "7cd012b74e794c4be6df9bfd601e1233de0f2b27",
+      "representatives": 19,
+      "seeds": [
+        78101,
+        78102
+      ],
+      "seats": [
+        0,
+        1
+      ],
+      "expected_games": 76,
+      "protocol": "docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
