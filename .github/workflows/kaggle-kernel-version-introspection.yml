@@ -1,0 +1,46 @@
+name: kaggle-kernel-version-introspection
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/kaggle-kernel-version-introspection.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: |
+          python -m pip install -U 'kaggle>=2.2.3' 'kagglesdk>=0.1.35'
+      - name: Introspect Kaggle kernel APIs
+        run: |
+          python - <<'PY'
+          import inspect, json
+          from kaggle.api.kaggle_api_extended import KaggleApi
+          api=KaggleApi(); api.authenticate()
+          names=[n for n in dir(api) if 'kernel' in n.lower()]
+          print('KAGGLE_API_KERNEL_METHODS',json.dumps(names))
+          for n in names:
+              try:
+                  obj=getattr(api,n)
+                  if callable(obj):
+                      print('SIG',n,str(inspect.signature(obj)))
+              except Exception as e:
+                  print('SIGERR',n,repr(e))
+          try:
+              import kagglesdk
+              print('KAGGLESDK',getattr(kagglesdk,'__version__',None))
+          except Exception as e:
+              print('KAGGLESDKERR',repr(e))
+          PY
