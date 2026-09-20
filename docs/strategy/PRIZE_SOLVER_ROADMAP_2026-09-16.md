@@ -368,31 +368,65 @@ Config:
 Result:
 `docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_AB_RESULT_2026-09-19.md`.
 
-### V6 bounded physical continuation — ACTIVE
+### V6 bounded physical continuation — CLOSED
+
+Binding lifecycle-corrected workflow:
+`35473780009`.
+
+Decision:
+**`V6_CONTINUATION_MARGIN_ONLY`**.
+
+Mechanical:
+- PASS;
+- failures 0;
+- 4 frozen hard contexts.
+
+Strategic:
+- loss->win flips: 0;
+- mean oracle margin delta: +68.5.
+
+Best hard-context outcomes:
+- V47 mirror -263 -> -96;
+- V48 -86 -> -76;
+- V48 -484 -> -484;
+- V48 -794 -> -697.
+
+Therefore:
+- close one-locus H2/H3 continuation as a W/L source;
+- do not extend horizon automatically;
+- do not promote margin-only physical patches.
+
+Result:
+`docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_RESULT_2026-09-19.md`.
+
+### V7 option-composition attribution — ACTIVE
 
 Workflow:
-**`35473389439`**.
+**`35479297555`**.
 
-Frozen method:
-- exact ALL3 base;
-- same transient public proposer panel as V5;
-- one selected physical locus only;
-- horizon H2 or H3;
-- exact ALL3 market preserved every branch turn;
-- all other physical loci exact ALL3;
-- exact ALL3 resumes after horizon.
+Frozen test over the exact four V6 hard contexts:
+- V47;
+- RW;
+- TW;
+- LQ2;
+- RW+TW;
+- RW+LQ2;
+- TW+LQ2;
+- ALL3.
 
-Strategic objective:
-- W/L first;
-- margin only tie-breaks equal outcome class.
+Purpose:
+attribute residual losses to existing first-party option composition and test whether static
+suppression of one option has W/L headroom.
 
-PASS/NARROW:
-derive a minimal first-party mechanism from winning continuation(s), then fresh causal validation.
+Gate:
+- same non-ALL3 composition rescues >=2 losses -> fresh broad paired regression vs ALL3;
+- exactly one rescue -> inspect legal-state suppression mechanism;
+- no rescue -> margin-only/no-headroom close.
 
-MARGIN_ONLY/NO_HEADROOM:
-close this bounded continuation family as a W/L source.
+Protocol:
+`docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_PROTOCOL_2026-09-19.md`.
 
-No Kaggle submission is authorized by V6 discovery.
+No Kaggle submission is authorized by V7.
 
 ### Binding next steps
 
