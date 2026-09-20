@@ -755,6 +755,24 @@
       ],
       "head_commit": "b528ac9dafedefd17b65dfa7407b1b793adb6046",
       "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory"
+    },
+    "v9_residual_structural_decomposition": {
+      "status": "DORMANT_PRE_REGISTERED_BEFORE_V8C_RESULT",
+      "activate_if": "binding V8C closes without reusable W/L headroom",
+      "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
+      "categories": [
+        "REORDER_ONLY",
+        "QTY_UP",
+        "QTY_DOWN",
+        "REPLACE",
+        "INSERT_DROP",
+        "MIXED_STRUCTURAL",
+        "OTHER"
+      ],
+      "v9b": "conditional one-turn causal category isolation only if V9A finds structural residuals",
+      "stop_rule": "if no repeatable W/L headroom, close residual one-turn V48 structural imitation rather than extend horizon or retune post hoc",
+      "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
