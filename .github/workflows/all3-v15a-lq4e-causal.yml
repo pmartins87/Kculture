@@ -1,0 +1,46 @@
+name: all3-v15a-lq4e-causal
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v15a-lq4e-causal.yml'
+      - 'tools/first_party_lq4e_early_fertilizer_before_hire.py'
+      - 'tools/all3_v15a_lq4e_causal.py'
+      - 'configs/all3_v14a_hard_contexts.json'
+      - 'docs/strategy/ALL3_V15A_LQ4E_CAUSAL_PROTOCOL_2026-09-20.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  causal:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/first_party_lq4e_early_fertilizer_before_hire.py
+          python -m py_compile tools/all3_v15a_lq4e_causal.py
+      - name: Run V15A causal gate
+        run: |
+          mkdir -p artifacts/v15a
+          python tools/all3_v15a_lq4e_causal.py             --hard-config configs/all3_v14a_hard_contexts.json             --out artifacts/v15a/ALL3_V15A_LQ4E_CAUSAL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v15a-lq4e-causal
+          path: artifacts/v15a/*.json
+          retention-days: 30
+          if-no-files-found: warn
