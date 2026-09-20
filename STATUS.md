@@ -1,5 +1,84 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V8C PASS-NARROW / V8D ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V8C — COMPLETE
+
+Binding workflow: **`35516167350`**  
+Head: `b528ac9dafedefd17b65dfa7407b1b793adb6046`
+
+Decision: **`V8C_CONDITIONAL_ORDER_HEADROOM_NARROW`**.
+
+Mechanical:
+- PASS;
+- 46 exact baseline-discovered one-shot branches;
+- expected branches 46;
+- failures 0.
+
+Strategic:
+- 1 loss->win flip;
+- 6 positive-margin states across all 4 hard contexts;
+- 37 negative-margin states;
+- mean margin delta -113.1522.
+
+Repeated strongest structural state:
+- exact post-LQ2 nonempty market shape = **4 SELL + 6 HIRE**;
+- no BUY / no other nonempty operation;
+- MILK, WOOL and FERTILIZER all present;
+- unchanged O-LQ3 would alter their relative order.
+
+The only two V8C states with this exact shape were both positive:
+- V48 75103/seat1: -86 -> +10 (**LOSS -> WIN**, +96);
+- V48 75110/seat0: -484 -> -220 (+264).
+
+### O-LQ3C — FROZEN
+
+Candidate eligibility is the structural 4-SELL + 6-HIRE signature above. No seed, opponent identity, turn number, price threshold, rating, EpisodeId, future state or opponent-private state is used.
+
+Treatment:
+apply the unchanged O-LQ3 stable priority `MILK -> WOOL -> FERTILIZER` for eligible turns only.
+
+Module:
+`tools/first_party_lq3c_conditional_sell_order.py`.
+
+### V8D — ACTIVE
+
+Workflow: **`35516560425`**  
+Launch commit: `6afd5dd1a4ab4776437c49aae9807e948d032d8f`.
+
+Fresh frozen validation:
+- seeds `76001..76012`;
+- both seats;
+- V48 primary;
+- V47 mirror control;
+- Ready Stock control;
+- 72 paired contexts total.
+
+Frozen PASS requires:
+- all 72 contexts mechanically clean;
+- >=4 V48 fire contexts;
+- >=2 combined control fire contexts;
+- V48 mean score delta >0;
+- >=1 positive-score V48 context;
+- zero win->nonwin regressions overall;
+- zero negative-score contexts in V47 mirror;
+- zero negative-score contexts in Ready Stock.
+
+If activation is underpowered, only more untouched seeds may be added with the same frozen rule. If activation is sufficient but no W/L confirmation, O-LQ3C closes and pre-registered V9A activates. Any W/L regression closes O-LQ3C.
+
+A V8D PASS does **not** automatically authorize Kaggle submission; it advances to broader regression/package readiness.
+
+V9 remains pre-registered and dormant unless V8D closes O-LQ3C.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35516560425`**. No manual Kaggle submission.
+
+
 ## Binding update — 2026-09-20 — O-LQ3 CLOSED / V8C ACTIVE
 
 **This block supersedes any lower stale "current", "binding next steps", or "immediate action" section.**
