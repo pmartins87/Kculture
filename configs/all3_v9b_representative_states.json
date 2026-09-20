@@ -1,0 +1,119 @@
+{
+  "schema": "kculture-v9b-representative-states-v1",
+  "frozen_from_v9a_workflow": 35517515758,
+  "selection_policy": "selected before any V9B causal outcomes; earliest structural state per hard context plus repeated INSERT_DROP turn 337 plus repeated QTY_UP turns 427 and 698 across all four contexts",
+  "states": [
+    {
+      "id": "c0_earliest",
+      "index": 0,
+      "turn": 80,
+      "category": "INSERT_DROP",
+      "selection_role": "earliest_structural"
+    },
+    {
+      "id": "c1_earliest",
+      "index": 1,
+      "turn": 153,
+      "category": "INSERT_DROP",
+      "selection_role": "earliest_structural"
+    },
+    {
+      "id": "c2_earliest",
+      "index": 2,
+      "turn": 80,
+      "category": "INSERT_DROP",
+      "selection_role": "earliest_structural"
+    },
+    {
+      "id": "c3_earliest",
+      "index": 3,
+      "turn": 80,
+      "category": "INSERT_DROP",
+      "selection_role": "earliest_structural"
+    },
+    {
+      "id": "c0_insert337",
+      "index": 0,
+      "turn": 337,
+      "category": "INSERT_DROP",
+      "selection_role": "repeated_insert_split"
+    },
+    {
+      "id": "c1_insert337",
+      "index": 1,
+      "turn": 337,
+      "category": "INSERT_DROP",
+      "selection_role": "repeated_insert_split"
+    },
+    {
+      "id": "c2_insert337",
+      "index": 2,
+      "turn": 337,
+      "category": "INSERT_DROP",
+      "selection_role": "repeated_insert_split"
+    },
+    {
+      "id": "c3_insert337",
+      "index": 3,
+      "turn": 337,
+      "category": "INSERT_DROP",
+      "selection_role": "repeated_insert_split"
+    },
+    {
+      "id": "c0_qty427",
+      "index": 0,
+      "turn": 427,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_mid"
+    },
+    {
+      "id": "c1_qty427",
+      "index": 1,
+      "turn": 427,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_mid"
+    },
+    {
+      "id": "c2_qty427",
+      "index": 2,
+      "turn": 427,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_mid"
+    },
+    {
+      "id": "c3_qty427",
+      "index": 3,
+      "turn": 427,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_mid"
+    },
+    {
+      "id": "c0_qty698",
+      "index": 0,
+      "turn": 698,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_late"
+    },
+    {
+      "id": "c1_qty698",
+      "index": 1,
+      "turn": 698,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_late"
+    },
+    {
+      "id": "c2_qty698",
+      "index": 2,
+      "turn": 698,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_late"
+    },
+    {
+      "id": "c3_qty698",
+      "index": 3,
+      "turn": 698,
+      "category": "QTY_UP",
+      "selection_role": "repeated_qty_late"
+    }
+  ]
+}
