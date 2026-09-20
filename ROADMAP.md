@@ -1,5 +1,85 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V11B REGIME SIGNAL / V12A TRANSFER ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V11A — COMPLETE
+
+Workflow: **`35518801971`**.
+
+Decision: **`V11A_HOSTED_HARD_POPULATION_READY`**.
+
+Current ALL3 hosted sample `56367770`:
+- 128 resolved games;
+- 57W–71L–0T;
+- score rate **0.4453125**;
+- 117 unique opponents;
+- 30 close losses in [-1000,0).
+
+This mature sample supersedes the early 34-game 28W–6L snapshot as the current hosted discovery source.
+
+Result:
+`docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_RESULT_2026-09-20.md`.
+
+### V11B — COMPLETE / OBSERVATIONAL SIGNAL
+
+Workflow: **`35519476400`**.
+
+Decision: **`V11B_PUBLIC_CROP_SHIFT_REGIME_SIGNAL`**.
+
+Public-state association:
+- step 456: opponent CARROT > ALL3 CARROT in 9 games, **9/9 losses**;
+- step 504: 13/13 losses;
+- step 552: 17/17 losses;
+- step 600: **22/22 losses**, mean margin -3504.27;
+- strict step-600 CARROT+4 / WHEAT-deficit-4 signature: **15/15 losses**, mean margin -4157.07.
+
+This is observational only and does not authorize a CARROT-response rule.
+
+Result:
+`docs/strategy/ALL3_V11B_HOSTED_LOSS_SIGNATURE_RESULT_2026-09-20.md`.
+
+### V12A — ACTIVE
+
+Workflow: **`35519704115`**  
+Launch commit: `f255d27997739690ff833828cc2adb1bc42bef04`.
+
+Exact ALL3 is run unchanged on fresh seeds `77001..77008`, both seats, against seven hash-pinned public families:
+- V47 mirror;
+- Ready Stock;
+- V48;
+- router_2715;
+- Conditional Memory;
+- Tactical Memory;
+- Best Market.
+
+Expected contexts: 112.
+
+Primary question:
+does the public `opponent CARROT > own CARROT` regime transfer outside hosted replay forensics and still discriminate poor ALL3 W/L?
+
+Frozen TRANSFER_READY gate requires:
+- signal support >=8;
+- >=2 opponent families with >=2 signal contexts each;
+- signal loss rate >=0.75;
+- signal score rate <=0.25;
+- non-signal support >=16;
+- non-signal score rate at least 0.20 above signal score rate.
+
+Only TRANSFER_READY may open a V12B causal macro-response oracle. V12A itself cannot promote or modify a policy.
+
+Opponent identity remains offline evaluation metadata only.
+
+No automatic Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35519704115`**.
+
+
 ## Binding update — 2026-09-20 — V10A CLOSED / V11A HOSTED REFRESH ACTIVE
 
 **This block supersedes lower stale current-action sections.**
