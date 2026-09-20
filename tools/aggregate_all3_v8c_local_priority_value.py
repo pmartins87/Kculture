@@ -11,7 +11,7 @@ def main():
     docs = [json.loads(p.read_text()) for p in sorted(Path(args.input_dir).rglob("*.json"))]
     failures = [f for d in docs for f in d.get("failures", [])]
     rows = [r for d in docs for r in d.get("branches", [])]
-    mech = len(docs) == 4 and not failures and all(d.get("mechanical_pass") for d in docs) and len(rows) == 48
+    expected_branch_states = sum(int(d.get("event_count", 0)) for d in docs)\n    mech = len(docs) == 4 and not failures and all(d.get("mechanical_pass") for d in docs) and expected_branch_states > 0 and len(rows) == expected_branch_states
 
     positive = [r for r in rows if float(r["margin_delta"]) > 0]
     negative = [r for r in rows if float(r["margin_delta"]) < 0]
@@ -49,7 +49,7 @@ def main():
     result = {
         "schema": "kculture-v8c-local-priority-value-atlas-v1",
         "mechanical_pass": mech, "decision": decision,
-        "branch_states": len(rows), "loss_to_win_flips": len(flips), "win_to_nonwin_regressions": len(regress),
+        "branch_states": len(rows), "expected_branch_states": expected_branch_states, "loss_to_win_flips": len(flips), "win_to_nonwin_regressions": len(regress),
         "positive_margin_states": len(positive), "negative_margin_states": len(negative),
         "positive_margin_contexts": pos_contexts, "flip_contexts": flip_contexts,
         "mean_margin_delta": statistics.fmean(float(r["margin_delta"]) for r in rows) if rows else 0.0,
@@ -64,7 +64,7 @@ def main():
     }
     p = Path(args.out); p.parent.mkdir(parents=True, exist_ok=True); p.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")
     print("V8C_RESULT", json.dumps({
-        "decision": decision, "mechanical_pass": mech, "branch_states": len(rows),
+        "decision": decision, "mechanical_pass": mech, "branch_states": len(rows), "expected_branch_states": expected_branch_states,
         "loss_to_win_flips": len(flips), "positive_margin_states": len(positive), "negative_margin_states": len(negative),
         "positive_margin_contexts": pos_contexts, "flip_contexts": flip_contexts,
         "mean_margin_delta": result["mean_margin_delta"], "turn_summary": turn_summary,
