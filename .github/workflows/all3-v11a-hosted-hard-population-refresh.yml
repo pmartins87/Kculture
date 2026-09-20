@@ -1,0 +1,90 @@
+name: all3-v11a-hosted-hard-population-refresh
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v11a-hosted-hard-population-refresh.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_TEAM_NAME: Paulo Martins
+      SID: '56367770'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Collect mature ALL3 public replays
+        run: |
+          mkdir -p artifacts/all3-v11a
+          python tools/collect_submission_replays_cli_v2.py             --submission all3:$SID             --output-dir artifacts/all3-v11a             --max-per-submission 128             --selection newest             --delay-seconds 0.10             --retries 4             --retry-backoff-seconds 0.5
+      - name: Summarize ALL3 mature hard population
+        run: |
+          python tools/cr083_hosted_forensics.py             --replay-root artifacts/all3-v11a/all3/replays             --target-team-name "$TARGET_TEAM_NAME"             --target-submission "$SID"             --output artifacts/all3-v11a/ALL3_V11A_FULL_SUMMARY.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path("artifacts/all3-v11a/ALL3_V11A_FULL_SUMMARY.json")
+          d=json.loads(p.read_text())
+          losses=sorted([g for g in d.get("games",[]) if g.get("result")=="L"],key=lambda x:x.get("margin",0))
+          by=sorted(
+              [x for x in d.get("by_opponent",[]) if x.get("losses",0)>0],
+              key=lambda x:(-x.get("losses",0),x.get("mean_margin",0),x.get("opponent_team",""))
+          )
+          close_losses=[g for g in losses if -1000 <= float(g.get("margin",0)) < 0]
+          repeated=[x for x in by if int(x.get("losses",0))>=2]
+          resolved=int(d.get("resolved_games") or 0)
+          nlost=int(d.get("losses") or 0)
+          decision="V11A_HOSTED_HARD_POPULATION_READY" if resolved>=64 and nlost>=10 else "V11A_HOSTED_SAMPLE_STILL_THIN"
+          digest={
+            "submission_id":56367770,
+            "resolved_games":resolved,
+            "wins":d.get("wins"),"losses":nlost,"ties":d.get("ties"),
+            "score_rate":d.get("score_rate"),
+            "mean_margin":d.get("mean_margin"),"median_margin":d.get("median_margin"),
+            "min_margin":d.get("min_margin"),"max_margin":d.get("max_margin"),
+            "opponents_unique":d.get("opponents_unique"),
+            "loss_opponents":by,
+            "repeated_loss_opponents":repeated,
+            "worst_losses":losses[:25],
+            "close_losses":close_losses,
+            "decision":decision,
+            "identity_use":"offline forensic only; prohibited as runtime policy feature",
+          }
+          Path("artifacts/all3-v11a/ALL3_V11A_HARD_POPULATION_DIGEST.json").write_text(
+              json.dumps(digest,indent=2,sort_keys=True)
+          )
+          print("V11A_RESULT",json.dumps({
+            "decision":decision,
+            "resolved_games":resolved,
+            "wins":digest["wins"],"losses":nlost,"ties":digest["ties"],
+            "score_rate":digest["score_rate"],
+            "opponents_unique":digest["opponents_unique"],
+            "repeated_loss_opponents":repeated[:20],
+            "worst_losses":losses[:12],
+            "close_loss_count":len(close_losses),
+          },sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v11a-hosted-hard-population-refresh
+          path: artifacts/all3-v11a/**
+          retention-days: 30
+          if-no-files-found: warn
