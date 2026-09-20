@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V17A workflow 35538621223; if a recurrent joint W2 market bundle exists, freeze exactly one bundle translation before any causal run",
+  "next_stage": "resolve V17A3 workflow 35539020930; only a trigger with recall=1.0, precision>=0.90, 24 contexts and 10 sources may define the first STRAWBERRY causal candidate",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1508,12 +1508,48 @@
       "automatic_kaggle_submission": false
     },
     "v17a_w2_joint_market_bundle": {
-      "status": "ACTIVE",
+      "status": "COMPLETE_READY",
       "workflow": 35538621223,
       "launch_commit": "1baf3e1abbb51368841caff6d3f5f34a2f6e0c5d",
       "source_workflow": 35526759114,
       "selection": "max sources; max contexts; max occurrences; earliest median turn; lexical bundle key",
       "protocol": "docs/strategy/ALL3_V17A_W2_JOINT_MARKET_BUNDLE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V17A_W2_JOINT_MARKET_BUNDLE_READY",
+      "selected_bundle": {
+        "signatures": [
+          "PRESENCE|SELL|STRAWBERRY|ADD",
+          "QTY|SELL|STRAWBERRY|2|INC"
+        ],
+        "contexts": 24,
+        "sources": 10,
+        "occurrences": 42,
+        "turns": [
+          493,
+          503
+        ],
+        "median_turn": 493
+      }
+    },
+    "v17a2_strawberry_translation": {
+      "status": "COMPLETE_READY",
+      "binding_workflow": 35538843133,
+      "nonbinding_mechanical_workflow": 35538722889,
+      "decision": "V17A2_STRAWBERRY_INSERTION_READY",
+      "insertion_rule": "first_free",
+      "insertion_agreement": 1,
+      "quantity": 2,
+      "quantity_agreement": 1,
+      "occurrences": 42,
+      "context_multiplicity": "18 contexts x2; 6 contexts x1",
+      "protocol": "docs/strategy/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION_PROTOCOL_2026-09-20.md"
+    },
+    "v17a3_strawberry_trigger": {
+      "status": "ACTIVE",
+      "workflow": 35539020930,
+      "launch_commit": "e7943512aee243921f1d115cad1ad832e4b182cb",
+      "ready_gate": "recall=1.0; precision>=0.90; contexts=24; sources=10",
+      "protocol": "docs/strategy/ALL3_V17A3_STRAWBERRY_TRIGGER_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
