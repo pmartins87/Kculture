@@ -1,0 +1,496 @@
+{
+  "schema": "kculture-all3-v8b-lq2-order-states-v1",
+  "source": {
+    "v8a_workflow": 35479557496,
+    "v8a_decision": "V8A_ORDER_SEARCH_READY",
+    "eligible_states": 170
+  },
+  "selection_rule": "top2_per_context_by_distinct_products_nonempty_count_total_qty_earlier_step_with_min_step_separation_48",
+  "selected_states": [
+    {
+      "index": 0,
+      "opponent": "v47_mirror",
+      "family": "modern41_v47",
+      "seed": 75113,
+      "seat": 1,
+      "step": 673,
+      "start": 0,
+      "end": 5,
+      "products": [
+        "FERTILIZER",
+        "MILK",
+        "WOOL",
+        "CARROT",
+        "WHEAT",
+        "EGG"
+      ],
+      "quantities": [
+        10,
+        2,
+        4,
+        2,
+        2,
+        4
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        [
+          "SELL",
+          "MILK",
+          2
+        ],
+        [
+          "SELL",
+          "WOOL",
+          4
+        ],
+        [
+          "SELL",
+          "CARROT",
+          2
+        ],
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ],
+        [
+          "SELL",
+          "EGG",
+          4
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 0,
+      "opponent": "v47_mirror",
+      "family": "modern41_v47",
+      "seed": 75113,
+      "seat": 1,
+      "step": 577,
+      "start": 0,
+      "end": 4,
+      "products": [
+        "STRAWBERRY",
+        "MILK",
+        "WOOL",
+        "FERTILIZER",
+        "EGG"
+      ],
+      "quantities": [
+        20,
+        6,
+        1,
+        9,
+        6
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "STRAWBERRY",
+          20
+        ],
+        [
+          "SELL",
+          "MILK",
+          6
+        ],
+        [
+          "SELL",
+          "WOOL",
+          1
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          9
+        ],
+        [
+          "SELL",
+          "EGG",
+          6
+        ],
+        [
+          "BUY_PRODUCT",
+          "FERTILIZER",
+          4
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 1,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75103,
+      "seat": 1,
+      "step": 673,
+      "start": 0,
+      "end": 4,
+      "products": [
+        "WOOL",
+        "FERTILIZER",
+        "MILK",
+        "CARROT",
+        "WHEAT"
+      ],
+      "quantities": [
+        7,
+        10,
+        3,
+        2,
+        2
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "WOOL",
+          7
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        [
+          "SELL",
+          "MILK",
+          3
+        ],
+        [
+          "SELL",
+          "CARROT",
+          2
+        ],
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 1,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75103,
+      "seat": 1,
+      "step": 600,
+      "start": 0,
+      "end": 3,
+      "products": [
+        "MILK",
+        "STRAWBERRY",
+        "FERTILIZER",
+        "WOOL"
+      ],
+      "quantities": [
+        16,
+        6,
+        11,
+        7
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "MILK",
+          16
+        ],
+        [
+          "SELL",
+          "STRAWBERRY",
+          6
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          11
+        ],
+        [
+          "SELL",
+          "WOOL",
+          7
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 2,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75110,
+      "seat": 0,
+      "step": 673,
+      "start": 0,
+      "end": 4,
+      "products": [
+        "WOOL",
+        "FERTILIZER",
+        "MILK",
+        "WHEAT",
+        "CARROT"
+      ],
+      "quantities": [
+        11,
+        10,
+        3,
+        2,
+        2
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "WOOL",
+          11
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        [
+          "SELL",
+          "MILK",
+          3
+        ],
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ],
+        [
+          "SELL",
+          "CARROT",
+          2
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 2,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75110,
+      "seat": 0,
+      "step": 600,
+      "start": 0,
+      "end": 3,
+      "products": [
+        "WOOL",
+        "MILK",
+        "FERTILIZER",
+        "STRAWBERRY"
+      ],
+      "quantities": [
+        7,
+        16,
+        11,
+        6
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "WOOL",
+          7
+        ],
+        [
+          "SELL",
+          "MILK",
+          16
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          11
+        ],
+        [
+          "SELL",
+          "STRAWBERRY",
+          6
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 3,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75113,
+      "seat": 1,
+      "step": 673,
+      "start": 0,
+      "end": 5,
+      "products": [
+        "FERTILIZER",
+        "MILK",
+        "WOOL",
+        "CARROT",
+        "WHEAT",
+        "EGG"
+      ],
+      "quantities": [
+        10,
+        2,
+        4,
+        2,
+        2,
+        4
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "FERTILIZER",
+          10
+        ],
+        [
+          "SELL",
+          "MILK",
+          2
+        ],
+        [
+          "SELL",
+          "WOOL",
+          4
+        ],
+        [
+          "SELL",
+          "CARROT",
+          2
+        ],
+        [
+          "SELL",
+          "WHEAT",
+          2
+        ],
+        [
+          "SELL",
+          "EGG",
+          4
+        ],
+        [
+          "HIRE"
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    },
+    {
+      "index": 3,
+      "opponent": "v48",
+      "family": "modern41_queue",
+      "seed": 75113,
+      "seat": 1,
+      "step": 577,
+      "start": 0,
+      "end": 4,
+      "products": [
+        "STRAWBERRY",
+        "MILK",
+        "WOOL",
+        "FERTILIZER",
+        "EGG"
+      ],
+      "quantities": [
+        20,
+        6,
+        1,
+        9,
+        6
+      ],
+      "post_lq2_market": [
+        [
+          "SELL",
+          "STRAWBERRY",
+          20
+        ],
+        [
+          "SELL",
+          "MILK",
+          6
+        ],
+        [
+          "SELL",
+          "WOOL",
+          1
+        ],
+        [
+          "SELL",
+          "FERTILIZER",
+          9
+        ],
+        [
+          "SELL",
+          "EGG",
+          6
+        ],
+        [
+          "BUY_PRODUCT",
+          "FERTILIZER",
+          4
+        ],
+        [
+          "HIRE"
+        ]
+      ]
+    }
+  ],
+  "automatic_kaggle_submission": false
+}
