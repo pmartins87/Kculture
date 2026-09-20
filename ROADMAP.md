@@ -1,5 +1,65 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V8D UNDERPOWERED / V8D-E1 ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V8D — COMPLETE / UNDERPOWERED
+
+Workflow: **`35516560425`**  
+Decision: **`V8D_CONDITIONAL_ORDER_UNDERPOWERED`**.
+
+Mechanical:
+- PASS;
+- 72/72 paired contexts complete;
+- failures 0;
+- score regressions 0.
+
+By opponent:
+- V48: 24 contexts, 2 fire contexts, mean score delta 0, mean margin delta +11.8333, no positive/negative score contexts;
+- V47 mirror: 24 contexts, 2 fire contexts, mean score delta 0, mean margin delta +11.8333, no negative score contexts;
+- Ready Stock: 24 contexts, 2 fire contexts, mean score delta 0, mean margin delta -2.0, no negative score contexts.
+
+Overall:
+- 6 fire contexts / 72;
+- mean score delta 0;
+- mean margin delta +7.2222;
+- zero win->nonwin regressions.
+
+The original gate required >=4 V48 fire contexts. Only 2 were observed, so this result is insufficient to confirm or reject O-LQ3C.
+
+### V8D-E1 — ACTIVE
+
+Workflow: **`35516899185`**  
+Launch commit: `a295970e373f02974adc1a6b6186b11d08254348`.
+
+Candidate O-LQ3C is unchanged.
+
+Fresh extension:
+- seeds `76013..76024`;
+- both seats;
+- V48, V47 mirror, Ready Stock;
+- 72 additional paired contexts.
+
+The strategic decision will be applied **cumulatively** to V8D + E1.
+
+If cumulative activation reaches >=4 V48 fire contexts:
+- positive W/L confirmation + no regressions => advance;
+- no W/L confirmation => close O-LQ3C and activate V9A;
+- any score regression => close O-LQ3C and activate V9A.
+
+If still underpowered, one final unchanged E2 on seeds `76025..76036` is pre-authorized. No further extensions after E2.
+
+V8E remains dormant and activates only on a cumulative V8D PASS.
+V9A remains dormant unless O-LQ3C closes.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35516899185`**. No manual Kaggle submission.
+
+
 ## Binding update — 2026-09-20 — V8C PASS-NARROW / V8D ACTIVE
 
 **This block supersedes lower stale current-action sections.**
