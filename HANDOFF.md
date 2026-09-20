@@ -1,5 +1,77 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V13C RERUN WITH IMMUTABLE RANK-14 PIN
+
+**This block supersedes lower stale current-action sections.**
+
+### V13C first run — NON-BINDING MECHANICAL INVALID
+
+Workflow: `35520875702`.
+
+Observed before mechanical rejection:
+- 72/76 episodes completed;
+- 20 nonwins across 9 source SHAs.
+
+These strategic outcomes are **NON-BINDING** and were not used to alter the population, seeds, or strategic gate.
+
+Mechanical failure:
+- rank 14 `tetsutani/demand-preserving-turn-sale-timing`;
+- V13B frozen main SHA: `1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f`;
+- unversioned ref changed before V13C and returned SHA `827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181`.
+
+Fail-closed behavior worked as designed.
+
+### Rank-14 immutable provenance repair
+
+Workflow `35523343530` searched public historical versions without executing third-party code.
+
+Exact frozen source was recovered at:
+
+`tetsutani/demand-preserving-turn-sale-timing/versions/4`
+
+Verification:
+- main SHA: `1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f`;
+- archive SHA: `24250d6de0e1bf143ea0cc1b2bdab541aa94ee12c09b9f2f6e98e8afb7097610`;
+- exact match to V13B bytes.
+
+Config amendment commit:
+`de85cbc11dea91ea80ea247437172aa50baf9e88`.
+
+The amendment changes **only provenance immutability**:
+- same 19 source SHAs;
+- same population;
+- same seeds `78101,78102`;
+- same seats;
+- same V13C strategic gate.
+
+### V13C binding rerun — ACTIVE
+
+Workflow: **`35523473844`**  
+Head: `de85cbc11dea91ea80ea247437172aa50baf9e88`.
+
+Expected:
+- 19 source representatives;
+- 2 seeds;
+- 2 seats;
+- 76 exact ALL3 episodes.
+
+Decision remains the pre-registered V13C gate.
+
+### V14A — DORMANT / PRE-REGISTERED
+
+Protocol:
+`docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-20.md`.
+
+It was frozen before the binding V13C result.
+
+Activate only if binding V13C returns
+`V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY`.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35523473844`**.
+
+
 ## Binding update — 2026-09-20 — V13B READY / V13C HARD-CONTEXT CENSUS ACTIVE
 
 **This block supersedes lower stale current-action sections.**
