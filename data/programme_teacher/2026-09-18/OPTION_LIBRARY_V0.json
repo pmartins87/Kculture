@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve repaired binding V8C workflow 35516167350; every O-LQ3 firing state discovered on untouched ALL3 baseline is branched exactly once; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D",
+  "next_stage": "resolve V8D workflow 35516560425; PASS => broad regression/package readiness; underpowered => same frozen O-LQ3C on more untouched seeds; no W/L confirmation or regression => close O-LQ3C and activate pre-registered V9A",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -726,9 +726,9 @@
       "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md"
     },
     "v8c_local_priority_value_atlas": {
-      "status": "ACTIVE_BINDING_REPAIRED",
+      "status": "COMPLETE",
       "workflow": 35516167350,
-      "expected_branch_states": "sum of baseline-discovered O-LQ3 firing states across the four frozen hard contexts",
+      "expected_branch_states": 46,
       "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
       "gate": {
         "repeatable": "loss->win flips in >=2 distinct hard contexts",
@@ -754,7 +754,21 @@
         }
       ],
       "head_commit": "b528ac9dafedefd17b65dfa7407b1b793adb6046",
-      "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory"
+      "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory",
+      "decision": "V8C_CONDITIONAL_ORDER_HEADROOM_NARROW",
+      "mechanical_pass": true,
+      "branch_states": 46,
+      "loss_to_win_flips": 1,
+      "positive_margin_states": 6,
+      "positive_margin_contexts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "negative_margin_states": 37,
+      "mean_margin_delta": -113.15217391304348,
+      "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md"
     },
     "v9_residual_structural_decomposition": {
       "status": "DORMANT_PRE_REGISTERED_BEFORE_V8C_RESULT",
@@ -772,6 +786,53 @@
       "v9b": "conditional one-turn causal category isolation only if V9A finds structural residuals",
       "stop_rule": "if no repeatable W/L headroom, close residual one-turn V48 structural imitation rather than extend horizon or retune post hoc",
       "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
+    },
+    "o_lq3c": {
+      "status": "FROZEN_FRESH_VALIDATION_ACTIVE",
+      "source_v8c_workflow": 35516167350,
+      "eligibility": "post-LQ2 nonempty market exactly 4 SELL + 6 HIRE; zero BUY/other; MILK, WOOL, FERTILIZER all present; O-LQ3 actually changes order",
+      "treatment": "apply unchanged MILK -> WOOL -> FERTILIZER stable ordering on eligible turn only",
+      "module": "tools/first_party_lq3c_conditional_sell_order.py",
+      "forbidden_runtime_inputs": [
+        "seed",
+        "opponent identity",
+        "rating",
+        "EpisodeId",
+        "future state",
+        "opponent private"
+      ],
+      "protocol": "docs/strategy/O_LQ3C_V8D_FRESH_VALIDATION_PROTOCOL_2026-09-20.md"
+    },
+    "v8d_fresh_validation": {
+      "status": "ACTIVE",
+      "workflow": 35516560425,
+      "launch_commit": "6afd5dd1a4ab4776437c49aae9807e948d032d8f",
+      "seeds": [
+        76001,
+        76002,
+        76003,
+        76004,
+        76005,
+        76006,
+        76007,
+        76008,
+        76009,
+        76010,
+        76011,
+        76012
+      ],
+      "seats": [
+        0,
+        1
+      ],
+      "opponents": [
+        "v48",
+        "v47_mirror",
+        "ready_stock"
+      ],
+      "paired_contexts": 72,
+      "pass_gate": "V48 positive mean score delta and >=1 positive-score context; zero win->nonwin overall; zero negative-score contexts in both controls; activation coverage minimum met",
       "automatic_kaggle_submission": false
     }
   },
