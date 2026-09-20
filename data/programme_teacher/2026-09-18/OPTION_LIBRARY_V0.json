@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve binding V14B MARKET phenotype atlas workflow 35526759114; if recurrent legal phenotype exists, derive exactly one first-party market option family under frozen deterministic selection; no Kaggle submission",
+  "next_stage": "resolve V15A workflow 35532585508 for frozen O-LQ4E; only V15A_LQ4E_WL_HEADROOM may activate the already preregistered fresh V15B validation",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1389,7 +1389,7 @@
       "result_doc": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_RESULT_2026-09-20.md"
     },
     "v14b_domain_phenotype": {
-      "status": "ACTIVE_MARKET_BRANCH",
+      "status": "COMPLETE_REORDER_TRANSLATED",
       "workflow": 35526759114,
       "launch_commit": "6183aea6077693c230a72f5eae94f88a543fc1d9",
       "branch": "MARKET",
@@ -1402,6 +1402,48 @@
         "lexical phenotype key"
       ],
       "protocol": "docs/strategy/ALL3_V14B_DOMAIN_PHENOTYPE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V14B_RECURRENT_DOMAIN_PHENOTYPE_READY",
+      "selected_phenotype": {
+        "group_key": "EARLY|REORDER",
+        "context_support": 24,
+        "source_support": 10,
+        "occurrences": 148,
+        "direction_share": 1,
+        "median_turn": 150
+      },
+      "translation_workflow": 35532446891,
+      "translation_decision": "V14B_REORDER_DIRECTION_READY",
+      "selected_relation": {
+        "preferred_earlier": [
+          "SELL",
+          "FERTILIZER"
+        ],
+        "preferred_later": [
+          "HIRE",
+          "_"
+        ],
+        "context_support": 24,
+        "source_support": 10,
+        "occurrences": 48,
+        "direction_share": 1,
+        "turns": [
+          96,
+          120
+        ],
+        "median_turn": 108
+      },
+      "result_doc": "docs/strategy/ALL3_V14B_MARKET_PHENOTYPE_RESULT_2026-09-20.md"
+    },
+    "v15a_lq4e_causal": {
+      "status": "ACTIVE",
+      "workflow": 35532585508,
+      "launch_commit": "de0242ec264047517dd4974419cf75cee8dbbf46",
+      "candidate": "O-LQ4E Early Fertilizer-before-Hire",
+      "implementation": "tools/first_party_lq4e_early_fertilizer_before_hire.py",
+      "hard_contexts": 24,
+      "pass_gate": "coverage>=8 contexts across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
+      "protocol": "docs/strategy/ALL3_V15A_LQ4E_CAUSAL_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
