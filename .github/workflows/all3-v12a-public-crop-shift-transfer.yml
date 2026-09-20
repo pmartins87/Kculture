@@ -1,0 +1,70 @@
+name: all3-v12a-public-crop-shift-transfer
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v12a-public-crop-shift-transfer.yml'
+      - 'tools/all3_v12a_public_crop_shift_transfer_shard.py'
+      - 'tools/aggregate_all3_v12a_public_crop_shift_transfer.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  opponent:
+    strategy:
+      fail-fast: false
+      matrix:
+        opponent: [v47_mirror, ready_stock, v48, router_2715, conditional_memory, tactical_memory, best_market]
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v12a_public_crop_shift_transfer_shard.py
+          python -m py_compile tools/aggregate_all3_v12a_public_crop_shift_transfer.py
+      - name: Run V12A opponent census
+        run: |
+          mkdir -p artifacts/v12a
+          python tools/all3_v12a_public_crop_shift_transfer_shard.py             --opponent ${{ matrix.opponent }}             --out artifacts/v12a/V12A_${{ matrix.opponent }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v12a-${{ matrix.opponent }}
+          path: artifacts/v12a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: opponent
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v12a-*
+          path: artifacts/v12a-shards
+          merge-multiple: false
+      - name: Aggregate V12A
+        run: |
+          mkdir -p artifacts/v12a-aggregate
+          python tools/aggregate_all3_v12a_public_crop_shift_transfer.py             --input-dir artifacts/v12a-shards             --out artifacts/v12a-aggregate/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v12a-public-crop-shift-transfer
+          path: artifacts/v12a-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
