@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V6 workflow 35473389439; PASS/NARROW => inspect winning continuation and derive first-party option; MARGIN_ONLY/NO_HEADROOM => close bounded continuation",
+  "next_stage": "resolve V8A workflow 35479557496; if any post-LQ2 multi-product SELL run exists, freeze bounded states and run exact cross-product SELL-order permutation oracle; otherwise close order mechanism",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -647,6 +647,26 @@
       ],
       "scope": "one physical locus, exact ALL3 market/other loci, ALL3 resumes after horizon",
       "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md"
+    },
+    "v7_option_composition": {
+      "workflow": 35479297555,
+      "decision": "V7_STATIC_COMPOSITION_MARGIN_ONLY",
+      "mechanical_pass": true,
+      "contexts": 4,
+      "compositions": 8,
+      "rescues": 0,
+      "all3_mean_margin": -406.75,
+      "best_alternative": "TW_LQ2",
+      "best_alternative_mean_margin": -399.75,
+      "interpretation": "no static suppression rescues any residual hard loss; LQ2 is dominant value component",
+      "result_doc": "docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_RESULT_2026-09-19.md",
+      "status": "CLOSED_MARGIN_ONLY"
+    },
+    "v8a_lq2_sell_run_census": {
+      "workflow": 35479557496,
+      "status": "ACTIVE",
+      "purpose": "census residual multi-product SELL runs after exact LQ2 on four frozen hard contexts",
+      "protocol": "docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
