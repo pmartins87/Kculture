@@ -1,5 +1,102 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V15A CLOSED ZERO EFFECT / V16B O-LQ5F ACTIVE
+
+**This block supersedes lower stale V15/V16 current-action sections.**
+
+### V15A — COMPLETE / CLOSED
+
+Workflow: **`35532585508`**.
+
+Decision:
+**`V15A_LQ4E_NO_HEADROOM_CLOSE`**.
+
+Mechanical:
+- 24/24 paired hard contexts;
+- failures 0;
+- coverage 24/24 contexts, 10/10 sources;
+- total O-LQ4E fires: 48;
+- exactly two fires/context at turns 96 and 120.
+
+Strategic:
+- loss-to-win flips: 0;
+- positive score contexts: 0;
+- mean score delta: **0.0**;
+- mean margin delta: **0.0**.
+
+Every paired margin was exactly unchanged.
+
+Binding interpretation:
+the selected EARLY reorder relation is a structural marker but not causal. O-LQ4E is closed. V15B is not activated.
+
+Result:
+`docs/strategy/ALL3_V15A_LQ4E_CAUSAL_RESULT_2026-09-20.md`.
+
+### V16A — COMPLETE
+
+Workflow: **`35533351868`**.
+
+Decision:
+**`V16A_W2_SELL_QUANTITY_PHENOTYPE_READY`**.
+
+Selected W2 SELL-quantity phenotype:
+- `W2|QTY|SELL|FERTILIZER|2`;
+- direction INC;
+- +2 units;
+- 24/24 contexts;
+- 10/10 sources;
+- direction share 1.0;
+- exactly one selected occurrence/context;
+- median turn 368.
+
+Binding candidate translation:
+**O-LQ5F — one-shot W2 Fertilizer Queue +2**.
+
+Semantics:
+- first eligible W2 ALL3 SELL FERTILIZER only;
+- add +2 quantity to first existing order;
+- one fire maximum/episode;
+- no new order;
+- preserve order positions, all other quantities, farmer/hands;
+- no exact-turn whitelist or identity feature.
+
+Result:
+`docs/strategy/ALL3_V16A_W2_SELL_QUANTITY_RESULT_2026-09-20.md`.
+
+### V16B — ACTIVE
+
+Workflow: **`35533510437`**  
+Launch commit: `12c3b9ea4c481c3e640688ca87cd346cd2777259`.
+
+Population:
+- all 24 binding V13C hard contexts;
+- BASE exact ALL3 vs exact ALL3 + frozen one-shot O-LQ5F.
+
+Frozen discovery PASS:
+- clean mechanics;
+- coverage >=8 contexts / >=2 sources;
+- loss-to-win flips >=4 across >=2 sources;
+- mean score delta >0;
+- mean margin delta >0.
+
+### V16C — DORMANT / PRE-FROZEN
+
+Config:
+`configs/all3_v16c_lq5f_fresh_validation.json`.
+
+If and only if V16B returns WL_HEADROOM:
+- same 10 exact source SHAs;
+- fresh seeds `78301..78304`;
+- both seats;
+- 80 fresh paired contexts.
+
+No candidate change after V16B.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35533510437`**.
+
+
 ## Binding update — 2026-09-20 — V14B REORDER TRANSLATED / V15A O-LQ4E CAUSAL ACTIVE
 
 **This block supersedes lower stale V14B/V15 current-action sections.**
