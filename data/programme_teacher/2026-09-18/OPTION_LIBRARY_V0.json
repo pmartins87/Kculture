@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve O-LQ3 Stage A workflow 35480144515; PASS => fresh paired Stage B on untouched seeds; directional-only => derive narrower legal-state condition; fail => do not promote global rule",
+  "next_stage": "resolve V8C workflow 35514319440; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D; margin-only/no-headroom closes simple SELL-priority family",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -638,15 +638,19 @@
       }
     },
     "v6_continuation": {
-      "workflow": 35473389439,
-      "status": "ACTIVE",
+      "workflow": 35473780009,
+      "status": "COMPLETE_CLOSED_MARGIN_ONLY",
       "config": "configs/all3_v6_hard_contexts.json",
       "horizons": [
         2,
         3
       ],
       "scope": "one physical locus, exact ALL3 market/other loci, ALL3 resumes after horizon",
-      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md"
+      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md",
+      "decision": "V6_CONTINUATION_MARGIN_ONLY",
+      "loss_to_win_flips": 0,
+      "mean_oracle_margin_delta": 68.5,
+      "result_doc": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_RESULT_2026-09-19.md"
     },
     "v7_option_composition": {
       "workflow": 35479297555,
@@ -712,11 +716,30 @@
       "result_doc": "docs/strategy/ALL3_V8B_LQ2_SELL_ORDER_ORACLE_RESULT_2026-09-19.md"
     },
     "o_lq3": {
-      "status": "STAGE_A_ACTIVE",
+      "status": "CLOSED_STAGE_A_FAIL_NO_RETUNING",
       "workflow": 35480144515,
+      "decision": "O_LQ3_STAGE_A_FAIL",
       "rule": "within each post-LQ2 consecutive SELL run, stable-sort only MILK/WOOL/FERTILIZER occupied slots by MILK -> WOOL -> FERTILIZER; preserve all quantities, other slots, farmer and hands",
-      "module": "tools/first_party_lq3_priority_sell_order.py",
-      "protocol": "docs/strategy/O_LQ3_STAGE_A_PROTOCOL_2026-09-19.md"
+      "fires_per_hard_context": 12,
+      "loss_to_win_flips": 0,
+      "mean_margin_delta": -1304.25,
+      "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md"
+    },
+    "v8c_local_priority_value_atlas": {
+      "status": "ACTIVE",
+      "workflow": 35514319440,
+      "launch_commit": "c174a0f944525a6d3006374357176cd32cabee1d",
+      "expected_branch_states": 48,
+      "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
+      "gate": {
+        "repeatable": "loss->win flips in >=2 distinct hard contexts",
+        "narrow": ">=1 loss->win plus positive-margin states in >=2 contexts",
+        "margin_heterogeneous": "positive-margin states in >=2 contexts without a win flip",
+        "no_reusable_headroom": "otherwise"
+      },
+      "promotion_rule": "only repeatable/narrow W/L evidence may derive one compact opponent-identity-free public-state condition, frozen before fresh V8D",
+      "protocol": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
@@ -731,5 +754,6 @@
       "status": "COMPLETE",
       "note": "latest observed snapshot; histories differ from O-RW1"
     }
-  }
+  },
+  "last_binding_update_utc": "2026-09-20"
 }
