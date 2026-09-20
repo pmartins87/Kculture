@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """V13A read-only current Top-30 public frontier drift census."""
 from __future__ import annotations
-import argparse,json,subprocess
+import argparse,json,subprocess,sys
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0,str(ROOT))
 from tools.kaggle_meta_scout_cli import csv_rows,normkey
 
 def ref_value(row):
