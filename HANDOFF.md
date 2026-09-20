@@ -1,5 +1,43 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — O-LQ3 CLOSED / V8C ACTIVE
+
+**This block supersedes any lower stale "current", "binding next steps", or "immediate action" section.**
+
+O-LQ3 Stage A workflow **`35480144515`** completed mechanically clean and is closed as **`O_LQ3_STAGE_A_FAIL`**:
+- 4/4 frozen hard contexts replayed with zero failures;
+- 12 O-LQ3 fires per context;
+- loss->win flips: **0**;
+- mean margin delta: **-1304.25**;
+- V47 mirror 75113/seat1: -263 -> -374;
+- V48 75103/seat1: -86 -> -2366;
+- V48 75110/seat0: -484 -> -3187;
+- V48 75113/seat1: -794 -> -917.
+
+The V8B local direction **MILK -> WOOL -> FERTILIZER** is therefore **not** a globally safe priority. No post-result threshold/frequency rescue of O-LQ3 is permitted.
+
+The binding next experiment is **V8C — Local Priority Value Atlas**, workflow **`35514319440`**, launched from commit **`c174a0f944525a6d3006374357176cd32cabee1d`**.
+
+V8C freezes the same four hard contexts and applies the unchanged O-LQ3 transform on **exactly one firing turn at a time**, then immediately resumes exact ALL3. Expected binding aggregate: **48 one-shot branches** (12 per context).
+
+Frozen V8C decision:
+- mechanics invalid / !=48 valid branches -> `V8C_MECHANICS_INVALID`;
+- loss->win in >=2 distinct hard contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_REPEATABLE`;
+- >=1 loss->win plus positive-margin states in >=2 contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_NARROW`;
+- positive-margin states in >=2 contexts without a win flip -> `V8C_CONDITIONAL_ORDER_MARGIN_HETEROGENEOUS`;
+- otherwise -> `V8C_CONDITIONAL_ORDER_NO_REUSABLE_HEADROOM`.
+
+Only the first two strategic W/L branches may justify deriving **one** compact opponent-identity-free public-state condition, frozen before fresh-seed V8D validation. Margin-only evidence does not authorize a hosted candidate. If V8C finds no reusable W/L headroom, close this simple SELL-priority family rather than retune it.
+
+Runtime robustness note: a community report suggested `obs["step"]` can be absent for seat 1, but our exact-engine V8A binding runs on `kaggle-environments==1.32.7` showed LQ2 firing normally in seat-1 contexts (97, 115 and 97 changed turns, with observed turns 577/600/673 etc.). Treat the report as an external portability warning, **not** as evidence of a current ALL3 failure. V8C targeting itself uses an internal deterministic turn counter.
+
+Preserve hosted pair:
+- O-RW1 submission `56336027`;
+- ALL3 submission `56367770`.
+
+**Binding immediate action:** resolve workflow **`35514319440`** once complete; do not submit a new Kaggle candidate from O-LQ3/V8C discovery alone.
+
+
 ## Current solver handoff — 2026-09-19
 
 Active branch: `research/prize-solver-v0`.
