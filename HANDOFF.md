@@ -1,5 +1,85 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V17A3 STATELESS CLOSE / V17A4 EDGE READY / V17B ACTIVE
+
+**This block supersedes lower stale V17 current-action sections.**
+
+### V17A3 — COMPLETE / STATELESS NOT COMPRESSIBLE
+
+Workflow: **`35539020930`**.
+
+Decision:
+**`V17A3_STRAWBERRY_TRIGGER_NOT_COMPRESSIBLE`**.
+
+Key trigger summaries:
+- T0_AVAILABLE: recall 1.0, precision 0.0399;
+- T1_CARRIED20: recall 0.5714, precision 0.3333;
+- T2_SHED2: recall 0.4286, precision 0.90;
+- T3_CARRIED20_OR_SHED2: recall 1.0, precision 0.4565.
+
+The dominant false positives for T3 were persistence at turns 494/495 after the true turn-493 event.
+
+### V17A4 — COMPLETE / READY
+
+Workflow: **`35539277486`**.
+
+Decision:
+**`V17A4_STRAWBERRY_EDGE_TRIGGER_READY`**.
+
+Selected trigger:
+`E3_CARRIED20_OR_SHED2_RISING`.
+
+Definition:
+- W2;
+- exact ALL3 market has no nonempty order;
+- total own STRAWBERRY >=2;
+- carried STRAWBERRY >=20 OR shed STRAWBERRY >=2;
+- fire only on false -> true transition.
+
+Metrics:
+- targets 42;
+- fires 44;
+- TP 42;
+- FP 2;
+- FN 0;
+- recall 1.0;
+- precision 0.954545;
+- 24/24 contexts;
+- 10/10 source SHAs.
+
+Frozen config:
+`configs/all3_v17b_lq6s_trigger.json`.
+
+### V17B — ACTIVE
+
+Workflow: **`35539385764`**  
+Launch commit: `303b3c72bb3bbc7ad73ed38d4fbebc7c23d9a538`.
+
+Candidate:
+**O-LQ6S — W2 STRAWBERRY first-free SELL2**.
+
+Runtime:
+- exact frozen V17A4 rising-edge trigger;
+- insert SELL STRAWBERRY qty2 at first semantic free slot;
+- recurrent on every rising edge;
+- preserve all other market orders/quantities and physical action.
+
+Discovery population:
+- all 24 binding V13C hard contexts.
+
+Frozen PASS:
+- 24-context / 10-source fire coverage;
+- loss-to-win flips >=4 across >=2 sources;
+- mean score delta >0;
+- mean margin delta >0.
+
+Fresh V17C population/seeds remain pre-frozen and dormant.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35539385764`**.
+
+
 ## Binding update — 2026-09-20 — V17A/A2 READY / V17A3 TRIGGER AUDIT ACTIVE
 
 **This block supersedes lower stale V17 current-action sections.**
