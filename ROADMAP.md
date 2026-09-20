@@ -1,5 +1,81 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V17A/A2 READY / V17A3 TRIGGER AUDIT ACTIVE
+
+**This block supersedes lower stale V17 current-action sections.**
+
+### V17A — COMPLETE / READY
+
+Workflow: **`35538621223`**.
+
+Decision:
+**`V17A_W2_JOINT_MARKET_BUNDLE_READY`**.
+
+Selected exact recurrent W2 bundle:
+- `PRESENCE|SELL|STRAWBERRY|ADD`;
+- `QTY|SELL|STRAWBERRY|2|INC`.
+
+Support:
+- 24/24 hard contexts;
+- 10/10 source SHAs;
+- 42 occurrences;
+- turns observed: 493 and 503;
+- median turn 493.
+
+### V17A2 — COMPLETE / READY
+
+Binding workflow: **`35538843133`**.
+
+Decision:
+**`V17A2_STRAWBERRY_INSERTION_READY`**.
+
+Translation:
+- quantity = exactly 2 in 42/42 events;
+- insertion index = 0 in 42/42 events;
+- semantic insertion rule = **first free market slot** in 42/42 events;
+- first free means first explicit empty slot, otherwise virtual append position;
+- selected occurrence multiplicity:
+  - 18 contexts: two events;
+  - 6 contexts: one event.
+
+The initial V17A2 workflow `35538722889` is NON-BINDING mechanical failure caused by equivalent `[]` vs `[[]]` empty-market representation. The binding rerun normalizes only that representation.
+
+### V17A3 — ACTIVE
+
+Workflow: **`35539020930`**  
+Launch commit: `e7943512aee243921f1d115cad1ad832e4b182cb`.
+
+Purpose:
+find a legal identity-free runtime trigger that reproduces the 42 selected bundle events without exact-turn whitelisting.
+
+Frozen trigger grammar:
+- T0_AVAILABLE;
+- T1_CARRIED20;
+- T2_SHED2;
+- T3_CARRIED20_OR_SHED2.
+
+All require:
+- W2;
+- exact ALL3 market has no nonempty order;
+- total own STRAWBERRY >=2.
+
+READY requires:
+- recall 1.0;
+- precision >=0.90;
+- all 24 contexts;
+- all 10 source SHAs.
+
+Selection:
+1. highest precision;
+2. fewest fires;
+3. lexical name.
+
+No STRAWBERRY treatment has been run yet.
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35539020930`**.
+
+
 ## Binding update — 2026-09-20 — V16B MARGIN-ONLY CLOSE / V17A JOINT MARKET BUNDLE ACTIVE
 
 **This block supersedes lower stale V16/V17 current-action sections.**
