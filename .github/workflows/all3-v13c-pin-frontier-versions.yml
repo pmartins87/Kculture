@@ -1,0 +1,44 @@
+name: all3-v13c-pin-frontier-versions
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v13c-pin-frontier-versions.yml'
+      - 'tools/all3_v13c_pin_frontier_versions.py'
+      - 'configs/all3_v13c_current_frontier_representatives.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install public-download clients
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle>=2.2.3'
+      - name: Syntax
+        run: python -m py_compile tools/all3_v13c_pin_frontier_versions.py
+      - name: Resolve immutable V13C source versions
+        run: |
+          mkdir -p artifacts/v13c-pin
+          python tools/all3_v13c_pin_frontier_versions.py             --config configs/all3_v13c_current_frontier_representatives.json             --out artifacts/v13c-pin/ALL3_V13C_PINNED_FRONTIER_VERSIONS.json             --max-back 12             --delay 1.25
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v13c-pinned-frontier-versions
+          path: artifacts/v13c-pin/*.json
+          retention-days: 30
+          if-no-files-found: warn
