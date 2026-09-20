@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V9A workflow 35517515758; if structural residuals span >=2 hard contexts, freeze representative states and run V9B one-turn causal category isolation; do not retune O-LQ3C",
+  "next_stage": "resolve V9B workflow 35517836947; only W/L headroom can advance residual one-turn structural imitation; margin-only closes this family",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -771,7 +771,7 @@
       "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md"
     },
     "v9_residual_structural_decomposition": {
-      "status": "V9A_ACTIVE",
+      "status": "V9A_COMPLETE_V9B_ACTIVE",
       "activate_if": "binding V8C closes without reusable W/L headroom",
       "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
       "categories": [
@@ -788,7 +788,27 @@
       "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
       "workflow": 35517515758,
-      "launch_commit": "a551a38023ee268b43f71ed442b998a99d547a40"
+      "launch_commit": "a551a38023ee268b43f71ed442b998a99d547a40",
+      "v9a_workflow": 35517515758,
+      "v9a_decision": "V9A_STRUCTURAL_RESIDUAL_READY",
+      "v9a_counts": {
+        "total": 233,
+        "INSERT_DROP": 161,
+        "QTY_UP": 63,
+        "REORDER_ONLY": 9,
+        "physical": 0
+      },
+      "structural_contexts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "v9a_result_doc": "docs/strategy/ALL3_V9A_RESIDUAL_STRUCTURAL_CENSUS_RESULT_2026-09-20.md",
+      "v9b_workflow": 35517836947,
+      "v9b_launch_commit": "fefc69744fb0b12bdd1c71141c53d0ff1083bd17",
+      "v9b_state_config": "configs/all3_v9b_representative_states.json",
+      "v9b_protocol": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_PROTOCOL_2026-09-20.md"
     },
     "o_lq3c": {
       "status": "CLOSED_NO_FRESH_WL_CONFIRMATION",
