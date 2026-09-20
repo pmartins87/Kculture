@@ -76,3 +76,16 @@ Decision:
 
 No causal game is run by V17A2.
 No Kaggle submission.
+
+
+### Mechanical representation amendment
+
+The first V17A2 run failed before decision because selected events use two semantically equivalent empty-market encodings:
+- `[[]]` — an explicit empty slot;
+- `[]` — no materialized slot yet.
+
+For translation only, define **first free slot** as:
+- the first explicit empty slot when one exists;
+- otherwise the virtual append position `len(market)`.
+
+This does not alter the selected bundle, event population, recurrence evidence, quantity rule, or any strategic gate. It only normalizes equivalent market-list representations.
