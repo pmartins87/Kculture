@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V12A workflow 35519704115; only PUBLIC_CROP_SHIFT_TRANSFER_READY may open a bounded causal V12B macro-response oracle; do not install a CARROT response from hosted correlation alone",
+  "next_stage": "resolve V13A workflow 35520312252; choose incremental/current-all/full frontier executable refresh strictly from frozen overlap gate; V12B remains dormant because V12A did not transfer",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1161,7 +1161,7 @@
       "automatic_kaggle_submission": false
     },
     "v12a_public_crop_shift_transfer": {
-      "status": "ACTIVE",
+      "status": "CLOSED_TRANSFER_SPARSE",
       "workflow": 35519704115,
       "launch_commit": "f255d27997739690ff833828cc2adb1bc42bef04",
       "seeds": [
@@ -1192,10 +1192,33 @@
       "transfer_ready_gate": "signal support >=8; >=2 families with >=2 signal contexts; signal loss rate >=0.75; signal score rate <=0.25; non-signal support >=16; non-signal score gap >=0.20",
       "next_if_ready": "V12B bounded causal public-state macro-response oracle",
       "protocol": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "decision": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
+      "mechanical_pass": true,
+      "all3_outcome": {
+        "wins": 112,
+        "losses": 0,
+        "ties": 0,
+        "score_rate": 1
+      },
+      "signal": {
+        "support": 12,
+        "wins": 12,
+        "losses": 0,
+        "score_rate": 1,
+        "mean_margin": 33873.333333333336,
+        "families": [
+          "literal_market_strategy"
+        ]
+      },
+      "strict_signal": {
+        "support": 0
+      },
+      "result_doc": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_RESULT_2026-09-20.md",
+      "interpretation": "hosted CARROT association not transferable on frozen seven-agent league; league too weak/unrepresentative for discovery"
     },
     "v12b_bounded_crop_response": {
-      "status": "DORMANT_PRE_REGISTERED_BEFORE_V12A_RESULT",
+      "status": "DORMANT_NOT_ACTIVATED",
       "activate_if": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_READY",
       "trigger": "first checkpoint in [456,480,504,552,600] where opponent public CARROT > own CARROT",
       "response_window_turns": 96,
@@ -1219,6 +1242,17 @@
         77104
       ],
       "protocol": "docs/strategy/ALL3_V12B_BOUNDED_CROP_RESPONSE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "activation_failed_because": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
+      "workflow": null
+    },
+    "v13a_current_top30_drift": {
+      "status": "ACTIVE",
+      "workflow": 35520312252,
+      "launch_commit": "a10d264f39af48823f30f02f306396c6f033bdfd",
+      "comparison": "current scoreDescending Top-30 vs frozen 2026-09-18 PROGRAMME_CORPUS",
+      "third_party_code_executed": false,
+      "protocol": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
