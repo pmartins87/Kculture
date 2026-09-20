@@ -1,5 +1,97 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V14A MARKET HEADROOM / V14B MARKET ATLAS ACTIVE
+
+**This block supersedes lower stale V14A/V14B current-action sections.**
+
+### V14A — COMPLETE / BINDING
+
+Binding mechanical-completion workflow: **`35526276641`**.
+
+Decision: **`V14A_MARKET_DOMAIN_HEADROOM`**.
+
+Complete grid:
+- 24 hard contexts;
+- 6 pre-registered modes;
+- **144/144 unique context-mode rows**.
+
+Domain results:
+
+**MARKET_ALL**
+- improved-score contexts: **12/24**;
+- improved unique sources: **5**;
+- mean score delta: **+0.50**;
+- mean margin delta: **+1812.83**;
+- regressions: **0**.
+
+**MARKET_W2PLUS**
+- improved-score contexts: **18/24**;
+- improved unique sources: **7**;
+- mean score delta: **+0.75**;
+- mean margin delta: **+1858.50**;
+- regressions: **0**.
+
+**PHYSICAL_ALL**
+- improved-score contexts: **0/24**;
+- mean margin delta: **-113.42**.
+
+**PHYSICAL_W2PLUS**
+- improved-score contexts: **0/24**;
+- mean margin delta: **-265.33**.
+
+**FULL_ALL**
+- improved-score contexts: **24/24**;
+- mean score delta: **+0.50**;
+- mean margin delta: **+1364.75**.
+
+Binding interpretation:
+reusable current-frontier W/L upper-bound headroom is a **market-domain** effect, especially post-turn-336. Physical imitation is closed for this branch.
+
+Result:
+`docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_RESULT_2026-09-20.md`.
+
+### V14B MARKET phenotype atlas — ACTIVE
+
+Workflow: **`35526759114`**  
+Launch commit: `6183aea6077693c230a72f5eae94f88a543fc1d9`.
+
+The V14B protocol was pre-registered before V14A completed.
+
+Population:
+- all 24 binding V13C hard contexts;
+- same frozen source SHAs;
+- exact ALL3 returned to the environment;
+- shadow teacher evaluated only for offline market-difference localization.
+
+Atlas records:
+- legal candidate-visible state;
+- market order-count deltas;
+- per-product/side quantity deltas;
+- add/remove presence;
+- reorder-only differences;
+- duplicate compaction/splitting;
+- phase and coarse predeclared state buckets.
+
+Recurrence gate:
+- context support >=4;
+- source support >=2;
+- same direction >=75%;
+- legal candidate-visible expression;
+- no opponent identity.
+
+If multiple families pass, deterministic selection:
+1. most unique source SHAs;
+2. most contexts;
+3. earliest median turn;
+4. lexical phenotype key.
+
+At most one phenotype may advance to a first-party causal rule.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35526759114`**.
+
+
 ## Binding update — 2026-09-20 — V14A MECHANICAL COMPLETION ACTIVE
 
 **This block supersedes lower stale V14A current-action sections.**
