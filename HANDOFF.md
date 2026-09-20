@@ -1,5 +1,62 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V16B MARGIN-ONLY CLOSE / V17A JOINT MARKET BUNDLE ACTIVE
+
+**This block supersedes lower stale V16/V17 current-action sections.**
+
+### V16B — COMPLETE / CLOSED
+
+Workflow: **`35533510437`**.
+
+Decision:
+**`V16B_LQ5F_MARGIN_ONLY_CLOSE`**.
+
+Mechanical:
+- 24/24 paired hard contexts;
+- failures 0;
+- fire coverage 24/24 contexts, 10/10 sources;
+- exactly one W2 O-LQ5F fire per treatment episode.
+
+Strategic:
+- loss-to-win flips: 0;
+- positive-score contexts: 0;
+- negative-score contexts: 0;
+- mean score delta: **0.0**;
+- mean margin delta: **+11.5**.
+
+O-LQ5F is closed. V16C fresh validation is not activated.
+
+Result:
+`docs/strategy/ALL3_V16B_LQ5F_CAUSAL_RESULT_2026-09-20.md`.
+
+### V17A — ACTIVE
+
+Workflow: **`35538621223`**  
+Launch commit: `1baf3e1abbb51368841caff6d3f5f34a2f6e0c5d`.
+
+Question:
+does the V14B binding W2 atlas contain a recurrent **multi-edit market bundle** that could explain why complete MARKET_W2PLUS substitution produced large W/L headroom while isolated reorder and isolated quantity edits did not?
+
+Frozen extraction:
+- binding V14B artifact only;
+- W2 events only;
+- recurrent legal market edits only;
+- multi-edit bundles only;
+- exact co-occurrence signatures;
+- no outcome-based ranking.
+
+Deterministic selection:
+1. max unique sources;
+2. max context support;
+3. max occurrence count;
+4. earliest median turn;
+5. lexical bundle key.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35538621223`**.
+
+
 ## Binding update — 2026-09-20 — V15A CLOSED ZERO EFFECT / V16B O-LQ5F ACTIVE
 
 **This block supersedes lower stale V15/V16 current-action sections.**
