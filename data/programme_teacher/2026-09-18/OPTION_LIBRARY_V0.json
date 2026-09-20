@@ -834,6 +834,37 @@
       "paired_contexts": 72,
       "pass_gate": "V48 positive mean score delta and >=1 positive-score context; zero win->nonwin overall; zero negative-score contexts in both controls; activation coverage minimum met",
       "automatic_kaggle_submission": false
+    },
+    "v8e_broad_regression": {
+      "status": "DORMANT_PRE_REGISTERED_BEFORE_V8D_RESULT",
+      "activate_if": "V8D_CONDITIONAL_ORDER_FRESH_PASS",
+      "seeds": [
+        76101,
+        76102,
+        76103,
+        76104,
+        76105,
+        76106
+      ],
+      "seats": [
+        0,
+        1
+      ],
+      "opponents": [
+        "v47_mirror",
+        "ready_stock",
+        "v48",
+        "router_2715",
+        "conditional_memory",
+        "tactical_memory",
+        "best_market"
+      ],
+      "paired_contexts": 84,
+      "candidate": "exact frozen O-LQ3C unchanged from V8D",
+      "safety_gate": "zero win->nonwin overall and zero negative-score contexts in every family",
+      "hosted_policy": "after broad + package parity PASS, preserve ALL3 as control and use other slot for new candidate",
+      "protocol": "docs/strategy/O_LQ3C_V8E_BROAD_REGRESSION_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
