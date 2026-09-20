@@ -1,0 +1,25 @@
+{
+  "schema": "kculture-all3-v17b-lq6s-trigger-v1",
+  "source_v17a4_workflow": 35539277486,
+  "decision": "V17A4_STRAWBERRY_EDGE_TRIGGER_READY",
+  "selected_trigger": "E3_CARRIED20_OR_SHED2_RISING",
+  "base_stateless_trigger": "T3_CARRIED20_OR_SHED2",
+  "recall": 1,
+  "precision": 0.9545454545454546,
+  "fires": 44,
+  "true_positives": 42,
+  "false_positives": 2,
+  "false_positive_keys": [
+    [
+      "v13c_hard_20",
+      503
+    ],
+    [
+      "v13c_hard_21",
+      503
+    ]
+  ],
+  "contexts_covered": 24,
+  "sources_covered": 10,
+  "automatic_kaggle_submission": false
+}
