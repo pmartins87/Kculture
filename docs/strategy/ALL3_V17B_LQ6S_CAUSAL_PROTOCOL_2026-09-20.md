@@ -4,15 +4,15 @@
 
 DORMANT / PRE-REGISTERED BEFORE V17A3 RESULT.
 
-Activate only if V17A3 returns:
-`V17A3_STRAWBERRY_TRIGGER_READY`.
+Activate only after the V17A3/V17A4 trigger chain resolves to:
+`V17A4_STRAWBERRY_EDGE_TRIGGER_READY`.
 
 ## Candidate family
 
 **O-LQ6S — W2 STRAWBERRY first-free SELL2**.
 
-The runtime trigger is exactly the deterministic V17A3-selected trigger.
-No trigger mutation is permitted after V17A3.
+The runtime trigger is exactly the frozen V17A4-selected rising-edge trigger from `configs/all3_v17b_lq6s_trigger.json`.
+No trigger mutation is permitted after V17A4.
 
 Common action transformation:
 - W2 only;
@@ -102,3 +102,13 @@ Fresh PASS requires:
 No candidate change after V17B.
 
 No Kaggle submission.
+
+
+### Activation amendment
+
+The original dormant V17B protocol anticipated a directly compressible stateless V17A3 trigger.
+V17A3 closed stateless triggers as non-compressible, and the pre-frozen V17A4 rising-edge audit then produced
+`V17A4_STRAWBERRY_EDGE_TRIGGER_READY`.
+
+This amendment changes only the trigger state semantics from stateless to the exact frozen V17A4 rising edge.
+The STRAWBERRY action transformation, discovery population, strategic PASS gate, and V17C validation population/seeds remain unchanged.
