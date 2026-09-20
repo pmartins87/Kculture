@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve corrected binding V8C workflow 35514497453; every O-LQ3 firing state discovered on untouched ALL3 baseline is branched exactly once; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D",
+  "next_stage": "resolve repaired binding V8C workflow 35516167350; every O-LQ3 firing state discovered on untouched ALL3 baseline is branched exactly once; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -726,8 +726,8 @@
       "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md"
     },
     "v8c_local_priority_value_atlas": {
-      "status": "ACTIVE_BINDING_CORRECTED",
-      "workflow": 35514497453,
+      "status": "ACTIVE_BINDING_REPAIRED",
+      "workflow": 35516167350,
       "expected_branch_states": "sum of baseline-discovered O-LQ3 firing states across the four frozen hard contexts",
       "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
       "gate": {
@@ -747,9 +747,13 @@
         {
           "workflow": 35514495824,
           "reason": "context-side correction only; aggregate still had obsolete fixed-count gate"
+        },
+        {
+          "workflow": 35514497453,
+          "reason": "aggregate source contained literal \\\\n and failed Python syntax before strategic simulation"
         }
       ],
-      "head_commit": "a9f36e24c66ed6ffcc8431b2ad9bec35f48e1cec",
+      "head_commit": "b528ac9dafedefd17b65dfa7407b1b793adb6046",
       "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory"
     }
   },
