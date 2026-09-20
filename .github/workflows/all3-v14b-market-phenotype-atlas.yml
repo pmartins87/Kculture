@@ -1,0 +1,43 @@
+name: all3-v14b-market-phenotype-atlas
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v14b-market-phenotype-atlas.yml'
+      - 'tools/all3_v14b_market_phenotype_atlas.py'
+      - 'configs/all3_v14a_hard_contexts.json'
+      - 'docs/strategy/ALL3_V14B_DOMAIN_PHENOTYPE_PROTOCOL_2026-09-20.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/all3_v14b_market_phenotype_atlas.py
+      - name: Run V14B MARKET phenotype atlas
+        run: |
+          mkdir -p artifacts/v14b
+          python tools/all3_v14b_market_phenotype_atlas.py             --hard-config configs/all3_v14a_hard_contexts.json             --out artifacts/v14b/ALL3_V14B_MARKET_PHENOTYPE_ATLAS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v14b-market-phenotype-atlas
+          path: artifacts/v14b/*.json
+          retention-days: 30
+          if-no-files-found: warn
