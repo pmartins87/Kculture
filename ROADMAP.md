@@ -1,5 +1,63 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V12A CLOSED / V13A CURRENT FRONTIER DRIFT ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V12A — COMPLETE / CLOSED
+
+Workflow: **`35519704115`**  
+Head: `f255d27997739690ff833828cc2adb1bc42bef04`.
+
+Decision: **`V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE`**.
+
+Mechanical:
+- 112/112 exact ALL3 episodes;
+- 7/7 frozen public families;
+- both seats;
+- failures 0.
+
+Competitive:
+- ALL3: **112W–0L–0T**;
+- primary CARROT signal support: 12, all in Best Market;
+- signal games: **12W–0L**;
+- strict CARROT+4 / WHEAT-deficit-4 signal support: 0.
+
+Binding interpretation:
+the hosted V11B CARROT association is not a transferable causal failure rule on this league, and the frozen seven-agent league is now too weak/unrepresentative for discovery.
+
+V12B remains **DORMANT_NOT_ACTIVATED**. Do not run or tune it.
+
+Result:
+`docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_RESULT_2026-09-20.md`.
+
+### V13A — ACTIVE
+
+Workflow: **`35520312252`**  
+Launch commit: `a10d264f39af48823f30f02f306396c6f033bdfd`.
+
+Purpose:
+refresh the current Kaggriculture score-sorted public Top-30 and compare it with the frozen 2026-09-18 Top-30 corpus before executing third-party agents.
+
+This stage:
+- performs read-only Kaggle metadata queries;
+- executes no third-party agent code;
+- records current refs, overlap, entrants, dropped refs, rank displacement and unknown source identities.
+
+Gate:
+- overlap >=24/30 and unknown/new <=6 => incremental executable refresh;
+- overlap 15..23 => refresh all current Top-30;
+- overlap <15 => full frontier rebuild.
+
+No Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35520312252`**.
+
+
 ## Binding update — 2026-09-20 — V11B REGIME SIGNAL / V12A TRANSFER ACTIVE
 
 **This block supersedes lower stale current-action sections.**
