@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V17A3 workflow 35539020930; only a trigger with recall=1.0, precision>=0.90, 24 contexts and 10 sources may define the first STRAWBERRY causal candidate",
+  "next_stage": "resolve V17B workflow 35539385764; only V17B_LQ6S_WL_HEADROOM may activate pre-frozen V17C on seeds 78401..78404",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1545,11 +1545,44 @@
       "protocol": "docs/strategy/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION_PROTOCOL_2026-09-20.md"
     },
     "v17a3_strawberry_trigger": {
-      "status": "ACTIVE",
+      "status": "COMPLETE_NOT_COMPRESSIBLE",
       "workflow": 35539020930,
       "launch_commit": "e7943512aee243921f1d115cad1ad832e4b182cb",
       "ready_gate": "recall=1.0; precision>=0.90; contexts=24; sources=10",
       "protocol": "docs/strategy/ALL3_V17A3_STRAWBERRY_TRIGGER_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V17A3_STRAWBERRY_TRIGGER_NOT_COMPRESSIBLE",
+      "best_stateless": {
+        "trigger": "T3_CARRIED20_OR_SHED2",
+        "recall": 1,
+        "precision": 0.45652173913043476,
+        "fires": 92,
+        "tp": 42,
+        "fp": 50
+      }
+    },
+    "v17a4_strawberry_edge_trigger": {
+      "status": "COMPLETE_READY",
+      "workflow": 35539277486,
+      "decision": "V17A4_STRAWBERRY_EDGE_TRIGGER_READY",
+      "selected_trigger": "E3_CARRIED20_OR_SHED2_RISING",
+      "recall": 1,
+      "precision": 0.9545454545454546,
+      "fires": 44,
+      "tp": 42,
+      "fp": 2,
+      "contexts": 24,
+      "sources": 10,
+      "config": "configs/all3_v17b_lq6s_trigger.json",
+      "result_doc": "docs/strategy/ALL3_V17A4_STRAWBERRY_TRIGGER_RESULT_2026-09-20.md"
+    },
+    "v17b_lq6s_causal": {
+      "status": "ACTIVE",
+      "workflow": 35539385764,
+      "launch_commit": "303b3c72bb3bbc7ad73ed38d4fbebc7c23d9a538",
+      "candidate": "O-LQ6S W2 STRAWBERRY first-free SELL2 with E3 rising-edge trigger",
+      "pass_gate": "24-context/10-source coverage; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
+      "protocol": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
