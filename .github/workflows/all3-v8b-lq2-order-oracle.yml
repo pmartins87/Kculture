@@ -1,0 +1,77 @@
+name: all3-v8b-lq2-order-oracle
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v8b-lq2-order-oracle.yml'
+      - 'tools/all3_v8b_lq2_order_context.py'
+      - 'tools/aggregate_all3_v8b_lq2_order.py'
+      - 'configs/all3_v8b_lq2_order_states.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  context:
+    strategy:
+      fail-fast: false
+      matrix:
+        index: [0,1,2,3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v8b_lq2_order_context.py
+          python -m py_compile tools/aggregate_all3_v8b_lq2_order.py
+      - name: Run V8B order oracle
+        run: |
+          mkdir -p artifacts/v8b
+          python tools/all3_v8b_lq2_order_context.py \
+            --hard-config configs/all3_v6_hard_contexts.json \
+            --state-config configs/all3_v8b_lq2_order_states.json \
+            --index ${{ matrix.index }} \
+            --out artifacts/v8b/V8B_CONTEXT_${{ matrix.index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v8b-context-${{ matrix.index }}
+          path: artifacts/v8b/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: context
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v8b-context-*
+          path: artifacts/v8b-contexts
+          merge-multiple: false
+      - name: Aggregate V8B
+        run: |
+          mkdir -p artifacts/v8b-aggregate
+          python tools/aggregate_all3_v8b_lq2_order.py \
+            --input-dir artifacts/v8b-contexts \
+            --out artifacts/v8b-aggregate/ALL3_V8B_LQ2_ORDER_ORACLE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v8b-lq2-order-oracle
+          path: artifacts/v8b-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
