@@ -87,12 +87,20 @@ def market_agg(market):
 def sequence_key(market):
     return tuple((order_parts(o)[0],order_parts(o)[1],order_parts(o)[2]) for o in list(market or []))
 
+def kind_counts(farm):
+    q=collections.Counter()
+    for row in farm.get("tiles",[]) or []:
+        for tile in row:
+            if isinstance(tile,dict):
+                q[str(tile.get("kind"))]+=1
+    return q
+
 def state_features(obs,seat,turn):
     p=plain(obs)
     farms=p.get("farms") or []
     own=farms[int(seat)] if len(farms)>int(seat) else {}
     opp=farms[1-int(seat)] if len(farms)>1-int(seat) else {}
-    oc=public_counts(own);pc=public_counts(opp)
+    oc=public_counts(own);pc=public_counts(opp);ok=kind_counts(own);pk=kind_counts(opp)
     private=p.get("private") or {}
     shed=private.get("shed") or {}
     seeds=private.get("seeds") or {}
@@ -113,6 +121,10 @@ def state_features(obs,seat,turn):
       "opp_quads":len(opp.get("unlocked_quadrants") or []),
       "own_hands_count":len(own.get("hands") or []),
       "opp_hands_count":len(opp.get("hands") or []),
+      "own_hands_state":plain(own.get("hands") or []),
+      "own_plants":int(ok.get("PLANT",0)),"opp_plants":int(pk.get("PLANT",0)),
+      "own_pastures":int(ok.get("PASTURE",0)+ok.get("COOP",0)),
+      "opp_pastures":int(pk.get("PASTURE",0)+pk.get("COOP",0)),
     }
     for x in CROPS:
         a=int(oc.get(f"crop_{x}",0));b=int(pc.get(f"crop_{x}",0))
@@ -170,10 +182,17 @@ def diff_event(all3,shadow,obs,seat,turn):
     if reordered:
         elementary.append({"group_key":f"{phase(turn)}|REORDER","direction":"REORDER","kind":"REORDER"})
 
+    base_sell=sum(q for (s,_p),q in bq.items() if s=="SELL")
+    teacher_sell=sum(q for (s,_p),q in tq.items() if s=="SELL")
+    base_buy=sum(q for (s,_p),q in bq.items() if s.startswith("BUY"))
+    teacher_buy=sum(q for (s,_p),q in tq.items() if s.startswith("BUY"))
     return {
       "turn":int(turn),"phase":phase(turn),
       "base_market":bm,"teacher_market":tm,
+      "base_sequence":list(sequence_key(bm)),"teacher_sequence":list(sequence_key(tm)),
       "base_order_count":len(bm),"teacher_order_count":len(tm),"order_count_delta":count_delta,
+      "base_sell_units":base_sell,"teacher_sell_units":teacher_sell,
+      "base_buy_units":base_buy,"teacher_buy_units":teacher_buy,
       "same_aggregate":same_aggregate,"reordered_only":reordered,
       "qty_deltas":qty_delta,"presence_deltas":presence,"duplicate_deltas":duplicate,
       "elementary":elementary,
@@ -256,7 +275,7 @@ def main():
     if str(getattr(kaggle_environments,"__version__",""))!=EXPECTED_ENGINE:raise SystemExit("engine mismatch")
     cfg=json.loads(Path(args.hard_config).read_text());contexts=list(cfg.get("hard_contexts") or [])
     if len(contexts)!=24:raise SystemExit("expected exactly 24 binding hard contexts")
-    failures=[];event_rows=[];provenance={};started=time.perf_counter()
+    failures=[];event_rows=[];processed_contexts=[];provenance={};started=time.perf_counter()
     with tempfile.TemporaryDirectory(prefix="v14b-market-atlas-") as td:
         root=Path(td)
         try:
@@ -285,6 +304,7 @@ def main():
                 if teacher is None:continue
                 try:
                     events=run_context(base_main,teacher,c)
+                    processed_contexts.append(c["context_id"])
                     for ev in events:
                         event_rows.append({
                           "context_id":c["context_id"],"rank":c.get("rank"),"ref":c["ref"],
@@ -298,7 +318,7 @@ def main():
                     purge_package_modules(base_main.parent);purge_package_modules(teacher.parent)
 
     families,recurrent=family_atlas(event_rows)
-    mech=(not failures and len({r["context_id"] for r in event_rows})==24)
+    mech=(not failures and len(set(processed_contexts))==24)
     if not mech:decision="V14B_MECHANICS_INVALID"
     elif recurrent:decision="V14B_RECURRENT_DOMAIN_PHENOTYPE_READY"
     else:decision="V14B_DOMAIN_HEADROOM_NOT_COMPRESSIBLE"
@@ -306,7 +326,9 @@ def main():
     result={
       "schema":"kculture-all3-v14b-market-phenotype-atlas-v1","engine":EXPECTED_ENGINE,
       "mechanical_pass":mech,"decision":decision,"contexts":24,
+      "processed_contexts":sorted(set(processed_contexts)),
       "contexts_with_divergence":len({r["context_id"] for r in event_rows}),
+      "contexts_without_divergence":sorted(set(processed_contexts)-{r["context_id"] for r in event_rows}),
       "market_divergence_events":len(event_rows),
       "families":families,"recurrent_families":recurrent,"selected_phenotype":selected,
       "event_rows":event_rows,"failures":failures,"provenance":provenance,
