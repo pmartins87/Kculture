@@ -37,23 +37,31 @@ def main():
         if sigs!=SELECTED:continue
         base=list(ev.get("base_market") or [])
         teacher=list(ev.get("teacher_market") or [])
-        if len(base)!=len(teacher):raise RuntimeError("market cardinality differs in selected event")
         add_idxs=[]
         details=[]
-        for i,(bo,to) in enumerate(zip(base,teacher)):
-            bs,bp,bq=order_type(bo);ts,tp,tq=order_type(to)
+        empties=[j for j,x in enumerate(base) if not list(x or [])]
+        first_free_index=empties[0] if empties else len(base)
+        last_free_index=empties[-1] if empties else len(base)
+        for i,to in enumerate(teacher):
+            ts,tp,tq=order_type(to)
+            bo=base[i] if i<len(base) else None
+            bs,bp,bq=order_type(bo) if bo is not None else ("MISSING","_",None)
             if ts=="SELL" and tp=="STRAWBERRY" and not (bs=="SELL" and bp=="STRAWBERRY"):
                 add_idxs.append(i)
-                empties=[j for j,x in enumerate(base) if not list(x or [])]
-                nonempty_before=sum(1 for x in base[:i] if list(x or []))
-                nonempty_after=sum(1 for x in base[i+1:] if list(x or []))
+                nonempty_before=sum(1 for x in base[:min(i,len(base))] if list(x or []))
+                nonempty_after=sum(1 for x in base[min(i+1,len(base)):] if list(x or []))
                 details.append({
                   "index":i,"teacher_qty":tq,"base_order":bo,
-                  "base_empty":not bool(list(bo or [])),
+                  "base_empty":(bo is None or not bool(list(bo or []))),
+                  "base_missing":bo is None,
                   "first_empty_index":empties[0] if empties else None,
                   "last_empty_index":empties[-1] if empties else None,
+                  "first_free_index":first_free_index,
+                  "last_free_index":last_free_index,
                   "is_first_empty":bool(empties and i==empties[0]),
                   "is_last_empty":bool(empties and i==empties[-1]),
+                  "is_first_free":i==first_free_index,
+                  "is_last_free":i==last_free_index,
                   "nonempty_before":nonempty_before,
                   "nonempty_after":nonempty_after,
                 })
@@ -76,6 +84,8 @@ def main():
     base_empty=sum(bool(x["base_empty"]) for x in flat)/len(flat)
     first_empty=sum(bool(x["is_first_empty"]) for x in flat)/len(flat)
     last_empty=sum(bool(x["is_last_empty"]) for x in flat)/len(flat)
+    first_free=sum(bool(x["is_first_free"]) for x in flat)/len(flat)
+    last_free=sum(bool(x["is_last_free"]) for x in flat)/len(flat)
 
     fixed_index=None;fixed_index_share=0.0
     if idxs:
@@ -85,6 +95,8 @@ def main():
         qty,count=qtys.most_common(1)[0];qty_share=count/len(flat)
 
     candidates=[
+      ("first_free",first_free),
+      ("last_free",last_free),
       ("first_empty",first_empty),
       ("last_empty",last_empty),
       ("fixed_index",fixed_index_share),
@@ -139,6 +151,8 @@ def main():
       "base_empty_share":base_empty,
       "first_empty_share":first_empty,
       "last_empty_share":last_empty,
+      "first_free_share":first_free,
+      "last_free_share":last_free,
       "fixed_index_share":fixed_index_share,
       "fixed_index":fixed_index,
       "chosen_insertion_rule":chosen,
@@ -153,6 +167,7 @@ def main():
       "index_distribution":result["index_distribution"],
       "quantity_distribution":result["quantity_distribution"],
       "base_empty_share":base_empty,"first_empty_share":first_empty,"last_empty_share":last_empty,
+      "first_free_share":first_free,"last_free_share":last_free,
       "chosen_insertion_rule":chosen,"quantity_rule":quantity_rule
     },sort_keys=True),flush=True)
     if chosen is None:raise SystemExit(2)
