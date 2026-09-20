@@ -33,7 +33,7 @@ The same four V6A hard contexts remain frozen:
 3. V48 75110 / seat 0;
 4. V48 75113 / seat 1.
 
-Stage A established exactly 12 O-LQ3 fires per context, so the binding aggregate expects **48 one-shot branch states**.
+Stage A fire counts came from the cumulatively treated trajectory and therefore are not a valid fixed branch-count target for a one-shot causal atlas. V8C discovers firing states on the untouched ALL3 baseline trajectory and branches every discovered state exactly once. The binding aggregate requires branch count to equal the sum of baseline-discovered events across all four contexts.
 
 ## Recorded legal features
 
@@ -50,7 +50,7 @@ Opponent identity remains offline stratification metadata only and is forbidden 
 
 ## Frozen decision rule
 
-- mechanics invalid or !=48 valid branch states -> `V8C_MECHANICS_INVALID`;
+- mechanics invalid, any context with zero baseline events, or branch count != the exact baseline-discovered event count -> `V8C_MECHANICS_INVALID`;
 - loss->win flips in >=2 distinct hard contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_REPEATABLE`;
 - >=1 loss->win plus positive-margin states in >=2 contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_NARROW`;
 - positive-margin states in >=2 contexts without a win flip -> `V8C_CONDITIONAL_ORDER_MARGIN_HETEROGENEOUS`;
@@ -63,3 +63,16 @@ Only a repeatable/narrow W/L result may justify deriving **one** compact public-
 Margin-only evidence does not authorize another hosted candidate.
 
 No Kaggle submission is authorized by V8C.
+
+
+## Pre-result mechanical amendment — 2026-09-20
+
+Initial workflow `35514319440` is **non-binding**. It incorrectly required 12 events per context based on O-LQ3 Stage A treatment trajectories. Two ALL3 baseline contexts correctly exposed 11 firing states before any branch result was observed.
+
+The amendment changes only the mechanical accounting rule:
+- discovery trajectory = untouched ALL3;
+- every baseline-discovered O-LQ3 firing state is branched once;
+- no fixed event count is inherited from a cumulatively treated trajectory;
+- strategic decision thresholds are unchanged.
+
+No V8C branch outcome was inspected or used to make this amendment.
