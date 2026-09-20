@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V8A workflow 35479557496; if any post-LQ2 multi-product SELL run exists, freeze bounded states and run exact cross-product SELL-order permutation oracle; otherwise close order mechanism",
+  "next_stage": "resolve O-LQ3 Stage A workflow 35480144515; PASS => fresh paired Stage B on untouched seeds; directional-only => derive narrower legal-state condition; fail => do not promote global rule",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -664,9 +664,59 @@
     },
     "v8a_lq2_sell_run_census": {
       "workflow": 35479557496,
-      "status": "ACTIVE",
-      "purpose": "census residual multi-product SELL runs after exact LQ2 on four frozen hard contexts",
-      "protocol": "docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_PROTOCOL_2026-09-19.md"
+      "status": "COMPLETE",
+      "decision": "V8A_ORDER_SEARCH_READY",
+      "mechanical_pass": true,
+      "lq2_changed_turns": 424,
+      "eligible_states": 170,
+      "contexts_with_eligible": 4,
+      "max_distinct_products": 6,
+      "result_doc": "docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_RESULT_2026-09-19.md"
+    },
+    "v8b_lq2_order_oracle": {
+      "workflow": 35479783995,
+      "status": "COMPLETE",
+      "decision": "V8B_ORDER_HEADROOM_NARROW",
+      "mechanical_pass": true,
+      "flipped_to_win": 1,
+      "mean_best_margin_delta": 96,
+      "winning_context": {
+        "opponent": "v48",
+        "seed": 75103,
+        "seat": 1,
+        "step": 600,
+        "base_margin": -86,
+        "treatment_margin": 10,
+        "swap": [
+          "FERTILIZER",
+          "WOOL"
+        ]
+      },
+      "directional_context": {
+        "opponent": "v48",
+        "seed": 75110,
+        "seat": 0,
+        "step": 600,
+        "base_margin": -484,
+        "treatment_margin": -220,
+        "swap": [
+          "WOOL",
+          "MILK"
+        ]
+      },
+      "inferred_local_priority": [
+        "MILK",
+        "WOOL",
+        "FERTILIZER"
+      ],
+      "result_doc": "docs/strategy/ALL3_V8B_LQ2_SELL_ORDER_ORACLE_RESULT_2026-09-19.md"
+    },
+    "o_lq3": {
+      "status": "STAGE_A_ACTIVE",
+      "workflow": 35480144515,
+      "rule": "within each post-LQ2 consecutive SELL run, stable-sort only MILK/WOOL/FERTILIZER occupied slots by MILK -> WOOL -> FERTILIZER; preserve all quantities, other slots, farmer and hands",
+      "module": "tools/first_party_lq3_priority_sell_order.py",
+      "protocol": "docs/strategy/O_LQ3_STAGE_A_PROTOCOL_2026-09-19.md"
     }
   },
   "current_hosted_pair": {
