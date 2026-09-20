@@ -1,0 +1,43 @@
+name: all3-v11b-hosted-loss-signature-atlas
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v11b-hosted-loss-signature-atlas.yml'
+      - 'tools/all3_v11b_hosted_loss_signature_atlas.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  atlas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download V11A mature hosted artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v11a-hosted-hard-population-refresh
+          path: artifacts/v11a-source
+          run-id: 35518801971
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_v11b_hosted_loss_signature_atlas.py
+      - name: Build V11B hosted loss signature atlas
+        run: |
+          mkdir -p artifacts/v11b
+          python tools/all3_v11b_hosted_loss_signature_atlas.py             --replay-root artifacts/v11a-source/all3/replays             --out artifacts/v11b/ALL3_V11B_HOSTED_LOSS_SIGNATURE_ATLAS.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v11b-hosted-loss-signature-atlas
+          path: artifacts/v11b/*.json
+          retention-days: 30
+          if-no-files-found: warn
