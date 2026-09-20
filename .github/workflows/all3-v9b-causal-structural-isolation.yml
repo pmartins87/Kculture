@@ -1,0 +1,76 @@
+name: all3-v9b-causal-structural-isolation
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v9b-causal-structural-isolation.yml'
+      - 'tools/all3_v9b_causal_structural_state.py'
+      - 'tools/aggregate_all3_v9b_causal_structural.py'
+      - 'configs/all3_v9b_representative_states.json'
+      - 'configs/all3_v6_hard_contexts.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  state:
+    strategy:
+      fail-fast: false
+      matrix:
+        state_id:
+          [c0_earliest,c1_earliest,c2_earliest,c3_earliest,
+           c0_insert337,c1_insert337,c2_insert337,c3_insert337,
+           c0_qty427,c1_qty427,c2_qty427,c3_qty427,
+           c0_qty698,c1_qty698,c2_qty698,c3_qty698]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v9b_causal_structural_state.py
+          python -m py_compile tools/aggregate_all3_v9b_causal_structural.py
+      - name: Run V9B frozen state
+        run: |
+          mkdir -p artifacts/v9b
+          python tools/all3_v9b_causal_structural_state.py             --contexts configs/all3_v6_hard_contexts.json             --states configs/all3_v9b_representative_states.json             --state-id ${{ matrix.state_id }}             --out artifacts/v9b/V9B_${{ matrix.state_id }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v9b-${{ matrix.state_id }}
+          path: artifacts/v9b/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: state
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v9b-*
+          path: artifacts/v9b-shards
+          merge-multiple: false
+      - name: Aggregate V9B
+        run: |
+          mkdir -p artifacts/v9b-aggregate
+          python tools/aggregate_all3_v9b_causal_structural.py             --input-dir artifacts/v9b-shards             --out artifacts/v9b-aggregate/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v9b-causal-structural-isolation
+          path: artifacts/v9b-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
