@@ -1,5 +1,57 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V8D-E1 UNDERPOWERED / V8D-E2 FINAL ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V8D-E1 — COMPLETE
+
+Workflow: **`35516899185`**.  
+Mechanical PASS: 72/72 paired contexts, failures 0.
+
+E1:
+- V48: 24 contexts, 0 fire contexts, score delta 0, margin delta 0;
+- V47 mirror: 24 contexts, 0 fire contexts, score delta 0, margin delta 0;
+- Ready Stock: 24 contexts, 0 fire contexts, score delta 0, margin delta 0.
+
+Cumulative V8D + E1:
+- V48 contexts = 48;
+- V48 fire contexts = **2**;
+- frozen minimum = 4;
+- score regressions = 0.
+
+Therefore O-LQ3C remains underpowered.
+
+### V8D-E2 — FINAL EXTENSION ACTIVE
+
+Workflow: **`35517228393`**  
+Launch commit: `0d832a9c7732e124b018bad35a48321c3ee27ef5`.
+
+Fresh seeds:
+- `76025..76036`;
+- both seats;
+- V48, V47 mirror, Ready Stock;
+- 72 additional paired contexts.
+
+O-LQ3C is unchanged.
+
+This is the **last permitted seed extension**.
+
+Final cumulative gate:
+- if V48 fire contexts remain <4 => `V8D_CONDITIONAL_ORDER_RARE_CLOSE`, close O-LQ3C, activate V9A;
+- if coverage >=4 and W/L gate passes with zero regressions => activate V8E;
+- if coverage >=4 but no W/L confirmation => close O-LQ3C, activate V9A;
+- any score regression => close O-LQ3C, activate V9A.
+
+No extension beyond E2.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35517228393`**. No manual Kaggle submission.
+
+
 ## Binding update — 2026-09-20 — V8D UNDERPOWERED / V8D-E1 ACTIVE
 
 **This block supersedes lower stale current-action sections.**
