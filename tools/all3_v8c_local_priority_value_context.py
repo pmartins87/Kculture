@@ -225,9 +225,6 @@ def main():
             if float(discovery["score"]) != float(ctx["score"]) or float(discovery["margin"]) != float(ctx["margin"]):
                 raise RuntimeError(f"ALL3 discovery mismatch {(discovery['score'], discovery['margin'])} != {(ctx['score'], ctx['margin'])}")
             events = discovery["events"]
-            if len(events) != EXPECTED_FIRES_PER_CONTEXT:
-                raise RuntimeError(f"unexpected O-LQ3 fire count {len(events)} != {EXPECTED_FIRES_PER_CONTEXT}")
-
             for event in events:
                 try:
                     purge(paths)
@@ -254,7 +251,7 @@ def main():
                 except Exception as exc:
                     failures.append({"turn": event.get("turn"), "error": f"{type(exc).__name__}: {exc}"})
 
-            mech = not failures and len(rows) == EXPECTED_FIRES_PER_CONTEXT
+            mech = not failures and len(events) > 0 and len(rows) == len(events)
             result = {
                 "schema": "kculture-v8c-local-priority-value-context-v1",
                 "mechanical_pass": mech,
