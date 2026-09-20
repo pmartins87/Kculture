@@ -1,5 +1,70 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V13C HARD CONTEXTS READY / V14A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V13C — COMPLETE / READY
+
+Binding mechanical-completion workflow: **`35523990217`**  
+Binding completion head: `0a537f334334130fc083b52994744aa11366f342`.
+
+Decision: **`V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY`**.
+
+Mechanical:
+- 76/76 frozen source-SHA × seed × seat contexts;
+- exact ALL3 unchanged;
+- 19 frozen unique-source current-frontier representatives;
+- rank-14 source repaired only by immutable provenance pin:
+  `tetsutani/demand-preserving-turn-sale-timing/versions/4`;
+- full 76-key set verified before strategic decision.
+
+Strategic:
+- **24 hard contexts**;
+- **10 unique hard source SHAs**;
+- rank 14: 4/4 losses;
+- rank 23: 4/4 losses;
+- ranks 1,2,4,6,8,9,11,19: 2/4 losses each.
+
+The 24 binding hard contexts are frozen in:
+`configs/all3_v14a_hard_contexts.json`.
+
+Result:
+`docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_RESULT_2026-09-20.md`.
+
+Local H2H remains mechanism-discovery only and is not a hosted-rating estimator.
+
+### V14A — ACTIVE
+
+Workflow: **`35525689199`**  
+Launch commit: `73f6dfdfc3e773c4b20bc9a3a888b2627c507521`.
+
+V14A was pre-registered before the binding V13C result.
+
+Frozen population:
+- all and only 24 V13C binding hard contexts;
+- no manual context selection.
+
+Frozen modes:
+- BASE;
+- MARKET_ALL;
+- MARKET_W2PLUS;
+- PHYSICAL_ALL;
+- PHYSICAL_W2PLUS;
+- FULL_ALL.
+
+Question:
+identify whether reusable W/L upper-bound headroom is carried by MARKET, PHYSICAL, both, only cross-domain interaction, or not recoverable even under the shadow-teacher ceiling.
+
+Margin-only evidence cannot pass a domain gate.
+
+Opponent identity/code is offline shadow-teacher evidence only and is prohibited as a future runtime feature.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35525689199`**.
+
+
 ## Binding update — 2026-09-20 — V13C RERUN WITH IMMUTABLE RANK-14 PIN
 
 **This block supersedes lower stale current-action sections.**
