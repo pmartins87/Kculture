@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V11A hosted ALL3 hard-population refresh workflow 35518801971; if sample ready, derive next mechanism hypotheses from actual ALL3 loss replay structure rather than V48 residual imitation or duplicate H1/H1B timing",
+  "next_stage": "resolve V12A workflow 35519704115; only PUBLIC_CROP_SHIFT_TRANSFER_READY may open a bounded causal V12B macro-response oracle; do not install a CARROT response from hosted correlation alone",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1122,6 +1122,77 @@
       "current_option": "O-TW1",
       "included_in": "ALL3",
       "decision": "do not reopen H1/H1B as a duplicate option family"
+    },
+    "v11a_hosted_hard_population": {
+      "status": "COMPLETE",
+      "workflow": 35518801971,
+      "decision": "V11A_HOSTED_HARD_POPULATION_READY",
+      "submission_id": 56367770,
+      "resolved_games": 128,
+      "wins": 57,
+      "losses": 71,
+      "ties": 0,
+      "score_rate": 0.4453125,
+      "opponents_unique": 117,
+      "close_losses": 30,
+      "result_doc": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_RESULT_2026-09-20.md",
+      "automatic_kaggle_submission": false
+    },
+    "v11b_hosted_loss_signature": {
+      "status": "COMPLETE_OBSERVATIONAL",
+      "workflow": 35519476400,
+      "decision": "V11B_PUBLIC_CROP_SHIFT_REGIME_SIGNAL",
+      "step600_primary": {
+        "support": 22,
+        "losses": 22,
+        "wins": 0,
+        "loss_rate": 1,
+        "mean_margin": -3504.2727272727275
+      },
+      "step600_strict": {
+        "support": 15,
+        "losses": 15,
+        "wins": 0,
+        "loss_rate": 1,
+        "mean_margin": -4157.066666666667
+      },
+      "causal_claim_authorized": false,
+      "result_doc": "docs/strategy/ALL3_V11B_HOSTED_LOSS_SIGNATURE_RESULT_2026-09-20.md",
+      "automatic_kaggle_submission": false
+    },
+    "v12a_public_crop_shift_transfer": {
+      "status": "ACTIVE",
+      "workflow": 35519704115,
+      "launch_commit": "f255d27997739690ff833828cc2adb1bc42bef04",
+      "seeds": [
+        77001,
+        77002,
+        77003,
+        77004,
+        77005,
+        77006,
+        77007,
+        77008
+      ],
+      "seats": [
+        0,
+        1
+      ],
+      "opponents": [
+        "v47_mirror",
+        "ready_stock",
+        "v48",
+        "router_2715",
+        "conditional_memory",
+        "tactical_memory",
+        "best_market"
+      ],
+      "contexts": 112,
+      "treatment": "none; exact ALL3 unchanged",
+      "transfer_ready_gate": "signal support >=8; >=2 families with >=2 signal contexts; signal loss rate >=0.75; signal score rate <=0.25; non-signal support >=16; non-signal score gap >=0.20",
+      "next_if_ready": "V12B bounded causal public-state macro-response oracle",
+      "protocol": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
