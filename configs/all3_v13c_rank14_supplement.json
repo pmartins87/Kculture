@@ -1,0 +1,30 @@
+{
+  "schema": "kculture-all3-v13c-rank14-supplement-v1",
+  "frozen_full_config": "configs/all3_v13c_current_frontier_representatives.json",
+  "source_run_to_complete": 35520875702,
+  "representatives": [
+    {
+      "rank": 14,
+      "ref": "tetsutani/demand-preserving-turn-sale-timing/versions/4",
+      "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f",
+      "unversioned_ref": "tetsutani/demand-preserving-turn-sale-timing",
+      "version_pin": 4,
+      "pin_provenance": {
+        "workflow": 35523343530,
+        "archive_sha256": "24250d6de0e1bf143ea0cc1b2bdab541aa94ee12c09b9f2f6e98e8afb7097610",
+        "reason": "unversioned notebook changed after V13B; immutable version 4 reproduces frozen V13B bytes exactly"
+      }
+    }
+  ],
+  "seeds": [
+    78101,
+    78102
+  ],
+  "seats": [
+    0,
+    1
+  ],
+  "mechanical_repair_only": true,
+  "strategic_population_changed": false,
+  "strategic_gate_changed": false
+}
