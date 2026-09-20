@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve binding V14A mechanical completion workflow 35526276641; require exact 144 context-mode grid before applying preregistered MARKET/PHYSICAL/FULL decision",
+  "next_stage": "resolve binding V14B MARKET phenotype atlas workflow 35526759114; if recurrent legal phenotype exists, derive exactly one first-party market option family under frozen deterministic selection; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1322,7 +1322,7 @@
       "local_h2h_hosted_rating_use": false
     },
     "v14a_current_frontier_domain_upper_bound": {
-      "status": "ACTIVE_BINDING_MECHANICAL_COMPLETION",
+      "status": "COMPLETE_MARKET_HEADROOM",
       "activate_if": "V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY",
       "modes": [
         "BASE",
@@ -1350,10 +1350,57 @@
       "binding_workflow": 35526276641,
       "binding_launch_commit": "efc82c77060fe44025eee86cb239b698d6201229",
       "expected_complete_rows": 144,
-      "supplement_config": "configs/all3_v14a_mechanical_supplement.json"
+      "supplement_config": "configs/all3_v14a_mechanical_supplement.json",
+      "decision": "V14A_MARKET_DOMAIN_HEADROOM",
+      "mechanical_pass": true,
+      "rows": 144,
+      "by_mode": {
+        "MARKET_ALL": {
+          "improved_score_contexts": 12,
+          "improved_sources": 5,
+          "mean_score_delta": 0.5,
+          "mean_margin_delta": 1812.8333333333333,
+          "regressed_score_contexts": 0
+        },
+        "MARKET_W2PLUS": {
+          "improved_score_contexts": 18,
+          "improved_sources": 7,
+          "mean_score_delta": 0.75,
+          "mean_margin_delta": 1858.5,
+          "regressed_score_contexts": 0
+        },
+        "PHYSICAL_ALL": {
+          "improved_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -113.41666666666667
+        },
+        "PHYSICAL_W2PLUS": {
+          "improved_score_contexts": 0,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -265.3333333333333
+        },
+        "FULL_ALL": {
+          "improved_score_contexts": 24,
+          "improved_sources": 10,
+          "mean_score_delta": 0.5,
+          "mean_margin_delta": 1364.75
+        }
+      },
+      "result_doc": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_RESULT_2026-09-20.md"
     },
     "v14b_domain_phenotype": {
-      "status": "DORMANT_PRE_REGISTERED_BEFORE_V14A_RESULT",
+      "status": "ACTIVE_MARKET_BRANCH",
+      "workflow": 35526759114,
+      "launch_commit": "6183aea6077693c230a72f5eae94f88a543fc1d9",
+      "branch": "MARKET",
+      "hard_contexts": 24,
+      "recurrence_gate": "context>=4; sources>=2; dominant direction share>=0.75; legal state only; no opponent identity",
+      "deterministic_selection": [
+        "max unique sources",
+        "max context support",
+        "earliest median turn",
+        "lexical phenotype key"
+      ],
       "protocol": "docs/strategy/ALL3_V14B_DOMAIN_PHENOTYPE_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
