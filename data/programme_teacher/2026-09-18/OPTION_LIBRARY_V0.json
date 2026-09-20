@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V8C workflow 35514319440; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D; margin-only/no-headroom closes simple SELL-priority family",
+  "next_stage": "resolve corrected binding V8C workflow 35514497453; every O-LQ3 firing state discovered on untouched ALL3 baseline is branched exactly once; only repeatable/narrow W/L headroom may produce one compact public-state condition frozen before fresh-seed V8D",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -726,10 +726,9 @@
       "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md"
     },
     "v8c_local_priority_value_atlas": {
-      "status": "ACTIVE",
-      "workflow": 35514319440,
-      "launch_commit": "c174a0f944525a6d3006374357176cd32cabee1d",
-      "expected_branch_states": 48,
+      "status": "ACTIVE_BINDING_CORRECTED",
+      "workflow": 35514497453,
+      "expected_branch_states": "sum of baseline-discovered O-LQ3 firing states across the four frozen hard contexts",
       "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
       "gate": {
         "repeatable": "loss->win flips in >=2 distinct hard contexts",
@@ -739,7 +738,19 @@
       },
       "promotion_rule": "only repeatable/narrow W/L evidence may derive one compact opponent-identity-free public-state condition, frozen before fresh V8D",
       "protocol": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "nonbinding_runs": [
+        {
+          "workflow": 35514319440,
+          "reason": "incorrect fixed 12-events-per-context count inherited from cumulatively treated O-LQ3 trajectory"
+        },
+        {
+          "workflow": 35514495824,
+          "reason": "context-side correction only; aggregate still had obsolete fixed-count gate"
+        }
+      ],
+      "head_commit": "a9f36e24c66ed6ffcc8431b2ad9bec35f48e1cec",
+      "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory"
     }
   },
   "current_hosted_pair": {
