@@ -1,5 +1,47 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V14A MECHANICAL COMPLETION ACTIVE
+
+**This block supersedes lower stale V14A current-action sections.**
+
+### V14A original parallel run — NON-BINDING MECHANICAL INVALID
+
+Workflow: `35525689199`.
+
+Strategically valid rows before rejection:
+- 126/144 mode-context rows;
+- 21/24 hard contexts complete.
+
+Mechanical failures:
+- `v13c_hard_14` — rank 19 source acquisition HTTP 429;
+- `v13c_hard_16` — rank 23 source acquisition HTTP 429;
+- `v13c_hard_18` — rank 23 source acquisition HTTP 429.
+
+No failed context was partially interpreted; all three failures happened during teacher acquisition before treatment execution.
+
+Preliminary completed-context evidence is non-binding until the full 144-grid is restored.
+
+### V14A binding mechanical completion — ACTIVE
+
+Workflow: **`35526276641`**  
+Launch commit: `efc82c77060fe44025eee86cb239b698d6201229`.
+
+Procedure:
+1. reuse exactly 126 mechanically valid rows from workflow `35525689199`;
+2. execute exactly the three missing contexts in all six pre-registered modes;
+3. require supplement mechanical PASS;
+4. verify exact 24 context × 6 mode = **144 unique keys**;
+5. apply the unchanged pre-registered V14A domain gate.
+
+No strategic population, mode, threshold, or decision rule changed.
+
+V14B domain phenotype protocol remains DORMANT and was pre-registered before the binding V14A result.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35526276641`**.
+
+
 ## Binding update — 2026-09-20 — V13C HARD CONTEXTS READY / V14A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
