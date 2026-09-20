@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V8D workflow 35516560425; PASS => broad regression/package readiness; underpowered => same frozen O-LQ3C on more untouched seeds; no W/L confirmation or regression => close O-LQ3C and activate pre-registered V9A",
+  "next_stage": "resolve V8D-E1 workflow 35516899185 cumulatively with V8D 35516560425; if coverage reached, apply original W/L gate; if still underpowered, run one final unchanged E2 on seeds 76025..76036; no extensions beyond E2",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -805,7 +805,7 @@
       "protocol": "docs/strategy/O_LQ3C_V8D_FRESH_VALIDATION_PROTOCOL_2026-09-20.md"
     },
     "v8d_fresh_validation": {
-      "status": "ACTIVE",
+      "status": "COMPLETE_UNDERPOWERED",
       "workflow": 35516560425,
       "launch_commit": "6afd5dd1a4ab4776437c49aae9807e948d032d8f",
       "seeds": [
@@ -833,7 +833,42 @@
       ],
       "paired_contexts": 72,
       "pass_gate": "V48 positive mean score delta and >=1 positive-score context; zero win->nonwin overall; zero negative-score contexts in both controls; activation coverage minimum met",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "decision": "V8D_CONDITIONAL_ORDER_UNDERPOWERED",
+      "mechanical_pass": true,
+      "overall": {
+        "fire_contexts": 6,
+        "mean_score_delta": 0,
+        "mean_margin_delta": 7.222222222222222,
+        "negative_score_contexts": 0,
+        "win_to_nonwin": 0
+      },
+      "by_opponent": {
+        "v48": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 11.833333333333334,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v47_mirror": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 11.833333333333334,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "ready_stock": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -2,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        }
+      }
     },
     "v8e_broad_regression": {
       "status": "DORMANT_PRE_REGISTERED_BEFORE_V8D_RESULT",
@@ -864,6 +899,40 @@
       "safety_gate": "zero win->nonwin overall and zero negative-score contexts in every family",
       "hosted_policy": "after broad + package parity PASS, preserve ALL3 as control and use other slot for new candidate",
       "protocol": "docs/strategy/O_LQ3C_V8E_BROAD_REGRESSION_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
+    },
+    "v8d_e1_extension": {
+      "status": "ACTIVE",
+      "workflow": 35516899185,
+      "launch_commit": "a295970e373f02974adc1a6b6186b11d08254348",
+      "seeds": [
+        76013,
+        76014,
+        76015,
+        76016,
+        76017,
+        76018,
+        76019,
+        76020,
+        76021,
+        76022,
+        76023,
+        76024
+      ],
+      "seats": [
+        0,
+        1
+      ],
+      "opponents": [
+        "v48",
+        "v47_mirror",
+        "ready_stock"
+      ],
+      "paired_contexts": 72,
+      "candidate": "exact frozen O-LQ3C unchanged",
+      "cumulative_with_workflow": 35516560425,
+      "if_still_underpowered": "one final unchanged E2 on seeds 76025..76036, then close for rarity if cumulative V48 fires remain <4",
+      "protocol": "docs/strategy/O_LQ3C_V8D_E1_EXTENSION_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
