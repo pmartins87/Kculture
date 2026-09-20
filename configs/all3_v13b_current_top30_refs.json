@@ -1,0 +1,164 @@
+{
+  "schema": "kculture-all3-v13b-current-top30-refs-v1",
+  "frozen_from_v13a_workflow": 35520373817,
+  "frozen_from_v13a_head": "9fb21773f4b7318dbc12605d49e680296de3898a",
+  "decision": "V13A_FRONTIER_MODERATE_DRIFT_REFRESH_ALL_CURRENT",
+  "current_top30": [
+    {
+      "rank": 1,
+      "ref": "haodou092/notebookdb6965aa8e"
+    },
+    {
+      "rank": 2,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers"
+    },
+    {
+      "rank": 3,
+      "ref": "guruprasaathas111/kaggriculture-master-engine-v4"
+    },
+    {
+      "rank": 4,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13"
+    },
+    {
+      "rank": 5,
+      "ref": "anhadmahajan06/kaggriculture-autonomous-ai-farming-agent"
+    },
+    {
+      "rank": 6,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock"
+    },
+    {
+      "rank": 7,
+      "ref": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
+    },
+    {
+      "rank": 8,
+      "ref": "lynnsakurai/farming-score-v2-a-better-approach"
+    },
+    {
+      "rank": 9,
+      "ref": "dmitriigluzdov/kaggriculture-more-wheat-smarter-sales"
+    },
+    {
+      "rank": 10,
+      "ref": "guruprasaathas111/kaggriculture-master-engine-v3"
+    },
+    {
+      "rank": 11,
+      "ref": "hanifnoerrofiq/a-wonderful-life"
+    },
+    {
+      "rank": 12,
+      "ref": "ahmedberatozer/kaggriculture-v38-smarter-feed-stronger-margins"
+    },
+    {
+      "rank": 13,
+      "ref": "ahmedberatozer/kaggriculture-v39-ready-before-the-rush"
+    },
+    {
+      "rank": 14,
+      "ref": "tetsutani/demand-preserving-turn-sale-timing"
+    },
+    {
+      "rank": 15,
+      "ref": "ahmedberatozer/kaggriculture-v34-observed-market-timing"
+    },
+    {
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v41-review-candidate"
+    },
+    {
+      "rank": 17,
+      "ref": "guruprasaathas111/kaggriculture-master-engine-v53e01d74d8f"
+    },
+    {
+      "rank": 18,
+      "ref": "ahmedberatozer/kaggriculture-v31-production-and-sale-priority"
+    },
+    {
+      "rank": 19,
+      "ref": "evgendvorkin/kaggriculture"
+    },
+    {
+      "rank": 20,
+      "ref": "sunil123kumar/kaggriculture-top-10-public-bots"
+    },
+    {
+      "rank": 21,
+      "ref": "laveshjadon/kagriculture-winning-notebook"
+    },
+    {
+      "rank": 22,
+      "ref": "ravi123a321at/177-180-fresh-top-30-v21-1-conditional-memory"
+    },
+    {
+      "rank": 23,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature"
+    },
+    {
+      "rank": 24,
+      "ref": "aurax7/kaggriculture-shop-router-reactive-v7"
+    },
+    {
+      "rank": 25,
+      "ref": "haideptry/the-2950-peak-farm"
+    },
+    {
+      "rank": 26,
+      "ref": "nathanjacob/kaggriculture-pipe-5-terminal-boost"
+    },
+    {
+      "rank": 27,
+      "ref": "reyhanksatria/best-market-agent-high-strategy"
+    },
+    {
+      "rank": 28,
+      "ref": "ahmedberatozer/kaggriculture-v45-first-turn-wheat-round-trip"
+    },
+    {
+      "rank": 29,
+      "ref": "degnonguidi/kaggriculture-cloning-agent"
+    },
+    {
+      "rank": 30,
+      "ref": "web3cainiao/kaggriculture-v21-tactical-memory"
+    }
+  ],
+  "overlap_count": 15,
+  "new_current_refs": [
+    "haodou092/notebookdb6965aa8e",
+    "nathanjacob/kaggriculture-pipe16-idle-workers",
+    "guruprasaathas111/kaggriculture-master-engine-v4",
+    "thomastschinkel/the-metav4-farm-submission-v13",
+    "anhadmahajan06/kaggriculture-autonomous-ai-farming-agent",
+    "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+    "lynnsakurai/farming-score-v2-a-better-approach",
+    "dmitriigluzdov/kaggriculture-more-wheat-smarter-sales",
+    "guruprasaathas111/kaggriculture-master-engine-v3",
+    "hanifnoerrofiq/a-wonderful-life",
+    "tetsutani/demand-preserving-turn-sale-timing",
+    "sunil123kumar/kaggriculture-top-10-public-bots",
+    "laveshjadon/kagriculture-winning-notebook",
+    "ahmedberatozer/kaggriculture-v53-opening-signature",
+    "haideptry/the-2950-peak-farm"
+  ],
+  "dropped_frozen_refs": [
+    "alperen5252525/kaggriculture-ready-stock-earlier-sales",
+    "tetsutani/market-smart-farming-kaggriculture",
+    "ahmedberatozer/kaggriculture-v46-first-turn-microstructure-and-s",
+    "ahmedberatozer/kaggriculture-v48-clear-the-queue",
+    "tetsutani/shop-aware-farming-kaggriculture",
+    "degnonguidi/best-agent-ranking",
+    "nathanjacob/kaggriculture-pipe-8-clean-opening",
+    "nathanjacob/kaggriculture-pipe-7-wheat-microstructure",
+    "sunil123kumar/kaggriculture-wheat-microstructure",
+    "nusrati/2715-6",
+    "ahmedberatozer/kaggriculture-v36-guarded-four-turn-sales",
+    "andrewsokolovsky/kaggriculture",
+    "flexonafft/kaggriculture-multi-route-farming-agent",
+    "reyhanksatria/kaggriculture-dynamic-route-agent",
+    "avioon/kaggriculture-apex-v7-god-emperor"
+  ],
+  "source_identity_refresh_required": true
+}
