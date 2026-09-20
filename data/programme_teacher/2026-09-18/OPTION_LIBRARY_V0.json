@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V15A workflow 35532585508 for frozen O-LQ4E; only V15A_LQ4E_WL_HEADROOM may activate the already preregistered fresh V15B validation",
+  "next_stage": "resolve V16B workflow 35533510437 for frozen one-shot O-LQ5F; only V16B_LQ5F_WL_HEADROOM may activate the pre-frozen V16C config on seeds 78301..78304",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1436,7 +1436,7 @@
       "result_doc": "docs/strategy/ALL3_V14B_MARKET_PHENOTYPE_RESULT_2026-09-20.md"
     },
     "v15a_lq4e_causal": {
-      "status": "ACTIVE",
+      "status": "CLOSED_NO_HEADROOM",
       "workflow": 35532585508,
       "launch_commit": "de0242ec264047517dd4974419cf75cee8dbbf46",
       "candidate": "O-LQ4E Early Fertilizer-before-Hire",
@@ -1444,6 +1444,57 @@
       "hard_contexts": 24,
       "pass_gate": "coverage>=8 contexts across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
       "protocol": "docs/strategy/ALL3_V15A_LQ4E_CAUSAL_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V15A_LQ4E_NO_HEADROOM_CLOSE",
+      "mechanical_pass": true,
+      "coverage_pass": true,
+      "fire_contexts": 24,
+      "fire_sources": 10,
+      "total_fires": 48,
+      "loss_to_win_flips": 0,
+      "mean_score_delta": 0,
+      "mean_margin_delta": 0,
+      "result_doc": "docs/strategy/ALL3_V15A_LQ4E_CAUSAL_RESULT_2026-09-20.md",
+      "fresh_validation_activated": false
+    },
+    "v16a_w2_sell_quantity": {
+      "status": "COMPLETE_READY",
+      "workflow": 35533351868,
+      "decision": "V16A_W2_SELL_QUANTITY_PHENOTYPE_READY",
+      "selected_family": {
+        "group_key": "W2|QTY|SELL|FERTILIZER|2",
+        "direction": "INC",
+        "increment": 2,
+        "context_support": 24,
+        "source_support": 10,
+        "direction_share": 1,
+        "median_turn": 368,
+        "occurrences": 24
+      },
+      "candidate": "O-LQ5F one-shot W2 Fertilizer Queue +2",
+      "result_doc": "docs/strategy/ALL3_V16A_W2_SELL_QUANTITY_RESULT_2026-09-20.md"
+    },
+    "v16b_lq5f_causal": {
+      "status": "ACTIVE",
+      "workflow": 35533510437,
+      "launch_commit": "12c3b9ea4c481c3e640688ca87cd346cd2777259",
+      "hard_contexts": 24,
+      "pass_gate": "coverage>=8 across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
+      "protocol": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
+    },
+    "v16c_lq5f_fresh_validation": {
+      "status": "DORMANT_PRE_FROZEN",
+      "activate_if": "V16B_LQ5F_WL_HEADROOM",
+      "config": "configs/all3_v16c_lq5f_fresh_validation.json",
+      "seeds": [
+        78301,
+        78302,
+        78303,
+        78304
+      ],
+      "sources": 10,
+      "pairs": 80,
       "automatic_kaggle_submission": false
     }
   },
