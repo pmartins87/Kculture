@@ -1,5 +1,53 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V13B READY / V13C HARD-CONTEXT CENSUS ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V13B — COMPLETE / READY
+
+Workflow: **`35520463598`**.
+
+Decision: **`V13B_EXECUTABLE_FRONTIER_READY`**.
+
+- 26/30 current refs acquired;
+- 4 failures were Kaggle HTTP 429 on ranks 27–30;
+- 19 unique current source SHAs;
+- **19/19 unique sources passed both-seat exact-engine smoke**;
+- all current Top-10 acquired refs map to smoke-passing sources.
+
+Frozen population:
+`configs/all3_v13c_current_frontier_representatives.json`.
+
+Result:
+`docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_RESULT_2026-09-20.md`.
+
+### V13C — ACTIVE
+
+Workflow: **`35520875702`**  
+Launch commit: `7cd012b74e794c4be6df9bfd601e1233de0f2b27`.
+
+Population:
+- 19 exact unique-source current frontier representatives;
+- source SHA frozen before outcomes;
+- exact ALL3 unchanged;
+- fresh seeds `78101, 78102`;
+- both seats;
+- expected 76 episodes.
+
+Decision gate was pre-registered before V13B result:
+- >=4 nonwins across >=2 unique sources => HARD_CONTEXTS_READY;
+- 1–3 or one-source only => NARROW;
+- zero => LOCAL_FRONTIER_TOO_EASY;
+- any unresolved SHA/runtime mechanics failure => MECHANICS_INVALID.
+
+Local H2H remains mechanism-discovery only, never a hosted-rating estimator.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35520875702`**.
+
+
 ## Binding update — 2026-09-20 — V13A MODERATE DRIFT / V13B EXECUTABLE REFRESH ACTIVE
 
 **This block supersedes lower stale current-action sections.**
