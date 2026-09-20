@@ -11,7 +11,8 @@ def main():
     docs = [json.loads(p.read_text()) for p in sorted(Path(args.input_dir).rglob("*.json"))]
     failures = [f for d in docs for f in d.get("failures", [])]
     rows = [r for d in docs for r in d.get("branches", [])]
-    expected_branch_states = sum(int(d.get("event_count", 0)) for d in docs)\n    mech = len(docs) == 4 and not failures and all(d.get("mechanical_pass") for d in docs) and expected_branch_states > 0 and len(rows) == expected_branch_states
+    expected_branch_states = sum(int(d.get("event_count", 0)) for d in docs)
+    mech = len(docs) == 4 and not failures and all(d.get("mechanical_pass") for d in docs) and expected_branch_states > 0 and len(rows) == expected_branch_states
 
     positive = [r for r in rows if float(r["margin_delta"]) > 0]
     negative = [r for r in rows if float(r["margin_delta"]) < 0]
