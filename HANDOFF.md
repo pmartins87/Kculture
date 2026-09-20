@@ -1,5 +1,63 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V9A READY / V9B ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V9A — COMPLETE
+
+Workflow: **`35517515758`**  
+Decision: **`V9A_STRUCTURAL_RESIDUAL_READY`**.
+
+Mechanical:
+- PASS;
+- exact ALL3 hard-context replay matched;
+- failures 0;
+- physical divergences 0.
+
+Residual market census:
+- 233 total divergences;
+- 161 INSERT_DROP;
+- 63 QTY_UP;
+- 9 REORDER_ONLY;
+- structural residuals present in all 4 hard contexts.
+
+Result:
+`docs/strategy/ALL3_V9A_RESIDUAL_STRUCTURAL_CENSUS_RESULT_2026-09-20.md`.
+
+### V9B — ACTIVE
+
+Workflow: **`35517836947`**  
+Launch commit: `fefc69744fb0b12bdd1c71141c53d0ff1083bd17`.
+
+Frozen before causal outcomes:
+- 16 representative states;
+- earliest structural state from each hard context;
+- repeated INSERT_DROP at turn 337 across all four;
+- repeated QTY_UP at turns 427 and 698 across all four.
+
+Config:
+`configs/all3_v9b_representative_states.json`.
+
+Each branch applies only one semantic category for one turn, then resumes ALL3.
+
+Gate:
+- same category loss->win in >=2 contexts => `V9B_CATEGORY_WL_REPEATABLE`;
+- exactly one flip plus positive margin in >=2 contexts for same category => `V9B_CATEGORY_WL_NARROW`;
+- zero W/L flips => `V9B_NO_WL_HEADROOM_CLOSE_ONE_TURN_STRUCTURAL`;
+- unsupported single flip => close rather than tune state thresholds.
+
+Margin-only evidence cannot advance.
+
+No automatic Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35517836947`**.
+
+
 ## Binding update — 2026-09-20 — O-LQ3C CLOSED / V9A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
