@@ -1,0 +1,111 @@
+{
+  "schema": "kculture-all3-v13c-current-frontier-representatives-v1",
+  "frozen_from_v13b_workflow": 35520463598,
+  "frozen_from_v13b_head": "79e14f85382c8f4d68fba2fab19bcae25c4d9437",
+  "decision": "V13B_EXECUTABLE_FRONTIER_READY",
+  "seeds": [
+    78101,
+    78102
+  ],
+  "seats": [
+    0,
+    1
+  ],
+  "representatives": [
+    {
+      "rank": 1,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+    },
+    {
+      "rank": 2,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181"
+    },
+    {
+      "rank": 4,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+    },
+    {
+      "rank": 6,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555"
+    },
+    {
+      "rank": 7,
+      "ref": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
+      "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+    },
+    {
+      "rank": 8,
+      "ref": "lynnsakurai/farming-score-v2-a-better-approach",
+      "main_sha256": "177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11"
+    },
+    {
+      "rank": 9,
+      "ref": "dmitriigluzdov/kaggriculture-more-wheat-smarter-sales",
+      "main_sha256": "218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d"
+    },
+    {
+      "rank": 11,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d"
+    },
+    {
+      "rank": 12,
+      "ref": "ahmedberatozer/kaggriculture-v38-smarter-feed-stronger-margins",
+      "main_sha256": "a2047ebd8ca5720221e1421529655d9c67a7b2fedb74e874c7d3c55a8970ac7e"
+    },
+    {
+      "rank": 13,
+      "ref": "ahmedberatozer/kaggriculture-v39-ready-before-the-rush",
+      "main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8"
+    },
+    {
+      "rank": 14,
+      "ref": "tetsutani/demand-preserving-turn-sale-timing",
+      "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f"
+    },
+    {
+      "rank": 15,
+      "ref": "ahmedberatozer/kaggriculture-v34-observed-market-timing",
+      "main_sha256": "58f3cbf957c267b464ec0bcfdc9ba7940f708e6ae77c7219b09f07a00a083869"
+    },
+    {
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v41-review-candidate",
+      "main_sha256": "8951ff93742015cba535b125223cf2e541bb7b602080fc4584f30c2613d210f3"
+    },
+    {
+      "rank": 18,
+      "ref": "ahmedberatozer/kaggriculture-v31-production-and-sale-priority",
+      "main_sha256": "3a72da1f2b3b31386366988408503f01581c285529137317c785ea4863b341ab"
+    },
+    {
+      "rank": 19,
+      "ref": "evgendvorkin/kaggriculture",
+      "main_sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    },
+    {
+      "rank": 22,
+      "ref": "ravi123a321at/177-180-fresh-top-30-v21-1-conditional-memory",
+      "main_sha256": "d9dc24ce5429ec628ead0621a160bee90725350683d7dfcc4686fcaf511f3aab"
+    },
+    {
+      "rank": 23,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e"
+    },
+    {
+      "rank": 24,
+      "ref": "aurax7/kaggriculture-shop-router-reactive-v7",
+      "main_sha256": "e221f4875daff8b03e8f0ec7c86bd3a2a72c0768b049d4c25064abd5301a532b"
+    },
+    {
+      "rank": 26,
+      "ref": "nathanjacob/kaggriculture-pipe-5-terminal-boost",
+      "main_sha256": "a5cb643b0516906fb7660613a4eebe00a6cc949a8de98d7744a7071038da824c"
+    }
+  ]
+}
