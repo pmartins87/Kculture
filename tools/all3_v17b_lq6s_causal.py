@@ -12,7 +12,7 @@ from tools.programme_adaptive_expert_gate import EXPECTED_ENGINE,acquire_public_
 from tools.o_pc1_dev_shard import BASE
 from tools.bounded_transaction_oracle_v1 import call_agent,canonical_action,action_key,score
 from tools.first_party_option_host_v1 import OptionHostState,apply_option_host
-from tools.first_party_lq6s_w2_strawberry_sell import ALLOWED_TRIGGERS,lq6s_action
+from tools.first_party_lq6s_w2_strawberry_sell import ALLOWED_TRIGGERS,LQ6SState,lq6s_action
 
 def acquire_exact(ref,expected,tmp,attempts=10):
     last=None
@@ -34,6 +34,7 @@ class Candidate:
         self.host=OptionHostState()
         self.treatment=bool(treatment)
         self.trigger_name=trigger_name
+        self.edge_state=LQ6SState()
         self.turn=0;self.trace=[];self.fire_meta=[]
     def __call__(self,obs,config=None):
         t=self.turn;self.turn+=1
@@ -41,7 +42,7 @@ class Candidate:
         all3=apply_option_host(obs,config,exact,self.host,use_rw=True,use_tw=True,use_lq2=True)
         self.trace.append((t,action_key(all3)))
         if not self.treatment:return all3
-        out,meta=lq6s_action(obs,all3,t,self.trigger_name)
+        out,meta=lq6s_action(obs,all3,t,self.trigger_name,self.edge_state)
         if meta.get("fired"):self.fire_meta.append(meta)
         return out
 
