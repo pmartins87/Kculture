@@ -1,0 +1,44 @@
+name: all3-v13b-current-top30-executable-refresh
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v13b-current-top30-executable-refresh.yml'
+      - 'tools/all3_v13b_current_top30_executable_refresh.py'
+      - 'configs/all3_v13b_current_top30_refs.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install pinned runtime and public-download clients
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: python -m py_compile tools/all3_v13b_current_top30_executable_refresh.py
+      - name: Refresh and smoke current Top-30
+        run: |
+          mkdir -p artifacts/v13b
+          python tools/all3_v13b_current_top30_executable_refresh.py             --config configs/all3_v13b_current_top30_refs.json             --out artifacts/v13b/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v13b-current-top30-executable-refresh
+          path: artifacts/v13b/*.json
+          retention-days: 30
+          if-no-files-found: warn
