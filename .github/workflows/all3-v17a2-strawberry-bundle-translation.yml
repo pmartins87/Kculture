@@ -1,0 +1,44 @@
+name: all3-v17a2-strawberry-bundle-translation
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v17a2-strawberry-bundle-translation.yml'
+      - 'tools/all3_v17a2_strawberry_bundle_translation.py'
+      - 'docs/strategy/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION_PROTOCOL_2026-09-20.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download V14B binding artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v14b-market-phenotype-atlas
+          path: artifacts/v14b-source
+          run-id: 35526759114
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_v17a2_strawberry_bundle_translation.py
+      - name: Audit selected STRAWBERRY bundle translation
+        run: |
+          mkdir -p artifacts/v17a2
+          python tools/all3_v17a2_strawberry_bundle_translation.py             --atlas artifacts/v14b-source/ALL3_V14B_MARKET_PHENOTYPE_ATLAS.json             --out artifacts/v17a2/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v17a2-strawberry-bundle-translation
+          path: artifacts/v17a2/*.json
+          retention-days: 30
+          if-no-files-found: warn
