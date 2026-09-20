@@ -1,5 +1,71 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-20 — V10A CLOSED / V11A HOSTED REFRESH ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V10A — COMPLETE / CLOSED
+
+Workflow: **`35518110487`**  
+Head: `291442310a0397da0d7a670a5b20954b8450c06b`.
+
+Decision: **`V10A_RESIDUAL_MARKET_UPPER_BOUND_CLOSED`**.
+
+Mechanical:
+- PASS;
+- 4/4 frozen hard contexts;
+- 28/28 mode-context runs;
+- failures 0;
+- zero physical fallback turns.
+
+Strategic:
+- FULL_ALL: 0/4 positive-score contexts, mean margin delta **-205.25**;
+- FULL_W2PLUS: 0/4 positive-score contexts, mean margin delta **-191.5**;
+- STRUCT_W2PLUS: 0/4 positive-score contexts, mean margin delta **-191.5**;
+- INSERT_W2PLUS: 0/4 positive-score contexts, mean margin delta **-191.5**;
+- QTY_W2PLUS: score/margin neutral;
+- REORDER_W2PLUS: score/margin neutral.
+
+Binding interpretation:
+the remaining V48 market behavior has no local or cumulative W/L upper-bound headroom over ALL3. Further V48-derived market imitation/tuning is closed.
+
+Result:
+`docs/strategy/ALL3_V10A_RESIDUAL_CUMULATIVE_MARKET_RESULT_2026-09-20.md`.
+
+### Historical option clarification
+
+H1/H1B timing is **not** a new missing option: its public town-WHEAT sale-deferral mechanism was already distilled into **O-TW1**, and O-TW1 is already one of the three ALL3 components (O-RW1 + O-TW1 + O-LQ2). Do not reopen H1/H1B as a duplicate option family.
+
+### V11A — ACTIVE
+
+Current discovery source moves from V48 residual imitation to the actual hosted ALL3 population.
+
+Workflow: **`35518801971`**  
+Launch commit: `bbc4a9d74e930bf4fb334a0f5217ab3cb43133c0`.
+
+Target:
+- ALL3 hosted submission `56367770`;
+- up to 128 newest public replays;
+- loss-opponent table;
+- repeated-loss opponents;
+- worst 25 losses;
+- close-loss subset.
+
+Opponent identity is offline forensic metadata only and prohibited as runtime policy input.
+
+Gate:
+- >=64 resolved games and >=10 losses => `V11A_HOSTED_HARD_POPULATION_READY`;
+- otherwise => `V11A_HOSTED_SAMPLE_STILL_THIN`.
+
+No automatic Kaggle submission.
+
+Preserve hosted pair:
+- O-RW1 `56336027`;
+- ALL3 `56367770`.
+
+**Binding immediate action:** resolve workflow **`35518801971`**.
+
+
 ## Binding update — 2026-09-20 — V9A READY / V9B ACTIVE
 
 **This block supersedes lower stale current-action sections.**
