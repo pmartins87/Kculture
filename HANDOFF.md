@@ -399,34 +399,74 @@ Therefore:
 Result:
 `docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_RESULT_2026-09-19.md`.
 
-### V7 option-composition attribution — ACTIVE
+### V7 option-composition attribution — CLOSED
 
 Workflow:
-**`35479297555`**.
+`35479297555`.
 
-Frozen test over the exact four V6 hard contexts:
-- V47;
-- RW;
-- TW;
-- LQ2;
-- RW+TW;
-- RW+LQ2;
-- TW+LQ2;
-- ALL3.
+Decision:
+**`V7_STATIC_COMPOSITION_MARGIN_ONLY`**.
 
-Purpose:
-attribute residual losses to existing first-party option composition and test whether static
-suppression of one option has W/L headroom.
+No non-ALL3 composition rescued any of the four hard losses.
+
+Mean margins:
+- ALL3 -406.75;
+- best alternative TW_LQ2 -399.75;
+- LQ2 -420.5;
+- V47 -1520.25.
+
+Interpretation:
+LQ2 is the dominant value-producing mechanism; static suppression is not the residual W/L answer.
+
+Result:
+`docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_RESULT_2026-09-19.md`.
+
+### V8A LQ2 residual SELL-run census — COMPLETE
+
+Workflow:
+`35479557496`.
+
+Decision:
+**`V8A_ORDER_SEARCH_READY`**.
+
+Aggregate:
+- 424 LQ2-changed turns;
+- 170 eligible post-LQ2 multi-product SELL-run states;
+- all 4 hard contexts represented;
+- max 6 distinct products in one SELL run.
+
+Frozen V8B states:
+- context 0: steps 673, 577;
+- context 1: steps 673, 600;
+- context 2: steps 673, 600;
+- context 3: steps 673, 577.
+
+Config:
+`configs/all3_v8b_lq2_order_states.json`.
+
+Result:
+`docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_RESULT_2026-09-19.md`.
+
+### V8B LQ2 SELL-order oracle — ACTIVE
+
+Workflow:
+**`35479783995`**.
+
+Frozen intervention:
+- pairwise transposition of two complete SELL orders inside one selected LQ2 run;
+- exact products and quantities preserved;
+- market outside the run preserved;
+- farmer/hands preserved;
+- only one turn changes;
+- ALL3 resumes next turn.
 
 Gate:
-- same non-ALL3 composition rescues >=2 losses -> fresh broad paired regression vs ALL3;
-- exactly one rescue -> inspect legal-state suppression mechanism;
-- no rescue -> margin-only/no-headroom close.
+- >=2 hard-context loss->win flips => repeatable order headroom;
+- exactly 1 => narrow headroom;
+- zero flips + positive aggregate best-margin delta => margin-only;
+- otherwise no-headroom.
 
-Protocol:
-`docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_PROTOCOL_2026-09-19.md`.
-
-No Kaggle submission is authorized by V7.
+No Kaggle submission is authorized by V8B.
 
 ### Binding next steps
 
