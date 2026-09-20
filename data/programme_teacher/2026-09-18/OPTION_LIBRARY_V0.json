@@ -1193,6 +1193,33 @@
       "next_if_ready": "V12B bounded causal public-state macro-response oracle",
       "protocol": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
+    },
+    "v12b_bounded_crop_response": {
+      "status": "DORMANT_PRE_REGISTERED_BEFORE_V12A_RESULT",
+      "activate_if": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_READY",
+      "trigger": "first checkpoint in [456,480,504,552,600] where opponent public CARROT > own CARROT",
+      "response_window_turns": 96,
+      "budgets": [
+        1,
+        2,
+        4
+      ],
+      "mechanism": "bounded future WHEAT->CARROT plant/seed reallocation using legal own/public state only",
+      "forbidden_runtime_inputs": [
+        "opponent identity",
+        "seed",
+        "rating",
+        "replay metadata",
+        "future state"
+      ],
+      "discovery_seeds": [
+        77101,
+        77102,
+        77103,
+        77104
+      ],
+      "protocol": "docs/strategy/ALL3_V12B_BOUNDED_CROP_RESPONSE_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
