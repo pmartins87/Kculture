@@ -16,12 +16,12 @@ O-LQ3 Stage A workflow **`35480144515`** completed mechanically clean and is clo
 
 The V8B local direction **MILK -> WOOL -> FERTILIZER** is therefore **not** a globally safe priority. No post-result threshold/frequency rescue of O-LQ3 is permitted.
 
-The binding next experiment is **V8C — Local Priority Value Atlas**, workflow **`35514319440`**, launched from commit **`c174a0f944525a6d3006374357176cd32cabee1d`**.
+Initial V8C run **`35514319440`** is non-binding: it incorrectly inherited the 12-fires-per-context count from the cumulatively treated O-LQ3 trajectory. A first correction run **`35514495824`** is also non-binding because it preceded the aggregate-gate correction. No strategic branch outcome was used for this amendment. Baseline ALL3 discovery showed 11 fires in two seat-1 contexts, proving treated-trajectory fire count cannot define one-shot branch count.\n\nThe binding next experiment is **V8C — Local Priority Value Atlas**, corrected binding workflow **`35514497453`**, head commit **`a9f36e24c66ed6ffcc8431b2ad9bec35f48e1cec`**.
 
-V8C freezes the same four hard contexts and applies the unchanged O-LQ3 transform on **exactly one firing turn at a time**, then immediately resumes exact ALL3. Expected binding aggregate: **48 one-shot branches** (12 per context).
+V8C freezes the same four hard contexts and applies the unchanged O-LQ3 transform on **exactly one firing turn at a time**, then immediately resumes exact ALL3. Binding aggregate size is the exact sum of O-LQ3 firing states discovered on the untouched ALL3 baseline trajectories; every discovered state must be branched exactly once.
 
 Frozen V8C decision:
-- mechanics invalid / !=48 valid branches -> `V8C_MECHANICS_INVALID`;
+- mechanics invalid, any context with zero baseline events, or branch count != exact baseline-discovered event count -> `V8C_MECHANICS_INVALID`;
 - loss->win in >=2 distinct hard contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_REPEATABLE`;
 - >=1 loss->win plus positive-margin states in >=2 contexts -> `V8C_CONDITIONAL_ORDER_HEADROOM_NARROW`;
 - positive-margin states in >=2 contexts without a win flip -> `V8C_CONDITIONAL_ORDER_MARGIN_HETEROGENEOUS`;
@@ -35,7 +35,7 @@ Preserve hosted pair:
 - O-RW1 submission `56336027`;
 - ALL3 submission `56367770`.
 
-**Binding immediate action:** resolve workflow **`35514319440`** once complete; do not submit a new Kaggle candidate from O-LQ3/V8C discovery alone.
+**Binding immediate action:** resolve corrected binding workflow **`35514497453`** once complete; do not submit a new Kaggle candidate from O-LQ3/V8C discovery alone.
 
 
 ## Current solver handoff — 2026-09-19
