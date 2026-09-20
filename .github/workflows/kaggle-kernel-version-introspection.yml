@@ -43,4 +43,35 @@ jobs:
               print('KAGGLESDK',getattr(kagglesdk,'__version__',None))
           except Exception as e:
               print('KAGGLESDKERR',repr(e))
+          ref='tetsutani/demand-preserving-turn-sale-timing'
+          try:
+              rows=api.kernels_list(user='tetsutani',search='demand-preserving-turn-sale-timing',page_size=20) or []
+              print('KERNEL_LIST_COUNT',len(rows))
+              for i,x in enumerate(rows):
+                  vals={}
+                  for n in dir(x):
+                      if n.startswith('_'): continue
+                      try:
+                          v=getattr(x,n)
+                          if callable(v): continue
+                          if isinstance(v,(str,int,float,bool,type(None))):
+                              vals[n]=v
+                      except Exception: pass
+                  print('KERNEL_META',i,json.dumps(vals,default=str,sort_keys=True))
+          except Exception as e:
+              print('KERNEL_LIST_ERR',repr(e))
+          try:
+              st=api.kernels_status(ref)
+              vals={}
+              for n in dir(st):
+                  if n.startswith('_'): continue
+                  try:
+                      v=getattr(st,n)
+                      if callable(v): continue
+                      if isinstance(v,(str,int,float,bool,type(None))):
+                          vals[n]=v
+                  except Exception: pass
+              print('KERNEL_STATUS_OBJ',type(st).__name__,json.dumps(vals,default=str,sort_keys=True),repr(st))
+          except Exception as e:
+              print('KERNEL_STATUS_ERR',repr(e))
           PY
