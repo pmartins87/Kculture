@@ -1,0 +1,43 @@
+{
+  "schema": "kculture-all3-v14a-mechanical-supplement-v1",
+  "source_workflow": 35525689199,
+  "missing_reason": "Kaggle HTTP 429 teacher acquisition only",
+  "hard_contexts": [
+    {
+      "context_id": "v13c_hard_14",
+      "rank": 19,
+      "ref": "evgendvorkin/kaggriculture",
+      "main_sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7",
+      "seed": 78101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1756,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v13c_hard_16",
+      "rank": 23,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 78101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2024,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v13c_hard_18",
+      "rank": 23,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 78102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -592,
+      "base_result": "L"
+    }
+  ],
+  "strategic_population_changed": false,
+  "strategic_gate_changed": false,
+  "automatic_kaggle_submission": false
+}
