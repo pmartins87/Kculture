@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve final V8D-E2 workflow 35517228393 cumulatively with V8D 35516560425 and E1 35516899185; no further seed extensions allowed",
+  "next_stage": "resolve V9A workflow 35517515758; if structural residuals span >=2 hard contexts, freeze representative states and run V9B one-turn causal category isolation; do not retune O-LQ3C",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -771,7 +771,7 @@
       "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md"
     },
     "v9_residual_structural_decomposition": {
-      "status": "DORMANT_PRE_REGISTERED_BEFORE_V8C_RESULT",
+      "status": "V9A_ACTIVE",
       "activate_if": "binding V8C closes without reusable W/L headroom",
       "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
       "categories": [
@@ -786,10 +786,12 @@
       "v9b": "conditional one-turn causal category isolation only if V9A finds structural residuals",
       "stop_rule": "if no repeatable W/L headroom, close residual one-turn V48 structural imitation rather than extend horizon or retune post hoc",
       "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "workflow": 35517515758,
+      "launch_commit": "a551a38023ee268b43f71ed442b998a99d547a40"
     },
     "o_lq3c": {
-      "status": "FROZEN_FRESH_VALIDATION_ACTIVE",
+      "status": "CLOSED_NO_FRESH_WL_CONFIRMATION",
       "source_v8c_workflow": 35516167350,
       "eligibility": "post-LQ2 nonempty market exactly 4 SELL + 6 HIRE; zero BUY/other; MILK, WOOL, FERTILIZER all present; O-LQ3 actually changes order",
       "treatment": "apply unchanged MILK -> WOOL -> FERTILIZER stable ordering on eligible turn only",
@@ -802,7 +804,14 @@
         "future state",
         "opponent private"
       ],
-      "protocol": "docs/strategy/O_LQ3C_V8D_FRESH_VALIDATION_PROTOCOL_2026-09-20.md"
+      "protocol": "docs/strategy/O_LQ3C_V8D_FRESH_VALIDATION_PROTOCOL_2026-09-20.md",
+      "final_decision": "V8D_CONDITIONAL_ORDER_NO_WL_CONFIRMATION",
+      "final_result_doc": "docs/strategy/O_LQ3C_V8D_FINAL_CUMULATIVE_RESULT_2026-09-20.md",
+      "final_v48_contexts": 72,
+      "final_v48_fire_contexts": 6,
+      "final_v48_positive_score_contexts": 0,
+      "final_v48_mean_score_delta": 0,
+      "no_more_seed_extensions": true
     },
     "v8d_fresh_validation": {
       "status": "COMPLETE_UNDERPOWERED",
@@ -973,7 +982,7 @@
       "result_doc": "docs/strategy/O_LQ3C_V8D_E1_RESULT_2026-09-20.md"
     },
     "v8d_e2_final_extension": {
-      "status": "ACTIVE_FINAL_EXTENSION",
+      "status": "COMPLETE",
       "workflow": 35517228393,
       "launch_commit": "0d832a9c7732e124b018bad35a48321c3ee27ef5",
       "seeds": [
@@ -1004,7 +1013,34 @@
       "finality": "no seed extensions beyond E2",
       "rare_close_if": "cumulative V48 fire contexts <4 after E2",
       "protocol": "docs/strategy/O_LQ3C_V8D_E2_FINAL_EXTENSION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "mechanical_pass": true,
+      "by_opponent": {
+        "v48": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 17.5,
+          "positive_score_contexts": 0,
+          "negative_score_contexts": 0
+        },
+        "v47_mirror": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_score_delta": 0,
+          "mean_margin_delta": 25.916666666666668,
+          "positive_score_contexts": 0,
+          "negative_score_contexts": 0
+        },
+        "ready_stock": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_score_delta": 0,
+          "mean_margin_delta": -11.416666666666666,
+          "positive_score_contexts": 0,
+          "negative_score_contexts": 0
+        }
+      }
     }
   },
   "current_hosted_pair": {
