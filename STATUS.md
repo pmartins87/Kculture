@@ -88,6 +88,9 @@ Protocol:
 Functional-diversity interpretation rule:
 `docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md`.
 
+Outcome router / architectural-reset protocol:
+`docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md`.
+
 If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-option mining and perform the pre-registered architectural reset / competition-strategy reassessment.
 
 No Kaggle submission is currently authorized.
