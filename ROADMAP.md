@@ -77,6 +77,15 @@ Routes:
 
 No teacher source will be embedded into a candidate under V27.
 
+Final-slot preservation protocol:
+`docs/strategy/FINAL_HOSTED_SLOT_PRESERVATION_PROTOCOL_2026-09-21.md`
+(commit `d7b3d3904462636dcb96531513c6ef25ab802239`).
+
+Current protected fallback:
+- ALL3 submission `56367770`, latest observed rating 2412.1;
+- O-RW1 submission `56336027`, latest observed rating 2361.6;
+- CR053 `56073870` is a legacy historical anchor, not the current strongest hosted result.
+
 No Kaggle submission is authorized.
 
 **Binding immediate action:** resolve workflow `35665757174`.
