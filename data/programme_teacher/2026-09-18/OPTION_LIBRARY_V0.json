@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve non-binding sensitivity workflow 35624589618; require exact BASE replay and 12/12 unanimous match with rank1+rank2 before sensitivity-only completion; no Kaggle submission",
+  "next_stage": "resolve V23 immutable snapshot workflow 35627972979; if V23A READY, V23B executes only from snapshot; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1876,7 +1876,7 @@
     "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md"
   },
   "v22b": {
-    "status": "ACTIVE_MECHANICAL_RERUN",
+    "status": "CLOSED_EXACT_ROUTING_INCONCLUSIVE_SOURCE_UNAVAILABLE",
     "workflow": 35607214335,
     "launch_commit": "ade4a4180d7081e57f7cde7286c9de07abfe2e87",
     "population": "all 92 binding V22A non-win contexts",
@@ -1973,6 +1973,54 @@
     },
     "source_unavailable_sensitivity_protocol": "docs/strategy/V22B_SOURCE_UNAVAILABLE_SENSITIVITY_CLOSURE_PROTOCOL_2026-09-21.md",
     "source_unavailable_sensitivity_protocol_commit": "51c699960868472f899c9ba4b4da7166a1b8d7f4",
-    "current_source_sensitivity_workflow": 35624589618
+    "current_source_sensitivity_workflow": 35624589618,
+    "closure_document": "docs/strategy/ALL3_V22B_SOURCE_UNAVAILABLE_CLOSE_2026-09-21.md",
+    "exact_keys": 356,
+    "expected_exact_keys": 368,
+    "exact_contexts": 89,
+    "expected_contexts": 92,
+    "sensitivity_workflow": 35624589618,
+    "sensitivity_accepted": false,
+    "sensitivity_failure": {
+      "base_replay_pass": false,
+      "context_margins": {
+        "v22a_hard_059": {
+          "frozen": -3061,
+          "current": -3136
+        },
+        "v22a_hard_063": {
+          "frozen": -3729,
+          "current": -3789
+        },
+        "v22a_hard_067": {
+          "frozen": -132,
+          "current": -194
+        }
+      }
+    }
+  },
+  "v23": {
+    "status": "ACTIVE",
+    "workflow": 35627972979,
+    "launch_commit": "ce1bd5abbb01926c073aafa69f7950be687db5d7",
+    "protocol": "docs/strategy/ALL3_V23_IMMUTABLE_SNAPSHOT_FRONTIER_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "fdfa1b672742a51ffc46e737a0977de29f8923ff",
+    "smoke_seed": 79300,
+    "discovery_seeds": [
+      79301,
+      79302,
+      79303,
+      79304,
+      79305,
+      79306
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "snapshot_selected_sources": true,
+    "v23b_live_kaggle_reacquisition": false,
+    "domain_thresholds_unchanged_from_v22b": true,
+    "automatic_kaggle_submission": false
   }
 }
