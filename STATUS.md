@@ -64,7 +64,10 @@ Protocols:
 
 No Kaggle submission.
 
-**Binding immediate action:** launch and resolve V21A semantic decomposition.
+**V21A workflow binding:** `35558880526`  
+Launch commit: `a815ee73dad8fda5f1c6a587417e22415120ec87`.
+
+**Binding immediate action:** resolve workflow `35558880526`.
 
 
 ## Binding update — 2026-09-21 — V20A NOT TRAINABLE / V21A SEMANTIC DECOMPOSITION ACTIVE
