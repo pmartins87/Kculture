@@ -1,0 +1,51 @@
+name: v22b-rank11-missing-context-recovery
+
+# DORMANT TEMPLATE. Activate only after recovery workflow 35624010734
+# has produced the exact frozen SHA 254eba47...
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  recover-contexts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download exact recovered historical source
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35624010734
+          name: v22b-yummers-historical-recovery
+          path: artifacts/yummers-recovered
+      - name: Run only missing rank-11 contexts
+        run: |
+          python tools/run_v22b_missing_contexts_from_recovered_source.py \
+            --hard-config configs/all3_v22b_hard_contexts.json \
+            --teacher-main artifacts/yummers-recovered/artifacts/yummers-source/main.py \
+            --context-ids v22a_hard_059,v22a_hard_063,v22a_hard_067 \
+            --out artifacts/v22b-rank11/V22B_RANK11_RECOVERY.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v22b-rank11-missing-context-recovery
+          path: artifacts/v22b-rank11/*.json
+          retention-days: 30
+          if-no-files-found: warn
