@@ -1,5 +1,82 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V18A P2 HEADROOM / V18B CUMULATIVE CONTROLLER ACTIVE
+
+**This block supersedes lower stale V18 current-action sections.**
+
+### V18A — COMPLETE / BINDING
+
+Workflow: **`35547247595`**.
+
+Decision:
+**`V18A_SINGLE_PARTITION_HEADROOM`**.
+
+Selected mode:
+**`MARKET_P2_ONLY`** = turns **464..591**.
+
+Mechanical:
+- 24 contexts × 7 modes complete;
+- failures 0;
+- MARKET_P123 exactly reproduced all 24 binding V14A MARKET_W2PLUS score+margin outcomes;
+- replication mismatches 0.
+
+Selected P2:
+- positive-score contexts: **14/24**;
+- improved source SHAs: **7**;
+- negative-score contexts: 0;
+- mean score delta: **+0.5833333**;
+- mean margin delta: **+1384.25**.
+
+Interaction context:
+- P1 alone: 0 score improvements;
+- P3 alone: 0;
+- P12: 20/24 improvements;
+- P23: 22/24;
+- P123: 18/24, exact V14A binding.
+
+The pre-registered specificity rule binds P2 despite broader combinations scoring higher.
+
+Result:
+`docs/strategy/ALL3_V18A_W2PLUS_TEMPORAL_LOCALIZATION_RESULT_2026-09-20.md`.
+
+### V18B — ACTIVE
+
+Workflow: **`35552335995`**  
+Launch commit: `a4d15571fc4d7a7594416e25de4a119b8f7f1118`.
+
+Architecture:
+- collect exactly **3072** P2 decision rows = 24 hard contexts × 128 turns;
+- exact ALL3 gameplay;
+- shadow teacher used only as offline market-residual label source;
+- no identity/seed/seat/outcome predictive features.
+
+Classifier:
+- independent shallow trees per actionable recurrent SELL residual family;
+- max depth 4;
+- source-held-out validation over 10 unique hard-source SHAs;
+- fixed precision/recall/F1 gates;
+- JSON export with exact sklearn parity.
+
+Controller v1 actionable kinds:
+- SELL QTY;
+- SELL PRESENCE;
+- SELL DUPLICATE.
+
+Generic REORDER/ORDER_COUNT and BUY/HIRE are excluded from first controller because they lack a uniquely safe standalone transformation.
+
+READY requires:
+- >=3 retained families;
+- retained families span QTY/PRESENCE/DUPLICATE;
+- >=4 positive source SHAs;
+- exact sklearn/JSON parity;
+- compiled structural validity on all 3072 rows.
+
+No causal game is run in V18B.
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35552335995`**.
+
+
 ## Binding update — 2026-09-20 — V17B CLOSED / V18A FULL W2PLUS TEMPORAL LOCALIZATION ACTIVE
 
 **This block supersedes lower stale V17/V18 current-action sections.**
