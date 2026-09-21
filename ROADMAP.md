@@ -1,5 +1,97 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-21 — V25A PERSISTENT POLICY / V26A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V25A — COMPLETE / PERSISTENT POLICY REQUIRED
+
+Binding workflow: **`35645830010`**.  
+Aggregate job: `106504353595`.  
+Final artifact: `10661899016`.  
+Digest: `sha256:e0d5190ffe6a8aded7b7df4610514bd616f04e9e744371bbc0b1aac9700b7d45`.
+
+Mechanical:
+- 4/4 shards PASS;
+- 93 hard contexts;
+- 9 frozen horizons per context;
+- **837/837 rows**;
+- failures 0;
+- H=0 exact V23B BASE parity;
+- H=720 exact V23B FULL_SHADOW parity.
+
+Decision:
+**`V25A_PERSISTENT_POLICY_REQUIRED`**.
+
+Finite horizons `4,8,16,32,64,128,256`:
+- **0/93 score improvements at every finite horizon**.
+
+H=720:
+- 81/93 score improvements;
+- 9 source SHAs;
+- 6 functional clusters;
+- all 5 hard seeds;
+- mean score delta +0.4838709677;
+- mean margin delta +3246.3226;
+- regressions 0.
+
+Interpretation:
+the competitive gap is persistent whole-episode policy, not an opening macro or finite state-basin prefix.
+
+Result:
+`docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_RESULT_2026-09-21.md`
+(commit `e0c2ad42fdc6ab0b6f31b146759fd8903992f220`).
+
+Additive option mining around V47+ALL3 is CLOSED.
+
+### V26A — ACTIVE / FIRST-PARTY BASE ARCHITECTURE BENCHMARK
+
+Protocol:
+`docs/strategy/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK_PROTOCOL_2026-09-21.md`
+(commit `c9accb8416e860bc372ba1fd0890181b65419c8d`).
+
+Binding workflow:
+**`35653189539`**.  
+Launch commit:
+`26be628577a7ef555a3b32544f94178162ec6118`.
+
+Fresh seeds:
+`79501..79506`, both seats.
+
+CONTROL:
+exact V47+ALL3.
+
+TREATMENT:
+`PrizeSolverV4` end-to-end adaptive architecture.
+
+Workflow:
+1. query current public Top-30 once;
+2. acquire / smoke / SHA-deduplicate;
+3. select up to 12 unique executable representatives, minimum 8;
+4. immutable-snapshot exact V47 base + selected opponents;
+5. paired ALL3 vs PrizeSolverV4 on fresh seeds and both seats;
+6. aggregate W/L headroom across sources, seeds and CONTROL functional clusters.
+
+Frozen PrizeSolverV4 headroom gate:
+- >=8 positive-score contexts;
+- >=3 source SHAs;
+- >=3 seeds;
+- mean score delta >0;
+- negative-score contexts <= positives/2;
+- CONTROL-win -> TREATMENT-nonwin <= positives/2;
+- >=2 CONTROL functional outcome clusters.
+
+PASS:
+`V26A_PRIZE_SOLVER_BASE_HEADROOM` => reopen Prize Solver roadmap at PS2/PS3.
+
+FAIL:
+`V26A_PRIZE_SOLVER_BASE_NOT_READY` => do not brute-force train V4; open teacher-derived persistent-policy reconstruction viability.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35653189539`.
+
+
 ## Binding update — 2026-09-21 — V24B COMPACT CLOSED / V25A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
