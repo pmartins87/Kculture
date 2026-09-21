@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "recover exact historical rank11 SHA in workflow 35624010734; execute only missing v22a_hard_059/063/067; merge to 368/368; then aggregate and route; no Kaggle submission",
+  "next_stage": "resolve non-binding sensitivity workflow 35624589618; require exact BASE replay and 12/12 unanimous match with rank1+rank2 before sensitivity-only completion; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1964,6 +1964,15 @@
     "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005",
     "historical_recovery_workflow": 35624010734,
     "historical_recovery_script": "tools/recover_kaggle_kernel_version_by_sha.py",
-    "historical_recovery_script_commit": "63a5bce10f32efad8e546332f16531196f10fd18"
+    "historical_recovery_script_commit": "63a5bce10f32efad8e546332f16531196f10fd18",
+    "historical_recovery_result": {
+      "workflow": 35624010734,
+      "found": false,
+      "versions_attempted": "1..60",
+      "failure": "HTTP 403 for every historical version"
+    },
+    "source_unavailable_sensitivity_protocol": "docs/strategy/V22B_SOURCE_UNAVAILABLE_SENSITIVITY_CLOSURE_PROTOCOL_2026-09-21.md",
+    "source_unavailable_sensitivity_protocol_commit": "51c699960868472f899c9ba4b4da7166a1b8d7f4",
+    "current_source_sensitivity_workflow": 35624589618
   }
 }
