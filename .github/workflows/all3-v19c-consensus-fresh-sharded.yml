@@ -1,0 +1,81 @@
+name: all3-v19c-consensus-fresh-sharded
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v19c-consensus-fresh-sharded.yml'
+      - 'tools/all3_v19c_consensus_fresh_shard.py'
+      - 'tools/aggregate_all3_v19c_consensus_fresh.py'
+      - 'docs/strategy/ALL3_V19C_CONSENSUS_FRESH_PROTOCOL_2026-09-21.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download binding V19A schedule
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v19a-p2-consensus-schedule
+          path: artifacts/v19a-binding
+          run-id: 35552885627
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: |
+          python -m py_compile tools/first_party_tm1_p2_consensus_schedule.py
+          python -m py_compile tools/all3_v19c_consensus_fresh_validation.py
+          python -m py_compile tools/all3_v19c_consensus_fresh_shard.py
+      - name: Run V19C shard
+        run: |
+          mkdir -p artifacts/v19c
+          python tools/all3_v19c_consensus_fresh_shard.py             --config configs/all3_v19c_consensus_fresh_validation.json             --schedule artifacts/v19a-binding/ALL3_V19A_P2_CONSENSUS_SCHEDULE.json             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v19c/V19C_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v19c-shard-${{ matrix.shard_index }}
+          path: artifacts/v19c/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v19c-shard-*
+          path: artifacts/v19c-shards
+          merge-multiple: false
+      - name: Aggregate binding V19C
+        run: |
+          mkdir -p artifacts/v19c-aggregate
+          python tools/aggregate_all3_v19c_consensus_fresh.py             --input-dir artifacts/v19c-shards             --out artifacts/v19c-aggregate/ALL3_V19C_CONSENSUS_FRESH_VALIDATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v19c-consensus-fresh-validation-sharded
+          path: artifacts/v19c-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
