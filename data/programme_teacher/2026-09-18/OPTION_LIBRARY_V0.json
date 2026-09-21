@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V26A workflow 35653189539 autonomously; if PrizeSolverV4 passes architecture headroom, reopen PS2/PS3; otherwise open teacher-derived persistent-policy reconstruction viability; no Kaggle submission",
+  "next_stage": "resolve V26B workflow 35660845547 autonomously; if consensus passes, distill one identity-free persistent policy; if not, close current teacher-bank imitation and reassess competition strategy/new learning architecture; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2212,26 +2212,40 @@
     "result_document": "docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_RESULT_2026-09-21.md"
   },
   "v26a": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35653189539,
-    "launch_commit": "26be628577a7ef555a3b32544f94178162ec6118",
-    "protocol": "docs/strategy/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "c9accb8416e860bc372ba1fd0890181b65419c8d",
-    "control": "V47+ALL3",
-    "treatment": "PrizeSolverV4",
+    "decision": "V26A_PRIZE_SOLVER_BASE_NOT_READY",
+    "contexts": 144,
+    "control_score_rate": 0.3611111111111111,
+    "treatment_score_rate": 0,
+    "positive_score_contexts": 0,
+    "negative_score_contexts": 52,
+    "control_win_to_treatment_nonwin": 52,
+    "mean_score_delta": -0.3611111111111111,
+    "mean_margin_delta": -135390.78472222222,
+    "result_document": "docs/strategy/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK_RESULT_2026-09-21.md",
+    "snapshot_artifact_id": 10663530412,
+    "snapshot_digest": "sha256:69f6407c34155af19671963c1ce107fab45926283098b422790cd1d86117ed43"
+  },
+  "v26b": {
+    "status": "ACTIVE",
+    "workflow": 35660845547,
+    "launch_commit": "356349db5a70763cafa722a0231b07bafc6e8ff8",
+    "protocol": "docs/strategy/V26B_TEACHER_DERIVED_PERSISTENT_POLICY_VIABILITY_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "d48bbea1158dab464b343589cfb27be3ee524487",
+    "treatment": "persistent modal complete-action consensus of all 12 immutable snapshot teachers",
     "seeds": [
-      79501,
-      79502,
-      79503,
-      79504,
-      79505,
-      79506
+      79601,
+      79602,
+      79603,
+      79604,
+      79605,
+      79606
     ],
     "seats": [
       0,
       1
     ],
-    "current_frontier_snapshot": true,
     "automatic_kaggle_submission": false
   }
 }
