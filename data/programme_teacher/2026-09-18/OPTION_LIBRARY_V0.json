@@ -1901,6 +1901,16 @@
       1,
       2,
       11
+    ],
+    "outcome_router": "docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md",
+    "both_domain_selector": [
+      "improved functional clusters",
+      "improved-score contexts",
+      "improved seeds",
+      "improved source SHAs",
+      "mean score delta",
+      "mean margin delta",
+      "MARKET lexical tie-break"
     ]
   }
 }
