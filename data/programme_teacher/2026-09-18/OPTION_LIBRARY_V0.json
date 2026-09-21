@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "let V22B attempt2 workflow 35607214335 finish shards 2/3; then activate strict mechanical merge of attempts 1+2; no strategic interpretation before 368/368 exact keys; no Kaggle submission",
+  "next_stage": "recover exact historical rank11 SHA in workflow 35624010734; execute only missing v22a_hard_059/063/067; merge to 368/368; then aggregate and route; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1938,19 +1938,32 @@
       "alias_executor_commit": "20195454330d67e786f33a49346f35504f5be07c",
       "merger_commit": "c04e01c54621320c5c52ceef4aa4b59f0d5277a2",
       "merge_template_commit": "adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c",
-      "current_union_exact_keys": 312,
+      "current_union_exact_keys": 356,
       "expected_exact_keys": 368,
-      "current_complete_contexts": 78,
+      "current_complete_contexts": 89,
       "expected_contexts": 92,
-      "remaining_contexts": 14,
+      "remaining_contexts": 3,
       "remaining_only_shards": [
         3
       ],
-      "remaining_exact_keys": 56,
+      "remaining_exact_keys": 12,
       "cross_attempt_duplicate_keys_compared": 116,
-      "cross_attempt_conflicts": 0
+      "cross_attempt_conflicts": 0,
+      "remaining_context_ids": [
+        "v22a_hard_059",
+        "v22a_hard_063",
+        "v22a_hard_067"
+      ],
+      "rank11_current_sha_drift": {
+        "ref": "romantamrazov/kaggriculture-yummers",
+        "frozen_sha": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+        "current_sha": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080"
+      }
     },
     "outcome_router_implementation": "tools/route_v22b_outcome.py",
-    "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005"
+    "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005",
+    "historical_recovery_workflow": 35624010734,
+    "historical_recovery_script": "tools/recover_kaggle_kernel_version_by_sha.py",
+    "historical_recovery_script_commit": "63a5bce10f32efad8e546332f16531196f10fd18"
   }
 }
