@@ -62,6 +62,36 @@ No Kaggle submission.
 
 **Binding immediate action:** resolve V19C fresh validation.
 
+### V19D/V19E — DORMANT / PRE-FROZEN PROMOTION PATH
+
+Only if V19C returns `V19C_CONSENSUS_FRESH_PASS`:
+
+**V19D package/parity**
+- deterministic package: `KCULTURE_V47_ALL3_TM1_V1.tar.gz`;
+- exact frozen V19A schedule embedded in standalone `main.py`;
+- fresh parity seeds 78701,78702;
+- opponents V47 mirror, V48 and tactical-memory;
+- both seats;
+- exact action + reward parity required in 12/12 contexts.
+
+Protocol:
+`docs/strategy/ALL3_V19D_TM1_PACKAGE_PARITY_PROTOCOL_2026-09-21.md`.
+
+Only V19D parity PASS may activate V19E.
+
+**V19E hosted submission**
+- exactly one submission;
+- frozen description:
+  `PS_ALL3_TM1_V1_P2_CONSENSUS_C68D8575`;
+- package SHA must equal V19D binding receipt;
+- daily submission cap <=5;
+- no post-hoc mutation after hosted observation.
+
+Protocol:
+`docs/strategy/ALL3_V19E_TM1_HOSTED_SUBMISSION_PROTOCOL_2026-09-21.md`.
+
+
+
 
 ## Binding update — 2026-09-20 — V18B CLOSED / V19A CONSENSUS READY / V19B ACTIVE
 
