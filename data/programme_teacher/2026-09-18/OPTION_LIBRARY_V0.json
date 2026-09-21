@@ -1894,6 +1894,13 @@
       "mean_score_delta_must_be_positive": true,
       "max_regressed_to_improved_ratio": 0.5
     },
-    "automatic_kaggle_submission": false
+    "automatic_kaggle_submission": false,
+    "functional_diversity_rule": "docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md",
+    "v22a_observed_hard_functional_clusters": 6,
+    "identical_base_outcome_cluster_ranks": [
+      1,
+      2,
+      11
+    ]
   }
 }
