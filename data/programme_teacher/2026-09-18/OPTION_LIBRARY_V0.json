@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V22B workflow 35566168354; MARKET/PHYSICAL headroom opens at most one new mechanism family in passing domain; no domain headroom triggers architectural reset; no Kaggle submission",
+  "next_stage": "resolve corrected V22B workflow 35607214335; ignore attempt1 partial strategic metrics; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1876,9 +1876,9 @@
     "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md"
   },
   "v22b": {
-    "status": "ACTIVE",
-    "workflow": 35566168354,
-    "launch_commit": "66ae1cec7bae766ab62915cac711a73cafdf1ee3",
+    "status": "ACTIVE_MECHANICAL_RERUN",
+    "workflow": 35607214335,
+    "launch_commit": "ade4a4180d7081e57f7cde7286c9de07abfe2e87",
     "population": "all 92 binding V22A non-win contexts",
     "modes": [
       "BASE",
@@ -1914,6 +1914,16 @@
     ],
     "functional_cluster_map": "configs/all3_v22b_functional_clusters.json",
     "functional_cluster_map_commit": "04be152448ef4f6b882530f2df93e6e4453391a9",
-    "hard_functional_clusters": 6
+    "hard_functional_clusters": 6,
+    "attempt1_workflow": 35566168354,
+    "attempt1_decision": "V22B_MECHANICS_INVALID",
+    "attempt1_failure_reason": "45 Kaggle HTTP 429 teacher_acquire failures; partial aggregate strategically non-binding",
+    "attempt1_result_document": "docs/strategy/ALL3_V22B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md",
+    "mechanical_repair": {
+      "acquisition_attempts": 8,
+      "retry_backoff": "bounded exponential 5,10,20,40,60... seconds",
+      "matrix_max_parallel": 1,
+      "strategic_changes": false
+    }
   }
 }
