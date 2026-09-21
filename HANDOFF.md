@@ -67,13 +67,13 @@ Observed so far:
 - strict mechanical merger: `tools/merge_v22b_mechanical_attempts.py`, commit `c04e01c54621320c5c52ceef4aa4b59f0d5277a2`;
 - dormant merge workflow template: `docs/strategy/templates/ALL3_V22B_MECHANICAL_MERGE_WORKFLOW.yml`, commit `adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c`.
 
-Current union of attempt-1 valid rows + attempt-2 shards 0/1/2:
-- **312/368 exact keys**;
-- **78/92 complete contexts**;
-- shard 0 is complete by merge;
-- shard 1 was already complete in attempt 1;
-- shard 2 is now complete by merge;
-- all remaining **14 contexts / 56 keys** belong only to shard 3.
+Current union after attempt 2 completed:
+- **356/368 exact keys**;
+- **89/92 complete contexts**;
+- only 3 contexts / 12 keys remain: shard-3 rank-11 contexts `v22a_hard_059`, `063`, `067`;
+- rank-2 gaps are already filled from attempt 1;
+- rank-11 current ref `romantamrazov/kaggriculture-yummers` drifted from frozen SHA `254eba47...` to `338a1a08...`;
+- historical exact-SHA recovery workflow: **`35624010734`**;
 - cross-attempt determinism audit: **116 duplicate keys compared, 0 conflicts**.
 
 Therefore no third full V22B run is justified at this time. Let attempt 2 finish shards 2/3, then mechanically merge attempts 1+2. Strategic interpretation remains blocked until a complete 368-key aggregate exists.
@@ -131,7 +131,7 @@ If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-opt
 
 No Kaggle submission is currently authorized.
 
-**Binding immediate action:** resolve corrected workflow `35607214335`.
+**Binding immediate action:** recover exact historical rank-11 SHA via workflow `35624010734`, execute only the 3 missing frozen contexts, then merge to 368/368.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
