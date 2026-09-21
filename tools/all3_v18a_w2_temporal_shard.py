@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Dormant V18A: localize V14A MARKET_W2PLUS headroom in fixed W2 windows."""
+"""V18A: localize V14A MARKET_W2PLUS headroom in fixed full-horizon partitions."""
 from __future__ import annotations
 import argparse,copy,json,math,os,sys,tempfile,time
 from pathlib import Path
@@ -13,14 +13,14 @@ from tools.o_pc1_dev_shard import BASE
 from tools.bounded_transaction_oracle_v1 import call_agent,canonical_action,score
 from tools.first_party_option_host_v1 import OptionHostState,apply_option_host
 
-MODES=("BASE","MARKET_W2A_ONLY","MARKET_W2B_ONLY","MARKET_W2C_ONLY","MARKET_W2AB","MARKET_W2BC","MARKET_W2ABC")
+MODES=("BASE","MARKET_P1_ONLY","MARKET_P2_ONLY","MARKET_P3_ONLY","MARKET_P12","MARKET_P23","MARKET_P123")
 WINDOWS={
- "MARKET_W2A_ONLY":((336,392),),
- "MARKET_W2B_ONLY":((392,448),),
- "MARKET_W2C_ONLY":((448,504),),
- "MARKET_W2AB":((336,392),(392,448)),
- "MARKET_W2BC":((392,448),(448,504)),
- "MARKET_W2ABC":((336,392),(392,448),(448,504)),
+ "MARKET_P1_ONLY":((336,464),),
+ "MARKET_P2_ONLY":((464,592),),
+ "MARKET_P3_ONLY":((592,719),),
+ "MARKET_P12":((336,464),(464,592)),
+ "MARKET_P23":((464,592),(592,719)),
+ "MARKET_P123":((336,464),(464,592),(592,719)),
 }
 
 def acquire_exact(ref,expected,tmp,attempts=10):
