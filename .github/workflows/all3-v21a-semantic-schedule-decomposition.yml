@@ -1,0 +1,95 @@
+name: all3-v21a-semantic-schedule-decomposition
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v21a-semantic-schedule-decomposition.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3,4,5,6,7,8,9]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download binding V19A schedule
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v19a-p2-consensus-schedule
+          path: artifacts/v19a-binding
+          run-id: 35552885627
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v21a_semantic_decomposition_shard.py
+          python -m py_compile tools/aggregate_all3_v21a_semantic_decomposition.py
+      - name: Run V21A semantic shard
+        run: |
+          mkdir -p artifacts/v21a
+          python tools/all3_v21a_semantic_decomposition_shard.py \
+            --config configs/all3_v21a_semantic_schedule_decomposition.json \
+            --schedule artifacts/v19a-binding/ALL3_V19A_P2_CONSENSUS_SCHEDULE.json \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 10 \
+            --out artifacts/v21a/V21A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v21a-shard-${{ matrix.shard_index }}
+          path: artifacts/v21a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download V21A shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v21a-shard-*
+          path: artifacts/v21a-shards
+          merge-multiple: false
+      - name: Download binding V20A aggregate
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v20a-state-gate
+          path: artifacts/v20a-binding
+          run-id: 35557692905
+          github-token: ${{ github.token }}
+      - name: Aggregate V21A
+        run: |
+          mkdir -p artifacts/v21a-aggregate
+          python tools/aggregate_all3_v21a_semantic_decomposition.py \
+            --input-dir artifacts/v21a-shards \
+            --v20a-binding artifacts/v20a-binding \
+            --config configs/all3_v21a_semantic_schedule_decomposition.json \
+            --out artifacts/v21a-aggregate/ALL3_V21A_SEMANTIC_DECOMPOSITION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v21a-semantic-decomposition
+          path: artifacts/v21a-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
