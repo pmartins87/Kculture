@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V19B workflow 35553022505; only V19B_CONSENSUS_WL_HEADROOM may activate pre-frozen V19C on seeds 78601..78604",
+  "next_stage": "resolve V19C fresh validation using frozen O-TM1 consensus schedule, seeds 78601..78604, both seats; only V19C_CONSENSUS_FRESH_PASS may authorize packaging/hosted promotion",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1665,12 +1665,19 @@
       "result_doc": "docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_RESULT_2026-09-20.md"
     },
     "v19b_consensus_causal": {
-      "status": "ACTIVE",
+      "status": "COMPLETE_WL_HEADROOM",
       "workflow": 35553022505,
-      "launch_commit": "88248e361c61f00c0c9cccd0ef76bc79da2282c8",
-      "candidate": "O-TM1 P2 cross-source consensus market schedule",
-      "pass_gate": "positive score>=4 across>=2 sources; negative score=0; mean score>0; mean margin>0",
-      "automatic_kaggle_submission": false
+      "decision": "V19B_CONSENSUS_WL_HEADROOM",
+      "schedule_sha256": "c68d857500b71a40f8cf4ef5f2ff693f6da1d97ced03e7d7f19eaedfded1ff22",
+      "mechanical_pass": true,
+      "coverage_pass": true,
+      "positive_score_contexts": 14,
+      "positive_score_sources": 7,
+      "negative_score_contexts": 0,
+      "mean_score_delta": 0.5833333333333334,
+      "mean_margin_delta": 1273.0833333333333,
+      "result_doc": "docs/strategy/ALL3_V19B_CONSENSUS_CAUSAL_RESULT_2026-09-21.md",
+      "fresh_validation_activated": true
     },
     "v19c_consensus_fresh": {
       "status": "DORMANT_PRE_FROZEN",
@@ -1684,6 +1691,29 @@
       ],
       "pairs": 80,
       "automatic_kaggle_submission": false
+    },
+    "v19c_consensus_fresh_validation": {
+      "status": "ACTIVE",
+      "config": "configs/all3_v19c_consensus_fresh_validation.json",
+      "seeds": [
+        78601,
+        78602,
+        78603,
+        78604
+      ],
+      "sources": 10,
+      "seats": [
+        0,
+        1
+      ],
+      "pairs": 80,
+      "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
+      "automatic_kaggle_submission": false
+    },
+    "v18b2_parallel_note": {
+      "status": "NON_BINDING_PARALLEL",
+      "workflow": 35556541064,
+      "note": "Do not supersede V19 source-of-truth path"
     }
   },
   "current_hosted_pair": {
