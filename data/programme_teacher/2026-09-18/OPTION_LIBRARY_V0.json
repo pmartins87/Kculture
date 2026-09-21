@@ -2052,6 +2052,13 @@
     },
     "v23b_binding_workflow": 35632311093,
     "v23b_fallback_commit": "a6e1d5fd3218d5a05bb0bdbdc05b525a4c05c083",
-    "v23b_reuses_binding_snapshot": true
+    "v23b_reuses_binding_snapshot": true,
+    "snapshot_audit": {
+      "verified_main_py": 13,
+      "expected_main_py": 13,
+      "missing": 0,
+      "sha_mismatches": 0,
+      "verified": true
+    }
   }
 }
