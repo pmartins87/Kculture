@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "V20A closed V20A_GATE_NOT_TRAINABLE; resolve pre-registered V21A semantic decomposition of frozen V19A P2 schedule on consumed seeds 78711..78716; only V21A_SEMANTIC_WL_HEADROOM may activate untouched V21B seeds 78901..78904",
+  "next_stage": "resolve V21A workflow 35558880526; only V21A_SEMANTIC_WL_HEADROOM may activate untouched V21B seeds 78901..78904",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1790,7 +1790,7 @@
     "result_doc": "docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md"
   },
   "v21a_semantic_decomposition": {
-    "status": "ACTIVE_PRE_REGISTERED",
+    "status": "ACTIVE",
     "discovery_seeds": [
       78711,
       78712,
@@ -1813,6 +1813,8 @@
     },
     "protocol": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md",
     "fresh_protocol": "docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md",
-    "automatic_kaggle_submission": false
+    "automatic_kaggle_submission": false,
+    "workflow": 35558880526,
+    "launch_commit": "a815ee73dad8fda5f1c6a587417e22415120ec87"
   }
 }
