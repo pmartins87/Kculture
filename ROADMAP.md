@@ -1,5 +1,68 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-21 — V19B CONSENSUS WL HEADROOM / V19C FRESH VALIDATION ACTIVE
+
+**This block supersedes lower stale V19 current-action sections.**
+
+### V19B — COMPLETE / PASS
+
+Workflow: **`35553022505`**.
+
+Decision:
+**`V19B_CONSENSUS_WL_HEADROOM`**.
+
+Mechanical:
+- 24/24 hard contexts;
+- failures 0;
+- changed-market coverage 24/24;
+- source coverage 10/10;
+- frozen schedule SHA256:
+  `c68d857500b71a40f8cf4ef5f2ff693f6da1d97ced03e7d7f19eaedfded1ff22`.
+
+Strategic:
+- positive-score contexts: **14/24**;
+- positive-score sources: **7**;
+- negative-score contexts: **0**;
+- mean score delta: **+0.5833333333333334**;
+- mean margin delta: **+1273.0833333333333**.
+
+Result:
+`docs/strategy/ALL3_V19B_CONSENSUS_CAUSAL_RESULT_2026-09-21.md`.
+
+### V19C — ACTIVE
+
+Frozen config:
+`configs/all3_v19c_consensus_fresh_validation.json`.
+
+Population:
+- same 10 exact hard-source SHAs;
+- fresh seeds `78601..78604`;
+- both seats;
+- **80 paired contexts**;
+- exact frozen V19A schedule / O-TM1 candidate.
+
+Fresh PASS requires:
+- all 80 pairs mechanically clean;
+- changed-market coverage >=20 contexts;
+- positive-score contexts >=2 across >=2 source SHAs;
+- negative-score contexts = 0;
+- BASE-win -> treatment-nonwin regressions = 0;
+- mean score delta >0;
+- mean margin delta >=0.
+
+No candidate change is allowed.
+
+### Parallel V18B2 note
+
+The V18B2 transition-event experiment created later in a parallel chat path is **NON-BINDING** for the current roadmap.
+The binding source-of-truth branch had already advanced through V19A/V19B.
+Do not use V18B2 to supersede or alter O-TM1/V19C.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve V19C fresh validation.
+
+
 ## Binding update — 2026-09-20 — V18B CLOSED / V19A CONSENSUS READY / V19B ACTIVE
 
 **This block supersedes lower stale V18/V19 current-action sections.**
