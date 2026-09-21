@@ -66,6 +66,9 @@ Pre-registered branch:
 Dormant V22B protocol:
 `docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md`.
 
+Mechanical-completion fallback for V22A:
+`docs/strategy/ALL3_V22A_MECHANICAL_COMPLETION_PROTOCOL_2026-09-21.md`.
+
 No Kaggle submission is currently authorized.
 
 **Binding immediate action:** resolve corrected workflow `35562142399`.
