@@ -105,7 +105,7 @@ Controller keeps one previous-feature vector as runtime state.
 **`V18B2_EVENT_CONTROLLER_READY_FOR_CAUSAL`** requires:
 - exact 3072-row transformed dataset;
 - >=3 retained families;
-- retained families span >=3 kinds among QTY/PRESENCE/DUPLICATE;
+- retained families span >=2 kinds and must include both QTY and PRESENCE;
 - retained positives span >=4 source SHAs;
 - exact sklearn/JSON parity;
 - structural compiler validity on all rows;
@@ -116,3 +116,17 @@ Otherwise:
 
 No causal game is run in V18B2.
 No Kaggle submission.
+
+
+### Feasibility amendment before first V18B2 model run
+
+Inspection of the already-binding V18B label-support table showed that every P2 DUPLICATE family has positive examples in only 2 source SHAs. Because the unchanged per-family retention gate requires positive support across >=4 source SHAs, no DUPLICATE family can possibly be retained regardless of classifier quality.
+
+No V18B2 model had been trained when this was detected.
+
+Therefore the controller-level diversity gate is corrected from an impossible three-kind requirement to:
+- at least 3 retained families;
+- at least 2 residual kinds;
+- QTY and PRESENCE must both be represented.
+
+The per-family precision, recall, F1, source-support gates, feature transform, model class, and compiler are unchanged.
