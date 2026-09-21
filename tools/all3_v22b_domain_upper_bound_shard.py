@@ -50,6 +50,29 @@ def acquire_exact(ref, expected, tmp, attempts=8):
     raise last
 
 
+def acquire_exact_any(refs, expected, tmp):
+    errors = []
+    seen = set()
+    ordered = []
+    for ref in refs:
+        if ref and ref not in seen:
+            seen.add(ref)
+            ordered.append(ref)
+    for j, ref in enumerate(ordered):
+        try:
+            main, receipt = acquire_exact(ref, expected, tmp / f"alias{j}")
+            receipt = dict(receipt)
+            receipt["acquired_ref"] = ref
+            receipt["expected_main_sha256"] = expected
+            return main, receipt, ref
+        except Exception as exc:
+            errors.append({"ref": ref, "error": f"{type(exc).__name__}: {exc}"})
+            # A 404 is deterministic for this ref; move to the next frozen exact-SHA alias.
+            if "404" in str(exc):
+                continue
+    raise RuntimeError(f"all exact-SHA aliases failed for {expected}: {errors}")
+
+
 def hand_diff_count(a, b):
     aa = list(a or [])
     bb = list(b or [])
@@ -218,14 +241,18 @@ def main():
                 if sha in teachers:
                     continue
                 try:
-                    main, receipt = acquire_exact(
-                        str(ctx["ref"]),
+                    aliases = list((cfg.get("source_sha_aliases") or {}).get(sha) or [])
+                    refs = [str(ctx["ref"])] + aliases
+                    main, receipt, acquired_ref = acquire_exact_any(
+                        refs,
                         sha,
                         root / f"teacher_{len(teachers)}",
                     )
                     teachers[sha] = main
                     provenance[sha] = {
                         "ref": ctx["ref"],
+                        "acquired_ref": acquired_ref,
+                        "aliases": refs,
                         "sha": sha,
                         "receipt": receipt,
                     }
