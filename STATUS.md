@@ -131,7 +131,14 @@ If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-opt
 
 No Kaggle submission is currently authorized.
 
-**Binding immediate action:** recover exact historical rank-11 SHA via workflow `35624010734`, execute only the 3 missing frozen contexts, then merge to 368/368.
+Historical recovery workflow `35624010734` exhausted versions 1..60 and all returned HTTP 403; exact frozen rank-11 bytes are unavailable through the authenticated Kaggle API.
+
+Frozen fallback sensitivity protocol:
+`docs/strategy/V22B_SOURCE_UNAVAILABLE_SENSITIVITY_CLOSURE_PROTOCOL_2026-09-21.md` (commit `51c699960868472f899c9ba4b4da7166a1b8d7f4`).
+
+Current-source NON-BINDING sensitivity workflow: **`35624589618`**.
+
+**Binding immediate action:** resolve sensitivity workflow `35624589618`; only a 12/12 unanimous current-source + rank1 + rank2 match permits sensitivity-only completion.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
