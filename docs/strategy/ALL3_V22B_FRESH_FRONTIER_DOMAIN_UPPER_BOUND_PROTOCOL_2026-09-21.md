@@ -37,6 +37,8 @@ For each context freeze:
 
 No context may be added/dropped based on V22B treatment outcomes.
 
+The hard-context config must be materialized mechanically by `tools/materialize_v22b_hard_config.py`, which accepts all and only binding V22A rows with `score < 1.0` and rejects any binding/acquisition/smoke/episode inconsistency.
+
 ## Candidate baseline
 
 Exact ALL3:
