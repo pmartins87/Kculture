@@ -63,6 +63,14 @@ Protocols:
 
 No Kaggle submission is currently authorized.
 
+Stopping rule:
+- if V21A has no semantic W/L headroom, close the V19A-derived schedule family;
+- do not search post-hoc category pairs/turn subsets;
+- activate the independent fresh-frontier V22 branch instead.
+
+Pre-registered stop/next-branch document:
+`docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md`.
+
 **Binding immediate action:** resolve workflow `35558880526`.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
