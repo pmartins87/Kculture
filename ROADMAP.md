@@ -74,6 +74,7 @@ Current union of attempt-1 valid rows + attempt-2 shards 0/1/2:
 - shard 1 was already complete in attempt 1;
 - shard 2 is now complete by merge;
 - all remaining **14 contexts / 56 keys** belong only to shard 3.
+- cross-attempt determinism audit: **116 duplicate keys compared, 0 conflicts**.
 
 Therefore no third full V22B run is justified at this time. Let attempt 2 finish shards 2/3, then mechanically merge attempts 1+2. Strategic interpretation remains blocked until a complete 368-key aggregate exists.
 
