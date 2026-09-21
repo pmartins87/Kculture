@@ -1,0 +1,45 @@
+name: all3-v19a-p2-consensus-schedule
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v19a-p2-consensus-schedule.yml'
+      - 'tools/all3_v19a_p2_consensus_schedule.py'
+      - 'docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_PROTOCOL_2026-09-20.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Download passed V18B dataset shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v18b-data-shard-*
+          path: artifacts/v18b-data
+          merge-multiple: false
+          run-id: 35552335995
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_v19a_p2_consensus_schedule.py
+      - name: Extract source-balanced consensus schedule
+        run: |
+          mkdir -p artifacts/v19a
+          python tools/all3_v19a_p2_consensus_schedule.py             --input-dir artifacts/v18b-data             --out artifacts/v19a/ALL3_V19A_P2_CONSENSUS_SCHEDULE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v19a-p2-consensus-schedule
+          path: artifacts/v19a/*.json
+          retention-days: 30
+          if-no-files-found: warn
