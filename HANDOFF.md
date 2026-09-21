@@ -1,5 +1,98 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V24B COMPACT CLOSED / V25A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V24A — COMPLETE
+
+Workflow: `35641081142`.  
+Decision: **`V24A_COMPACT_COUPLED_EVENT_FAMILY_FOUND`**.
+
+Selected family:
+**`M_TO_P|hands|2`**.
+
+Properties:
+- 63/63 interaction-exclusive contexts;
+- 9 SHAs;
+- 6 functional clusters;
+- 4 seeds;
+- median start turn 0;
+- median end turn 2;
+- 19 recurrent families passed the frozen recurrence gate.
+
+Result document:
+`docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_RESULT_2026-09-21.md`
+(commit `f4f9a4885dff7af97ad9667ac14f461ad36bad59`).
+
+### V24B — CLOSED / NOT DISTILLABLE COMPACTLY
+
+Binding identifiability audit workflow:
+`35645479016`.
+
+Decision:
+**`V24B_NOT_DISTILLABLE_COMPACTLY`**.
+
+R1:
+- train occurrences: 21;
+- best single signature train coverage: **66.67%** < frozen 70%;
+- holdout coverage of that training-dominant signature: **0%**.
+
+R2:
+- selected family present in **93/93 hard contexts**;
+- valid negative start states: **0**;
+- unique legal turn-0 state keys: **1**;
+- conflicting legal-state keys: **1**.
+
+Therefore the same exact legal runtime state maps to two different teacher market labels. The missing discriminator is opponent/source identity, which is forbidden.
+
+Result document:
+`docs/strategy/ALL3_V24B_INTERACTION_MECHANISM_DISTILLATION_RESULT_2026-09-21.md`
+(commit `db0b15c60145ab8c282885b0c6af35a208967f02`).
+
+Compact <=2-turn interaction controller search is closed. No V24C is opened.
+
+### V25A — ACTIVE / SHADOW PREFIX STATE-BASIN HORIZON
+
+Protocol:
+`docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_PROTOCOL_2026-09-21.md`
+(commit `fa63ba0a1850aeabfe73bfa2edcdc108ddab2ac5`).
+
+Binding workflow:
+**`35645830010`**.  
+Launch commit:
+`641f28a3c836c8248f1ea42b9d60b3acebfb1faa`.
+
+Frozen horizons:
+`[0,4,8,16,32,64,128,256,720]`.
+
+Population:
+- all 93 V23 hard contexts;
+- same immutable V23A snapshot;
+- H=0 must reproduce exact V23B BASE;
+- H=720 must reproduce exact V23B FULL_SHADOW.
+
+Finite-horizon gate:
+- >=4 score improvements;
+- >=2 source SHAs;
+- >=2 functional clusters;
+- >=2 seeds;
+- mean score delta >0;
+- regressions <= improvements/2.
+
+Selector:
+- smallest finite H that passes.
+
+Decision routing:
+- H<=32 => EARLY_STATE_BASIN_HEADROOM;
+- H in 64/128/256 => LONG_STATE_BASIN_HEADROOM;
+- no finite pass but H720 pass => PERSISTENT_POLICY_REQUIRED.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35645830010`.
+
+
 ## Binding update — 2026-09-21 — V23B CROSS-DOMAIN HEADROOM / V24A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
