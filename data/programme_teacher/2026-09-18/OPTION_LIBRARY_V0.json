@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V26B workflow 35660845547 autonomously; if consensus passes, distill one identity-free persistent policy; if not, close current teacher-bank imitation and reassess competition strategy/new learning architecture; no Kaggle submission",
+  "next_stage": "resolve V27A workflow 35665757174 autonomously; if Markov viable, train state-only behavioral distillation; if history-required, freeze one legal-history representation; if too stateful, close fast teacher distillation and move to final-slot strategy; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2228,24 +2228,62 @@
     "snapshot_digest": "sha256:69f6407c34155af19671963c1ce107fab45926283098b422790cd1d86117ed43"
   },
   "v26b": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35660845547,
-    "launch_commit": "356349db5a70763cafa722a0231b07bafc6e8ff8",
-    "protocol": "docs/strategy/V26B_TEACHER_DERIVED_PERSISTENT_POLICY_VIABILITY_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "d48bbea1158dab464b343589cfb27be3ee524487",
-    "treatment": "persistent modal complete-action consensus of all 12 immutable snapshot teachers",
+    "decision": "V26B_NO_SOURCE_AGNOSTIC_POLICY_HEADROOM",
+    "artifact_id": 10667886918,
+    "artifact_digest": "sha256:c47ebfcb406f6077165a0b1779ede2a2060a283f9476d79129feb36e2207132e",
+    "contexts": 144,
+    "control_score_rate": 0.3472222222222222,
+    "treatment_score_rate": 0.1527777777777778,
+    "mean_score_delta": -0.19444444444444445,
+    "mean_margin_delta": -2131.0833333333335,
+    "positive_score_contexts": 2,
+    "negative_score_contexts": 30,
+    "control_win_to_treatment_nonwin": 30,
+    "positive_source_count": 1,
+    "positive_seed_count": 1,
+    "positive_functional_cluster_count": 1,
+    "mean_modal_support": 9.9254365631278,
+    "result_document": "docs/strategy/V26B_PERSISTENT_TEACHER_CONSENSUS_RESULT_2026-09-21.md"
+  },
+  "v27a": {
+    "status": "ACTIVE",
+    "workflow": 35665757174,
+    "launch_commit": "6538f221f5fa6c7f7cbbc42cca797e3d23584461",
+    "protocol": "docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "5045ddb827b03cd0e66bd102d3756581da47700e",
+    "teacher_ref": "ahmedberatozer/kaggriculture-v56-smarter-seeds-and-fertilizer",
+    "teacher_sha": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
+    "opponents": 12,
     "seeds": [
-      79601,
-      79602,
-      79603,
-      79604,
-      79605,
-      79606
+      79701,
+      79702,
+      79703
     ],
     "seats": [
       0,
       1
     ],
+    "checkpoints": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      384,
+      512,
+      640,
+      718
+    ],
+    "expected_episodes": 72,
+    "expected_comparisons": 1080,
     "automatic_kaggle_submission": false
   }
 }
