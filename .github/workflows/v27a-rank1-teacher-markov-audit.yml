@@ -1,0 +1,84 @@
+name: v27a-rank1-teacher-markov-audit
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v27a-rank1-teacher-markov-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install complete pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35653189539
+          name: v26a-frontier-immutable-snapshot
+          path: artifacts/v26a-snapshot
+      - name: Run V27A shard
+        run: |
+          mkdir -p artifacts/v27a
+          python tools/v27a_rank1_markov_audit_shard.py \
+            --snapshot-dir artifacts/v26a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v27a/V27A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v27a-shard-${{ matrix.shard_index }}
+          path: artifacts/v27a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v27a-shard-*
+          path: artifacts/v27a-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35653189539
+          name: v26a-frontier-snapshot-result
+          path: artifacts/v26a-snapshot-result
+      - name: Aggregate V27A
+        run: |
+          mkdir -p artifacts/v27a-final
+          python tools/aggregate_v27a_rank1_markov_audit.py \
+            --input-dir artifacts/v27a-shards \
+            --snapshot-result artifacts/v26a-snapshot-result/V26A_SNAPSHOT_RESULT.json \
+            --out artifacts/v27a-final/V27A_RANK1_MARKOV_RECONSTRUCTIBILITY.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v27a-rank1-markov-reconstructibility
+          path: artifacts/v27a-final/*.json
+          retention-days: 30
+          if-no-files-found: error
