@@ -57,6 +57,15 @@ jobs:
             --hard-config configs/all3_v22b_hard_contexts.json \
             --out artifacts/v22b-final/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND.json
 
+      - name: Route completed V22B
+        if: steps.merge_rows.outcome == 'success'
+        run: |
+          mkdir -p artifacts/v22b-route
+          python tools/route_v22b_outcome.py \
+            --aggregate artifacts/v22b-final/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND.json \
+            --cluster-map configs/all3_v22b_functional_clusters.json \
+            --out artifacts/v22b-route/ALL3_V22B_OUTCOME_ROUTE.json
+
       - name: Upload merge status
         if: always()
         uses: actions/upload-artifact@v4
@@ -72,6 +81,15 @@ jobs:
         with:
           name: all3-v22b-fresh-frontier-domain-upper-bound-merged
           path: artifacts/v22b-final/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Upload routed outcome
+        if: steps.merge_rows.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: all3-v22b-outcome-route
+          path: artifacts/v22b-route/*.json
           retention-days: 30
           if-no-files-found: error
 
