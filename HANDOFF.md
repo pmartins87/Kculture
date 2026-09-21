@@ -36,8 +36,9 @@ Binding stop rule:
 
 ### V22A — ACTIVE / FRESH CURRENT-FRONTIER REFRESH
 
-Workflow: **`35560761804`**.  
-Launch commit: `b57a5aa37249e9629233b7f11fe300ffc267cb94`.
+Binding workflow: **`35562142399`**.  
+Binding relaunch commit: `2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f`.  
+Original workflow `35560761804` is **NON-BINDING** due the pre-outcome mechanical gate defect documented in `docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md`.
 
 Purpose:
 - refresh the current public Kaggriculture Top-30;
@@ -67,7 +68,7 @@ Dormant V22B protocol:
 
 No Kaggle submission is currently authorized.
 
-**Binding immediate action:** resolve workflow `35560761804`.
+**Binding immediate action:** resolve corrected workflow `35562142399`.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
