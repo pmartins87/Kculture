@@ -85,6 +85,9 @@ Decision space:
 Protocol:
 `docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md`.
 
+Functional-diversity interpretation rule:
+`docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md`.
+
 If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-option mining and perform the pre-registered architectural reset / competition-strategy reassessment.
 
 No Kaggle submission is currently authorized.
