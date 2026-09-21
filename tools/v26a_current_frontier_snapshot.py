@@ -106,6 +106,14 @@ def main():
                 acquisitions.append(rec);unavailable.append(rec)
                 print("V26A_UNAVAILABLE",json.dumps(rec,sort_keys=True),flush=True)
 
+        # Freeze exact V47 base in the same immutable snapshot.
+        base_main,base_sha,base_receipt=acquire_retry(BASE["handle"],tmp/"v47_base")
+        if base_sha!=BASE["expected_main_sha256"]:
+            raise RuntimeError(f"V47 base SHA drift {base_sha} != {BASE['expected_main_sha256']}")
+        base_snap=snapshot_package(base_main,snaproot/"base")
+        if sha256_bytes(base_snap.read_bytes())!=BASE["expected_main_sha256"]:
+            raise RuntimeError("V47 base snapshot SHA mismatch")
+
         for sha,meta in sorted(by_sha.items(),key=lambda kv:min(kv[1]["ranks"])):
             smokes=[]
             for seat in (0,1):
@@ -131,10 +139,10 @@ def main():
             if got!=rep["main_sha256"]:raise RuntimeError(f"snapshot SHA mismatch {got} != {rep['main_sha256']}")
             manifest_sources.append({"sha":got,"representative_rank":rep["representative_rank"],"representative_ref":rep["representative_ref"],"path":f"sources/{got}/main.py"})
 
-        manifest={"schema":"kculture-v26a-current-frontier-snapshot-v1","sources":manifest_sources}
+        manifest={"schema":"kculture-v26a-current-frontier-snapshot-v1","base":{"ref":BASE["handle"],"sha":BASE["expected_main_sha256"],"path":"base/main.py","receipt":base_receipt},"sources":manifest_sources}
         (snaproot/"MANIFEST.json").write_text(json.dumps(manifest,indent=2,sort_keys=True)+"\n")
 
-    mechanical_pass=(len(refs)==TOP_N and len(selected)>=MIN_REPS and len(manifest_sources)==len(selected) and all(x["smoke_pass_both_seats"] for x in selected))
+    mechanical_pass=(len(refs)==TOP_N and len(selected)>=MIN_REPS and len(manifest_sources)==len(selected) and (snaproot/"base/main.py").exists() and all(x["smoke_pass_both_seats"] for x in selected))
     decision="V26A_FRONTIER_SNAPSHOT_READY" if mechanical_pass else "V26A_FRONTIER_SNAPSHOT_INVALID"
     result={"schema":"kculture-v26a-frontier-snapshot-result-v1","decision":decision,"mechanical_pass":mechanical_pass,"top30_refs":refs,"acquisitions":acquisitions,"unavailable_refs":unavailable,"unique_sources":len(unique_rows),"selected_representatives":selected,"selected_representative_count":len(selected),"smoke_failures":smoke_failures,"snapshot_manifest":"MANIFEST.json","automatic_kaggle_submission":False}
     outp.write_text(json.dumps(result,indent=2,sort_keys=True)+"\n")
