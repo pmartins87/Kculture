@@ -7,6 +7,73 @@
 ### V20A — COMPLETE / CLOSED
 
 Workflow: **`35557692905`**.
+Decision: **`V20A_GATE_NOT_TRAINABLE`**.
+
+Mechanical:
+- 5/5 shards PASS; 120/120 paired contexts; failures 0;
+- changed-market coverage 120/120;
+- exact V19A schedule SHA PASS.
+
+Frozen training gate:
+- seeds 78711..78714 = 80 contexts;
+- positive W/L labels: **0**; non-positive: **80**;
+- positive seed support: **0**;
+- no classifier was fit or tuned.
+
+Across all 120 discovery contexts:
+- positive score contexts: **0**;
+- negative score contexts: **0**;
+- mean score delta: **0.0**;
+- mean margin delta: **-742.75**.
+
+Result: `docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md`.
+
+V20B / O-TM2 is BLOCKED and remains archival/dormant. Do not tune V20A post hoc. Do not submit O-TM1/O-TM2.
+
+### V21A — ACTIVE / PRE-REGISTERED
+
+Causal semantic decomposition of the 102-turn V19A P2 schedule.
+
+Frozen categories:
+- EMPTY 40;
+- SELL_PRESENT 33;
+- BUY_ONLY 22;
+- HIRE_PRESENT 7.
+
+Population:
+- already-consumed seeds 78711..78716;
+- same 10 exact source SHAs;
+- both seats;
+- 120 contexts;
+- no new validation seed consumed.
+
+Modes:
+BASE, FULL, four single-category modes and four FULL-minus-one-category modes.
+
+Hard binding:
+- BASE must reproduce all 120 V20A BASE score+margin rows exactly;
+- FULL must reproduce all 120 V20A treatment score+margin rows exactly;
+- only W/L headroom with zero score regressions may select a candidate;
+- margin-only cannot pass.
+
+V21B fresh seeds are already frozen: `78901..78904`.
+
+Protocols:
+- `docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md`;
+- `docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md`.
+
+No Kaggle submission.
+
+**Binding immediate action:** launch and resolve V21A semantic decomposition.
+
+
+## Binding update — 2026-09-21 — V20A NOT TRAINABLE / V21A SEMANTIC DECOMPOSITION ACTIVE
+
+**This block supersedes lower stale V20/V21 current-action sections.**
+
+### V20A — COMPLETE / CLOSED
+
+Workflow: **`35557692905`**.
 
 Decision:
 **`V20A_GATE_NOT_TRAINABLE`**.
