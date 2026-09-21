@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V23B fallback workflow 35632311093 using exact V23A binding snapshot/config; no Kaggle submission",
+  "next_stage": "resolve V24A workflow 35641081142; if one recurrent coupled event family is selected, distill at most one identity-free interaction mechanism, then fresh causal validation; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2059,6 +2059,86 @@
       "missing": 0,
       "sha_mismatches": 0,
       "verified": true
+    },
+    "v23b": {
+      "status": "COMPLETE_VALID",
+      "workflow": 35632311093,
+      "aggregate_job": 106449044810,
+      "artifact_id": 10656170070,
+      "artifact_digest": "sha256:6d626768832cd29029094bc8d4f129e6f78acece250fa39a67ed51530520509f",
+      "mechanical_pass": true,
+      "hard_contexts": 93,
+      "rows": 372,
+      "failures": 0,
+      "decision": "V23B_CROSS_DOMAIN_INTERACTION_HEADROOM",
+      "route": "ARCHITECTURAL_INTERACTION_RESET",
+      "market_only": {
+        "improved_contexts": 18,
+        "improved_sources": 9,
+        "improved_functional_clusters": 6,
+        "improved_seeds": [
+          79301
+        ],
+        "pass": false,
+        "mean_score_delta": 0.1935483870967742,
+        "mean_margin_delta": -12503.537634408602
+      },
+      "physical_only": {
+        "improved_contexts": 0,
+        "improved_sources": 0,
+        "improved_seeds": [],
+        "pass": false,
+        "mean_score_delta": 0,
+        "mean_margin_delta": -4181.956989247312
+      },
+      "full_shadow": {
+        "improved_contexts": 81,
+        "improved_sources": 9,
+        "improved_seeds": [
+          79301,
+          79302,
+          79304,
+          79305,
+          79306
+        ],
+        "pass": true,
+        "mean_score_delta": 0.4838709677419355,
+        "mean_margin_delta": 3246.3225806451615
+      },
+      "interaction_exclusive": {
+        "contexts": 63,
+        "source_shas": 9,
+        "functional_clusters": 6,
+        "seeds": [
+          79302,
+          79304,
+          79305,
+          79306
+        ]
+      },
+      "result_document": "docs/strategy/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND_RESULT_2026-09-21.md"
     }
+  },
+  "v24a": {
+    "status": "ACTIVE",
+    "workflow": 35641081142,
+    "launch_commit": "d8cc5085b483da43a902f1751d08b1e97de9492c",
+    "protocol": "docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "130f15c1b810e8c296926be9c8d2ce1bceed2f12",
+    "hard_contexts": 93,
+    "interaction_exclusive_contexts": 63,
+    "topologies": [
+      "SAME",
+      "M_TO_P",
+      "P_TO_M"
+    ],
+    "max_compact_lag": 3,
+    "recurrence_gate": {
+      "contexts": 4,
+      "source_shas": 2,
+      "functional_clusters": 2,
+      "seeds": 2
+    },
+    "automatic_kaggle_submission": false
   }
 }
