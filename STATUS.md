@@ -1,5 +1,82 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-21 — V23B CROSS-DOMAIN HEADROOM / V24A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V23B — COMPLETE / VALID
+
+Binding workflow: **`35632311093`**.  
+Aggregate job: `106449044810`.  
+Final artifact: `10656170070`.  
+Digest: `sha256:6d626768832cd29029094bc8d4f129e6f78acece250fa39a67ed51530520509f`.
+
+Mechanical:
+- 4/4 shards PASS;
+- 93 hard contexts;
+- 372/372 rows;
+- 0 failures;
+- immutable V23A snapshot only;
+- no live Kaggle source reacquisition.
+
+Decision:
+**`V23B_CROSS_DOMAIN_INTERACTION_HEADROOM`**.
+
+Frozen route:
+**`ARCHITECTURAL_INTERACTION_RESET`**.
+
+Domain evidence:
+- MARKET_ONLY: 18/93 score improvements, 9 SHAs, 6 functional clusters, but only seed `79301`; frozen >=2-seed gate FAIL;
+- PHYSICAL_ONLY: 0/93 score improvements; FAIL;
+- FULL_SHADOW: 81/93 score improvements, 9 SHAs, all 5 hard seeds; mean score delta +0.4838709677; mean margin delta +3246.3226; interaction ceiling PASS;
+- **63/93** contexts improve under FULL_SHADOW while neither one-domain treatment improves; these span 9 SHAs, 6 clusters, and 4 seeds.
+
+Result document:
+`docs/strategy/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND_RESULT_2026-09-21.md`
+(commit `b6b3d9c67a3050c334a1bb9a756a34a3f9b611e7`).
+
+No MARKET-only or PHYSICAL-only option may be opened from V23B.
+
+### V24A — ACTIVE / COUPLED DIVERGENCE TRACE
+
+Protocol:
+`docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_PROTOCOL_2026-09-21.md`
+(commit `130f15c1b810e8c296926be9c8d2ce1bceed2f12`).
+
+Binding workflow:
+**`35641081142`**.  
+Launch commit: `d8cc5085b483da43a902f1751d08b1e97de9492c`.
+
+Population:
+- all 93 exact V23 hard contexts;
+- same immutable V23A snapshot;
+- exact V23B FULL_SHADOW replay required per context;
+- no Kaggle source reacquisition.
+
+Frozen eligible coupling topologies:
+- SAME market+physical divergence;
+- market-only -> physical within 1..3 turns;
+- physical-only -> market within 1..3 turns.
+
+Family key:
+`(topology, physical_kind, lag)`.
+
+Recurrence gate within the 63 interaction-exclusive contexts:
+- >=4 contexts;
+- >=2 source SHAs;
+- >=2 functional clusters;
+- >=2 seeds.
+
+Frozen selector picks exactly one earliest recurrent family by:
+median end step -> clusters -> SHAs -> seeds -> contexts -> lag -> lexical.
+
+V24A is discovery only. Any selected family must still be distilled into one identity-free controller and pass untouched fresh causal validation before any hosted candidate.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35641081142`.
+
+
 ## Binding update — 2026-09-21 — V22B CLOSED INCONCLUSIVE / V23 IMMUTABLE SNAPSHOT ACTIVE
 
 **This block supersedes lower stale V22/V23 current-action sections.**
