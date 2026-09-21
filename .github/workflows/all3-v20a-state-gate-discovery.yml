@@ -1,0 +1,89 @@
+name: all3-v20a-state-gate-discovery
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v20a-state-gate-discovery.yml'
+      - 'tools/all3_v20a_state_gate_discovery_shard.py'
+      - 'tools/aggregate_all3_v20a_state_gate.py'
+      - 'docs/strategy/ALL3_V20A_STATE_GATE_PROTOCOL_2026-09-21.md'
+      - 'configs/all3_v20a_state_gate_discovery.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3,4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download binding V19A schedule
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v19a-p2-consensus-schedule
+          path: artifacts/v19a-binding
+          run-id: 35552885627
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: |
+          python -m py_compile tools/all3_v20a_state_gate_discovery_shard.py
+          python -m py_compile tools/aggregate_all3_v20a_state_gate.py
+      - name: Run V20A discovery shard
+        run: |
+          mkdir -p artifacts/v20a
+          python tools/all3_v20a_state_gate_discovery_shard.py             --config configs/all3_v20a_state_gate_discovery.json             --schedule artifacts/v19a-binding/ALL3_V19A_P2_CONSENSUS_SCHEDULE.json             --shard-index ${{ matrix.shard_index }}             --num-shards 5             --out artifacts/v20a/V20A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v20a-shard-${{ matrix.shard_index }}
+          path: artifacts/v20a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install trainer runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install numpy scikit-learn
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v20a-shard-*
+          path: artifacts/v20a-shards
+          merge-multiple: false
+      - name: Train and holdout-gate V20A
+        run: |
+          mkdir -p artifacts/v20a-aggregate
+          python tools/aggregate_all3_v20a_state_gate.py             --input-dir artifacts/v20a-shards             --config configs/all3_v20a_state_gate_discovery.json             --out artifacts/v20a-aggregate/ALL3_V20A_STATE_GATE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v20a-state-gate
+          path: artifacts/v20a-aggregate/*.json
+          retention-days: 30
+          if-no-files-found: warn
