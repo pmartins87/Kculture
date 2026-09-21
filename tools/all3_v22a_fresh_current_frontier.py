@@ -400,6 +400,8 @@ def main():
     mechanical_pass = (
         len(refs) == TOP_N
         and base_main is not None
+        and not acquisition_failures
+        and not smoke_failures
         and len(selected) >= MIN_REPS
         and expected >= 96
         and len(rows) == expected
