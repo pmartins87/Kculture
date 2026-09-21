@@ -32,7 +32,7 @@ from tools.first_party_option_host_v1 import OptionHostState, apply_option_host
 MODES = ("BASE", "MARKET_ONLY", "PHYSICAL_ONLY", "FULL_SHADOW")
 
 
-def acquire_exact(ref, expected, tmp, attempts=5):
+def acquire_exact(ref, expected, tmp, attempts=8):
     last = None
     for i in range(attempts):
         try:
@@ -44,7 +44,9 @@ def acquire_exact(ref, expected, tmp, attempts=5):
         except Exception as exc:
             last = exc
             if i + 1 < attempts:
-                time.sleep(1.5 * (i + 1))
+                # Mechanical retry hardening for transient Kaggle HTTP 429 only.
+                # Does not alter source identity, context population, modes, or gate.
+                time.sleep(min(60.0, 5.0 * (2 ** i)))
     raise last
 
 
