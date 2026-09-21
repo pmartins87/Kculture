@@ -88,6 +88,9 @@ Protocol:
 Functional-diversity interpretation rule:
 `docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md`.
 
+Frozen functional-cluster map:
+`configs/all3_v22b_functional_clusters.json` (commit `04be152448ef4f6b882530f2df93e6e4453391a9`).
+
 Outcome router / architectural-reset protocol:
 `docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md`.
 
