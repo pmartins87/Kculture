@@ -54,8 +54,11 @@ Per the frozen V26B protocol:
 The next solver work, if any, must use a genuinely different learning/search architecture.
 
 Current hosted preservation facts:
-- strongest exact project-hosted anchor remains CR053_REAL, submission `56073870`, historical checkpoint ~2064.8;
-- current preserved hosted pair remains O-RW1 `56336027` and ALL3 `56367770` until a deliberate final-slot decision.
+- CR053_REAL submission `56073870` is a **legacy historical anchor** (~2064.8), not the strongest current hosted result;
+- latest observed ALL3 snapshot: submission `56367770`, rating **2412.1**;
+- latest observed O-RW1 snapshot: submission `56336027`, rating **2361.6**;
+- rating histories differ, so these values are not a causal A/B estimate;
+- nevertheless the current preserved pair is O-RW1 + ALL3, and **ALL3 is the protected final-slot fallback** unless a later candidate passes all promotion gates.
 
 Next research block:
 **V27A — rank-1 teacher statefulness / Markov reconstructibility audit.**
