@@ -62,6 +62,9 @@ Decision gate:
 Pre-registered branch:
 `docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md`.
 
+Dormant V22B protocol:
+`docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md`.
+
 No Kaggle submission is currently authorized.
 
 **Binding immediate action:** resolve workflow `35560761804`.
