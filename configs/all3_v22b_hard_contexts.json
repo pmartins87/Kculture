@@ -1,0 +1,1122 @@
+{
+  "schema": "kculture-all3-v22b-hard-context-config-v1",
+  "source_v22a_workflow": 35562142399,
+  "source_v22a_job": 106216902367,
+  "source_v22a_artifact_id": 10623710178,
+  "source_v22a_artifact_digest": "sha256:56c2ee63e78c7e3389687ec5ece3a815a9bc190f41e731f4084324e5acf343f3",
+  "source_v22a_launch_commit": "2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f",
+  "source_v22a_decision": "V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
+  "source_v22a_expected_games": 144,
+  "source_v22a_completed_games": 144,
+  "source_v22a_selected_representatives": [
+    {
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181"
+    },
+    {
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+    },
+    {
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970"
+    },
+    {
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555"
+    },
+    {
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+    },
+    {
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef"
+    },
+    {
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d"
+    },
+    {
+      "rank": 13,
+      "ref": "ahmedberatozer/kaggriculture-v38-smarter-feed-stronger-margins",
+      "main_sha256": "a2047ebd8ca5720221e1421529655d9c67a7b2fedb74e874c7d3c55a8970ac7e"
+    },
+    {
+      "rank": 14,
+      "ref": "ahmedberatozer/kaggriculture-v39-ready-before-the-rush",
+      "main_sha256": "708c7485fa964853b193f175dcd83020602c005e159ce82e38dc350b22e970c8"
+    },
+    {
+      "rank": 15,
+      "ref": "ahmedberatozer/kaggriculture-v34-observed-market-timing",
+      "main_sha256": "58f3cbf957c267b464ec0bcfdc9ba7940f708e6ae77c7219b09f07a00a083869"
+    },
+    {
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e"
+    },
+    {
+      "rank": 17,
+      "ref": "ahmedberatozer/kaggriculture-v41-review-candidate",
+      "main_sha256": "8951ff93742015cba535b125223cf2e541bb7b602080fc4584f30c2613d210f3"
+    }
+  ],
+  "frozen_discovery_seeds": [
+    79101,
+    79102,
+    79103,
+    79104,
+    79105,
+    79106
+  ],
+  "frozen_seats": [
+    0,
+    1
+  ],
+  "hard_context_count": 92,
+  "hard_source_shas": [
+    "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+    "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+    "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+    "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+    "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+    "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+    "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+    "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+  ],
+  "hard_seeds": [
+    79101,
+    79102,
+    79103,
+    79104,
+    79105,
+    79106
+  ],
+  "hard_contexts": [
+    {
+      "context_id": "v22a_hard_000",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_001",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_002",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_003",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_004",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3889,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_005",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3729,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_006",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_007",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_008",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_009",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_010",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_011",
+      "rank": 1,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_012",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_013",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_014",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_015",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_016",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3889,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_017",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3729,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_018",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_019",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_020",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_021",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_022",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_023",
+      "rank": 2,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_024",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3107,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_025",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3107,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_026",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2015,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_027",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2015,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_028",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3920,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_029",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3760,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_030",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -7412,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_031",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -7412,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_032",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -165,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_033",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -165,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_034",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1465,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_035",
+      "rank": 4,
+      "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+      "main_sha256": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1465,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_036",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2078,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_037",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2078,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_038",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1537,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_039",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1537,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_040",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -4572,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_041",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2211,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_042",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -5534,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_043",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -5534,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_044",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -323,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_045",
+      "rank": 5,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -323,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_046",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2996,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_047",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2996,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_048",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1934,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_049",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1934,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_050",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3841,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_051",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3681,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_052",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -7202,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_053",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -7202,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_054",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -78,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_055",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -78,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_056",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1385,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_057",
+      "rank": 7,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1385,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_058",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_059",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3061,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_060",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_061",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1984,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_062",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3889,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_063",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3729,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_064",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_065",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -7285,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_066",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_067",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -132,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_068",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_069",
+      "rank": 11,
+      "ref": "romantamrazov/kaggriculture-yummers",
+      "main_sha256": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1436,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_070",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2078,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_071",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2078,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_072",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -1537,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_073",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -1537,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_074",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -4572,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_075",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2215,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_076",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -5534,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_077",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -5534,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_078",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -323,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_079",
+      "rank": 12,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -323,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_080",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79101,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -3154,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_081",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79101,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -3154,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_082",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79102,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2365,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_083",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79102,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2365,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_084",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79103,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -4517,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_085",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79103,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2502,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_086",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79104,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -5464,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_087",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79104,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -5464,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_088",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79105,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -702,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_089",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79105,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -702,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_090",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79106,
+      "seat": 0,
+      "base_score": 0,
+      "base_margin": -2308,
+      "base_result": "L"
+    },
+    {
+      "context_id": "v22a_hard_091",
+      "rank": 16,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e",
+      "seed": 79106,
+      "seat": 1,
+      "base_score": 0,
+      "base_margin": -2308,
+      "base_result": "L"
+    }
+  ],
+  "selection_rule": "all and only binding V22A rows with score < 1.0",
+  "source_rows_reconstructed_from_binding_job_log": true,
+  "manual_context_selection_allowed": false,
+  "automatic_kaggle_submission": false
+}
