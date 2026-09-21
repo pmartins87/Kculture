@@ -70,6 +70,71 @@ No Kaggle submission is authorized.
 **Binding immediate action:** resolve workflow `35627972979`.
 
 
+
+### V23A binding result
+
+Workflow `35627972979` / discover job `106426918864`:
+
+- decision: **`V23A_IMMUTABLE_HARD_POPULATION_READY`**;
+- 144/144 discovery games complete;
+- 0 episode failures;
+- 0 unavailable refs among selected set;
+- 12 selected executable representatives;
+- **93 hard contexts**;
+- **12 hard source SHAs**;
+- **5 hard seeds**;
+- immutable snapshot artifact ID `10655240502`;
+- immutable snapshot digest `sha256:12a6f45ebd3ed44c3d9b57d49b6a53d77514dccf48d8cddff17cb2c829c99054`;
+- V23A result artifact ID `10655010811`;
+- V23 config artifact ID `10654531145`;
+- materialized functional clusters: **9**.
+
+Hard-source counts:
+- rank 1: 10;
+- rank 2: 10;
+- rank 4: 10;
+- rank 5: 10;
+- rank 6: 10;
+- rank 7: 10;
+- rank 9: 10;
+- rank 10: 10;
+- rank 11: 1;
+- rank 12: 1;
+- rank 13: 10;
+- rank 14: 1.
+
+Observed V23A functional clusters:
+- F01: rank 1;
+- F02: ranks 2 + 9;
+- F03: rank 4;
+- F04: ranks 5 + 6 + 10;
+- F05: rank 7;
+- F06: rank 11;
+- F07: rank 12;
+- F08: rank 13;
+- F09: rank 14.
+
+### V23B mechanical rebind
+
+The integrated V23B jobs in workflow `35627972979` failed before treatment execution because the runtime omitted `kagglehub` (`ModuleNotFoundError`).
+
+This does **not** invalidate V23A or its immutable artifacts.
+
+Fallback workflow, frozen before activation:
+`docs/strategy/templates/V23B_FROM_BINDING_V23A_SNAPSHOT_WORKFLOW.yml`
+(commit `71d28401f0eeef95788f3cee764a0095389cdf9f`).
+
+Active corrected V23B binding workflow:
+**`35632311093`**.
+
+It reuses exactly:
+- V23A snapshot from workflow `35627972979`;
+- V23 hard config / cluster map from workflow `35627972979`;
+- no live Kaggle source reacquisition.
+
+**Binding immediate action:** resolve V23B workflow `35632311093`.
+
+
 ## Binding update — 2026-09-21 — V22A READY / V22B DOMAIN UPPER BOUND ACTIVE
 
 **This block supersedes lower stale V20/V21/V22 current-action sections.**
