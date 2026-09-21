@@ -127,6 +127,8 @@ Fallback workflow, frozen before activation:
 Active corrected V23B binding workflow:
 **`35632311093`**.
 
+Independent snapshot audit: **13/13 `main.py` files (V47 base + 12 selected sources) match the exact SHAs in `MANIFEST.json`; 0 missing, 0 mismatches.**
+
 It reuses exactly:
 - V23A snapshot from workflow `35627972979`;
 - V23 hard config / cluster map from workflow `35627972979`;
