@@ -1,5 +1,75 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V22B CLOSED INCONCLUSIVE / V23 IMMUTABLE SNAPSHOT ACTIVE
+
+**This block supersedes lower stale V22/V23 current-action sections.**
+
+### V22B — CLOSED / EXACT ROUTING INCONCLUSIVE
+
+Closure:
+**`V22B_EXACT_ROUTING_INCONCLUSIVE_SOURCE_UNAVAILABLE`**.
+
+Exact evidence:
+- 356/368 exact keys;
+- 89/92 exact contexts;
+- 0 cross-attempt conflicts;
+- only rank-11 frozen SHA `254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef` remained unavailable.
+
+Historical recovery workflow `35624010734` failed: versions 1..60 returned HTTP 403.
+
+Current-source sensitivity workflow `35624589618` was REJECTED:
+- `base_replay_pass=false`;
+- context 059: -3136 current vs -3061 frozen;
+- context 063: -3789 current vs -3729 frozen;
+- context 067: -194 current vs -132 frozen;
+- 0 admissible treatment rows.
+
+Closure document:
+`docs/strategy/ALL3_V22B_SOURCE_UNAVAILABLE_CLOSE_2026-09-21.md`.
+
+No V22B strategic decision or option promotion is valid.
+
+### V23 — ACTIVE / IMMUTABLE SNAPSHOT FRONTIER
+
+Binding workflow: **`35627972979`**.  
+Launch commit: `ce1bd5abbb01926c073aafa69f7950be687db5d7`.
+
+Protocol:
+`docs/strategy/ALL3_V23_IMMUTABLE_SNAPSHOT_FRONTIER_PROTOCOL_2026-09-21.md`
+(commit `fdfa1b672742a51ffc46e737a0977de29f8923ff`).
+
+Fresh seeds:
+- smoke: `79300`;
+- discovery: `79301..79306`;
+- seats: 0/1.
+
+V23A:
+- query current Top-30 once;
+- unavailable non-selected refs are recorded but do not mechanically invalidate the run;
+- select up to 12 unique executable SHAs by rank only, minimum 8;
+- snapshot exact selected package bytes plus exact V47 base;
+- run ALL3 discovery from the immutable snapshot;
+- READY gate remains >=12 hard contexts, >=4 hard SHAs, >=3 seeds.
+
+V23B, only if V23A READY:
+- uses all and only V23A hard rows;
+- loads teacher/opponent source only from immutable snapshot artifact;
+- performs no live Kaggle source reacquisition;
+- modes and domain-pass thresholds are unchanged from V22B;
+- deterministic routing remains frozen.
+
+Implementation:
+- `tools/all3_v23a_immutable_frontier.py` — `e8560288a681648baaa649dc88307d307c2bd5a7`;
+- `tools/materialize_v23b_hard_config_and_clusters.py` — `bda0dfa92216b2de4d9dd344d0cb8ca631964b11`;
+- `tools/all3_v23b_immutable_snapshot_shard.py` — `b5be592471be003566e19b147dcade0cdb47f99e`;
+- `tools/aggregate_all3_v23b_immutable_snapshot.py` — `bd9a6a5d7bb4cfbea7c92861183656485097823b`;
+- `tools/route_v23b_outcome.py` — `f5619c257b44eff1d765674a3fcdbc8ecfeb626f`.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35627972979`.
+
+
 ## Binding update — 2026-09-21 — V22A READY / V22B DOMAIN UPPER BOUND ACTIVE
 
 **This block supersedes lower stale V20/V21/V22 current-action sections.**
