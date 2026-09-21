@@ -1872,7 +1872,9 @@
     "nonbinding_workflow": 35560761804,
     "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md",
     "strict_zero_acquisition_failures": true,
-    "strict_zero_smoke_failures": true
+    "strict_zero_smoke_failures": true,
+    "mechanical_completion_protocol": "docs/strategy/ALL3_V22A_MECHANICAL_COMPLETION_PROTOCOL_2026-09-21.md",
+    "on_mechanics_invalid": "freeze exact binding Top-30/ref/SHA population and repair missing mechanics only; do not re-query frontier"
   },
   "v22b": {
     "status": "DORMANT_PRE_REGISTERED",
