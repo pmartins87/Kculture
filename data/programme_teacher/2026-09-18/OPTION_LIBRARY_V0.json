@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve corrected V22A workflow 35562142399; ignore non-binding 35560761804; READY activates only pre-registered V22B",
+  "next_stage": "resolve V22B workflow 35566168354; MARKET/PHYSICAL headroom opens at most one new mechanism family in passing domain; no domain headroom triggers architectural reset; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1847,10 +1847,21 @@
     "result_document": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md"
   },
   "v22a": {
-    "status": "ACTIVE_CORRECTED_BINDING",
+    "status": "COMPLETE_READY",
     "workflow": 35562142399,
     "launch_commit": "2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f",
-    "seeds": [
+    "decision": "V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
+    "artifact_id": 10623710178,
+    "artifact_digest": "sha256:56c2ee63e78c7e3389687ec5ece3a815a9bc190f41e731f4084324e5acf343f3",
+    "selected_representatives": 12,
+    "expected_games": 144,
+    "completed_games": 144,
+    "acquisition_failures": 0,
+    "smoke_failures": 0,
+    "episode_failures": 0,
+    "hard_contexts": 92,
+    "hard_source_shas": 8,
+    "hard_seeds": [
       79101,
       79102,
       79103,
@@ -1858,34 +1869,24 @@
       79105,
       79106
     ],
-    "seats": [
-      0,
-      1
-    ],
-    "max_unique_frontier_sources": 12,
-    "min_unique_frontier_sources": 8,
-    "ready_min_valid_contexts": 96,
-    "ready_min_nonwins": 12,
-    "ready_min_nonwin_source_shas": 4,
-    "ready_min_nonwin_seeds": 3,
-    "protocol": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
+    "hard_config": "configs/all3_v22b_hard_contexts.json",
+    "hard_config_commit": "5c6058ed4fcc267242f0b654f06bd669fec1849b",
+    "result_document": "docs/strategy/ALL3_V22A_FRESH_CURRENT_FRONTIER_RESULT_2026-09-21.md",
     "nonbinding_workflow": 35560761804,
-    "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md",
-    "strict_zero_acquisition_failures": true,
-    "strict_zero_smoke_failures": true,
-    "mechanical_completion_protocol": "docs/strategy/ALL3_V22A_MECHANICAL_COMPLETION_PROTOCOL_2026-09-21.md",
-    "on_mechanics_invalid": "freeze exact binding Top-30/ref/SHA population and repair missing mechanics only; do not re-query frontier"
+    "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md"
   },
   "v22b": {
-    "status": "DORMANT_PRE_REGISTERED",
-    "activation": "only if V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
-    "protocol": "docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md",
+    "status": "ACTIVE",
+    "workflow": 35566168354,
+    "launch_commit": "66ae1cec7bae766ab62915cac711a73cafdf1ee3",
+    "population": "all 92 binding V22A non-win contexts",
     "modes": [
       "BASE",
       "MARKET_ONLY",
       "PHYSICAL_ONLY",
       "FULL_SHADOW"
     ],
+    "protocol": "docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md",
     "domain_gate": {
       "min_improved_score_contexts": 4,
       "min_improved_source_shas": 2,
@@ -1893,13 +1894,6 @@
       "mean_score_delta_must_be_positive": true,
       "max_regressed_to_improved_ratio": 0.5
     },
-    "decisions": [
-      "V22B_MARKET_DOMAIN_HEADROOM",
-      "V22B_PHYSICAL_DOMAIN_HEADROOM",
-      "V22B_BOTH_DOMAINS_HEADROOM",
-      "V22B_CROSS_DOMAIN_INTERACTION_HEADROOM",
-      "V22B_NO_DOMAIN_WL_HEADROOM_RESET",
-      "V22B_MECHANICS_INVALID"
-    ]
+    "automatic_kaggle_submission": false
   }
 }
