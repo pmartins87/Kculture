@@ -1,0 +1,92 @@
+{
+  "schema": "kculture-all3-v22b-functional-cluster-map-v1",
+  "source_v22a_workflow": 35562142399,
+  "source_v22a_job": 106216902367,
+  "source_definition": "exact equality of the 12 binding V22A BASE outcome tuples (seed,seat,score,margin)",
+  "hard_source_sha_count": 8,
+  "functional_cluster_count": 6,
+  "clusters": [
+    {
+      "cluster_id": "F01",
+      "members": [
+        {
+          "rank": 1,
+          "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+          "sha": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181"
+        },
+        {
+          "rank": 2,
+          "ref": "haodou092/notebookdb6965aa8e",
+          "sha": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+        },
+        {
+          "rank": 11,
+          "ref": "romantamrazov/kaggriculture-yummers",
+          "sha": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef"
+        }
+      ]
+    },
+    {
+      "cluster_id": "F02",
+      "members": [
+        {
+          "rank": 4,
+          "ref": "dmitriigluzdov/kaggriculture-one-more-wheat",
+          "sha": "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970"
+        }
+      ]
+    },
+    {
+      "cluster_id": "F03",
+      "members": [
+        {
+          "rank": 5,
+          "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+          "sha": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555"
+        }
+      ]
+    },
+    {
+      "cluster_id": "F04",
+      "members": [
+        {
+          "rank": 7,
+          "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+          "sha": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+        }
+      ]
+    },
+    {
+      "cluster_id": "F05",
+      "members": [
+        {
+          "rank": 12,
+          "ref": "hanifnoerrofiq/a-wonderful-life",
+          "sha": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d"
+        }
+      ]
+    },
+    {
+      "cluster_id": "F06",
+      "members": [
+        {
+          "rank": 16,
+          "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+          "sha": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e"
+        }
+      ]
+    }
+  ],
+  "sha_to_cluster": {
+    "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181": "F01",
+    "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8": "F01",
+    "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef": "F01",
+    "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970": "F02",
+    "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555": "F03",
+    "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9": "F04",
+    "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d": "F05",
+    "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e": "F06"
+  },
+  "immutable_for_v22b_outcome_routing": true,
+  "automatic_kaggle_submission": false
+}
