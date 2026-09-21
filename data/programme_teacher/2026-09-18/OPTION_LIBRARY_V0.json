@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V24A workflow 35641081142; if one recurrent coupled event family is selected, distill at most one identity-free interaction mechanism, then fresh causal validation; no Kaggle submission",
+  "next_stage": "resolve V25A workflow 35645830010; choose smallest finite shadow prefix horizon passing frozen multi-source/cluster/seed W/L gate; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2120,25 +2120,71 @@
     }
   },
   "v24a": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35641081142,
-    "launch_commit": "d8cc5085b483da43a902f1751d08b1e97de9492c",
-    "protocol": "docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "130f15c1b810e8c296926be9c8d2ce1bceed2f12",
-    "hard_contexts": 93,
-    "interaction_exclusive_contexts": 63,
-    "topologies": [
-      "SAME",
-      "M_TO_P",
-      "P_TO_M"
+    "decision": "V24A_COMPACT_COUPLED_EVENT_FAMILY_FOUND",
+    "selected_family": "M_TO_P|hands|2",
+    "interaction_contexts": 63,
+    "source_shas": 9,
+    "functional_clusters": [
+      "F01",
+      "F02",
+      "F03",
+      "F04",
+      "F05",
+      "F08"
     ],
-    "max_compact_lag": 3,
-    "recurrence_gate": {
-      "contexts": 4,
-      "source_shas": 2,
-      "functional_clusters": 2,
-      "seeds": 2
+    "seeds": [
+      79302,
+      79304,
+      79305,
+      79306
+    ],
+    "median_start_step": 0,
+    "median_end_step": 2,
+    "eligible_family_count": 19,
+    "result_document": "docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_RESULT_2026-09-21.md"
+  },
+  "v24b": {
+    "status": "CLOSED_NOT_DISTILLABLE_COMPACTLY",
+    "workflow": 35645479016,
+    "decision": "V24B_NOT_DISTILLABLE_COMPACTLY",
+    "r1": {
+      "train_occurrences": 21,
+      "best_train_coverage": 0.6666666666666666,
+      "holdout_coverage": 0,
+      "pass": false
     },
+    "r2": {
+      "family_present_hard_contexts": 93,
+      "hard_contexts": 93,
+      "valid_negative_start_states": 0,
+      "unique_legal_state_keys": 1,
+      "conflicting_legal_state_keys": 1,
+      "identifiable": false,
+      "possible": false
+    },
+    "result_document": "docs/strategy/ALL3_V24B_INTERACTION_MECHANISM_DISTILLATION_RESULT_2026-09-21.md",
+    "compact_controller_closed": true
+  },
+  "v25a": {
+    "status": "ACTIVE",
+    "workflow": 35645830010,
+    "launch_commit": "641f28a3c836c8248f1ea42b9d60b3acebfb1faa",
+    "protocol": "docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "fa63ba0a1850aeabfe73bfa2edcdc108ddab2ac5",
+    "horizons": [
+      0,
+      4,
+      8,
+      16,
+      32,
+      64,
+      128,
+      256,
+      720
+    ],
+    "hard_contexts": 93,
     "automatic_kaggle_submission": false
   }
 }
