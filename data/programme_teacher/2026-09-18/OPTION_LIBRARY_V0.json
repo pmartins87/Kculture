@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V21A workflow 35558880526; PASS follows frozen V21B->V21C->V21D; NO_WL_HEADROOM closes V19A schedule family and activates independent V22 fresh-frontier branch",
+  "next_stage": "resolve V22A workflow 35560761804; V22A READY activates only the pre-registered V22B fresh-domain upper bound; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1818,7 +1818,7 @@
     "launch_commit": "a815ee73dad8fda5f1c6a587417e22415120ec87"
   },
   "v21_stop_rule": {
-    "status": "PRE_REGISTERED_WHILE_V21A_RUNNING",
+    "status": "TRIGGERED_V19A_SCHEDULE_FAMILY_CLOSED",
     "document": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
     "if_no_wl_headroom": "close entire V19A-derived schedule family; no post-hoc category-pair or turn-subset search",
     "fallback": "V22 fresh current-frontier refresh",
@@ -1829,6 +1829,45 @@
       79104,
       79105,
       79106
-    ]
+    ],
+    "v21b_v21c_v21d": "BLOCKED"
+  },
+  "v21a": {
+    "status": "CLOSED",
+    "workflow": 35558880526,
+    "decision": "V21A_SEMANTIC_NO_WL_HEADROOM",
+    "aggregate_artifact_id": 10622146329,
+    "aggregate_digest": "sha256:4e15b39d10a10c57feb8f5b071ecea10d532f379a16b4b519ac036b93fd3810b",
+    "base_binding_mismatches": 0,
+    "full_binding_mismatches": 0,
+    "selected_mode": null,
+    "all_modes_positive_score_contexts": 0,
+    "best_margin_only_mode": "SELL_ONLY",
+    "best_margin_only_mean_delta": 176.91666666666666,
+    "result_document": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md"
+  },
+  "v22a": {
+    "status": "ACTIVE",
+    "workflow": 35560761804,
+    "launch_commit": "b57a5aa37249e9629233b7f11fe300ffc267cb94",
+    "seeds": [
+      79101,
+      79102,
+      79103,
+      79104,
+      79105,
+      79106
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "max_unique_frontier_sources": 12,
+    "min_unique_frontier_sources": 8,
+    "ready_min_valid_contexts": 96,
+    "ready_min_nonwins": 12,
+    "ready_min_nonwin_source_shas": 4,
+    "ready_min_nonwin_seeds": 3,
+    "protocol": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md"
   }
 }
