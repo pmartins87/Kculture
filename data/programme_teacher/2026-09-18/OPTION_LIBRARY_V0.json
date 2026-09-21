@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve corrected V22B workflow 35607214335; ignore attempt1 partial strategic metrics; no Kaggle submission",
+  "next_stage": "let V22B attempt2 workflow 35607214335 finish shards 2/3; then activate strict mechanical merge of attempts 1+2; no strategic interpretation before 368/368 exact keys; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1924,6 +1924,29 @@
       "retry_backoff": "bounded exponential 5,10,20,40,60... seconds",
       "matrix_max_parallel": 1,
       "strategic_changes": false
+    },
+    "attempt2_progress": {
+      "workflow": 35607214335,
+      "shard0": {
+        "rows": 80,
+        "expected_rows": 92,
+        "failures": 3,
+        "failure_reason": "representative ref haodou092/notebookdb6965aa8e now HTTP 404 for exact SHA fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+      },
+      "exact_sha_alias_for_rank2": "degnonguidi/best-agent-ranking",
+      "alias_map_commit": "f1c5628b2799e7acd62d2746d231ee0c2acbbd56",
+      "alias_executor_commit": "20195454330d67e786f33a49346f35504f5be07c",
+      "merger_commit": "c04e01c54621320c5c52ceef4aa4b59f0d5277a2",
+      "merge_template_commit": "adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c",
+      "current_union_exact_keys": 244,
+      "expected_exact_keys": 368,
+      "current_complete_contexts": 61,
+      "expected_contexts": 92,
+      "remaining_contexts": 31,
+      "remaining_only_shards": [
+        2,
+        3
+      ]
     }
   }
 }
