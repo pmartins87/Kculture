@@ -1,5 +1,92 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
+
+**This block supersedes lower stale V19/V20 current-action sections.**
+
+### V19C — COMPLETE / CLOSED
+
+Workflow: **`35556749095`**.
+
+Decision:
+**`V19C_CONSENSUS_FRESH_FAIL_CLOSE`**.
+
+Mechanical:
+- 80/80 frozen pairs;
+- failures 0;
+- changed-market coverage 80/80;
+- exact binding schedule SHA PASS.
+
+Strategic:
+- positive-score contexts: **10**;
+- positive-score sources: **5**;
+- negative-score contexts: **10**;
+- BASE-win -> treatment-nonwin: **10**;
+- mean score delta: **0.0**;
+- mean margin delta: **-241.6375**.
+
+Regime evidence:
+- seed 78602 produced the score regressions;
+- seed 78603 produced the score improvements;
+- 78601/78604 produced no score changes.
+The sign is therefore environmental-regime dependent, not a stable source-identity effect.
+
+Result:
+`docs/strategy/ALL3_V19C_CONSENSUS_FRESH_RESULT_2026-09-21.md`.
+
+O-TM1 unconditional is CLOSED.
+
+### V19D / V19E — NOT ACTIVATED
+
+Because V19C failed:
+- do not run V19D package parity;
+- do not run V19E hosted submission;
+- do not submit O-TM1.
+
+Their pre-registered protocols remain archival only.
+
+### V20A — ACTIVE
+
+Workflow: **`35557692905`**  
+Launch commit: `4613d77ea10d16110edf943948a18ea2d3b63573`.
+
+Architecture:
+one identity-free gate decided once at turn 464:
+- OFF -> exact ALL3;
+- ON -> unchanged frozen V19A O-TM1 schedule during P2.
+
+V19C seeds are excluded from model fitting and validation.
+
+Discovery:
+- seeds 78711..78716;
+- 10 exact source SHAs;
+- both seats;
+- 120 paired unconditional O-TM1 contexts.
+
+Training:
+- 78711..78714.
+
+Internal holdout:
+- 78715..78716.
+
+Features:
+- legal state/action snapshots at 463 and 464;
+- current + previous + delta + abs(delta);
+- no source/ref/rank/context/seed/seat/outcome/reward feature.
+
+Frozen classifier:
+- tree depth 3;
+- min leaf 8;
+- balanced classes;
+- threshold P(benefit) >=0.80.
+
+Only V20A_STATE_GATE_READY may activate untouched V20B seeds 78801..78804.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35557692905`**.
+
+
 ## Binding update — 2026-09-21 — V19B CONSENSUS WL HEADROOM / V19C FRESH VALIDATION ACTIVE
 
 **This block supersedes lower stale V19 current-action sections.**
