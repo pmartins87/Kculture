@@ -1,0 +1,44 @@
+name: v22b-yummers-historical-sha-recovery
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v22b-yummers-historical-sha-recovery.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  recover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install Kaggle CLI
+        run: python -m pip install 'kaggle>=2.2.3'
+      - name: Recover exact historical yummers source
+        run: |
+          python tools/recover_kaggle_kernel_version_by_sha.py \
+            --ref romantamrazov/kaggriculture-yummers \
+            --expected-sha 254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef \
+            --min-version 1 --max-version 60 \
+            --out-dir artifacts/yummers-source \
+            --result artifacts/yummers-recovery/YUMMERS_RECOVERY.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v22b-yummers-historical-recovery
+          path: |
+            artifacts/yummers-source/main.py
+            artifacts/yummers-recovery/YUMMERS_RECOVERY.json
+          retention-days: 30
+          if-no-files-found: warn
