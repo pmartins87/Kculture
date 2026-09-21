@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V20A workflow 35557692905; only V20A_STATE_GATE_READY may activate untouched V20B validation on seeds 78801..78804",
+  "next_stage": "V20A closed V20A_GATE_NOT_TRAINABLE; resolve pre-registered V21A semantic decomposition of frozen V19A P2 schedule on consumed seeds 78711..78716; only V21A_SEMANTIC_WL_HEADROOM may activate untouched V21B seeds 78901..78904",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1774,5 +1774,45 @@
       "note": "latest observed snapshot; histories differ from O-RW1"
     }
   },
-  "last_binding_update_utc": "2026-09-20"
+  "last_binding_update_utc": "2026-09-20",
+  "v20a_state_gate": {
+    "workflow": 35557692905,
+    "decision": "V20A_GATE_NOT_TRAINABLE",
+    "contexts": 120,
+    "train_contexts": 80,
+    "train_positive_wl_labels": 0,
+    "train_nonpositive_wl_labels": 80,
+    "all_positive_score_contexts": 0,
+    "all_negative_score_contexts": 0,
+    "mean_score_delta": 0,
+    "mean_margin_delta": -742.75,
+    "status": "CLOSED_NO_CLASSIFIER",
+    "result_doc": "docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md"
+  },
+  "v21a_semantic_decomposition": {
+    "status": "ACTIVE_PRE_REGISTERED",
+    "discovery_seeds": [
+      78711,
+      78712,
+      78713,
+      78714,
+      78715,
+      78716
+    ],
+    "validation_seeds": [
+      78901,
+      78902,
+      78903,
+      78904
+    ],
+    "semantic_category_counts": {
+      "EMPTY": 40,
+      "SELL_PRESENT": 33,
+      "BUY_ONLY": 22,
+      "HIRE_PRESENT": 7
+    },
+    "protocol": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md",
+    "fresh_protocol": "docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md",
+    "automatic_kaggle_submission": false
+  }
 }
