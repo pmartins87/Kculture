@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V19C fresh validation using frozen O-TM1 consensus schedule, seeds 78601..78604, both seats; only V19C_CONSENSUS_FRESH_PASS may authorize packaging/hosted promotion",
+  "next_stage": "resolve V20A workflow 35557692905; only V20A_STATE_GATE_READY may activate untouched V20B validation on seeds 78801..78804",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1693,7 +1693,7 @@
       "automatic_kaggle_submission": false
     },
     "v19c_consensus_fresh_validation": {
-      "status": "ACTIVE",
+      "status": "CLOSED_FRESH_FAIL",
       "config": "configs/all3_v19c_consensus_fresh_validation.json",
       "seeds": [
         78601,
@@ -1708,12 +1708,57 @@
       ],
       "pairs": 80,
       "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
-      "automatic_kaggle_submission": false
+      "automatic_kaggle_submission": false,
+      "workflow": 35556749095,
+      "decision": "V19C_CONSENSUS_FRESH_FAIL_CLOSE",
+      "mechanical_pass": true,
+      "coverage_pass": true,
+      "positive_score_contexts": 10,
+      "positive_score_sources": 5,
+      "negative_score_contexts": 10,
+      "win_to_nonwin": 10,
+      "mean_score_delta": 0,
+      "mean_margin_delta": -241.6375,
+      "result_doc": "docs/strategy/ALL3_V19C_CONSENSUS_FRESH_RESULT_2026-09-21.md"
     },
     "v18b2_parallel_note": {
       "status": "NON_BINDING_PARALLEL",
       "workflow": 35556541064,
       "note": "Do not supersede V19 source-of-truth path"
+    },
+    "v20a_state_gate": {
+      "status": "ACTIVE",
+      "workflow": 35557692905,
+      "launch_commit": "4613d77ea10d16110edf943948a18ea2d3b63573",
+      "discovery_seeds": [
+        78711,
+        78712,
+        78713,
+        78714,
+        78715,
+        78716
+      ],
+      "train_seeds": [
+        78711,
+        78712,
+        78713,
+        78714
+      ],
+      "holdout_seeds": [
+        78715,
+        78716
+      ],
+      "untouched_validation_seeds": [
+        78801,
+        78802,
+        78803,
+        78804
+      ],
+      "threshold": 0.8,
+      "tree_max_depth": 3,
+      "min_samples_leaf": 8,
+      "protocol": "docs/strategy/ALL3_V20A_STATE_GATE_PROTOCOL_2026-09-21.md",
+      "automatic_kaggle_submission": false
     }
   },
   "current_hosted_pair": {
