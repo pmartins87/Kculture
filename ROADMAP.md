@@ -67,10 +67,13 @@ Observed so far:
 - strict mechanical merger: `tools/merge_v22b_mechanical_attempts.py`, commit `c04e01c54621320c5c52ceef4aa4b59f0d5277a2`;
 - dormant merge workflow template: `docs/strategy/templates/ALL3_V22B_MECHANICAL_MERGE_WORKFLOW.yml`, commit `adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c`.
 
-Current union of attempt-1 valid rows + attempt-2 shard 0:
-- **244/368 exact keys**;
-- **61/92 complete contexts**;
-- all remaining 31 contexts belong only to shards 2 and 3.
+Current union of attempt-1 valid rows + attempt-2 shards 0/1/2:
+- **312/368 exact keys**;
+- **78/92 complete contexts**;
+- shard 0 is complete by merge;
+- shard 1 was already complete in attempt 1;
+- shard 2 is now complete by merge;
+- all remaining **14 contexts / 56 keys** belong only to shard 3.
 
 Therefore no third full V22B run is justified at this time. Let attempt 2 finish shards 2/3, then mechanically merge attempts 1+2. Strategic interpretation remains blocked until a complete 368-key aggregate exists.
 
