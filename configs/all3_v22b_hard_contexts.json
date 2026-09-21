@@ -1118,5 +1118,37 @@
   "selection_rule": "all and only binding V22A rows with score < 1.0",
   "source_rows_reconstructed_from_binding_job_log": true,
   "manual_context_selection_allowed": false,
-  "automatic_kaggle_submission": false
+  "automatic_kaggle_submission": false,
+  "source_sha_aliases": {
+    "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181": [
+      "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "tetsutani/demand-preserving-turn-sale-timing",
+      "kaibaur/demand-preserving-turn-sale-timing-f46e91"
+    ],
+    "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8": [
+      "haodou092/notebookdb6965aa8e",
+      "degnonguidi/best-agent-ranking"
+    ],
+    "10f58185b916392ca39697c83f67f455df81a74dfb6eb1aacd60fd81d50c9970": [
+      "dmitriigluzdov/kaggriculture-one-more-wheat"
+    ],
+    "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555": [
+      "dmitriigluzdov/kaggriculture-a-smaller-market-shock"
+    ],
+    "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9": [
+      "thomastschinkel/the-metav4-farm-submission-v13",
+      "guruprasaathas111/kaggriculture-master-engine-v3",
+      "anhadmahajan06/kaggriculture-autonomous-ai-farming-agent"
+    ],
+    "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef": [
+      "romantamrazov/kaggriculture-yummers"
+    ],
+    "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d": [
+      "hanifnoerrofiq/a-wonderful-life"
+    ],
+    "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e": [
+      "ahmedberatozer/kaggriculture-v53-opening-signature"
+    ]
+  },
+  "source_alias_rule": "aliases are only refs that V22A binding independently acquired and SHA-deduplicated to the same exact main.py SHA; alias may change acquisition path but never source bytes"
 }
