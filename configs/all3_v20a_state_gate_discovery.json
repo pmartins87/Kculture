@@ -1,0 +1,86 @@
+{
+  "schema": "kculture-all3-v20a-state-gate-discovery-v1",
+  "schedule_workflow": 35552885627,
+  "schedule_sha256": "c68d857500b71a40f8cf4ef5f2ff693f6da1d97ced03e7d7f19eaedfded1ff22",
+  "discovery_seeds": [
+    78711,
+    78712,
+    78713,
+    78714,
+    78715,
+    78716
+  ],
+  "train_seeds": [
+    78711,
+    78712,
+    78713,
+    78714
+  ],
+  "holdout_seeds": [
+    78715,
+    78716
+  ],
+  "validation_seeds": [
+    78801,
+    78802,
+    78803,
+    78804
+  ],
+  "seats": [
+    0,
+    1
+  ],
+  "sources": [
+    {
+      "rank": 1,
+      "ref": "haodou092/notebookdb6965aa8e",
+      "main_sha256": "fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
+    },
+    {
+      "rank": 2,
+      "ref": "nathanjacob/kaggriculture-pipe16-idle-workers",
+      "main_sha256": "827ddf2997fa442e80baadebc4cc91ffaeedec1ff333c1fa7d872b0f1d448181"
+    },
+    {
+      "rank": 4,
+      "ref": "thomastschinkel/the-metav4-farm-submission-v13",
+      "main_sha256": "9d63494603f88219857a3101d7dc19cc750ded04e5886732ee428580326967d9"
+    },
+    {
+      "rank": 6,
+      "ref": "dmitriigluzdov/kaggriculture-a-smaller-market-shock",
+      "main_sha256": "d5460fc2e5488e0a340f0e4e795f2709c48b58cff7c204ced3821a4c7dae4555"
+    },
+    {
+      "rank": 8,
+      "ref": "lynnsakurai/farming-score-v2-a-better-approach",
+      "main_sha256": "177d78bdf00aa96579d98052558e18cd3081d29f855c8a6f20a2bbfebcdbda11"
+    },
+    {
+      "rank": 9,
+      "ref": "dmitriigluzdov/kaggriculture-more-wheat-smarter-sales",
+      "main_sha256": "218d72b0a5ce40d23657b9bd6a1385f106948a9dd76d49f786d9cf04eba34b7d"
+    },
+    {
+      "rank": 11,
+      "ref": "hanifnoerrofiq/a-wonderful-life",
+      "main_sha256": "caf490d382731dce2ce85b227b407ddef70c5df88f0773ebe017b695226d3e6d"
+    },
+    {
+      "rank": 14,
+      "ref": "tetsutani/demand-preserving-turn-sale-timing/versions/4",
+      "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f"
+    },
+    {
+      "rank": 19,
+      "ref": "evgendvorkin/kaggriculture",
+      "main_sha256": "bfee70e9daaebeae0737a880f1df8f1c60d0783c59af620136cc0d28ef482bc7"
+    },
+    {
+      "rank": 23,
+      "ref": "ahmedberatozer/kaggriculture-v53-opening-signature",
+      "main_sha256": "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e"
+    }
+  ],
+  "automatic_kaggle_submission": false
+}
