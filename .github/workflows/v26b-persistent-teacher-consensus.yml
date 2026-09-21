@@ -1,0 +1,84 @@
+name: v26b-persistent-teacher-consensus
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v26b-persistent-teacher-consensus.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install complete pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35653189539
+          name: v26a-frontier-immutable-snapshot
+          path: artifacts/v26a-snapshot
+      - name: Run V26B shard
+        run: |
+          mkdir -p artifacts/v26b
+          python tools/v26b_persistent_consensus_shard.py \
+            --snapshot-dir artifacts/v26a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v26b/V26B_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v26b-shard-${{ matrix.shard_index }}
+          path: artifacts/v26b/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v26b-shard-*
+          path: artifacts/v26b-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35653189539
+          name: v26a-frontier-snapshot-result
+          path: artifacts/v26a-snapshot-result
+      - name: Aggregate V26B
+        run: |
+          mkdir -p artifacts/v26b-final
+          python tools/aggregate_v26b_persistent_consensus.py \
+            --input-dir artifacts/v26b-shards \
+            --snapshot-result artifacts/v26a-snapshot-result/V26A_SNAPSHOT_RESULT.json \
+            --out artifacts/v26b-final/V26B_PERSISTENT_TEACHER_CONSENSUS.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v26b-persistent-teacher-consensus
+          path: artifacts/v26b-final/*.json
+          retention-days: 30
+          if-no-files-found: error
