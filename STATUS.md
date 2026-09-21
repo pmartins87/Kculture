@@ -53,8 +53,9 @@ Original workflow `35560761804` is NON-BINDING due the pre-outcome mechanics ame
 
 ### V22B — ACTIVE / PRE-REGISTERED DOMAIN UPPER BOUND
 
-Binding workflow: **`35566168354`**.  
-Launch commit: `66ae1cec7bae766ab62915cac711a73cafdf1ee3`.
+Attempt 1 workflow: `35566168354` => **`V22B_MECHANICS_INVALID`** due 45 Kaggle HTTP 429 `teacher_acquire` failures; its partial aggregate is strategically NON-BINDING.  
+Corrected binding workflow: **`35607214335`**.  
+Mechanical-repair launch commit: `ade4a4180d7081e57f7cde7286c9de07abfe2e87`.
 
 Frozen population:
 - exactly all 92 V22A binding non-win contexts;
@@ -85,6 +86,9 @@ Decision space:
 Protocol:
 `docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md`.
 
+Attempt-1 mechanical diagnosis:
+`docs/strategy/ALL3_V22B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md`.
+
 Functional-diversity interpretation rule:
 `docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md`.
 
@@ -98,7 +102,7 @@ If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-opt
 
 No Kaggle submission is currently authorized.
 
-**Binding immediate action:** resolve workflow `35566168354`.
+**Binding immediate action:** resolve corrected workflow `35607214335`.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
