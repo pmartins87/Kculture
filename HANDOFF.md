@@ -6,6 +6,50 @@
 
 ### V20A — COMPLETE / CLOSED
 
+Workflow: **`35557692905`**. Decision: **`V20A_GATE_NOT_TRAINABLE`**.
+
+- 5/5 shards PASS; 120/120 paired contexts; failures 0.
+- Training seeds 78711..78714: **0 positive W/L labels / 80 non-positive**; positive seed support 0.
+- No classifier was fit or tuned.
+- Across all 120 contexts: 0 positive score deltas, 0 negative score deltas, mean score delta 0.0, mean margin delta **-742.75**.
+- V20B / O-TM2 is BLOCKED and remains dormant.
+- Result: `docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md`.
+
+### V21A — ACTIVE / PRE-REGISTERED
+
+Causal decomposition of the frozen 102-turn P2 schedule into four outcome-independent semantic categories:
+- EMPTY 40;
+- SELL_PRESENT 33;
+- BUY_ONLY 22;
+- HIRE_PRESENT 7.
+
+Population: same already-consumed V20A seeds 78711..78716, same 10 exact source SHAs, both seats = 120 contexts.
+
+Modes: BASE, FULL, four single categories, four FULL-minus-one categories.
+
+Mechanical binding:
+- BASE must reproduce all V20A BASE score+margin rows;
+- FULL must reproduce all V20A treatment score+margin rows.
+
+Promotion requires real W/L headroom with zero score regressions. Margin-only cannot pass.
+
+V21B is dormant and already frozen on fresh seeds `78901..78904`.
+
+Protocols:
+- `docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md`;
+- `docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md`.
+
+No Kaggle submission.
+
+**Binding immediate action:** launch and resolve V21A.
+
+
+## Binding update — 2026-09-21 — V20A NOT TRAINABLE / V21A SEMANTIC DECOMPOSITION ACTIVE
+
+**This block supersedes lower stale V20/V21 current-action sections.**
+
+### V20A — COMPLETE / CLOSED
+
 Workflow: **`35557692905`**.
 
 Decision:
