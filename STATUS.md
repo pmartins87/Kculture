@@ -1,77 +1,70 @@
 # STATUS — Kculture live source of truth
 
-## Binding update — 2026-09-21 — V20A NOT TRAINABLE / V21A SEMANTIC DECOMPOSITION ACTIVE
+## Binding update — 2026-09-21 — V21A CLOSED / V22A FRESH FRONTIER ACTIVE
 
-**This block supersedes lower stale V20/V21 current-action sections.**
+**This block supersedes lower stale V20/V21/V22 current-action sections.**
 
-### V20A — COMPLETE / CLOSED
-
-Workflow: **`35557692905`**.  
-Decision: **`V20A_GATE_NOT_TRAINABLE`**.
-
-- 5/5 shards PASS; 120/120 paired contexts; failures 0.
-- O-TM1 changed market in 120/120 contexts.
-- Training seeds 78711..78714: **0 positive W/L labels / 80 non-positive**.
-- No classifier was fit or tuned.
-- Across all 120 contexts: 0 positive score deltas, 0 negative score deltas, mean score delta 0.0, mean margin delta **-742.75**.
-- V20B / O-TM2 is BLOCKED and remains dormant.
-
-Result: `docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md`.
-
-### V21A — ACTIVE / PRE-REGISTERED
+### V21A — COMPLETE / CLOSED
 
 Workflow: **`35558880526`**.  
-Launch commit: `a815ee73dad8fda5f1c6a587417e22415120ec87`.
+Launch commit: `a815ee73dad8fda5f1c6a587417e22415120ec87`.  
+Decision: **`V21A_SEMANTIC_NO_WL_HEADROOM`**.
 
-Causal decomposition of the frozen 102-turn V19A P2 schedule.
+Mechanical:
+- 10/10 shards SUCCESS;
+- 120/120 frozen contexts;
+- failures 0;
+- BASE binding mismatches: **0**;
+- FULL binding mismatches: **0**;
+- aggregate artifact ID: `10622146329`;
+- artifact digest: `sha256:4e15b39d10a10c57feb8f5b071ecea10d532f379a16b4b519ac036b93fd3810b`.
 
-Frozen categories:
-- EMPTY: 40;
-- SELL_PRESENT: 33;
-- BUY_ONLY: 22;
-- HIRE_PRESENT: 7.
+Strategic:
+- every tested semantic mode produced **0 positive-score contexts and 0 negative-score contexts**;
+- mean score delta was **0.0 for every mode**;
+- `SELL_ONLY` had the best mean margin delta at **+176.91666666666666**, but remained strictly margin-only and is not promotable;
+- selected mode: **none**.
 
-Population:
-- already-consumed seeds 78711..78716;
-- same 10 exact source SHAs;
-- both seats;
-- 120 contexts;
-- no fresh validation seed consumed.
+Result:
+`docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md`.
 
-Modes:
-- BASE;
-- FULL;
-- four single-category modes;
-- four FULL-minus-one-category modes.
+Binding stop rule:
+- close the entire V19A-derived consensus-schedule family;
+- V21B/V21C/V21D are BLOCKED and remain archival/dormant;
+- do not search post-hoc semantic combinations, turn subsets, thresholds or state gates;
+- do not submit V19A/V21 candidates.
 
-Hard binding:
-- BASE must reproduce all 120 V20A BASE score+margin rows exactly;
-- FULL must reproduce all 120 V20A treatment score+margin rows exactly;
-- only W/L headroom with zero score regressions may select a candidate;
-- margin-only cannot pass.
+### V22A — ACTIVE / FRESH CURRENT-FRONTIER REFRESH
 
-Dormant promotion path:
-- V21B fresh seeds: `78901..78904`;
-- V21C package/parity seeds: `79001..79002`;
-- V21D: exactly one hosted submission only after V21A+B+C PASS.
+Workflow: **`35560761804`**.  
+Launch commit: `b57a5aa37249e9629233b7f11fe300ffc267cb94`.
 
-Protocols:
-- `docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md`;
-- `docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md`;
-- `docs/strategy/ALL3_V21C_SEMANTIC_PACKAGE_PARITY_PROTOCOL_2026-09-21.md`;
-- `docs/strategy/ALL3_V21D_SEMANTIC_HOSTED_SUBMISSION_PROTOCOL_2026-09-21.md`.
+Purpose:
+- refresh the current public Kaggriculture Top-30;
+- transiently acquire and SHA-deduplicate public sources;
+- remove Kaggle credentials before any third-party execution;
+- smoke-test unique sources in both seats;
+- choose up to 12 unique executable current-frontier sources by current representative rank only;
+- run exact ALL3 on untouched seeds `79101..79106`, both seats;
+- build a fresh hard-context population independent of the V19A/V21 schedule family.
+
+READY requires:
+- >=8 unique executable frontier source SHAs;
+- >=96 mechanically valid contexts;
+- >=12 ALL3 non-win contexts;
+- non-wins across >=4 source SHAs and >=3 seeds.
+
+Decision gate:
+- READY -> activate dormant V22B fresh domain upper bound;
+- TOO_EASY -> refresh later, no micro-tuning;
+- MECHANICS_INVALID -> repair mechanics only and rerun exact V22A.
+
+Pre-registered branch:
+`docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md`.
 
 No Kaggle submission is currently authorized.
 
-Stopping rule:
-- if V21A has no semantic W/L headroom, close the V19A-derived schedule family;
-- do not search post-hoc category pairs/turn subsets;
-- activate the independent fresh-frontier V22 branch instead.
-
-Pre-registered stop/next-branch document:
-`docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md`.
-
-**Binding immediate action:** resolve workflow `35558880526`.
+**Binding immediate action:** resolve workflow `35560761804`.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
