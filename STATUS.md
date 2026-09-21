@@ -1,5 +1,97 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-20 — V18B CLOSED / V19A CONSENSUS READY / V19B ACTIVE
+
+**This block supersedes lower stale V18/V19 current-action sections.**
+
+### V18B — COMPLETE / CLOSED
+
+Binding trainer-recovery workflow: **`35552606264`**.
+
+Decision:
+**`V18B_CONTROLLER_NOT_DISTILLABLE`**.
+
+Dataset:
+- 3072 exact P2 rows;
+- 24 hard contexts;
+- 10 unique source SHAs;
+- zero replay/source failures.
+
+Actionable recurrent SELL families: 19.  
+Retained under frozen leave-one-source-out gate: **0**.
+
+Best near misses were high-recall / low-precision:
+- W3 FERTILIZER QTY +1: precision 0.56098, recall 0.95833, F1 0.70769;
+- W3 FERTILIZER presence ADD: same metrics;
+- W2 STRAWBERRY 5+ QTY INC: precision 0.54054, recall 1.0, F1 0.70175.
+
+Do not relax tree thresholds or increase depth post-hoc.
+
+Result:
+`docs/strategy/ALL3_V18B_P2_MARKET_CONTROLLER_RESULT_2026-09-20.md`.
+
+### V19A — COMPLETE / READY
+
+Workflow: **`35552885627`**.
+
+Decision:
+**`V19A_CONSENSUS_SCHEDULE_READY`**.
+
+Source-balanced P2 exact-market consensus:
+- scope: turns 464..591;
+- 10 source votes/turn;
+- turn selected iff modal market support >=8/10 sources and >=16/24 contexts;
+- **102/128 turns scheduled**;
+- minimum source support 8;
+- minimum context support 16;
+- no source identity in runtime schedule.
+
+Binding artifact:
+`all3-v19a-p2-consensus-schedule`.
+
+Result:
+`docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_RESULT_2026-09-20.md`.
+
+### V19B — ACTIVE
+
+Workflow: **`35553022505`**  
+Launch commit: `88248e361c61f00c0c9cccd0ef76bc79da2282c8`.
+
+Candidate:
+**O-TM1 — P2 Cross-Source Consensus Market Schedule**.
+
+Runtime:
+- exact ALL3 outside scheduled turns;
+- on scheduled P2 turns, replace market only with the frozen consensus market;
+- SELL quantities conservatively capped to current available own inventory;
+- BUY_SEED / BUY_PRODUCT / HIRE remain exactly as frozen;
+- farmer/hands never changed;
+- no identity, seed, seat, context, future state or outcome feature.
+
+Frozen discovery PASS:
+- 24 paired hard contexts mechanical PASS;
+- changed-market coverage >=8 contexts / >=4 sources;
+- positive-score contexts >=4 across >=2 sources;
+- negative-score contexts =0;
+- mean score delta >0;
+- mean margin delta >0.
+
+### V19C — DORMANT / PRE-FROZEN
+
+Config:
+`configs/all3_v19c_consensus_fresh_validation.json`.
+
+If and only if V19B returns WL_HEADROOM:
+- same 10 exact hard-source SHAs;
+- fresh seeds 78601..78604;
+- both seats;
+- 80 paired contexts.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35553022505`**.
+
+
 ## Binding update — 2026-09-20 — V18A P2 HEADROOM / V18B CUMULATIVE CONTROLLER ACTIVE
 
 **This block supersedes lower stale V18 current-action sections.**
