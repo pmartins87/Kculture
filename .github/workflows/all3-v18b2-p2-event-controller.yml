@@ -1,0 +1,56 @@
+name: all3-v18b2-p2-event-controller
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/all3-v18b2-p2-event-controller.yml'
+      - 'tools/all3_v18b2_train_event_controller.py'
+      - 'docs/strategy/ALL3_V18B2_EVENT_CONTROLLER_PROTOCOL_2026-09-21.md'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install trainer runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install numpy scikit-learn
+      - name: Download binding V18B dataset shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v18b-data-shard-*
+          path: artifacts/v18b-data
+          merge-multiple: false
+          run-id: 35552335995
+          github-token: ${{ github.token }}
+      - name: Download binding V14B atlas
+        uses: actions/download-artifact@v4
+        with:
+          name: all3-v14b-market-phenotype-atlas
+          path: artifacts/v14b-source
+          run-id: 35526759114
+          github-token: ${{ github.token }}
+      - name: Syntax
+        run: python -m py_compile tools/all3_v18b2_train_event_controller.py
+      - name: Train transition-event controller
+        run: |
+          mkdir -p artifacts/v18b2-model
+          python tools/all3_v18b2_train_event_controller.py             --input-dir artifacts/v18b-data             --v14b artifacts/v14b-source/ALL3_V14B_MARKET_PHENOTYPE_ATLAS.json             --out artifacts/v18b2-model/ALL3_V18B2_P2_EVENT_CONTROLLER.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: all3-v18b2-p2-event-controller
+          path: artifacts/v18b2-model/*.json
+          retention-days: 30
+          if-no-files-found: warn
