@@ -37,7 +37,7 @@ V21B is dormant and already frozen on fresh seeds `78901..78904`.
 
 Protocols:
 - `docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md`;
-- `docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md`.
+- `docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md`.\n- `docs/strategy/ALL3_V21C_SEMANTIC_PACKAGE_PARITY_PROTOCOL_2026-09-21.md`;\n- `docs/strategy/ALL3_V21D_SEMANTIC_HOSTED_SUBMISSION_PROTOCOL_2026-09-21.md`.
 
 No Kaggle submission.
 
