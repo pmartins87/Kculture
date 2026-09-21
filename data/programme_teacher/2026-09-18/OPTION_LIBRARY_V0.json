@@ -1949,6 +1949,8 @@
       "remaining_exact_keys": 56,
       "cross_attempt_duplicate_keys_compared": 116,
       "cross_attempt_conflicts": 0
-    }
+    },
+    "outcome_router_implementation": "tools/route_v22b_outcome.py",
+    "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005"
   }
 }
