@@ -1,22 +1,23 @@
-# ALL3 V18A W2 Market-Headroom Temporal Localization Protocol — 2026-09-20
+# ALL3 V18A MARKET_W2PLUS Temporal Localization Protocol — 2026-09-20
 
 ## Status
 
-**DORMANT / PRE-REGISTERED BEFORE V17B RESULT.**
+ACTIVE after V17B closed without W/L headroom.
 
-Activate only if V17B does **not** return `V17B_LQ6S_WL_HEADROOM`.
+The first dormant draft used only turns 336..503. Before any V18A game was run, inspection of the binding V14A implementation confirmed that `MARKET_W2PLUS` means **all turns t >= 336 through episode end**, not only the earlier W2 subphase.
+
+This corrected binding protocol therefore partitions the entire V14A treatment interval. No V18A outcome existed when this correction was made.
 
 ## Motivation
 
-Binding evidence already establishes:
+Binding evidence:
 
-- V14A MARKET_W2PLUS: 18/24 hard-context loss-to-win flips, zero W/L regressions;
-- isolated EARLY reorder (V15A): exact zero causal effect;
-- isolated W2 FERTILIZER +2 (V16B): margin-only;
-- V17B tests the strongest recurrent STRAWBERRY insertion bundle with an identity-free edge trigger.
+- V14A MARKET_W2PLUS: 18/24 hard-context score improvements, 7 source families, mean score delta +0.75, mean margin delta +1858.5, zero score regressions;
+- V15A EARLY reorder: zero causal effect;
+- V16B one-shot W2 FERTILIZER +2: margin-only;
+- V17B STRAWBERRY edge bundle: no W/L headroom and negative mean margin.
 
-If V17B fails W/L, do **not** select a second-ranked V14B phenotype post-hoc.
-Instead localize where inside W2 the full teacher-market upper-bound is carried.
+Rather than selecting additional atlas phenotypes post-hoc, localize where in the full `t >= 336` market-treatment horizon the W/L headroom resides.
 
 ## Population
 
@@ -28,29 +29,31 @@ Exact source SHAs, seeds and seats are unchanged.
 
 Exact ALL3.
 
-## Frozen W2 windows
+## Frozen equal chronological partitions
 
-Partition W2 `336..503` into exactly three contiguous windows of 56 turns:
+The V14A MARKET_W2PLUS interval is turns `336..718` inclusive = 383 turns.
 
-- **W2A**: turns `336..391`
-- **W2B**: turns `392..447`
-- **W2C**: turns `448..503`
+Partition deterministically into three contiguous chronological segments:
 
-No window boundary may change after V17B.
+- **P1**: turns `336..463` inclusive — 128 turns;
+- **P2**: turns `464..591` inclusive — 128 turns;
+- **P3**: turns `592..718` inclusive — 127 turns.
+
+No boundary may change after this protocol.
 
 ## Modes
 
 For each context run:
 
 1. **BASE** — exact ALL3.
-2. **MARKET_W2A_ONLY** — shadow-teacher market only during W2A; ALL3 market elsewhere.
-3. **MARKET_W2B_ONLY** — shadow-teacher market only during W2B.
-4. **MARKET_W2C_ONLY** — shadow-teacher market only during W2C.
-5. **MARKET_W2AB** — shadow-teacher market during W2A+W2B only.
-6. **MARKET_W2BC** — shadow-teacher market during W2B+W2C only.
-7. **MARKET_W2ABC** — exact V14A MARKET_W2PLUS replication during all W2.
+2. **MARKET_P1_ONLY** — shadow-teacher market only in P1.
+3. **MARKET_P2_ONLY** — shadow-teacher market only in P2.
+4. **MARKET_P3_ONLY** — shadow-teacher market only in P3.
+5. **MARKET_P12** — shadow-teacher market in P1+P2 only.
+6. **MARKET_P23** — shadow-teacher market in P2+P3 only.
+7. **MARKET_P123** — shadow-teacher market for every turn t>=336.
 
-Physical action always exact ALL3.
+Physical action always remains exact ALL3.
 
 The public hard-source policy is an offline shadow teacher only and is never a runtime feature.
 
@@ -59,11 +62,15 @@ The public hard-source policy is an offline shadow teacher only and is never a r
 PASS requires:
 
 - all 24 contexts × 7 modes complete;
-- BASE exactly reproduces frozen V13C score/margin;
-- MARKET_W2ABC reproduces the corresponding V14A MARKET_W2PLUS paired score/margin;
+- BASE exactly reproduces frozen V13C score/margin for every context;
+- **MARKET_P123 exactly reproduces the binding V14A MARKET_W2PLUS treatment score and treatment margin for every context**;
+- binding V14A source: workflow `35526276641`, artifact `all3-v14a-mechanical-completion`;
 - zero source drift;
-- candidate/teacher state reset independently between modes;
-- no physical action substitution.
+- candidate and teacher state reset independently between modes;
+- no physical-action substitution.
+
+Any P123/V14A mismatch is:
+**`V18A_V14A_REPLICATION_FAILURE`** and invalidates temporal interpretation.
 
 ## Strategic localization
 
@@ -75,10 +82,10 @@ For each non-BASE mode record:
 - mean score delta;
 - mean margin delta.
 
-A window mode has **W/L headroom** iff:
+A mode has W/L headroom iff:
 
-- loss-to-win flips >=4;
-- flips span >=2 unique source SHAs;
+- score-improved contexts >=4;
+- improvements span >=2 unique source SHAs;
 - mean score delta >0;
 - mean margin delta >0.
 
@@ -86,21 +93,21 @@ A window mode has **W/L headroom** iff:
 
 Use deterministic specificity order:
 
-1. If one or more **single-window** modes pass, select the passing single window with:
-   - most loss-to-win flips;
+1. If one or more single partitions pass, select the passing single partition with:
+   - most score-improved contexts;
    - then most unique improved source SHAs;
    - then highest mean score delta;
-   - then earliest window lexical order W2A < W2B < W2C.
+   - then chronological order P1 < P2 < P3.
 
-   Decision: **`V18A_SINGLE_W2_WINDOW_HEADROOM`**.
+   Decision: **`V18A_SINGLE_PARTITION_HEADROOM`**.
 
-2. Else if W2AB or W2BC passes, choose by the same metrics, then lexical order.
-   Decision: **`V18A_ADJACENT_W2_WINDOWS_HEADROOM`**.
+2. Else if P12 or P23 passes, choose by the same metrics and chronological order.
+   Decision: **`V18A_ADJACENT_PARTITIONS_HEADROOM`**.
 
-3. Else if only W2ABC passes:
-   **`V18A_DISTRIBUTED_W2_HEADROOM`**.
+3. Else if only P123 passes:
+   **`V18A_DISTRIBUTED_HEADROOM`**.
 
-4. If even W2ABC fails to reproduce V14A W/L headroom:
+4. If P123 fails exact binding replication:
    **`V18A_V14A_REPLICATION_FAILURE`**.
 
 5. Mechanics failure:
@@ -110,7 +117,7 @@ Use deterministic specificity order:
 
 V18A is localization only.
 
-A passing window narrows a fresh phenotype/action-difference atlas to that fixed temporal region.
+A passing partition narrows the next fresh phenotype/action-difference atlas to that pre-frozen temporal region.
 No exact-turn rule, source identity, or teacher policy may be promoted directly.
 
 No Kaggle submission.
