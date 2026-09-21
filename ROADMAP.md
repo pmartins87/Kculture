@@ -1,77 +1,95 @@
 # ROADMAP — Kculture live plan
 
-## Binding update — 2026-09-21 — V21A CLOSED / V22A FRESH FRONTIER ACTIVE
+## Binding update — 2026-09-21 — V22A READY / V22B DOMAIN UPPER BOUND ACTIVE
 
 **This block supersedes lower stale V20/V21/V22 current-action sections.**
 
 ### V21A — COMPLETE / CLOSED
 
 Workflow: **`35558880526`**.  
-Launch commit: `a815ee73dad8fda5f1c6a587417e22415120ec87`.  
 Decision: **`V21A_SEMANTIC_NO_WL_HEADROOM`**.
 
-Mechanical:
-- 10/10 shards SUCCESS;
 - 120/120 frozen contexts;
-- failures 0;
-- BASE binding mismatches: **0**;
-- FULL binding mismatches: **0**;
-- aggregate artifact ID: `10622146329`;
-- artifact digest: `sha256:4e15b39d10a10c57feb8f5b071ecea10d532f379a16b4b519ac036b93fd3810b`.
-
-Strategic:
-- every tested semantic mode produced **0 positive-score contexts and 0 negative-score contexts**;
-- mean score delta was **0.0 for every mode**;
-- `SELL_ONLY` had the best mean margin delta at **+176.91666666666666**, but remained strictly margin-only and is not promotable;
-- selected mode: **none**.
+- BASE mismatches: 0;
+- FULL mismatches: 0;
+- no semantic mode produced any W/L-positive context;
+- V19A-derived schedule family is CLOSED.
 
 Result:
 `docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md`.
 
-Binding stop rule:
-- close the entire V19A-derived consensus-schedule family;
-- V21B/V21C/V21D are BLOCKED and remain archival/dormant;
-- do not search post-hoc semantic combinations, turn subsets, thresholds or state gates;
-- do not submit V19A/V21 candidates.
+### V22A — COMPLETE / READY
 
-### V22A — ACTIVE / FRESH CURRENT-FRONTIER REFRESH
+Corrected binding workflow: **`35562142399`**.  
+Launch commit: `2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f`.  
+Decision: **`V22A_FRESH_FRONTIER_HARD_POPULATION_READY`**.
 
-Binding workflow: **`35562142399`**.  
-Binding relaunch commit: `2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f`.  
-Original workflow `35560761804` is **NON-BINDING** due the pre-outcome mechanical gate defect documented in `docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md`.
+Mechanical:
+- selected executable representatives: **12**;
+- expected/completed games: **144/144**;
+- acquisition failures: **0**;
+- smoke failures: **0**;
+- episode failures: **0**;
+- mechanical PASS.
 
-Purpose:
-- refresh the current public Kaggriculture Top-30;
-- transiently acquire and SHA-deduplicate public sources;
-- remove Kaggle credentials before any third-party execution;
-- smoke-test unique sources in both seats;
-- choose up to 12 unique executable current-frontier sources by current representative rank only;
-- run exact ALL3 on untouched seeds `79101..79106`, both seats;
-- build a fresh hard-context population independent of the V19A/V21 schedule family.
+Fresh hard population:
+- ALL3 non-win contexts: **92/144**;
+- hard unique source SHAs: **8**;
+- hard seeds: **6/6** (`79101..79106`);
+- both seats evaluated.
 
-READY requires:
-- >=8 unique executable frontier source SHAs;
-- >=96 mechanically valid contexts;
-- >=12 ALL3 non-win contexts;
-- non-wins across >=4 source SHAs and >=3 seeds.
+Binding artifact:
+- artifact ID: `10623710178`;
+- digest: `sha256:56c2ee63e78c7e3389687ec5ece3a815a9bc190f41e731f4084324e5acf343f3`.
 
-Decision gate:
-- READY -> activate dormant V22B fresh domain upper bound;
-- TOO_EASY -> refresh later, no micro-tuning;
-- MECHANICS_INVALID -> repair mechanics only and rerun exact V22A.
+Frozen hard config:
+`configs/all3_v22b_hard_contexts.json`
+(commit `5c6058ed4fcc267242f0b654f06bd669fec1849b`).
 
-Pre-registered branch:
-`docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md`.
+Result:
+`docs/strategy/ALL3_V22A_FRESH_CURRENT_FRONTIER_RESULT_2026-09-21.md`.
 
-Dormant V22B protocol:
+Original workflow `35560761804` is NON-BINDING due the pre-outcome mechanics amendment.
+
+### V22B — ACTIVE / PRE-REGISTERED DOMAIN UPPER BOUND
+
+Binding workflow: **`35566168354`**.  
+Launch commit: `66ae1cec7bae766ab62915cac711a73cafdf1ee3`.
+
+Frozen population:
+- exactly all 92 V22A binding non-win contexts;
+- no manual context selection;
+- exact source ref/SHA, seed, seat, BASE score and BASE margin frozen.
+
+Frozen modes:
+- BASE;
+- MARKET_ONLY;
+- PHYSICAL_ONLY;
+- FULL_SHADOW.
+
+Domain W/L gate:
+- >=4 improved-score contexts;
+- improvements across >=2 source SHAs;
+- improvements across >=2 seeds;
+- mean score delta >0;
+- regressions <= half the improvements.
+
+Decision space:
+- `V22B_MARKET_DOMAIN_HEADROOM`;
+- `V22B_PHYSICAL_DOMAIN_HEADROOM`;
+- `V22B_BOTH_DOMAINS_HEADROOM`;
+- `V22B_CROSS_DOMAIN_INTERACTION_HEADROOM`;
+- `V22B_NO_DOMAIN_WL_HEADROOM_RESET`;
+- `V22B_MECHANICS_INVALID`.
+
+Protocol:
 `docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md`.
 
-Mechanical-completion fallback for V22A:
-`docs/strategy/ALL3_V22A_MECHANICAL_COMPLETION_PROTOCOL_2026-09-21.md`.
+If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-option mining and perform the pre-registered architectural reset / competition-strategy reassessment.
 
 No Kaggle submission is currently authorized.
 
-**Binding immediate action:** resolve corrected workflow `35562142399`.
+**Binding immediate action:** resolve workflow `35566168354`.
 
 ## Binding update — 2026-09-21 — V19C FRESH FAIL / V20A STATE GATE ACTIVE
 
