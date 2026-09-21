@@ -124,6 +124,9 @@ Frozen functional-cluster map:
 Outcome router / architectural-reset protocol:
 `docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md`.
 
+Deterministic router implementation:
+`tools/route_v22b_outcome.py` (commit `8acdf847d13dabd48fb208543aa20d923c287005`).
+
 If V22B returns no MARKET/PHYSICAL W/L upper-bound headroom, stop ALL3 local-option mining and perform the pre-registered architectural reset / competition-strategy reassessment.
 
 No Kaggle submission is currently authorized.
