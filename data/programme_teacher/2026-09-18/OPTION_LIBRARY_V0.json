@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V17B workflow 35539385764; only V17B_LQ6S_WL_HEADROOM may activate pre-frozen V17C on seeds 78401..78404",
+  "next_stage": "resolve V18A workflow 35547247595; first require exact MARKET_P123 replication of all 24 binding V14A MARKET_W2PLUS outcomes, then interpret frozen partitions P1/P2/P3",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1577,12 +1577,46 @@
       "result_doc": "docs/strategy/ALL3_V17A4_STRAWBERRY_TRIGGER_RESULT_2026-09-20.md"
     },
     "v17b_lq6s_causal": {
-      "status": "ACTIVE",
+      "status": "CLOSED_NO_HEADROOM",
       "workflow": 35539385764,
       "launch_commit": "303b3c72bb3bbc7ad73ed38d4fbebc7c23d9a538",
       "candidate": "O-LQ6S W2 STRAWBERRY first-free SELL2 with E3 rising-edge trigger",
       "pass_gate": "24-context/10-source coverage; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
       "protocol": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "decision": "V17B_LQ6S_NO_HEADROOM_CLOSE",
+      "mechanical_pass": true,
+      "coverage_pass": true,
+      "fire_contexts": 24,
+      "fire_sources": 10,
+      "total_fires": 44,
+      "loss_to_win_flips": 0,
+      "mean_score_delta": 0,
+      "mean_margin_delta": -42.833333333333336,
+      "result_doc": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_RESULT_2026-09-20.md",
+      "fresh_validation_activated": false
+    },
+    "v18a_w2plus_temporal": {
+      "status": "ACTIVE",
+      "workflow": 35547247595,
+      "launch_commit": "d02e63aea3dee0ff5c462f86f73450548a0d5959",
+      "source_v14a_workflow": 35526276641,
+      "partitions": {
+        "P1": [
+          336,
+          463
+        ],
+        "P2": [
+          464,
+          591
+        ],
+        "P3": [
+          592,
+          718
+        ]
+      },
+      "exact_replication_required": "MARKET_P123 must equal binding V14A MARKET_W2PLUS score+margin for all 24 contexts",
+      "protocol": "docs/strategy/ALL3_V18A_W2_TEMPORAL_LOCALIZATION_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false
     }
   },
