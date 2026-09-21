@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V22A workflow 35560761804; V22A READY activates only the pre-registered V22B fresh-domain upper bound; no Kaggle submission",
+  "next_stage": "resolve corrected V22A workflow 35562142399; ignore non-binding 35560761804; READY activates only pre-registered V22B",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1847,9 +1847,9 @@
     "result_document": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md"
   },
   "v22a": {
-    "status": "ACTIVE",
-    "workflow": 35560761804,
-    "launch_commit": "b57a5aa37249e9629233b7f11fe300ffc267cb94",
+    "status": "ACTIVE_CORRECTED_BINDING",
+    "workflow": 35562142399,
+    "launch_commit": "2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f",
     "seeds": [
       79101,
       79102,
@@ -1868,7 +1868,11 @@
     "ready_min_nonwins": 12,
     "ready_min_nonwin_source_shas": 4,
     "ready_min_nonwin_seeds": 3,
-    "protocol": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md"
+    "protocol": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
+    "nonbinding_workflow": 35560761804,
+    "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md",
+    "strict_zero_acquisition_failures": true,
+    "strict_zero_smoke_failures": true
   },
   "v22b": {
     "status": "DORMANT_PRE_REGISTERED",
