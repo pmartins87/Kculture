@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V23 immutable snapshot workflow 35627972979; if V23A READY, V23B executes only from snapshot; no Kaggle submission",
+  "next_stage": "resolve V23B fallback workflow 35632311093 using exact V23A binding snapshot/config; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2000,7 +2000,7 @@
     }
   },
   "v23": {
-    "status": "ACTIVE",
+    "status": "V23A_READY_V23B_FALLBACK_ACTIVE",
     "workflow": 35627972979,
     "launch_commit": "ce1bd5abbb01926c073aafa69f7950be687db5d7",
     "protocol": "docs/strategy/ALL3_V23_IMMUTABLE_SNAPSHOT_FRONTIER_PROTOCOL_2026-09-21.md",
@@ -2021,6 +2021,37 @@
     "snapshot_selected_sources": true,
     "v23b_live_kaggle_reacquisition": false,
     "domain_thresholds_unchanged_from_v22b": true,
-    "automatic_kaggle_submission": false
+    "automatic_kaggle_submission": false,
+    "v23a": {
+      "workflow": 35627972979,
+      "discover_job": 106426918864,
+      "decision": "V23A_IMMUTABLE_HARD_POPULATION_READY",
+      "expected_games": 144,
+      "completed_games": 144,
+      "episode_failures": 0,
+      "selected_representatives": 12,
+      "hard_contexts": 93,
+      "hard_source_shas": 12,
+      "hard_seeds": [
+        79301,
+        79302,
+        79304,
+        79305,
+        79306
+      ],
+      "functional_clusters": 9,
+      "snapshot_artifact_id": 10655240502,
+      "snapshot_digest": "sha256:12a6f45ebd3ed44c3d9b57d49b6a53d77514dccf48d8cddff17cb2c829c99054",
+      "result_artifact_id": 10655010811,
+      "config_artifact_id": 10654531145
+    },
+    "integrated_v23b_failure": {
+      "workflow": 35627972979,
+      "reason": "ModuleNotFoundError: No module named 'kagglehub' before treatment execution",
+      "strategic_data_used": false
+    },
+    "v23b_binding_workflow": 35632311093,
+    "v23b_fallback_commit": "a6e1d5fd3218d5a05bb0bdbdc05b525a4c05c083",
+    "v23b_reuses_binding_snapshot": true
   }
 }
