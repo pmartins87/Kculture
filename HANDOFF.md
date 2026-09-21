@@ -1,5 +1,87 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V26B CLOSED / V27A ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V26B — COMPLETE / NO SOURCE-AGNOSTIC POLICY HEADROOM
+
+Binding workflow: **`35660845547`**.  
+Aggregate job: `106542706979`.  
+Final artifact: `10667886918`.  
+Digest: `sha256:c47ebfcb406f6077165a0b1779ede2a2060a283f9476d79129feb36e2207132e`.
+
+Mechanical:
+- 4/4 shards PASS;
+- 144/144 paired contexts;
+- 0 failures;
+- immutable 12-teacher snapshot;
+- no live Kaggle source reacquisition.
+
+Decision:
+**`V26B_NO_SOURCE_AGNOSTIC_POLICY_HEADROOM`**.
+
+Key results:
+- ALL3 control score rate: 0.3472222;
+- teacher-consensus score rate: 0.1527778;
+- mean score delta: -0.1944444;
+- mean margin delta: -2131.0833;
+- positive-score contexts: 2;
+- negative-score contexts: 30;
+- CONTROL-win -> consensus-nonwin regressions: 30;
+- positive source SHAs: 1;
+- positive seeds: 1;
+- positive CONTROL functional clusters: 1;
+- mean modal support: 9.925 / 12 teachers.
+
+Result:
+`docs/strategy/V26B_PERSISTENT_TEACHER_CONSENSUS_RESULT_2026-09-21.md`
+(commit `0f07d70c9d8ddd81040a3265a51cc767596462db`).
+
+Closed:
+- PrizeSolverV4 as current base;
+- source-agnostic 12-teacher consensus;
+- ALL3 additive option mining.
+
+### V27A — ACTIVE / RANK-1 TEACHER MARKOV RECONSTRUCTIBILITY
+
+Protocol:
+`docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_PROTOCOL_2026-09-21.md`
+(commit `5045ddb827b03cd0e66bd102d3756581da47700e`).
+
+Binding workflow:
+**`35665757174`**.  
+Launch commit:
+`6538f221f5fa6c7f7cbbc42cca797e3d23584461`.
+
+Frozen teacher:
+- current V26A rank-1 public representative;
+- ref `ahmedberatozer/kaggriculture-v56-smarter-seeds-and-fertilizer`;
+- SHA `a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c`.
+
+Population:
+- all 12 immutable V26A opponent sources;
+- fresh seeds 79701..79703;
+- both seats;
+- 72 episodes;
+- 15 frozen checkpoints per episode;
+- 1080 ongoing-vs-fresh action comparisons.
+
+Question:
+does the same legal current state reproduce the teacher action without its hidden episode history?
+
+Routes:
+- >=95% complete action parity + strict component/source/checkpoint gates => state-only distillation;
+- >=70% complete parity but Markov gate fail => explicit legal-history distillation;
+- <70% complete parity => fast teacher distillation closed.
+
+No teacher source will be embedded into a candidate under V27.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35665757174`.
+
+
 ## Binding update — 2026-09-21 — V26A CLOSED / V26B ACTIVE
 
 **This block supersedes lower stale current-action sections.**
