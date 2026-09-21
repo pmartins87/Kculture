@@ -1869,5 +1869,31 @@
     "ready_min_nonwin_source_shas": 4,
     "ready_min_nonwin_seeds": 3,
     "protocol": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md"
+  },
+  "v22b": {
+    "status": "DORMANT_PRE_REGISTERED",
+    "activation": "only if V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
+    "protocol": "docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md",
+    "modes": [
+      "BASE",
+      "MARKET_ONLY",
+      "PHYSICAL_ONLY",
+      "FULL_SHADOW"
+    ],
+    "domain_gate": {
+      "min_improved_score_contexts": 4,
+      "min_improved_source_shas": 2,
+      "min_improved_seeds": 2,
+      "mean_score_delta_must_be_positive": true,
+      "max_regressed_to_improved_ratio": 0.5
+    },
+    "decisions": [
+      "V22B_MARKET_DOMAIN_HEADROOM",
+      "V22B_PHYSICAL_DOMAIN_HEADROOM",
+      "V22B_BOTH_DOMAINS_HEADROOM",
+      "V22B_CROSS_DOMAIN_INTERACTION_HEADROOM",
+      "V22B_NO_DOMAIN_WL_HEADROOM_RESET",
+      "V22B_MECHANICS_INVALID"
+    ]
   }
 }
