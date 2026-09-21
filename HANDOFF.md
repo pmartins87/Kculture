@@ -1,5 +1,69 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-20 — V17B CLOSED / V18A FULL W2PLUS TEMPORAL LOCALIZATION ACTIVE
+
+**This block supersedes lower stale V17/V18 current-action sections.**
+
+### V17B — COMPLETE / CLOSED
+
+Workflow: **`35539385764`**.
+
+Decision:
+**`V17B_LQ6S_NO_HEADROOM_CLOSE`**.
+
+Mechanical:
+- 24/24 paired hard contexts;
+- failures 0;
+- fire coverage 24/24 contexts;
+- source coverage 10/10 source SHAs;
+- total O-LQ6S fires: 44.
+
+Strategic:
+- loss-to-win flips: 0;
+- positive-score contexts: 0;
+- negative-score contexts: 0;
+- mean score delta: **0.0**;
+- mean margin delta: **-42.833333333333336**.
+
+O-LQ6S is closed. V17C fresh validation is not activated.
+
+Result:
+`docs/strategy/ALL3_V17B_LQ6S_CAUSAL_RESULT_2026-09-20.md`.
+
+### V18A — ACTIVE
+
+Workflow: **`35547247595`**  
+Launch commit: `d02e63aea3dee0ff5c462f86f73450548a0d5959`.
+
+Before any V18A game ran, the original V14A implementation was re-opened and confirmed:
+`MARKET_W2PLUS` means **all turns t >= 336 through episode end**.
+
+The dormant V18A draft that only covered 336..503 was therefore mechanically corrected before activation.
+
+Frozen equal chronological partitions of the full 383-turn V14A treatment interval:
+- P1: 336..463;
+- P2: 464..591;
+- P3: 592..718.
+
+Modes:
+- BASE;
+- MARKET_P1_ONLY;
+- MARKET_P2_ONLY;
+- MARKET_P3_ONLY;
+- MARKET_P12;
+- MARKET_P23;
+- MARKET_P123.
+
+Hard mechanical requirement:
+**MARKET_P123 must exactly reproduce score and margin for every one of the 24 binding V14A MARKET_W2PLUS rows** from workflow `35526276641`.
+
+Only after exact replication may the narrower partitions be interpreted.
+
+No Kaggle submission.
+
+**Binding immediate action:** resolve workflow **`35547247595`**.
+
+
 ## Binding update — 2026-09-20 — V17A3 STATELESS CLOSE / V17A4 EDGE READY / V17B ACTIVE
 
 **This block supersedes lower stale V17 current-action sections.**
