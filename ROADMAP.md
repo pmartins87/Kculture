@@ -1,5 +1,95 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-21 — V26A CLOSED / V26B ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V26A — COMPLETE / PRIZE SOLVER BASE NOT READY
+
+Binding workflow: **`35653189539`**.  
+Aggregate job: `106517283200`.  
+Final artifact: `10664405274`.  
+Digest: `sha256:a43451c248c92eff000d624690cdba4233f9777106f45e496541d6c168c953c9`.
+
+Current-frontier snapshot:
+- 12 selected unique executable representatives;
+- 0 unavailable refs;
+- 0 smoke failures;
+- immutable snapshot artifact `10663530412`;
+- snapshot digest `sha256:69f6407c34155af19671963c1ce107fab45926283098b422790cd1d86117ed43`.
+
+Mechanical:
+- 144/144 paired contexts;
+- failures 0;
+- fresh seeds `79501..79506`;
+- both seats.
+
+Decision:
+**`V26A_PRIZE_SOLVER_BASE_NOT_READY`**.
+
+Competitive:
+- ALL3 control score rate: **0.3611111**;
+- PrizeSolverV4 treatment score rate: **0.0**;
+- positive treatment contexts: **0**;
+- negative treatment contexts: **52**;
+- CONTROL-win -> TREATMENT-nonwin: **52**;
+- mean score delta: **-0.3611111**;
+- mean margin delta: **-135390.7847**.
+
+PrizeSolverV4 is not a competitive base in its current heuristic form. Do not scale PS2/PS3 to rescue it.
+
+Result:
+`docs/strategy/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK_RESULT_2026-09-21.md`
+(commit `92f29f4e61e6d623a47cd1ba6ed793c6bf1ddbb2`).
+
+### V26B — ACTIVE / PERSISTENT SOURCE-AGNOSTIC TEACHER CONSENSUS
+
+Protocol:
+`docs/strategy/V26B_TEACHER_DERIVED_PERSISTENT_POLICY_VIABILITY_PROTOCOL_2026-09-21.md`
+(commit `d48bbea1158dab464b343589cfb27be3ee524487`).
+
+Binding workflow:
+**`35660845547`**.  
+Launch commit:
+`356349db5a70763cafa722a0231b07bafc6e8ff8`.
+
+Inputs:
+- exact immutable V26A current-frontier snapshot;
+- same 12 selected teachers and opponents;
+- no live Kaggle source reacquisition.
+
+Fresh seeds:
+`79601..79606`, both seats.
+
+Treatment:
+- every turn, evaluate all 12 snapshot teachers on the same legal observation;
+- choose modal complete canonical action;
+- lexical canonical JSON tie-break;
+- no component mixing;
+- no source weights;
+- no opponent-specific subset;
+- no identity/rank/SHA runtime feature.
+
+Frozen headroom gate:
+- >=8 positive-score contexts;
+- >=3 opponent SHAs;
+- >=3 fresh seeds;
+- mean score delta >0;
+- negatives <= positives/2;
+- CONTROL-win -> CONSENSUS-nonwin <= positives/2;
+- >=2 CONTROL functional outcome clusters.
+
+PASS:
+`V26B_CONSENSUS_POLICY_HEADROOM` => distill persistent first-party policy.
+
+FAIL:
+`V26B_NO_SOURCE_AGNOSTIC_POLICY_HEADROOM` => close current teacher-bank imitation and move to competition-strategy reassessment / genuinely new learning architecture.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35660845547`.
+
+
 ## Binding update — 2026-09-21 — V25A PERSISTENT POLICY / V26A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
