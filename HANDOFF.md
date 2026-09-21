@@ -53,6 +53,28 @@ Original workflow `35560761804` is NON-BINDING due the pre-outcome mechanics ame
 
 ### V22B — ACTIVE / PRE-REGISTERED DOMAIN UPPER BOUND
 
+### V22B attempt-2 mechanical progress
+
+Corrected binding workflow `35607214335` is still running serially.
+
+Observed so far:
+- shard 0 completed with 80/92 rows;
+- its only failures were the 3 rank-2 contexts for SHA `fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8`;
+- the representative ref `haodou092/notebookdb6965aa8e` now returns HTTP 404;
+- binding V22A had already proven `degnonguidi/best-agent-ranking` as an exact-SHA alias for the same bytes;
+- frozen alias map: `configs/all3_v22b_hard_contexts.json`, commit `f1c5628b2799e7acd62d2746d231ee0c2acbbd56`;
+- executor exact-SHA alias support: commit `20195454330d67e786f33a49346f35504f5be07c`;
+- strict mechanical merger: `tools/merge_v22b_mechanical_attempts.py`, commit `c04e01c54621320c5c52ceef4aa4b59f0d5277a2`;
+- dormant merge workflow template: `docs/strategy/templates/ALL3_V22B_MECHANICAL_MERGE_WORKFLOW.yml`, commit `adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c`.
+
+Current union of attempt-1 valid rows + attempt-2 shard 0:
+- **244/368 exact keys**;
+- **61/92 complete contexts**;
+- all remaining 31 contexts belong only to shards 2 and 3.
+
+Therefore no third full V22B run is justified at this time. Let attempt 2 finish shards 2/3, then mechanically merge attempts 1+2. Strategic interpretation remains blocked until a complete 368-key aggregate exists.
+
+
 Attempt 1 workflow: `35566168354` => **`V22B_MECHANICS_INVALID`** due 45 Kaggle HTTP 429 `teacher_acquire` failures; its partial aggregate is strategically NON-BINDING.  
 Corrected binding workflow: **`35607214335`**.  
 Mechanical-repair launch commit: `ade4a4180d7081e57f7cde7286c9de07abfe2e87`.
