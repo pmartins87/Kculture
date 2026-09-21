@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V18B workflow 35552335995; if V18B_CONTROLLER_READY_FOR_CAUSAL, freeze exported JSON controller artifact and open a paired hard-context causal gate before any fresh/hosted validation",
+  "next_stage": "resolve V19B workflow 35553022505; only V19B_CONSENSUS_WL_HEADROOM may activate pre-frozen V19C on seeds 78601..78604",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1632,7 +1632,7 @@
       "result_doc": "docs/strategy/ALL3_V18A_W2PLUS_TEMPORAL_LOCALIZATION_RESULT_2026-09-20.md"
     },
     "v18b_market_controller": {
-      "status": "ACTIVE",
+      "status": "CLOSED_NOT_DISTILLABLE",
       "workflow": 35552335995,
       "launch_commit": "a4d15571fc4d7a7594416e25de4a119b8f7f1118",
       "scope": [
@@ -1643,6 +1643,46 @@
       "validation": "leave-one-source-SHA-out",
       "ready_gate": "retained>=3; kinds QTY/PRESENCE/DUPLICATE; positive sources>=4; JSON parity; structural compiler pass",
       "protocol": "docs/strategy/ALL3_V18B_TEMPORAL_MARKET_CONTROLLER_PROTOCOL_2026-09-20.md",
+      "automatic_kaggle_submission": false,
+      "binding_workflow": 35552606264,
+      "decision": "V18B_CONTROLLER_NOT_DISTILLABLE",
+      "dataset_rows": 3072,
+      "eligible_families": 19,
+      "retained_families": 0,
+      "result_doc": "docs/strategy/ALL3_V18B_P2_MARKET_CONTROLLER_RESULT_2026-09-20.md"
+    },
+    "v19a_consensus_schedule": {
+      "status": "COMPLETE_READY",
+      "workflow": 35552885627,
+      "decision": "V19A_CONSENSUS_SCHEDULE_READY",
+      "scope": [
+        464,
+        591
+      ],
+      "scheduled_turns": 102,
+      "min_source_support": 8,
+      "min_context_support": 16,
+      "result_doc": "docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_RESULT_2026-09-20.md"
+    },
+    "v19b_consensus_causal": {
+      "status": "ACTIVE",
+      "workflow": 35553022505,
+      "launch_commit": "88248e361c61f00c0c9cccd0ef76bc79da2282c8",
+      "candidate": "O-TM1 P2 cross-source consensus market schedule",
+      "pass_gate": "positive score>=4 across>=2 sources; negative score=0; mean score>0; mean margin>0",
+      "automatic_kaggle_submission": false
+    },
+    "v19c_consensus_fresh": {
+      "status": "DORMANT_PRE_FROZEN",
+      "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
+      "config": "configs/all3_v19c_consensus_fresh_validation.json",
+      "seeds": [
+        78601,
+        78602,
+        78603,
+        78604
+      ],
+      "pairs": 80,
       "automatic_kaggle_submission": false
     }
   },
