@@ -1,0 +1,137 @@
+name: v26a-first-party-base-architecture-benchmark
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v26a-first-party-base-architecture-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      decision: ${{ steps.read.outputs.decision }}
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Run V26A frontier snapshot
+        id: snap
+        continue-on-error: true
+        run: |
+          python tools/v26a_current_frontier_snapshot.py \
+            --out artifacts/v26a-snapshot-result/V26A_SNAPSHOT_RESULT.json \
+            --raw artifacts/v26a-snapshot-result/TOP30_RAW.csv \
+            --snapshot-dir artifacts/v26a-snapshot
+      - name: Read snapshot decision
+        id: read
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,os
+          p='artifacts/v26a-snapshot-result/V26A_SNAPSHOT_RESULT.json'
+          decision='V26A_NO_RESULT'
+          if os.path.exists(p):
+              decision=json.load(open(p))['decision']
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write(f"decision={decision}\n")
+          print("V26A_SNAPSHOT_WORKFLOW_DECISION",decision)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v26a-frontier-snapshot-result
+          path: artifacts/v26a-snapshot-result/*
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v26a-frontier-immutable-snapshot
+          path: artifacts/v26a-snapshot/**
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Fail if snapshot invalid
+        if: steps.snap.outcome != 'success'
+        run: exit 2
+
+  shard:
+    needs: snapshot
+    if: needs.snapshot.outputs.decision == 'V26A_FRONTIER_SNAPSHOT_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install complete pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: v26a-frontier-immutable-snapshot
+          path: artifacts/v26a-snapshot
+      - name: Run V26A shard
+        run: |
+          mkdir -p artifacts/v26a
+          python tools/v26a_base_architecture_benchmark_shard.py \
+            --snapshot-dir artifacts/v26a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v26a/V26A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v26a-shard-${{ matrix.shard_index }}
+          path: artifacts/v26a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [snapshot, shard]
+    if: needs.snapshot.outputs.decision == 'V26A_FRONTIER_SNAPSHOT_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v26a-shard-*
+          path: artifacts/v26a-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: v26a-frontier-snapshot-result
+          path: artifacts/v26a-snapshot-result
+      - name: Aggregate V26A
+        run: |
+          mkdir -p artifacts/v26a-final
+          python tools/aggregate_v26a_base_architecture_benchmark.py \
+            --input-dir artifacts/v26a-shards \
+            --snapshot-result artifacts/v26a-snapshot-result/V26A_SNAPSHOT_RESULT.json \
+            --out artifacts/v26a-final/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v26a-first-party-base-architecture-benchmark
+          path: artifacts/v26a-final/*.json
+          retention-days: 30
+          if-no-files-found: error
