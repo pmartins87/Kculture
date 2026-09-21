@@ -1946,7 +1946,9 @@
       "remaining_only_shards": [
         3
       ],
-      "remaining_exact_keys": 56
+      "remaining_exact_keys": 56,
+      "cross_attempt_duplicate_keys_compared": 116,
+      "cross_attempt_conflicts": 0
     }
   }
 }
