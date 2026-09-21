@@ -1,0 +1,101 @@
+name: all3-v24a-coupled-divergence-trace
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/all3-v24a-coupled-divergence-trace.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install complete pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35627972979
+          name: all3-v23a-immutable-source-snapshot
+          path: artifacts/v23a-snapshot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35627972979
+          name: all3-v23-config
+          path: artifacts/v23-config
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35632311093
+          name: all3-v23b-fallback-domain-upper-bound
+          path: artifacts/v23b-binding
+      - name: Run V24A trace shard
+        run: |
+          mkdir -p artifacts/v24a
+          python tools/all3_v24a_coupled_divergence_trace_shard.py \
+            --hard-config artifacts/v23-config/V23B_HARD_CONFIG.json \
+            --cluster-map artifacts/v23-config/V23_FUNCTIONAL_CLUSTERS.json \
+            --v23b-aggregate artifacts/v23b-binding/v23b-final/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND.json \
+            --snapshot-dir artifacts/v23a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v24a/V24A_TRACE_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v24a-trace-shard-${{ matrix.shard_index }}
+          path: artifacts/v24a/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v24a-trace-shard-*
+          path: artifacts/v24a-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35627972979
+          name: all3-v23-config
+          path: artifacts/v23-config
+      - name: Aggregate V24A
+        run: |
+          mkdir -p artifacts/v24a-final
+          python tools/aggregate_all3_v24a_coupled_divergence_trace.py \
+            --input-dir artifacts/v24a-shards \
+            --hard-config artifacts/v23-config/V23B_HARD_CONFIG.json \
+            --out artifacts/v24a-final/ALL3_V24A_COUPLED_DIVERGENCE_TRACE.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: all3-v24a-coupled-divergence-trace
+          path: artifacts/v24a-final/*.json
+          retention-days: 30
+          if-no-files-found: error
