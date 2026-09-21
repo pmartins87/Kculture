@@ -1,0 +1,80 @@
+name: all3-v22b-mechanical-merge
+
+# DORMANT TEMPLATE. Promote to .github/workflows only after V22B attempt 2
+# workflow 35607214335 has completed. This is mechanical completion only.
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download V22B attempt 1 shard artifacts
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35566168354
+          pattern: v22b-shard-*
+          path: artifacts/v22b-attempt1
+          merge-multiple: false
+
+      - name: Download V22B attempt 2 shard artifacts
+        uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35607214335
+          pattern: v22b-shard-*
+          path: artifacts/v22b-attempt2
+          merge-multiple: false
+
+      - name: Merge mechanically valid exact rows
+        id: merge_rows
+        continue-on-error: true
+        run: |
+          mkdir -p artifacts/v22b-merged artifacts/v22b-merge-status
+          python tools/merge_v22b_mechanical_attempts.py \
+            --input-dir artifacts \
+            --hard-config configs/all3_v22b_hard_contexts.json \
+            --out-dir artifacts/v22b-merged \
+            --status-out artifacts/v22b-merge-status/V22B_MERGE_STATUS.json
+
+      - name: Aggregate completed V22B
+        if: steps.merge_rows.outcome == 'success'
+        run: |
+          mkdir -p artifacts/v22b-final
+          python tools/aggregate_all3_v22b_domain_upper_bound.py \
+            --input-dir artifacts/v22b-merged \
+            --hard-config configs/all3_v22b_hard_contexts.json \
+            --out artifacts/v22b-final/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND.json
+
+      - name: Upload merge status
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all3-v22b-mechanical-merge-status
+          path: artifacts/v22b-merge-status/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+      - name: Upload completed aggregate
+        if: steps.merge_rows.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: all3-v22b-fresh-frontier-domain-upper-bound-merged
+          path: artifacts/v22b-final/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: Fail if mechanical merge incomplete
+        if: steps.merge_rows.outcome != 'success'
+        run: exit 2
