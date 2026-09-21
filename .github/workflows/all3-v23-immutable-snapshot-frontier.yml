@@ -1,0 +1,186 @@
+name: all3-v23-immutable-snapshot-frontier
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/all3-v23-immutable-snapshot-frontier.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    outputs:
+      decision: ${{ steps.read_decision.outputs.decision }}
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Require Kaggle token
+        run: test -n "$KAGGLE_API_TOKEN"
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Syntax
+        run: |
+          python -m py_compile \
+            tools/all3_v23a_immutable_frontier.py \
+            tools/materialize_v23b_hard_config_and_clusters.py \
+            tools/all3_v23b_immutable_snapshot_shard.py \
+            tools/aggregate_all3_v23b_immutable_snapshot.py \
+            tools/route_v23b_outcome.py
+      - name: Run V23A immutable frontier refresh
+        id: v23a
+        continue-on-error: true
+        run: |
+          python tools/all3_v23a_immutable_frontier.py \
+            --out artifacts/v23a-result/ALL3_V23A_IMMUTABLE_FRONTIER.json \
+            --raw artifacts/v23a-result/TOP30_RAW.csv \
+            --snapshot-dir artifacts/v23a-snapshot
+      - name: Read V23A decision
+        id: read_decision
+        if: always()
+        run: |
+          python - <<'PY'
+          import json, os
+          p='artifacts/v23a-result/ALL3_V23A_IMMUTABLE_FRONTIER.json'
+          decision='V23A_NO_RESULT'
+          if os.path.exists(p):
+              decision=json.load(open(p))['decision']
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f:
+              f.write(f"decision={decision}\n")
+          print("V23A_WORKFLOW_DECISION",decision)
+          PY
+      - name: Upload V23A result
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all3-v23a-immutable-frontier-result
+          path: artifacts/v23a-result/*
+          retention-days: 30
+          if-no-files-found: warn
+      - name: Upload immutable source snapshot
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all3-v23a-immutable-source-snapshot
+          path: artifacts/v23a-snapshot/**
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Fail on V23A mechanical failure
+        if: steps.v23a.outcome != 'success'
+        run: exit 2
+
+  materialize:
+    needs: discover
+    if: needs.discover.outputs.decision == 'V23A_IMMUTABLE_HARD_POPULATION_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: all3-v23a-immutable-frontier-result
+          path: artifacts/v23a-result
+      - name: Materialize hard config and clusters
+        run: |
+          mkdir -p artifacts/v23-config
+          python tools/materialize_v23b_hard_config_and_clusters.py \
+            --v23a-result artifacts/v23a-result/ALL3_V23A_IMMUTABLE_FRONTIER.json \
+            --hard-config-out artifacts/v23-config/V23B_HARD_CONFIG.json \
+            --cluster-map-out artifacts/v23-config/V23_FUNCTIONAL_CLUSTERS.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: all3-v23-config
+          path: artifacts/v23-config/*.json
+          retention-days: 30
+          if-no-files-found: error
+
+  shard:
+    needs: [discover, materialize]
+    if: needs.discover.outputs.decision == 'V23A_IMMUTABLE_HARD_POPULATION_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0, 1, 2, 3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: all3-v23a-immutable-source-snapshot
+          path: artifacts/v23a-snapshot
+      - uses: actions/download-artifact@v4
+        with:
+          name: all3-v23-config
+          path: artifacts/v23-config
+      - name: Run V23B immutable snapshot shard
+        run: |
+          mkdir -p artifacts/v23b
+          python tools/all3_v23b_immutable_snapshot_shard.py \
+            --hard-config artifacts/v23-config/V23B_HARD_CONFIG.json \
+            --snapshot-dir artifacts/v23a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v23b/V23B_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v23b-shard-${{ matrix.shard_index }}
+          path: artifacts/v23b/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [discover, materialize, shard]
+    if: needs.discover.outputs.decision == 'V23A_IMMUTABLE_HARD_POPULATION_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v23b-shard-*
+          path: artifacts/v23b-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: all3-v23-config
+          path: artifacts/v23-config
+      - name: Aggregate V23B
+        run: |
+          mkdir -p artifacts/v23b-final artifacts/v23b-route
+          python tools/aggregate_all3_v23b_immutable_snapshot.py \
+            --input-dir artifacts/v23b-shards \
+            --hard-config artifacts/v23-config/V23B_HARD_CONFIG.json \
+            --out artifacts/v23b-final/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND.json
+          python tools/route_v23b_outcome.py \
+            --aggregate artifacts/v23b-final/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND.json \
+            --cluster-map artifacts/v23-config/V23_FUNCTIONAL_CLUSTERS.json \
+            --out artifacts/v23b-route/ALL3_V23B_OUTCOME_ROUTE.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: all3-v23b-immutable-snapshot-domain-upper-bound
+          path: |
+            artifacts/v23b-final/*.json
+            artifacts/v23b-route/*.json
+            artifacts/v23-config/*.json
+          retention-days: 30
+          if-no-files-found: error
