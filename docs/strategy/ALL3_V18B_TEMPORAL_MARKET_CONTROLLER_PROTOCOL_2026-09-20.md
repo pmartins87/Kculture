@@ -2,14 +2,11 @@
 
 ## Status
 
-**DORMANT / PRE-REGISTERED BEFORE V18A RESULT.**
+**ACTIVE after binding V18A `V18A_SINGLE_PARTITION_HEADROOM`.**
 
-Activate only if V18A returns one of:
-- `V18A_SINGLE_PARTITION_HEADROOM`;
-- `V18A_ADJACENT_PARTITIONS_HEADROOM`;
-- `V18A_DISTRIBUTED_HEADROOM`.
+Binding temporal scope: **P2 = turns 464..591**.
 
-Do not activate if V18A fails exact V14A replication.
+V18A exact V14A replication passed 24/24 contexts.
 
 ## Architectural purpose
 
@@ -159,3 +156,169 @@ on the same 24 hard contexts.
 Only real W/L improvement can activate untouched fresh validation.
 
 No Kaggle submission is authorized by V18B alone.
+
+
+## Binding implementation amendment — selected P2 scope
+
+This amendment is frozen before any V18B dataset/model result.
+
+### Selected scope
+
+Binding V18A selected:
+- `MARKET_P2_ONLY`;
+- turns **464..591 inclusive**;
+- 14/24 positive-score contexts;
+- 7 improved source SHAs;
+- mean score delta +0.5833333;
+- mean margin delta +1384.25;
+- zero negative-score contexts.
+
+### Dataset rows
+
+Collect exactly one row for every hard context and every turn 464..591:
+
+- 24 contexts × 128 turns = **3072 rows**.
+
+Each row contains:
+- a numeric legal feature vector from the current observation and exact ALL3 action;
+- the exact current ALL3 market;
+- the exact shadow-teacher market;
+- normalized V14B elementary market residual labels.
+
+BASE gameplay remains exact ALL3.
+
+### Frozen feature schema
+
+The predictive feature vector may contain only numeric values from:
+
+1. turn and normalized progress inside P2;
+2. own and opponent public money / quadrants / public crop-animal counts;
+3. own private shed, carried inventory and seed counts;
+4. public product prices / public market inventory;
+5. exact ALL3 market aggregate structure:
+   - market length;
+   - nonempty/empty counts;
+   - per SELL product aggregate quantity/count;
+   - per BUY_SEED/BUY_PRODUCT product aggregate quantity/count;
+   - HIRE count;
+   - total SELL/BUY units;
+6. count of unlocked public town shops.
+
+Explicitly prohibited from the feature vector:
+- source SHA/ref/rank;
+- context id;
+- seed;
+- seat;
+- outcome/result/margin;
+- future state.
+
+Source SHA is retained only as offline fold provenance.
+
+### Actionable residual families in controller v1
+
+A V14B recurrent family is independently actionable in controller v1 only when its elementary kind is:
+
+- `QTY` on `SELL <real-product>`;
+- `PRESENCE` on `SELL <real-product>`;
+- `DUPLICATE` on `SELL <real-product>`.
+
+Generic `ORDER_COUNT` and `REORDER` are not independently actionable because they do not identify a unique legal transformation.
+
+BUY/HIRE residuals are not independently applied in controller v1 because legality depends on coupled capital/capacity constraints not represented by a safe standalone transformation. They remain observable in the dataset but cannot become runtime edits in V18B v1.
+
+This restriction is frozen before V18B model results.
+
+### Family identity
+
+A classifier target is the exact tuple:
+
+`(group_key, dominant_direction)`
+
+from the binding V14B recurrent-family atlas.
+
+Only families whose dominant residual actually appears inside turns 464..591 and satisfy the actionable-family rule above are trained.
+
+### Fixed classifier
+
+For every eligible family and every leave-one-source-SHA-out fold:
+
+- sklearn `DecisionTreeClassifier`;
+- `max_depth=4`;
+- `class_weight="balanced"`;
+- `random_state=20260920`;
+- `min_samples_leaf=max(8, ceil(0.01 * training_rows))`;
+- no hyperparameter search.
+
+Retain a family only if aggregated OOF predictions satisfy:
+- true positive examples span >=4 source SHAs;
+- precision >=0.80;
+- recall >=0.70;
+- F1 >=0.75.
+
+### Pure-Python tree parity
+
+Each retained final tree is refit on all 3072 rows with the same frozen parameters and exported to JSON.
+
+A generic pure-Python JSON-tree predictor must reproduce sklearn predictions **exactly on all 3072 rows** for every retained family.
+
+Any mismatch fails V18B.
+
+### Frozen SELL compiler semantics
+
+Predicted retained families are grouped by SELL product.
+
+For each product:
+
+1. If a predicted `PRESENCE REMOVE` exists:
+   - remove all current SELL orders for that product;
+   - ignore other predicted edits for that product on that turn.
+
+2. Otherwise derive one predicted quantity delta from QTY families:
+   - bucket 1 -> 1;
+   - bucket 2 -> 2;
+   - bucket 3-4 -> 3;
+   - bucket 5+ -> 5;
+   - INC positive, DEC negative;
+   - if multiple QTY families for the same product fire, use the family with highest training positive support, then lexical family id.
+
+3. If current aggregate SELL quantity is zero:
+   - a predicted `PRESENCE ADD` creates one SELL order with quantity equal to the positive QTY delta when an INC QTY family also fires;
+   - otherwise ADD creates quantity 1;
+   - insert at first semantic free market slot.
+
+4. If current aggregate SELL quantity is positive:
+   - apply selected QTY delta to the first matching SELL order;
+   - clamp aggregate sell quantity to [0, current legally available own product inventory];
+   - if quantity becomes zero, replace that order with an empty slot.
+
+5. `DUPLICATE COMPACT`:
+   - combine all same-product SELL quantities into the first matching slot;
+   - empty the later duplicate slots.
+
+6. `DUPLICATE SPLIT`:
+   - only if exactly one same-product SELL order has aggregate quantity >=2;
+   - keep quantity 1 in the original slot;
+   - place the remainder in the first semantic free slot;
+   - otherwise skip.
+
+Cross-product application order is lexical product name after the global canonical kind order already frozen in the parent protocol.
+
+The compiler may skip an edit if its legality preconditions are not satisfied; it may never alter farmer/hands.
+
+### Controller discovery PASS
+
+`V18B_CONTROLLER_READY_FOR_CAUSAL` requires:
+
+- exact 3072-row dataset;
+- zero replay/source failures;
+- at least 3 retained families;
+- retained families span >=3 residual kinds among QTY/PRESENCE/DUPLICATE;
+- retained-family positive examples span >=4 source SHAs;
+- exact sklearn/JSON inference parity;
+- compiled actions structurally valid on all 3072 dataset rows;
+- no prohibited feature in the exported model schema.
+
+Otherwise:
+`V18B_CONTROLLER_NOT_DISTILLABLE`.
+
+No causal game is run in V18B.
