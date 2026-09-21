@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V21A workflow 35558880526; only V21A_SEMANTIC_WL_HEADROOM may activate untouched V21B seeds 78901..78904",
+  "next_stage": "resolve V21A workflow 35558880526; PASS follows frozen V21B->V21C->V21D; NO_WL_HEADROOM closes V19A schedule family and activates independent V22 fresh-frontier branch",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -1816,5 +1816,19 @@
     "automatic_kaggle_submission": false,
     "workflow": 35558880526,
     "launch_commit": "a815ee73dad8fda5f1c6a587417e22415120ec87"
+  },
+  "v21_stop_rule": {
+    "status": "PRE_REGISTERED_WHILE_V21A_RUNNING",
+    "document": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
+    "if_no_wl_headroom": "close entire V19A-derived schedule family; no post-hoc category-pair or turn-subset search",
+    "fallback": "V22 fresh current-frontier refresh",
+    "v22_discovery_seeds": [
+      79101,
+      79102,
+      79103,
+      79104,
+      79105,
+      79106
+    ]
   }
 }
