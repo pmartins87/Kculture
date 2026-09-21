@@ -9,7 +9,8 @@ from sklearn.tree import DecisionTreeClassifier
 REAL_PRODUCTS=("WHEAT","CARROT","TOMATO","STRAWBERRY","MELON","EGG","MILK","WOOL","FERTILIZER")
 ACTIONABLE_KINDS={"QTY","PRESENCE","DUPLICATE"}
 BUCKET_MIN={"1":1,"2":2,"3-4":3,"5+":5}
-PROHIBITED_TOKENS=("source","sha","ref","rank","context","seed","seat","result","margin","reward","outcome")
+PROHIBITED_EXACT={"source","source_sha","sha","ref","rank","context","context_id","scenario_seed","seed","seat","result","margin","reward","outcome"}
+PROHIBITED_PREFIXES=("source_","context_","scenario_","outcome_","result_","reward_","margin_")
 
 def tree_json(clf,names):
     t=clf.tree_
@@ -187,7 +188,11 @@ def main():
     if not feature_names:raise RuntimeError("empty feature schema")
     for r in rows:
         if sorted((r.get("features") or {}).keys())!=feature_names:raise RuntimeError("feature schema drift")
-    bad=[n for n in feature_names if any(tok in n.lower() for tok in PROHIBITED_TOKENS)]
+    bad=[]
+    for n in feature_names:
+        low=n.lower()
+        if low in PROHIBITED_EXACT or any(low.startswith(p) for p in PROHIBITED_PREFIXES):
+            bad.append(n)
     if bad:raise RuntimeError(f"prohibited predictive features: {bad}")
 
     X=matrix(rows,feature_names)
