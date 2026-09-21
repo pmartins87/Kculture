@@ -7,6 +7,10 @@ name: v23b-from-binding-v23a-snapshot
 # binding V23A artifacts; it must not reacquire any Kaggle source.
 
 'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v23b-from-binding-v23a-snapshot.yml'
   workflow_dispatch:
 
 permissions:
