@@ -1938,15 +1938,15 @@
       "alias_executor_commit": "20195454330d67e786f33a49346f35504f5be07c",
       "merger_commit": "c04e01c54621320c5c52ceef4aa4b59f0d5277a2",
       "merge_template_commit": "adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c",
-      "current_union_exact_keys": 244,
+      "current_union_exact_keys": 312,
       "expected_exact_keys": 368,
-      "current_complete_contexts": 61,
+      "current_complete_contexts": 78,
       "expected_contexts": 92,
-      "remaining_contexts": 31,
+      "remaining_contexts": 14,
       "remaining_only_shards": [
-        2,
         3
-      ]
+      ],
+      "remaining_exact_keys": 56
     }
   }
 }
