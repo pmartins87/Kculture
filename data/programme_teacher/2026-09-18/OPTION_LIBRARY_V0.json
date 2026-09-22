@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "Monitor exact-V47 submission 56466970 read-only as episode count/rating matures; one-episode score 600.0 is not decision-grade; no additional Kaggle submission authorized.",
+  "next_stage": "Read-only monitor V47 submission 56466970; notify only at >=100 episodes, >=169 episodes, or latest-two/mechanical drift. No further Kaggle submission without a new explicit user decision.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2500,6 +2500,44 @@
       "v47_historical_56333577": 36
     },
     "initial_score_decision_grade": false,
-    "reason": "new exact-V47 submission had only 1 listed public episode at first COMPLETE score snapshot"
+    "reason": "new exact-V47 submission had only 1 listed public episode at first COMPLETE score snapshot",
+    "latest_maturity": {
+      "snapshot_utc": "2026-09-22T20:14:24.092692+00:00",
+      "maturity_run": 35778942531,
+      "status_run": 35779042553,
+      "latest_two": [
+        "56466970",
+        "56367770"
+      ],
+      "v47": {
+        "submission_id": 56466970,
+        "status": "COMPLETE",
+        "public_score": 1852.1,
+        "episodes": 89
+      },
+      "all3": {
+        "submission_id": 56367770,
+        "status": "COMPLETE",
+        "public_score": 1964.2,
+        "episodes": 405
+      },
+      "historical_v47": {
+        "a": {
+          "submission_id": 56336025,
+          "episodes": 169
+        },
+        "b": {
+          "submission_id": 56333577,
+          "episodes": 36
+        }
+      },
+      "crossed_checkpoint": 36,
+      "next_checkpoints": [
+        100,
+        169
+      ],
+      "active_pair_strategy": "ALL3 primary + V47 hedge",
+      "additional_submission_authorized": false
+    }
   }
 }
