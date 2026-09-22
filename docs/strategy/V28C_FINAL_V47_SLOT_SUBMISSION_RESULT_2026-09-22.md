@@ -62,3 +62,29 @@ The artifact preserves authenticated before/after submission CSVs, preflight JSO
 ## Next action
 
 Read-only monitor submission `56466970` until it leaves PENDING. Do not submit another candidate merely because scoring is pending. After completion, re-audit the current latest-two pair and ratings and update the canonical project sources.
+
+
+## Read-only completion and maturity audit
+
+Read-only status workflow: **35740411550**.
+
+At the status snapshot, the new V47 submission `56466970` was:
+- status: **SubmissionStatus.COMPLETE**;
+- listed publicScore: **600.0**.
+
+The latest-two IDs remained exactly:
+1. `56466970` — exact V47;
+2. `56367770` — ALL3.
+
+ALL3 was COMPLETE with listed publicScore **1988.8**. O-RW1 `56336027` remained outside the latest two.
+
+Read-only maturity workflow: **35740643501**.
+Snapshot: `2026-09-22T14:29:32.606521+00:00`.
+
+Listed episode counts:
+- new V47 `56466970`: **1**;
+- ALL3 `56367770`: **382**;
+- historical exact V47 `56336025`: **169**;
+- historical exact V47 `56333577`: **36**.
+
+The 600.0 V47 score is therefore a one-episode initial rating and is not decision-grade evidence for reversing the V28B/V28C slot decision. The appropriate next step is read-only maturity monitoring, not another submission.
