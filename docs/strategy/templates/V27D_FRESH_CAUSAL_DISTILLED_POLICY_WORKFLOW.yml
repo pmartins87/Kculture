@@ -1,0 +1,143 @@
+name: v27d-fresh-causal-distilled-policy
+
+# DORMANT TEMPLATE.
+# Activate only after binding V27C2 workflow 35682535729 returns
+# V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE.
+
+'on':
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    outputs:
+      decision: ${{ steps.read.outputs.decision }}
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned snapshot runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Run fresh V27D frontier snapshot
+        id: snap
+        continue-on-error: true
+        run: |
+          python tools/v27d_current_frontier_snapshot.py \
+            --out artifacts/v27d-snapshot-result/V27D_SNAPSHOT_RESULT.json \
+            --raw artifacts/v27d-snapshot-result/TOP30_RAW.csv \
+            --snapshot-dir artifacts/v27d-snapshot
+      - name: Read snapshot decision
+        id: read
+        if: always()
+        run: |
+          python - <<'PY'
+          import json,os
+          p='artifacts/v27d-snapshot-result/V27D_SNAPSHOT_RESULT.json'
+          d='V27D_NO_RESULT'
+          if os.path.exists(p): d=json.load(open(p))['decision']
+          with open(os.environ['GITHUB_OUTPUT'],'a') as f: f.write(f"decision={d}\n")
+          print("V27D_SNAPSHOT_WORKFLOW_DECISION",d)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v27d-frontier-snapshot-result
+          path: artifacts/v27d-snapshot-result/*
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v27d-frontier-immutable-snapshot
+          path: artifacts/v27d-snapshot/**
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Fail if snapshot invalid
+        if: steps.snap.outcome != 'success'
+        run: exit 2
+
+  shard:
+    needs: snapshot
+    if: needs.snapshot.outputs.decision == 'V27D_FRONTIER_SNAPSHOT_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install exact causal runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'scikit-learn==1.7.2' joblib numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: v27d-frontier-immutable-snapshot
+          path: artifacts/v27d-snapshot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35682535729
+          name: v27c2-stateful-structural-distillation
+          path: artifacts/v27c2-model
+      - name: Run V27D paired shard
+        run: |
+          mkdir -p artifacts/v27d
+          python tools/v27d_fresh_causal_shard.py \
+            --snapshot-dir artifacts/v27d-snapshot \
+            --model-bundle artifacts/v27c2-model/V27C2_MODELS.joblib \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 4 \
+            --out artifacts/v27d/V27D_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v27d-shard-${{ matrix.shard_index }}
+          path: artifacts/v27d/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: [snapshot,shard]
+    if: needs.snapshot.outputs.decision == 'V27D_FRONTIER_SNAPSHOT_READY'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v27d-shard-*
+          path: artifacts/v27d-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: v27d-frontier-snapshot-result
+          path: artifacts/v27d-snapshot-result
+      - name: Aggregate V27D
+        run: |
+          mkdir -p artifacts/v27d-final
+          python tools/aggregate_v27d_fresh_causal.py \
+            --input-dir artifacts/v27d-shards \
+            --snapshot-result artifacts/v27d-snapshot-result/V27D_SNAPSHOT_RESULT.json \
+            --out artifacts/v27d-final/V27D_FRESH_CAUSAL_DISTILLED_POLICY.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v27d-fresh-causal-distilled-policy
+          path: artifacts/v27d-final/*.json
+          retention-days: 30
+          if-no-files-found: error
