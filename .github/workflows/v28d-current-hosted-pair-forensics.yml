@@ -1,0 +1,64 @@
+name: v28d-current-hosted-pair-forensics
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v28d-current-hosted-pair-forensics.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  forensics:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      TARGET_TEAM_NAME: Paulo Martins
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Kaggle CLI
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+
+      - name: Collect current hosted replay corpora
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v28d
+          python tools/collect_submission_replays_cli_v2.py             --submission v47:$V47_ID             --submission all3:$ALL3_ID             --output-dir artifacts/v28d             --max-per-submission 256             --selection newest             --delay-seconds 0.05             --retries 4             --retry-backoff-seconds 0.5
+
+      - name: Summarize each submission
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/cr083_hosted_forensics.py             --replay-root artifacts/v28d/v47/replays             --target-team-name "$TARGET_TEAM_NAME"             --target-submission "$V47_ID"             --output artifacts/v28d/V47_SUMMARY.json
+          python tools/cr083_hosted_forensics.py             --replay-root artifacts/v28d/all3/replays             --target-team-name "$TARGET_TEAM_NAME"             --target-submission "$ALL3_ID"             --output artifacts/v28d/ALL3_SUMMARY.json
+
+      - name: Temporal and common-opponent comparison
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/v28d_current_hosted_pair_forensics.py             --v47-summary artifacts/v28d/V47_SUMMARY.json             --all3-summary artifacts/v28d/ALL3_SUMMARY.json             --out artifacts/v28d/V28D_RESULT.json
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28d-current-hosted-pair-forensics
+          path: artifacts/v28d/**
+          retention-days: 30
+          if-no-files-found: warn
