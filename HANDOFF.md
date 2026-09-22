@@ -1,5 +1,62 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V27C2 CLOSED / FINAL-SLOT STRATEGY ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V27C2 — COMPLETE / STRUCTURAL DISTILLATION NOT VIABLE
+
+Binding workflow: **`35682535729`**.  
+Train job: `106603317949`.  
+Final artifact: `10675616361`.  
+Digest: `sha256:4a40b1156a52b2bb26ae5473d7bf339e2dab8d1b84b448f53d268ca1b7de434c`.
+
+Mechanical:
+- 12/12 collectors PASS;
+- 192/192 teacher episodes;
+- no runtime identity;
+- no teacher call at inference.
+
+Decision:
+**`V27C2_STRUCTURAL_POLICY_DISTILLATION_NOT_VIABLE`**.
+
+Untouched holdout:
+- complete-action parity: **0.5734817**;
+- MARKET: **0.6978442**;
+- FARMER: **0.9541029**;
+- HANDS: **0.7493046**;
+- minimum source complete parity: **0.5625869**;
+- minimum 120-turn stage parity: **0.1454861**.
+
+Result:
+`docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_RESULT_2026-09-21.md`
+(commit `a2a7053c3bda8cadfe983798df3e2afc3ff691c3`).
+
+Per frozen routing:
+- V27D remains DORMANT and MUST NOT be activated;
+- no tree/history/feature sweep;
+- no source-conditioned distillation;
+- fast rank-1 behavioral distillation is CLOSED for this competition.
+
+### Active next stage — final-slot / competition strategy
+
+The technical solver branches V23–V27 have now resolved:
+- additive ALL3 options cannot transfer persistent teacher headroom;
+- PrizeSolverV4 is not competitive;
+- source-agnostic teacher consensus is not competitive;
+- compact interaction control is not identity-free;
+- rank-1 bounded legal history is reconstructible but not compressible by the frozen fast first-party distillation route.
+
+The next work is a read-only current competition audit:
+- verify current leaderboard/frontier;
+- verify our current submissions / ratings / ordering;
+- verify which two submissions would currently count under the competition final-evaluation rule;
+- preserve the strongest proven candidates;
+- identify whether any final submission action is actually justified.
+
+No Kaggle submission is authorized without explicit user approval.
+
+
 ## Binding update — 2026-09-21 — V27C WHOLE-LABEL CLOSED / V27C2 STRUCTURAL ACTIVE
 
 **This block supersedes lower stale current-action sections.**
