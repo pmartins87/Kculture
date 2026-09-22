@@ -1,5 +1,5 @@
 name: v28c-v47-status-readonly
-# read-only refresh requested 2026-09-22T20:15Z
+# read-only refresh requested 2026-09-22T20:34Z
 'on':
   push:
     branches:
@@ -43,31 +43,22 @@ jobs:
           lines=[x for x in text.splitlines() if x.strip()]
           rows=[]
           for i,line in enumerate(lines):
-              if "," not in line:
-                  continue
+              if "," not in line: continue
               cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
               if cand and any(k and "ref" in k.lower() for k in cand[0]):
-                  rows=cand
-                  break
-          if not rows:
-              raise SystemExit("could not parse submissions")
-          def get(row,needle):
-              return next((str(v) for k,v in row.items() if k and needle in k.lower()),"")
+                  rows=cand; break
+          if not rows: raise SystemExit("could not parse submissions")
+          def get(row,needle): return next((str(v) for k,v in row.items() if k and needle in k.lower()),"")
           rows=sorted(rows,key=lambda r:get(r,"date"),reverse=True)
           target=next((r for r in rows if get(r,"ref")==os.environ["V47_ID"]),None)
-          if target is None:
-              raise SystemExit("V47 submission missing")
+          if target is None: raise SystemExit("V47 submission missing")
           out={
             "v47_submission_id":os.environ["V47_ID"],
             "v47_status":get(target,"status"),
             "v47_public_score":get(target,"publicscore"),
             "v47_date":get(target,"date"),
             "latest_two":[get(r,"ref") for r in rows[:2]],
-            "all3_row":next(({
-              "status":get(r,"status"),
-              "public_score":get(r,"publicscore"),
-              "date":get(r,"date")
-            } for r in rows if get(r,"ref")==os.environ["ALL3_ID"]),None),
+            "all3_row":next(({"status":get(r,"status"),"public_score":get(r,"publicscore"),"date":get(r,"date")} for r in rows if get(r,"ref")==os.environ["ALL3_ID"]),None),
             "orw1_in_latest_two":os.environ["ORW1_ID"] in [get(r,"ref") for r in rows[:2]]
           }
           Path("v28c_status.json").write_text(json.dumps(out,indent=2,sort_keys=True))
