@@ -1,4 +1,5 @@
 name: v27b-legal-history-reconstructibility
+# Mechanical retry: offline replay + 12-way sharding
 'on':
   push:
     branches: [research/prize-solver-v0]
@@ -13,7 +14,7 @@ jobs:
     timeout-minutes: 180
     strategy:
       fail-fast: false
-      matrix: {shard_index: [0,1,2,3]}
+      matrix: {shard_index: [0,1,2,3,4,5,6,7,8,9,10,11]}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -27,7 +28,7 @@ jobs:
           name: v26a-frontier-immutable-snapshot
           path: artifacts/v26a-snapshot
       - name: Run V27B shard
-        run: python tools/v27b_legal_history_audit_shard.py --snapshot-dir artifacts/v26a-snapshot --shard-index ${{ matrix.shard_index }} --num-shards 4 --out artifacts/v27b/V27B_SHARD_${{ matrix.shard_index }}.json
+        run: python tools/v27b_legal_history_audit_shard.py --snapshot-dir artifacts/v26a-snapshot --shard-index ${{ matrix.shard_index }} --num-shards 12 --out artifacts/v27b/V27B_SHARD_${{ matrix.shard_index }}.json
       - uses: actions/upload-artifact@v4
         if: always()
         with:
