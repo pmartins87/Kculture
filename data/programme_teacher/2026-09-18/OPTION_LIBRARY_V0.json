@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "read-only current competition/leaderboard/submission-slot audit; preserve strongest proven candidates; no Kaggle submission without explicit user authorization",
+  "next_stage": "resolve V28B workflow 35683424225; present final pair recommendation and require explicit user authorization before any Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2345,6 +2345,72 @@
   "final_slot_strategy": {
     "status": "ACTIVE",
     "read_only_audit_required": true,
+    "automatic_kaggle_submission": false
+  },
+  "v28a": {
+    "status": "COMPLETE",
+    "workflow": 35683053247,
+    "artifact_id": 10675491726,
+    "artifact_digest": "sha256:53914e363c1104f0d4c49307a923ed28a51d391d6b3903282a014cc0a9df0c54",
+    "team_rank": 1629,
+    "leaderboard_teams": 9795,
+    "team_score": 2050.6,
+    "current_active_pair": [
+      {
+        "submission_id": 56367770,
+        "key": "ALL3",
+        "publicScore": 2050.6
+      },
+      {
+        "submission_id": 56336027,
+        "key": "ORW1",
+        "publicScore": 2014.4
+      }
+    ],
+    "historical_calibration": [
+      {
+        "submission_id": 56336025,
+        "key": "V47",
+        "publicScore": 2344.6
+      },
+      {
+        "submission_id": 56333577,
+        "key": "V47",
+        "publicScore": 2387.9
+      },
+      {
+        "submission_id": 56073870,
+        "key": "CR053",
+        "publicScore": 2064.8
+      }
+    ],
+    "current_top_score": 3188.5,
+    "result_document": "docs/strategy/V28A_FINAL_SLOT_READONLY_AUDIT_RESULT_2026-09-22.md",
+    "automatic_kaggle_submission": false
+  },
+  "v28b": {
+    "status": "ACTIVE",
+    "workflow": 35683424225,
+    "launch_commit": "405335b3c031df3ab0357822b117021bcc362c98",
+    "protocol": "docs/strategy/V28B_FRESH_FINAL_SLOT_CANDIDATE_BENCHMARK_PROTOCOL_2026-09-22.md",
+    "protocol_commit": "52b3cdbcab9fd7df59e763c15976573934c14f0c",
+    "candidates": [
+      "V47",
+      "ORW1",
+      "ALL3"
+    ],
+    "seeds": [
+      80301,
+      80302,
+      80303,
+      80304,
+      80305,
+      80306
+    ],
+    "seats": [
+      0,
+      1
+    ],
     "automatic_kaggle_submission": false
   }
 }
