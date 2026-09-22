@@ -1,5 +1,88 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V27B BOUNDED HISTORY / V27C ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V27B — COMPLETE / BOUNDED LEGAL HISTORY VIABLE
+
+Corrected episode workflow: `35676166396`.  
+Aggregate-only binding workflow: **`35678269956`**.  
+Aggregate artifact: `10673273774`.  
+Digest: `sha256:927a1f266329aa02965b3ed76c3ec3fe149a82429efbde519616c5b1ec99ec63`.
+
+Decision:
+**`V27B_BOUNDED_LEGAL_HISTORY_DISTILLATION_VIABLE`**.
+
+Selected minimum viable horizon:
+**256 prior legal candidate observations**.
+
+H=256:
+- complete-action parity: **0.9962963**;
+- MARKET: **0.9962963**;
+- FARMER: **1.0000000**;
+- HANDS: **1.0000000**;
+- minimum source complete-action parity: **0.9777778**;
+- minimum checkpoint complete-action parity: **0.9444444**.
+
+FULL legal history:
+- complete/MARKET/FARMER/HANDS parity: **1.0**.
+
+Result:
+`docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-21.md`
+(commit `702243cda86f9aa1e5ea6d991d6b9d87808869c5`).
+
+### V27C — ACTIVE / 256-STEP BEHAVIORAL DISTILLATION
+
+Protocol:
+`docs/strategy/V27C_256_HISTORY_BEHAVIORAL_DISTILLATION_PROTOCOL_2026-09-21.md`
+(commit `99c6c70a301d9f6949273c51b5049ed4e9ee9a6d`).
+
+Binding workflow:
+**`35678728124`**.  
+Launch commit:
+`c208e67f4a9ab7e852be4df391c58beb52e4be47`.
+
+Dataset:
+- exact rank-1 teacher SHA `a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c`;
+- all 12 immutable V26A snapshot opponents;
+- fresh seeds `79901..79908`;
+- both seats;
+- 192 expected teacher episodes;
+- every candidate turn labeled.
+
+Representation:
+- current 114 programme features;
+- legal lag snapshots at 1,2,4,8,16,32,64,128,256;
+- current-minus-lag deltas;
+- legal previous-action structural summaries;
+- no source/rank/SHA/cluster/opponent identity.
+
+Model:
+- independent MARKET/FARMER/HANDS `ExtraTreesClassifier`;
+- 256 trees;
+- no hyperparameter sweep;
+- fixed random state 20260921.
+
+Frozen holdout gate:
+- complete action >=0.90;
+- MARKET >=0.94;
+- FARMER >=0.99;
+- HANDS >=0.98;
+- minimum source complete-action >=0.80;
+- minimum 120-turn stage parity >=0.80.
+
+PASS =>
+`V27C_HISTORY_POLICY_DISTILLATION_VIABLE` and open fresh causal V27D.
+
+FAIL =>
+`V27C_HISTORY_POLICY_DISTILLATION_NOT_VIABLE` and close fast rank-1 distillation.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35678728124`.
+
+
 ## Binding update — 2026-09-21 — V27A HISTORY-AWARE / V27B MECHANICAL RETRY ACTIVE
 
 **This block supersedes lower stale current-action sections.**
