@@ -1,5 +1,92 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-22 — V27 CLOSED / V28B FINAL PAIR READY / USER DECISION REQUIRED
+
+**This block supersedes lower stale current-action sections.**
+
+### V27C — CLOSED
+
+Binding workflow:
+`35725924827`.
+
+Decision:
+**`V27C_BEHAVIORAL_DISTILLATION_DATA_TOO_COMPLEX`**.
+
+Mechanical:
+- 96/96 trajectories;
+- 69,024 labeled turns;
+- 0 failures;
+- H=256 legal history representation;
+- duplicate-feature conflict rates 0.0 for complete/MARKET/FARMER/HANDS.
+
+But fast cross-seed distillation fails:
+- unique complete labels: 2597;
+- validation decomposable coverage: 0.6358368104;
+- test decomposable coverage: 0.6021094112;
+- step-modal complete-action test accuracy: 0.3561659713.
+
+Therefore V27D remains dormant and fast rank-1 behavioral cloning is CLOSED.
+
+Result:
+`docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_RESULT_2026-09-22.md`
+(commit `53716433748bed5b57665f331d2f77b09b75fd02`).
+
+### V28A — READ-ONLY FINAL-SLOT AUDIT COMPLETE
+
+Workflow:
+`35683053247`.
+
+Current active/latest pair at audit:
+1. ALL3 submission `56367770` — publicScore 2050.6;
+2. ORW1 submission `56336027` — publicScore 2014.4.
+
+Historical exact-V47 calibration:
+- `56336025`: 2344.6;
+- `56333577`: 2387.9.
+
+Audit confirmed:
+- only latest 2 submissions remain active/tracked;
+- team final score uses the better of the 2 active submissions;
+- the second slot is a hedge.
+
+### V28B — COMPLETE / FINAL PAIR RECOMMENDATION READY
+
+Binding workflow:
+**`35683424225`**.
+
+Decision:
+**`V28B_FINAL_PAIR_RECOMMENDATION_READY`**.
+
+Fresh common panel:
+- 12 current executable frontier sources;
+- seeds 80301..80306;
+- both seats;
+- 144 contexts per candidate;
+- 0 failures.
+
+Metrics:
+- ALL3: score rate 0.4444444, 64-80-0, mean margin **+26.3750**;
+- V47: score rate 0.4444444, 64-80-0, mean margin **-62.7986**;
+- ORW1: score rate 0.4444444, 64-80-0, mean margin **-70.3681**.
+
+Frozen selector:
+- PRIMARY = **ALL3**;
+- HEDGE = **V47**.
+
+Recommended active pair:
+**ALL3 + V47**.
+
+Current active pair:
+**ALL3 + ORW1**.
+
+Thus the only recommended slot change is:
+replace ORW1 with exact V47, while preserving ALL3.
+
+No Kaggle submission has been made.
+
+**Binding immediate action:** USER DECISION REQUIRED — explicitly authorize or reject changing the active pair from ALL3 + ORW1 to ALL3 + V47.
+
+
 ## Binding update — 2026-09-22 — V27B BOUNDED HISTORY PASS / V27C ACTIVE
 
 **This block supersedes lower stale current-action sections.**
