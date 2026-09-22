@@ -1,4 +1,4 @@
-name: orw1-hosted-ab-submit-v1
+name: v28c-exact-v47-final-hedge-submit
 'on':
   push:
     branches:
@@ -8,21 +8,21 @@ name: orw1-hosted-ab-submit-v1
 
 permissions:
   contents: read
-  actions: read
 
 jobs:
-  submit-ab:
+  submit-v47:
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
       KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
       COMPETITION: kaggriculture
       MAX_DAILY: '5'
-      CONTROL_DESCRIPTION: PS_ORW1_R2_CONTROL_EXACT_V47_08E56C43
-      TREATMENT_DESCRIPTION: PS_ORW1_R2_TREATMENT_HOSTED_FAITHFUL_997AA273
-      CONTROL_EXPECTED_SHA256: 08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01
-      TREATMENT_EXPECTED_SHA256: 997aa273cb64c6acf933f8d719bd358c47d07871f6e42ac056003155499c68c9
+      ALL3_ID: '56367770'
+      ORW1_ID: '56336027'
+      V47_DESCRIPTION: PS_V28C_FINAL_HEDGE_EXACT_V47_08E56C43
+      V47_EXPECTED_SHA256: 08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01
       V47_MAIN_EXPECTED_SHA256: f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842
+      V47_EXPECTED_ENTRYPOINT: _y_agent_shopherd
 
     steps:
       - uses: actions/checkout@v4
@@ -33,186 +33,201 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Require authenticated Kaggle access
+      - name: Install authenticated Kaggle runtime
         shell: bash
         run: |
           set -euo pipefail
           test -n "$KAGGLE_API_TOKEN"
           python -m pip install -U 'kaggle>=2.2.3' 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7'
           kaggle competitions list --group entered -v | tee entered.csv
-          grep -qi 'kaggriculture' entered.csv
+          grep -qi "$COMPETITION" entered.csv
 
-      - name: Download exact frozen treatment artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: orw1-hosted-candidate-v1
-          path: treatment_artifact
-          run-id: 35372969031
-          github-token: ${{ github.token }}
-
-      - name: Recover exact public V47 control bytes and verify both arms
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p frozen
-          python - <<'PY'
-          import hashlib, shutil, tarfile
-          from pathlib import Path
-          import kagglehub
-
-          expected_archive = "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01"
-          expected_main = "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
-          handle = "ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
-
-          out = Path("v47_public_output")
-          kagglehub.notebook_output_download(handle, output_dir=str(out), force_download=True)
-
-          candidates = []
-          for p in sorted(out.rglob("*")):
-              if not p.is_file() or not p.name.lower().endswith((".tar.gz",".tgz",".tar")):
-                  continue
-              blob = p.read_bytes()
-              ah = hashlib.sha256(blob).hexdigest()
-              try:
-                  with tarfile.open(p, "r:*") as tf:
-                      names = sorted(m.name for m in tf.getmembers() if m.isfile())
-                      if names != ["main.py"]:
-                          continue
-                      data = tf.extractfile("main.py").read()
-              except Exception:
-                  continue
-              mh = hashlib.sha256(data).hexdigest()
-              candidates.append((p, ah, mh))
-
-          hits = [x for x in candidates if x[1] == expected_archive and x[2] == expected_main]
-          if len(hits) != 1:
-              raise SystemExit(f"expected one exact V47 archive hit, got {hits}")
-          shutil.copyfile(hits[0][0], "frozen/CONTROL_EXACT_V47.tar.gz")
-          print({"control_source": str(hits[0][0]), "archive_sha256": hits[0][1], "main_sha256": hits[0][2]})
-          PY
-
-          test -f treatment_artifact/KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz
-          cp treatment_artifact/KCULTURE_V47_ORW1_ONESHOT_V1.tar.gz frozen/TREATMENT_V47_ORW1.tar.gz
-
-          CONTROL_SHA="$(sha256sum frozen/CONTROL_EXACT_V47.tar.gz | awk '{print $1}')"
-          TREATMENT_SHA="$(sha256sum frozen/TREATMENT_V47_ORW1.tar.gz | awk '{print $1}')"
-          echo "CONTROL_SHA=$CONTROL_SHA"
-          echo "TREATMENT_SHA=$TREATMENT_SHA"
-          test "$CONTROL_SHA" = "$CONTROL_EXPECTED_SHA256"
-          test "$TREATMENT_SHA" = "$TREATMENT_EXPECTED_SHA256"
-
-          tar -tzf frozen/CONTROL_EXACT_V47.tar.gz | grep -Fxq 'main.py'
-          tar -tzf frozen/TREATMENT_V47_ORW1.tar.gz | grep -Fxq 'main.py'
-
-          {
-            echo "$CONTROL_SHA  CONTROL_EXACT_V47.tar.gz"
-            echo "$TREATMENT_SHA  TREATMENT_V47_ORW1.tar.gz"
-          } | tee frozen/SHA256SUMS.txt
-
-      - name: Official loader smoke both arms
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p smoke/control smoke/treatment
-          tar -xzf frozen/CONTROL_EXACT_V47.tar.gz -C smoke/control
-          tar -xzf frozen/TREATMENT_V47_ORW1.tar.gz -C smoke/treatment
-          python - <<'PY'
-          from pathlib import Path
-          from kaggle_environments.agent import get_last_callable
-
-          expected = {
-              "control": "_y_agent_shopherd",
-              "treatment": "_kc_orw1_entrypoint",
-          }
-          for label in ("control","treatment"):
-              path = Path("smoke")/label/"main.py"
-              fn = get_last_callable(path.read_text(encoding="utf-8"), path=str(path.resolve()))
-              name = getattr(fn,"__name__",None)
-              argc = getattr(getattr(fn,"__code__",None),"co_argcount",None)
-              if name != expected[label]:
-                  raise RuntimeError(f"{label}: loader selected {name!r}, expected {expected[label]!r}")
-              if argc not in (1,2):
-                  raise RuntimeError(f"{label}: loader selected {fn!r}, argc={argc}")
-              print(label, name, argc)
-          PY
-
-      - name: Authenticated quota and duplicate preflight
+      - name: Strict current-pair and quota preflight
         shell: bash
         run: |
           set -euo pipefail
           kaggle competitions submissions "$COMPETITION" -v -q | tee before_submissions.csv
           python - <<'PY'
-          import csv, io, os
+          import csv, io, json, os
           from datetime import datetime, timezone
           from pathlib import Path
 
-          text = Path("before_submissions.csv").read_text(encoding="utf-8", errors="replace")
-          lines = [line for line in text.splitlines() if line.strip()]
+          text=Path("before_submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in text.splitlines() if x.strip()]
           rows=[]
           for i,line in enumerate(lines):
               if "," not in line:
                   continue
               cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
-              if cand and any(k and ("date" in k.lower() or "ref" in k.lower()) for k in cand[0]):
+              if cand and any(k and "ref" in k.lower() for k in cand[0]):
                   rows=cand
                   break
+          if not rows:
+              raise SystemExit("could not parse Kaggle submissions CSV")
+
+          def get(row, needle):
+              return next((str(v) for k,v in row.items() if k and needle in k.lower()),"")
+          rows=sorted(rows,key=lambda r:get(r,"date"),reverse=True)
+          latest=[get(r,"ref") for r in rows[:2]]
+          expected=[os.environ["ALL3_ID"],os.environ["ORW1_ID"]]
+          if latest != expected:
+              raise SystemExit(f"latest-two drifted: observed={latest}, expected={expected}")
+
+          descs={get(r,"description") for r in rows}
+          wanted=os.environ["V47_DESCRIPTION"]
+          if wanted in descs:
+              raise SystemExit(f"duplicate V47 description already exists: {wanted}")
 
           today=datetime.now(timezone.utc).date().isoformat()
-          today_rows=[row for row in rows if next((str(v) for k,v in row.items() if k and "date" in k.lower()),"").startswith(today)]
-          descriptions={str(v) for row in rows for k,v in row.items() if k and "description" in k.lower()}
-          wanted=[os.environ["CONTROL_DESCRIPTION"],os.environ["TREATMENT_DESCRIPTION"]]
-          duplicates=sorted(set(wanted)&descriptions)
-          if duplicates:
-              raise SystemExit(f"duplicate descriptions already exist: {duplicates}")
-          projected=len(today_rows)+2
+          today_rows=[r for r in rows if get(r,"date").startswith(today)]
+          projected=len(today_rows)+1
           maximum=int(os.environ["MAX_DAILY"])
-          print({"today_utc":today,"observed_today":len(today_rows),"projected":projected,"maximum":maximum})
           if projected>maximum:
               raise SystemExit(f"daily cap would be exceeded: {projected}>{maximum}")
+
+          out={"latest_two_before":latest,"today_utc":today,"observed_today":len(today_rows),
+               "projected_today":projected,"maximum_daily":maximum}
+          Path("preflight.json").write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,sort_keys=True))
           PY
 
-      - name: Submit frozen CONTROL then TREATMENT
+      - name: Recover exact historical V47 bytes
         shell: bash
         run: |
           set -euo pipefail
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_window_start_utc.txt
-          kaggle competitions submit -c "$COMPETITION" -f frozen/CONTROL_EXACT_V47.tar.gz -m "$CONTROL_DESCRIPTION"
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee control_submit_return_utc.txt
-          kaggle competitions submit -c "$COMPETITION" -f frozen/TREATMENT_V47_ORW1.tar.gz -m "$TREATMENT_DESCRIPTION"
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee treatment_submit_return_utc.txt
+          mkdir -p frozen v47_public_output smoke
+          python - <<'PY'
+          import hashlib, shutil, tarfile
+          from pathlib import Path
+          import kagglehub
 
-      - name: Bounded registration checkpoint and IDs
+          expected_archive="08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01"
+          expected_main="f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+          handle="ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
+
+          out=Path("v47_public_output")
+          kagglehub.notebook_output_download(handle,output_dir=str(out),force_download=True)
+          hits=[]
+          for p in sorted(out.rglob("*")):
+              if not p.is_file() or not p.name.lower().endswith((".tar.gz",".tgz",".tar")):
+                  continue
+              ah=hashlib.sha256(p.read_bytes()).hexdigest()
+              try:
+                  with tarfile.open(p,"r:*") as tf:
+                      files=sorted(m.name for m in tf.getmembers() if m.isfile())
+                      if files != ["main.py"]:
+                          continue
+                      data=tf.extractfile("main.py").read()
+              except Exception:
+                  continue
+              mh=hashlib.sha256(data).hexdigest()
+              if ah==expected_archive and mh==expected_main:
+                  hits.append(p)
+          if len(hits)!=1:
+              raise SystemExit(f"expected one exact V47 archive, got {len(hits)}: {hits}")
+          shutil.copyfile(hits[0],"frozen/V47_EXACT.tar.gz")
+          print({"source":str(hits[0]),"archive_sha256":expected_archive,"main_sha256":expected_main})
+          PY
+
+          test "$(sha256sum frozen/V47_EXACT.tar.gz | awk '{print $1}')" = "$V47_EXPECTED_SHA256"
+          tar -xzf frozen/V47_EXACT.tar.gz -C smoke
+          test "$(sha256sum smoke/main.py | awk '{print $1}')" = "$V47_MAIN_EXPECTED_SHA256"
+          printf '%s  %s\n' "$V47_EXPECTED_SHA256" V47_EXACT.tar.gz | tee SHA256SUMS.txt
+
+      - name: Official loader smoke
         shell: bash
         run: |
           set -euo pipefail
-          for i in $(seq 1 12); do
+          python - <<'PY'
+          import os
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+          p=Path("smoke/main.py")
+          fn=get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          name=getattr(fn,"__name__",None)
+          argc=getattr(getattr(fn,"__code__",None),"co_argcount",None)
+          if name!=os.environ["V47_EXPECTED_ENTRYPOINT"]:
+              raise SystemExit(f"loader selected {name!r}, expected {os.environ['V47_EXPECTED_ENTRYPOINT']!r}")
+          if argc not in (1,2):
+              raise SystemExit(f"unexpected argc={argc}")
+          print({"entrypoint":name,"argc":argc})
+          PY
+
+      - name: Submit exact V47 once
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_start_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f frozen/V47_EXACT.tar.gz -m "$V47_DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_return_utc.txt
+
+      - name: Verify registration and latest-two pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 24); do
             kaggle competitions submissions "$COMPETITION" -v -q > after_submissions.csv
-            if grep -Fq "$CONTROL_DESCRIPTION" after_submissions.csv && grep -Fq "$TREATMENT_DESCRIPTION" after_submissions.csv; then
-              echo "CONTROL:"
-              grep -F "$CONTROL_DESCRIPTION" after_submissions.csv | head -1 | tee control_registered_row.txt
-              echo "TREATMENT:"
-              grep -F "$TREATMENT_DESCRIPTION" after_submissions.csv | head -1 | tee treatment_registered_row.txt
-              exit 0
-            fi
+            if grep -Fq "$V47_DESCRIPTION" after_submissions.csv; then ok=1; break; fi
             sleep 5
           done
-          echo "Both submissions were not visible within the bounded registration checkpoint."
-          cat after_submissions.csv
-          exit 93
+          test "$ok" = "1"
+
+          python - <<'PY'
+          import csv, io, json, os
+          from pathlib import Path
+
+          text=Path("after_submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in text.splitlines() if x.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if "," not in line:
+                  continue
+              cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              if cand and any(k and "ref" in k.lower() for k in cand[0]):
+                  rows=cand
+                  break
+          if not rows:
+              raise SystemExit("could not parse post-submit CSV")
+          def get(row,needle):
+              return next((str(v) for k,v in row.items() if k and needle in k.lower()),"")
+          rows=sorted(rows,key=lambda r:get(r,"date"),reverse=True)
+          target=next((r for r in rows if get(r,"description")==os.environ["V47_DESCRIPTION"]),None)
+          if target is None:
+              raise SystemExit("registered V47 row missing")
+          new_id=get(target,"ref")
+          latest=[get(r,"ref") for r in rows[:2]]
+          expected=[new_id,os.environ["ALL3_ID"]]
+          if latest!=expected:
+              raise SystemExit(f"post-submit latest-two invalid: observed={latest}, expected={expected}")
+          if os.environ["ORW1_ID"] in latest:
+              raise SystemExit("ORW1 still appears in latest-two")
+          out={
+            "decision":"V28C_EXACT_V47_REGISTERED",
+            "new_v47_submission_id":new_id,
+            "new_v47_status":get(target,"status"),
+            "new_v47_public_score":get(target,"publicscore"),
+            "latest_two_after":latest,
+            "preserved_all3_submission_id":os.environ["ALL3_ID"],
+            "displaced_orw1_submission_id":os.environ["ORW1_ID"],
+            "description":os.environ["V47_DESCRIPTION"]
+          }
+          Path("v28c_result.json").write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,sort_keys=True))
+          PY
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: orw1-hosted-ab-submit-v1-provenance
+          name: v28c-exact-v47-final-hedge-submit-provenance
           path: |
             entered.csv
             before_submissions.csv
+            preflight.json
+            SHA256SUMS.txt
+            submit_start_utc.txt
+            submit_return_utc.txt
             after_submissions.csv
-            frozen/SHA256SUMS.txt
-            submit_window_start_utc.txt
-            control_submit_return_utc.txt
-            treatment_submit_return_utc.txt
-            control_registered_row.txt
-            treatment_registered_row.txt
+            v28c_result.json
           retention-days: 30
           if-no-files-found: warn
