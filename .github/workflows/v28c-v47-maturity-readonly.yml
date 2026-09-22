@@ -1,0 +1,92 @@
+name: v28c-v47-maturity-readonly
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v28c-v47-maturity-readonly.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  maturity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+      HIST_V47_A: '56336025'
+      HIST_V47_B: '56333577'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Count listed public episodes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+          python - <<'PY'
+          import csv, io, json, os, re, subprocess, datetime
+          from pathlib import Path
+
+          ids={
+            "v47_new":os.environ["V47_ID"],
+            "all3":os.environ["ALL3_ID"],
+            "v47_hist_a":os.environ["HIST_V47_A"],
+            "v47_hist_b":os.environ["HIST_V47_B"],
+          }
+
+          def count(sid):
+              p=subprocess.run(
+                  ["kaggle","competitions","episodes",str(sid),"-v","-q"],
+                  text=True,capture_output=True
+              )
+              if p.returncode != 0:
+                  return {"ok":False,"count":None,"stderr":p.stderr[-1000:]}
+              lines=[x for x in p.stdout.splitlines() if x.strip()]
+              if not lines:
+                  return {"ok":True,"count":0}
+              for start in range(len(lines)):
+                  try:
+                      rows=list(csv.DictReader(io.StringIO("\n".join(lines[start:]))))
+                  except Exception:
+                      continue
+                  if not rows:
+                      continue
+                  keys={str(k).lower().replace("_",""):k for k in rows[0] if k}
+                  for norm,key in keys.items():
+                      if norm in ("id","episodeid","episode") or ("episode" in norm and "id" in norm):
+                          vals=[]
+                          good=True
+                          for row in rows:
+                              v=str(row.get(key,"")).strip()
+                              if not re.fullmatch(r"\d+",v):
+                                  good=False
+                                  break
+                              vals.append(int(v))
+                          if good:
+                              return {"ok":True,"count":len(set(vals))}
+              return {"ok":False,"count":None,"stderr":"episode count parse failed"}
+
+          out={
+            "snapshot_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "submissions":{label:{"id":sid,**count(sid)} for label,sid in ids.items()}
+          }
+          Path("v28c_maturity.json").write_text(json.dumps(out,indent=2,sort_keys=True))
+          print("V28C_MATURITY",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28c-v47-maturity-readonly
+          path: v28c_maturity.json
+          retention-days: 14
+          if-no-files-found: warn
