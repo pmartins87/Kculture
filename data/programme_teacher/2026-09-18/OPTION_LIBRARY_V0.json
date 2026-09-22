@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V27C2 workflow 35682535729 autonomously; if viable, freeze model/runtime and open V27D fresh causal benchmark; if not viable, close fast rank1 behavioral distillation; no Kaggle submission",
+  "next_stage": "read-only current competition/leaderboard/submission-slot audit; preserve strongest proven candidates; no Kaggle submission without explicit user authorization",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2298,32 +2298,28 @@
     "closure_document": "docs/strategy/V27C_WHOLE_COMPONENT_COMPUTATIONAL_INVALID_2026-09-21.md"
   },
   "v27c2": {
-    "status": "ACTIVE",
+    "status": "COMPLETE_NOT_VIABLE",
     "workflow": 35682535729,
-    "launch_commit": "7a9567d78a21be4fb6b139d5bf109d2d7c4142c0",
-    "protocol": "docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "29a08da5cf200e85d219936f38a8de07363bcdec",
-    "models": [
-      "shared_unit_decision_tree",
-      "shared_market_slot_decision_tree"
-    ],
-    "teacher_sha": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
-    "seeds": [
-      79901,
-      79902,
-      79903,
-      79904,
-      79905,
-      79906,
-      79907,
-      79908
-    ],
-    "expected_episodes": 192,
-    "original_v27c_holdout_thresholds_unchanged": true,
-    "automatic_kaggle_submission": false
+    "train_job": 106603317949,
+    "artifact_id": 10675616361,
+    "artifact_digest": "sha256:4a40b1156a52b2bb26ae5473d7bf339e2dab8d1b84b448f53d268ca1b7de434c",
+    "decision": "V27C2_STRUCTURAL_POLICY_DISTILLATION_NOT_VIABLE",
+    "mechanical_pass": true,
+    "holdout": {
+      "episodes": 48,
+      "turns": 34512,
+      "complete_action_parity": 0.5734816875289754,
+      "market_parity": 0.6978442280945758,
+      "farmer_parity": 0.9541029207232267,
+      "hands_parity": 0.7493045897079277,
+      "minimum_source_complete_action_parity": 0.5625869262865091,
+      "minimum_stage_complete_action_parity": 0.14548611111111112
+    },
+    "result_document": "docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_RESULT_2026-09-21.md",
+    "fast_rank1_distillation_closed": true
   },
   "v27d": {
-    "status": "READY_DORMANT",
+    "status": "DORMANT_BLOCKED_BY_V27C2_NOT_VIABLE",
     "protocol": "docs/strategy/V27D_FRESH_CAUSAL_DISTILLED_POLICY_PROTOCOL_2026-09-21.md",
     "protocol_commit": "782b965c7809b5a43e1567130c5ff3666a23ab34",
     "seeds": [
@@ -2344,6 +2340,11 @@
     "aggregator": "tools/aggregate_v27d_fresh_causal.py",
     "workflow_template": "docs/strategy/templates/V27D_FRESH_CAUSAL_DISTILLED_POLICY_WORKFLOW.yml",
     "activation_condition": "V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE",
+    "automatic_kaggle_submission": false
+  },
+  "final_slot_strategy": {
+    "status": "ACTIVE",
+    "read_only_audit_required": true,
     "automatic_kaggle_submission": false
   }
 }
