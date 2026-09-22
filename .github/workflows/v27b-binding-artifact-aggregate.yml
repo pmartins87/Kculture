@@ -1,0 +1,39 @@
+name: v27b-binding-artifact-aggregate
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v27b-binding-artifact-aggregate.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  aggregate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35676166396
+          pattern: v27b-shard-*
+          path: artifacts/v27b-shards
+          merge-multiple: false
+      - name: Aggregate binding V27B shards
+        run: |
+          mkdir -p artifacts/v27b-final
+          python tools/aggregate_v27b_legal_history_audit.py \
+            --input-dir artifacts/v27b-shards \
+            --out artifacts/v27b-final/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v27b-binding-aggregate
+          path: artifacts/v27b-final/*.json
+          retention-days: 30
+          if-no-files-found: error
