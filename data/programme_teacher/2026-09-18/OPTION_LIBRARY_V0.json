@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "Read-only monitor exact-V47 submission 56466970 until completion, then re-audit latest-two pair and ratings; no further Kaggle submission is authorized.",
+  "next_stage": "Monitor exact-V47 submission 56466970 read-only as episode count/rating matures; one-episode score 600.0 is not decision-grade; no additional Kaggle submission authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2343,7 +2343,7 @@
     "automatic_kaggle_submission": false
   },
   "final_slot_strategy": {
-    "status": "V28C_V47_REGISTERED_COMPLETION_WATCH",
+    "status": "FINAL_PAIR_ACTIVE_MATURITY_WATCH",
     "v28a_workflow": 35683053247,
     "v28b_workflow": 35683424225,
     "v28b_decision": "V28B_FINAL_PAIR_RECOMMENDATION_READY",
@@ -2398,7 +2398,10 @@
     "primary_submission_id": 56367770,
     "hedge": "V47",
     "hedge_submission_id": 56466970,
-    "displaced_orw1_submission_id": 56336027
+    "displaced_orw1_submission_id": 56336027,
+    "v47_initial_complete_public_score": 600,
+    "all3_snapshot_public_score": 1988.8,
+    "further_submission_authorized": false
   },
   "v28a": {
     "status": "COMPLETE",
@@ -2467,7 +2470,7 @@
     "automatic_kaggle_submission": false
   },
   "v28c": {
-    "status": "REGISTERED_PENDING",
+    "status": "COMPLETE_MATURITY_WATCH",
     "workflow": 35739943846,
     "launch_commit": "d5d23b2ce570cceac34dd03a90f80f630aebc779",
     "result_document": "docs/strategy/V28C_FINAL_V47_SLOT_SUBMISSION_RESULT_2026-09-22.md",
@@ -2485,6 +2488,18 @@
     "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
     "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
     "loader_entrypoint": "_y_agent_shopherd",
-    "further_submission_authorized": false
+    "further_submission_authorized": false,
+    "complete_status": "COMPLETE",
+    "initial_complete_public_score": 600,
+    "maturity_workflow": 35740643501,
+    "maturity_snapshot_utc": "2026-09-22T14:29:32.606521+00:00",
+    "episode_counts": {
+      "v47_new_56466970": 1,
+      "all3_56367770": 382,
+      "v47_historical_56336025": 169,
+      "v47_historical_56333577": 36
+    },
+    "initial_score_decision_grade": false,
+    "reason": "new exact-V47 submission had only 1 listed public episode at first COMPLETE score snapshot"
   }
 }
