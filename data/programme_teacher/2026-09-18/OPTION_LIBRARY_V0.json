@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V27A workflow 35665757174 autonomously; if Markov viable, train state-only behavioral distillation; if history-required, freeze one legal-history representation; if too stateful, close fast teacher distillation and move to final-slot strategy; no Kaggle submission",
+  "next_stage": "resolve corrected V27B workflow 35676166396 autonomously; apply frozen V27B route; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2248,42 +2248,33 @@
     "result_document": "docs/strategy/V26B_PERSISTENT_TEACHER_CONSENSUS_RESULT_2026-09-21.md"
   },
   "v27a": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35665757174,
-    "launch_commit": "6538f221f5fa6c7f7cbbc42cca797e3d23584461",
-    "protocol": "docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "5045ddb827b03cd0e66bd102d3756581da47700e",
-    "teacher_ref": "ahmedberatozer/kaggriculture-v56-smarter-seeds-and-fertilizer",
-    "teacher_sha": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
-    "opponents": 12,
-    "seeds": [
-      79701,
-      79702,
-      79703
-    ],
-    "seats": [
-      0,
-      1
-    ],
-    "checkpoints": [
-      0,
-      1,
-      2,
-      3,
-      4,
-      8,
-      16,
-      32,
-      64,
-      128,
-      256,
-      384,
-      512,
-      640,
-      718
-    ],
-    "expected_episodes": 72,
-    "expected_comparisons": 1080,
+    "decision": "V27A_HISTORY_AWARE_DISTILLATION_REQUIRED",
+    "episodes": 72,
+    "comparisons": 1080,
+    "failures": 0,
+    "complete_action_parity": 0.9222222222222223,
+    "market_parity": 0.9296296296296296,
+    "farmer_parity": 1,
+    "hands_parity": 0.9925925925925926,
+    "minimum_checkpoint_complete_action_parity": 0.6666666666666666,
+    "minimum_source_complete_action_parity": 0.8666666666666667,
+    "state_only_distillation_closed": true
+  },
+  "v27b": {
+    "status": "CORRECTED_BINDING_ACTIVE",
+    "attempt1_workflow": 35672298198,
+    "attempt1_binding": false,
+    "attempt1_failure": "counterfactual history replay inside live callback caused late frozen checkpoints to be missed; episodes DONE/DONE but only 13/15 checkpoints",
+    "attempt1_result_document": "docs/strategy/V27B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md",
+    "binding_workflow": 35676166396,
+    "runner_fix_commit": "352f67a9b2b207cefa2b52e48a463bc230bd930e",
+    "aggregator_fix_commit": "bb04953ed2f73c5de8acda19b094ccbd509ba2ab",
+    "launch_commit": "fd0f9f36da5ed9f5be527fbea6e77239ca57c8b9",
+    "replay_execution": "offline_after_episode",
+    "num_shards": 12,
+    "experiment_semantics_unchanged": true,
     "automatic_kaggle_submission": false
   }
 }
