@@ -61,6 +61,15 @@ No Kaggle submission is authorized.
 
 **Binding immediate action:** resolve workflow `35682535729`.
 
+V27D is already PRE-REGISTERED / READY-DORMANT:
+- protocol: `docs/strategy/V27D_FRESH_CAUSAL_DISTILLED_POLICY_PROTOCOL_2026-09-21.md`;
+- protocol commit: `782b965c7809b5a43e1567130c5ff3666a23ab34`;
+- fresh seeds: `80101..80106`, both seats;
+- fresh current-frontier immutable snapshot;
+- causal shard + aggregator + first-party runtime already implemented;
+- dormant workflow template: `docs/strategy/templates/V27D_FRESH_CAUSAL_DISTILLED_POLICY_WORKFLOW.yml`;
+- activate only if V27C2 returns `V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE`.
+
 
 ## Binding correction — V27C mechanical retry
 
