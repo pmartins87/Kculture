@@ -1,5 +1,72 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-22 — V28A AUDIT COMPLETE / V28B ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V28A — COMPLETE / READ-ONLY CURRENT COMPETITION AUDIT
+
+Binding workflow: **`35683053247`**.  
+Artifact: `10675491726`.  
+Digest: `sha256:53914e363c1104f0d4c49307a923ed28a51d391d6b3903282a014cc0a9df0c54`.
+
+Current team:
+- rank **1629 / 9795**;
+- displayed score **2050.6**;
+- active/latest pair:
+  - ALL3 submission `56367770`: 2050.6;
+  - O-RW1 submission `56336027`: 2014.4.
+
+Historical calibration:
+- exact V47 `56336025`: 2344.6;
+- exact V47 `56333577`: 2387.9;
+- CR053 `56073870`: 2064.8.
+
+Current public #1 at audit: **3188.5**.
+
+Official final-evaluation rule:
+- only latest 2 submissions remain active/tracked;
+- team score is the better of the two active submissions;
+- second slot is a hedge with no downside;
+- final Bradley-Terry uses episodes between agents that remain active.
+
+Result:
+`docs/strategy/V28A_FINAL_SLOT_READONLY_AUDIT_RESULT_2026-09-22.md`
+(commit `788f11bded40dcc2027e1f51388d5a7512210b33`).
+
+### V28B — ACTIVE / FRESH FINAL-SLOT CANDIDATE BENCHMARK
+
+Protocol:
+`docs/strategy/V28B_FRESH_FINAL_SLOT_CANDIDATE_BENCHMARK_PROTOCOL_2026-09-22.md`
+(commit `52b3cdbcab9fd7df59e763c15976573934c14f0c`).
+
+Binding workflow:
+**`35683424225`**.  
+Launch commit:
+`405335b3c031df3ab0357822b117021bcc362c98`.
+
+Candidates:
+- exact V47;
+- exact V47 + O-RW1 only;
+- ALL3 = V47 + O-RW1 + O-TW1 + O-LQ2.
+
+Fresh seeds:
+`80301..80306`, both seats.
+
+Fresh current-frontier snapshot:
+- up to 12 unique executable sources;
+- minimum 8;
+- exact SHA snapshot before episodes.
+
+Frozen pair selector:
+- primary: overall score rate -> source breadth -> seed breadth -> mean margin -> lexical;
+- hedge: wins in contexts where primary is non-win -> overall score rate -> source breadth -> mean margin -> lexical.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35683424225`.
+
+
 ## Binding update — 2026-09-21 — V27C2 CLOSED / FINAL-SLOT STRATEGY ACTIVE
 
 **This block supersedes lower stale current-action sections.**
