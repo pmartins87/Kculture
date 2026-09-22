@@ -1,5 +1,37 @@
 # HANDOFF — Kculture
 
+
+## Binding update — 2026-09-22 — V28D CURRENT-HOSTED FORENSICS ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+Fresh read-only status at `2026-09-22T20:35:53Z`:
+- exact V47 `56466970`: **90 listed episodes**, publicScore **1853.1**, COMPLETE;
+- ALL3 `56367770`: **406 listed episodes**, publicScore **1960.0**, COMPLETE;
+- latest-two remains exactly V47 `56466970` + ALL3 `56367770`;
+- O-RW1 `56336027` remains outside the latest two.
+
+The V47 gap is now a meaningful negative signal, not the original one-episode artifact, but raw hosted ratings are still confounded by opponent population and ladder drift.
+
+### V28D — ACTIVE / READ-ONLY CURRENT-HOSTED PAIR FORENSICS
+
+Protocol:
+`docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_PROTOCOL_2026-09-22.md`.
+
+Binding workflow:
+**`35781539795`**.
+
+Purpose:
+- collect current public replays for V47 and recent ALL3;
+- align by V47 Episode-ID time window;
+- compare overall W/L/T and margins;
+- compare opponent mix;
+- compare score rate/margins on common opponents, both micro and equal-opponent macro.
+
+This stage cannot mutate Kaggle slots. No submission, deletion or reordering is authorized.
+
+**Binding immediate action:** resolve workflow `35781539795`. If the result shows a robust current-meta V47 underperformance signal, record it and design the next slot decision gate; do not submit anything without explicit user authorization.
+
 ## Binding update — 2026-09-22 — V28C MATURITY CHECKPOINT 36 CROSSED / ACTIVE PAIR STABLE
 
 **This block supersedes lower stale maturity-action sections.**
