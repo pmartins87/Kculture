@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V27C workflow 35725924827; if census passes, fit one pre-frozen component-wise tree clone; otherwise close fast teacher distillation; no Kaggle submission",
+  "next_stage": "USER DECISION: authorize or reject replacing ORW1 with exact V47 while preserving ALL3; no Kaggle submission until explicit authorization",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2284,24 +2284,18 @@
     "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-22.md"
   },
   "v27c": {
-    "status": "ACTIVE",
+    "status": "CLOSED_DATA_TOO_COMPLEX",
     "workflow": 35725924827,
-    "protocol": "docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_PROTOCOL_2026-09-22.md",
-    "protocol_commit": "5ab18ce72a162980d6e2a25cac2cec073f92b102",
-    "history_window": 256,
-    "seeds": [
-      79901,
-      79902,
-      79903,
-      79904
-    ],
-    "seats": [
-      0,
-      1
-    ],
-    "opponents": 12,
+    "decision": "V27C_BEHAVIORAL_DISTILLATION_DATA_TOO_COMPLEX",
+    "rows": 69024,
+    "episodes": 96,
     "feature_dim": 1254,
-    "automatic_kaggle_submission": false
+    "unique_complete_labels": 2597,
+    "validation_decomposable_coverage": 0.6358368103847937,
+    "test_decomposable_coverage": 0.6021094112192861,
+    "step_modal_complete_test_accuracy": 0.3561659712563746,
+    "result_document": "docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_RESULT_2026-09-22.md",
+    "fast_behavioral_distillation_closed": true
   },
   "v27c2": {
     "status": "COMPLETE_NOT_VIABLE",
@@ -2349,8 +2343,47 @@
     "automatic_kaggle_submission": false
   },
   "final_slot_strategy": {
-    "status": "ACTIVE",
-    "read_only_audit_required": true,
+    "status": "USER_DECISION_REQUIRED",
+    "v28a_workflow": 35683053247,
+    "v28b_workflow": 35683424225,
+    "v28b_decision": "V28B_FINAL_PAIR_RECOMMENDATION_READY",
+    "current_pair": [
+      {
+        "candidate": "ALL3",
+        "submission_id": 56367770,
+        "publicScore": 2050.6
+      },
+      {
+        "candidate": "ORW1",
+        "submission_id": 56336027,
+        "publicScore": 2014.4
+      }
+    ],
+    "recommended_pair": [
+      "ALL3",
+      "V47"
+    ],
+    "recommended_primary": "ALL3",
+    "recommended_hedge": "V47",
+    "fresh_panel": {
+      "contexts_per_candidate": 144,
+      "sources": 12,
+      "seeds": [
+        80301,
+        80302,
+        80303,
+        80304,
+        80305,
+        80306
+      ],
+      "all3_score_rate": 0.4444444,
+      "v47_score_rate": 0.4444444,
+      "orw1_score_rate": 0.4444444,
+      "all3_mean_margin": 26.375,
+      "v47_mean_margin": -62.7986,
+      "orw1_mean_margin": -70.3681
+    },
+    "requires_explicit_user_authorization": true,
     "automatic_kaggle_submission": false
   },
   "v28a": {
