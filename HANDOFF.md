@@ -1,5 +1,42 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-22 — V28C MATURITY CHECKPOINT 36 CROSSED / ACTIVE PAIR STABLE
+
+**This block supersedes lower stale maturity-action sections.**
+
+Read-only refresh workflows:
+- maturity run **`35778942531`**;
+- status run **`35779042553`**.
+
+Snapshot UTC:
+`2026-09-22T20:14:24.092692+00:00`.
+
+Current latest-two submissions remain exactly:
+1. exact V47 **`56466970`**;
+2. ALL3 **`56367770`**.
+
+O-RW1 `56336027` remains outside the latest two.
+
+Current listed public maturity / score:
+- V47 `56466970`: **89 episodes**, publicScore **1852.1**, COMPLETE;
+- ALL3 `56367770`: **405 episodes**, publicScore **1964.2**, COMPLETE;
+- historical exact V47 `56336025`: **169 episodes**;
+- historical exact V47 `56333577`: **36 episodes**.
+
+Interpretation:
+- the new V47 has crossed the frozen 36-episode maturity checkpoint;
+- it has **not yet reached the next 100-episode checkpoint**;
+- no slot reversal or further submission is authorized from this snapshot;
+- active strategy remains **ALL3 primary + V47 hedge**.
+
+Next read-only maturity checkpoints:
+- V47 >=100 episodes;
+- then V47 >=169 episodes;
+or any mechanical/latest-two drift.
+
+No additional Kaggle submission is authorized without a new explicit user decision.
+
+
 
 
 ## Binding update — 2026-09-22 — V28C COMPLETE / FINAL PAIR ACTIVE / MATURITY WATCH
