@@ -12,7 +12,7 @@ def main():
   except:continue
   if d.get('schema')=='kculture-v27b-legal-history-audit-shard-v1': docs.append(d)
  rows=[r for d in docs for r in d.get('rows',[])]; fails=[x for d in docs for x in d.get('failures',[])]
- mech=len(docs)==4 and all(d.get('mechanical_pass') for d in docs) and not fails and len(rows)==72
+ shard_counts={int(d.get('num_shards',-1)) for d in docs}; shard_ids={int(d.get('shard_index',-1)) for d in docs}; expected_shards=next(iter(shard_counts)) if len(shard_counts)==1 else -1\n mech=expected_shards>0 and len(docs)==expected_shards and shard_ids==set(range(expected_shards)) and all(d.get('mechanical_pass') for d in docs) and not fails and len(rows)==72
  metrics={}
  for h in H:
   vals=[]
