@@ -1,5 +1,67 @@
 # STATUS — Kculture live source of truth
 
+## Binding update — 2026-09-22 — V27B BOUNDED HISTORY PASS / V27C ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V27B — COMPLETE / BOUNDED LEGAL HISTORY VIABLE
+
+Corrected binding shard workflow:
+**`35676166396`**.
+
+Corrected aggregate-only workflow:
+**`35725538992`**.
+
+Decision:
+**`V27B_BOUNDED_LEGAL_HISTORY_DISTILLATION_VIABLE`**.
+
+Selected horizon:
+**`H=256`**.
+
+H=256:
+- complete-action parity: 0.9962962963;
+- MARKET parity: 0.9962962963;
+- FARMER parity: 1.0;
+- HANDS parity: 1.0;
+- minimum source complete-action parity: 0.9777777778;
+- minimum checkpoint complete-action parity: 0.9444444444.
+
+H=128 fails the frozen gate.
+FULL history parity is 1.0.
+
+Result:
+`docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-22.md`
+(commit `ad073ddc19f5ff1ca4f0364aad9a2d846652f4cf`).
+
+### V27C — ACTIVE / BOUNDED-HISTORY DISTILLATION CENSUS
+
+Protocol:
+`docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_PROTOCOL_2026-09-22.md`
+(commit `5ab18ce72a162980d6e2a25cac2cec073f92b102`).
+
+Binding workflow:
+**`35725924827`**.
+
+Frozen history window:
+**256 legal prior observations**.
+
+Fresh census seeds:
+`79901..79904`, both seats, all 12 immutable V26A opponents.
+
+Representation:
+- current 114 programme features;
+- lags 1/4/16/64/128/256;
+- per-feature min/max/mean/window delta;
+- 1254-dimensional legal numeric state;
+- no source/rank/SHA/opponent identity feature.
+
+V27C is a compactness/label-conflict census only. If it passes, V27D fits exactly one pre-frozen component-wise tree model family. If it fails, fast rank-1 behavioral distillation closes.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35725924827`.
+
+
 ## Binding update — 2026-09-22 — V28A AUDIT COMPLETE / V28B ACTIVE
 
 **This block supersedes lower stale current-action sections.**
