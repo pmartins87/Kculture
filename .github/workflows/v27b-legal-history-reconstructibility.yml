@@ -1,5 +1,5 @@
 name: v27b-legal-history-reconstructibility
-# Mechanical retry: offline replay + 12-way sharding
+# Mechanical retry 2: offline replay + 12-way sharding + aggregator syntax fix
 'on':
   push:
     branches: [research/prize-solver-v0]
