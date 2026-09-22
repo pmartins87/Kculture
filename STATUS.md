@@ -1,6 +1,50 @@
 # STATUS — Kculture live source of truth
 
 
+
+## Binding update — 2026-09-22 — V28C COMPLETE / FINAL PAIR ACTIVE / MATURITY WATCH
+
+**This block supersedes lower stale current-action sections.**
+
+### V28C — COMPLETE
+
+Authorized exact-V47 submission:
+- workflow `35739943846`;
+- submission **`56466970`**;
+- status **COMPLETE**;
+- initial listed publicScore **600.0**.
+
+Verified latest-two active pair:
+1. exact V47 `56466970`;
+2. ALL3 `56367770`.
+
+O-RW1 `56336027` remains outside the latest two.
+
+At the same read-only snapshot, ALL3 was COMPLETE with listed publicScore **1988.8**.
+
+### V28C maturity audit — INITIAL SCORE NOT DECISION-GRADE
+
+Read-only workflow:
+**`35740643501`**.
+
+Snapshot UTC:
+`2026-09-22T14:29:32.606521+00:00`.
+
+Listed public episode counts:
+- new V47 `56466970`: **1**;
+- ALL3 `56367770`: **382**;
+- historical exact V47 `56336025`: **169**;
+- historical exact V47 `56333577`: **36**.
+
+Therefore the new V47 score of 600.0 is based on only one listed episode and is **not mature enough to justify reversing the slot decision**. The bytes, internal main.py hash, and loader were already verified exact before submission.
+
+Current strategy remains:
+**ALL3 primary + V47 hedge**.
+
+No additional Kaggle submission is authorized.
+
+**Binding immediate action:** monitor V47 `56466970` read-only as its episode count/rating matures. Re-evaluate only on a meaningful maturity checkpoint or active-pair drift; do not react to the one-episode score.
+
 ## Binding update — 2026-09-22 — V28C SUBMITTED / V47 REGISTERED / COMPLETION WATCH
 
 **This block supersedes lower stale current-action sections.**
