@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve corrected V27C workflow 35678874775 autonomously; if viable open V27D fresh causal validation; if not viable close fast rank1 distillation; no Kaggle submission",
+  "next_stage": "resolve V27C2 workflow 35682535729 autonomously; if viable, freeze model/runtime and open V27D fresh causal benchmark; if not viable, close fast rank1 behavioral distillation; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2282,12 +2282,32 @@
     "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-21.md"
   },
   "v27c": {
-    "status": "CORRECTED_BINDING_ACTIVE",
-    "workflow": 35678728124,
-    "launch_commit": "c208e67f4a9ab7e852be4df391c58beb52e4be47",
-    "protocol": "docs/strategy/V27C_256_HISTORY_BEHAVIORAL_DISTILLATION_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "99c6c70a301d9f6949273c51b5049ed4e9ee9a6d",
-    "history_window": 256,
+    "status": "CLOSED_COMPUTATIONAL_MECHANICS_INVALID",
+    "workflow": 35678874775,
+    "collector_shards_passed": 12,
+    "expected_episodes": 192,
+    "holdout_result_observed": false,
+    "failure": "two identical runner shutdowns during frozen ExtraTrees fit after matrix construction",
+    "matrix": {
+      "training_turns": 57520,
+      "features": 2215,
+      "market_classes": 881,
+      "farmer_classes": 50,
+      "hands_classes": 1765
+    },
+    "closure_document": "docs/strategy/V27C_WHOLE_COMPONENT_COMPUTATIONAL_INVALID_2026-09-21.md"
+  },
+  "v27c2": {
+    "status": "ACTIVE",
+    "workflow": 35682535729,
+    "launch_commit": "7a9567d78a21be4fb6b139d5bf109d2d7c4142c0",
+    "protocol": "docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "29a08da5cf200e85d219936f38a8de07363bcdec",
+    "models": [
+      "shared_unit_decision_tree",
+      "shared_market_slot_decision_tree"
+    ],
+    "teacher_sha": "a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c",
     "seeds": [
       79901,
       79902,
@@ -2298,19 +2318,8 @@
       79907,
       79908
     ],
-    "seats": [
-      0,
-      1
-    ],
     "expected_episodes": 192,
-    "model_family": "ExtraTreesClassifier",
-    "automatic_kaggle_submission": false,
-    "initial_workflow": 35678728124,
-    "initial_binding": false,
-    "initial_failure": "collector ImportError: plain imported from wrong module before any episode",
-    "collector_fix_commit": "725a66061a7d601a5c4eb90d343250c49c66e1d9",
-    "binding_workflow": 35678874775,
-    "relaunch_commit": "c2c16c11086b1d83e109e5f6c729427913a1d949",
-    "experiment_semantics_unchanged": true
+    "original_v27c_holdout_thresholds_unchanged": true,
+    "automatic_kaggle_submission": false
   }
 }
