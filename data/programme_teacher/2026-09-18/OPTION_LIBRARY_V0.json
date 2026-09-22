@@ -2321,5 +2321,29 @@
     "expected_episodes": 192,
     "original_v27c_holdout_thresholds_unchanged": true,
     "automatic_kaggle_submission": false
+  },
+  "v27d": {
+    "status": "READY_DORMANT",
+    "protocol": "docs/strategy/V27D_FRESH_CAUSAL_DISTILLED_POLICY_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "782b965c7809b5a43e1567130c5ff3666a23ab34",
+    "seeds": [
+      80101,
+      80102,
+      80103,
+      80104,
+      80105,
+      80106
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "fresh_frontier_snapshot": true,
+    "runtime": "solver/v27c2_structural_runtime.py",
+    "shard_runner": "tools/v27d_fresh_causal_shard.py",
+    "aggregator": "tools/aggregate_v27d_fresh_causal.py",
+    "workflow_template": "docs/strategy/templates/V27D_FRESH_CAUSAL_DISTILLED_POLICY_WORKFLOW.yml",
+    "activation_condition": "V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE",
+    "automatic_kaggle_submission": false
   }
 }
