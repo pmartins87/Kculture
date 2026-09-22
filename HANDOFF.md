@@ -1,5 +1,20 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-22 — V28D COMPLETE / ACTIVE PAIR PRESERVED
+
+**This block supersedes lower current-action sections.**
+
+Binding workflow `35781539795` completed SUCCESS. Decision: **`V28D_NO_CURRENT_META_V47_UNDERPERFORMANCE_SIGNAL`**.
+
+Current-window evidence: exact V47 `56466970` had 89 games, score rate `0.5280898876`, mean margin `+6198.47`; ALL3 `56367770` aligned to the exact V47 Episode-ID window had 23 games, score rate `0.3913043478`, mean margin `-1362.61`. V47 minus aligned ALL3: score rate `+0.1367855398`, mean margin `+7561.08`. Common-opponent overlap was only one opponent, too sparse for broad matchup inference; on it both were 1-0 and V47 margin was +423.
+
+Result: `docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_RESULT_2026-09-22.md`.
+
+Per frozen routing, preserve latest-two exactly: ALL3 `56367770` primary + exact V47 `56466970` hedge. O-RW1 `56336027` remains outside latest two. Do not open the CR053/stale-rating candidate branch because its prerequisite (robust current-meta V47 underperformance) did not occur.
+
+Continue read-only maturity/status monitoring. Notify on latest-two drift, V47 error/disappearance, or V47 maturity >=100 / >=169 episodes. No Kaggle submission, deletion, or reordering is authorized.
+
+
 
 ## Binding update — 2026-09-22 — V28D CURRENT-HOSTED FORENSICS ACTIVE
 

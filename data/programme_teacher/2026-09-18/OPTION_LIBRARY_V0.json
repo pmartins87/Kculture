@@ -1,151 +1,177 @@
 {
-  "schema": "kculture-option-library-v0",
-  "date": "2026-09-18",
-  "host": {
-    "name": "exact_public_v47",
-    "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
-    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
-    "hosted_entrypoint": "_y_agent_shopherd",
-    "loader_contract": "kaggle_environments.agent.get_last_callable"
+  "composition_gate_2026_09_19": {
+    "aggregate_harness_status": "FAILED_MISSING_KAGGLE_ENV_DEPENDENCY_NON_STRATEGIC",
+    "base_score_rate": 0.7857142857142857,
+    "binding_source": "seven successful shards from workflow 35426256016",
+    "both_score_rate": 0.8392857142857143,
+    "both_vs_base_score_delta": 0.0535714285714286,
+    "both_vs_best_single_score_delta": 0,
+    "decision": "OPTION_LIBRARY_COMBO_ADVANCE",
+    "interpretation": "BOTH is W/L-safe on this gate and retains the mirror gain, but adds no W/L over the best single option; use as offline host, not as evidence for immediate hosted submission.",
+    "mechanical_shards_pass": "7/7",
+    "nonnegative_score_blocks": 7,
+    "parallel_run": 35426256016,
+    "result_doc": "docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_RESULT_2026-09-19.md",
+    "rw1_score_rate": 0.8392857142857143,
+    "score_regressing_blocks": 0,
+    "serial_run": 35424958961,
+    "serial_status": "CANCELLED_NON_BINDING",
+    "shard_contexts": 56,
+    "tw1_score_rate": 0.8392857142857143
   },
-  "options": [
-    {
-      "option_id": "O-RW1",
-      "family": "market_timing_ready_stock",
-      "eligibility": "step<=671 AND exact V47 market==[] AND own private shed.WOOL>=2",
-      "treatment": "preserve exact V47 farmer/hands; replace empty market with SELL WOOL 2 for current turn only",
-      "max_fires_per_episode": 1,
-      "legality_inputs": [
-        "current step",
-        "current exact V47 action",
-        "own private shed.WOOL"
-      ],
-      "forbidden_runtime_inputs": [
-        "seed",
-        "future state",
-        "opponent private",
-        "opponent identity",
-        "rating",
-        "EpisodeId"
-      ],
-      "causal_run": 35363453097,
-      "runtime_run": 35367785929,
-      "runtime_score_delta": 0.09375,
-      "runtime_nonwin_to_win_flips": 14,
-      "runtime_win_to_nonwin_regressions": 0,
-      "hosted_submission": 56336027,
-      "status": "HOSTED_ACTIVE_AND_OFFLINE_LIBRARY"
+  "current_hosted_pair": {
+    "all3": {
+      "note": "latest observed snapshot; histories differ from O-RW1",
+      "rating": 2412.1,
+      "status": "COMPLETE",
+      "submission_id": 56367770
     },
-    {
-      "option_id": "O-TW1",
-      "family": "market_timing_town_consumption",
-      "eligibility": "public town WHEAT demand this turn AND exact V47 SELLs already-owned WHEAT",
-      "treatment": "preserve exact V47 farmer/hands and non-WHEAT market orders; suppress current-turn SELL WHEAT only; exact V47 resumes next turn",
-      "max_fires_per_episode": 1,
-      "legality_inputs": [
-        "current step",
-        "public town unlocked_shops",
-        "public config intervals",
-        "current exact V47 action",
-        "own private shed.WHEAT"
-      ],
-      "forbidden_runtime_inputs": [
-        "seed",
-        "future state",
-        "opponent private",
-        "opponent identity",
-        "rating",
-        "EpisodeId"
-      ],
-      "causal_run": 35378191104,
-      "runtime_run": 35395548699,
-      "runtime_score_delta": 0.09375,
-      "runtime_nonwin_to_win_flips": 14,
-      "runtime_win_to_nonwin_regressions": 0,
-      "hosted_submission": null,
-      "status": "OFFLINE_LIBRARY_RUNTIME_PASS"
+    "orw1": {
+      "rating": 2361.6,
+      "status": "COMPLETE",
+      "submission_id": 56336027
     }
-  ],
-  "primary_value_target": "counterfactual score_delta in {-1,-0.5,0,0.5,1}",
+  },
+  "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
+  "date": "2026-09-18",
   "diagnostic_targets": [
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "Resolve read-only V28D workflow 35781539795 comparing V47 and ALL3 in the current hosted population; no Kaggle mutation is authorized.",
-  "no_automatic_kaggle_submission": true,
-  "option_value_v2": {
-    "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
-    "seeds": 150,
-    "opponents": 7,
-    "rows": 4200,
-    "unique_state_hashes": 1238,
-    "failures": 0,
-    "positive_labels_total": 461,
-    "positive_labels_v47_mirror": 458,
-    "positive_labels_outside_v47": 3,
-    "outside_v47_rows": 3600,
-    "interpretation": "MECHANICS_PASS_OPTION_COVERAGE_INSUFFICIENT_FOR_PRODUCTION_MULTI_FAMILY_SELECTOR",
-    "result_doc": "docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md"
-  },
-  "composition_gate_2026_09_19": {
-    "binding_source": "seven successful shards from workflow 35426256016",
-    "serial_run": 35424958961,
-    "serial_status": "CANCELLED_NON_BINDING",
-    "parallel_run": 35426256016,
-    "shard_contexts": 56,
-    "mechanical_shards_pass": "7/7",
-    "aggregate_harness_status": "FAILED_MISSING_KAGGLE_ENV_DEPENDENCY_NON_STRATEGIC",
-    "base_score_rate": 0.7857142857142857,
-    "rw1_score_rate": 0.8392857142857143,
-    "tw1_score_rate": 0.8392857142857143,
-    "both_score_rate": 0.8392857142857143,
-    "both_vs_base_score_delta": 0.0535714285714286,
-    "both_vs_best_single_score_delta": 0,
-    "nonnegative_score_blocks": 7,
-    "score_regressing_blocks": 0,
-    "decision": "OPTION_LIBRARY_COMBO_ADVANCE",
-    "interpretation": "BOTH is W/L-safe on this gate and retains the mirror gain, but adds no W/L over the best single option; use as offline host, not as evidence for immediate hosted submission.",
-    "result_doc": "docs/strategy/OPTION_LIBRARY_COMBO_RUNTIME_V0_RESULT_2026-09-19.md"
-  },
-  "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "discovery_2026_09_19": {
-    "v47_v48_census": {
-      "workflow": 35439729714,
-      "decision": "V48_CENSUS_MARKET_SEARCHABLE",
-      "contexts": 8,
-      "v47_score_rate": 0,
-      "wins": 0,
-      "ties": 0,
-      "losses": 8,
-      "mean_margin": -454,
-      "market_only_divergences": 458,
-      "physical_divergences": 0,
-      "result_doc": "docs/strategy/V47_V48_DIVERGENCE_CENSUS_V1_RESULT_2026-09-19.md"
+    "all3": {
+      "composition": {
+        "all3_negative_vs_base": 0,
+        "all3_score_rate": 0.9464285714285714,
+        "base_score_rate": 0.7857142857142857,
+        "contexts": 56,
+        "decision": "TRIPLE_COMBO_SAFE_ADVANCE",
+        "lq2_score_rate": 0.9464285714285714,
+        "old_score_rate": 0.8392857142857143,
+        "workflow": 35456535323
+      },
+      "first_informative": {
+        "exposure_workflow": 35465480222,
+        "forensics_workflow": 35465520238,
+        "listed_episodes": 35,
+        "losses": 6,
+        "mean_margin": 13626.970588235294,
+        "median_margin": 1676.5,
+        "rating_snapshot": 2395.4,
+        "resolved_external_games": 34,
+        "result_doc": "docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md",
+        "retained_orw1_rating_snapshot": 2364.1,
+        "score_rate": 0.8235294117647058,
+        "status_workflow": 35465432144,
+        "ties": 0,
+        "unique_opponents": 33,
+        "wins": 28
+      },
+      "hosted": {
+        "description": "PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4",
+        "initial_rating": 600,
+        "initial_status_workflow": 35459613689,
+        "registered_utc": "2026-09-19 17:53:18.930000",
+        "retained_pair_rating": 2383.9,
+        "retained_pair_submission": 56336027,
+        "status": "COMPLETE",
+        "submission_id": 56367770
+      },
+      "loss_coverage_proxy": {
+        "note": "coverage census only; not counterfactual outcome",
+        "residual_hard_count": 9,
+        "result_doc": "docs/strategy/ALL3_HOSTED_LOSS_COVERAGE_RESULT_2026-09-19.md",
+        "source_losses": 82,
+        "source_replays": 128,
+        "source_submission": 56336027,
+        "workflow": 35465395838
+      },
+      "package": {
+        "action_parity": "12/12",
+        "archive_sha256": "204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8",
+        "candidate": "KCULTURE_V47_ALL3_V1.tar.gz",
+        "candidate_main_sha256": "92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f",
+        "decision": "ALL3_HOSTED_PACKAGE_PARITY_PASS",
+        "entrypoint": "_kc_all3_entrypoint",
+        "parity_pairs": 12,
+        "reward_parity": "12/12",
+        "workflow": 35457146455
+      },
+      "readiness": {
+        "checkpoint_1": {
+          "control_rating": 2344.6,
+          "orw1_rating": 2383.9
+        },
+        "checkpoint_2": {
+          "control_rating": 2344.6,
+          "orw1_rating": 2383.9
+        },
+        "current_control_submission": 56336025,
+        "decision": "ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL",
+        "retained_orw1_submission": 56336027
+      },
+      "status": "HOSTED_COMPLETE_INITIAL_600",
+      "submission_workflow": 35459415491
+    },
+    "all3_next_option": {
+      "current_all3_submission_id": 56367770,
+      "identity_use": "offline forensic only; prohibited as runtime policy feature",
+      "launch_commit": "bbc4a9d74e930bf4fb334a0f5217ab3cb43133c0",
+      "max_public_replays": 128,
+      "previous_orw1_forensics_status": "COMPLETE_STALE_PROXY",
+      "previous_orw1_forensics_workflow": 35459722091,
+      "protocol": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_PROTOCOL_2026-09-20.md",
+      "purpose": "mine mature O-RW1 hosted losses/opponents to target next ALL3 option discovery",
+      "source_submission_id": 56336027,
+      "status": "V11A_CURRENT_ALL3_REFRESH_ACTIVE",
+      "workflow": 35518801971
     },
     "candidate_option": {
-      "option_id": "O-CQ1",
+      "causal_workflow_status": "NOT_RUN",
+      "close_reason": "pre-action shed is the wrong availability state; physical shed operations and earlier market orders resolve before later SELLs, and V48 queue sanitation is selectively activated",
+      "decision": "CQ1_PARITY_FAIL",
       "family": "market_queue_inventory_clamp",
       "hypothesis": "clamp each V47 SELL slot to current pre-action own shed inventory; zero becomes []",
-      "status": "PARITY_FAIL_CLOSED",
-      "parity_workflow": 35439945148,
-      "decision": "CQ1_PARITY_FAIL",
       "metrics": {
-        "v48_market_divergence_rows": 456,
+        "changed_but_not_exact": 168,
         "cq1_changed_rows": 1356,
         "exact_v48_matches": 288,
         "false_positive_changes": 900,
         "missed_v48_changes": 0,
-        "changed_but_not_exact": 168,
         "precision": 0.21238938053097345,
-        "recall": 0.631578947368421
+        "recall": 0.631578947368421,
+        "v48_market_divergence_rows": 456
       },
-      "causal_workflow_status": "NOT_RUN",
-      "close_reason": "pre-action shed is the wrong availability state; physical shed operations and earlier market orders resolve before later SELLs, and V48 queue sanitation is selectively activated"
+      "option_id": "O-CQ1",
+      "parity_workflow": 35439945148,
+      "status": "PARITY_FAIL_CLOSED"
+    },
+    "cq2": {
+      "best": {
+        "changed_but_not_exact": 48,
+        "exact_v48_matches": 424,
+        "f1": 0.6563467492260062,
+        "false_positive_changes": 332,
+        "full_action_accuracy": 0.93115438108484,
+        "min_step": 336,
+        "missed_v48_changes": 16,
+        "mode": "slot_projected",
+        "precision": 0.527363184079602,
+        "recall": 0.8688524590163934,
+        "v48_divergences": 488
+      },
+      "binding_workflow": 35440530160,
+      "decision": "CQ2_DEV_WEAK_USE_V4A",
+      "result_doc": "docs/strategy/CQ2_PROJECTED_QUEUE_DEV_RESULT_2026-09-19.md",
+      "validation_status": "SKIPPED_BY_PRE_REGISTERED_GATE"
     },
     "fallback_v4a": {
-      "tool": "tools/v48_multiturn_market_oracle_v4a.py",
-      "workflow": ".github/workflows/v48-multiturn-market-oracle-v4a.yml",
-      "status": "ACTIVATING_AFTER_CQ2_WEAK",
+      "horizons": [
+        1,
+        2,
+        3
+      ],
+      "max_events": 3,
       "seeds": [
         74001,
         74002,
@@ -154,54 +180,12 @@
         74005,
         74006
       ],
-      "horizons": [
-        1,
-        2,
-        3
-      ],
-      "max_events": 3
-    },
-    "next_candidate": {
-      "option_id": "O-CQ2",
-      "family": "market_queue_projected_availability",
-      "status": "DEVELOPMENT_PARITY_MATRIX",
-      "hypothesis": "project own shed through current V47 physical actions and earlier market slots, then sanitize overcommitted SELL queue; learn activation/compaction form on development seeds and freeze before fresh validation"
-    },
-    "cq2": {
-      "binding_workflow": 35440530160,
-      "decision": "CQ2_DEV_WEAK_USE_V4A",
-      "best": {
-        "mode": "slot_projected",
-        "min_step": 336,
-        "exact_v48_matches": 424,
-        "v48_divergences": 488,
-        "precision": 0.527363184079602,
-        "recall": 0.8688524590163934,
-        "f1": 0.6563467492260062,
-        "false_positive_changes": 332,
-        "changed_but_not_exact": 48,
-        "missed_v48_changes": 16,
-        "full_action_accuracy": 0.93115438108484
-      },
-      "validation_status": "SKIPPED_BY_PRE_REGISTERED_GATE",
-      "result_doc": "docs/strategy/CQ2_PROJECTED_QUEUE_DEV_RESULT_2026-09-19.md"
-    },
-    "v4a": {
-      "workflow": 35444529719,
-      "decision": "V48_V4A_MARGIN_ONLY",
-      "contexts": 12,
-      "hard_base_nonwins": 11,
-      "base_score_rate": 0.08333333333333333,
-      "oracle_score_rate": 0.08333333333333333,
-      "score_delta": 0,
-      "nonwin_to_win_flips": 0,
-      "mean_oracle_margin_delta": 0.25,
-      "result_doc": "docs/strategy/V48_MULTITURN_MARKET_V4A_RESULT_2026-09-19.md"
+      "status": "ACTIVATING_AFTER_CQ2_WEAK",
+      "tool": "tools/v48_multiturn_market_oracle_v4a.py",
+      "workflow": ".github/workflows/v48-multiturn-market-oracle-v4a.yml"
     },
     "fallback_v4b": {
-      "tool": "tools/v48_market_upper_bound_v4b.py",
-      "workflow": ".github/workflows/v48-market-upper-bound-v4b.yml",
-      "status": "ACTIVATING_AFTER_V4A_MARGIN_ONLY",
+      "purpose": "long-horizon market-only upper bound under exact V47 physical policy",
       "seeds": [
         74101,
         74102,
@@ -210,105 +194,114 @@
         74105,
         74106
       ],
-      "purpose": "long-horizon market-only upper bound under exact V47 physical policy"
+      "status": "ACTIVATING_AFTER_V4A_MARGIN_ONLY",
+      "tool": "tools/v48_market_upper_bound_v4b.py",
+      "workflow": ".github/workflows/v48-market-upper-bound-v4b.yml"
     },
-    "v4b": {
-      "workflow": 35448761774,
-      "runner_decision": "V48_V4B_LONG_HORIZON_MARGIN_ONLY",
-      "binding_interpretation": "V48_V4B_LOSS_TO_TIE_WL_HEADROOM",
-      "contexts": 12,
-      "base_score_rate": 0,
-      "upper_score_rate": 0.5,
-      "score_delta": 0.5,
-      "mean_margin_delta": 585.6666666666666,
-      "mean_applied_market_turns": 50.166666666666664,
-      "mean_physical_fallback_turns": 0,
-      "result_doc": "docs/strategy/V48_MARKET_UPPER_BOUND_V4B_RESULT_2026-09-19.md"
+    "h1_h1b_clarification": {
+      "current_option": "O-TW1",
+      "decision": "do not reopen H1/H1B as a duplicate option family",
+      "included_in": "ALL3",
+      "mechanism": "public town-WHEAT sell deferral",
+      "status": "ALREADY_ABSORBED"
     },
-    "v4c": {
-      "status": "NOT_ACTIVATED_ZERO_PHYSICAL_FALLBACK",
-      "tool": "tools/v48_state_basin_coupling_v4c.py",
-      "workflow": ".github/workflows/v48-state-basin-coupling-v4c.yml",
-      "activate_if": "V4B no W/L headroom AND material physical_fallback_turns",
-      "purpose": "measure whether market substitutions induce future V48-vs-V47 physical policy divergence"
+    "next_candidate": {
+      "family": "market_queue_projected_availability",
+      "hypothesis": "project own shed through current V47 physical actions and earlier market slots, then sanitize overcommitted SELL queue; learn activation/compaction form on development seeds and freeze before fresh validation",
+      "option_id": "O-CQ2",
+      "status": "DEVELOPMENT_PARITY_MATRIX"
     },
-    "v4d": {
-      "workflow": 35449982864,
-      "decision": "V48_V4D_GLOBAL_INTERVAL_FOUND",
-      "global_interval": {
-        "label": "W2_PLUS",
-        "start": 336,
-        "end": 718,
-        "reproduced_contexts": 12,
-        "contexts": 12,
-        "score_rate": 0.5,
-        "mean_score_delta": 0.5,
-        "mean_margin_delta": 585.6666666666666,
-        "mean_applied_market_turns": 49,
-        "physical_fallback_turns": 0
+    "o_hv1": {
+      "configs": {
+        "D1": {
+          "mean_margin_delta": -30170.666666666668,
+          "mean_score_delta": -0.5833333333333334,
+          "min_price": 175,
+          "min_step": 240,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0
+        },
+        "D2": {
+          "mean_margin_delta": -28698.416666666668,
+          "mean_score_delta": -0.5833333333333334,
+          "min_price": 200,
+          "min_step": 240,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0
+        },
+        "D3": {
+          "mean_margin_delta": -29900.458333333332,
+          "mean_score_delta": -0.5833333333333334,
+          "min_price": 175,
+          "min_step": 336,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0
+        },
+        "D4": {
+          "mean_margin_delta": -28424.458333333332,
+          "mean_score_delta": -0.5833333333333334,
+          "min_price": 200,
+          "min_step": 336,
+          "negative_score_contexts": 14,
+          "positive_score_contexts": 0
+        }
       },
-      "minimal_reproducer_label_counts": {
-        "W2_PLUS": 4,
-        "W3_PLUS": 6,
-        "W4_PLUS": 2
-      },
-      "result_doc": "docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md"
+      "decision": "O_HV1_DEV_CLOSE",
+      "eligible": [],
+      "mechanical_pass": true,
+      "result_doc": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md",
+      "status": "CLOSED_NO_RETUNING",
+      "workflow_original": 35465868923,
+      "workflow_parallel": 35466170602
     },
     "o_lq1": {
+      "base_score_rate": 0,
       "binding_workflow": 35450434666,
       "decision": "O_LQ1_V48_CAUSAL_FAIL",
-      "pairs": 16,
-      "base_score_rate": 0,
-      "treatment_score_rate": 0,
-      "mean_score_delta": 0,
       "mean_margin_delta": 0,
+      "mean_score_delta": 0,
+      "pairs": 16,
+      "result_doc": "docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_RESULT_2026-09-19.md",
+      "status": "CLOSED_ENGINE_SEMANTIC_NOOP",
       "total_changed_slots": 3480,
       "total_cleared_slots": 2770,
       "total_qty_down_slots": 710,
-      "status": "CLOSED_ENGINE_SEMANTIC_NOOP",
-      "result_doc": "docs/strategy/O_LQ1_LATE_QUEUE_CAUSAL_RESULT_2026-09-19.md"
-    },
-    "v4e": {
-      "workflow": 35450703737,
-      "decision": "V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY",
-      "full": {
-        "reproduced_contexts": 12,
-        "score_rate": 0.5,
-        "mean_score_delta": 0.5,
-        "mean_margin_delta": 585.6666666666666
-      },
-      "only_sanitation": {
-        "reproduced_contexts": 2,
-        "score_rate": 0.16666666666666666,
-        "mean_margin_delta": 18.666666666666668
-      },
-      "only_structural": {
-        "reproduced_contexts": 10,
-        "score_rate": 0.5,
-        "mean_margin_delta": 587.1666666666666
-      },
-      "full_minus_sanitation": {
-        "reproduced_contexts": 10,
-        "score_rate": 0.5
-      },
-      "full_minus_replace": {
-        "reproduced_contexts": 0,
-        "score_rate": 0
-      },
-      "full_minus_qty_up": {
-        "reproduced_contexts": 2,
-        "score_rate": 0.16666666666666666
-      },
-      "necessary_categories": [
-        "REPLACE",
-        "QTY_UP",
-        "STRUCTURAL"
-      ],
-      "result_doc": "docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md"
+      "treatment_score_rate": 0
     },
     "o_lq2": {
-      "workflow": 35456018489,
-      "status": "BROAD_SAFE_PACKAGE_READY",
+      "broad": {
+        "by_opponent": {
+          "best_market": 0,
+          "conditional_memory": 0,
+          "ready_stock": 0,
+          "router_2715": 0,
+          "tactical_memory": 0,
+          "v47_mirror": 0.375,
+          "v48": 0.75
+        },
+        "contexts": 56,
+        "decision": "O_LQ2_BROAD_SAFE_PASS",
+        "mean_margin_delta": 212.82142857142858,
+        "mean_score_delta": 0.16071428571428573,
+        "negative_score_contexts": 0,
+        "workflow": 35456201059
+      },
+      "causal": {
+        "base_score_rate": 0,
+        "decision": "O_LQ2_V48_CAUSAL_PASS",
+        "mean_margin_delta": 567,
+        "mean_score_delta": 1,
+        "negative_score_contexts": 0,
+        "pairs": 16,
+        "treatment_score_rate": 1,
+        "workflow": 35456018489
+      },
+      "result_docs": [
+        "docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md",
+        "docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md"
+      ],
+      "rule": "from step 336, canonicalize each consecutive SELL run by always aggregating duplicate products, capping aggregate demand to projected own inventory, dropping zero-effective products, and compacting survivors left",
+      "runtime_uses_v48_code": false,
       "seeds": [
         74401,
         74402,
@@ -319,510 +312,27 @@
         74407,
         74408
       ],
-      "rule": "from step 336, canonicalize each consecutive SELL run by always aggregating duplicate products, capping aggregate demand to projected own inventory, dropping zero-effective products, and compacting survivors left",
-      "runtime_uses_v48_code": false,
-      "causal": {
-        "workflow": 35456018489,
-        "decision": "O_LQ2_V48_CAUSAL_PASS",
-        "pairs": 16,
-        "base_score_rate": 0,
-        "treatment_score_rate": 1,
-        "mean_score_delta": 1,
-        "mean_margin_delta": 567,
-        "negative_score_contexts": 0
-      },
-      "broad": {
-        "workflow": 35456201059,
-        "decision": "O_LQ2_BROAD_SAFE_PASS",
-        "contexts": 56,
-        "mean_score_delta": 0.16071428571428573,
-        "mean_margin_delta": 212.82142857142858,
-        "negative_score_contexts": 0,
-        "by_opponent": {
-          "v48": 0.75,
-          "v47_mirror": 0.375,
-          "ready_stock": 0,
-          "router_2715": 0,
-          "conditional_memory": 0,
-          "tactical_memory": 0,
-          "best_market": 0
-        }
-      },
-      "result_docs": [
-        "docs/strategy/O_LQ2_CANONICAL_SELL_QUEUE_CAUSAL_RESULT_2026-09-19.md",
-        "docs/strategy/O_LQ2_BROAD_REGRESSION_RESULT_2026-09-19.md"
-      ]
-    },
-    "all3": {
-      "composition": {
-        "workflow": 35456535323,
-        "decision": "TRIPLE_COMBO_SAFE_ADVANCE",
-        "contexts": 56,
-        "base_score_rate": 0.7857142857142857,
-        "old_score_rate": 0.8392857142857143,
-        "lq2_score_rate": 0.9464285714285714,
-        "all3_score_rate": 0.9464285714285714,
-        "all3_negative_vs_base": 0
-      },
-      "package": {
-        "workflow": 35457146455,
-        "decision": "ALL3_HOSTED_PACKAGE_PARITY_PASS",
-        "candidate": "KCULTURE_V47_ALL3_V1.tar.gz",
-        "archive_sha256": "204a9ed49579b8255343d6014e815d2512d2f37edea142eba082203e101ff7f8",
-        "candidate_main_sha256": "92cffec54646e04e4e019bbc623564705038264b8ce7719b589095c1804d3e2f",
-        "entrypoint": "_kc_all3_entrypoint",
-        "parity_pairs": 12,
-        "action_parity": "12/12",
-        "reward_parity": "12/12"
-      },
-      "readiness": {
-        "decision": "ALL3_HOSTED_READINESS_PASS_REPLACE_CONTROL",
-        "current_control_submission": 56336025,
-        "retained_orw1_submission": 56336027,
-        "checkpoint_1": {
-          "control_rating": 2344.6,
-          "orw1_rating": 2383.9
-        },
-        "checkpoint_2": {
-          "control_rating": 2344.6,
-          "orw1_rating": 2383.9
-        }
-      },
-      "submission_workflow": 35459415491,
-      "status": "HOSTED_COMPLETE_INITIAL_600",
-      "hosted": {
-        "submission_id": 56367770,
-        "description": "PS_ALL3_V1_RW1_TW1_LQ2_204A9ED4",
-        "registered_utc": "2026-09-19 17:53:18.930000",
-        "status": "COMPLETE",
-        "initial_rating": 600,
-        "initial_status_workflow": 35459613689,
-        "retained_pair_submission": 56336027,
-        "retained_pair_rating": 2383.9
-      },
-      "first_informative": {
-        "status_workflow": 35465432144,
-        "exposure_workflow": 35465480222,
-        "forensics_workflow": 35465520238,
-        "listed_episodes": 35,
-        "resolved_external_games": 34,
-        "wins": 28,
-        "losses": 6,
-        "ties": 0,
-        "score_rate": 0.8235294117647058,
-        "unique_opponents": 33,
-        "mean_margin": 13626.970588235294,
-        "median_margin": 1676.5,
-        "rating_snapshot": 2395.4,
-        "retained_orw1_rating_snapshot": 2364.1,
-        "result_doc": "docs/strategy/ALL3_HOSTED_FIRST_INFORMATIVE_RESULT_2026-09-19.md"
-      },
-      "loss_coverage_proxy": {
-        "workflow": 35465395838,
-        "source_submission": 56336027,
-        "source_replays": 128,
-        "source_losses": 82,
-        "residual_hard_count": 9,
-        "note": "coverage census only; not counterfactual outcome",
-        "result_doc": "docs/strategy/ALL3_HOSTED_LOSS_COVERAGE_RESULT_2026-09-19.md"
-      }
-    },
-    "all3_next_option": {
-      "source_submission_id": 56336027,
-      "purpose": "mine mature O-RW1 hosted losses/opponents to target next ALL3 option discovery",
-      "workflow": 35518801971,
-      "status": "V11A_CURRENT_ALL3_REFRESH_ACTIVE",
-      "max_public_replays": 128,
-      "identity_use": "offline forensic only; prohibited as runtime policy feature",
-      "previous_orw1_forensics_workflow": 35459722091,
-      "previous_orw1_forensics_status": "COMPLETE_STALE_PROXY",
-      "current_all3_submission_id": 56367770,
-      "launch_commit": "bbc4a9d74e930bf4fb334a0f5217ab3cb43133c0",
-      "protocol": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_PROTOCOL_2026-09-20.md"
-    },
-    "o_hv1": {
-      "workflow_original": 35465868923,
-      "workflow_parallel": 35466170602,
-      "decision": "O_HV1_DEV_CLOSE",
-      "mechanical_pass": true,
-      "eligible": [],
-      "configs": {
-        "D1": {
-          "min_step": 240,
-          "min_price": 175,
-          "mean_score_delta": -0.5833333333333334,
-          "negative_score_contexts": 14,
-          "positive_score_contexts": 0,
-          "mean_margin_delta": -30170.666666666668
-        },
-        "D2": {
-          "min_step": 240,
-          "min_price": 200,
-          "mean_score_delta": -0.5833333333333334,
-          "negative_score_contexts": 14,
-          "positive_score_contexts": 0,
-          "mean_margin_delta": -28698.416666666668
-        },
-        "D3": {
-          "min_step": 336,
-          "min_price": 175,
-          "mean_score_delta": -0.5833333333333334,
-          "negative_score_contexts": 14,
-          "positive_score_contexts": 0,
-          "mean_margin_delta": -29900.458333333332
-        },
-        "D4": {
-          "min_step": 336,
-          "min_price": 200,
-          "mean_score_delta": -0.5833333333333334,
-          "negative_score_contexts": 14,
-          "positive_score_contexts": 0,
-          "mean_margin_delta": -28424.458333333332
-        }
-      },
-      "status": "CLOSED_NO_RETUNING",
-      "result_doc": "docs/strategy/O_HV1_HIGH_VALUE_STOCK_FLUSH_RESULT_2026-09-19.md"
-    },
-    "o_pc1": {
-      "workflow_original": 35469344185,
-      "workflow_parallel": 35469497089,
-      "decision": "O_PC1_DEV_CLOSE",
-      "mechanical_pass": true,
-      "contexts": 24,
-      "fire_contexts": 6,
-      "mean_fire_count": 3.25,
-      "plant_replacements": 54,
-      "seed_units_redirected": 54,
-      "mean_score_delta": -0.25,
-      "mean_margin_delta": -217.83333333333334,
-      "negative_score_contexts": 6,
-      "positive_score_contexts": 0,
-      "by_opponent": {
-        "v47_mirror": {
-          "mean_score_delta": -0.25,
-          "negative": 2,
-          "positive": 0,
-          "mean_margin_delta": -204.25
-        },
-        "v48": {
-          "mean_score_delta": -0.25,
-          "negative": 2,
-          "positive": 0,
-          "mean_margin_delta": -146.25
-        },
-        "ready_stock": {
-          "mean_score_delta": -0.25,
-          "negative": 2,
-          "positive": 0,
-          "mean_margin_delta": -303
-        }
-      },
-      "status": "CLOSED_NO_RETUNING",
-      "result_doc": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md"
-    },
-    "v5_physical_oracle": {
-      "corrected_workflow_original": 35470046629,
-      "corrected_workflow_parallel": 35470051852,
-      "decision": "V5_PHYSICAL_MARGIN_ONLY",
-      "mechanical_pass": true,
-      "branch_states": 32,
-      "base_score_rate": 0.9375,
-      "oracle_score_rate": 0.9375,
-      "score_delta": 0,
-      "nonwin_to_win_flips": 0,
-      "loss_to_win_flips": 0,
-      "mean_oracle_margin_delta": 505.65625,
-      "median_oracle_margin_delta": 0,
-      "positive_margin_states": 14,
-      "v48_mean_margin_delta": 0,
-      "only_nonwin": {
-        "opponent": "v48",
-        "seed": 75002,
-        "seat": 0,
-        "margin": -26
-      },
-      "status": "CLOSED_MARGIN_ONLY_NO_FIRST_PARTY_PROMOTION",
-      "result_doc": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md"
-    },
-    "v6a_hard_context_census": {
-      "batch_a": {
-        "nonbinding_run": 35472681958,
-        "binding_run": 35472777632,
-        "decision": "V6A_EXPAND_HARD_CENSUS",
-        "mechanical_pass": true,
-        "contexts": 112,
-        "wins": 111,
-        "losses": 1,
-        "ties": 0,
-        "nonwins": [
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75103,
-            "seat": 1,
-            "margin": -86,
-            "score": 0
-          }
-        ],
-        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_BATCH_A_RESULT_2026-09-19.md"
-      },
-      "batch_b": {
-        "workflow": 35473134791,
-        "status": "COMPLETE",
-        "contexts": 112,
-        "nonwins": [
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75110,
-            "seat": 0,
-            "margin": -484,
-            "score": 0
-          },
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75113,
-            "seat": 1,
-            "margin": -794,
-            "score": 0
-          },
-          {
-            "opponent": "v47_mirror",
-            "family": "modern41_v47",
-            "seed": 75113,
-            "seat": 1,
-            "margin": -263,
-            "score": 0
-          }
-        ]
-      },
-      "combined_gate": "need >=4 total nonwins before V6; close wins forbidden as substitutes",
-      "combined": {
-        "decision": "V6A_HARD_CONTEXTS_READY",
-        "contexts": 224,
-        "wins": 220,
-        "losses": 4,
-        "ties": 0,
-        "selected_hard_contexts": [
-          {
-            "opponent": "v47_mirror",
-            "family": "modern41_v47",
-            "seed": 75113,
-            "seat": 1,
-            "margin": -263,
-            "score": 0
-          },
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75103,
-            "seat": 1,
-            "margin": -86,
-            "score": 0
-          },
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75110,
-            "seat": 0,
-            "margin": -484,
-            "score": 0
-          },
-          {
-            "opponent": "v48",
-            "family": "modern41_queue",
-            "seed": 75113,
-            "seat": 1,
-            "margin": -794,
-            "score": 0
-          }
-        ],
-        "config": "configs/all3_v6_hard_contexts.json",
-        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_AB_RESULT_2026-09-19.md"
-      }
-    },
-    "v6_continuation": {
-      "workflow": 35473780009,
-      "status": "COMPLETE_CLOSED_MARGIN_ONLY",
-      "config": "configs/all3_v6_hard_contexts.json",
-      "horizons": [
-        2,
-        3
-      ],
-      "scope": "one physical locus, exact ALL3 market/other loci, ALL3 resumes after horizon",
-      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md",
-      "decision": "V6_CONTINUATION_MARGIN_ONLY",
-      "loss_to_win_flips": 0,
-      "mean_oracle_margin_delta": 68.5,
-      "result_doc": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_RESULT_2026-09-19.md"
-    },
-    "v7_option_composition": {
-      "workflow": 35479297555,
-      "decision": "V7_STATIC_COMPOSITION_MARGIN_ONLY",
-      "mechanical_pass": true,
-      "contexts": 4,
-      "compositions": 8,
-      "rescues": 0,
-      "all3_mean_margin": -406.75,
-      "best_alternative": "TW_LQ2",
-      "best_alternative_mean_margin": -399.75,
-      "interpretation": "no static suppression rescues any residual hard loss; LQ2 is dominant value component",
-      "result_doc": "docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_RESULT_2026-09-19.md",
-      "status": "CLOSED_MARGIN_ONLY"
-    },
-    "v8a_lq2_sell_run_census": {
-      "workflow": 35479557496,
-      "status": "COMPLETE",
-      "decision": "V8A_ORDER_SEARCH_READY",
-      "mechanical_pass": true,
-      "lq2_changed_turns": 424,
-      "eligible_states": 170,
-      "contexts_with_eligible": 4,
-      "max_distinct_products": 6,
-      "result_doc": "docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_RESULT_2026-09-19.md"
-    },
-    "v8b_lq2_order_oracle": {
-      "workflow": 35479783995,
-      "status": "COMPLETE",
-      "decision": "V8B_ORDER_HEADROOM_NARROW",
-      "mechanical_pass": true,
-      "flipped_to_win": 1,
-      "mean_best_margin_delta": 96,
-      "winning_context": {
-        "opponent": "v48",
-        "seed": 75103,
-        "seat": 1,
-        "step": 600,
-        "base_margin": -86,
-        "treatment_margin": 10,
-        "swap": [
-          "FERTILIZER",
-          "WOOL"
-        ]
-      },
-      "directional_context": {
-        "opponent": "v48",
-        "seed": 75110,
-        "seat": 0,
-        "step": 600,
-        "base_margin": -484,
-        "treatment_margin": -220,
-        "swap": [
-          "WOOL",
-          "MILK"
-        ]
-      },
-      "inferred_local_priority": [
-        "MILK",
-        "WOOL",
-        "FERTILIZER"
-      ],
-      "result_doc": "docs/strategy/ALL3_V8B_LQ2_SELL_ORDER_ORACLE_RESULT_2026-09-19.md"
+      "status": "BROAD_SAFE_PACKAGE_READY",
+      "workflow": 35456018489
     },
     "o_lq3": {
-      "status": "CLOSED_STAGE_A_FAIL_NO_RETUNING",
-      "workflow": 35480144515,
       "decision": "O_LQ3_STAGE_A_FAIL",
-      "rule": "within each post-LQ2 consecutive SELL run, stable-sort only MILK/WOOL/FERTILIZER occupied slots by MILK -> WOOL -> FERTILIZER; preserve all quantities, other slots, farmer and hands",
       "fires_per_hard_context": 12,
       "loss_to_win_flips": 0,
       "mean_margin_delta": -1304.25,
-      "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md"
-    },
-    "v8c_local_priority_value_atlas": {
-      "status": "COMPLETE",
-      "workflow": 35516167350,
-      "expected_branch_states": 46,
-      "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
-      "gate": {
-        "repeatable": "loss->win flips in >=2 distinct hard contexts",
-        "narrow": ">=1 loss->win plus positive-margin states in >=2 contexts",
-        "margin_heterogeneous": "positive-margin states in >=2 contexts without a win flip",
-        "no_reusable_headroom": "otherwise"
-      },
-      "promotion_rule": "only repeatable/narrow W/L evidence may derive one compact opponent-identity-free public-state condition, frozen before fresh V8D",
-      "protocol": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "nonbinding_runs": [
-        {
-          "workflow": 35514319440,
-          "reason": "incorrect fixed 12-events-per-context count inherited from cumulatively treated O-LQ3 trajectory"
-        },
-        {
-          "workflow": 35514495824,
-          "reason": "context-side correction only; aggregate still had obsolete fixed-count gate"
-        },
-        {
-          "workflow": 35514497453,
-          "reason": "aggregate source contained literal \\\\n and failed Python syntax before strategic simulation"
-        }
-      ],
-      "head_commit": "b528ac9dafedefd17b65dfa7407b1b793adb6046",
-      "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory",
-      "decision": "V8C_CONDITIONAL_ORDER_HEADROOM_NARROW",
-      "mechanical_pass": true,
-      "branch_states": 46,
-      "loss_to_win_flips": 1,
-      "positive_margin_states": 6,
-      "positive_margin_contexts": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "negative_margin_states": 37,
-      "mean_margin_delta": -113.15217391304348,
-      "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md"
-    },
-    "v9_residual_structural_decomposition": {
-      "status": "CLOSED_ONE_TURN_NO_WL",
-      "activate_if": "binding V8C closes without reusable W/L headroom",
-      "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
-      "categories": [
-        "REORDER_ONLY",
-        "QTY_UP",
-        "QTY_DOWN",
-        "REPLACE",
-        "INSERT_DROP",
-        "MIXED_STRUCTURAL",
-        "OTHER"
-      ],
-      "v9b": "conditional one-turn causal category isolation only if V9A finds structural residuals",
-      "stop_rule": "if no repeatable W/L headroom, close residual one-turn V48 structural imitation rather than extend horizon or retune post hoc",
-      "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "workflow": 35517515758,
-      "launch_commit": "a551a38023ee268b43f71ed442b998a99d547a40",
-      "v9a_workflow": 35517515758,
-      "v9a_decision": "V9A_STRUCTURAL_RESIDUAL_READY",
-      "v9a_counts": {
-        "total": 233,
-        "INSERT_DROP": 161,
-        "QTY_UP": 63,
-        "REORDER_ONLY": 9,
-        "physical": 0
-      },
-      "structural_contexts": [
-        0,
-        1,
-        2,
-        3
-      ],
-      "v9a_result_doc": "docs/strategy/ALL3_V9A_RESIDUAL_STRUCTURAL_CENSUS_RESULT_2026-09-20.md",
-      "v9b_workflow": 35517836947,
-      "v9b_launch_commit": "fefc69744fb0b12bdd1c71141c53d0ff1083bd17",
-      "v9b_state_config": "configs/all3_v9b_representative_states.json",
-      "v9b_protocol": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_PROTOCOL_2026-09-20.md",
-      "v9b_decision": "V9B_NO_WL_HEADROOM_CLOSE_ONE_TURN_STRUCTURAL",
-      "v9b_result_doc": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_RESULT_2026-09-20.md"
+      "result_doc": "docs/strategy/O_LQ3_PRIORITY_SELL_ORDER_STAGE_A_RESULT_2026-09-20.md",
+      "rule": "within each post-LQ2 consecutive SELL run, stable-sort only MILK/WOOL/FERTILIZER occupied slots by MILK -> WOOL -> FERTILIZER; preserve all quantities, other slots, farmer and hands",
+      "status": "CLOSED_STAGE_A_FAIL_NO_RETUNING",
+      "workflow": 35480144515
     },
     "o_lq3c": {
-      "status": "CLOSED_NO_FRESH_WL_CONFIRMATION",
-      "source_v8c_workflow": 35516167350,
       "eligibility": "post-LQ2 nonempty market exactly 4 SELL + 6 HIRE; zero BUY/other; MILK, WOOL, FERTILIZER all present; O-LQ3 actually changes order",
-      "treatment": "apply unchanged MILK -> WOOL -> FERTILIZER stable ordering on eligible turn only",
-      "module": "tools/first_party_lq3c_conditional_sell_order.py",
+      "final_decision": "V8D_CONDITIONAL_ORDER_NO_WL_CONFIRMATION",
+      "final_result_doc": "docs/strategy/O_LQ3C_V8D_FINAL_CUMULATIVE_RESULT_2026-09-20.md",
+      "final_v48_contexts": 72,
+      "final_v48_fire_contexts": 6,
+      "final_v48_mean_score_delta": 0,
+      "final_v48_positive_score_contexts": 0,
       "forbidden_runtime_inputs": [
         "seed",
         "opponent identity",
@@ -831,96 +341,148 @@
         "future state",
         "opponent private"
       ],
+      "module": "tools/first_party_lq3c_conditional_sell_order.py",
+      "no_more_seed_extensions": true,
       "protocol": "docs/strategy/O_LQ3C_V8D_FRESH_VALIDATION_PROTOCOL_2026-09-20.md",
-      "final_decision": "V8D_CONDITIONAL_ORDER_NO_WL_CONFIRMATION",
-      "final_result_doc": "docs/strategy/O_LQ3C_V8D_FINAL_CUMULATIVE_RESULT_2026-09-20.md",
-      "final_v48_contexts": 72,
-      "final_v48_fire_contexts": 6,
-      "final_v48_positive_score_contexts": 0,
-      "final_v48_mean_score_delta": 0,
-      "no_more_seed_extensions": true
+      "source_v8c_workflow": 35516167350,
+      "status": "CLOSED_NO_FRESH_WL_CONFIRMATION",
+      "treatment": "apply unchanged MILK -> WOOL -> FERTILIZER stable ordering on eligible turn only"
     },
-    "v8d_fresh_validation": {
-      "status": "COMPLETE_UNDERPOWERED",
-      "workflow": 35516560425,
-      "launch_commit": "6afd5dd1a4ab4776437c49aae9807e948d032d8f",
-      "seeds": [
-        76001,
-        76002,
-        76003,
-        76004,
-        76005,
-        76006,
-        76007,
-        76008,
-        76009,
-        76010,
-        76011,
-        76012
-      ],
-      "seats": [
-        0,
-        1
-      ],
-      "opponents": [
-        "v48",
-        "v47_mirror",
-        "ready_stock"
-      ],
-      "paired_contexts": 72,
-      "pass_gate": "V48 positive mean score delta and >=1 positive-score context; zero win->nonwin overall; zero negative-score contexts in both controls; activation coverage minimum met",
-      "automatic_kaggle_submission": false,
-      "decision": "V8D_CONDITIONAL_ORDER_UNDERPOWERED",
-      "mechanical_pass": true,
-      "overall": {
-        "fire_contexts": 6,
-        "mean_score_delta": 0,
-        "mean_margin_delta": 7.222222222222222,
-        "negative_score_contexts": 0,
-        "win_to_nonwin": 0
-      },
+    "o_pc1": {
       "by_opponent": {
-        "v48": {
-          "contexts": 24,
-          "fire_contexts": 2,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 11.833333333333334,
-          "negative_score_contexts": 0,
-          "positive_score_contexts": 0
+        "ready_stock": {
+          "mean_margin_delta": -303,
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0
         },
         "v47_mirror": {
-          "contexts": 24,
-          "fire_contexts": 2,
+          "mean_margin_delta": -204.25,
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0
+        },
+        "v48": {
+          "mean_margin_delta": -146.25,
+          "mean_score_delta": -0.25,
+          "negative": 2,
+          "positive": 0
+        }
+      },
+      "contexts": 24,
+      "decision": "O_PC1_DEV_CLOSE",
+      "fire_contexts": 6,
+      "mean_fire_count": 3.25,
+      "mean_margin_delta": -217.83333333333334,
+      "mean_score_delta": -0.25,
+      "mechanical_pass": true,
+      "negative_score_contexts": 6,
+      "plant_replacements": 54,
+      "positive_score_contexts": 0,
+      "result_doc": "docs/strategy/O_PC1_PROFIT_DOMINANT_CROP_ROTATION_RESULT_2026-09-19.md",
+      "seed_units_redirected": 54,
+      "status": "CLOSED_NO_RETUNING",
+      "workflow_original": 35469344185,
+      "workflow_parallel": 35469497089
+    },
+    "v10a_residual_cumulative_market": {
+      "by_mode": {
+        "FULL_ALL": {
+          "mean_margin_delta": -205.25,
           "mean_score_delta": 0,
-          "mean_margin_delta": 11.833333333333334,
-          "negative_score_contexts": 0,
+          "mean_substitutions": 59.25,
           "positive_score_contexts": 0
         },
-        "ready_stock": {
-          "contexts": 24,
-          "fire_contexts": 2,
+        "FULL_W2PLUS": {
+          "mean_margin_delta": -191.5,
           "mean_score_delta": 0,
-          "mean_margin_delta": -2,
-          "negative_score_contexts": 0,
+          "mean_substitutions": 55.25,
+          "positive_score_contexts": 0
+        },
+        "INSERT_W2PLUS": {
+          "mean_margin_delta": -191.5,
+          "mean_score_delta": 0,
+          "mean_substitutions": 37.75,
+          "positive_score_contexts": 0
+        },
+        "QTY_W2PLUS": {
+          "mean_margin_delta": 0,
+          "mean_score_delta": 0,
+          "mean_substitutions": 15.75,
+          "positive_score_contexts": 0
+        },
+        "REORDER_W2PLUS": {
+          "mean_margin_delta": 0,
+          "mean_score_delta": 0,
+          "mean_substitutions": 2.25,
+          "positive_score_contexts": 0
+        },
+        "STRUCT_W2PLUS": {
+          "mean_margin_delta": -191.5,
+          "mean_score_delta": 0,
+          "mean_substitutions": 53,
           "positive_score_contexts": 0
         }
-      }
+      },
+      "close_reason": "remaining V48 market behavior has no cumulative W/L upper-bound headroom over ALL3",
+      "decision": "V10A_RESIDUAL_MARKET_UPPER_BOUND_CLOSED",
+      "head_commit": "291442310a0397da0d7a670a5b20954b8450c06b",
+      "mechanical_pass": true,
+      "result_doc": "docs/strategy/ALL3_V10A_RESIDUAL_CUMULATIVE_MARKET_RESULT_2026-09-20.md",
+      "status": "CLOSED",
+      "workflow": 35518110487
     },
-    "v8e_broad_regression": {
-      "status": "DORMANT_PRE_REGISTERED_BEFORE_V8D_RESULT",
-      "activate_if": "V8D_CONDITIONAL_ORDER_FRESH_PASS",
-      "seeds": [
-        76101,
-        76102,
-        76103,
-        76104,
-        76105,
-        76106
-      ],
-      "seats": [
-        0,
-        1
-      ],
+    "v11a_hosted_hard_population": {
+      "automatic_kaggle_submission": false,
+      "close_losses": 30,
+      "decision": "V11A_HOSTED_HARD_POPULATION_READY",
+      "losses": 71,
+      "opponents_unique": 117,
+      "resolved_games": 128,
+      "result_doc": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_RESULT_2026-09-20.md",
+      "score_rate": 0.4453125,
+      "status": "COMPLETE",
+      "submission_id": 56367770,
+      "ties": 0,
+      "wins": 57,
+      "workflow": 35518801971
+    },
+    "v11b_hosted_loss_signature": {
+      "automatic_kaggle_submission": false,
+      "causal_claim_authorized": false,
+      "decision": "V11B_PUBLIC_CROP_SHIFT_REGIME_SIGNAL",
+      "result_doc": "docs/strategy/ALL3_V11B_HOSTED_LOSS_SIGNATURE_RESULT_2026-09-20.md",
+      "status": "COMPLETE_OBSERVATIONAL",
+      "step600_primary": {
+        "loss_rate": 1,
+        "losses": 22,
+        "mean_margin": -3504.2727272727275,
+        "support": 22,
+        "wins": 0
+      },
+      "step600_strict": {
+        "loss_rate": 1,
+        "losses": 15,
+        "mean_margin": -4157.066666666667,
+        "support": 15,
+        "wins": 0
+      },
+      "workflow": 35519476400
+    },
+    "v12a_public_crop_shift_transfer": {
+      "all3_outcome": {
+        "losses": 0,
+        "score_rate": 1,
+        "ties": 0,
+        "wins": 112
+      },
+      "automatic_kaggle_submission": false,
+      "contexts": 112,
+      "decision": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
+      "interpretation": "hosted CARROT association not transferable on frozen seven-agent league; league too weak/unrepresentative for discovery",
+      "launch_commit": "f255d27997739690ff833828cc2adb1bc42bef04",
+      "mechanical_pass": true,
+      "next_if_ready": "V12B bounded causal public-state macro-response oracle",
       "opponents": [
         "v47_mirror",
         "ready_stock",
@@ -930,240 +492,12 @@
         "tactical_memory",
         "best_market"
       ],
-      "paired_contexts": 84,
-      "candidate": "exact frozen O-LQ3C unchanged from V8D",
-      "safety_gate": "zero win->nonwin overall and zero negative-score contexts in every family",
-      "hosted_policy": "after broad + package parity PASS, preserve ALL3 as control and use other slot for new candidate",
-      "protocol": "docs/strategy/O_LQ3C_V8E_BROAD_REGRESSION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false
-    },
-    "v8d_e1_extension": {
-      "status": "COMPLETE_UNDERPOWERED",
-      "workflow": 35516899185,
-      "launch_commit": "a295970e373f02974adc1a6b6186b11d08254348",
-      "seeds": [
-        76013,
-        76014,
-        76015,
-        76016,
-        76017,
-        76018,
-        76019,
-        76020,
-        76021,
-        76022,
-        76023,
-        76024
-      ],
+      "protocol": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_PROTOCOL_2026-09-20.md",
+      "result_doc": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_RESULT_2026-09-20.md",
       "seats": [
         0,
         1
       ],
-      "opponents": [
-        "v48",
-        "v47_mirror",
-        "ready_stock"
-      ],
-      "paired_contexts": 72,
-      "candidate": "exact frozen O-LQ3C unchanged",
-      "cumulative_with_workflow": 35516560425,
-      "if_still_underpowered": "one final unchanged E2 on seeds 76025..76036, then close for rarity if cumulative V48 fires remain <4",
-      "protocol": "docs/strategy/O_LQ3C_V8D_E1_EXTENSION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "mechanical_pass": true,
-      "overall": {
-        "fire_contexts": 0,
-        "mean_score_delta": 0,
-        "mean_margin_delta": 0,
-        "negative_score_contexts": 0,
-        "win_to_nonwin": 0
-      },
-      "by_opponent": {
-        "v48": {
-          "contexts": 24,
-          "fire_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 0,
-          "negative_score_contexts": 0,
-          "positive_score_contexts": 0
-        },
-        "v47_mirror": {
-          "contexts": 24,
-          "fire_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 0,
-          "negative_score_contexts": 0,
-          "positive_score_contexts": 0
-        },
-        "ready_stock": {
-          "contexts": 24,
-          "fire_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 0,
-          "negative_score_contexts": 0,
-          "positive_score_contexts": 0
-        }
-      },
-      "cumulative_v48_fire_contexts": 2,
-      "cumulative_v48_contexts": 48,
-      "result_doc": "docs/strategy/O_LQ3C_V8D_E1_RESULT_2026-09-20.md"
-    },
-    "v8d_e2_final_extension": {
-      "status": "COMPLETE",
-      "workflow": 35517228393,
-      "launch_commit": "0d832a9c7732e124b018bad35a48321c3ee27ef5",
-      "seeds": [
-        76025,
-        76026,
-        76027,
-        76028,
-        76029,
-        76030,
-        76031,
-        76032,
-        76033,
-        76034,
-        76035,
-        76036
-      ],
-      "seats": [
-        0,
-        1
-      ],
-      "opponents": [
-        "v48",
-        "v47_mirror",
-        "ready_stock"
-      ],
-      "paired_contexts": 72,
-      "candidate": "exact frozen O-LQ3C unchanged",
-      "finality": "no seed extensions beyond E2",
-      "rare_close_if": "cumulative V48 fire contexts <4 after E2",
-      "protocol": "docs/strategy/O_LQ3C_V8D_E2_FINAL_EXTENSION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "mechanical_pass": true,
-      "by_opponent": {
-        "v48": {
-          "contexts": 24,
-          "fire_contexts": 4,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 17.5,
-          "positive_score_contexts": 0,
-          "negative_score_contexts": 0
-        },
-        "v47_mirror": {
-          "contexts": 24,
-          "fire_contexts": 4,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 25.916666666666668,
-          "positive_score_contexts": 0,
-          "negative_score_contexts": 0
-        },
-        "ready_stock": {
-          "contexts": 24,
-          "fire_contexts": 4,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -11.416666666666666,
-          "positive_score_contexts": 0,
-          "negative_score_contexts": 0
-        }
-      }
-    },
-    "v10a_residual_cumulative_market": {
-      "status": "CLOSED",
-      "workflow": 35518110487,
-      "head_commit": "291442310a0397da0d7a670a5b20954b8450c06b",
-      "decision": "V10A_RESIDUAL_MARKET_UPPER_BOUND_CLOSED",
-      "mechanical_pass": true,
-      "by_mode": {
-        "FULL_ALL": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -205.25,
-          "mean_substitutions": 59.25
-        },
-        "FULL_W2PLUS": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -191.5,
-          "mean_substitutions": 55.25
-        },
-        "STRUCT_W2PLUS": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -191.5,
-          "mean_substitutions": 53
-        },
-        "INSERT_W2PLUS": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -191.5,
-          "mean_substitutions": 37.75
-        },
-        "QTY_W2PLUS": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 0,
-          "mean_substitutions": 15.75
-        },
-        "REORDER_W2PLUS": {
-          "positive_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": 0,
-          "mean_substitutions": 2.25
-        }
-      },
-      "result_doc": "docs/strategy/ALL3_V10A_RESIDUAL_CUMULATIVE_MARKET_RESULT_2026-09-20.md",
-      "close_reason": "remaining V48 market behavior has no cumulative W/L upper-bound headroom over ALL3"
-    },
-    "h1_h1b_clarification": {
-      "status": "ALREADY_ABSORBED",
-      "mechanism": "public town-WHEAT sell deferral",
-      "current_option": "O-TW1",
-      "included_in": "ALL3",
-      "decision": "do not reopen H1/H1B as a duplicate option family"
-    },
-    "v11a_hosted_hard_population": {
-      "status": "COMPLETE",
-      "workflow": 35518801971,
-      "decision": "V11A_HOSTED_HARD_POPULATION_READY",
-      "submission_id": 56367770,
-      "resolved_games": 128,
-      "wins": 57,
-      "losses": 71,
-      "ties": 0,
-      "score_rate": 0.4453125,
-      "opponents_unique": 117,
-      "close_losses": 30,
-      "result_doc": "docs/strategy/ALL3_V11A_HOSTED_HARD_POPULATION_RESULT_2026-09-20.md",
-      "automatic_kaggle_submission": false
-    },
-    "v11b_hosted_loss_signature": {
-      "status": "COMPLETE_OBSERVATIONAL",
-      "workflow": 35519476400,
-      "decision": "V11B_PUBLIC_CROP_SHIFT_REGIME_SIGNAL",
-      "step600_primary": {
-        "support": 22,
-        "losses": 22,
-        "wins": 0,
-        "loss_rate": 1,
-        "mean_margin": -3504.2727272727275
-      },
-      "step600_strict": {
-        "support": 15,
-        "losses": 15,
-        "wins": 0,
-        "loss_rate": 1,
-        "mean_margin": -4157.066666666667
-      },
-      "causal_claim_authorized": false,
-      "result_doc": "docs/strategy/ALL3_V11B_HOSTED_LOSS_SIGNATURE_RESULT_2026-09-20.md",
-      "automatic_kaggle_submission": false
-    },
-    "v12a_public_crop_shift_transfer": {
-      "status": "CLOSED_TRANSFER_SPARSE",
-      "workflow": 35519704115,
-      "launch_commit": "f255d27997739690ff833828cc2adb1bc42bef04",
       "seeds": [
         77001,
         77002,
@@ -1174,66 +508,32 @@
         77007,
         77008
       ],
-      "seats": [
-        0,
-        1
-      ],
-      "opponents": [
-        "v47_mirror",
-        "ready_stock",
-        "v48",
-        "router_2715",
-        "conditional_memory",
-        "tactical_memory",
-        "best_market"
-      ],
-      "contexts": 112,
-      "treatment": "none; exact ALL3 unchanged",
-      "transfer_ready_gate": "signal support >=8; >=2 families with >=2 signal contexts; signal loss rate >=0.75; signal score rate <=0.25; non-signal support >=16; non-signal score gap >=0.20",
-      "next_if_ready": "V12B bounded causal public-state macro-response oracle",
-      "protocol": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "decision": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
-      "mechanical_pass": true,
-      "all3_outcome": {
-        "wins": 112,
-        "losses": 0,
-        "ties": 0,
-        "score_rate": 1
-      },
       "signal": {
-        "support": 12,
-        "wins": 12,
-        "losses": 0,
-        "score_rate": 1,
-        "mean_margin": 33873.333333333336,
         "families": [
           "literal_market_strategy"
-        ]
+        ],
+        "losses": 0,
+        "mean_margin": 33873.333333333336,
+        "score_rate": 1,
+        "support": 12,
+        "wins": 12
       },
+      "status": "CLOSED_TRANSFER_SPARSE",
       "strict_signal": {
         "support": 0
       },
-      "result_doc": "docs/strategy/ALL3_V12A_PUBLIC_CROP_SHIFT_TRANSFER_RESULT_2026-09-20.md",
-      "interpretation": "hosted CARROT association not transferable on frozen seven-agent league; league too weak/unrepresentative for discovery"
+      "transfer_ready_gate": "signal support >=8; >=2 families with >=2 signal contexts; signal loss rate >=0.75; signal score rate <=0.25; non-signal support >=16; non-signal score gap >=0.20",
+      "treatment": "none; exact ALL3 unchanged",
+      "workflow": 35519704115
     },
     "v12b_bounded_crop_response": {
-      "status": "DORMANT_NOT_ACTIVATED",
       "activate_if": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_READY",
-      "trigger": "first checkpoint in [456,480,504,552,600] where opponent public CARROT > own CARROT",
-      "response_window_turns": 96,
+      "activation_failed_because": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
+      "automatic_kaggle_submission": false,
       "budgets": [
         1,
         2,
         4
-      ],
-      "mechanism": "bounded future WHEAT->CARROT plant/seed reallocation using legal own/public state only",
-      "forbidden_runtime_inputs": [
-        "opponent identity",
-        "seed",
-        "rating",
-        "replay metadata",
-        "future state"
       ],
       "discovery_seeds": [
         77101,
@@ -1241,89 +541,139 @@
         77103,
         77104
       ],
+      "forbidden_runtime_inputs": [
+        "opponent identity",
+        "seed",
+        "rating",
+        "replay metadata",
+        "future state"
+      ],
+      "mechanism": "bounded future WHEAT->CARROT plant/seed reallocation using legal own/public state only",
       "protocol": "docs/strategy/ALL3_V12B_BOUNDED_CROP_RESPONSE_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "activation_failed_because": "V12A_PUBLIC_CROP_SHIFT_TRANSFER_SPARSE",
+      "response_window_turns": 96,
+      "status": "DORMANT_NOT_ACTIVATED",
+      "trigger": "first checkpoint in [456,480,504,552,600] where opponent public CARROT > own CARROT",
       "workflow": null
     },
     "v13a_current_top30_drift": {
-      "status": "COMPLETE",
-      "workflow": 35520312252,
-      "launch_commit": "a10d264f39af48823f30f02f306396c6f033bdfd",
-      "comparison": "current scoreDescending Top-30 vs frozen 2026-09-18 PROGRAMME_CORPUS",
-      "third_party_code_executed": false,
-      "protocol": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
       "binding_workflow": 35520373817,
-      "nonbinding_mechanical_workflow": 35520312252,
-      "decision": "V13A_FRONTIER_MODERATE_DRIFT_REFRESH_ALL_CURRENT",
-      "overlap_count": 15,
-      "new_current_ref_count": 15,
-      "dropped_frozen_ref_count": 15,
-      "unknown_source_identity_count": 15,
+      "comparison": "current scoreDescending Top-30 vs frozen 2026-09-18 PROGRAMME_CORPUS",
       "config": "configs/all3_v13b_current_top30_refs.json",
-      "result_doc": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_RESULT_2026-09-20.md"
+      "decision": "V13A_FRONTIER_MODERATE_DRIFT_REFRESH_ALL_CURRENT",
+      "dropped_frozen_ref_count": 15,
+      "launch_commit": "a10d264f39af48823f30f02f306396c6f033bdfd",
+      "new_current_ref_count": 15,
+      "nonbinding_mechanical_workflow": 35520312252,
+      "overlap_count": 15,
+      "protocol": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_PROTOCOL_2026-09-20.md",
+      "result_doc": "docs/strategy/ALL3_V13A_CURRENT_TOP30_DRIFT_RESULT_2026-09-20.md",
+      "status": "COMPLETE",
+      "third_party_code_executed": false,
+      "unknown_source_identity_count": 15,
+      "workflow": 35520312252
     },
     "v13b_current_top30_executable_refresh": {
-      "status": "COMPLETE_READY",
-      "workflow": 35520463598,
-      "launch_commit": "79e14f85382c8f4d68fba2fab19bcae25c4d9437",
-      "refs_config": "configs/all3_v13b_current_top30_refs.json",
-      "gate": "refs_acquired>=24; unique_sources>=12; unique_both_seat_smoke_pass>=10; top10 refs on passing sources>=5",
-      "third_party_code_persisted": false,
-      "local_smoke_wl_strategic_use": false,
-      "protocol": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
       "decision": "V13B_EXECUTABLE_FRONTIER_READY",
-      "refs_acquired": 26,
-      "refs_failed": 4,
-      "unique_sources": 19,
-      "unique_both_seat_smoke_pass": 19,
-      "top10_refs_on_passing_source": 10,
       "failures_reason": "four Kaggle HTTP 429 acquisition failures at ranks 27-30",
+      "gate": "refs_acquired>=24; unique_sources>=12; unique_both_seat_smoke_pass>=10; top10 refs on passing sources>=5",
+      "launch_commit": "79e14f85382c8f4d68fba2fab19bcae25c4d9437",
+      "local_smoke_wl_strategic_use": false,
+      "protocol": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_PROTOCOL_2026-09-20.md",
+      "refs_acquired": 26,
+      "refs_config": "configs/all3_v13b_current_top30_refs.json",
+      "refs_failed": 4,
       "reps_config": "configs/all3_v13c_current_frontier_representatives.json",
-      "result_doc": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_RESULT_2026-09-20.md"
+      "result_doc": "docs/strategy/ALL3_V13B_CURRENT_TOP30_EXECUTABLE_REFRESH_RESULT_2026-09-20.md",
+      "status": "COMPLETE_READY",
+      "third_party_code_persisted": false,
+      "top10_refs_on_passing_source": 10,
+      "unique_both_seat_smoke_pass": 19,
+      "unique_sources": 19,
+      "workflow": 35520463598
     },
     "v13c_current_frontier_hard_context": {
-      "status": "COMPLETE_READY",
-      "workflow": 35520875702,
+      "automatic_kaggle_submission": false,
+      "binding_decision": "V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY",
+      "binding_head": "de85cbc11dea91ea80ea247437172aa50baf9e88",
+      "binding_workflow": 35523990217,
+      "completed_games": 76,
+      "expected_games": 76,
+      "hard_context_config": "configs/all3_v14a_hard_contexts.json",
+      "hard_contexts": 24,
+      "hard_sources": 10,
       "launch_commit": "7cd012b74e794c4be6df9bfd601e1233de0f2b27",
+      "local_h2h_hosted_rating_use": false,
+      "nonbinding_mechanical_workflow": 35520875702,
+      "nonbinding_observed_hard_contexts": 20,
+      "nonbinding_observed_hard_sources": 9,
+      "nonbinding_reason": "rank14 unversioned ref source drift after V13B; only 72/76 episodes",
+      "protocol": "docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_PROTOCOL_2026-09-20.md",
+      "rank14_pin": {
+        "archive_sha256": "24250d6de0e1bf143ea0cc1b2bdab541aa94ee12c09b9f2f6e98e8afb7097610",
+        "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f",
+        "pinned_handle": "tetsutani/demand-preserving-turn-sale-timing/versions/4",
+        "workflow": 35523343530
+      },
       "representatives": 19,
-      "seeds": [
-        78101,
-        78102
-      ],
+      "result_doc": "docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_RESULT_2026-09-20.md",
       "seats": [
         0,
         1
       ],
-      "expected_games": 76,
-      "protocol": "docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "nonbinding_mechanical_workflow": 35520875702,
-      "nonbinding_reason": "rank14 unversioned ref source drift after V13B; only 72/76 episodes",
-      "nonbinding_observed_hard_contexts": 20,
-      "nonbinding_observed_hard_sources": 9,
+      "seeds": [
+        78101,
+        78102
+      ],
+      "status": "COMPLETE_READY",
       "strategic_use_of_nonbinding_outcomes": false,
-      "rank14_pin": {
-        "workflow": 35523343530,
-        "pinned_handle": "tetsutani/demand-preserving-turn-sale-timing/versions/4",
-        "main_sha256": "1aa3717b3201997a95920c80cf5612c23f78f8716c7b1084b6a345ca4eae7e4f",
-        "archive_sha256": "24250d6de0e1bf143ea0cc1b2bdab541aa94ee12c09b9f2f6e98e8afb7097610"
-      },
-      "binding_workflow": 35523990217,
-      "binding_head": "de85cbc11dea91ea80ea247437172aa50baf9e88",
-      "binding_decision": "V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY",
-      "completed_games": 76,
-      "hard_contexts": 24,
-      "hard_sources": 10,
-      "hard_context_config": "configs/all3_v14a_hard_contexts.json",
-      "result_doc": "docs/strategy/ALL3_V13C_CURRENT_FRONTIER_HARD_CONTEXT_RESULT_2026-09-20.md",
-      "local_h2h_hosted_rating_use": false
+      "workflow": 35520875702
     },
     "v14a_current_frontier_domain_upper_bound": {
-      "status": "COMPLETE_MARKET_HEADROOM",
       "activate_if": "V13C_CURRENT_FRONTIER_HARD_CONTEXTS_READY",
+      "automatic_kaggle_submission": false,
+      "binding_launch_commit": "efc82c77060fe44025eee86cb239b698d6201229",
+      "binding_workflow": 35526276641,
+      "by_mode": {
+        "FULL_ALL": {
+          "improved_score_contexts": 24,
+          "improved_sources": 10,
+          "mean_margin_delta": 1364.75,
+          "mean_score_delta": 0.5
+        },
+        "MARKET_ALL": {
+          "improved_score_contexts": 12,
+          "improved_sources": 5,
+          "mean_margin_delta": 1812.8333333333333,
+          "mean_score_delta": 0.5,
+          "regressed_score_contexts": 0
+        },
+        "MARKET_W2PLUS": {
+          "improved_score_contexts": 18,
+          "improved_sources": 7,
+          "mean_margin_delta": 1858.5,
+          "mean_score_delta": 0.75,
+          "regressed_score_contexts": 0
+        },
+        "PHYSICAL_ALL": {
+          "improved_score_contexts": 0,
+          "mean_margin_delta": -113.41666666666667,
+          "mean_score_delta": 0
+        },
+        "PHYSICAL_W2PLUS": {
+          "improved_score_contexts": 0,
+          "mean_margin_delta": -265.3333333333333,
+          "mean_score_delta": 0
+        }
+      },
+      "decision": "V14A_MARKET_DOMAIN_HEADROOM",
+      "expected_complete_rows": 144,
+      "hard_context_config": "configs/all3_v14a_hard_contexts.json",
+      "hard_contexts": 24,
+      "hard_sources": 10,
+      "launch_commit": "73f6dfdfc3e773c4b20bc9a3a888b2627c507521",
+      "mechanical_pass": true,
       "modes": [
         "BASE",
         "MARKET_ALL",
@@ -1332,89 +682,49 @@
         "PHYSICAL_W2PLUS",
         "FULL_ALL"
       ],
-      "protocol": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "workflow": 35525689199,
-      "launch_commit": "73f6dfdfc3e773c4b20bc9a3a888b2627c507521",
-      "hard_contexts": 24,
-      "hard_sources": 10,
-      "hard_context_config": "configs/all3_v14a_hard_contexts.json",
-      "nonbinding_original_workflow": 35525689199,
-      "nonbinding_valid_rows": 126,
+      "nonbinding_failure_reason": "Kaggle HTTP 429 during teacher acquisition only",
       "nonbinding_missing_contexts": [
         "v13c_hard_14",
         "v13c_hard_16",
         "v13c_hard_18"
       ],
-      "nonbinding_failure_reason": "Kaggle HTTP 429 during teacher acquisition only",
-      "binding_workflow": 35526276641,
-      "binding_launch_commit": "efc82c77060fe44025eee86cb239b698d6201229",
-      "expected_complete_rows": 144,
-      "supplement_config": "configs/all3_v14a_mechanical_supplement.json",
-      "decision": "V14A_MARKET_DOMAIN_HEADROOM",
-      "mechanical_pass": true,
+      "nonbinding_original_workflow": 35525689199,
+      "nonbinding_valid_rows": 126,
+      "protocol": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-20.md",
+      "result_doc": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_RESULT_2026-09-20.md",
       "rows": 144,
-      "by_mode": {
-        "MARKET_ALL": {
-          "improved_score_contexts": 12,
-          "improved_sources": 5,
-          "mean_score_delta": 0.5,
-          "mean_margin_delta": 1812.8333333333333,
-          "regressed_score_contexts": 0
-        },
-        "MARKET_W2PLUS": {
-          "improved_score_contexts": 18,
-          "improved_sources": 7,
-          "mean_score_delta": 0.75,
-          "mean_margin_delta": 1858.5,
-          "regressed_score_contexts": 0
-        },
-        "PHYSICAL_ALL": {
-          "improved_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -113.41666666666667
-        },
-        "PHYSICAL_W2PLUS": {
-          "improved_score_contexts": 0,
-          "mean_score_delta": 0,
-          "mean_margin_delta": -265.3333333333333
-        },
-        "FULL_ALL": {
-          "improved_score_contexts": 24,
-          "improved_sources": 10,
-          "mean_score_delta": 0.5,
-          "mean_margin_delta": 1364.75
-        }
-      },
-      "result_doc": "docs/strategy/ALL3_V14A_CURRENT_FRONTIER_DOMAIN_UPPER_BOUND_RESULT_2026-09-20.md"
+      "status": "COMPLETE_MARKET_HEADROOM",
+      "supplement_config": "configs/all3_v14a_mechanical_supplement.json",
+      "workflow": 35525689199
     },
     "v14b_domain_phenotype": {
-      "status": "COMPLETE_REORDER_TRANSLATED",
-      "workflow": 35526759114,
-      "launch_commit": "6183aea6077693c230a72f5eae94f88a543fc1d9",
+      "automatic_kaggle_submission": false,
       "branch": "MARKET",
-      "hard_contexts": 24,
-      "recurrence_gate": "context>=4; sources>=2; dominant direction share>=0.75; legal state only; no opponent identity",
+      "decision": "V14B_RECURRENT_DOMAIN_PHENOTYPE_READY",
       "deterministic_selection": [
         "max unique sources",
         "max context support",
         "earliest median turn",
         "lexical phenotype key"
       ],
+      "hard_contexts": 24,
+      "launch_commit": "6183aea6077693c230a72f5eae94f88a543fc1d9",
       "protocol": "docs/strategy/ALL3_V14B_DOMAIN_PHENOTYPE_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "decision": "V14B_RECURRENT_DOMAIN_PHENOTYPE_READY",
+      "recurrence_gate": "context>=4; sources>=2; dominant direction share>=0.75; legal state only; no opponent identity",
+      "result_doc": "docs/strategy/ALL3_V14B_MARKET_PHENOTYPE_RESULT_2026-09-20.md",
       "selected_phenotype": {
-        "group_key": "EARLY|REORDER",
         "context_support": 24,
-        "source_support": 10,
-        "occurrences": 148,
         "direction_share": 1,
-        "median_turn": 150
+        "group_key": "EARLY|REORDER",
+        "median_turn": 150,
+        "occurrences": 148,
+        "source_support": 10
       },
-      "translation_workflow": 35532446891,
-      "translation_decision": "V14B_REORDER_DIRECTION_READY",
       "selected_relation": {
+        "context_support": 24,
+        "direction_share": 1,
+        "median_turn": 108,
+        "occurrences": 48,
         "preferred_earlier": [
           "SELL",
           "FERTILIZER"
@@ -1423,80 +733,80 @@
           "HIRE",
           "_"
         ],
-        "context_support": 24,
         "source_support": 10,
-        "occurrences": 48,
-        "direction_share": 1,
         "turns": [
           96,
           120
-        ],
-        "median_turn": 108
+        ]
       },
-      "result_doc": "docs/strategy/ALL3_V14B_MARKET_PHENOTYPE_RESULT_2026-09-20.md"
+      "status": "COMPLETE_REORDER_TRANSLATED",
+      "translation_decision": "V14B_REORDER_DIRECTION_READY",
+      "translation_workflow": 35532446891,
+      "workflow": 35526759114
     },
     "v15a_lq4e_causal": {
-      "status": "CLOSED_NO_HEADROOM",
-      "workflow": 35532585508,
-      "launch_commit": "de0242ec264047517dd4974419cf75cee8dbbf46",
+      "automatic_kaggle_submission": false,
       "candidate": "O-LQ4E Early Fertilizer-before-Hire",
-      "implementation": "tools/first_party_lq4e_early_fertilizer_before_hire.py",
+      "coverage_pass": true,
+      "decision": "V15A_LQ4E_NO_HEADROOM_CLOSE",
+      "fire_contexts": 24,
+      "fire_sources": 10,
+      "fresh_validation_activated": false,
       "hard_contexts": 24,
+      "implementation": "tools/first_party_lq4e_early_fertilizer_before_hire.py",
+      "launch_commit": "de0242ec264047517dd4974419cf75cee8dbbf46",
+      "loss_to_win_flips": 0,
+      "mean_margin_delta": 0,
+      "mean_score_delta": 0,
+      "mechanical_pass": true,
       "pass_gate": "coverage>=8 contexts across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
       "protocol": "docs/strategy/ALL3_V15A_LQ4E_CAUSAL_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "decision": "V15A_LQ4E_NO_HEADROOM_CLOSE",
-      "mechanical_pass": true,
-      "coverage_pass": true,
-      "fire_contexts": 24,
-      "fire_sources": 10,
-      "total_fires": 48,
-      "loss_to_win_flips": 0,
-      "mean_score_delta": 0,
-      "mean_margin_delta": 0,
       "result_doc": "docs/strategy/ALL3_V15A_LQ4E_CAUSAL_RESULT_2026-09-20.md",
-      "fresh_validation_activated": false
+      "status": "CLOSED_NO_HEADROOM",
+      "total_fires": 48,
+      "workflow": 35532585508
     },
     "v16a_w2_sell_quantity": {
-      "status": "COMPLETE_READY",
-      "workflow": 35533351868,
-      "decision": "V16A_W2_SELL_QUANTITY_PHENOTYPE_READY",
-      "selected_family": {
-        "group_key": "W2|QTY|SELL|FERTILIZER|2",
-        "direction": "INC",
-        "increment": 2,
-        "context_support": 24,
-        "source_support": 10,
-        "direction_share": 1,
-        "median_turn": 368,
-        "occurrences": 24
-      },
       "candidate": "O-LQ5F one-shot W2 Fertilizer Queue +2",
-      "result_doc": "docs/strategy/ALL3_V16A_W2_SELL_QUANTITY_RESULT_2026-09-20.md"
+      "decision": "V16A_W2_SELL_QUANTITY_PHENOTYPE_READY",
+      "result_doc": "docs/strategy/ALL3_V16A_W2_SELL_QUANTITY_RESULT_2026-09-20.md",
+      "selected_family": {
+        "context_support": 24,
+        "direction": "INC",
+        "direction_share": 1,
+        "group_key": "W2|QTY|SELL|FERTILIZER|2",
+        "increment": 2,
+        "median_turn": 368,
+        "occurrences": 24,
+        "source_support": 10
+      },
+      "status": "COMPLETE_READY",
+      "workflow": 35533351868
     },
     "v16b_lq5f_causal": {
-      "status": "CLOSED_MARGIN_ONLY",
-      "workflow": 35533510437,
-      "launch_commit": "12c3b9ea4c481c3e640688ca87cd346cd2777259",
-      "hard_contexts": 24,
-      "pass_gate": "coverage>=8 across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
-      "protocol": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
-      "decision": "V16B_LQ5F_MARGIN_ONLY_CLOSE",
-      "mechanical_pass": true,
       "coverage_pass": true,
+      "decision": "V16B_LQ5F_MARGIN_ONLY_CLOSE",
       "fire_contexts": 24,
       "fire_sources": 10,
+      "fresh_validation_activated": false,
+      "hard_contexts": 24,
+      "launch_commit": "12c3b9ea4c481c3e640688ca87cd346cd2777259",
       "loss_to_win_flips": 0,
-      "mean_score_delta": 0,
       "mean_margin_delta": 11.5,
+      "mean_score_delta": 0,
+      "mechanical_pass": true,
+      "pass_gate": "coverage>=8 across>=2 sources; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
+      "protocol": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_PROTOCOL_2026-09-20.md",
       "result_doc": "docs/strategy/ALL3_V16B_LQ5F_CAUSAL_RESULT_2026-09-20.md",
-      "fresh_validation_activated": false
+      "status": "CLOSED_MARGIN_ONLY",
+      "workflow": 35533510437
     },
     "v16c_lq5f_fresh_validation": {
-      "status": "DORMANT_PRE_FROZEN",
       "activate_if": "V16B_LQ5F_WL_HEADROOM",
+      "automatic_kaggle_submission": false,
       "config": "configs/all3_v16c_lq5f_fresh_validation.json",
+      "pairs": 80,
       "seeds": [
         78301,
         78302,
@@ -1504,103 +814,105 @@
         78304
       ],
       "sources": 10,
-      "pairs": 80,
-      "automatic_kaggle_submission": false
+      "status": "DORMANT_PRE_FROZEN"
+    },
+    "v17a2_strawberry_translation": {
+      "binding_workflow": 35538843133,
+      "context_multiplicity": "18 contexts x2; 6 contexts x1",
+      "decision": "V17A2_STRAWBERRY_INSERTION_READY",
+      "insertion_agreement": 1,
+      "insertion_rule": "first_free",
+      "nonbinding_mechanical_workflow": 35538722889,
+      "occurrences": 42,
+      "protocol": "docs/strategy/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION_PROTOCOL_2026-09-20.md",
+      "quantity": 2,
+      "quantity_agreement": 1,
+      "status": "COMPLETE_READY"
+    },
+    "v17a3_strawberry_trigger": {
+      "automatic_kaggle_submission": false,
+      "best_stateless": {
+        "fires": 92,
+        "fp": 50,
+        "precision": 0.45652173913043476,
+        "recall": 1,
+        "tp": 42,
+        "trigger": "T3_CARRIED20_OR_SHED2"
+      },
+      "decision": "V17A3_STRAWBERRY_TRIGGER_NOT_COMPRESSIBLE",
+      "launch_commit": "e7943512aee243921f1d115cad1ad832e4b182cb",
+      "protocol": "docs/strategy/ALL3_V17A3_STRAWBERRY_TRIGGER_PROTOCOL_2026-09-20.md",
+      "ready_gate": "recall=1.0; precision>=0.90; contexts=24; sources=10",
+      "status": "COMPLETE_NOT_COMPRESSIBLE",
+      "workflow": 35539020930
+    },
+    "v17a4_strawberry_edge_trigger": {
+      "config": "configs/all3_v17b_lq6s_trigger.json",
+      "contexts": 24,
+      "decision": "V17A4_STRAWBERRY_EDGE_TRIGGER_READY",
+      "fires": 44,
+      "fp": 2,
+      "precision": 0.9545454545454546,
+      "recall": 1,
+      "result_doc": "docs/strategy/ALL3_V17A4_STRAWBERRY_TRIGGER_RESULT_2026-09-20.md",
+      "selected_trigger": "E3_CARRIED20_OR_SHED2_RISING",
+      "sources": 10,
+      "status": "COMPLETE_READY",
+      "tp": 42,
+      "workflow": 35539277486
     },
     "v17a_w2_joint_market_bundle": {
-      "status": "COMPLETE_READY",
-      "workflow": 35538621223,
-      "launch_commit": "1baf3e1abbb51368841caff6d3f5f34a2f6e0c5d",
-      "source_workflow": 35526759114,
-      "selection": "max sources; max contexts; max occurrences; earliest median turn; lexical bundle key",
-      "protocol": "docs/strategy/ALL3_V17A_W2_JOINT_MARKET_BUNDLE_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
       "decision": "V17A_W2_JOINT_MARKET_BUNDLE_READY",
+      "launch_commit": "1baf3e1abbb51368841caff6d3f5f34a2f6e0c5d",
+      "protocol": "docs/strategy/ALL3_V17A_W2_JOINT_MARKET_BUNDLE_PROTOCOL_2026-09-20.md",
       "selected_bundle": {
+        "contexts": 24,
+        "median_turn": 493,
+        "occurrences": 42,
         "signatures": [
           "PRESENCE|SELL|STRAWBERRY|ADD",
           "QTY|SELL|STRAWBERRY|2|INC"
         ],
-        "contexts": 24,
         "sources": 10,
-        "occurrences": 42,
         "turns": [
           493,
           503
-        ],
-        "median_turn": 493
-      }
-    },
-    "v17a2_strawberry_translation": {
+        ]
+      },
+      "selection": "max sources; max contexts; max occurrences; earliest median turn; lexical bundle key",
+      "source_workflow": 35526759114,
       "status": "COMPLETE_READY",
-      "binding_workflow": 35538843133,
-      "nonbinding_mechanical_workflow": 35538722889,
-      "decision": "V17A2_STRAWBERRY_INSERTION_READY",
-      "insertion_rule": "first_free",
-      "insertion_agreement": 1,
-      "quantity": 2,
-      "quantity_agreement": 1,
-      "occurrences": 42,
-      "context_multiplicity": "18 contexts x2; 6 contexts x1",
-      "protocol": "docs/strategy/ALL3_V17A2_STRAWBERRY_BUNDLE_TRANSLATION_PROTOCOL_2026-09-20.md"
-    },
-    "v17a3_strawberry_trigger": {
-      "status": "COMPLETE_NOT_COMPRESSIBLE",
-      "workflow": 35539020930,
-      "launch_commit": "e7943512aee243921f1d115cad1ad832e4b182cb",
-      "ready_gate": "recall=1.0; precision>=0.90; contexts=24; sources=10",
-      "protocol": "docs/strategy/ALL3_V17A3_STRAWBERRY_TRIGGER_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "decision": "V17A3_STRAWBERRY_TRIGGER_NOT_COMPRESSIBLE",
-      "best_stateless": {
-        "trigger": "T3_CARRIED20_OR_SHED2",
-        "recall": 1,
-        "precision": 0.45652173913043476,
-        "fires": 92,
-        "tp": 42,
-        "fp": 50
-      }
-    },
-    "v17a4_strawberry_edge_trigger": {
-      "status": "COMPLETE_READY",
-      "workflow": 35539277486,
-      "decision": "V17A4_STRAWBERRY_EDGE_TRIGGER_READY",
-      "selected_trigger": "E3_CARRIED20_OR_SHED2_RISING",
-      "recall": 1,
-      "precision": 0.9545454545454546,
-      "fires": 44,
-      "tp": 42,
-      "fp": 2,
-      "contexts": 24,
-      "sources": 10,
-      "config": "configs/all3_v17b_lq6s_trigger.json",
-      "result_doc": "docs/strategy/ALL3_V17A4_STRAWBERRY_TRIGGER_RESULT_2026-09-20.md"
+      "workflow": 35538621223
     },
     "v17b_lq6s_causal": {
-      "status": "CLOSED_NO_HEADROOM",
-      "workflow": 35539385764,
-      "launch_commit": "303b3c72bb3bbc7ad73ed38d4fbebc7c23d9a538",
-      "candidate": "O-LQ6S W2 STRAWBERRY first-free SELL2 with E3 rising-edge trigger",
-      "pass_gate": "24-context/10-source coverage; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
-      "protocol": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
-      "decision": "V17B_LQ6S_NO_HEADROOM_CLOSE",
-      "mechanical_pass": true,
+      "candidate": "O-LQ6S W2 STRAWBERRY first-free SELL2 with E3 rising-edge trigger",
       "coverage_pass": true,
+      "decision": "V17B_LQ6S_NO_HEADROOM_CLOSE",
       "fire_contexts": 24,
       "fire_sources": 10,
-      "total_fires": 44,
+      "fresh_validation_activated": false,
+      "launch_commit": "303b3c72bb3bbc7ad73ed38d4fbebc7c23d9a538",
       "loss_to_win_flips": 0,
-      "mean_score_delta": 0,
       "mean_margin_delta": -42.833333333333336,
+      "mean_score_delta": 0,
+      "mechanical_pass": true,
+      "pass_gate": "24-context/10-source coverage; loss_to_win>=4 across>=2 sources; mean score delta>0; mean margin delta>0",
+      "protocol": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_PROTOCOL_2026-09-20.md",
       "result_doc": "docs/strategy/ALL3_V17B_LQ6S_CAUSAL_RESULT_2026-09-20.md",
-      "fresh_validation_activated": false
+      "status": "CLOSED_NO_HEADROOM",
+      "total_fires": 44,
+      "workflow": 35539385764
     },
     "v18a_w2plus_temporal": {
-      "status": "COMPLETE_SINGLE_PARTITION_HEADROOM",
-      "workflow": 35547247595,
+      "automatic_kaggle_submission": false,
+      "decision": "V18A_SINGLE_PARTITION_HEADROOM",
+      "exact_replication_required": "MARKET_P123 must equal binding V14A MARKET_W2PLUS score+margin for all 24 contexts",
+      "improved_sources": 7,
       "launch_commit": "d02e63aea3dee0ff5c462f86f73450548a0d5959",
-      "source_v14a_workflow": 35526276641,
+      "mean_margin_delta": 1384.25,
+      "mean_score_delta": 0.5833333333333334,
       "partitions": {
         "P1": [
           336,
@@ -1615,86 +927,103 @@
           718
         ]
       },
-      "exact_replication_required": "MARKET_P123 must equal binding V14A MARKET_W2PLUS score+margin for all 24 contexts",
+      "positive_score_contexts": 14,
       "protocol": "docs/strategy/ALL3_V18A_W2_TEMPORAL_LOCALIZATION_PROTOCOL_2026-09-20.md",
-      "automatic_kaggle_submission": false,
-      "decision": "V18A_SINGLE_PARTITION_HEADROOM",
+      "result_doc": "docs/strategy/ALL3_V18A_W2PLUS_TEMPORAL_LOCALIZATION_RESULT_2026-09-20.md",
       "selected_mode": "MARKET_P2_ONLY",
       "selected_scope": [
         464,
         591
       ],
+      "source_v14a_workflow": 35526276641,
+      "status": "COMPLETE_SINGLE_PARTITION_HEADROOM",
       "v14a_replication_pass": true,
-      "positive_score_contexts": 14,
-      "improved_sources": 7,
-      "mean_score_delta": 0.5833333333333334,
-      "mean_margin_delta": 1384.25,
-      "result_doc": "docs/strategy/ALL3_V18A_W2PLUS_TEMPORAL_LOCALIZATION_RESULT_2026-09-20.md"
+      "workflow": 35547247595
+    },
+    "v18b2_parallel_note": {
+      "note": "Do not supersede V19 source-of-truth path",
+      "status": "NON_BINDING_PARALLEL",
+      "workflow": 35556541064
     },
     "v18b_market_controller": {
-      "status": "CLOSED_NOT_DISTILLABLE",
-      "workflow": 35552335995,
-      "launch_commit": "a4d15571fc4d7a7594416e25de4a119b8f7f1118",
-      "scope": [
-        464,
-        591
-      ],
-      "expected_rows": 3072,
-      "validation": "leave-one-source-SHA-out",
-      "ready_gate": "retained>=3; kinds QTY/PRESENCE/DUPLICATE; positive sources>=4; JSON parity; structural compiler pass",
-      "protocol": "docs/strategy/ALL3_V18B_TEMPORAL_MARKET_CONTROLLER_PROTOCOL_2026-09-20.md",
       "automatic_kaggle_submission": false,
       "binding_workflow": 35552606264,
-      "decision": "V18B_CONTROLLER_NOT_DISTILLABLE",
       "dataset_rows": 3072,
+      "decision": "V18B_CONTROLLER_NOT_DISTILLABLE",
       "eligible_families": 19,
+      "expected_rows": 3072,
+      "launch_commit": "a4d15571fc4d7a7594416e25de4a119b8f7f1118",
+      "protocol": "docs/strategy/ALL3_V18B_TEMPORAL_MARKET_CONTROLLER_PROTOCOL_2026-09-20.md",
+      "ready_gate": "retained>=3; kinds QTY/PRESENCE/DUPLICATE; positive sources>=4; JSON parity; structural compiler pass",
+      "result_doc": "docs/strategy/ALL3_V18B_P2_MARKET_CONTROLLER_RESULT_2026-09-20.md",
       "retained_families": 0,
-      "result_doc": "docs/strategy/ALL3_V18B_P2_MARKET_CONTROLLER_RESULT_2026-09-20.md"
-    },
-    "v19a_consensus_schedule": {
-      "status": "COMPLETE_READY",
-      "workflow": 35552885627,
-      "decision": "V19A_CONSENSUS_SCHEDULE_READY",
       "scope": [
         464,
         591
       ],
-      "scheduled_turns": 102,
-      "min_source_support": 8,
+      "status": "CLOSED_NOT_DISTILLABLE",
+      "validation": "leave-one-source-SHA-out",
+      "workflow": 35552335995
+    },
+    "v19a_consensus_schedule": {
+      "decision": "V19A_CONSENSUS_SCHEDULE_READY",
       "min_context_support": 16,
-      "result_doc": "docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_RESULT_2026-09-20.md"
+      "min_source_support": 8,
+      "result_doc": "docs/strategy/ALL3_V19A_P2_CONSENSUS_SCHEDULE_RESULT_2026-09-20.md",
+      "scheduled_turns": 102,
+      "scope": [
+        464,
+        591
+      ],
+      "status": "COMPLETE_READY",
+      "workflow": 35552885627
     },
     "v19b_consensus_causal": {
-      "status": "COMPLETE_WL_HEADROOM",
-      "workflow": 35553022505,
-      "decision": "V19B_CONSENSUS_WL_HEADROOM",
-      "schedule_sha256": "c68d857500b71a40f8cf4ef5f2ff693f6da1d97ced03e7d7f19eaedfded1ff22",
-      "mechanical_pass": true,
       "coverage_pass": true,
+      "decision": "V19B_CONSENSUS_WL_HEADROOM",
+      "fresh_validation_activated": true,
+      "mean_margin_delta": 1273.0833333333333,
+      "mean_score_delta": 0.5833333333333334,
+      "mechanical_pass": true,
+      "negative_score_contexts": 0,
       "positive_score_contexts": 14,
       "positive_score_sources": 7,
-      "negative_score_contexts": 0,
-      "mean_score_delta": 0.5833333333333334,
-      "mean_margin_delta": 1273.0833333333333,
       "result_doc": "docs/strategy/ALL3_V19B_CONSENSUS_CAUSAL_RESULT_2026-09-21.md",
-      "fresh_validation_activated": true
+      "schedule_sha256": "c68d857500b71a40f8cf4ef5f2ff693f6da1d97ced03e7d7f19eaedfded1ff22",
+      "status": "COMPLETE_WL_HEADROOM",
+      "workflow": 35553022505
     },
     "v19c_consensus_fresh": {
-      "status": "DORMANT_PRE_FROZEN",
       "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
+      "automatic_kaggle_submission": false,
       "config": "configs/all3_v19c_consensus_fresh_validation.json",
+      "pairs": 80,
       "seeds": [
         78601,
         78602,
         78603,
         78604
       ],
-      "pairs": 80,
-      "automatic_kaggle_submission": false
+      "status": "DORMANT_PRE_FROZEN"
     },
     "v19c_consensus_fresh_validation": {
-      "status": "CLOSED_FRESH_FAIL",
+      "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
+      "automatic_kaggle_submission": false,
       "config": "configs/all3_v19c_consensus_fresh_validation.json",
+      "coverage_pass": true,
+      "decision": "V19C_CONSENSUS_FRESH_FAIL_CLOSE",
+      "mean_margin_delta": -241.6375,
+      "mean_score_delta": 0,
+      "mechanical_pass": true,
+      "negative_score_contexts": 10,
+      "pairs": 80,
+      "positive_score_contexts": 10,
+      "positive_score_sources": 5,
+      "result_doc": "docs/strategy/ALL3_V19C_CONSENSUS_FRESH_RESULT_2026-09-21.md",
+      "seats": [
+        0,
+        1
+      ],
       "seeds": [
         78601,
         78602,
@@ -1702,34 +1031,12 @@
         78604
       ],
       "sources": 10,
-      "seats": [
-        0,
-        1
-      ],
-      "pairs": 80,
-      "activate_if": "V19B_CONSENSUS_WL_HEADROOM",
-      "automatic_kaggle_submission": false,
-      "workflow": 35556749095,
-      "decision": "V19C_CONSENSUS_FRESH_FAIL_CLOSE",
-      "mechanical_pass": true,
-      "coverage_pass": true,
-      "positive_score_contexts": 10,
-      "positive_score_sources": 5,
-      "negative_score_contexts": 10,
+      "status": "CLOSED_FRESH_FAIL",
       "win_to_nonwin": 10,
-      "mean_score_delta": 0,
-      "mean_margin_delta": -241.6375,
-      "result_doc": "docs/strategy/ALL3_V19C_CONSENSUS_FRESH_RESULT_2026-09-21.md"
-    },
-    "v18b2_parallel_note": {
-      "status": "NON_BINDING_PARALLEL",
-      "workflow": 35556541064,
-      "note": "Do not supersede V19 source-of-truth path"
+      "workflow": 35556749095
     },
     "v20a_state_gate": {
-      "status": "ACTIVE",
-      "workflow": 35557692905,
-      "launch_commit": "4613d77ea10d16110edf943948a18ea2d3b63573",
+      "automatic_kaggle_submission": false,
       "discovery_seeds": [
         78711,
         78712,
@@ -1738,59 +1045,842 @@
         78715,
         78716
       ],
+      "holdout_seeds": [
+        78715,
+        78716
+      ],
+      "launch_commit": "4613d77ea10d16110edf943948a18ea2d3b63573",
+      "min_samples_leaf": 8,
+      "protocol": "docs/strategy/ALL3_V20A_STATE_GATE_PROTOCOL_2026-09-21.md",
+      "status": "ACTIVE",
+      "threshold": 0.8,
       "train_seeds": [
         78711,
         78712,
         78713,
         78714
       ],
-      "holdout_seeds": [
-        78715,
-        78716
-      ],
+      "tree_max_depth": 3,
       "untouched_validation_seeds": [
         78801,
         78802,
         78803,
         78804
       ],
-      "threshold": 0.8,
-      "tree_max_depth": 3,
-      "min_samples_leaf": 8,
-      "protocol": "docs/strategy/ALL3_V20A_STATE_GATE_PROTOCOL_2026-09-21.md",
-      "automatic_kaggle_submission": false
+      "workflow": 35557692905
+    },
+    "v47_v48_census": {
+      "contexts": 8,
+      "decision": "V48_CENSUS_MARKET_SEARCHABLE",
+      "losses": 8,
+      "market_only_divergences": 458,
+      "mean_margin": -454,
+      "physical_divergences": 0,
+      "result_doc": "docs/strategy/V47_V48_DIVERGENCE_CENSUS_V1_RESULT_2026-09-19.md",
+      "ties": 0,
+      "v47_score_rate": 0,
+      "wins": 0,
+      "workflow": 35439729714
+    },
+    "v4a": {
+      "base_score_rate": 0.08333333333333333,
+      "contexts": 12,
+      "decision": "V48_V4A_MARGIN_ONLY",
+      "hard_base_nonwins": 11,
+      "mean_oracle_margin_delta": 0.25,
+      "nonwin_to_win_flips": 0,
+      "oracle_score_rate": 0.08333333333333333,
+      "result_doc": "docs/strategy/V48_MULTITURN_MARKET_V4A_RESULT_2026-09-19.md",
+      "score_delta": 0,
+      "workflow": 35444529719
+    },
+    "v4b": {
+      "base_score_rate": 0,
+      "binding_interpretation": "V48_V4B_LOSS_TO_TIE_WL_HEADROOM",
+      "contexts": 12,
+      "mean_applied_market_turns": 50.166666666666664,
+      "mean_margin_delta": 585.6666666666666,
+      "mean_physical_fallback_turns": 0,
+      "result_doc": "docs/strategy/V48_MARKET_UPPER_BOUND_V4B_RESULT_2026-09-19.md",
+      "runner_decision": "V48_V4B_LONG_HORIZON_MARGIN_ONLY",
+      "score_delta": 0.5,
+      "upper_score_rate": 0.5,
+      "workflow": 35448761774
+    },
+    "v4c": {
+      "activate_if": "V4B no W/L headroom AND material physical_fallback_turns",
+      "purpose": "measure whether market substitutions induce future V48-vs-V47 physical policy divergence",
+      "status": "NOT_ACTIVATED_ZERO_PHYSICAL_FALLBACK",
+      "tool": "tools/v48_state_basin_coupling_v4c.py",
+      "workflow": ".github/workflows/v48-state-basin-coupling-v4c.yml"
+    },
+    "v4d": {
+      "decision": "V48_V4D_GLOBAL_INTERVAL_FOUND",
+      "global_interval": {
+        "contexts": 12,
+        "end": 718,
+        "label": "W2_PLUS",
+        "mean_applied_market_turns": 49,
+        "mean_margin_delta": 585.6666666666666,
+        "mean_score_delta": 0.5,
+        "physical_fallback_turns": 0,
+        "reproduced_contexts": 12,
+        "score_rate": 0.5,
+        "start": 336
+      },
+      "minimal_reproducer_label_counts": {
+        "W2_PLUS": 4,
+        "W3_PLUS": 6,
+        "W4_PLUS": 2
+      },
+      "result_doc": "docs/strategy/V48_MARKET_TEMPORAL_LOCALIZATION_V4D_RESULT_2026-09-19.md",
+      "workflow": 35449982864
+    },
+    "v4e": {
+      "decision": "V4E_STRUCTURAL_SUFFICIENT_SANITATION_NOT_NECESSARY",
+      "full": {
+        "mean_margin_delta": 585.6666666666666,
+        "mean_score_delta": 0.5,
+        "reproduced_contexts": 12,
+        "score_rate": 0.5
+      },
+      "full_minus_qty_up": {
+        "reproduced_contexts": 2,
+        "score_rate": 0.16666666666666666
+      },
+      "full_minus_replace": {
+        "reproduced_contexts": 0,
+        "score_rate": 0
+      },
+      "full_minus_sanitation": {
+        "reproduced_contexts": 10,
+        "score_rate": 0.5
+      },
+      "necessary_categories": [
+        "REPLACE",
+        "QTY_UP",
+        "STRUCTURAL"
+      ],
+      "only_sanitation": {
+        "mean_margin_delta": 18.666666666666668,
+        "reproduced_contexts": 2,
+        "score_rate": 0.16666666666666666
+      },
+      "only_structural": {
+        "mean_margin_delta": 587.1666666666666,
+        "reproduced_contexts": 10,
+        "score_rate": 0.5
+      },
+      "result_doc": "docs/strategy/V4E_SEMANTIC_CATEGORY_DECOMPOSITION_RESULT_2026-09-19.md",
+      "workflow": 35450703737
+    },
+    "v5_physical_oracle": {
+      "base_score_rate": 0.9375,
+      "branch_states": 32,
+      "corrected_workflow_original": 35470046629,
+      "corrected_workflow_parallel": 35470051852,
+      "decision": "V5_PHYSICAL_MARGIN_ONLY",
+      "loss_to_win_flips": 0,
+      "mean_oracle_margin_delta": 505.65625,
+      "mechanical_pass": true,
+      "median_oracle_margin_delta": 0,
+      "nonwin_to_win_flips": 0,
+      "only_nonwin": {
+        "margin": -26,
+        "opponent": "v48",
+        "seat": 0,
+        "seed": 75002
+      },
+      "oracle_score_rate": 0.9375,
+      "positive_margin_states": 14,
+      "result_doc": "docs/strategy/ALL3_PHYSICAL_PROPOSAL_ORACLE_V5_RESULT_2026-09-19.md",
+      "score_delta": 0,
+      "status": "CLOSED_MARGIN_ONLY_NO_FIRST_PARTY_PROMOTION",
+      "v48_mean_margin_delta": 0
+    },
+    "v6_continuation": {
+      "config": "configs/all3_v6_hard_contexts.json",
+      "decision": "V6_CONTINUATION_MARGIN_ONLY",
+      "horizons": [
+        2,
+        3
+      ],
+      "loss_to_win_flips": 0,
+      "mean_oracle_margin_delta": 68.5,
+      "protocol": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_PROTOCOL_2026-09-19.md",
+      "result_doc": "docs/strategy/ALL3_V6_BOUNDED_PHYSICAL_CONTINUATION_RESULT_2026-09-19.md",
+      "scope": "one physical locus, exact ALL3 market/other loci, ALL3 resumes after horizon",
+      "status": "COMPLETE_CLOSED_MARGIN_ONLY",
+      "workflow": 35473780009
+    },
+    "v6a_hard_context_census": {
+      "batch_a": {
+        "binding_run": 35472777632,
+        "contexts": 112,
+        "decision": "V6A_EXPAND_HARD_CENSUS",
+        "losses": 1,
+        "mechanical_pass": true,
+        "nonbinding_run": 35472681958,
+        "nonwins": [
+          {
+            "family": "modern41_queue",
+            "margin": -86,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 1,
+            "seed": 75103
+          }
+        ],
+        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_BATCH_A_RESULT_2026-09-19.md",
+        "ties": 0,
+        "wins": 111
+      },
+      "batch_b": {
+        "contexts": 112,
+        "nonwins": [
+          {
+            "family": "modern41_queue",
+            "margin": -484,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 0,
+            "seed": 75110
+          },
+          {
+            "family": "modern41_queue",
+            "margin": -794,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 1,
+            "seed": 75113
+          },
+          {
+            "family": "modern41_v47",
+            "margin": -263,
+            "opponent": "v47_mirror",
+            "score": 0,
+            "seat": 1,
+            "seed": 75113
+          }
+        ],
+        "status": "COMPLETE",
+        "workflow": 35473134791
+      },
+      "combined": {
+        "config": "configs/all3_v6_hard_contexts.json",
+        "contexts": 224,
+        "decision": "V6A_HARD_CONTEXTS_READY",
+        "losses": 4,
+        "result_doc": "docs/strategy/ALL3_V6A_HARD_CONTEXT_CENSUS_AB_RESULT_2026-09-19.md",
+        "selected_hard_contexts": [
+          {
+            "family": "modern41_v47",
+            "margin": -263,
+            "opponent": "v47_mirror",
+            "score": 0,
+            "seat": 1,
+            "seed": 75113
+          },
+          {
+            "family": "modern41_queue",
+            "margin": -86,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 1,
+            "seed": 75103
+          },
+          {
+            "family": "modern41_queue",
+            "margin": -484,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 0,
+            "seed": 75110
+          },
+          {
+            "family": "modern41_queue",
+            "margin": -794,
+            "opponent": "v48",
+            "score": 0,
+            "seat": 1,
+            "seed": 75113
+          }
+        ],
+        "ties": 0,
+        "wins": 220
+      },
+      "combined_gate": "need >=4 total nonwins before V6; close wins forbidden as substitutes"
+    },
+    "v7_option_composition": {
+      "all3_mean_margin": -406.75,
+      "best_alternative": "TW_LQ2",
+      "best_alternative_mean_margin": -399.75,
+      "compositions": 8,
+      "contexts": 4,
+      "decision": "V7_STATIC_COMPOSITION_MARGIN_ONLY",
+      "interpretation": "no static suppression rescues any residual hard loss; LQ2 is dominant value component",
+      "mechanical_pass": true,
+      "rescues": 0,
+      "result_doc": "docs/strategy/ALL3_V7_OPTION_COMPOSITION_ATTRIBUTION_RESULT_2026-09-19.md",
+      "status": "CLOSED_MARGIN_ONLY",
+      "workflow": 35479297555
+    },
+    "v8a_lq2_sell_run_census": {
+      "contexts_with_eligible": 4,
+      "decision": "V8A_ORDER_SEARCH_READY",
+      "eligible_states": 170,
+      "lq2_changed_turns": 424,
+      "max_distinct_products": 6,
+      "mechanical_pass": true,
+      "result_doc": "docs/strategy/ALL3_V8A_LQ2_RESIDUAL_SELL_RUN_CENSUS_RESULT_2026-09-19.md",
+      "status": "COMPLETE",
+      "workflow": 35479557496
+    },
+    "v8b_lq2_order_oracle": {
+      "decision": "V8B_ORDER_HEADROOM_NARROW",
+      "directional_context": {
+        "base_margin": -484,
+        "opponent": "v48",
+        "seat": 0,
+        "seed": 75110,
+        "step": 600,
+        "swap": [
+          "WOOL",
+          "MILK"
+        ],
+        "treatment_margin": -220
+      },
+      "flipped_to_win": 1,
+      "inferred_local_priority": [
+        "MILK",
+        "WOOL",
+        "FERTILIZER"
+      ],
+      "mean_best_margin_delta": 96,
+      "mechanical_pass": true,
+      "result_doc": "docs/strategy/ALL3_V8B_LQ2_SELL_ORDER_ORACLE_RESULT_2026-09-19.md",
+      "status": "COMPLETE",
+      "winning_context": {
+        "base_margin": -86,
+        "opponent": "v48",
+        "seat": 1,
+        "seed": 75103,
+        "step": 600,
+        "swap": [
+          "FERTILIZER",
+          "WOOL"
+        ],
+        "treatment_margin": 10
+      },
+      "workflow": 35479783995
+    },
+    "v8c_local_priority_value_atlas": {
+      "automatic_kaggle_submission": false,
+      "branch_states": 46,
+      "decision": "V8C_CONDITIONAL_ORDER_HEADROOM_NARROW",
+      "design": "one-shot unchanged O-LQ3 transform at each actual firing state on the four frozen hard contexts; exact ALL3 resumes next turn",
+      "expected_branch_states": 46,
+      "gate": {
+        "margin_heterogeneous": "positive-margin states in >=2 contexts without a win flip",
+        "narrow": ">=1 loss->win plus positive-margin states in >=2 contexts",
+        "no_reusable_headroom": "otherwise",
+        "repeatable": "loss->win flips in >=2 distinct hard contexts"
+      },
+      "head_commit": "b528ac9dafedefd17b65dfa7407b1b793adb6046",
+      "loss_to_win_flips": 1,
+      "mean_margin_delta": -113.15217391304348,
+      "mechanical_pass": true,
+      "mechanical_rule": "every baseline-discovered event branches exactly once; no fixed count inherited from treatment trajectory",
+      "negative_margin_states": 37,
+      "nonbinding_runs": [
+        {
+          "reason": "incorrect fixed 12-events-per-context count inherited from cumulatively treated O-LQ3 trajectory",
+          "workflow": 35514319440
+        },
+        {
+          "reason": "context-side correction only; aggregate still had obsolete fixed-count gate",
+          "workflow": 35514495824
+        },
+        {
+          "reason": "aggregate source contained literal \\\\n and failed Python syntax before strategic simulation",
+          "workflow": 35514497453
+        }
+      ],
+      "positive_margin_contexts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "positive_margin_states": 6,
+      "promotion_rule": "only repeatable/narrow W/L evidence may derive one compact opponent-identity-free public-state condition, frozen before fresh V8D",
+      "protocol": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_PROTOCOL_2026-09-20.md",
+      "result_doc": "docs/strategy/ALL3_V8C_LOCAL_PRIORITY_VALUE_RESULT_2026-09-20.md",
+      "status": "COMPLETE",
+      "workflow": 35516167350
+    },
+    "v8d_e1_extension": {
+      "automatic_kaggle_submission": false,
+      "by_opponent": {
+        "ready_stock": {
+          "contexts": 24,
+          "fire_contexts": 0,
+          "mean_margin_delta": 0,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v47_mirror": {
+          "contexts": 24,
+          "fire_contexts": 0,
+          "mean_margin_delta": 0,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v48": {
+          "contexts": 24,
+          "fire_contexts": 0,
+          "mean_margin_delta": 0,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        }
+      },
+      "candidate": "exact frozen O-LQ3C unchanged",
+      "cumulative_v48_contexts": 48,
+      "cumulative_v48_fire_contexts": 2,
+      "cumulative_with_workflow": 35516560425,
+      "if_still_underpowered": "one final unchanged E2 on seeds 76025..76036, then close for rarity if cumulative V48 fires remain <4",
+      "launch_commit": "a295970e373f02974adc1a6b6186b11d08254348",
+      "mechanical_pass": true,
+      "opponents": [
+        "v48",
+        "v47_mirror",
+        "ready_stock"
+      ],
+      "overall": {
+        "fire_contexts": 0,
+        "mean_margin_delta": 0,
+        "mean_score_delta": 0,
+        "negative_score_contexts": 0,
+        "win_to_nonwin": 0
+      },
+      "paired_contexts": 72,
+      "protocol": "docs/strategy/O_LQ3C_V8D_E1_EXTENSION_PROTOCOL_2026-09-20.md",
+      "result_doc": "docs/strategy/O_LQ3C_V8D_E1_RESULT_2026-09-20.md",
+      "seats": [
+        0,
+        1
+      ],
+      "seeds": [
+        76013,
+        76014,
+        76015,
+        76016,
+        76017,
+        76018,
+        76019,
+        76020,
+        76021,
+        76022,
+        76023,
+        76024
+      ],
+      "status": "COMPLETE_UNDERPOWERED",
+      "workflow": 35516899185
+    },
+    "v8d_e2_final_extension": {
+      "automatic_kaggle_submission": false,
+      "by_opponent": {
+        "ready_stock": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_margin_delta": -11.416666666666666,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v47_mirror": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_margin_delta": 25.916666666666668,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v48": {
+          "contexts": 24,
+          "fire_contexts": 4,
+          "mean_margin_delta": 17.5,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        }
+      },
+      "candidate": "exact frozen O-LQ3C unchanged",
+      "finality": "no seed extensions beyond E2",
+      "launch_commit": "0d832a9c7732e124b018bad35a48321c3ee27ef5",
+      "mechanical_pass": true,
+      "opponents": [
+        "v48",
+        "v47_mirror",
+        "ready_stock"
+      ],
+      "paired_contexts": 72,
+      "protocol": "docs/strategy/O_LQ3C_V8D_E2_FINAL_EXTENSION_PROTOCOL_2026-09-20.md",
+      "rare_close_if": "cumulative V48 fire contexts <4 after E2",
+      "seats": [
+        0,
+        1
+      ],
+      "seeds": [
+        76025,
+        76026,
+        76027,
+        76028,
+        76029,
+        76030,
+        76031,
+        76032,
+        76033,
+        76034,
+        76035,
+        76036
+      ],
+      "status": "COMPLETE",
+      "workflow": 35517228393
+    },
+    "v8d_fresh_validation": {
+      "automatic_kaggle_submission": false,
+      "by_opponent": {
+        "ready_stock": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_margin_delta": -2,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v47_mirror": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_margin_delta": 11.833333333333334,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        },
+        "v48": {
+          "contexts": 24,
+          "fire_contexts": 2,
+          "mean_margin_delta": 11.833333333333334,
+          "mean_score_delta": 0,
+          "negative_score_contexts": 0,
+          "positive_score_contexts": 0
+        }
+      },
+      "decision": "V8D_CONDITIONAL_ORDER_UNDERPOWERED",
+      "launch_commit": "6afd5dd1a4ab4776437c49aae9807e948d032d8f",
+      "mechanical_pass": true,
+      "opponents": [
+        "v48",
+        "v47_mirror",
+        "ready_stock"
+      ],
+      "overall": {
+        "fire_contexts": 6,
+        "mean_margin_delta": 7.222222222222222,
+        "mean_score_delta": 0,
+        "negative_score_contexts": 0,
+        "win_to_nonwin": 0
+      },
+      "paired_contexts": 72,
+      "pass_gate": "V48 positive mean score delta and >=1 positive-score context; zero win->nonwin overall; zero negative-score contexts in both controls; activation coverage minimum met",
+      "seats": [
+        0,
+        1
+      ],
+      "seeds": [
+        76001,
+        76002,
+        76003,
+        76004,
+        76005,
+        76006,
+        76007,
+        76008,
+        76009,
+        76010,
+        76011,
+        76012
+      ],
+      "status": "COMPLETE_UNDERPOWERED",
+      "workflow": 35516560425
+    },
+    "v8e_broad_regression": {
+      "activate_if": "V8D_CONDITIONAL_ORDER_FRESH_PASS",
+      "automatic_kaggle_submission": false,
+      "candidate": "exact frozen O-LQ3C unchanged from V8D",
+      "hosted_policy": "after broad + package parity PASS, preserve ALL3 as control and use other slot for new candidate",
+      "opponents": [
+        "v47_mirror",
+        "ready_stock",
+        "v48",
+        "router_2715",
+        "conditional_memory",
+        "tactical_memory",
+        "best_market"
+      ],
+      "paired_contexts": 84,
+      "protocol": "docs/strategy/O_LQ3C_V8E_BROAD_REGRESSION_PROTOCOL_2026-09-20.md",
+      "safety_gate": "zero win->nonwin overall and zero negative-score contexts in every family",
+      "seats": [
+        0,
+        1
+      ],
+      "seeds": [
+        76101,
+        76102,
+        76103,
+        76104,
+        76105,
+        76106
+      ],
+      "status": "DORMANT_PRE_REGISTERED_BEFORE_V8D_RESULT"
+    },
+    "v9_residual_structural_decomposition": {
+      "activate_if": "binding V8C closes without reusable W/L headroom",
+      "automatic_kaggle_submission": false,
+      "categories": [
+        "REORDER_ONLY",
+        "QTY_UP",
+        "QTY_DOWN",
+        "REPLACE",
+        "INSERT_DROP",
+        "MIXED_STRUCTURAL",
+        "OTHER"
+      ],
+      "launch_commit": "a551a38023ee268b43f71ed442b998a99d547a40",
+      "protocol": "docs/strategy/ALL3_V9_RESIDUAL_STRUCTURAL_DECOMPOSITION_PROTOCOL_2026-09-20.md",
+      "status": "CLOSED_ONE_TURN_NO_WL",
+      "stop_rule": "if no repeatable W/L headroom, close residual one-turn V48 structural imitation rather than extend horizon or retune post hoc",
+      "structural_contexts": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "v9a": "descriptive ALL3 vs V48 shadow residual divergence census on the four frozen V6A hard contexts",
+      "v9a_counts": {
+        "INSERT_DROP": 161,
+        "QTY_UP": 63,
+        "REORDER_ONLY": 9,
+        "physical": 0,
+        "total": 233
+      },
+      "v9a_decision": "V9A_STRUCTURAL_RESIDUAL_READY",
+      "v9a_result_doc": "docs/strategy/ALL3_V9A_RESIDUAL_STRUCTURAL_CENSUS_RESULT_2026-09-20.md",
+      "v9a_workflow": 35517515758,
+      "v9b": "conditional one-turn causal category isolation only if V9A finds structural residuals",
+      "v9b_decision": "V9B_NO_WL_HEADROOM_CLOSE_ONE_TURN_STRUCTURAL",
+      "v9b_launch_commit": "fefc69744fb0b12bdd1c71141c53d0ff1083bd17",
+      "v9b_protocol": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_PROTOCOL_2026-09-20.md",
+      "v9b_result_doc": "docs/strategy/ALL3_V9B_CAUSAL_STRUCTURAL_ISOLATION_RESULT_2026-09-20.md",
+      "v9b_state_config": "configs/all3_v9b_representative_states.json",
+      "v9b_workflow": 35517836947,
+      "workflow": 35517515758
     }
   },
-  "current_hosted_pair": {
-    "orw1": {
-      "submission_id": 56336027,
-      "rating": 2361.6,
-      "status": "COMPLETE"
+  "final_slot_strategy": {
+    "all3_snapshot_public_score": 1988.8,
+    "authorized_pair": [
+      "ALL3",
+      "V47"
+    ],
+    "automatic_kaggle_submission": false,
+    "current_latest_two_submission_ids": [
+      56466970,
+      56367770
+    ],
+    "current_pair": [
+      {
+        "candidate": "ALL3",
+        "publicScore": 2050.6,
+        "submission_id": 56367770
+      },
+      {
+        "candidate": "ORW1",
+        "publicScore": 2014.4,
+        "submission_id": 56336027
+      }
+    ],
+    "displaced_orw1_submission_id": 56336027,
+    "fresh_panel": {
+      "all3_mean_margin": 26.375,
+      "all3_score_rate": 0.4444444,
+      "contexts_per_candidate": 144,
+      "orw1_mean_margin": -70.3681,
+      "orw1_score_rate": 0.4444444,
+      "seeds": [
+        80301,
+        80302,
+        80303,
+        80304,
+        80305,
+        80306
+      ],
+      "sources": 12,
+      "v47_mean_margin": -62.7986,
+      "v47_score_rate": 0.4444444
     },
-    "all3": {
-      "submission_id": 56367770,
-      "rating": 2412.1,
-      "status": "COMPLETE",
-      "note": "latest observed snapshot; histories differ from O-RW1"
-    }
+    "further_submission_authorized": false,
+    "hedge": "V47",
+    "hedge_submission_id": 56466970,
+    "primary": "ALL3",
+    "primary_submission_id": 56367770,
+    "recommended_hedge": "V47",
+    "recommended_pair": [
+      "ALL3",
+      "V47"
+    ],
+    "recommended_primary": "ALL3",
+    "requires_explicit_user_authorization": true,
+    "status": "FINAL_PAIR_ACTIVE_MATURITY_WATCH",
+    "user_authorized": true,
+    "v28a_workflow": 35683053247,
+    "v28b_decision": "V28B_FINAL_PAIR_RECOMMENDATION_READY",
+    "v28b_workflow": 35683424225,
+    "v47_initial_complete_public_score": 600
+  },
+  "host": {
+    "handle": "ahmedberatozer/kaggriculture-v47-reactive-market-coordination",
+    "hosted_entrypoint": "_y_agent_shopherd",
+    "loader_contract": "kaggle_environments.agent.get_last_callable",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
+  "next_stage": "Preserve ALL3 56367770 + exact V47 56466970; continue read-only maturity/status monitoring to V47 >=100 then >=169 episodes or any latest-two/mechanical drift; no Kaggle mutation without explicit authorization.",
+  "no_automatic_kaggle_submission": true,
+  "option_value_v2": {
+    "failures": 0,
+    "interpretation": "MECHANICS_PASS_OPTION_COVERAGE_INSUFFICIENT_FOR_PRODUCTION_MULTI_FAMILY_SELECTOR",
+    "opponents": 7,
+    "outside_v47_rows": 3600,
+    "positive_labels_outside_v47": 3,
+    "positive_labels_total": 461,
+    "positive_labels_v47_mirror": 458,
+    "result_doc": "docs/strategy/OPTION_VALUE_RYZEN_V2_RESULT_2026-09-19.md",
+    "rows": 4200,
+    "seeds": 150,
+    "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
+    "unique_state_hashes": 1238
+  },
+  "options": [
+    {
+      "causal_run": 35363453097,
+      "eligibility": "step<=671 AND exact V47 market==[] AND own private shed.WOOL>=2",
+      "family": "market_timing_ready_stock",
+      "forbidden_runtime_inputs": [
+        "seed",
+        "future state",
+        "opponent private",
+        "opponent identity",
+        "rating",
+        "EpisodeId"
+      ],
+      "hosted_submission": 56336027,
+      "legality_inputs": [
+        "current step",
+        "current exact V47 action",
+        "own private shed.WOOL"
+      ],
+      "max_fires_per_episode": 1,
+      "option_id": "O-RW1",
+      "runtime_nonwin_to_win_flips": 14,
+      "runtime_run": 35367785929,
+      "runtime_score_delta": 0.09375,
+      "runtime_win_to_nonwin_regressions": 0,
+      "status": "HOSTED_ACTIVE_AND_OFFLINE_LIBRARY",
+      "treatment": "preserve exact V47 farmer/hands; replace empty market with SELL WOOL 2 for current turn only"
+    },
+    {
+      "causal_run": 35378191104,
+      "eligibility": "public town WHEAT demand this turn AND exact V47 SELLs already-owned WHEAT",
+      "family": "market_timing_town_consumption",
+      "forbidden_runtime_inputs": [
+        "seed",
+        "future state",
+        "opponent private",
+        "opponent identity",
+        "rating",
+        "EpisodeId"
+      ],
+      "hosted_submission": null,
+      "legality_inputs": [
+        "current step",
+        "public town unlocked_shops",
+        "public config intervals",
+        "current exact V47 action",
+        "own private shed.WHEAT"
+      ],
+      "max_fires_per_episode": 1,
+      "option_id": "O-TW1",
+      "runtime_nonwin_to_win_flips": 14,
+      "runtime_run": 35395548699,
+      "runtime_score_delta": 0.09375,
+      "runtime_win_to_nonwin_regressions": 0,
+      "status": "OFFLINE_LIBRARY_RUNTIME_PASS",
+      "treatment": "preserve exact V47 farmer/hands and non-WHEAT market orders; suppress current-turn SELL WHEAT only; exact V47 resumes next turn"
+    }
+  ],
+  "primary_value_target": "counterfactual score_delta in {-1,-0.5,0,0.5,1}",
+  "schema": "kculture-option-library-v0",
   "v20a_state_gate": {
-    "workflow": 35557692905,
-    "decision": "V20A_GATE_NOT_TRAINABLE",
-    "contexts": 120,
-    "train_contexts": 80,
-    "train_positive_wl_labels": 0,
-    "train_nonpositive_wl_labels": 80,
-    "all_positive_score_contexts": 0,
     "all_negative_score_contexts": 0,
-    "mean_score_delta": 0,
+    "all_positive_score_contexts": 0,
+    "contexts": 120,
+    "decision": "V20A_GATE_NOT_TRAINABLE",
     "mean_margin_delta": -742.75,
+    "mean_score_delta": 0,
+    "result_doc": "docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md",
     "status": "CLOSED_NO_CLASSIFIER",
-    "result_doc": "docs/strategy/ALL3_V20A_STATE_GATE_RESULT_2026-09-21.md"
+    "train_contexts": 80,
+    "train_nonpositive_wl_labels": 80,
+    "train_positive_wl_labels": 0,
+    "workflow": 35557692905
+  },
+  "v21_stop_rule": {
+    "document": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
+    "fallback": "V22 fresh current-frontier refresh",
+    "if_no_wl_headroom": "close entire V19A-derived schedule family; no post-hoc category-pair or turn-subset search",
+    "status": "TRIGGERED_V19A_SCHEDULE_FAMILY_CLOSED",
+    "v21b_v21c_v21d": "BLOCKED",
+    "v22_discovery_seeds": [
+      79101,
+      79102,
+      79103,
+      79104,
+      79105,
+      79106
+    ]
+  },
+  "v21a": {
+    "aggregate_artifact_id": 10622146329,
+    "aggregate_digest": "sha256:4e15b39d10a10c57feb8f5b071ecea10d532f379a16b4b519ac036b93fd3810b",
+    "all_modes_positive_score_contexts": 0,
+    "base_binding_mismatches": 0,
+    "best_margin_only_mean_delta": 176.91666666666666,
+    "best_margin_only_mode": "SELL_ONLY",
+    "decision": "V21A_SEMANTIC_NO_WL_HEADROOM",
+    "full_binding_mismatches": 0,
+    "result_document": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md",
+    "selected_mode": null,
+    "status": "CLOSED",
+    "workflow": 35558880526
   },
   "v21a_semantic_decomposition": {
-    "status": "ACTIVE",
+    "automatic_kaggle_submission": false,
     "discovery_seeds": [
       78711,
       78712,
@@ -1799,68 +1889,35 @@
       78715,
       78716
     ],
+    "fresh_protocol": "docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md",
+    "launch_commit": "a815ee73dad8fda5f1c6a587417e22415120ec87",
+    "protocol": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md",
+    "semantic_category_counts": {
+      "BUY_ONLY": 22,
+      "EMPTY": 40,
+      "HIRE_PRESENT": 7,
+      "SELL_PRESENT": 33
+    },
+    "status": "ACTIVE",
     "validation_seeds": [
       78901,
       78902,
       78903,
       78904
     ],
-    "semantic_category_counts": {
-      "EMPTY": 40,
-      "SELL_PRESENT": 33,
-      "BUY_ONLY": 22,
-      "HIRE_PRESENT": 7
-    },
-    "protocol": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_PROTOCOL_2026-09-21.md",
-    "fresh_protocol": "docs/strategy/ALL3_V21B_SEMANTIC_SCHEDULE_FRESH_PROTOCOL_2026-09-21.md",
-    "automatic_kaggle_submission": false,
-    "workflow": 35558880526,
-    "launch_commit": "a815ee73dad8fda5f1c6a587417e22415120ec87"
-  },
-  "v21_stop_rule": {
-    "status": "TRIGGERED_V19A_SCHEDULE_FAMILY_CLOSED",
-    "document": "docs/strategy/V21_STOP_RULE_AND_V22_FRESH_FRONTIER_BRANCH_2026-09-21.md",
-    "if_no_wl_headroom": "close entire V19A-derived schedule family; no post-hoc category-pair or turn-subset search",
-    "fallback": "V22 fresh current-frontier refresh",
-    "v22_discovery_seeds": [
-      79101,
-      79102,
-      79103,
-      79104,
-      79105,
-      79106
-    ],
-    "v21b_v21c_v21d": "BLOCKED"
-  },
-  "v21a": {
-    "status": "CLOSED",
-    "workflow": 35558880526,
-    "decision": "V21A_SEMANTIC_NO_WL_HEADROOM",
-    "aggregate_artifact_id": 10622146329,
-    "aggregate_digest": "sha256:4e15b39d10a10c57feb8f5b071ecea10d532f379a16b4b519ac036b93fd3810b",
-    "base_binding_mismatches": 0,
-    "full_binding_mismatches": 0,
-    "selected_mode": null,
-    "all_modes_positive_score_contexts": 0,
-    "best_margin_only_mode": "SELL_ONLY",
-    "best_margin_only_mean_delta": 176.91666666666666,
-    "result_document": "docs/strategy/ALL3_V21A_SEMANTIC_SCHEDULE_DECOMPOSITION_RESULT_2026-09-21.md"
+    "workflow": 35558880526
   },
   "v22a": {
-    "status": "COMPLETE_READY",
-    "workflow": 35562142399,
-    "launch_commit": "2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f",
-    "decision": "V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
-    "artifact_id": 10623710178,
-    "artifact_digest": "sha256:56c2ee63e78c7e3389687ec5ece3a815a9bc190f41e731f4084324e5acf343f3",
-    "selected_representatives": 12,
-    "expected_games": 144,
-    "completed_games": 144,
     "acquisition_failures": 0,
-    "smoke_failures": 0,
+    "artifact_digest": "sha256:56c2ee63e78c7e3389687ec5ece3a815a9bc190f41e731f4084324e5acf343f3",
+    "artifact_id": 10623710178,
+    "completed_games": 144,
+    "decision": "V22A_FRESH_FRONTIER_HARD_POPULATION_READY",
     "episode_failures": 0,
+    "expected_games": 144,
+    "hard_config": "configs/all3_v22b_hard_contexts.json",
+    "hard_config_commit": "5c6058ed4fcc267242f0b654f06bd669fec1849b",
     "hard_contexts": 92,
-    "hard_source_shas": 8,
     "hard_seeds": [
       79101,
       79102,
@@ -1869,40 +1926,57 @@
       79105,
       79106
     ],
-    "hard_config": "configs/all3_v22b_hard_contexts.json",
-    "hard_config_commit": "5c6058ed4fcc267242f0b654f06bd669fec1849b",
-    "result_document": "docs/strategy/ALL3_V22A_FRESH_CURRENT_FRONTIER_RESULT_2026-09-21.md",
+    "hard_source_shas": 8,
+    "launch_commit": "2ee8c8a0c73b7c11ff0487c0ed8e1a7a2f36ae7f",
+    "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md",
     "nonbinding_workflow": 35560761804,
-    "mechanical_amendment": "docs/strategy/ALL3_V22A_MECHANICAL_GATE_AMENDMENT_2026-09-21.md"
+    "result_document": "docs/strategy/ALL3_V22A_FRESH_CURRENT_FRONTIER_RESULT_2026-09-21.md",
+    "selected_representatives": 12,
+    "smoke_failures": 0,
+    "status": "COMPLETE_READY",
+    "workflow": 35562142399
   },
   "v22b": {
-    "status": "CLOSED_EXACT_ROUTING_INCONCLUSIVE_SOURCE_UNAVAILABLE",
-    "workflow": 35607214335,
-    "launch_commit": "ade4a4180d7081e57f7cde7286c9de07abfe2e87",
-    "population": "all 92 binding V22A non-win contexts",
-    "modes": [
-      "BASE",
-      "MARKET_ONLY",
-      "PHYSICAL_ONLY",
-      "FULL_SHADOW"
-    ],
-    "protocol": "docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md",
-    "domain_gate": {
-      "min_improved_score_contexts": 4,
-      "min_improved_source_shas": 2,
-      "min_improved_seeds": 2,
-      "mean_score_delta_must_be_positive": true,
-      "max_regressed_to_improved_ratio": 0.5
+    "attempt1_decision": "V22B_MECHANICS_INVALID",
+    "attempt1_failure_reason": "45 Kaggle HTTP 429 teacher_acquire failures; partial aggregate strategically non-binding",
+    "attempt1_result_document": "docs/strategy/ALL3_V22B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md",
+    "attempt1_workflow": 35566168354,
+    "attempt2_progress": {
+      "alias_executor_commit": "20195454330d67e786f33a49346f35504f5be07c",
+      "alias_map_commit": "f1c5628b2799e7acd62d2746d231ee0c2acbbd56",
+      "cross_attempt_conflicts": 0,
+      "cross_attempt_duplicate_keys_compared": 116,
+      "current_complete_contexts": 89,
+      "current_union_exact_keys": 356,
+      "exact_sha_alias_for_rank2": "degnonguidi/best-agent-ranking",
+      "expected_contexts": 92,
+      "expected_exact_keys": 368,
+      "merge_template_commit": "adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c",
+      "merger_commit": "c04e01c54621320c5c52ceef4aa4b59f0d5277a2",
+      "rank11_current_sha_drift": {
+        "current_sha": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080",
+        "frozen_sha": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
+        "ref": "romantamrazov/kaggriculture-yummers"
+      },
+      "remaining_context_ids": [
+        "v22a_hard_059",
+        "v22a_hard_063",
+        "v22a_hard_067"
+      ],
+      "remaining_contexts": 3,
+      "remaining_exact_keys": 12,
+      "remaining_only_shards": [
+        3
+      ],
+      "shard0": {
+        "expected_rows": 92,
+        "failure_reason": "representative ref haodou092/notebookdb6965aa8e now HTTP 404 for exact SHA fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8",
+        "failures": 3,
+        "rows": 80
+      },
+      "workflow": 35607214335
     },
     "automatic_kaggle_submission": false,
-    "functional_diversity_rule": "docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md",
-    "v22a_observed_hard_functional_clusters": 6,
-    "identical_base_outcome_cluster_ranks": [
-      1,
-      2,
-      11
-    ],
-    "outcome_router": "docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md",
     "both_domain_selector": [
       "improved functional clusters",
       "improved-score contexts",
@@ -1912,100 +1986,82 @@
       "mean margin delta",
       "MARKET lexical tie-break"
     ],
+    "closure_document": "docs/strategy/ALL3_V22B_SOURCE_UNAVAILABLE_CLOSE_2026-09-21.md",
+    "current_source_sensitivity_workflow": 35624589618,
+    "domain_gate": {
+      "max_regressed_to_improved_ratio": 0.5,
+      "mean_score_delta_must_be_positive": true,
+      "min_improved_score_contexts": 4,
+      "min_improved_seeds": 2,
+      "min_improved_source_shas": 2
+    },
+    "exact_contexts": 89,
+    "exact_keys": 356,
+    "expected_contexts": 92,
+    "expected_exact_keys": 368,
     "functional_cluster_map": "configs/all3_v22b_functional_clusters.json",
     "functional_cluster_map_commit": "04be152448ef4f6b882530f2df93e6e4453391a9",
+    "functional_diversity_rule": "docs/strategy/ALL3_V22B_FUNCTIONAL_DIVERSITY_INTERPRETATION_2026-09-21.md",
     "hard_functional_clusters": 6,
-    "attempt1_workflow": 35566168354,
-    "attempt1_decision": "V22B_MECHANICS_INVALID",
-    "attempt1_failure_reason": "45 Kaggle HTTP 429 teacher_acquire failures; partial aggregate strategically non-binding",
-    "attempt1_result_document": "docs/strategy/ALL3_V22B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md",
-    "mechanical_repair": {
-      "acquisition_attempts": 8,
-      "retry_backoff": "bounded exponential 5,10,20,40,60... seconds",
-      "matrix_max_parallel": 1,
-      "strategic_changes": false
-    },
-    "attempt2_progress": {
-      "workflow": 35607214335,
-      "shard0": {
-        "rows": 80,
-        "expected_rows": 92,
-        "failures": 3,
-        "failure_reason": "representative ref haodou092/notebookdb6965aa8e now HTTP 404 for exact SHA fd39dffa68e2171fe6fc016b79804b52b862dc5c2af3427e9ca4c54e9fb410d8"
-      },
-      "exact_sha_alias_for_rank2": "degnonguidi/best-agent-ranking",
-      "alias_map_commit": "f1c5628b2799e7acd62d2746d231ee0c2acbbd56",
-      "alias_executor_commit": "20195454330d67e786f33a49346f35504f5be07c",
-      "merger_commit": "c04e01c54621320c5c52ceef4aa4b59f0d5277a2",
-      "merge_template_commit": "adaaea4f8750cd79d5d600833dd1c0fbc34c5c5c",
-      "current_union_exact_keys": 356,
-      "expected_exact_keys": 368,
-      "current_complete_contexts": 89,
-      "expected_contexts": 92,
-      "remaining_contexts": 3,
-      "remaining_only_shards": [
-        3
-      ],
-      "remaining_exact_keys": 12,
-      "cross_attempt_duplicate_keys_compared": 116,
-      "cross_attempt_conflicts": 0,
-      "remaining_context_ids": [
-        "v22a_hard_059",
-        "v22a_hard_063",
-        "v22a_hard_067"
-      ],
-      "rank11_current_sha_drift": {
-        "ref": "romantamrazov/kaggriculture-yummers",
-        "frozen_sha": "254eba4713f092e7bbdd6efe8b2b31ee8cf2873fcfbdf16ca7c530628a0f51ef",
-        "current_sha": "338a1a08fa612585e01ace53fbd9e83d294750e13d6f981739b174209a967080"
-      }
-    },
-    "outcome_router_implementation": "tools/route_v22b_outcome.py",
-    "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005",
-    "historical_recovery_workflow": 35624010734,
-    "historical_recovery_script": "tools/recover_kaggle_kernel_version_by_sha.py",
-    "historical_recovery_script_commit": "63a5bce10f32efad8e546332f16531196f10fd18",
     "historical_recovery_result": {
-      "workflow": 35624010734,
+      "failure": "HTTP 403 for every historical version",
       "found": false,
       "versions_attempted": "1..60",
-      "failure": "HTTP 403 for every historical version"
+      "workflow": 35624010734
     },
-    "source_unavailable_sensitivity_protocol": "docs/strategy/V22B_SOURCE_UNAVAILABLE_SENSITIVITY_CLOSURE_PROTOCOL_2026-09-21.md",
-    "source_unavailable_sensitivity_protocol_commit": "51c699960868472f899c9ba4b4da7166a1b8d7f4",
-    "current_source_sensitivity_workflow": 35624589618,
-    "closure_document": "docs/strategy/ALL3_V22B_SOURCE_UNAVAILABLE_CLOSE_2026-09-21.md",
-    "exact_keys": 356,
-    "expected_exact_keys": 368,
-    "exact_contexts": 89,
-    "expected_contexts": 92,
-    "sensitivity_workflow": 35624589618,
+    "historical_recovery_script": "tools/recover_kaggle_kernel_version_by_sha.py",
+    "historical_recovery_script_commit": "63a5bce10f32efad8e546332f16531196f10fd18",
+    "historical_recovery_workflow": 35624010734,
+    "identical_base_outcome_cluster_ranks": [
+      1,
+      2,
+      11
+    ],
+    "launch_commit": "ade4a4180d7081e57f7cde7286c9de07abfe2e87",
+    "mechanical_repair": {
+      "acquisition_attempts": 8,
+      "matrix_max_parallel": 1,
+      "retry_backoff": "bounded exponential 5,10,20,40,60... seconds",
+      "strategic_changes": false
+    },
+    "modes": [
+      "BASE",
+      "MARKET_ONLY",
+      "PHYSICAL_ONLY",
+      "FULL_SHADOW"
+    ],
+    "outcome_router": "docs/strategy/ALL3_V22B_OUTCOME_ROUTER_AND_ARCHITECTURAL_RESET_PROTOCOL_2026-09-21.md",
+    "outcome_router_implementation": "tools/route_v22b_outcome.py",
+    "outcome_router_implementation_commit": "8acdf847d13dabd48fb208543aa20d923c287005",
+    "population": "all 92 binding V22A non-win contexts",
+    "protocol": "docs/strategy/ALL3_V22B_FRESH_FRONTIER_DOMAIN_UPPER_BOUND_PROTOCOL_2026-09-21.md",
     "sensitivity_accepted": false,
     "sensitivity_failure": {
       "base_replay_pass": false,
       "context_margins": {
         "v22a_hard_059": {
-          "frozen": -3061,
-          "current": -3136
+          "current": -3136,
+          "frozen": -3061
         },
         "v22a_hard_063": {
-          "frozen": -3729,
-          "current": -3789
+          "current": -3789,
+          "frozen": -3729
         },
         "v22a_hard_067": {
-          "frozen": -132,
-          "current": -194
+          "current": -194,
+          "frozen": -132
         }
       }
-    }
+    },
+    "sensitivity_workflow": 35624589618,
+    "source_unavailable_sensitivity_protocol": "docs/strategy/V22B_SOURCE_UNAVAILABLE_SENSITIVITY_CLOSURE_PROTOCOL_2026-09-21.md",
+    "source_unavailable_sensitivity_protocol_commit": "51c699960868472f899c9ba4b4da7166a1b8d7f4",
+    "status": "CLOSED_EXACT_ROUTING_INCONCLUSIVE_SOURCE_UNAVAILABLE",
+    "v22a_observed_hard_functional_clusters": 6,
+    "workflow": 35607214335
   },
   "v23": {
-    "status": "V23A_READY_V23B_FALLBACK_ACTIVE",
-    "workflow": 35627972979,
-    "launch_commit": "ce1bd5abbb01926c073aafa69f7950be687db5d7",
-    "protocol": "docs/strategy/ALL3_V23_IMMUTABLE_SNAPSHOT_FRONTIER_PROTOCOL_2026-09-21.md",
-    "protocol_commit": "fdfa1b672742a51ffc46e737a0977de29f8923ff",
-    "smoke_seed": 79300,
+    "automatic_kaggle_submission": false,
     "discovery_seeds": [
       79301,
       79302,
@@ -2014,24 +2070,38 @@
       79305,
       79306
     ],
+    "domain_thresholds_unchanged_from_v22b": true,
+    "integrated_v23b_failure": {
+      "reason": "ModuleNotFoundError: No module named 'kagglehub' before treatment execution",
+      "strategic_data_used": false,
+      "workflow": 35627972979
+    },
+    "launch_commit": "ce1bd5abbb01926c073aafa69f7950be687db5d7",
+    "protocol": "docs/strategy/ALL3_V23_IMMUTABLE_SNAPSHOT_FRONTIER_PROTOCOL_2026-09-21.md",
+    "protocol_commit": "fdfa1b672742a51ffc46e737a0977de29f8923ff",
     "seats": [
       0,
       1
     ],
+    "smoke_seed": 79300,
+    "snapshot_audit": {
+      "expected_main_py": 13,
+      "missing": 0,
+      "sha_mismatches": 0,
+      "verified": true,
+      "verified_main_py": 13
+    },
     "snapshot_selected_sources": true,
-    "v23b_live_kaggle_reacquisition": false,
-    "domain_thresholds_unchanged_from_v22b": true,
-    "automatic_kaggle_submission": false,
+    "status": "V23A_READY_V23B_FALLBACK_ACTIVE",
     "v23a": {
-      "workflow": 35627972979,
-      "discover_job": 106426918864,
-      "decision": "V23A_IMMUTABLE_HARD_POPULATION_READY",
-      "expected_games": 144,
       "completed_games": 144,
+      "config_artifact_id": 10654531145,
+      "decision": "V23A_IMMUTABLE_HARD_POPULATION_READY",
+      "discover_job": 106426918864,
       "episode_failures": 0,
-      "selected_representatives": 12,
+      "expected_games": 144,
+      "functional_clusters": 9,
       "hard_contexts": 93,
-      "hard_source_shas": 12,
       "hard_seeds": [
         79301,
         79302,
@@ -2039,61 +2109,21 @@
         79305,
         79306
       ],
-      "functional_clusters": 9,
+      "hard_source_shas": 12,
+      "result_artifact_id": 10655010811,
+      "selected_representatives": 12,
       "snapshot_artifact_id": 10655240502,
       "snapshot_digest": "sha256:12a6f45ebd3ed44c3d9b57d49b6a53d77514dccf48d8cddff17cb2c829c99054",
-      "result_artifact_id": 10655010811,
-      "config_artifact_id": 10654531145
-    },
-    "integrated_v23b_failure": {
-      "workflow": 35627972979,
-      "reason": "ModuleNotFoundError: No module named 'kagglehub' before treatment execution",
-      "strategic_data_used": false
-    },
-    "v23b_binding_workflow": 35632311093,
-    "v23b_fallback_commit": "a6e1d5fd3218d5a05bb0bdbdc05b525a4c05c083",
-    "v23b_reuses_binding_snapshot": true,
-    "snapshot_audit": {
-      "verified_main_py": 13,
-      "expected_main_py": 13,
-      "missing": 0,
-      "sha_mismatches": 0,
-      "verified": true
+      "workflow": 35627972979
     },
     "v23b": {
-      "status": "COMPLETE_VALID",
-      "workflow": 35632311093,
       "aggregate_job": 106449044810,
-      "artifact_id": 10656170070,
       "artifact_digest": "sha256:6d626768832cd29029094bc8d4f129e6f78acece250fa39a67ed51530520509f",
-      "mechanical_pass": true,
-      "hard_contexts": 93,
-      "rows": 372,
-      "failures": 0,
+      "artifact_id": 10656170070,
       "decision": "V23B_CROSS_DOMAIN_INTERACTION_HEADROOM",
-      "route": "ARCHITECTURAL_INTERACTION_RESET",
-      "market_only": {
-        "improved_contexts": 18,
-        "improved_sources": 9,
-        "improved_functional_clusters": 6,
-        "improved_seeds": [
-          79301
-        ],
-        "pass": false,
-        "mean_score_delta": 0.1935483870967742,
-        "mean_margin_delta": -12503.537634408602
-      },
-      "physical_only": {
-        "improved_contexts": 0,
-        "improved_sources": 0,
-        "improved_seeds": [],
-        "pass": false,
-        "mean_score_delta": 0,
-        "mean_margin_delta": -4181.956989247312
-      },
+      "failures": 0,
       "full_shadow": {
         "improved_contexts": 81,
-        "improved_sources": 9,
         "improved_seeds": [
           79301,
           79302,
@@ -2101,31 +2131,58 @@
           79305,
           79306
         ],
-        "pass": true,
+        "improved_sources": 9,
+        "mean_margin_delta": 3246.3225806451615,
         "mean_score_delta": 0.4838709677419355,
-        "mean_margin_delta": 3246.3225806451615
+        "pass": true
       },
+      "hard_contexts": 93,
       "interaction_exclusive": {
         "contexts": 63,
-        "source_shas": 9,
         "functional_clusters": 6,
         "seeds": [
           79302,
           79304,
           79305,
           79306
-        ]
+        ],
+        "source_shas": 9
       },
-      "result_document": "docs/strategy/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND_RESULT_2026-09-21.md"
-    }
+      "market_only": {
+        "improved_contexts": 18,
+        "improved_functional_clusters": 6,
+        "improved_seeds": [
+          79301
+        ],
+        "improved_sources": 9,
+        "mean_margin_delta": -12503.537634408602,
+        "mean_score_delta": 0.1935483870967742,
+        "pass": false
+      },
+      "mechanical_pass": true,
+      "physical_only": {
+        "improved_contexts": 0,
+        "improved_seeds": [],
+        "improved_sources": 0,
+        "mean_margin_delta": -4181.956989247312,
+        "mean_score_delta": 0,
+        "pass": false
+      },
+      "result_document": "docs/strategy/ALL3_V23B_IMMUTABLE_SNAPSHOT_DOMAIN_UPPER_BOUND_RESULT_2026-09-21.md",
+      "route": "ARCHITECTURAL_INTERACTION_RESET",
+      "rows": 372,
+      "status": "COMPLETE_VALID",
+      "workflow": 35632311093
+    },
+    "v23b_binding_workflow": 35632311093,
+    "v23b_fallback_commit": "a6e1d5fd3218d5a05bb0bdbdc05b525a4c05c083",
+    "v23b_live_kaggle_reacquisition": false,
+    "v23b_reuses_binding_snapshot": true,
+    "workflow": 35627972979
   },
   "v24a": {
-    "status": "COMPLETE",
-    "workflow": 35641081142,
     "decision": "V24A_COMPACT_COUPLED_EVENT_FAMILY_FOUND",
-    "selected_family": "M_TO_P|hands|2",
-    "interaction_contexts": 63,
-    "source_shas": 9,
+    "eligible_family_count": 19,
     "functional_clusters": [
       "F01",
       "F02",
@@ -2134,43 +2191,69 @@
       "F05",
       "F08"
     ],
+    "interaction_contexts": 63,
+    "median_end_step": 2,
+    "median_start_step": 0,
+    "result_document": "docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_RESULT_2026-09-21.md",
     "seeds": [
       79302,
       79304,
       79305,
       79306
     ],
-    "median_start_step": 0,
-    "median_end_step": 2,
-    "eligible_family_count": 19,
-    "result_document": "docs/strategy/ALL3_V24A_COUPLED_DIVERGENCE_TRACE_RESULT_2026-09-21.md"
+    "selected_family": "M_TO_P|hands|2",
+    "source_shas": 9,
+    "status": "COMPLETE",
+    "workflow": 35641081142
   },
   "v24b": {
-    "status": "CLOSED_NOT_DISTILLABLE_COMPACTLY",
-    "workflow": 35645479016,
+    "compact_controller_closed": true,
     "decision": "V24B_NOT_DISTILLABLE_COMPACTLY",
     "r1": {
-      "train_occurrences": 21,
       "best_train_coverage": 0.6666666666666666,
       "holdout_coverage": 0,
-      "pass": false
+      "pass": false,
+      "train_occurrences": 21
     },
     "r2": {
+      "conflicting_legal_state_keys": 1,
       "family_present_hard_contexts": 93,
       "hard_contexts": 93,
-      "valid_negative_start_states": 0,
-      "unique_legal_state_keys": 1,
-      "conflicting_legal_state_keys": 1,
       "identifiable": false,
-      "possible": false
+      "possible": false,
+      "unique_legal_state_keys": 1,
+      "valid_negative_start_states": 0
     },
     "result_document": "docs/strategy/ALL3_V24B_INTERACTION_MECHANISM_DISTILLATION_RESULT_2026-09-21.md",
-    "compact_controller_closed": true
+    "status": "CLOSED_NOT_DISTILLABLE_COMPACTLY",
+    "workflow": 35645479016
   },
   "v25a": {
-    "status": "COMPLETE",
-    "workflow": 35645830010,
     "decision": "V25A_PERSISTENT_POLICY_REQUIRED",
+    "finite_horizon_score_improvements": {
+      "128": 0,
+      "16": 0,
+      "256": 0,
+      "32": 0,
+      "4": 0,
+      "64": 0,
+      "8": 0
+    },
+    "full_shadow_gate_pass": true,
+    "h720": {
+      "functional_clusters": 6,
+      "improved_contexts": 81,
+      "improved_seeds": [
+        79301,
+        79302,
+        79304,
+        79305,
+        79306
+      ],
+      "mean_margin_delta": 3246.3225806451615,
+      "mean_score_delta": 0.4838709677419355,
+      "source_shas": 9
+    },
     "hard_contexts": 93,
     "horizons": [
       0,
@@ -2184,144 +2267,130 @@
       720
     ],
     "passing_finite_horizons": [],
+    "result_document": "docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_RESULT_2026-09-21.md",
     "selected_horizon": null,
-    "full_shadow_gate_pass": true,
-    "finite_horizon_score_improvements": {
-      "4": 0,
-      "8": 0,
-      "16": 0,
-      "32": 0,
-      "64": 0,
-      "128": 0,
-      "256": 0
-    },
-    "h720": {
-      "improved_contexts": 81,
-      "source_shas": 9,
-      "functional_clusters": 6,
-      "improved_seeds": [
-        79301,
-        79302,
-        79304,
-        79305,
-        79306
-      ],
-      "mean_score_delta": 0.4838709677419355,
-      "mean_margin_delta": 3246.3225806451615
-    },
-    "result_document": "docs/strategy/ALL3_V25A_SHADOW_PREFIX_STATE_BASIN_RESULT_2026-09-21.md"
+    "status": "COMPLETE",
+    "workflow": 35645830010
   },
   "v26a": {
-    "status": "COMPLETE",
-    "workflow": 35653189539,
-    "decision": "V26A_PRIZE_SOLVER_BASE_NOT_READY",
     "contexts": 144,
     "control_score_rate": 0.3611111111111111,
-    "treatment_score_rate": 0,
-    "positive_score_contexts": 0,
-    "negative_score_contexts": 52,
     "control_win_to_treatment_nonwin": 52,
-    "mean_score_delta": -0.3611111111111111,
+    "decision": "V26A_PRIZE_SOLVER_BASE_NOT_READY",
     "mean_margin_delta": -135390.78472222222,
+    "mean_score_delta": -0.3611111111111111,
+    "negative_score_contexts": 52,
+    "positive_score_contexts": 0,
     "result_document": "docs/strategy/V26A_FIRST_PARTY_BASE_ARCHITECTURE_BENCHMARK_RESULT_2026-09-21.md",
     "snapshot_artifact_id": 10663530412,
-    "snapshot_digest": "sha256:69f6407c34155af19671963c1ce107fab45926283098b422790cd1d86117ed43"
+    "snapshot_digest": "sha256:69f6407c34155af19671963c1ce107fab45926283098b422790cd1d86117ed43",
+    "status": "COMPLETE",
+    "treatment_score_rate": 0,
+    "workflow": 35653189539
   },
   "v26b": {
-    "status": "COMPLETE",
-    "workflow": 35660845547,
-    "decision": "V26B_NO_SOURCE_AGNOSTIC_POLICY_HEADROOM",
-    "artifact_id": 10667886918,
     "artifact_digest": "sha256:c47ebfcb406f6077165a0b1779ede2a2060a283f9476d79129feb36e2207132e",
+    "artifact_id": 10667886918,
     "contexts": 144,
     "control_score_rate": 0.3472222222222222,
-    "treatment_score_rate": 0.1527777777777778,
-    "mean_score_delta": -0.19444444444444445,
-    "mean_margin_delta": -2131.0833333333335,
-    "positive_score_contexts": 2,
-    "negative_score_contexts": 30,
     "control_win_to_treatment_nonwin": 30,
-    "positive_source_count": 1,
-    "positive_seed_count": 1,
-    "positive_functional_cluster_count": 1,
+    "decision": "V26B_NO_SOURCE_AGNOSTIC_POLICY_HEADROOM",
+    "mean_margin_delta": -2131.0833333333335,
     "mean_modal_support": 9.9254365631278,
-    "result_document": "docs/strategy/V26B_PERSISTENT_TEACHER_CONSENSUS_RESULT_2026-09-21.md"
+    "mean_score_delta": -0.19444444444444445,
+    "negative_score_contexts": 30,
+    "positive_functional_cluster_count": 1,
+    "positive_score_contexts": 2,
+    "positive_seed_count": 1,
+    "positive_source_count": 1,
+    "result_document": "docs/strategy/V26B_PERSISTENT_TEACHER_CONSENSUS_RESULT_2026-09-21.md",
+    "status": "COMPLETE",
+    "treatment_score_rate": 0.1527777777777778,
+    "workflow": 35660845547
   },
   "v27a": {
-    "status": "COMPLETE",
-    "workflow": 35665757174,
+    "comparisons": 1080,
+    "complete_action_parity": 0.9222222222222223,
     "decision": "V27A_HISTORY_AWARE_DISTILLATION_REQUIRED",
     "episodes": 72,
-    "comparisons": 1080,
     "failures": 0,
-    "complete_action_parity": 0.9222222222222223,
-    "market_parity": 0.9296296296296296,
     "farmer_parity": 1,
     "hands_parity": 0.9925925925925926,
+    "market_parity": 0.9296296296296296,
     "minimum_checkpoint_complete_action_parity": 0.6666666666666666,
     "minimum_source_complete_action_parity": 0.8666666666666667,
-    "state_only_distillation_closed": true
+    "state_only_distillation_closed": true,
+    "status": "COMPLETE",
+    "workflow": 35665757174
   },
   "v27b": {
-    "status": "COMPLETE_BOUNDED_HISTORY_DISTILLATION_VIABLE",
-    "shard_workflow": 35676166396,
     "aggregate_workflow": 35725538992,
     "decision": "V27B_BOUNDED_LEGAL_HISTORY_DISTILLATION_VIABLE",
-    "selected_horizon": 256,
-    "h256": {
-      "complete_action_parity": 0.9962962962962963,
-      "market_parity": 0.9962962962962963,
-      "farmer_parity": 1,
-      "hands_parity": 1,
-      "minimum_source_complete_action_parity": 0.9777777777777777,
-      "minimum_checkpoint_complete_action_parity": 0.9444444444444444
-    },
+    "full_history_parity": 1,
     "h128": {
       "complete_action_parity": 0.9296296296296296,
       "market_parity": 0.9296296296296296
     },
-    "full_history_parity": 1,
-    "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-22.md"
+    "h256": {
+      "complete_action_parity": 0.9962962962962963,
+      "farmer_parity": 1,
+      "hands_parity": 1,
+      "market_parity": 0.9962962962962963,
+      "minimum_checkpoint_complete_action_parity": 0.9444444444444444,
+      "minimum_source_complete_action_parity": 0.9777777777777777
+    },
+    "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-22.md",
+    "selected_horizon": 256,
+    "shard_workflow": 35676166396,
+    "status": "COMPLETE_BOUNDED_HISTORY_DISTILLATION_VIABLE"
   },
   "v27c": {
-    "status": "CLOSED_DATA_TOO_COMPLEX",
-    "workflow": 35725924827,
     "decision": "V27C_BEHAVIORAL_DISTILLATION_DATA_TOO_COMPLEX",
-    "rows": 69024,
     "episodes": 96,
+    "fast_behavioral_distillation_closed": true,
     "feature_dim": 1254,
+    "result_document": "docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_RESULT_2026-09-22.md",
+    "rows": 69024,
+    "status": "CLOSED_DATA_TOO_COMPLEX",
+    "step_modal_complete_test_accuracy": 0.3561659712563746,
+    "test_decomposable_coverage": 0.6021094112192861,
     "unique_complete_labels": 2597,
     "validation_decomposable_coverage": 0.6358368103847937,
-    "test_decomposable_coverage": 0.6021094112192861,
-    "step_modal_complete_test_accuracy": 0.3561659712563746,
-    "result_document": "docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_RESULT_2026-09-22.md",
-    "fast_behavioral_distillation_closed": true
+    "workflow": 35725924827
   },
   "v27c2": {
-    "status": "COMPLETE_NOT_VIABLE",
-    "workflow": 35682535729,
-    "train_job": 106603317949,
-    "artifact_id": 10675616361,
     "artifact_digest": "sha256:4a40b1156a52b2bb26ae5473d7bf339e2dab8d1b84b448f53d268ca1b7de434c",
+    "artifact_id": 10675616361,
     "decision": "V27C2_STRUCTURAL_POLICY_DISTILLATION_NOT_VIABLE",
-    "mechanical_pass": true,
+    "fast_rank1_distillation_closed": true,
     "holdout": {
-      "episodes": 48,
-      "turns": 34512,
       "complete_action_parity": 0.5734816875289754,
-      "market_parity": 0.6978442280945758,
+      "episodes": 48,
       "farmer_parity": 0.9541029207232267,
       "hands_parity": 0.7493045897079277,
+      "market_parity": 0.6978442280945758,
       "minimum_source_complete_action_parity": 0.5625869262865091,
-      "minimum_stage_complete_action_parity": 0.14548611111111112
+      "minimum_stage_complete_action_parity": 0.14548611111111112,
+      "turns": 34512
     },
+    "mechanical_pass": true,
     "result_document": "docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_RESULT_2026-09-21.md",
-    "fast_rank1_distillation_closed": true
+    "status": "COMPLETE_NOT_VIABLE",
+    "train_job": 106603317949,
+    "workflow": 35682535729
   },
   "v27d": {
-    "status": "DORMANT_BLOCKED_BY_V27C2_NOT_VIABLE",
+    "activation_condition": "V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE",
+    "aggregator": "tools/aggregate_v27d_fresh_causal.py",
+    "automatic_kaggle_submission": false,
+    "fresh_frontier_snapshot": true,
     "protocol": "docs/strategy/V27D_FRESH_CAUSAL_DISTILLED_POLICY_PROTOCOL_2026-09-21.md",
     "protocol_commit": "782b965c7809b5a43e1567130c5ff3666a23ab34",
+    "runtime": "solver/v27c2_structural_runtime.py",
+    "seats": [
+      0,
+      1
+    ],
     "seeds": [
       80101,
       80102,
@@ -2330,130 +2399,64 @@
       80105,
       80106
     ],
-    "seats": [
-      0,
-      1
-    ],
-    "fresh_frontier_snapshot": true,
-    "runtime": "solver/v27c2_structural_runtime.py",
     "shard_runner": "tools/v27d_fresh_causal_shard.py",
-    "aggregator": "tools/aggregate_v27d_fresh_causal.py",
-    "workflow_template": "docs/strategy/templates/V27D_FRESH_CAUSAL_DISTILLED_POLICY_WORKFLOW.yml",
-    "activation_condition": "V27C2_STRUCTURAL_POLICY_DISTILLATION_VIABLE",
-    "automatic_kaggle_submission": false
-  },
-  "final_slot_strategy": {
-    "status": "FINAL_PAIR_ACTIVE_MATURITY_WATCH",
-    "v28a_workflow": 35683053247,
-    "v28b_workflow": 35683424225,
-    "v28b_decision": "V28B_FINAL_PAIR_RECOMMENDATION_READY",
-    "current_pair": [
-      {
-        "candidate": "ALL3",
-        "submission_id": 56367770,
-        "publicScore": 2050.6
-      },
-      {
-        "candidate": "ORW1",
-        "submission_id": 56336027,
-        "publicScore": 2014.4
-      }
-    ],
-    "recommended_pair": [
-      "ALL3",
-      "V47"
-    ],
-    "recommended_primary": "ALL3",
-    "recommended_hedge": "V47",
-    "fresh_panel": {
-      "contexts_per_candidate": 144,
-      "sources": 12,
-      "seeds": [
-        80301,
-        80302,
-        80303,
-        80304,
-        80305,
-        80306
-      ],
-      "all3_score_rate": 0.4444444,
-      "v47_score_rate": 0.4444444,
-      "orw1_score_rate": 0.4444444,
-      "all3_mean_margin": 26.375,
-      "v47_mean_margin": -62.7986,
-      "orw1_mean_margin": -70.3681
-    },
-    "requires_explicit_user_authorization": true,
-    "automatic_kaggle_submission": false,
-    "user_authorized": true,
-    "authorized_pair": [
-      "ALL3",
-      "V47"
-    ],
-    "current_latest_two_submission_ids": [
-      56466970,
-      56367770
-    ],
-    "primary": "ALL3",
-    "primary_submission_id": 56367770,
-    "hedge": "V47",
-    "hedge_submission_id": 56466970,
-    "displaced_orw1_submission_id": 56336027,
-    "v47_initial_complete_public_score": 600,
-    "all3_snapshot_public_score": 1988.8,
-    "further_submission_authorized": false
+    "status": "DORMANT_BLOCKED_BY_V27C2_NOT_VIABLE",
+    "workflow_template": "docs/strategy/templates/V27D_FRESH_CAUSAL_DISTILLED_POLICY_WORKFLOW.yml"
   },
   "v28a": {
-    "status": "COMPLETE",
-    "workflow": 35683053247,
-    "artifact_id": 10675491726,
     "artifact_digest": "sha256:53914e363c1104f0d4c49307a923ed28a51d391d6b3903282a014cc0a9df0c54",
-    "team_rank": 1629,
-    "leaderboard_teams": 9795,
-    "team_score": 2050.6,
+    "artifact_id": 10675491726,
+    "automatic_kaggle_submission": false,
     "current_active_pair": [
       {
-        "submission_id": 56367770,
         "key": "ALL3",
-        "publicScore": 2050.6
+        "publicScore": 2050.6,
+        "submission_id": 56367770
       },
       {
-        "submission_id": 56336027,
         "key": "ORW1",
-        "publicScore": 2014.4
-      }
-    ],
-    "historical_calibration": [
-      {
-        "submission_id": 56336025,
-        "key": "V47",
-        "publicScore": 2344.6
-      },
-      {
-        "submission_id": 56333577,
-        "key": "V47",
-        "publicScore": 2387.9
-      },
-      {
-        "submission_id": 56073870,
-        "key": "CR053",
-        "publicScore": 2064.8
+        "publicScore": 2014.4,
+        "submission_id": 56336027
       }
     ],
     "current_top_score": 3188.5,
+    "historical_calibration": [
+      {
+        "key": "V47",
+        "publicScore": 2344.6,
+        "submission_id": 56336025
+      },
+      {
+        "key": "V47",
+        "publicScore": 2387.9,
+        "submission_id": 56333577
+      },
+      {
+        "key": "CR053",
+        "publicScore": 2064.8,
+        "submission_id": 56073870
+      }
+    ],
+    "leaderboard_teams": 9795,
     "result_document": "docs/strategy/V28A_FINAL_SLOT_READONLY_AUDIT_RESULT_2026-09-22.md",
-    "automatic_kaggle_submission": false
+    "status": "COMPLETE",
+    "team_rank": 1629,
+    "team_score": 2050.6,
+    "workflow": 35683053247
   },
   "v28b": {
-    "status": "ACTIVE",
-    "workflow": 35683424225,
-    "launch_commit": "405335b3c031df3ab0357822b117021bcc362c98",
-    "protocol": "docs/strategy/V28B_FRESH_FINAL_SLOT_CANDIDATE_BENCHMARK_PROTOCOL_2026-09-22.md",
-    "protocol_commit": "52b3cdbcab9fd7df59e763c15976573934c14f0c",
+    "automatic_kaggle_submission": false,
     "candidates": [
       "V47",
       "ORW1",
       "ALL3"
+    ],
+    "launch_commit": "405335b3c031df3ab0357822b117021bcc362c98",
+    "protocol": "docs/strategy/V28B_FRESH_FINAL_SLOT_CANDIDATE_BENCHMARK_PROTOCOL_2026-09-22.md",
+    "protocol_commit": "52b3cdbcab9fd7df59e763c15976573934c14f0c",
+    "seats": [
+      0,
+      1
     ],
     "seeds": [
       80301,
@@ -2463,101 +2466,119 @@
       80305,
       80306
     ],
-    "seats": [
-      0,
-      1
-    ],
-    "automatic_kaggle_submission": false
+    "status": "ACTIVE",
+    "workflow": 35683424225
   },
   "v28c": {
-    "status": "COMPLETE_MATURITY_WATCH",
-    "workflow": 35739943846,
-    "launch_commit": "d5d23b2ce570cceac34dd03a90f80f630aebc779",
-    "result_document": "docs/strategy/V28C_FINAL_V47_SLOT_SUBMISSION_RESULT_2026-09-22.md",
-    "provenance_artifact_id": 10699168127,
-    "provenance_digest": "sha256:a24b5f90a57beae66f475ac8f39337c4b0946e330e9d9267871eb0e5af8dd96d",
-    "description": "PS_V28C_FINAL_HEDGE_EXACT_V47_08E56C43",
-    "new_v47_submission_id": 56466970,
-    "initial_status": "PENDING",
-    "latest_two_after": [
-      56466970,
-      56367770
-    ],
-    "preserved_all3_submission_id": 56367770,
-    "displaced_orw1_submission_id": 56336027,
     "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
-    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
-    "loader_entrypoint": "_y_agent_shopherd",
-    "further_submission_authorized": false,
     "complete_status": "COMPLETE",
-    "initial_complete_public_score": 600,
-    "maturity_workflow": 35740643501,
-    "maturity_snapshot_utc": "2026-09-22T14:29:32.606521+00:00",
+    "description": "PS_V28C_FINAL_HEDGE_EXACT_V47_08E56C43",
+    "displaced_orw1_submission_id": 56336027,
     "episode_counts": {
-      "v47_new_56466970": 1,
       "all3_56367770": 382,
+      "v47_historical_56333577": 36,
       "v47_historical_56336025": 169,
-      "v47_historical_56333577": 36
+      "v47_new_56466970": 1
     },
+    "further_submission_authorized": false,
+    "initial_complete_public_score": 600,
     "initial_score_decision_grade": false,
-    "reason": "new exact-V47 submission had only 1 listed public episode at first COMPLETE score snapshot",
+    "initial_status": "PENDING",
     "latest_maturity": {
-      "snapshot_utc": "2026-09-22T20:14:24.092692+00:00",
-      "maturity_run": 35778942531,
-      "status_run": 35779042553,
+      "active_pair_strategy": "ALL3 primary + V47 hedge",
+      "additional_submission_authorized": false,
+      "all3": {
+        "episodes": 405,
+        "public_score": 1964.2,
+        "status": "COMPLETE",
+        "submission_id": 56367770
+      },
+      "crossed_checkpoint": 36,
+      "historical_v47": {
+        "a": {
+          "episodes": 169,
+          "submission_id": 56336025
+        },
+        "b": {
+          "episodes": 36,
+          "submission_id": 56333577
+        }
+      },
       "latest_two": [
         "56466970",
         "56367770"
       ],
-      "v47": {
-        "submission_id": 56466970,
-        "status": "COMPLETE",
-        "public_score": 1852.1,
-        "episodes": 89
-      },
-      "all3": {
-        "submission_id": 56367770,
-        "status": "COMPLETE",
-        "public_score": 1964.2,
-        "episodes": 405
-      },
-      "historical_v47": {
-        "a": {
-          "submission_id": 56336025,
-          "episodes": 169
-        },
-        "b": {
-          "submission_id": 56333577,
-          "episodes": 36
-        }
-      },
-      "crossed_checkpoint": 36,
+      "maturity_run": 35778942531,
       "next_checkpoints": [
         100,
         169
       ],
-      "active_pair_strategy": "ALL3 primary + V47 hedge",
-      "additional_submission_authorized": false
-    }
+      "snapshot_utc": "2026-09-22T20:14:24.092692+00:00",
+      "status_run": 35779042553,
+      "v47": {
+        "episodes": 89,
+        "public_score": 1852.1,
+        "status": "COMPLETE",
+        "submission_id": 56466970
+      }
+    },
+    "latest_two_after": [
+      56466970,
+      56367770
+    ],
+    "launch_commit": "d5d23b2ce570cceac34dd03a90f80f630aebc779",
+    "loader_entrypoint": "_y_agent_shopherd",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "maturity_snapshot_utc": "2026-09-22T14:29:32.606521+00:00",
+    "maturity_workflow": 35740643501,
+    "new_v47_submission_id": 56466970,
+    "preserved_all3_submission_id": 56367770,
+    "provenance_artifact_id": 10699168127,
+    "provenance_digest": "sha256:a24b5f90a57beae66f475ac8f39337c4b0946e330e9d9267871eb0e5af8dd96d",
+    "reason": "new exact-V47 submission had only 1 listed public episode at first COMPLETE score snapshot",
+    "result_document": "docs/strategy/V28C_FINAL_V47_SLOT_SUBMISSION_RESULT_2026-09-22.md",
+    "status": "COMPLETE_MATURITY_WATCH",
+    "workflow": 35739943846
   },
   "v28d": {
-    "status": "ACTIVE_READONLY",
-    "workflow": 35781539795,
-    "protocol": "docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_PROTOCOL_2026-09-22.md",
-    "v47_submission_id": 56466970,
     "all3_submission_id": 56367770,
+    "kaggle_mutation_authorized": false,
     "launch_snapshot": {
-      "snapshot_utc": "2026-09-22T20:35:53.390551+00:00",
-      "v47_episodes": 90,
-      "v47_public_score": 1853.1,
       "all3_episodes": 406,
       "all3_public_score": 1960,
       "latest_two": [
         56466970,
         56367770
-      ]
+      ],
+      "snapshot_utc": "2026-09-22T20:35:53.390551+00:00",
+      "v47_episodes": 90,
+      "v47_public_score": 1853.1
     },
+    "protocol": "docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_PROTOCOL_2026-09-22.md",
     "purpose": "temporal and common-opponent hosted forensic comparison",
-    "kaggle_mutation_authorized": false
+    "status": "ACTIVE_READONLY",
+    "v47_submission_id": 56466970,
+    "workflow": 35781539795
+  },
+  "v28d_current_hosted_pair_forensics": {
+    "active_pair_preserved": [
+      "ALL3 56367770",
+      "exact V47 56466970"
+    ],
+    "all3_aligned_games": 23,
+    "all3_aligned_mean_margin": -1362.608695652174,
+    "all3_aligned_score_rate": 0.391304347826087,
+    "all3_submission_id": 56367770,
+    "automatic_kaggle_submission": false,
+    "common_opponent_count": 1,
+    "decision": "V28D_NO_CURRENT_META_V47_UNDERPERFORMANCE_SIGNAL",
+    "mechanical_pass": true,
+    "result_document": "docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_RESULT_2026-09-22.md",
+    "status": "COMPLETE",
+    "v47_games": 89,
+    "v47_mean_margin": 6198.471910112359,
+    "v47_score_rate": 0.5280898876404494,
+    "v47_submission_id": 56466970,
+    "workflow": 35781539795
   }
 }
