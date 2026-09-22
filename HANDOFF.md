@@ -1,5 +1,53 @@
 # HANDOFF — Kculture
 
+
+## Binding update — 2026-09-22 — V28C SUBMITTED / V47 REGISTERED / COMPLETION WATCH
+
+**This block supersedes lower stale current-action sections.**
+
+The user explicitly authorized the frozen V28B recommendation. V28C executed that authorization successfully.
+
+### V28C — EXACT V47 FINAL HEDGE REGISTERED
+
+Workflow:
+**`35739943846`**.
+
+Launch commit:
+`d5d23b2ce570cceac34dd03a90f80f630aebc779`.
+
+Result document:
+`docs/strategy/V28C_FINAL_V47_SLOT_SUBMISSION_RESULT_2026-09-22.md`.
+
+Provenance artifact:
+- ID `10699168127`;
+- digest `sha256:a24b5f90a57beae66f475ac8f39337c4b0946e330e9d9267871eb0e5af8dd96d`.
+
+Strict preflight passed:
+- latest two before mutation = ALL3 `56367770` then O-RW1 `56336027`;
+- daily count projected = 1/5;
+- exact V47 archive SHA = `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`;
+- exact V47 `main.py` SHA = `f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`;
+- official loader entrypoint = `_y_agent_shopherd`.
+
+New exact-V47 submission:
+**`56466970`**.
+
+Initial registered status:
+**PENDING**.
+
+Verified latest-two immediately after registration:
+1. V47 `56466970`;
+2. ALL3 `56367770`.
+
+O-RW1 `56336027` is no longer among the latest two.
+
+The intended active pair is therefore now:
+**ALL3 primary + V47 hedge**.
+
+No additional Kaggle submission is authorized by this result.
+
+**Binding immediate action:** monitor submission `56466970` read-only until it leaves PENDING, then re-audit the latest-two pair/current ratings and update the canonical sources. Do not create a third final-slot mutation without a new gate and explicit authorization.
+
 ## Binding update — 2026-09-22 — V27 CLOSED / V28B FINAL PAIR READY / USER DECISION REQUIRED
 
 **This block supersedes lower stale current-action sections.**
