@@ -1,5 +1,25 @@
 # STATUS — Kculture live source of truth
 
+## Binding correction — V27C mechanical retry
+
+Initial V27C workflow `35678728124` is NON-BINDING. Several collectors failed before any episode because `plain` was imported from the wrong module.
+
+Mechanical correction:
+- only import path changed;
+- teacher, opponents, seeds, split, 256-step representation, sampling rule, ExtraTrees parameters and gates are unchanged.
+
+Corrected binding workflow:
+**`35678874775`**.
+
+Collector fix commit:
+`725a66061a7d601a5c4eb90d343250c49c66e1d9`.
+
+Relaunch commit:
+`c2c16c11086b1d83e109e5f6c729427913a1d949`.
+
+**Binding immediate action:** resolve workflow `35678874775`.
+
+
 ## Binding update — 2026-09-21 — V27B BOUNDED HISTORY / V27C ACTIVE
 
 **This block supersedes lower stale current-action sections.**
