@@ -1,5 +1,72 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-21 — V27A HISTORY-AWARE / V27B MECHANICAL RETRY ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V27A — COMPLETE
+
+Binding workflow: **`35665757174`**.
+
+Decision:
+**`V27A_HISTORY_AWARE_DISTILLATION_REQUIRED`**.
+
+Mechanical:
+- 72/72 episodes;
+- 1080/1080 checkpoint comparisons;
+- failures 0.
+
+Parity:
+- complete action: **0.9222222**;
+- MARKET: **0.9296296**;
+- FARMER: **1.0000000**;
+- HANDS: **0.9925926**;
+- minimum checkpoint complete-action parity: **0.6666667**;
+- minimum source complete-action parity: **0.8666667**.
+
+State-only behavioral cloning is closed. The teacher is sufficiently reconstructible to justify one explicit legal-history audit.
+
+Result:
+`docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_RESULT_2026-09-21.md`.
+
+### V27B attempt 1 — NON-BINDING MECHANICS INVALID
+
+Attempt workflow:
+`35672298198`.
+
+All live episodes ended DONE/DONE, but the implementation performed long counterfactual history replays inside the live agent callback. This consumed the per-turn runtime budget and only 13/15 frozen checkpoints were observed.
+
+No strategic horizon result from attempt 1 is valid.
+
+Mechanics document:
+`docs/strategy/V27B_ATTEMPT1_MECHANICS_INVALID_2026-09-21.md`
+(commit `20284111894f79056b89e42dc03f0f007a775256`).
+
+### V27B corrected binding — ACTIVE
+
+Corrected workflow:
+**`35676166396`**.
+
+Corrections:
+- live episode runs ongoing teacher normally;
+- all legal observations/actions are recorded;
+- frozen history reconstruction is performed offline after the episode;
+- 12-way sharding replaces 4-way sharding to reduce wall-clock time only.
+
+Frozen experiment is unchanged:
+- rank-1 teacher SHA `a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c`;
+- all 12 V26A snapshot opponents;
+- seeds `79801..79803`;
+- both seats;
+- checkpoints `0,1,2,3,4,8,16,32,64,128,256,384,512,640,718`;
+- horizons `0,1,2,4,8,16,32,64,128,256,512,FULL`;
+- original V27B parity gates unchanged.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35676166396`.
+
+
 ## Binding update — 2026-09-21 — V26B CLOSED / V27A ACTIVE
 
 **This block supersedes lower stale current-action sections.**
