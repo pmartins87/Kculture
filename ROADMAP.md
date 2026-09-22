@@ -1,5 +1,67 @@
 # ROADMAP — Kculture live plan
 
+## Binding update — 2026-09-21 — V27C WHOLE-LABEL CLOSED / V27C2 STRUCTURAL ACTIVE
+
+**This block supersedes lower stale current-action sections.**
+
+### V27C whole-component classification — CLOSED / COMPUTATIONAL MECHANICS INVALID
+
+Binding collection workflow:
+`35678874775`.
+
+Preserved evidence:
+- 12/12 data shards PASS;
+- 192 teacher episodes;
+- no validation/holdout model result was ever produced.
+
+Both frozen training attempts reached the identical matrix:
+- 57,520 training turns;
+- 2,215 features;
+- 881 MARKET classes;
+- 50 FARMER classes;
+- 1,765 HANDS classes;
+then the hosted runner received a shutdown signal during ExtraTrees fitting.
+
+This representation is closed as computationally invalid, not strategically negative.
+
+Closure:
+`docs/strategy/V27C_WHOLE_COMPONENT_COMPUTATIONAL_INVALID_2026-09-21.md`
+(commit `02db35134e0949c9dc9022f32b7d1932d4961fc2`).
+
+### V27C2 — ACTIVE / STATEFUL STRUCTURAL DISTILLATION
+
+Protocol:
+`docs/strategy/V27C2_STATEFUL_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-21.md`
+(commit `29a08da5cf200e85d219936f38a8de07363bcdec`).
+
+Binding workflow:
+**`35682535729`**.  
+Launch commit:
+`7a9567d78a21be4fb6b139d5bf109d2d7c4142c0`.
+
+Same teacher / opponents / seeds / split as V27C.
+
+Structural representation:
+- one shared UNIT model over farmer + all real hands/workers;
+- one shared MARKET-SLOT model over slots 0..9;
+- raw legal memory only: step-2 opponent-money/WHEAT state, ordered first-two-shop memory, phase flags;
+- actor-local legal position/inventory/tile/neighborhood features;
+- no route ID/table, source identity, rank, SHA, hidden seed, EpisodeId, or teacher call at inference.
+
+Frozen models:
+- 2 x `DecisionTreeClassifier`;
+- max_depth 32;
+- min_samples_leaf 2;
+- random_state 20260921;
+- no hyperparameter sweep.
+
+Original V27C holdout thresholds are unchanged.
+
+No Kaggle submission is authorized.
+
+**Binding immediate action:** resolve workflow `35682535729`.
+
+
 ## Binding correction — V27C mechanical retry
 
 Initial V27C workflow `35678728124` is NON-BINDING. Several collectors failed before any episode because `plain` was imported from the wrong module.
