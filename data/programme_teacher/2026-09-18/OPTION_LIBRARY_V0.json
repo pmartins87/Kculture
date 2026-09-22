@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "USER DECISION: authorize or reject replacing ORW1 with exact V47 while preserving ALL3; no Kaggle submission until explicit authorization",
+  "next_stage": "Read-only monitor exact-V47 submission 56466970 until completion, then re-audit latest-two pair and ratings; no further Kaggle submission is authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2343,7 +2343,7 @@
     "automatic_kaggle_submission": false
   },
   "final_slot_strategy": {
-    "status": "USER_DECISION_REQUIRED",
+    "status": "V28C_V47_REGISTERED_COMPLETION_WATCH",
     "v28a_workflow": 35683053247,
     "v28b_workflow": 35683424225,
     "v28b_decision": "V28B_FINAL_PAIR_RECOMMENDATION_READY",
@@ -2384,7 +2384,21 @@
       "orw1_mean_margin": -70.3681
     },
     "requires_explicit_user_authorization": true,
-    "automatic_kaggle_submission": false
+    "automatic_kaggle_submission": false,
+    "user_authorized": true,
+    "authorized_pair": [
+      "ALL3",
+      "V47"
+    ],
+    "current_latest_two_submission_ids": [
+      56466970,
+      56367770
+    ],
+    "primary": "ALL3",
+    "primary_submission_id": 56367770,
+    "hedge": "V47",
+    "hedge_submission_id": 56466970,
+    "displaced_orw1_submission_id": 56336027
   },
   "v28a": {
     "status": "COMPLETE",
@@ -2451,5 +2465,26 @@
       1
     ],
     "automatic_kaggle_submission": false
+  },
+  "v28c": {
+    "status": "REGISTERED_PENDING",
+    "workflow": 35739943846,
+    "launch_commit": "d5d23b2ce570cceac34dd03a90f80f630aebc779",
+    "result_document": "docs/strategy/V28C_FINAL_V47_SLOT_SUBMISSION_RESULT_2026-09-22.md",
+    "provenance_artifact_id": 10699168127,
+    "provenance_digest": "sha256:a24b5f90a57beae66f475ac8f39337c4b0946e330e9d9267871eb0e5af8dd96d",
+    "description": "PS_V28C_FINAL_HEDGE_EXACT_V47_08E56C43",
+    "new_v47_submission_id": 56466970,
+    "initial_status": "PENDING",
+    "latest_two_after": [
+      56466970,
+      56367770
+    ],
+    "preserved_all3_submission_id": 56367770,
+    "displaced_orw1_submission_id": 56336027,
+    "archive_sha256": "08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01",
+    "main_sha256": "f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842",
+    "loader_entrypoint": "_y_agent_shopherd",
+    "further_submission_authorized": false
   }
 }
