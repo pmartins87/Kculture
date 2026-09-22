@@ -17,9 +17,8 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0,str(ROOT))
 
 from solver.programme_features import features as programme_features
-from tools.kaggle_exact_runtime import plain
 from tools.programme_adaptive_expert_gate import EXPECTED_ENGINE,load_public_agent,purge_package_modules,sha256_bytes
-from tools.bounded_transaction_oracle_v1 import call_agent,canonical_action
+from tools.bounded_transaction_oracle_v1 import call_agent,canonical_action,plain
 
 TEACHER_SHA="a1ad0fd1d174477ee2cbdd561a812bcb7029647ce34599e79d6b79e9057eff6c"
 SEEDS=(79901,79902,79903,79904,79905,79906,79907,79908)
