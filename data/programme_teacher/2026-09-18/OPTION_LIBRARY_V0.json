@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "Read-only monitor V47 submission 56466970; notify only at >=100 episodes, >=169 episodes, or latest-two/mechanical drift. No further Kaggle submission without a new explicit user decision.",
+  "next_stage": "Resolve read-only V28D workflow 35781539795 comparing V47 and ALL3 in the current hosted population; no Kaggle mutation is authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2539,5 +2539,25 @@
       "active_pair_strategy": "ALL3 primary + V47 hedge",
       "additional_submission_authorized": false
     }
+  },
+  "v28d": {
+    "status": "ACTIVE_READONLY",
+    "workflow": 35781539795,
+    "protocol": "docs/strategy/V28D_CURRENT_HOSTED_PAIR_FORENSICS_PROTOCOL_2026-09-22.md",
+    "v47_submission_id": 56466970,
+    "all3_submission_id": 56367770,
+    "launch_snapshot": {
+      "snapshot_utc": "2026-09-22T20:35:53.390551+00:00",
+      "v47_episodes": 90,
+      "v47_public_score": 1853.1,
+      "all3_episodes": 406,
+      "all3_public_score": 1960,
+      "latest_two": [
+        56466970,
+        56367770
+      ]
+    },
+    "purpose": "temporal and common-opponent hosted forensic comparison",
+    "kaggle_mutation_authorized": false
   }
 }
