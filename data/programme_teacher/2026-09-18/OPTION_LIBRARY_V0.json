@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V28B workflow 35683424225; present final pair recommendation and require explicit user authorization before any Kaggle submission",
+  "next_stage": "resolve V27C workflow 35725924827; if census passes, fit one pre-frozen component-wise tree clone; otherwise close fast teacher distillation; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2263,14 +2263,12 @@
     "state_only_distillation_closed": true
   },
   "v27b": {
-    "status": "COMPLETE",
-    "corrected_episode_workflow": 35676166396,
-    "aggregate_binding_workflow": 35678269956,
-    "aggregate_artifact_id": 10673273774,
-    "aggregate_artifact_digest": "sha256:927a1f266329aa02965b3ed76c3ec3fe149a82429efbde519616c5b1ec99ec63",
+    "status": "COMPLETE_BOUNDED_HISTORY_DISTILLATION_VIABLE",
+    "shard_workflow": 35676166396,
+    "aggregate_workflow": 35725538992,
     "decision": "V27B_BOUNDED_LEGAL_HISTORY_DISTILLATION_VIABLE",
     "selected_horizon": 256,
-    "metrics_256": {
+    "h256": {
       "complete_action_parity": 0.9962962962962963,
       "market_parity": 0.9962962962962963,
       "farmer_parity": 1,
@@ -2278,24 +2276,32 @@
       "minimum_source_complete_action_parity": 0.9777777777777777,
       "minimum_checkpoint_complete_action_parity": 0.9444444444444444
     },
+    "h128": {
+      "complete_action_parity": 0.9296296296296296,
+      "market_parity": 0.9296296296296296
+    },
     "full_history_parity": 1,
-    "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-21.md"
+    "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-22.md"
   },
   "v27c": {
-    "status": "CLOSED_COMPUTATIONAL_MECHANICS_INVALID",
-    "workflow": 35678874775,
-    "collector_shards_passed": 12,
-    "expected_episodes": 192,
-    "holdout_result_observed": false,
-    "failure": "two identical runner shutdowns during frozen ExtraTrees fit after matrix construction",
-    "matrix": {
-      "training_turns": 57520,
-      "features": 2215,
-      "market_classes": 881,
-      "farmer_classes": 50,
-      "hands_classes": 1765
-    },
-    "closure_document": "docs/strategy/V27C_WHOLE_COMPONENT_COMPUTATIONAL_INVALID_2026-09-21.md"
+    "status": "ACTIVE",
+    "workflow": 35725924827,
+    "protocol": "docs/strategy/V27C_BOUNDED_HISTORY_BEHAVIORAL_DISTILLATION_CENSUS_PROTOCOL_2026-09-22.md",
+    "protocol_commit": "5ab18ce72a162980d6e2a25cac2cec073f92b102",
+    "history_window": 256,
+    "seeds": [
+      79901,
+      79902,
+      79903,
+      79904
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "opponents": 12,
+    "feature_dim": 1254,
+    "automatic_kaggle_submission": false
   },
   "v27c2": {
     "status": "COMPLETE_NOT_VIABLE",
