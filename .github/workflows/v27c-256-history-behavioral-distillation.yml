@@ -1,4 +1,5 @@
 name: v27c-256-history-behavioral-distillation
+# Mechanical retry after plain import fix
 
 'on':
   push:
