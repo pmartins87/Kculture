@@ -1,0 +1,76 @@
+name: v27c-bounded-history-distillation-census
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v27c-bounded-history-distillation-census.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3,4,5,6,7,8,9,10,11]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install pinned runtime
+        run: |
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 35653189539
+          name: v26a-frontier-immutable-snapshot
+          path: artifacts/v26a-snapshot
+      - name: Run V27C shard
+        run: |
+          mkdir -p artifacts/v27c
+          python tools/v27c_bounded_history_census_shard.py \
+            --snapshot-dir artifacts/v26a-snapshot \
+            --shard-index ${{ matrix.shard_index }} \
+            --num-shards 12 \
+            --out artifacts/v27c/V27C_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v27c-shard-${{ matrix.shard_index }}
+          path: artifacts/v27c/*.json
+          retention-days: 30
+          if-no-files-found: warn
+
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v27c-shard-*
+          path: artifacts/v27c-shards
+          merge-multiple: false
+      - name: Aggregate V27C
+        run: |
+          mkdir -p artifacts/v27c-final
+          python tools/aggregate_v27c_bounded_history_census.py \
+            --input-dir artifacts/v27c-shards \
+            --out artifacts/v27c-final/V27C_BOUNDED_HISTORY_DISTILLATION_CENSUS.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v27c-bounded-history-distillation-census
+          path: artifacts/v27c-final/*.json
+          retention-days: 30
+          if-no-files-found: error
