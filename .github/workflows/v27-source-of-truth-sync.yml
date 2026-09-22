@@ -1,0 +1,42 @@
+name: v27-source-of-truth-sync
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v27-source-of-truth-sync.yml']
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: Update living source of truth
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          block='''## Binding update — 2026-09-21 — V27A CLOSED / V27B ACTIVE\n\n**This block supersedes lower stale current-action sections.**\n\nV27A workflow `35665757174` completed mechanically PASS: 72 episodes, 1080 comparisons, zero failures. Decision: **`V27A_HISTORY_AWARE_DISTILLATION_REQUIRED`**. Complete-action fresh-state parity was 0.9222222; MARKET 0.9296296; FARMER 1.0; HANDS 0.9925926; minimum checkpoint parity 0.6666667; minimum source parity 0.8666667. State-only distillation is therefore closed.\n\nResult: `docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_RESULT_2026-09-21.md`.\n\nV27B legal-history reconstructibility is ACTIVE under frozen protocol `docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_PROTOCOL_2026-09-21.md`. Binding workflow: **`35672298198`**. It tests bounded legal observation-history horizons before any first-party behavioral distillation. No Kaggle submission is authorized.\n\n**Binding immediate action:** resolve workflow `35672298198`.\n\n'''
+          for name in ('STATUS.md','ROADMAP.md','HANDOFF.md'):
+              p=Path(name); txt=p.read_text()
+              if 'V27A CLOSED / V27B ACTIVE' not in txt:
+                  lines=txt.splitlines(True)
+                  if lines and lines[0].startswith('# '): txt=lines[0]+'\n'+block+''.join(lines[1:])
+                  else: txt=block+txt
+                  p.write_text(txt)
+          p=Path('data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json')
+          d=json.loads(p.read_text())
+          d['v27a_rank1_markov_reconstructibility']={
+            'workflow':35665757174,'decision':'V27A_HISTORY_AWARE_DISTILLATION_REQUIRED','episodes':72,'comparisons':1080,
+            'complete_action_parity':0.9222222222222223,'market_parity':0.9296296296296296,'farmer_parity':1.0,'hands_parity':0.9925925925925926,
+            'minimum_checkpoint_complete_action_parity':0.6666666666666666,'minimum_source_complete_action_parity':0.8666666666666667,
+            'result_doc':'docs/strategy/V27A_RANK1_TEACHER_MARKOV_RECONSTRUCTIBILITY_RESULT_2026-09-21.md','automatic_kaggle_submission':False}
+          d['v27b_legal_history_reconstructibility']={'workflow':35672298198,'status':'ACTIVE','protocol':'docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_PROTOCOL_2026-09-21.md','automatic_kaggle_submission':False}
+          d['next_stage']='resolve V27B workflow 35672298198 autonomously; obey frozen legal-history route; no Kaggle submission'
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git diff --cached --quiet || git commit -m 'Record V27A result and activate V27B'
+          git push origin HEAD:research/prize-solver-v0
