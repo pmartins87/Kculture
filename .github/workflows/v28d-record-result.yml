@@ -21,6 +21,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git add STATUS.md ROADMAP.md HANDOFF.md
+          git add -f data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
           git diff --cached --quiet || git commit -m 'Record binding V28D result in canonical sources'
           git push origin HEAD:research/prize-solver-v0
