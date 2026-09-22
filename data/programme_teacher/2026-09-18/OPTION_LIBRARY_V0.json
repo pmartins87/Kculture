@@ -71,7 +71,7 @@
     "margin_delta",
     "terminal reward delta"
   ],
-  "next_stage": "resolve V27C workflow 35678728124 autonomously; if viable, freeze/export model and open fresh causal V27D; if not viable, close fast rank1 distillation; no Kaggle submission",
+  "next_stage": "resolve corrected V27C workflow 35678874775 autonomously; if viable open V27D fresh causal validation; if not viable close fast rank1 distillation; no Kaggle submission",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "source_commit": "2c402f54462bb31be4f1061c64efe11613b24253",
@@ -2282,7 +2282,7 @@
     "result_document": "docs/strategy/V27B_LEGAL_HISTORY_RECONSTRUCTIBILITY_RESULT_2026-09-21.md"
   },
   "v27c": {
-    "status": "ACTIVE",
+    "status": "CORRECTED_BINDING_ACTIVE",
     "workflow": 35678728124,
     "launch_commit": "c208e67f4a9ab7e852be4df391c58beb52e4be47",
     "protocol": "docs/strategy/V27C_256_HISTORY_BEHAVIORAL_DISTILLATION_PROTOCOL_2026-09-21.md",
@@ -2304,6 +2304,13 @@
     ],
     "expected_episodes": 192,
     "model_family": "ExtraTreesClassifier",
-    "automatic_kaggle_submission": false
+    "automatic_kaggle_submission": false,
+    "initial_workflow": 35678728124,
+    "initial_binding": false,
+    "initial_failure": "collector ImportError: plain imported from wrong module before any episode",
+    "collector_fix_commit": "725a66061a7d601a5c4eb90d343250c49c66e1d9",
+    "binding_workflow": 35678874775,
+    "relaunch_commit": "c2c16c11086b1d83e109e5f6c729427913a1d949",
+    "experiment_semantics_unchanged": true
   }
 }
