@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V28F workflow 35807910104 ALL3-centered hedge complementarity; continue V47 read-only maturity monitoring to >=169 episodes. No Kaggle mutation authorized.",
+  "next_stage": "Decompose the 66 ALL3 residual losses from V28F into source/seed/seat/margin structure, then open an orthogonal hedge-discovery branch; preserve ALL3+V47 and continue V47 maturity monitoring to >=169 episodes.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2608,30 +2608,42 @@
     "kaggle_mutation_authorized": false
   },
   "v28f": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35807910104,
-    "protocol": "docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_PROTOCOL_2026-09-22.md",
-    "primary": "ALL3",
-    "hedges": [
-      "V47",
-      "ORW1",
-      "CR053",
-      "CR029"
-    ],
-    "seeds": [
-      80401,
-      80402,
-      80403,
-      80404,
-      80405,
-      80406
-    ],
-    "seats": [
-      0,
-      1
-    ],
-    "selector": "best-of-two complementarity with ALL3",
-    "material_replacement_rule": "alternate must add >=3 more ALL3-nonwin-to-win conversions than V47 and source complement breadth >= V47",
+    "result_doc": "docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_RESULT_2026-09-22.md",
+    "decision": "V28F_NO_MATERIAL_HEDGE_REPLACEMENT",
+    "contexts_per_candidate": 144,
+    "all3": {
+      "wins": 78,
+      "losses": 66,
+      "ties": 0,
+      "score_rate": 0.5416666666666666,
+      "mean_margin": 168.04166666666666
+    },
+    "hedge_complementarity": {
+      "V47": {
+        "nonwin_to_win": 0,
+        "source_breadth": 0,
+        "standalone_score_rate": 0.5138888888888888
+      },
+      "ORW1": {
+        "nonwin_to_win": 0,
+        "source_breadth": 0,
+        "standalone_score_rate": 0.5138888888888888
+      },
+      "CR053": {
+        "nonwin_to_win": 0,
+        "source_breadth": 0,
+        "standalone_score_rate": 0.027777777777777776
+      },
+      "CR029": {
+        "nonwin_to_win": 0,
+        "source_breadth": 0,
+        "standalone_score_rate": 0
+      }
+    },
+    "selector_winner": "ORW1",
+    "material_replacement_gate_pass": false,
     "kaggle_mutation_authorized": false
   }
 }
