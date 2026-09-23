@@ -1,5 +1,37 @@
 # ROADMAP — Kculture live plan
 
+
+## Binding update — 2026-09-22 — V47 >=100 EPISODES / V28E OPPONENT-STRENGTH ATTRIBUTION ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+Fresh read-only snapshot at `2026-09-23T01:33:47Z`:
+- exact V47 `56466970`: **119 listed episodes**, publicScore **1861.4**, COMPLETE;
+- ALL3 `56367770`: **430 listed episodes**, publicScore **1923.4**, COMPLETE;
+- latest-two remains exactly V47 `56466970` + ALL3 `56367770`;
+- O-RW1 `56336027` remains outside the latest two.
+
+The public-score gap narrowed from about 107 points at 90 episodes to about 62 points at 119 episodes. V28D already found no robust current-meta V47 underperformance signal: V47 realized 45W/4T/40L over 89 resolved games with score rate 0.5281 and positive mean margin, while opponent overlap with ALL3 was almost disjoint.
+
+### V28E — ACTIVE / READ-ONLY OPPONENT-STRENGTH ATTRIBUTION
+
+Protocol:
+`docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_PROTOCOL_2026-09-22.md`.
+
+Binding workflow:
+**`35806944875`**.
+
+Purpose:
+- reuse the immutable V28D replay evidence;
+- snapshot the current Kaggriculture leaderboard;
+- exact-match hosted opponent team names to current public scores;
+- compare opponent-score distributions for V47 and temporally aligned ALL3;
+- determine whether matchmaking/opponent strength materially explains the public-rating gap.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** resolve workflow `35806944875`; then continue maturity monitoring to V47 >=169 episodes unless V28E exposes a genuine mechanical or population-strength issue that changes the research gate.
+
 ## Binding update — 2026-09-22 — V28D COMPLETE / ACTIVE PAIR PRESERVED
 
 **This block supersedes lower current-action sections.**
