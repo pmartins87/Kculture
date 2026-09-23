@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V28H workflow 35812876571 matched hard-vs-easy trajectory trace; then open legal-observation mechanism discovery around the selected structural separation checkpoint/action window. Continue V47 read-only maturity monitoring to >=169 episodes. No Kaggle mutation authorized.",
+  "next_stage": "Resolve V28J workflow 35822283032 exactly as frozen; if identifiable route to phenotype-positive mechanism/action discovery, otherwise close simple classifier risk gating and route to direct matched hard-vs-control mechanism/action discovery. Preserve ALL3+V47; continue V47 maturity monitoring to >=169.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2685,14 +2685,52 @@
     "kaggle_mutation_authorized": false
   },
   "v28h": {
-    "status": "ACTIVE",
-    "workflow": 35812876571,
-    "protocol": "docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_PROTOCOL_2026-09-22.md",
-    "frozen_inputs": {
-      "v28f_workflow": 35807910104,
-      "v28g_workflow": 35812527508
+    "status": "COMPLETE",
+    "workflow": 35813287407,
+    "decision": "V28H_MIDGAME_STRUCTURAL_SEPARATION",
+    "selected_checkpoint": 480,
+    "explanatory_window": [
+      384,
+      479
+    ],
+    "result_doc": "docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md",
+    "kaggle_mutation_authorized": false
+  },
+  "v28i": {
+    "status": "COMPLETE",
+    "workflow": 35818084144,
+    "decision": "V28I_LEGAL_STATE_RISK_PHENOTYPE_NOT_IDENTIFIABLE",
+    "holdout_metrics": {
+      "precision": 0.625,
+      "recall": 1,
+      "specificity": 0.5714285714,
+      "balanced_accuracy": 0.7857142857
     },
-    "purpose": "matched hard-vs-zero-loss trajectory tracing with same seed/seat and exact V28F terminal parity",
+    "used_features": [
+      "opp_money",
+      "market_inventory:FERTILIZER",
+      "opp_consecutive_need"
+    ],
+    "result_doc": "docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md",
+    "kaggle_mutation_authorized": false
+  },
+  "v28j": {
+    "status": "ACTIVE_READONLY",
+    "workflow": 35822283032,
+    "protocol": "docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-23.md",
+    "checkpoints": [
+      384,
+      416,
+      448,
+      480
+    ],
+    "feature_count": 798,
+    "model": {
+      "max_depth": 3,
+      "min_samples_leaf": 8,
+      "class_weight": "balanced",
+      "random_state": 20260922
+    },
     "kaggle_mutation_authorized": false
   }
 }
