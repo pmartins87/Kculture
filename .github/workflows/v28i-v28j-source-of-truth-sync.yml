@@ -1,9 +1,11 @@
 name: v28i-v28j-source-of-truth-sync
 'on':
   push:
-    branches: [research/prize-solver-v0]
-    paths: ['.github/workflows/v28i-v28j-source-of-truth-sync.yml']
-  workflow_dispatch:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - .github/workflows/v28i-v28j-source-of-truth-sync.yml
+  workflow_dispatch: {}
 permissions:
   contents: write
 jobs:
@@ -11,48 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: {ref: research/prize-solver-v0, fetch-depth: 0}
+        with:
+          ref: research/prize-solver-v0
+          fetch-depth: 0
       - name: Update canonical sources
-        shell: bash
+        run: python tools/sync_v28i_v28j_canonical.py
+      - name: Commit canonical sources
         run: |
-          python - <<'PY'
-          from pathlib import Path
-          import json
-          block='''## Binding update — 2026-09-23 — V28H COMPLETE / V28I NOT IDENTIFIABLE / V28J BOUNDED HISTORY ACTIVE
-
-**This block supersedes lower current-action sections.**
-
-### Hosted pair — IMMUTABLE WITHOUT NEW USER AUTHORIZATION
-- primary: ALL3 `56367770`;
-- hedge: exact V47 `56466970`;
-- O-RW1 `56336027` remains outside latest two;
-- no Kaggle submission, deletion, or reordering is authorized.
-
-Latest binding read-only hosted checkpoint remains V47 127 episodes / 1864.7 and ALL3 438 / 1932.0, latest-two `[56466970,56367770]`. Continue read-only monitoring to V47 >=169 and alert on latest-two drift or V47 error/disappearance.
-
-### V28H-R2 — COMPLETE
-Binding workflow `35813287407`: mechanics PASS, decision `V28H_MIDGAME_STRUCTURAL_SEPARATION`, selected checkpoint **480**, explanatory window **384–479**. Attempt 1 `35812876571` is non-binding mechanical failure only (`defaultdict` summary NameError). Result: `docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md`.
-
-### V28I — COMPLETE
-Binding workflow `35818084144`: mechanics PASS, 144/144 exact V28F terminal replays, 66 positives. Decision **`V28I_LEGAL_STATE_RISK_PHENOTYPE_NOT_IDENTIFIABLE`**. Frozen holdout: precision 0.625, recall 1.0, specificity 0.5714286, balanced accuracy 0.7857143. Tree depth 3, 4 leaves; used legal features `opp_money`, `market_inventory:FERTILIZER`, `opp_consecutive_need`. The frozen gate fails on precision/specificity; no post-outcome tuning is allowed. Result: `docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md`.
-
-### V28J — ACTIVE
-Per the pre-registered V28I fallback, single-state gating is closed and a bounded legal-history/stateful phenotype gate is active. Protocol: `docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-23.md`. It freezes checkpoints `384,416,448,480`, the exact V28I source-held-out split, 798 runtime-legal raw+adjacent-delta columns, and the same deterministic depth-3 tree/acceptance thresholds. No identity/source/rank/SHA enters runtime features.
-
-**Binding immediate action:** resolve the V28J workflow launched from `.github/workflows/v28j-bounded-legal-history-risk-identifiability.yml`; repair mechanics only if needed. No Kaggle mutation.
-
-'''
-          for name in ('STATUS.md','ROADMAP.md','HANDOFF.md'):
-              p=Path(name); txt=p.read_text(); first=txt.find('\n'); p.write_text(txt[:first+1]+'\n'+block+txt[first+1:])
-          p=Path('data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json');d=json.loads(p.read_text())
-          d['v28h']={'status':'COMPLETE','binding_workflow':35813287407,'attempt1_workflow':35812876571,'attempt1_binding':False,'mechanical_pass':True,'decision':'V28H_MIDGAME_STRUCTURAL_SEPARATION','selected_checkpoint':480,'explanatory_window':[384,479],'result_doc':'docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md','automatic_kaggle_submission':False}
-          d['v28i']={'status':'COMPLETE','binding_workflow':35818084144,'mechanical_pass':True,'decision':'V28I_LEGAL_STATE_RISK_PHENOTYPE_NOT_IDENTIFIABLE','contexts':144,'positive_count':66,'selected_checkpoint':480,'holdout_precision':0.625,'holdout_recall':1.0,'holdout_specificity':0.5714285714285714,'holdout_balanced_accuracy':0.7857142857142857,'tree_depth':3,'tree_leaves':4,'used_features':['opp_money','market_inventory:FERTILIZER','opp_consecutive_need'],'result_doc':'docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md','automatic_kaggle_submission':False}
-          d['v28j']={'status':'ACTIVE','protocol':'docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-23.md','workflow_file':'.github/workflows/v28j-bounded-legal-history-risk-identifiability.yml','checkpoints':[384,416,448,480],'feature_count':798,'source_split':'exact V28I split','model':'deterministic depth-3 tree','automatic_kaggle_submission':False}
-          d['next_stage']='resolve active V28J bounded legal-history risk-identifiability gate; continue V47 read-only maturity monitoring; never mutate Kaggle slots without explicit authorization'
-          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
-          git diff --cached --quiet || git commit -m 'Record V28I and activate V28J bounded history gate'
+          git diff --cached --quiet || git commit -m "Record V28I and activate V28J bounded history gate"
           git push origin HEAD:research/prize-solver-v0
