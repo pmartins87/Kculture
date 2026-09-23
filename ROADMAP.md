@@ -1,6 +1,85 @@
 # ROADMAP — Kculture live plan
 
 
+
+## Binding update — 2026-09-23 — V29A CLOSED / V30A DIRECT PUBLIC PERSISTENT POLICY BENCHMARK ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+### V29A — CLOSED
+
+Binding workflow:
+**`35876362346`**.
+
+Decision:
+**`V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL`**.
+
+Mechanics PASS. The frozen GRU-64 structural experiment trained exactly 8 epochs on immutable V27C2 data, but untouched holdout performance was far below even the causal-eligible gate:
+- complete-action parity **0.07128**;
+- MARKET **0.37297**;
+- FARMER **0.74507**;
+- HANDS **0.15009**;
+- minimum source complete parity **0.07024**;
+- minimum stage complete parity **0.00347**.
+
+Per protocol, do not tune or reopen V29A.
+
+Result:
+`docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md`.
+
+### Rule basis for V30A
+
+Kaggriculture Rule 6.b permits Competition Code publicly shared on Kaggle competition notebooks/discussions and deems that public Competition Code licensed under an OSI-approved license. V30A uses only public competition sources acquired through the audited Kaggle public-source path; no private code is used.
+
+### V30A — ACTIVE
+
+Protocol:
+`docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_PROTOCOL_2026-09-23.md`.
+
+Binding workflow:
+**`35877442921`**.
+
+Frozen design:
+- fresh current Kaggriculture Top-30 public-kernel query;
+- public-source acquisition only;
+- SHA deduplication and two-seat smoke;
+- freeze 8–12 executable unique representatives;
+- candidate set = ALL3 + every frozen public persistent policy;
+- common opponent panel = every frozen public representative;
+- fresh seeds `80501..80504`;
+- both seats;
+- no policy mixing or opponent-identity routing.
+
+Frozen promotion gate for a public policy:
+1. score rate >= ALL3 + 0.08;
+2. mean paired score delta >= +0.08;
+3. positive aggregate opponent-source breadth >=4;
+4. positive seed breadth >=3/4;
+5. positive paired contexts > negative paired contexts;
+6. positive support in both seats;
+7. mechanics PASS.
+
+Frozen selector among eligible policies:
+score rate -> paired score delta -> paired margin delta -> lower public-kernel rank -> lexical SHA.
+
+Routing:
+- READY => preserve exact public ref/SHA/package and attribution; launch V30B independent fresh validation/package-parity; still no Kaggle submission;
+- NO_ADVANTAGE => do not cherry-pick by reputation/rank; close this direct-public-policy branch.
+
+Protected hosted pair remains exact V47 `56466970` + ALL3 `56367770`.
+
+Latest V28N snapshot:
+- ALL3 482 episodes / 1862.4;
+- V47 175 / 1828.7;
+- team rank 1916;
+- Top-10 threshold 2959.8;
+- gap to Top-10 1097.4;
+- final submission deadline 2026-09-30 23:59 UTC.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** resolve V30A workflow `35877442921`; repair mechanics only without changing the frozen candidate snapshot, contexts, thresholds or selector.
+
 ## Binding update — 2026-09-23 — V29A RECURRENT STRUCTURAL DISTILLATION CLOSED
 
 **This block supersedes lower current-action sections.**
