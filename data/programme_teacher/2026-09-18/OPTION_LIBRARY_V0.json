@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Decompose the 66 ALL3 residual losses from V28F into source/seed/seat/margin structure, then open an orthogonal hedge-discovery branch; preserve ALL3+V47 and continue V47 maturity monitoring to >=169 episodes.",
+  "next_stage": "Run matched hard-vs-zero-loss trajectory traces from V28G target contexts, holding seed/seat fixed, to locate earliest economic separation and recurrent legal-observation signatures for orthogonal option discovery; preserve ALL3+V47 and continue V47 maturity monitoring to >=169 episodes.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2644,6 +2644,44 @@
     },
     "selector_winner": "ORW1",
     "material_replacement_gate_pass": false,
+    "kaggle_mutation_authorized": false
+  },
+  "v28g": {
+    "status": "COMPLETE",
+    "workflow": 35812527508,
+    "result_doc": "docs/strategy/V28G_ALL3_RESIDUAL_HARD_CORE_RESULT_2026-09-22.md",
+    "decision": "V28G_SOURCE_CLUSTERED_HARD_CORE",
+    "contexts": 144,
+    "all3_residual_losses": 66,
+    "universal_hard_losses": 66,
+    "source_concentration": {
+      "top4_share": 0.696969696969697,
+      "systematic_sources_ge9_losses": 6,
+      "zero_loss_sources": 6
+    },
+    "by_seat": {
+      "0": 33,
+      "1": 33
+    },
+    "loss_severity": {
+      "close": 4,
+      "medium": 50,
+      "severe": 12
+    },
+    "overlay_margin_effect_on_all3_losses": {
+      "V47": {
+        "all3_better": 62,
+        "all3_worse": 4,
+        "mean_delta": 89.9090909090909,
+        "median_delta": 61
+      },
+      "ORW1": {
+        "all3_better": 62,
+        "all3_worse": 4,
+        "mean_delta": 90.39393939393939,
+        "median_delta": 54
+      }
+    },
     "kaggle_mutation_authorized": false
   }
 }
