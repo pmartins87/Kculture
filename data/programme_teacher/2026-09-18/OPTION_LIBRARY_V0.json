@@ -24,17 +24,17 @@
       "submission_id": 56367770,
       "status": "COMPLETE",
       "role": "primary",
-      "latest_observed_rating": 1923.4,
-      "episodes_at_snapshot": 430
+      "latest_observed_rating": 1932,
+      "episodes_at_snapshot": 438
     },
     "v47": {
       "submission_id": 56466970,
       "status": "COMPLETE",
       "role": "hedge",
-      "latest_observed_rating": 1861.4,
-      "episodes_at_snapshot": 119
+      "latest_observed_rating": 1864.7,
+      "episodes_at_snapshot": 127
     },
-    "snapshot_utc": "2026-09-23T01:33:47.064787+00:00",
+    "snapshot_utc": "2026-09-23T03:05:00+00:00",
     "latest_two": [
       56466970,
       56367770
@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Run matched hard-vs-zero-loss trajectory traces from V28G target contexts, holding seed/seat fixed, to locate earliest economic separation and recurrent legal-observation signatures for orthogonal option discovery; preserve ALL3+V47 and continue V47 maturity monitoring to >=169 episodes.",
+  "next_stage": "Resolve V28H workflow 35812876571 matched hard-vs-easy trajectory trace; then open legal-observation mechanism discovery around the selected structural separation checkpoint/action window. Continue V47 read-only maturity monitoring to >=169 episodes. No Kaggle mutation authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2682,6 +2682,17 @@
         "median_delta": 54
       }
     },
+    "kaggle_mutation_authorized": false
+  },
+  "v28h": {
+    "status": "ACTIVE",
+    "workflow": 35812876571,
+    "protocol": "docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_PROTOCOL_2026-09-22.md",
+    "frozen_inputs": {
+      "v28f_workflow": 35807910104,
+      "v28g_workflow": 35812527508
+    },
+    "purpose": "matched hard-vs-zero-loss trajectory tracing with same seed/seat and exact V28F terminal parity",
     "kaggle_mutation_authorized": false
   }
 }
