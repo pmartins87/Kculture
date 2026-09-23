@@ -1,4 +1,4 @@
-name: v28e-hosted-opponent-strength-attribution
+name: v28e-r2-hosted-opponent-strength-attribution
 'on':
   push:
     branches:
@@ -36,10 +36,30 @@ jobs:
           path: replay_artifact
           run-id: 35781539795
           github-token: ${{ github.token }}
-      - name: Snapshot current leaderboard
+      - name: Download full current leaderboard
+        shell: bash
         run: |
           set -euo pipefail
-          kaggle competitions leaderboard "$COMPETITION" --show -v > leaderboard.csv
+          rm -rf leaders
+          mkdir -p leaders
+          kaggle competitions leaderboard "$COMPETITION" --download -p leaders -q
+          find leaders -maxdepth 3 -type f -print
+          python - <<'PY'
+          from pathlib import Path
+          import shutil, zipfile
+          root=Path("leaders")
+          csvs=list(root.rglob("*.csv"))
+          if not csvs:
+              for z in root.rglob("*.zip"):
+                  with zipfile.ZipFile(z) as f:
+                      f.extractall(root / ("unzipped_" + z.stem))
+              csvs=list(root.rglob("*.csv"))
+          if len(csvs) != 1:
+              raise SystemExit(f"expected one downloaded leaderboard CSV, found {len(csvs)}: {[str(x) for x in csvs]}")
+          shutil.copyfile(csvs[0],"leaderboard.csv")
+          print("FULL_LEADERBOARD_CSV",csvs[0])
+          PY
+          wc -l leaderboard.csv
           head -5 leaderboard.csv
       - name: Attribute opponent strength
         run: |
@@ -48,7 +68,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: v28e-hosted-opponent-strength-attribution
+          name: v28e-r2-hosted-opponent-strength-attribution
           path: |
             artifacts/v28e/**
             leaderboard.csv
