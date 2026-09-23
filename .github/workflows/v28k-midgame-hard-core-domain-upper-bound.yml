@@ -1,0 +1,74 @@
+name: v28k-midgame-hard-core-domain-upper-bound
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28k-midgame-hard-core-domain-upper-bound.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  shard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 160
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install frozen runtime
+        run: python -m pip install -U pip && python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: v28f-immutable-snapshot
+          path: artifacts/v28f-snapshot
+          run-id: 35807910104
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v28f-all3-hedge-complementarity
+          path: artifacts/v28f
+          run-id: 35807910104
+          github-token: ${{ github.token }}
+      - name: Run V28K shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          python tools/v28k_midgame_domain_upper_bound_shard.py             --snapshot-dir artifacts/v28f-snapshot             --v28f artifacts/v28f/V28F_ALL3_HEDGE_COMPLEMENTARITY.json             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v28k/V28K_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28k-shard-${{ matrix.shard_index }}
+          path: artifacts/v28k/*.json
+          retention-days: 30
+
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v28k-shard-*
+          path: artifacts/v28k-shards
+          merge-multiple: false
+      - name: Aggregate frozen V28K
+        run: |
+          set -euo pipefail
+          python tools/aggregate_v28k_midgame_domain_upper_bound.py             --input-dir artifacts/v28k-shards             --out artifacts/v28k-final/V28K_MIDGAME_DOMAIN_UPPER_BOUND.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28k-midgame-domain-upper-bound
+          path: artifacts/v28k-final/*.json
+          retention-days: 30
+          if-no-files-found: warn
