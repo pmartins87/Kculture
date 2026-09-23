@@ -24,11 +24,19 @@ The raw W/L evidence therefore does not explain why V47 has the lower public Bra
 
 Does current opponent strength / matchmaking composition materially explain the V47 vs ALL3 public-rating gap?
 
+## Mechanical repair amendment after R1
+
+R1 workflow `35806944875` returned `V28E_MAPPING_INSUFFICIENT` because the CLI `--show` surface exposed only the top 20 leaderboard rows, producing 0% exact-name coverage for both hosted populations.
+
+This is a mechanical acquisition failure only. No threshold, alignment rule, mapping rule, metric, or interpretation rule below is changed.
+
+R2 replaces only the leaderboard acquisition surface with the documented full download command:
+`kaggle competitions leaderboard kaggriculture --download -p <dir> -q`.
+
 ## Frozen evidence
 
 1. Reuse the immutable V28D replay/summary artifact from workflow `35781539795`.
-2. Query the current Kaggriculture leaderboard once at V28E runtime with:
-   `kaggle competitions leaderboard kaggriculture --show -v`.
+2. Query the current Kaggriculture leaderboard once at V28E-R2 runtime using the full leaderboard download command above.
 3. Use leaderboard columns `teamName` and `score`.
 4. Team identity is OFFLINE FORENSIC metadata only and is forbidden as a runtime policy feature.
 
