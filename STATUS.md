@@ -1,6 +1,87 @@
 # STATUS — Kculture live source of truth
 
 
+
+## Binding update — 2026-09-23 — V28N FINAL-WEEK AUDIT COMPLETE / V29A RECURRENT STRUCTURAL DISTILLATION ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+### V28N — COMPLETE / FINAL-WEEK PRIZE-GAP AUDIT
+
+Binding workflow:
+**`35875524017`**.
+
+The core read-only audit completed successfully and emitted its binding result. The workflow conclusion was FAILURE only because GitHub artifact upload rejected the colon characters in the Kaggle leaderboard filename; the Kaggle queries, episode counts, leaderboard parse and calculations had already completed.
+
+Snapshot UTC:
+`2026-09-23T14:37:35Z`.
+
+Protected latest-two remained exactly:
+1. exact V47 `56466970`;
+2. ALL3 `56367770`.
+
+No pair drift.
+
+Current maturity / hosted scores:
+- ALL3 `56367770`: **482 episodes**, **1862.4**, COMPLETE;
+- exact V47 `56466970`: **175 episodes**, **1828.7**, COMPLETE.
+
+V47 has therefore crossed the frozen >=169-episode maturity checkpoint.
+
+Current full leaderboard:
+- teams parsed: **9910**;
+- our better active row: **rank 1916**, score **1862.4**;
+- current #1: **3094.4**;
+- current #10 threshold: **2959.8**;
+- gap from our better active score to #10: **1097.4**;
+- gap to #1: **1232.0**.
+
+Official final submission deadline:
+**2026-09-30 23:59 UTC**.
+
+Result:
+`docs/strategy/V28N_FINAL_WEEK_STRATEGY_AUDIT_RESULT_2026-09-23.md`.
+
+Binding interpretation:
+the preserved ALL3+V47 pair is mechanically stable but not prize-contending at the current ladder state. With roughly one week remaining, final-week research must target a genuinely higher-ceiling persistent-policy architecture while preserving the current pair until a new candidate passes offline and closed-loop gates.
+
+### V29A — ACTIVE / RECURRENT STRUCTURAL TEACHER DISTILLATION
+
+Protocol:
+`docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-23.md`.
+
+Binding workflow:
+**`35876362346`**.
+
+Rationale:
+- V25A proved finite shadow prefixes <=256 do not preserve W/L headroom; persistent whole-episode policy is required;
+- V27B proved legal history can reconstruct the rank-1 teacher state;
+- V27C/V27C2 proved tree/compact structural distillation is too weak, especially late;
+- V28N shows the protected pair alone is >1000 rating points below the current Top-10 threshold.
+
+Frozen V29A architecture:
+- immutable existing V27C2 datasets only — no new teacher acquisition;
+- rank-1 V56 teacher labels;
+- legal 114-feature observation sequence;
+- 1-layer GRU, hidden size 64;
+- structural UNIT decoder using actor-local legal features;
+- structural 10-slot MARKET decoder;
+- no opponent identity/source/rank/SHA/seed/EpisodeId feature;
+- no teacher call at inference;
+- exact 8 epochs, AdamW 1e-3, weight decay 1e-4, clip 1.0, seed 20260923;
+- V27C2 split preserved exactly.
+
+Routing:
+- STRONG PASS or CAUSAL-ELIGIBLE => freeze epoch-8 model and open exactly one fresh V29B closed-loop causal benchmark against ALL3/current immutable frontier;
+- FAIL => no hidden-size/epoch/loss-weight sweep; close this teacher-distillation family and return to final-slot preservation or a separately preregistered genuinely different architecture.
+
+Current execution:
+workflow `35876362346` is running; immutable V27C2 dataset download PASS and frozen training/evaluation is active.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** resolve V29A workflow `35876362346`; repair mechanics only if needed. If V29A is STRONG or CAUSAL-ELIGIBLE, autonomously build and launch V29B, but do not mutate Kaggle slots without explicit user authorization.
+
 ## Binding update — 2026-09-23 — V28J/V28K/V28L COMPLETE / PHYSICAL IMITATION CLOSED
 
 **This block supersedes lower current-action sections.**
