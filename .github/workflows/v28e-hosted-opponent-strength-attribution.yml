@@ -1,4 +1,4 @@
-name: v28e-r2-hosted-opponent-strength-attribution
+name: v28e-r3-hosted-opponent-strength-attribution
 'on':
   push:
     branches:
@@ -68,7 +68,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: v28e-r2-hosted-opponent-strength-attribution
+          name: v28e-r3-hosted-opponent-strength-attribution
           path: |
             artifacts/v28e/**
             leaderboard.csv
