@@ -1,0 +1,38 @@
+name: v28g-all3-residual-hard-core-census
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v28g-all3-residual-hard-core-census.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  census:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/download-artifact@v4
+        with:
+          name: v28f-all3-hedge-complementarity
+          path: v28f
+          run-id: 35807910104
+          github-token: ${{ github.token }}
+      - name: Run frozen residual hard-core census
+        shell: bash
+        run: |
+          set -euo pipefail
+          python tools/v28g_residual_hard_core_census.py             --input v28f/V28F_ALL3_HEDGE_COMPLEMENTARITY.json             --out artifacts/v28g/V28G_RESIDUAL_HARD_CORE.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28g-all3-residual-hard-core-census
+          path: artifacts/v28g/*.json
+          retention-days: 30
+          if-no-files-found: warn
