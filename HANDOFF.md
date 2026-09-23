@@ -2,6 +2,53 @@
 
 
 
+
+## Binding update — 2026-09-22 — V28F ALL3-CENTERED HEDGE COMPLEMENTARITY ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+V28E established that hosted raw W/L is materially confounded by opponent strength, so hedge selection is now being tested directly on identical fresh contexts.
+
+### V28F — ACTIVE
+
+Protocol:
+`docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_PROTOCOL_2026-09-22.md`.
+
+Binding workflow:
+**`35807910104`**.
+
+Frozen primary:
+- ALL3.
+
+Frozen hedge candidates:
+- exact V47;
+- O-RW1;
+- exact CR053;
+- exact CR029.
+
+The selector optimizes best-of-two complementarity with ALL3, not historical hosted score. A non-V47 replacement is material only if it adds at least 3 more ALL3-nonwin -> hedge-win conversions than V47 and has complement source breadth no lower than V47.
+
+Fresh frontier:
+- new current Top-30 snapshot;
+- SHA deduplication;
+- up to 12 executable unique sources, minimum 8;
+- seeds 80401..80406;
+- both seats;
+- identical contexts for ALL3 and all four hedges.
+
+Exact lineage gates:
+- CR053 archive SHA `095080e791bd8d58369893c1a421beb57b7f64c2808c011f576e09684ffb9a15`;
+- CR053 embedded main SHA `6e5d298797117bc72ad43c06b1d6a37634ad33a16a5c371c8c7e1a0aa5fc4519`;
+- CR029 canonical tape SHA `6c56840b9510e0688da2fbec47e8f89583c63a0124fa4c8801fa5d93c197226b`.
+
+Current Kaggle pair remains unchanged:
+- primary ALL3 `56367770`;
+- hedge V47 `56466970`.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** resolve workflow `35807910104`. Continue V47 read-only maturity monitoring to >=169 episodes in parallel. Any actual hedge-slot replacement still requires a separate slot/quota preflight and explicit user authorization.
+
 ## Binding update — 2026-09-22 — V28E COMPLETE / MATCHMAKING CONFOUND CONFIRMED
 
 **This block supersedes lower current-action sections.**
