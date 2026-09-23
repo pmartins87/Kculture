@@ -1,0 +1,41 @@
+name: v28jk-canonical-sync
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28jk-canonical-sync.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+          fetch-depth: 0
+      - name: Update canonical sources
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          marker='## Binding update — 2026-09-23 — V28J/V28K COMPLETE / V28L PHYSICAL TEMPORAL LOCALIZATION ACTIVE'
+          block='''\n\n## Binding update — 2026-09-23 — V28J/V28K COMPLETE / V28L PHYSICAL TEMPORAL LOCALIZATION ACTIVE\n\n**This block supersedes lower current-action sections.**\n\n### V28J — COMPLETE\n\nWorkflow `35822283032`: mechanical PASS. Decision **`V28J_BOUNDED_LEGAL_HISTORY_RISK_PHENOTYPE_NOT_IDENTIFIABLE`**. Held-out precision 0.5882, recall 1.0, specificity 0.5, balanced accuracy 0.75, confusion matrix [[14,14],[0,20]]. Simple classifier-based risk gating on the 384–480 legal-history window is closed; no retuning. Result: `docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md`.\n\n### V28K — COMPLETE\n\nWorkflow `35822623519`: mechanical PASS, failures 0. Decision **`V28K_NO_MIDGAME_WINDOW_WL_HEADROOM`**. MARKET_WINDOW and FULL_WINDOW produced 0 loss-to-win flips. PHYSICAL_WINDOW produced 4 flips across 2 sources but only seed 80401, failing the frozen >=2-seed rule despite mean score delta +0.060606. Result: `docs/strategy/V28K_MIDGAME_DOMAIN_UPPER_BOUND_RESULT_2026-09-23.md`.\n\n### Combined binding interpretation\n\nThe two independently frozen gates agree that 384–479 should not be rescued by classifier retuning or weakened causal thresholds. Direct action/mechanism discovery continues. The physical domain is the only causal hint, but V28K shows the midgame window itself lacks robust W/L headroom.\n\n### V28L — ACTIVE\n\nProtocol: `docs/strategy/V28L_PHYSICAL_CAUSAL_TEMPORAL_LOCALIZATION_PROTOCOL_2026-09-23.md`. V28L keeps the exact 66 V28F ALL3 residual losses and exact BASE parity, and tests the same physical upper-bound intervention only in frozen non-overlapping windows outside V28K: EARLY 0–191, PRE_MID 192–383, LATE 480–719. Same robustness rule: >=4 loss-to-win flips across >=2 sources and >=2 seeds with mean score delta >0.\n\nHosted pair remains exact V47 `56466970` + ALL3 `56367770`. No Kaggle submission, deletion or reordering is authorized.\n'''
+          for fn in ['STATUS.md','ROADMAP.md','HANDOFF.md']:
+              p=Path(fn);s=p.read_text()
+              if marker not in s:
+                  i=s.find('\n');p.write_text(s[:i+1]+block+s[i+1:])
+          p=Path('data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json');d=json.loads(p.read_text())
+          d['v28j']={'status':'COMPLETE','workflow':35822283032,'decision':'V28J_BOUNDED_LEGAL_HISTORY_RISK_PHENOTYPE_NOT_IDENTIFIABLE','mechanical_pass':True,'holdout_precision':0.5882352941176471,'holdout_recall':1.0,'holdout_specificity':0.5,'holdout_balanced_accuracy':0.75,'result_doc':'docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md'}
+          d['v28k']={'status':'COMPLETE','workflow':35822623519,'decision':'V28K_NO_MIDGAME_WINDOW_WL_HEADROOM','mechanical_pass':True,'market_loss_to_win_flips':0,'physical_loss_to_win_flips':4,'physical_flip_sources':2,'physical_flip_seeds':1,'physical_mean_score_delta':0.06060606060606061,'full_loss_to_win_flips':0,'result_doc':'docs/strategy/V28K_MIDGAME_DOMAIN_UPPER_BOUND_RESULT_2026-09-23.md'}
+          d['v28l']={'status':'ACTIVE','protocol':'docs/strategy/V28L_PHYSICAL_CAUSAL_TEMPORAL_LOCALIZATION_PROTOCOL_2026-09-23.md','windows':{'EARLY':[0,191],'PRE_MID':[192,383],'LATE':[480,719]},'automatic_kaggle_submission':False}
+          d['next_stage']='resolve V28L physical temporal localization; preserve exact hosted pair V47 56466970 + ALL3 56367770; no Kaggle mutation'
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'kculture-research-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git diff --cached --quiet && exit 0
+          git commit -m 'Bind V28J V28K results and V28L route'
+          git push origin HEAD:research/prize-solver-v0
