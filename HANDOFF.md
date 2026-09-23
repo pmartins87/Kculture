@@ -5,6 +5,61 @@
 
 
 
+
+## Binding update — 2026-09-22 — V28H MATCHED HARD-vs-EASY TRACE ACTIVE / V47 127-EPISODE CHECKPOINT
+
+**This block supersedes lower current-action sections.**
+
+### Hosted read-only checkpoint
+
+Snapshot around `2026-09-23T03:05Z`:
+- exact V47 `56466970`: **127 episodes**, publicScore **1864.7**, COMPLETE;
+- ALL3 `56367770`: **438 episodes**, publicScore **1932.0**, COMPLETE;
+- latest-two remains exactly V47 `56466970` + ALL3 `56367770`;
+- O-RW1 `56336027` remains outside latest two.
+
+V47 has not yet reached the next frozen maturity checkpoint of 169 episodes.
+
+### V28H — ACTIVE
+
+Protocol:
+`docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_PROTOCOL_2026-09-22.md`.
+
+Binding workflow:
+**`35812876571`**.
+
+Frozen inputs:
+- V28F immutable current-frontier snapshot;
+- V28F exact aggregate rows;
+- V28G exact deterministic hard trace targets.
+
+Matched-control rule:
+- zero-loss sources only;
+- controls sorted by representative rank then SHA;
+- each hard target paired with a zero-loss source at the **same seed and same seat**.
+
+Mechanical contract:
+- every hard/control rerun must reproduce the exact V28F ALL3 terminal score and margin;
+- no source reacquisition;
+- no target/control reselection;
+- no Kaggle credentials inside episode execution.
+
+Trace outputs:
+- phase/checkpoint ALL3 money gap;
+- public farm composition;
+- own legal private shed/seeds;
+- ALL3 and opponent action allocation;
+- O-RW1/O-TW1/O-LQ2 event timing.
+
+Frozen routing:
+- earliest selected checkpoint where median paired hard-minus-control money-gap difference <= -1000;
+- otherwise most negative median checkpoint;
+- route as EARLY / MIDGAME / LATE structural separation.
+
+Current Kaggle pair remains unchanged and no Kaggle mutation is authorized.
+
+**Binding immediate action:** resolve workflow `35812876571`. If mechanics pass, record V28H and launch legal-observation mechanism discovery around the selected separation checkpoint/action window. Continue V47 read-only monitoring to >=169 episodes in parallel.
+
 ## Binding update — 2026-09-22 — V28G COMPLETE / SOURCE-CLUSTERED UNIVERSAL HARD CORE
 
 **This block supersedes lower current-action sections.**
