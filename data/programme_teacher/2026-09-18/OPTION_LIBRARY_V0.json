@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V29A workflow 35876362346. If STRONG PASS or CAUSAL-ELIGIBLE, freeze epoch-8 model and autonomously launch V29B fresh closed-loop causal benchmark versus ALL3/current immutable frontier. Never mutate Kaggle slots without explicit user authorization.",
+  "next_stage": "Resolve V30A workflow 35877442921. If a public persistent policy passes the frozen gate, preserve exact public ref/SHA/package and attribution and launch V30B independent validation/package-parity. Never mutate Kaggle slots without explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2769,14 +2769,19 @@
     "kaggle_mutation_authorized": false
   },
   "v29a": {
-    "status": "ACTIVE",
+    "status": "CLOSED_FAIL",
     "workflow": 35876362346,
-    "protocol": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-23.md",
-    "architecture": "1-layer GRU(114->64) + structural UNIT and MARKET-SLOT decoders",
-    "data_source_workflow": 35682535729,
-    "epochs": 8,
-    "runtime_identity_features": false,
-    "teacher_call_at_inference": false,
+    "decision": "V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL",
+    "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
+    "holdout": {
+      "complete_action_parity": 0.0712795549,
+      "market_parity": 0.37297172,
+      "farmer_parity": 0.7450741771,
+      "hands_parity": 0.1500927214,
+      "minimum_source_complete_action_parity": 0.0702364395,
+      "minimum_stage_complete_action_parity": 0.0034722222
+    },
+    "tuning_authorized": false,
     "kaggle_mutation_authorized": false
   },
   "v29a_recurrent_structural_distillation_2026_09_23": {
@@ -2796,5 +2801,30 @@
     "holdout_unit_sample_accuracy": 0.6661316014440611,
     "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
     "route": "CLOSE_NO_RETUNING_NO_V29B"
+  },
+  "v30a": {
+    "status": "ACTIVE_READONLY",
+    "workflow": 35877442921,
+    "protocol": "docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_PROTOCOL_2026-09-23.md",
+    "public_code_basis": "Kaggriculture Rule 6.b public Competition Code only",
+    "seeds": [
+      80501,
+      80502,
+      80503,
+      80504
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "promotion_gate": {
+      "score_rate_delta_vs_all3": 0.08,
+      "mean_paired_score_delta": 0.08,
+      "positive_source_breadth": 4,
+      "positive_seed_breadth": 3,
+      "positive_contexts_gt_negative": true,
+      "both_seats": true
+    },
+    "kaggle_mutation_authorized": false
   }
 }
