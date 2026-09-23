@@ -1,6 +1,25 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-23 — V28J/V28K/V28L COMPLETE / PHYSICAL IMITATION CLOSED
+
+**This block supersedes lower current-action sections.**
+
+### V28J — COMPLETE
+Workflow `35822283032`: mechanics PASS. Decision **`V28J_BOUNDED_LEGAL_HISTORY_RISK_PHENOTYPE_NOT_IDENTIFIABLE`**. Held-out precision 0.5882, recall 1.0, specificity 0.5, balanced accuracy 0.75. Simple classifier-based risk gating on 384–480 is closed without retuning. Result: `docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md`.
+
+### V28K — COMPLETE
+Workflow `35822623519`: mechanics PASS. Decision **`V28K_NO_MIDGAME_WINDOW_WL_HEADROOM`**. MARKET and FULL had zero loss-to-win flips. PHYSICAL had 4 flips across 2 sources but only one seed. Result: `docs/strategy/V28K_MIDGAME_DOMAIN_UPPER_BOUND_RESULT_2026-09-23.md`.
+
+### V28L — COMPLETE
+Workflow `35827398179`: mechanics PASS, failures 0. Decision **`V28L_NO_ROBUST_PHYSICAL_TEMPORAL_HEADROOM`**. EARLY had 0 loss-to-win flips. PRE_MID and LATE each had 4 flips across 2 sources and both seats with mean score delta +0.060606, but all flips were concentrated in one seed, failing the frozen >=2-seed rule. Result: `docs/strategy/V28L_PHYSICAL_CAUSAL_TEMPORAL_LOCALIZATION_RESULT_2026-09-23.md`.
+
+### Binding route
+V28K+V28L exhaust opponent-action physical imitation across the full episode partition without weakening thresholds. That rescue path is closed. Return to broader first-party mechanism discovery/final competition strategy. Opponent identity/source/rank/SHA remains offline forensic metadata only and is forbidden as a runtime feature.
+
+Hosted pair remains exactly V47 `56466970` + ALL3 `56367770`. No Kaggle submission, deletion or reordering is authorized.
+
+
 
 
 

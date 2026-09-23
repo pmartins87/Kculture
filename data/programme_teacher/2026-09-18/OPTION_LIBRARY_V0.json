@@ -21,24 +21,24 @@
   },
   "current_hosted_pair": {
     "all3": {
-      "submission_id": 56367770,
-      "status": "COMPLETE",
-      "role": "primary",
+      "episodes_at_snapshot": 438,
       "latest_observed_rating": 1932,
-      "episodes_at_snapshot": 438
-    },
-    "v47": {
-      "submission_id": 56466970,
+      "role": "primary",
       "status": "COMPLETE",
-      "role": "hedge",
-      "latest_observed_rating": 1864.7,
-      "episodes_at_snapshot": 127
+      "submission_id": 56367770
     },
-    "snapshot_utc": "2026-09-23T03:05:00+00:00",
     "latest_two": [
       56466970,
       56367770
-    ]
+    ],
+    "snapshot_utc": "2026-09-23T03:05:00+00:00",
+    "v47": {
+      "episodes_at_snapshot": 127,
+      "latest_observed_rating": 1864.7,
+      "role": "hedge",
+      "status": "COMPLETE",
+      "submission_id": 56466970
+    }
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V28J workflow 35822283032 exactly as frozen; if identifiable route to phenotype-positive mechanism/action discovery, otherwise close simple classifier risk gating and route to direct matched hard-vs-control mechanism/action discovery. Preserve ALL3+V47; continue V47 maturity monitoring to >=169.",
+  "next_stage": "broader first-party mechanism discovery/final competition strategy; physical imitation closed; preserve exact hosted pair V47 56466970 + ALL3 56367770; no Kaggle mutation",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2239,13 +2239,13 @@
   "v25a": {
     "decision": "V25A_PERSISTENT_POLICY_REQUIRED",
     "finite_horizon_score_improvements": {
-      "4": 0,
-      "8": 0,
-      "16": 0,
-      "32": 0,
-      "64": 0,
       "128": 0,
-      "256": 0
+      "16": 0,
+      "256": 0,
+      "32": 0,
+      "4": 0,
+      "64": 0,
+      "8": 0
     },
     "full_shadow_gate_pass": true,
     "h720": {
@@ -2590,147 +2590,168 @@
     "workflow": 35781539795
   },
   "v28e": {
-    "status": "COMPLETE",
-    "workflow": 35807341491,
-    "result_doc": "docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_RESULT_2026-09-22.md",
-    "artifact_id": 10728251773,
-    "artifact_digest": "sha256:48b3daaec4065e5241fac72219888d889bb3998f389caa7e58494c733892b91f",
-    "decision": "V28E_ALL3_FACED_MATERIALLY_STRONGER_POPULATION",
-    "leaderboard_teams": 9872,
-    "v47_mapping_games": "89/89",
     "all3_mapping_games": "23/23",
-    "v47_mean_opponent_score": 1892.5528089887641,
-    "v47_median_opponent_score": 1897.2,
     "all3_mean_opponent_score": 2239.3739130434783,
     "all3_median_opponent_score": 2147,
+    "artifact_digest": "sha256:48b3daaec4065e5241fac72219888d889bb3998f389caa7e58494c733892b91f",
+    "artifact_id": 10728251773,
+    "decision": "V28E_ALL3_FACED_MATERIALLY_STRONGER_POPULATION",
+    "kaggle_mutation_authorized": false,
+    "leaderboard_teams": 9872,
     "mean_difficulty_delta_all3_minus_v47": 346.82110405471417,
     "median_difficulty_delta_all3_minus_v47": 249.8,
-    "kaggle_mutation_authorized": false
+    "result_doc": "docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_RESULT_2026-09-22.md",
+    "status": "COMPLETE",
+    "v47_mapping_games": "89/89",
+    "v47_mean_opponent_score": 1892.5528089887641,
+    "v47_median_opponent_score": 1897.2,
+    "workflow": 35807341491
   },
   "v28f": {
-    "status": "COMPLETE",
-    "workflow": 35807910104,
-    "result_doc": "docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_RESULT_2026-09-22.md",
-    "decision": "V28F_NO_MATERIAL_HEDGE_REPLACEMENT",
-    "contexts_per_candidate": 144,
     "all3": {
-      "wins": 78,
       "losses": 66,
-      "ties": 0,
+      "mean_margin": 168.04166666666666,
       "score_rate": 0.5416666666666666,
-      "mean_margin": 168.04166666666666
+      "ties": 0,
+      "wins": 78
     },
+    "contexts_per_candidate": 144,
+    "decision": "V28F_NO_MATERIAL_HEDGE_REPLACEMENT",
     "hedge_complementarity": {
-      "V47": {
+      "CR029": {
         "nonwin_to_win": 0,
         "source_breadth": 0,
-        "standalone_score_rate": 0.5138888888888888
-      },
-      "ORW1": {
-        "nonwin_to_win": 0,
-        "source_breadth": 0,
-        "standalone_score_rate": 0.5138888888888888
+        "standalone_score_rate": 0
       },
       "CR053": {
         "nonwin_to_win": 0,
         "source_breadth": 0,
         "standalone_score_rate": 0.027777777777777776
       },
-      "CR029": {
+      "ORW1": {
         "nonwin_to_win": 0,
         "source_breadth": 0,
-        "standalone_score_rate": 0
+        "standalone_score_rate": 0.5138888888888888
+      },
+      "V47": {
+        "nonwin_to_win": 0,
+        "source_breadth": 0,
+        "standalone_score_rate": 0.5138888888888888
       }
     },
-    "selector_winner": "ORW1",
+    "kaggle_mutation_authorized": false,
     "material_replacement_gate_pass": false,
-    "kaggle_mutation_authorized": false
+    "result_doc": "docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_RESULT_2026-09-22.md",
+    "selector_winner": "ORW1",
+    "status": "COMPLETE",
+    "workflow": 35807910104
   },
   "v28g": {
-    "status": "COMPLETE",
-    "workflow": 35812527508,
-    "result_doc": "docs/strategy/V28G_ALL3_RESIDUAL_HARD_CORE_RESULT_2026-09-22.md",
-    "decision": "V28G_SOURCE_CLUSTERED_HARD_CORE",
-    "contexts": 144,
     "all3_residual_losses": 66,
-    "universal_hard_losses": 66,
-    "source_concentration": {
-      "top4_share": 0.696969696969697,
-      "systematic_sources_ge9_losses": 6,
-      "zero_loss_sources": 6
-    },
     "by_seat": {
       "0": 33,
       "1": 33
     },
+    "contexts": 144,
+    "decision": "V28G_SOURCE_CLUSTERED_HARD_CORE",
+    "kaggle_mutation_authorized": false,
     "loss_severity": {
       "close": 4,
       "medium": 50,
       "severe": 12
     },
     "overlay_margin_effect_on_all3_losses": {
-      "V47": {
-        "all3_better": 62,
-        "all3_worse": 4,
-        "mean_delta": 89.9090909090909,
-        "median_delta": 61
-      },
       "ORW1": {
         "all3_better": 62,
         "all3_worse": 4,
         "mean_delta": 90.39393939393939,
         "median_delta": 54
+      },
+      "V47": {
+        "all3_better": 62,
+        "all3_worse": 4,
+        "mean_delta": 89.9090909090909,
+        "median_delta": 61
       }
     },
-    "kaggle_mutation_authorized": false
+    "result_doc": "docs/strategy/V28G_ALL3_RESIDUAL_HARD_CORE_RESULT_2026-09-22.md",
+    "source_concentration": {
+      "systematic_sources_ge9_losses": 6,
+      "top4_share": 0.696969696969697,
+      "zero_loss_sources": 6
+    },
+    "status": "COMPLETE",
+    "universal_hard_losses": 66,
+    "workflow": 35812527508
   },
   "v28h": {
-    "status": "COMPLETE",
-    "workflow": 35813287407,
     "decision": "V28H_MIDGAME_STRUCTURAL_SEPARATION",
-    "selected_checkpoint": 480,
     "explanatory_window": [
       384,
       479
     ],
+    "kaggle_mutation_authorized": false,
     "result_doc": "docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md",
-    "kaggle_mutation_authorized": false
+    "selected_checkpoint": 480,
+    "status": "COMPLETE",
+    "workflow": 35813287407
   },
   "v28i": {
-    "status": "COMPLETE",
-    "workflow": 35818084144,
     "decision": "V28I_LEGAL_STATE_RISK_PHENOTYPE_NOT_IDENTIFIABLE",
     "holdout_metrics": {
+      "balanced_accuracy": 0.7857142857,
       "precision": 0.625,
       "recall": 1,
-      "specificity": 0.5714285714,
-      "balanced_accuracy": 0.7857142857
+      "specificity": 0.5714285714
     },
+    "kaggle_mutation_authorized": false,
+    "result_doc": "docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md",
+    "status": "COMPLETE",
     "used_features": [
       "opp_money",
       "market_inventory:FERTILIZER",
       "opp_consecutive_need"
     ],
-    "result_doc": "docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md",
-    "kaggle_mutation_authorized": false
+    "workflow": 35818084144
   },
   "v28j": {
-    "status": "ACTIVE_READONLY",
-    "workflow": 35822283032,
-    "protocol": "docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-23.md",
-    "checkpoints": [
-      384,
-      416,
-      448,
-      480
-    ],
-    "feature_count": 798,
-    "model": {
-      "max_depth": 3,
-      "min_samples_leaf": 8,
-      "class_weight": "balanced",
-      "random_state": 20260922
-    },
-    "kaggle_mutation_authorized": false
+    "decision": "V28J_BOUNDED_LEGAL_HISTORY_RISK_PHENOTYPE_NOT_IDENTIFIABLE",
+    "holdout_balanced_accuracy": 0.75,
+    "holdout_precision": 0.5882352941176471,
+    "holdout_recall": 1.0,
+    "holdout_specificity": 0.5,
+    "mechanical_pass": true,
+    "result_doc": "docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md",
+    "status": "COMPLETE",
+    "workflow": 35822283032
+  },
+  "v28k": {
+    "decision": "V28K_NO_MIDGAME_WINDOW_WL_HEADROOM",
+    "full_loss_to_win_flips": 0,
+    "market_loss_to_win_flips": 0,
+    "mechanical_pass": true,
+    "physical_flip_seeds": 1,
+    "physical_flip_sources": 2,
+    "physical_loss_to_win_flips": 4,
+    "physical_mean_score_delta": 0.06060606060606061,
+    "result_doc": "docs/strategy/V28K_MIDGAME_DOMAIN_UPPER_BOUND_RESULT_2026-09-23.md",
+    "status": "COMPLETE",
+    "workflow": 35822623519
+  },
+  "v28l": {
+    "decision": "V28L_NO_ROBUST_PHYSICAL_TEMPORAL_HEADROOM",
+    "early_loss_to_win_flips": 0,
+    "failures": 0,
+    "late_flip_seeds": 1,
+    "late_flip_sources": 2,
+    "late_loss_to_win_flips": 4,
+    "mechanical_pass": true,
+    "pre_mid_flip_seeds": 1,
+    "pre_mid_flip_sources": 2,
+    "pre_mid_loss_to_win_flips": 4,
+    "result_doc": "docs/strategy/V28L_PHYSICAL_CAUSAL_TEMPORAL_LOCALIZATION_RESULT_2026-09-23.md",
+    "selected_window": null,
+    "status": "COMPLETE",
+    "workflow": 35827398179
   }
 }
