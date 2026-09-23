@@ -254,7 +254,7 @@ def main():
             out.sort(key=lambda x:(-abs(float(x["mean_hard_minus_control"])),x["metric"]))
 
         def evsum(rows):
-            kind=collections.Counter();first=defaultdict(list)
+            kind=collections.Counter();first=collections.defaultdict(list)
             for r in rows:
                 for e in r["option_events"]:
                     for k in e["kinds"]:
