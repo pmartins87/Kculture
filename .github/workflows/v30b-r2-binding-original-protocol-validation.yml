@@ -1,0 +1,141 @@
+name: v30b-r2-binding-original-protocol-validation
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v30b-r2-binding-original-protocol-validation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install -r requirements.txt
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download immutable V30A snapshot
+        uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - name: Package exact candidate and run 8-of-8 parity
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v30b-binding
+          python tools/v30b_binding_package_parity.py             --v30a-snapshot artifacts/v30a-snapshot             --package-dir artifacts/v30b-binding/package             --archive artifacts/v30b-binding/V30B_CANDIDATE.tar.gz             --out artifacts/v30b-binding/V30B_PACKAGE_PARITY.json
+      - name: Acquire fresh binding frontier
+        env:
+          KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v30b-binding-frontier-result artifacts/v30b-binding-frontier
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v30b-binding-frontier-result/V30B_BINDING_FRONTIER_RESULT.json             --raw artifacts/v30b-binding-frontier-result/TOP30_RAW.csv             --snapshot-dir artifacts/v30b-binding-frontier
+          python - <<'PY'
+          import json
+          d=json.load(open('artifacts/v30b-binding-frontier-result/V30B_BINDING_FRONTIER_RESULT.json'))
+          assert d.get('decision')=='V28B_FRONTIER_SNAPSHOT_READY',d
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-binding/**
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v30b-binding-frontier
+          path: artifacts/v30b-binding-frontier/**
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v30b-binding-frontier-result
+          path: artifacts/v30b-binding-frontier-result/**
+          retention-days: 30
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-binding
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-frontier
+          path: artifacts/v30b-binding-frontier
+      - name: Run binding validation shard
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v30b-binding-shard
+          python tools/v30b_binding_validation_shard.py             --package-dir artifacts/v30b-binding/package             --fresh-snapshot artifacts/v30b-binding-frontier             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v30b-binding-shard/V30B_BINDING_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30b-binding-shard-${{ matrix.shard_index }}
+          path: artifacts/v30b-binding-shard/*.json
+          retention-days: 30
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v30b-binding-shard-*
+          path: artifacts/v30b-binding-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-binding
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-frontier-result
+          path: artifacts/v30b-binding-frontier-result
+      - name: Aggregate binding V30B
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v30b-binding-final
+          python tools/aggregate_v30b_binding_validation.py             --input-dir artifacts/v30b-binding-shards             --preflight artifacts/v30b-binding/V30B_PACKAGE_PARITY.json             --frontier-result artifacts/v30b-binding-frontier-result/V30B_BINDING_FRONTIER_RESULT.json             --out artifacts/v30b-binding-final/V30B_BINDING_ORIGINAL_PROTOCOL_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30b-binding-original-protocol-result
+          path: artifacts/v30b-binding-final/*.json
+          retention-days: 30
+          if-no-files-found: error
