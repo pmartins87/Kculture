@@ -21,24 +21,24 @@
   },
   "current_hosted_pair": {
     "all3": {
-      "submission_id": 56367770,
-      "status": "COMPLETE",
-      "role": "primary",
+      "episodes_at_snapshot": 482,
       "latest_observed_rating": 1862.4,
-      "episodes_at_snapshot": 482
-    },
-    "v47": {
-      "submission_id": 56466970,
+      "role": "primary",
       "status": "COMPLETE",
-      "role": "hedge",
-      "latest_observed_rating": 1828.7,
-      "episodes_at_snapshot": 175
+      "submission_id": 56367770
     },
-    "snapshot_utc": "2026-09-23T14:37:35.015940+00:00",
     "latest_two": [
       56466970,
       56367770
-    ]
+    ],
+    "snapshot_utc": "2026-09-23T14:37:35.015940+00:00",
+    "v47": {
+      "episodes_at_snapshot": 175,
+      "latest_observed_rating": 1828.7,
+      "role": "hedge",
+      "status": "COMPLETE",
+      "submission_id": 56466970
+    }
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -2239,13 +2239,13 @@
   "v25a": {
     "decision": "V25A_PERSISTENT_POLICY_REQUIRED",
     "finite_horizon_score_improvements": {
-      "4": 0,
-      "8": 0,
-      "16": 0,
-      "32": 0,
-      "64": 0,
       "128": 0,
-      "256": 0
+      "16": 0,
+      "256": 0,
+      "32": 0,
+      "4": 0,
+      "64": 0,
+      "8": 0
     },
     "full_shadow_gate_pass": true,
     "h720": {
@@ -2755,76 +2755,98 @@
     "workflow": 35827398179
   },
   "v28n": {
-    "status": "COMPLETE",
-    "workflow": 35875524017,
-    "result_doc": "docs/strategy/V28N_FINAL_WEEK_STRATEGY_AUDIT_RESULT_2026-09-23.md",
-    "team_rank": 1916,
     "active_best_score": 1862.4,
-    "top10_threshold": 2959.8,
-    "gap_to_top10": 1097.4,
-    "top1_score": 3094.4,
-    "gap_to_top1": 1232,
-    "leaderboard_teams": 9910,
     "final_submission_deadline_utc": "2026-09-30T23:59:00Z",
-    "kaggle_mutation_authorized": false
+    "gap_to_top1": 1232,
+    "gap_to_top10": 1097.4,
+    "kaggle_mutation_authorized": false,
+    "leaderboard_teams": 9910,
+    "result_doc": "docs/strategy/V28N_FINAL_WEEK_STRATEGY_AUDIT_RESULT_2026-09-23.md",
+    "status": "COMPLETE",
+    "team_rank": 1916,
+    "top10_threshold": 2959.8,
+    "top1_score": 3094.4,
+    "workflow": 35875524017
   },
   "v29a": {
-    "status": "CLOSED_FAIL",
-    "workflow": 35876362346,
     "decision": "V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL",
-    "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
     "holdout": {
       "complete_action_parity": 0.0712795549,
-      "market_parity": 0.37297172,
       "farmer_parity": 0.7450741771,
       "hands_parity": 0.1500927214,
+      "market_parity": 0.37297172,
       "minimum_source_complete_action_parity": 0.0702364395,
       "minimum_stage_complete_action_parity": 0.0034722222
     },
+    "kaggle_mutation_authorized": false,
+    "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
+    "status": "CLOSED_FAIL",
     "tuning_authorized": false,
-    "kaggle_mutation_authorized": false
+    "workflow": 35876362346
   },
   "v29a_recurrent_structural_distillation_2026_09_23": {
-    "workflow": 35876362346,
-    "source_data_workflow": 35682535729,
-    "mechanical_pass": true,
-    "decision": "V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL",
-    "strong_pass": false,
     "causal_eligible": false,
+    "decision": "V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL",
     "holdout_complete_action_parity": 0.07127955493741307,
-    "holdout_minimum_source_complete_action_parity": 0.0702364394993046,
-    "holdout_minimum_stage_complete_action_parity": 0.003472222222222222,
     "holdout_farmer_parity": 0.7450741770978211,
     "holdout_hands_parity": 0.1500927213722763,
     "holdout_market_parity": 0.37297171998145573,
     "holdout_market_slot_accuracy": 0.9000811312007417,
+    "holdout_minimum_source_complete_action_parity": 0.0702364394993046,
+    "holdout_minimum_stage_complete_action_parity": 0.003472222222222222,
     "holdout_unit_sample_accuracy": 0.6661316014440611,
+    "mechanical_pass": true,
     "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
-    "route": "CLOSE_NO_RETUNING_NO_V29B"
+    "route": "CLOSE_NO_RETUNING_NO_V29B",
+    "source_data_workflow": 35682535729,
+    "strong_pass": false,
+    "workflow": 35876362346
   },
   "v30a": {
-    "status": "ACTIVE_READONLY",
-    "workflow": 35877442921,
+    "kaggle_mutation_authorized": false,
+    "promotion_gate": {
+      "both_seats": true,
+      "mean_paired_score_delta": 0.08,
+      "positive_contexts_gt_negative": true,
+      "positive_seed_breadth": 3,
+      "positive_source_breadth": 4,
+      "score_rate_delta_vs_all3": 0.08
+    },
     "protocol": "docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_PROTOCOL_2026-09-23.md",
     "public_code_basis": "Kaggriculture Rule 6.b public Competition Code only",
+    "seats": [
+      0,
+      1
+    ],
     "seeds": [
       80501,
       80502,
       80503,
       80504
     ],
-    "seats": [
+    "status": "ACTIVE_READONLY",
+    "workflow": 35877442921
+  },
+  "v30a_public_persistent_policy_benchmark_2026_09_23": {
+    "all3_score_rate": 0.5833333333333334,
+    "decision": "V30A_PUBLIC_PERSISTENT_POLICY_CANDIDATE_READY",
+    "failures": 0,
+    "mean_paired_margin_delta": 3932.5104166666665,
+    "mean_paired_score_delta": 0.3333333333333333,
+    "mechanical_pass": true,
+    "negative_contexts": 0,
+    "next": "V30B independent fresh validation active; no Kaggle mutation",
+    "positive_contexts": 34,
+    "positive_seats": [
       0,
       1
     ],
-    "promotion_gate": {
-      "score_rate_delta_vs_all3": 0.08,
-      "mean_paired_score_delta": 0.08,
-      "positive_source_breadth": 4,
-      "positive_seed_breadth": 3,
-      "positive_contexts_gt_negative": true,
-      "both_seats": true
-    },
-    "kaggle_mutation_authorized": false
+    "positive_seed_breadth": 4,
+    "positive_source_breadth": 5,
+    "result_doc": "docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_RESULT_2026-09-23.md",
+    "selected_ref": "arsgorynich/herd-safe-v3-experimental-risk-aware-feed",
+    "selected_score_rate": 0.9166666666666666,
+    "selected_sha": "4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01",
+    "workflow": 35877442921
   }
 }

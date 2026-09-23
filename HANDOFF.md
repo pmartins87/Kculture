@@ -1,5 +1,16 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-23 — V30A COMPLETE / V30B INDEPENDENT VALIDATION ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+V30A workflow `35877442921` completed SUCCESS with mechanics PASS and zero failures. Binding decision: **`V30A_PUBLIC_PERSISTENT_POLICY_CANDIDATE_READY`**. Frozen selector winner: public ref `arsgorynich/herd-safe-v3-experimental-risk-aware-feed`, exact SHA-256 `4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01`, V30A score rate 0.9166666667 versus ALL3 0.5833333333, paired score delta +0.3333333333, paired mean margin delta +3932.5104167, 34 positive / 0 negative contexts, source breadth 5, seed breadth 4/4, both seats. Result: `docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_RESULT_2026-09-23.md`.
+
+V30B was preregistered before outcomes at `docs/strategy/V30B_INDEPENDENT_PUBLIC_POLICY_VALIDATION_PROTOCOL_2026-09-23.md` and launched. It uses the exact immutable V30A candidate package/SHA, a separately reacquired fresh current frontier, unseen seeds 80601..80604, both seats, and the same frozen promotion thresholds. It is offline only.
+
+V29A remains CLOSED and must not be tuned/reopened. Protected hosted pair remains exact V47 `56466970` + ALL3 `56367770`; no Kaggle submission, deletion, or reordering is authorized.
+
+
 
 
 ## Binding update — 2026-09-23 — V29A CLOSED / V30A DIRECT PUBLIC PERSISTENT POLICY BENCHMARK ACTIVE
