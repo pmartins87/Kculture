@@ -1,0 +1,36 @@
+name: v28h-binding-sync
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28h-binding-sync.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+          fetch-depth: 0
+      - name: Sync V28H binding and V28I active state
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          block='''## Binding update — 2026-09-22 — V28H-R2 COMPLETE / V28I ACTIVE\n\n**This block supersedes lower current-action sections.**\n\nV28H corrected binding workflow **`35813287407`** completed SUCCESS with mechanics PASS and zero failures. Attempt 1 `35812876571` is non-binding mechanics-invalid only due to the post-episode `defaultdict` summary NameError; R2 changed only that reference to `collections.defaultdict`.\n\nDecision: **`V28H_MIDGAME_STRUCTURAL_SEPARATION`**. Selected checkpoint: **480**. Frozen explanatory window: **384–479**. Median paired hard-minus-control money-gap difference at 480: **-1016.0**; mean: **-1763.58**. The gap then widens materially through the late game. Option-event timing is essentially unchanged between hard and control cohorts.\n\nResult: `docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md`.\n\nV28I was pre-registered before the V28H outcome and is now ACTIVE under `docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-22.md`. It uses all 144 V28F ALL3 contexts, exact V28F terminal parity, only the 114 legal `solver.programme_features` at checkpoint 480, the frozen source-held-out 8-source train / 4-source holdout split, and the frozen deterministic depth-3 tree/gates. Runtime source/rank/SHA identity is forbidden.\n\nCurrent hosted pair remains unchanged: exact V47 `56466970` + ALL3 `56367770`; O-RW1 `56336027` remains outside latest two. No Kaggle submission, deletion, or reordering is authorized.\n\n**Binding immediate action:** resolve V28I; if identifiable freeze the legal state phenotype and route to V28J mechanism/action discovery, otherwise route to bounded legal-history/stateful phenotype discovery exactly as pre-registered. Continue read-only V47 maturity monitoring to >=169 episodes.\n\n'''
+          for fn in ('STATUS.md','ROADMAP.md','HANDOFF.md'):
+              p=Path(fn);s=p.read_text();i=s.find('\n');p.write_text(s[:i+1]+'\n'+block+s[i+1:])
+          p=Path('data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json');d=json.loads(p.read_text())
+          d['v28h_matched_hard_easy_trace']={'attempt1_workflow':35812876571,'attempt1_binding':False,'attempt1_failure':'post-episode summary NameError defaultdict only','binding_workflow':35813287407,'mechanical_pass':True,'failures':0,'decision':'V28H_MIDGAME_STRUCTURAL_SEPARATION','selected_checkpoint':480,'explanatory_window':[384,479],'checkpoint_480_mean_money_gap_diff':-1763.5833333333333,'checkpoint_480_median_money_gap_diff':-1016.0,'result_doc':'docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md','automatic_kaggle_submission':False}
+          d['v28i_legal_state_risk_identifiability']={'status':'ACTIVE','protocol':'docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-22.md','selected_checkpoint':480,'contexts':144,'feature_count':114,'model':'DecisionTreeClassifier(max_depth=3,min_samples_leaf=8,class_weight=balanced,random_state=20260922)','automatic_kaggle_submission':False}
+          d['next_stage']='resolve frozen V28I; route exactly by pre-registered identifiability result; preserve hosted V47 56466970 + ALL3 56367770 and monitor V47 to >=169 episodes'
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git diff --cached --quiet || git commit -m 'Record V28H binding and activate frozen V28I'
+          git push origin HEAD:research/prize-solver-v0
