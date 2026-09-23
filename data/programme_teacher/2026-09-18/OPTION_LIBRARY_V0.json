@@ -1760,7 +1760,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Preserve ALL3 56367770 + exact V47 56466970; continue read-only maturity/status monitoring to V47 >=100 then >=169 episodes or any latest-two/mechanical drift; no Kaggle mutation without explicit authorization.",
+  "next_stage": "Resolve V28E workflow 35806944875 opponent-strength attribution, then continue read-only V47 maturity monitoring to >=169 episodes; no Kaggle mutation authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2231,13 +2231,13 @@
   "v25a": {
     "decision": "V25A_PERSISTENT_POLICY_REQUIRED",
     "finite_horizon_score_improvements": {
-      "128": 0,
-      "16": 0,
-      "256": 0,
-      "32": 0,
       "4": 0,
+      "8": 0,
+      "16": 0,
+      "32": 0,
       "64": 0,
-      "8": 0
+      "128": 0,
+      "256": 0
     },
     "full_shadow_gate_pass": true,
     "h720": {
@@ -2580,5 +2580,25 @@
     "v47_score_rate": 0.5280898876404494,
     "v47_submission_id": 56466970,
     "workflow": 35781539795
+  },
+  "v28e": {
+    "status": "ACTIVE_READONLY",
+    "workflow": 35806944875,
+    "protocol": "docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_PROTOCOL_2026-09-22.md",
+    "launch_snapshot": {
+      "snapshot_utc": "2026-09-23T01:33:47.064787+00:00",
+      "v47_submission_id": 56466970,
+      "v47_episodes": 119,
+      "v47_public_score": 1861.4,
+      "all3_submission_id": 56367770,
+      "all3_episodes": 430,
+      "all3_public_score": 1923.4,
+      "latest_two": [
+        56466970,
+        56367770
+      ]
+    },
+    "purpose": "attribute hosted rating gap to current opponent-strength composition using frozen V28D replays",
+    "kaggle_mutation_authorized": false
   }
 }
