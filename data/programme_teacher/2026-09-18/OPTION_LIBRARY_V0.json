@@ -21,24 +21,24 @@
   },
   "current_hosted_pair": {
     "all3": {
-      "episodes_at_snapshot": 438,
-      "latest_observed_rating": 1932,
-      "role": "primary",
+      "submission_id": 56367770,
       "status": "COMPLETE",
-      "submission_id": 56367770
+      "role": "primary",
+      "latest_observed_rating": 1862.4,
+      "episodes_at_snapshot": 482
     },
+    "v47": {
+      "submission_id": 56466970,
+      "status": "COMPLETE",
+      "role": "hedge",
+      "latest_observed_rating": 1828.7,
+      "episodes_at_snapshot": 175
+    },
+    "snapshot_utc": "2026-09-23T14:37:35.015940+00:00",
     "latest_two": [
       56466970,
       56367770
-    ],
-    "snapshot_utc": "2026-09-23T03:05:00+00:00",
-    "v47": {
-      "episodes_at_snapshot": 127,
-      "latest_observed_rating": 1864.7,
-      "role": "hedge",
-      "status": "COMPLETE",
-      "submission_id": 56466970
-    }
+    ]
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -1768,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "broader first-party mechanism discovery/final competition strategy; physical imitation closed; preserve exact hosted pair V47 56466970 + ALL3 56367770; no Kaggle mutation",
+  "next_stage": "Resolve V29A workflow 35876362346. If STRONG PASS or CAUSAL-ELIGIBLE, freeze epoch-8 model and autonomously launch V29B fresh closed-loop causal benchmark versus ALL3/current immutable frontier. Never mutate Kaggle slots without explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2239,13 +2239,13 @@
   "v25a": {
     "decision": "V25A_PERSISTENT_POLICY_REQUIRED",
     "finite_horizon_score_improvements": {
-      "128": 0,
-      "16": 0,
-      "256": 0,
-      "32": 0,
       "4": 0,
+      "8": 0,
+      "16": 0,
+      "32": 0,
       "64": 0,
-      "8": 0
+      "128": 0,
+      "256": 0
     },
     "full_shadow_gate_pass": true,
     "h720": {
@@ -2718,7 +2718,7 @@
     "decision": "V28J_BOUNDED_LEGAL_HISTORY_RISK_PHENOTYPE_NOT_IDENTIFIABLE",
     "holdout_balanced_accuracy": 0.75,
     "holdout_precision": 0.5882352941176471,
-    "holdout_recall": 1.0,
+    "holdout_recall": 1,
     "holdout_specificity": 0.5,
     "mechanical_pass": true,
     "result_doc": "docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md",
@@ -2753,5 +2753,30 @@
     "selected_window": null,
     "status": "COMPLETE",
     "workflow": 35827398179
+  },
+  "v28n": {
+    "status": "COMPLETE",
+    "workflow": 35875524017,
+    "result_doc": "docs/strategy/V28N_FINAL_WEEK_STRATEGY_AUDIT_RESULT_2026-09-23.md",
+    "team_rank": 1916,
+    "active_best_score": 1862.4,
+    "top10_threshold": 2959.8,
+    "gap_to_top10": 1097.4,
+    "top1_score": 3094.4,
+    "gap_to_top1": 1232,
+    "leaderboard_teams": 9910,
+    "final_submission_deadline_utc": "2026-09-30T23:59:00Z",
+    "kaggle_mutation_authorized": false
+  },
+  "v29a": {
+    "status": "ACTIVE",
+    "workflow": 35876362346,
+    "protocol": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_PROTOCOL_2026-09-23.md",
+    "architecture": "1-layer GRU(114->64) + structural UNIT and MARKET-SLOT decoders",
+    "data_source_workflow": 35682535729,
+    "epochs": 8,
+    "runtime_identity_features": false,
+    "teacher_call_at_inference": false,
+    "kaggle_mutation_authorized": false
   }
 }
