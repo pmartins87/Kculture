@@ -1,0 +1,57 @@
+name: v28m-hosted-pair-readonly-checkpoint
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28m-hosted-pair-readonly-checkpoint.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture exact active pair read-only
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee snapshot_utc.txt
+          kaggle competitions submissions "$COMPETITION" -v -q | tee submissions.csv
+          grep -F "$V47_ID" submissions.csv | head -1 | tee v47_row.txt
+          grep -F "$ALL3_ID" submissions.csv | head -1 | tee all3_row.txt
+          python - <<'PY'
+          import csv,json
+          rows=list(csv.DictReader(open('submissions.csv')))
+          ids=['56466970','56367770']
+          found={}
+          for r in rows:
+              sid=str(r.get('ref') or r.get('id') or r.get('submissionId') or '')
+              if sid in ids: found[sid]=r
+          latest=[]
+          for r in rows[:2]: latest.append(str(r.get('ref') or r.get('id') or r.get('submissionId') or ''))
+          out={'schema':'kculture-v28m-hosted-pair-readonly-v1','found':found,'latest_two':latest,'expected_latest_two':['56466970','56367770'],'pair_drift':latest!=['56466970','56367770'],'automatic_kaggle_submission':False}
+          open('v28m_status.json','w').write(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V28M_HOSTED_STATUS',json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v28m-hosted-pair-readonly-checkpoint
+          path: |
+            snapshot_utc.txt
+            submissions.csv
+            v47_row.txt
+            all3_row.txt
+            v28m_status.json
+          retention-days: 30
