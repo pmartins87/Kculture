@@ -1,0 +1,34 @@
+name: v30a-canonical-sync
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v30a-canonical-sync.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0, fetch-depth: 0}
+      - name: Update canonical four
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          block='''\n\n## Binding update — 2026-09-23 — V30A COMPLETE / V30B INDEPENDENT VALIDATION ACTIVE\n\n**This block supersedes lower current-action sections.**\n\nV30A workflow `35877442921` completed SUCCESS with mechanics PASS and zero failures. Binding decision: **`V30A_PUBLIC_PERSISTENT_POLICY_CANDIDATE_READY`**. Frozen selector winner: public ref `arsgorynich/herd-safe-v3-experimental-risk-aware-feed`, exact SHA-256 `4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01`, V30A score rate 0.9166666667 versus ALL3 0.5833333333, paired score delta +0.3333333333, paired mean margin delta +3932.5104167, 34 positive / 0 negative contexts, source breadth 5, seed breadth 4/4, both seats. Result: `docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_RESULT_2026-09-23.md`.\n\nV30B was preregistered before outcomes at `docs/strategy/V30B_INDEPENDENT_PUBLIC_POLICY_VALIDATION_PROTOCOL_2026-09-23.md` and launched. It uses the exact immutable V30A candidate package/SHA, a separately reacquired fresh current frontier, unseen seeds 80601..80604, both seats, and the same frozen promotion thresholds. It is offline only.\n\nV29A remains CLOSED and must not be tuned/reopened. Protected hosted pair remains exact V47 `56466970` + ALL3 `56367770`; no Kaggle submission, deletion, or reordering is authorized.\n'''
+          for fn in ['STATUS.md','ROADMAP.md','HANDOFF.md']:
+              p=Path(fn); txt=p.read_text()
+              if 'V30A COMPLETE / V30B INDEPENDENT VALIDATION ACTIVE' not in txt:
+                  first,rest=(txt.split('\n',1)+[''])[:2]; p.write_text(first+block+'\n'+rest)
+          p=Path('data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json'); d=json.loads(p.read_text())
+          d['v30a_public_persistent_policy_benchmark_2026_09_23']={'workflow':35877442921,'decision':'V30A_PUBLIC_PERSISTENT_POLICY_CANDIDATE_READY','mechanical_pass':True,'failures':0,'selected_ref':'arsgorynich/herd-safe-v3-experimental-risk-aware-feed','selected_sha':'4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01','selected_score_rate':0.9166666666666666,'all3_score_rate':0.5833333333333334,'mean_paired_score_delta':0.3333333333333333,'mean_paired_margin_delta':3932.5104166666665,'positive_contexts':34,'negative_contexts':0,'positive_source_breadth':5,'positive_seed_breadth':4,'positive_seats':[0,1],'result_doc':'docs/strategy/V30A_CURRENT_PUBLIC_PERSISTENT_POLICY_BENCHMARK_RESULT_2026-09-23.md','next':'V30B independent fresh validation active; no Kaggle mutation'}
+          p.write_text(json.dumps(d,indent=2,sort_keys=True)+'\n')
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add STATUS.md ROADMAP.md HANDOFF.md
+          git add -f data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git commit -m 'Record V30A binding result and V30B route' || exit 0
+          git push origin HEAD:research/prize-solver-v0
