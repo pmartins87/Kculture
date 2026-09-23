@@ -24,6 +24,12 @@ The raw W/L evidence therefore does not explain why V47 has the lower public Bra
 
 Does current opponent strength / matchmaking composition materially explain the V47 vs ALL3 public-rating gap?
 
+## Mechanical repair amendment after R2
+
+R2 workflow `35807122446` successfully downloaded the full Kaggriculture leaderboard: **9873 CSV lines including the header**. The analysis then failed because the full-download schema uses a UTF-8 BOM and title-cased columns (`TeamName`, `Score`) whereas the R1 top-20 display used lower-camel columns (`teamName`, `score`).
+
+R3 normalizes leaderboard header names case-insensitively and reads with `utf-8-sig`. Team-name **values** remain exact-match only. No threshold, temporal alignment, metric, population, or decision rule changes.
+
 ## Mechanical repair amendment after R1
 
 R1 workflow `35806944875` returned `V28E_MAPPING_INSUFFICIENT` because the CLI `--show` surface exposed only the top 20 leaderboard rows, producing 0% exact-name coverage for both hosted populations.
