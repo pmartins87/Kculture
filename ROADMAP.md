@@ -6,6 +6,101 @@
 
 
 
+
+## Binding update — 2026-09-23 — V28H/V28I COMPLETE / V28J BOUNDED LEGAL-HISTORY GATE ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+### V28H — COMPLETE
+
+Corrected binding workflow:
+**`35813287407`**.
+
+Decision:
+**`V28H_MIDGAME_STRUCTURAL_SEPARATION`**.
+
+Mechanical PASS, failures 0.
+
+Selected checkpoint:
+**480**.
+
+Frozen explanatory window:
+**384–479**.
+
+Median paired hard-minus-control ALL3 money-gap difference:
+- 384: -227.5;
+- **480: -1016.0**;
+- 576: -6223.0;
+- 719: -12473.0.
+
+At 480, mean hard-minus-control money-gap difference was -1763.58. Opponent public money was +1635.17 on average in hard contexts while ALL3 own money was only -128.42. In 384–479 the largest opponent action differences were SELL:WHEAT (+246.83 mean) and BUY_PRODUCT (+246.0 mean), while ALL3 action allocation was nearly unchanged. Existing option timings were essentially identical between hard and control cohorts.
+
+Result:
+`docs/strategy/V28H_MATCHED_HARD_EASY_TRACE_RESULT_2026-09-22.md`.
+
+### V28I — COMPLETE
+
+Binding workflow:
+**`35818084144`**.
+
+Decision:
+**`V28I_LEGAL_STATE_RISK_PHENOTYPE_NOT_IDENTIFIABLE`**.
+
+Mechanical PASS over all 144 frozen V28F contexts with exact terminal parity.
+
+Frozen single-state checkpoint:
+480.
+
+Source-held-out metrics:
+- precision **0.6250**;
+- recall **1.0000**;
+- specificity **0.5714**;
+- balanced accuracy **0.7857**;
+- confusion matrix [[16,12],[0,20]].
+
+The depth-3 tree used only legal features:
+- opp_money;
+- market_inventory:FERTILIZER;
+- opp_consecutive_need.
+
+The frozen gate fails because precision <0.70 and specificity is insufficient. No retuning is allowed.
+
+Result:
+`docs/strategy/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY_RESULT_2026-09-23.md`.
+
+### V28J — ACTIVE
+
+Protocol:
+`docs/strategy/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY_PROTOCOL_2026-09-23.md`.
+
+Binding workflow:
+**`35822283032`**.
+
+Frozen design:
+- all 144 V28F ALL3 contexts;
+- exact V28I source-held-out split;
+- legal checkpoints 384, 416, 448, 480;
+- 456 raw legal features + 342 adjacent legal deltas = 798 columns;
+- exact same deterministic tree capacity as V28I: max_depth=3, min_samples_leaf=8, class_weight=balanced, random_state=20260922;
+- no threshold search, no hyperparameter sweep, no source identity feature.
+
+Routing:
+- identifiable => freeze the bounded legal-history phenotype and open direct mechanism/action discovery within phenotype-positive states;
+- not identifiable => close simple classifier-based risk gating on this window and route to direct matched hard-vs-control mechanism/action discovery.
+
+Hosted pair remains unchanged:
+- ALL3 `56367770` primary;
+- exact V47 `56466970` hedge.
+
+Latest read-only hosted checkpoint remains:
+- V47 127 episodes / 1864.7;
+- ALL3 438 episodes / 1932.0;
+- latest two exactly [56466970, 56367770].
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** resolve V28J workflow `35822283032`; then follow its frozen routing. Continue read-only V47 maturity monitoring to >=169 episodes in parallel.
+
 ## Binding update — 2026-09-22 — V28H MATCHED HARD-vs-EASY TRACE ACTIVE / V47 127-EPISODE CHECKPOINT
 
 **This block supersedes lower current-action sections.**
