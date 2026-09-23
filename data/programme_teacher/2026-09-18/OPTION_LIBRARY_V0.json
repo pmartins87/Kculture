@@ -1760,7 +1760,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V28E workflow 35806944875 opponent-strength attribution, then continue read-only V47 maturity monitoring to >=169 episodes; no Kaggle mutation authorized.",
+  "next_stage": "Open fresh offline ALL3-centered hedge-complementarity gate after V28E; include exact V47/O-RW1 controls and reconsider mechanically reproducible independent lineages without stale hosted-rating exclusion. Continue V47 read-only maturity to >=169. No Kaggle mutation authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2582,23 +2582,21 @@
     "workflow": 35781539795
   },
   "v28e": {
-    "status": "ACTIVE_READONLY",
-    "workflow": 35806944875,
-    "protocol": "docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_PROTOCOL_2026-09-22.md",
-    "launch_snapshot": {
-      "snapshot_utc": "2026-09-23T01:33:47.064787+00:00",
-      "v47_submission_id": 56466970,
-      "v47_episodes": 119,
-      "v47_public_score": 1861.4,
-      "all3_submission_id": 56367770,
-      "all3_episodes": 430,
-      "all3_public_score": 1923.4,
-      "latest_two": [
-        56466970,
-        56367770
-      ]
-    },
-    "purpose": "attribute hosted rating gap to current opponent-strength composition using frozen V28D replays",
+    "status": "COMPLETE",
+    "workflow": 35807341491,
+    "result_doc": "docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_RESULT_2026-09-22.md",
+    "artifact_id": 10728251773,
+    "artifact_digest": "sha256:48b3daaec4065e5241fac72219888d889bb3998f389caa7e58494c733892b91f",
+    "decision": "V28E_ALL3_FACED_MATERIALLY_STRONGER_POPULATION",
+    "leaderboard_teams": 9872,
+    "v47_mapping_games": "89/89",
+    "all3_mapping_games": "23/23",
+    "v47_mean_opponent_score": 1892.5528089887641,
+    "v47_median_opponent_score": 1897.2,
+    "all3_mean_opponent_score": 2239.3739130434783,
+    "all3_median_opponent_score": 2147,
+    "mean_difficulty_delta_all3_minus_v47": 346.82110405471417,
+    "median_difficulty_delta_all3_minus_v47": 249.8,
     "kaggle_mutation_authorized": false
   }
 }
