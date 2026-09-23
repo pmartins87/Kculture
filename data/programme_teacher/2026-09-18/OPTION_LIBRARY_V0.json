@@ -21,16 +21,24 @@
   },
   "current_hosted_pair": {
     "all3": {
-      "note": "latest observed snapshot; histories differ from O-RW1",
-      "rating": 2412.1,
+      "submission_id": 56367770,
       "status": "COMPLETE",
-      "submission_id": 56367770
+      "role": "primary",
+      "latest_observed_rating": 1923.4,
+      "episodes_at_snapshot": 430
     },
-    "orw1": {
-      "rating": 2361.6,
+    "v47": {
+      "submission_id": 56466970,
       "status": "COMPLETE",
-      "submission_id": 56336027
-    }
+      "role": "hedge",
+      "latest_observed_rating": 1861.4,
+      "episodes_at_snapshot": 119
+    },
+    "snapshot_utc": "2026-09-23T01:33:47.064787+00:00",
+    "latest_two": [
+      56466970,
+      56367770
+    ]
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -1760,7 +1768,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Open fresh offline ALL3-centered hedge-complementarity gate after V28E; include exact V47/O-RW1 controls and reconsider mechanically reproducible independent lineages without stale hosted-rating exclusion. Continue V47 read-only maturity to >=169. No Kaggle mutation authorized.",
+  "next_stage": "Resolve V28F workflow 35807910104 ALL3-centered hedge complementarity; continue V47 read-only maturity monitoring to >=169 episodes. No Kaggle mutation authorized.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2597,6 +2605,33 @@
     "all3_median_opponent_score": 2147,
     "mean_difficulty_delta_all3_minus_v47": 346.82110405471417,
     "median_difficulty_delta_all3_minus_v47": 249.8,
+    "kaggle_mutation_authorized": false
+  },
+  "v28f": {
+    "status": "ACTIVE",
+    "workflow": 35807910104,
+    "protocol": "docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_PROTOCOL_2026-09-22.md",
+    "primary": "ALL3",
+    "hedges": [
+      "V47",
+      "ORW1",
+      "CR053",
+      "CR029"
+    ],
+    "seeds": [
+      80401,
+      80402,
+      80403,
+      80404,
+      80405,
+      80406
+    ],
+    "seats": [
+      0,
+      1
+    ],
+    "selector": "best-of-two complementarity with ALL3",
+    "material_replacement_rule": "alternate must add >=3 more ALL3-nonwin-to-win conversions than V47 and source complement breadth >= V47",
     "kaggle_mutation_authorized": false
   }
 }
