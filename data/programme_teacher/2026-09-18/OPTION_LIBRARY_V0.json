@@ -2778,5 +2778,23 @@
     "runtime_identity_features": false,
     "teacher_call_at_inference": false,
     "kaggle_mutation_authorized": false
+  },
+  "v29a_recurrent_structural_distillation_2026_09_23": {
+    "workflow": 35876362346,
+    "source_data_workflow": 35682535729,
+    "mechanical_pass": true,
+    "decision": "V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL",
+    "strong_pass": false,
+    "causal_eligible": false,
+    "holdout_complete_action_parity": 0.07127955493741307,
+    "holdout_minimum_source_complete_action_parity": 0.0702364394993046,
+    "holdout_minimum_stage_complete_action_parity": 0.003472222222222222,
+    "holdout_farmer_parity": 0.7450741770978211,
+    "holdout_hands_parity": 0.1500927213722763,
+    "holdout_market_parity": 0.37297171998145573,
+    "holdout_market_slot_accuracy": 0.9000811312007417,
+    "holdout_unit_sample_accuracy": 0.6661316014440611,
+    "result_doc": "docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md",
+    "route": "CLOSE_NO_RETUNING_NO_V29B"
   }
 }

@@ -1,6 +1,21 @@
 # HANDOFF — Kculture
 
 
+## Binding update — 2026-09-23 — V29A RECURRENT STRUCTURAL DISTILLATION CLOSED
+
+**This block supersedes lower current-action sections.**
+
+Binding workflow: **`35876362346`**. Mechanics PASS; immutable V27C2 data from workflow `35682535729` only; exact frozen 8-epoch GRU-64 structural experiment completed successfully.
+
+Decision: **`V29A_RECURRENT_STRUCTURAL_DISTILLATION_FAIL`**.
+
+Frozen holdout: complete-action parity **0.0712795549**; minimum-source complete-action parity **0.0702364395**; minimum-stage complete-action parity **0.0034722222**; farmer parity **0.7450741771**; hands parity **0.1500927214**; market parity **0.3729717200**; market-slot accuracy **0.9000811312**; unit-sample accuracy **0.6661316014**. `strong_pass=false`; `causal_eligible=false`.
+
+Result: `docs/strategy/V29A_RECURRENT_STRUCTURAL_DISTILLATION_RESULT_2026-09-23.md`.
+
+Binding route: **do not launch V29B**. Do not tune hidden size, epochs, learning rate, loss weights, split or holdout-guided architecture. Close this recurrent structural teacher-distillation family. Protected hosted pair remains exact V47 `56466970` + ALL3 `56367770`; no Kaggle mutation authorized. Next strategic work returns to final-week preservation or a separately preregistered genuinely different architecture.
+
+
 
 ## Binding update — 2026-09-23 — V28N FINAL-WEEK AUDIT COMPLETE / V29A RECURRENT STRUCTURAL DISTILLATION ACTIVE
 
