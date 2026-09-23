@@ -1,0 +1,61 @@
+name: v29a-recurrent-structural-distillation
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v29a-recurrent-structural-distillation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+
+      - name: Install frozen training stack
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'numpy>=2.0,<3'
+          python -m pip install 'torch>=2.8,<3' --index-url https://download.pytorch.org/whl/cpu
+          python -m py_compile tools/v29a_recurrent_structural_distillation.py
+          python - <<'PY'
+          import torch, numpy
+          print("TORCH",torch.__version__)
+          print("NUMPY",numpy.__version__)
+          PY
+
+      - name: Download immutable V27C2 structural datasets
+        uses: actions/download-artifact@v4
+        with:
+          repository: ${{ github.repository }}
+          github-token: ${{ github.token }}
+          run-id: 35682535729
+          pattern: v27c2-data-*
+          path: artifacts/v27c2-data
+          merge-multiple: false
+
+      - name: Train and evaluate frozen V29A
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v29a
+          python tools/v29a_recurrent_structural_distillation.py             --input-dir artifacts/v27c2-data             --out-dir artifacts/v29a
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v29a-recurrent-structural-distillation
+          path: artifacts/v29a/*
+          retention-days: 30
+          if-no-files-found: warn
