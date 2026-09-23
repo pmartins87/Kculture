@@ -1,6 +1,39 @@
 # HANDOFF — Kculture
 
 
+
+## Binding update — 2026-09-22 — V28E COMPLETE / MATCHMAKING CONFOUND CONFIRMED
+
+**This block supersedes lower current-action sections.**
+
+V28E-R3 workflow **`35807341491`** completed SUCCESS after repair-only acquisition/parser fixes. Binding decision:
+
+**`V28E_ALL3_FACED_MATERIALLY_STRONGER_POPULATION`**.
+
+Mechanical:
+- full leaderboard: **9872 teams**;
+- V47 mapping: **89/89 games (100%)**;
+- aligned ALL3 mapping: **23/23 games (100%)**;
+- same frozen V28D Episode-ID window: `112051391..112150695`.
+
+Opponent strength:
+- V47 mean opponent score: **1892.55**; median **1897.2**;
+- ALL3 aligned mean opponent score: **2239.37**; median **2147.0**;
+- ALL3 minus V47: mean **+346.82**, median **+249.8**.
+
+Thus V28D's raw W/L comparison was heavily confounded: V47's 52.8% raw score rate came against a materially easier population. V47 had 26/89 games against opponents below 1800 and scored 100% there; aligned ALL3 had zero games below 1800.
+
+Result:
+`docs/strategy/V28E_HOSTED_OPPONENT_STRENGTH_RESULT_2026-09-22.md`.
+
+Interpretation:
+- V47 is mechanically healthy, but its raw hosted W/L is not evidence of prize-grade standalone strength;
+- V28E does not prove V47 is a poor hedge because hedge value is complementarity to ALL3;
+- current pair remains ALL3 `56367770` primary + exact V47 `56466970` hedge while research continues;
+- no Kaggle mutation is authorized.
+
+**Binding immediate action:** open a fresh offline hedge-complementarity gate centered on ALL3. Reconsider mechanically reproducible independent lineages without using stale hosted score as an exclusion rule; include exact V47 and O-RW1 as controls. Continue V47 read-only maturity monitoring to >=169 episodes in parallel.
+
 ## Binding update — 2026-09-22 — V47 >=100 EPISODES / V28E OPPONENT-STRENGTH ATTRIBUTION ACTIVE
 
 **This block supersedes lower current-action sections.**
