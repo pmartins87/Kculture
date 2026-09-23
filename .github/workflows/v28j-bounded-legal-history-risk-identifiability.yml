@@ -1,0 +1,48 @@
+name: v28j-bounded-legal-history-risk-identifiability
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28j-bounded-legal-history-risk-identifiability.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  identify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install frozen runtime
+        run: python -m pip install -U pip && python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' numpy scikit-learn
+      - uses: actions/download-artifact@v4
+        with: {name: v28f-immutable-snapshot, path: artifacts/v28f-snapshot, run-id: 35807910104, github-token: '${{ github.token }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: v28f-all3-hedge-complementarity, path: artifacts/v28f, run-id: 35807910104, github-token: '${{ github.token }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: v28g-all3-residual-hard-core-census, path: artifacts/v28g, run-id: 35812527508, github-token: '${{ github.token }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: v28h-matched-hard-easy-trajectory-trace, path: artifacts/v28h, run-id: 35813287407, github-token: '${{ github.token }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: v28i-legal-state-risk-identifiability, path: artifacts/v28i, run-id: 35818084144, github-token: '${{ github.token }}'}
+      - name: Run frozen V28J
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          python tools/v28j_bounded_legal_history_risk_identifiability.py \
+            --snapshot-dir artifacts/v28f-snapshot \
+            --v28f artifacts/v28f/V28F_ALL3_HEDGE_COMPLEMENTARITY.json \
+            --v28g artifacts/v28g/V28G_RESIDUAL_HARD_CORE.json \
+            --v28h artifacts/v28h/V28H_MATCHED_TRACE.json \
+            --v28i artifacts/v28i/V28I_LEGAL_STATE_RISK_IDENTIFIABILITY.json \
+            --out artifacts/v28j/V28J_BOUNDED_LEGAL_HISTORY_RISK_IDENTIFIABILITY.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28j-bounded-legal-history-risk-identifiability
+          path: artifacts/v28j/*.json
+          retention-days: 30
