@@ -1,0 +1,56 @@
+name: v28e-hosted-opponent-strength-attribution
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v28e-hosted-opponent-strength-attribution.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  attribution:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Kaggle CLI
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Download frozen V28D evidence
+        uses: actions/download-artifact@v4
+        with:
+          name: v28d-current-hosted-pair-forensics
+          path: replay_artifact
+          run-id: 35781539795
+          github-token: ${{ github.token }}
+      - name: Snapshot current leaderboard
+        run: |
+          set -euo pipefail
+          kaggle competitions leaderboard "$COMPETITION" --show -v > leaderboard.csv
+          head -5 leaderboard.csv
+      - name: Attribute opponent strength
+        run: |
+          set -euo pipefail
+          python tools/v28e_hosted_opponent_strength.py             --artifact-root replay_artifact             --leaderboard leaderboard.csv             --out artifacts/v28e/V28E_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28e-hosted-opponent-strength-attribution
+          path: |
+            artifacts/v28e/**
+            leaderboard.csv
+          retention-days: 30
+          if-no-files-found: warn
