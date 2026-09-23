@@ -4,6 +4,62 @@
 
 
 
+
+## Binding update — 2026-09-22 — V28G COMPLETE / SOURCE-CLUSTERED UNIVERSAL HARD CORE
+
+**This block supersedes lower current-action sections.**
+
+Binding workflow **`35812527508`** completed SUCCESS.
+
+Decision:
+**`V28G_SOURCE_CLUSTERED_HARD_CORE`**.
+
+Frozen V28F residual losses:
+- ALL3 losses: **66 / 144**;
+- universal-hard losses: **66 / 66** — every ALL3 loss was also a loss for V47, O-RW1, CR053 and CR029.
+
+Source structure:
+- exactly **6 of 12** fresh frontier sources generate all 66 losses;
+- the other 6 sources generate zero ALL3 losses;
+- 3 hard sources beat ALL3 in 12/12 contexts;
+- 3 hard sources beat ALL3 in 10/12;
+- top-4 sources account for **69.70%** of all residual losses;
+- systematic sources >=9 losses: **6**;
+- zero-loss sources: **6**.
+
+Seat:
+- 33 losses seat 0;
+- 33 losses seat 1.
+
+Seeds:
+- seed 80401: 6/24 losses;
+- seeds 80402..80406: each 12/24 losses.
+
+Severity:
+- close >= -2000: **4**;
+- medium (-10000,-2000): **50**;
+- severe <= -10000: **12**.
+
+Existing ALL3 options remain directionally useful inside the hard core:
+- ALL3 margin better than V47 in **62/66** losses;
+- mean ALL3-minus-V47 margin delta **+89.91**;
+- ALL3 margin better than O-RW1 in **62/66**;
+- mean delta **+90.39**.
+
+Result:
+`docs/strategy/V28G_ALL3_RESIDUAL_HARD_CORE_RESULT_2026-09-22.md`.
+
+Binding interpretation:
+the residual weakness is a sharply source-clustered structural regime, not broad random failure. Existing options improve the economics slightly but do not change W/L.
+
+Current Kaggle pair remains unchanged:
+- primary ALL3 `56367770`;
+- hedge exact V47 `56466970`.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** run matched hard-vs-zero-loss trajectory traces on the deterministic V28G target set, holding seed and seat fixed. Identify the earliest economic/strategic separation and recurrent legal-observation signatures suitable for genuinely orthogonal option discovery. Continue V47 read-only maturity monitoring to >=169 episodes in parallel.
+
 ## Binding update — 2026-09-22 — V28F COMPLETE / ZERO HEDGE RESCUE / RESIDUAL-LOSS DISCOVERY NEXT
 
 **This block supersedes lower current-action sections.**
