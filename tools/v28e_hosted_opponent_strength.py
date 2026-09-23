@@ -13,18 +13,23 @@ def q(vals,p):
     return vals[lo]*(1-f)+vals[hi]*f
 
 def load_csv(path):
-    lines=[x for x in Path(path).read_text(encoding="utf-8",errors="replace").splitlines() if x.strip()]
-    rows=[]
-    for i in range(len(lines)):
-        try: cand=list(csv.DictReader(lines[i:]))
-        except Exception: continue
-        if cand and {"teamName","score"}.issubset(set(cand[0].keys())):
-            rows=cand;break
-    if not rows: raise SystemExit("leaderboard parse failed")
+    # Full Kaggle leaderboard downloads currently use a UTF-8 BOM and
+    # title-cased headers (e.g. TeamName, Score). Normalize header names
+    # mechanically; do not alter team-name values used for exact matching.
+    text=Path(path).read_text(encoding="utf-8-sig",errors="replace")
+    lines=[x for x in text.splitlines() if x.strip()]
+    if not lines:
+        raise SystemExit("leaderboard empty")
+    reader=csv.DictReader(lines)
+    field_map={str(k).strip().lower():k for k in (reader.fieldnames or []) if k}
+    if "teamname" not in field_map or "score" not in field_map:
+        raise SystemExit(f"leaderboard parse failed headers={reader.fieldnames}")
+    team_key=field_map["teamname"]
+    score_key=field_map["score"]
     out={}
-    for r in rows:
-        name=str(r.get("teamName","")).strip()
-        try: score=float(r.get("score"))
+    for r in reader:
+        name=str(r.get(team_key,"")).strip()
+        try: score=float(r.get(score_key))
         except Exception: continue
         if name and name not in out: out[name]=score
     return out
