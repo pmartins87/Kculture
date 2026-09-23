@@ -1,0 +1,145 @@
+name: v28n-final-week-strategy-audit
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28n-final-week-strategy-audit.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install Kaggle CLI
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture submissions, episodes, competition metadata, leaderboard
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p audit leaders
+          kaggle competitions submissions "$COMPETITION" -v -q > audit/submissions.csv
+          kaggle competitions list -s "$COMPETITION" -v -q > audit/competition_list.csv || true
+          kaggle competitions leaderboard "$COMPETITION" --download -p leaders -q
+          python - <<'PY'
+          import csv,io,json,os,re,subprocess,zipfile,datetime,statistics
+          from pathlib import Path
+
+          comp=os.environ["COMPETITION"]
+          ids={"v47":os.environ["V47_ID"],"all3":os.environ["ALL3_ID"]}
+
+          def parse_csv_any(path):
+              text=Path(path).read_text(encoding="utf-8-sig",errors="replace")
+              lines=[x for x in text.splitlines() if x.strip()]
+              for start in range(len(lines)):
+                  try:
+                      rows=list(csv.DictReader(io.StringIO("\n".join(lines[start:]))))
+                  except Exception:
+                      continue
+                  if rows and rows[0]:
+                      return rows
+              return []
+
+          subrows=parse_csv_any("audit/submissions.csv")
+          def normrow(r):
+              return {str(k).strip().lower():v for k,v in r.items() if k}
+          nsubs=[normrow(r) for r in subrows]
+          def sid(r):
+              return str(r.get("ref") or r.get("id") or r.get("submissionid") or "").strip()
+          found={label:next((r for r in nsubs if sid(r)==x),None) for label,x in ids.items()}
+          latest_two=[sid(r) for r in nsubs[:2]]
+
+          def fscore(r):
+              if not r:return None
+              for k in ("publicscore","score"):
+                  try:return float(str(r.get(k,"")).strip())
+                  except Exception:pass
+              return None
+
+          def episode_count(subid):
+              p=subprocess.run(["kaggle","competitions","episodes",str(subid),"-v","-q"],text=True,capture_output=True)
+              if p.returncode!=0:
+                  return {"ok":False,"count":None,"stderr":p.stderr[-1000:]}
+              lines=[x for x in p.stdout.splitlines() if x.strip()]
+              for start in range(len(lines)):
+                  try: rows=list(csv.DictReader(io.StringIO("\n".join(lines[start:]))))
+                  except Exception: continue
+                  if not rows: continue
+                  keys={str(k).lower().replace("_",""):k for k in rows[0] if k}
+                  for norm,key in keys.items():
+                      if norm in ("id","episodeid","episode") or ("episode" in norm and "id" in norm):
+                          vals=[];good=True
+                          for row in rows:
+                              v=str(row.get(key,"")).strip()
+                              if not re.fullmatch(r"\d+",v):
+                                  good=False;break
+                              vals.append(int(v))
+                          if good:return {"ok":True,"count":len(set(vals))}
+              return {"ok":False,"count":None,"stderr":"episode count parse failed"}
+
+          csvs=list(Path("leaders").rglob("*.csv"))
+          if not csvs:
+              for z in Path("leaders").rglob("*.zip"):
+                  with zipfile.ZipFile(z) as f:f.extractall(Path("leaders")/("unzipped_"+z.stem))
+              csvs=list(Path("leaders").rglob("*.csv"))
+          if len(csvs)!=1:
+              raise SystemExit(f"expected one leaderboard CSV, found {[str(x) for x in csvs]}")
+          lrows=parse_csv_any(csvs[0])
+          if not lrows: raise SystemExit("leaderboard parse empty")
+          nl=[normrow(r) for r in lrows]
+          def team_name(r):return str(r.get("teamname") or r.get("team") or "").strip()
+          def score(r):
+              try:return float(str(r.get("score","")).strip())
+              except Exception:return None
+          valid=[r for r in nl if score(r) is not None]
+          valid.sort(key=lambda r:score(r),reverse=True)
+          top10=[{"rank":i+1,"team":team_name(r),"score":score(r)} for i,r in enumerate(valid[:10])]
+          v47_score=fscore(found["v47"]);all3_score=fscore(found["all3"])
+          active_best=max(x for x in (v47_score,all3_score) if x is not None)
+          candidates=[{"rank":i+1,"team":team_name(r),"score":score(r)} for i,r in enumerate(valid)
+                      if abs(score(r)-active_best)<1e-9]
+
+          out={
+            "schema":"kculture-v28n-final-week-strategy-audit-v1",
+            "snapshot_utc":datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            "latest_two":latest_two,
+            "expected_latest_two":[ids["v47"],ids["all3"]],
+            "pair_drift":latest_two!=[ids["v47"],ids["all3"]],
+            "submissions":{
+              "v47":{"id":ids["v47"],"score":v47_score,"row":found["v47"],"episodes":episode_count(ids["v47"])},
+              "all3":{"id":ids["all3"],"score":all3_score,"row":found["all3"],"episodes":episode_count(ids["all3"])},
+            },
+            "leaderboard":{"teams":len(valid),"top10":top10,"top1_score":top10[0]["score"],"top10_threshold":top10[-1]["score"],
+                           "active_best_score":active_best,
+                           "gap_to_top1":top10[0]["score"]-active_best,
+                           "gap_to_top10":top10[-1]["score"]-active_best,
+                           "exact_active_score_candidates":candidates},
+            "competition_list_raw":Path("audit/competition_list.csv").read_text(errors="replace")[:5000],
+            "automatic_kaggle_submission":False,
+          }
+          Path("audit/V28N_FINAL_WEEK_AUDIT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V28N_RESULT",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v28n-final-week-strategy-audit
+          path: |
+            audit/**
+            leaders/**
+          retention-days: 30
+          if-no-files-found: warn
