@@ -1,0 +1,23 @@
+name: v28ij-canonical-sync-r2
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v28ij-canonical-sync-r2.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+          fetch-depth: 0
+      - run: python tools/sync_v28i_v28j_canonical.py
+      - run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add STATUS.md ROADMAP.md HANDOFF.md data/programme_teacher/2026-09-18/OPTION_LIBRARY_V0.json
+          git diff --cached --quiet || git commit -m 'Record V28I and activate V28J bounded history gate'
+          git push origin HEAD:research/prize-solver-v0
