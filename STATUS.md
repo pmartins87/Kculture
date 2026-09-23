@@ -3,6 +3,57 @@
 
 
 
+
+## Binding update — 2026-09-22 — V28F COMPLETE / ZERO HEDGE RESCUE / RESIDUAL-LOSS DISCOVERY NEXT
+
+**This block supersedes lower current-action sections.**
+
+Binding workflow **`35807910104`** completed SUCCESS.
+
+Decision:
+**`V28F_NO_MATERIAL_HEDGE_REPLACEMENT`**.
+
+Mechanical:
+- 12 fresh current-frontier sources;
+- 6 seeds x 2 seats = **144 identical contexts per candidate**;
+- candidates: ALL3, V47, O-RW1, exact CR053, exact CR029;
+- failures: **0**.
+
+ALL3:
+- 78W / 66L;
+- score rate **0.5416666667**;
+- mean margin **+168.04**.
+
+Hedges:
+- V47: 74W / 70L, score rate 0.5138888889, mean margin +91.06;
+- O-RW1: 74W / 70L, score rate 0.5138888889, mean margin +91.21;
+- CR053: 4W / 140L, score rate 0.0277777778;
+- CR029: 0W / 144L.
+
+Critical complementarity result:
+- V47 ALL3-nonwin -> hedge-win conversions: **0**;
+- O-RW1: **0**;
+- CR053: **0**;
+- CR029: **0**;
+- complement source breadth for every hedge: **0**;
+- best-of-two pair score for every tested hedge = ALL3 alone = **0.5416666667**.
+
+O-RW1 wins the lower-order frozen selector only by a tiny standalone mean-margin tiebreak, but the material replacement gate fails decisively.
+
+Result:
+`docs/strategy/V28F_ALL3_HEDGE_COMPLEMENTARITY_RESULT_2026-09-22.md`.
+
+Binding interpretation:
+the available preserved hedge lineages are outcome-redundant on ALL3's residual losses. Do not recycle them as the next discovery path.
+
+Current Kaggle pair remains unchanged:
+- primary ALL3 `56367770`;
+- hedge exact V47 `56466970`.
+
+No Kaggle submission, deletion, or reordering is authorized.
+
+**Binding immediate action:** decompose ALL3's 66 fresh residual losses to identify hard-source, seed, seat and margin structure, then route into a genuinely orthogonal hedge-discovery branch. Continue V47 read-only maturity monitoring to >=169 episodes in parallel.
+
 ## Binding update — 2026-09-22 — V28F ALL3-CENTERED HEDGE COMPLEMENTARITY ACTIVE
 
 **This block supersedes lower current-action sections.**
