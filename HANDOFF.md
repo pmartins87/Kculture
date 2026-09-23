@@ -1,5 +1,12 @@
 # HANDOFF — Kculture
 
+## Binding update — 2026-09-23 — V30B-R2 VALIDATED / USER DECISION GATE
+
+**This block supersedes lower current-action sections.**
+
+Binding original V30B protocol: `docs/strategy/V30B_PUBLIC_PERSISTENT_POLICY_VALIDATION_PROTOCOL_2026-09-23.md`. Binding workflow `35906418993` completed SUCCESS with mechanics PASS and exact package parity 8/8. Decision: **`V30B_PUBLIC_PERSISTENT_POLICY_VALIDATED_READY_FOR_USER_DECISION`**. Exact public candidate: `arsgorynich/herd-safe-v3-experimental-risk-aware-feed`; frozen main.py SHA `4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01`; archive SHA `70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b`. Fresh 12-opponent frontier, seeds 80511..80516, both seats: candidate score rate 0.9097222222 vs ALL3 0.5833333333; paired score delta +0.3263888889; mean paired margin delta +6314.2013889; positive/neutral/negative contexts 54/90/0; source breadth 5; seed breadth 6/6; positive support both seats. Result: `docs/strategy/V30B_PUBLIC_PERSISTENT_POLICY_VALIDATION_RESULT_2026-09-23.md`. No Kaggle mutation authorized. Protected latest-two remains exact V47 `56466970` + ALL3 `56367770` pending read-only preflight and explicit user authorization.
+
+
 ## Binding update — 2026-09-23 — V30A COMPLETE / V30B INDEPENDENT VALIDATION ACTIVE
 
 **This block supersedes lower current-action sections.**

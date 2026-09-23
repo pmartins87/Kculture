@@ -2848,5 +2848,26 @@
     "selected_score_rate": 0.9166666666666666,
     "selected_sha": "4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01",
     "workflow": 35877442921
+  },
+  "v30b_binding_original_protocol_2026_09_23": {
+    "all3_score_rate": 0.5833333333333334,
+    "archive_sha256": "70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b",
+    "automatic_kaggle_submission": false,
+    "candidate_ref": "arsgorynich/herd-safe-v3-experimental-risk-aware-feed",
+    "candidate_score_rate": 0.9097222222222222,
+    "candidate_sha": "4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01",
+    "decision": "V30B_PUBLIC_PERSISTENT_POLICY_VALIDATED_READY_FOR_USER_DECISION",
+    "mean_paired_margin_delta": 6314.201388888889,
+    "mean_paired_score_delta": 0.3263888888888889,
+    "mechanical_pass": true,
+    "negative_contexts": 0,
+    "package_parity": "8/8",
+    "positive_contexts": 54,
+    "positive_seed_breadth": 6,
+    "positive_source_breadth": 5,
+    "positive_support_both_seats": true,
+    "result_doc": "docs/strategy/V30B_PUBLIC_PERSISTENT_POLICY_VALIDATION_RESULT_2026-09-23.md",
+    "routing": "READ_ONLY_PREFLIGHT_THEN_EXPLICIT_USER_AUTHORIZATION_REQUIRED",
+    "workflow": 35906418993
   }
 }
