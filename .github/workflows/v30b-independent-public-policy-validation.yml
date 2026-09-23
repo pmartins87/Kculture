@@ -1,0 +1,63 @@
+name: v30b-independent-public-policy-validation
+
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v30b-independent-public-policy-validation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install -r requirements.txt
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12' 'kaggle>=2.2.3' numpy
+      - name: Download immutable V30A public package snapshot
+        uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Acquire separate fresh V30B frontier
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v30b-frontier-result artifacts/v30b-fresh-snapshot
+          python tools/v28b_current_frontier_snapshot.py --out artifacts/v30b-frontier-result/V30B_FRONTIER_RESULT.json --raw artifacts/v30b-frontier-result/TOP30_RAW.csv --snapshot-dir artifacts/v30b-fresh-snapshot
+          python - <<'PY'
+          import json
+          d=json.load(open('artifacts/v30b-frontier-result/V30B_FRONTIER_RESULT.json'))
+          assert d.get('decision')=='V28B_FRONTIER_SNAPSHOT_READY',d
+          PY
+      - name: Run frozen V30B
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v30b-final
+          python tools/v30b_independent_public_policy_validation.py --v30a-snapshot artifacts/v30a-snapshot --fresh-snapshot artifacts/v30b-fresh-snapshot --out artifacts/v30b-final/V30B_INDEPENDENT_PUBLIC_POLICY_VALIDATION.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30b-independent-public-policy-validation
+          path: |
+            artifacts/v30b-final/*.json
+            artifacts/v30b-frontier-result/*
+            artifacts/v30b-fresh-snapshot/MANIFEST.json
+          retention-days: 30
+          if-no-files-found: warn
