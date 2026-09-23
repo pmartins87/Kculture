@@ -1,4 +1,4 @@
-name: v28h-matched-hard-easy-trajectory-trace
+name: v28h-r2-matched-hard-easy-trajectory-trace
 'on':
   push:
     branches:
