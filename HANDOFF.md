@@ -3,6 +3,90 @@
 
 
 
+
+## Binding update — 2026-09-24 — V31C/V31D READY FOR USER SLOT DECISION / V32C CLOSED
+
+**This block supersedes lower current-action sections.**
+
+### V31C — COMPLETE / SECOND-SLOT REPLACEMENT CONFIRMED
+
+Workflow:
+**`35999484379`**.
+
+Decision:
+**`V31C_SECOND_SLOT_REPLACEMENT_CONFIRMED`**.
+
+Confirmed hedge:
+- ref `prvsiyan/kaggriculture-frontier-the-moon-counts-melons`;
+- main.py SHA `178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a`.
+
+Fresh 144-context panel:
+- V30B primary 0.8263888889;
+- V30B+V47 0.8368055556;
+- V30B+confirmed hedge 0.9027777778;
+- pair delta vs V30B +0.0763888889;
+- 6 V30B loss->hedge-win conversions;
+- 16 V30B nonwin->hedge-win conversions;
+- source breadth 3;
+- seed breadth 5/6;
+- both seats.
+
+Result:
+`docs/strategy/V31C_NEAR_MISS_SECOND_SLOT_CONFIRMATION_RESULT_2026-09-24.md`.
+
+### V31D — COMPLETE / PACKAGE + READ-ONLY SLOT PREFLIGHT PASS
+
+Repaired binding workflow:
+**`36011748849`**.
+
+Only repair from first V31D attempt:
+install missing `kagglehub` dependency. No scientific or candidate change.
+
+Package:
+- exact main.py SHA `178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a`;
+- deterministic archive SHA `bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880`;
+- direct-vs-packaged parity **8/8 PASS**.
+
+Read-only hosted preflight:
+- latest-two exactly [V30B `56509591`, V47 `56466970`];
+- a new confirmed-hedge submission would retain V30B and displace V47;
+- submissions on UTC 2026-09-24 before mutation: 1;
+- projected after one: 2 / daily maximum 5.
+
+Result:
+`docs/strategy/V31D_CONFIRMED_HEDGE_PACKAGE_PREFLIGHT_RESULT_2026-09-24.md`.
+
+**A new explicit user authorization is required before any Kaggle slot mutation.**
+
+### V32A/V32C — CHA22 PATH CLOSED
+
+V32A workflow `35999814456` found CHA22 as a strong near-miss but correctly returned `V32A_NEW_PUBLIC_POLICIES_NO_ADVANTAGE`.
+
+Independent V32C workflow:
+**`36011461813`**.
+
+Decision:
+**`V32C_CHA22_PRIMARY_NOT_CONFIRMED`**.
+
+Fresh 144-context confirmation:
+- V30B 0.8611111111;
+- CHA22 0.9305555556;
+- paired score delta +0.0694444444;
+- mean margin delta -201.4444444;
+- 24 positive / 6 negative contexts;
+- source breadth 3;
+- seed breadth 5/6;
+- both seats.
+
+It failed the frozen confirmation requirements of >=+0.08 score-rate advantage, >=+0.08 paired delta, and source breadth >=4.
+
+Result:
+`docs/strategy/V32C_CHA22_INDEPENDENT_PRIMARY_CONFIRMATION_RESULT_2026-09-24.md`.
+
+Do not tune/reopen CHA22 under this family.
+
+**Immediate action:** wait for explicit user decision on replacing V47 with the confirmed V31C hedge. No automatic Kaggle submission is authorized.
+
 ## Binding update — 2026-09-24 — V31C HEDGE REPLACEMENT CONFIRMED / V32A CLOSED / V32C ACTIVE
 
 **This block supersedes lower current-action sections.**
