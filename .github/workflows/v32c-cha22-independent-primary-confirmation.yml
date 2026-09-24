@@ -1,0 +1,137 @@
+name: v32c-cha22-independent-primary-confirmation
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v32c-cha22-independent-primary-confirmation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install acquisition runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35999814456
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Acquire fresh V32C frontier
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v32c-frontier artifacts/v32c-meta
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v32c-meta/V32C_FRONTIER_RESULT.json             --raw artifacts/v32c-meta/TOP30_RAW.csv             --snapshot-dir artifacts/v32c-frontier
+          python - <<'PY'
+          import json
+          d=json.load(open('artifacts/v32c-meta/V32C_FRONTIER_RESULT.json'))
+          assert d.get('decision')=='V28B_FRONTIER_SNAPSHOT_READY',d
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v32c-frontier
+          path: artifacts/v32c-frontier/**
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v32c-meta
+          path: artifacts/v32c-meta/**
+          retention-days: 14
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35999814456
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32c-frontier
+          path: artifacts/v32c-frontier
+      - name: Run V32C shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v32c
+          python tools/v32c_cha22_confirmation_shard.py             --v32a-snapshot artifacts/v32a-snapshot             --frontier artifacts/v32c-frontier             --primary-main artifacts/v30b-package/package/main.py             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v32c/V32C_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v32c-shard-${{ matrix.shard_index }}
+          path: artifacts/v32c/*.json
+          retention-days: 14
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v32c-shard-*
+          path: artifacts/v32c-shards
+          merge-multiple: false
+      - name: Aggregate V32C
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v32c-final
+          python tools/aggregate_v32c_cha22_confirmation.py             --input-dir artifacts/v32c-shards             --out artifacts/v32c-final/V32C_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v32c-cha22-independent-primary-confirmation
+          path: artifacts/v32c-final/*.json
+          retention-days: 14
+          if-no-files-found: error
