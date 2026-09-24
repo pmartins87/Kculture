@@ -4,6 +4,57 @@
 
 
 
+
+## Binding update — 2026-09-24 — V31C CONFIRMED HEDGE HOSTED / NEW FINAL-WEEK PAIR
+
+**This block supersedes lower hosted-pair/current-action sections.**
+
+User explicitly authorized replacement of V47 with the V31C-confirmed hedge.
+
+Hosted submission workflow:
+**`36038249614`**.
+
+Exact submitted hedge:
+- ref `prvsiyan/kaggriculture-frontier-the-moon-counts-melons`;
+- main.py SHA `178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a`;
+- deterministic archive SHA `bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880`;
+- description `PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4`.
+
+Registration:
+- new hedge submission ID: **`56528406`**;
+- initial status: **PENDING**;
+- initial public score: blank;
+- registration UTC: approximately `2026-09-24T18:01:46Z`.
+
+Final preflight immediately before mutation:
+- latest-two exactly [V30B `56509591`, V47 `56466970`];
+- submissions on UTC 2026-09-24 before submit: 1;
+- projected after submit: 2 / daily maximum 5.
+
+Post-submit latest-two:
+1. **V31C confirmed hedge `56528406`**;
+2. **V30B primary `56509591`**.
+
+Displaced:
+- exact V47 `56466970`.
+
+The V30B primary is preserved.
+
+Binding offline evidence for the hedge:
+- V31C workflow `35999484379`;
+- V30B+V47 pair score 0.8368055556;
+- V30B+confirmed hedge pair score 0.9027777778;
+- 6 V30B loss->hedge-win conversions;
+- 16 nonwin->hedge-win conversions;
+- seed breadth 5/6;
+- both seats.
+
+Package preflight:
+- V31D R2 workflow `36011748849`;
+- exact package parity **8/8 PASS**.
+
+**Immediate route:** monitor V31C `56528406` and V30B `56509591` read-only for validation status, episode accumulation and ratings. No additional Kaggle slot mutation is authorized without another explicit user decision.
+
 ## Binding update — 2026-09-24 — V31C/V31D READY FOR USER SLOT DECISION / V32C CLOSED
 
 **This block supersedes lower current-action sections.**
