@@ -1,5 +1,52 @@
 # HANDOFF — Kculture
 
+
+## Binding update — 2026-09-24 — V30B HOSTED SUBMISSION REGISTERED
+
+**This block supersedes lower hosted-pair/current-action sections.**
+
+User explicitly authorized hosted submission of the exact validated V30B package.
+
+Submission workflow:
+**`35948472420`**.
+
+Exact submitted candidate:
+- public provenance: `arsgorynich/herd-safe-v3-experimental-risk-aware-feed`;
+- frozen `main.py` SHA-256: `4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01`;
+- submitted archive SHA-256: `70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b`;
+- Kaggle description: `PS_V30B_HERDSAFE_VALIDATED_70D93426`.
+
+Registration:
+- new submission ID: **`56509591`**;
+- initial status: **PENDING**;
+- initial public score: blank;
+- submission UTC: approximately `2026-09-24T02:44:56Z`.
+
+Post-submit latest-two:
+1. **V30B `56509591`**;
+2. exact V47 `56466970`.
+
+Displaced from latest-two by explicit authorization:
+- ALL3 `56367770`.
+
+Preflight:
+- latest-two immediately before submit was exactly [`56466970`, `56367770`];
+- observed submissions on UTC 2026-09-24 before submit: 0;
+- projected after submit: 1 / daily maximum 5.
+
+Binding offline evidence remains:
+- original V30B protocol workflow `35906418993`;
+- package parity 8/8;
+- candidate score rate 0.9097222222 vs ALL3 0.5833333333;
+- mean paired score delta +0.3263888889;
+- mean paired margin delta +6314.2013889;
+- positive/neutral/negative contexts 54/90/0;
+- source breadth 5;
+- seed breadth 6/6;
+- both seats.
+
+**Immediate route:** monitor V30B `56509591` read-only for validation status, episode accumulation and rating. In parallel, final-week research may evaluate whether V47 remains the best second-slot companion, but no further Kaggle mutation is authorized without a new explicit user decision.
+
 ## Binding update — 2026-09-23 — V30B-R2 VALIDATED / USER DECISION GATE
 
 **This block supersedes lower current-action sections.**
