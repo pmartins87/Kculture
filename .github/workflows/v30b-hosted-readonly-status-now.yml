@@ -1,0 +1,88 @@
+name: v30b-hosted-readonly-status-now
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v30b-hosted-readonly-status-now.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      V30B_ID: '56509591'
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install Kaggle CLI
+        run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture current hosted state
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v30b-status
+          kaggle competitions submissions "$COMPETITION" -v -q > artifacts/v30b-status/submissions.csv
+          for id in "$V30B_ID" "$V47_ID" "$ALL3_ID"; do
+            kaggle competitions episodes "$id" -v -q > "artifacts/v30b-status/episodes_$id.csv" || true
+          done
+          python - <<'PY'
+          import csv,io,json,os,re
+          from pathlib import Path
+          ids=[os.environ["V30B_ID"],os.environ["V47_ID"],os.environ["ALL3_ID"]]
+
+          def parse(path):
+              txt=Path(path).read_text(encoding="utf-8-sig",errors="replace")
+              lines=[x for x in txt.splitlines() if x.strip()]
+              for i in range(len(lines)):
+                  try: rows=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+                  except Exception: continue
+                  if rows and rows[0]: return rows
+              return []
+
+          subs=parse("artifacts/v30b-status/submissions.csv")
+          def norm(r): return {str(k).strip().lower():v for k,v in r.items() if k}
+          nsubs=[norm(r) for r in subs]
+          def sid(r): return str(r.get("ref") or r.get("id") or "").strip()
+          found={i:next((r for r in nsubs if sid(r)==i),None) for i in ids}
+          latest=[sid(r) for r in nsubs[:2]]
+
+          def ep_count(i):
+              rows=parse(f"artifacts/v30b-status/episodes_{i}.csv")
+              if not rows:return 0
+              nr=[norm(r) for r in rows]
+              for key in nr[0]:
+                  kk=key.replace("_","")
+                  if kk in ("id","episodeid","episode") or ("episode" in kk and "id" in kk):
+                      vals=[]
+                      ok=True
+                      for r in nr:
+                          v=str(r.get(key,"")).strip()
+                          if not re.fullmatch(r"\d+",v): ok=False; break
+                          vals.append(v)
+                      if ok:return len(set(vals))
+              return len(rows)
+
+          out={
+            "latest_two":latest,
+            "rows":{i:found[i] for i in ids},
+            "episode_counts":{i:ep_count(i) for i in ids},
+            "read_only":True
+          }
+          Path("artifacts/v30b-status/status.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V30B_HOSTED_STATUS",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30b-hosted-readonly-status-now
+          path: artifacts/v30b-status/**
+          retention-days: 7
