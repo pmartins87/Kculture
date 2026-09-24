@@ -1,0 +1,75 @@
+name: v30c-current-leaderboard-checkpoint
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v30c-current-leaderboard-checkpoint.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checkpoint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      TARGET_ID: '56509591'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install Kaggle CLI
+        run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture leaderboard and target row
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v30c leaders
+          kaggle competitions submissions "$COMPETITION" -v -q > artifacts/v30c/submissions.csv
+          kaggle competitions leaderboard "$COMPETITION" --download -p leaders -q
+          python - <<'PY'
+          import csv,io,json,zipfile
+          from pathlib import Path
+          def parse(path):
+              txt=Path(path).read_text(encoding='utf-8-sig',errors='replace')
+              lines=[x for x in txt.splitlines() if x.strip()]
+              for i in range(len(lines)):
+                  try:r=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
+                  except Exception:continue
+                  if r and r[0]:return r
+              return []
+          subs=[{str(k).lower():v for k,v in r.items() if k} for r in parse('artifacts/v30c/submissions.csv')]
+          target=next(r for r in subs if str(r.get('ref',''))=='56509591')
+          score=float(target['publicscore'])
+          csvs=list(Path('leaders').rglob('*.csv'))
+          if not csvs:
+              for z in Path('leaders').rglob('*.zip'):
+                  with zipfile.ZipFile(z) as f:f.extractall(Path('leaders')/('unzipped_'+z.stem))
+              csvs=list(Path('leaders').rglob('*.csv'))
+          if len(csvs)!=1:raise SystemExit(csvs)
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in parse(csvs[0])]
+          def s(r):
+              try:return float(r.get('score',''))
+              except:return None
+          valid=[r for r in rows if s(r) is not None]
+          valid.sort(key=s,reverse=True)
+          candidates=[{'rank':i+1,'team':str(r.get('teamname') or r.get('team') or ''),'score':s(r)} for i,r in enumerate(valid) if abs(s(r)-score)<1e-9]
+          out={
+            'target_submission_id':56509591,'target_score':score,'exact_score_rows':candidates,
+            'teams':len(valid),'top1':s(valid[0]),'top10':s(valid[9]),
+            'gap_to_top10':s(valid[9])-score,'gap_to_top1':s(valid[0])-score,
+            'top10_rows':[{'rank':i+1,'team':str(r.get('teamname') or r.get('team') or ''),'score':s(r)} for i,r in enumerate(valid[:10])],
+            'read_only':True
+          }
+          Path('artifacts/v30c/V30C_LEADERBOARD.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V30C_LEADERBOARD',json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30c-current-leaderboard-checkpoint
+          path: artifacts/v30c/**
+          retention-days: 7
