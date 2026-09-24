@@ -1,0 +1,74 @@
+name: final-pair-readonly-status
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/final-pair-readonly-status.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  status:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      HEDGE_ID: '56528406'
+      PRIMARY_ID: '56509591'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install Kaggle CLI
+        run: python -m pip install -U 'kaggle>=2.2.3'
+      - name: Capture pair state
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/final-pair
+          kaggle competitions submissions "$COMPETITION" -v -q > artifacts/final-pair/submissions.csv
+          for id in "$HEDGE_ID" "$PRIMARY_ID"; do
+            kaggle competitions episodes "$id" -v -q > "artifacts/final-pair/episodes_$id.csv" || true
+          done
+          python - <<'PY'
+          import csv,io,json,os,re
+          from pathlib import Path
+          ids=[os.environ["HEDGE_ID"],os.environ["PRIMARY_ID"]]
+          def parse(path):
+              txt=Path(path).read_text(encoding="utf-8-sig",errors="replace")
+              lines=[x for x in txt.splitlines() if x.strip()]
+              for i in range(len(lines)):
+                  try:r=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+                  except Exception:continue
+                  if r and r[0]:return r
+              return []
+          subs=[{str(k).strip().lower():v for k,v in r.items() if k} for r in parse("artifacts/final-pair/submissions.csv")]
+          def sid(r):return str(r.get("ref") or r.get("id") or "").strip()
+          rows={i:next((r for r in subs if sid(r)==i),None) for i in ids}
+          latest=[sid(r) for r in subs[:2]]
+          def count(i):
+              r=parse(f"artifacts/final-pair/episodes_{i}.csv")
+              if not r:return 0
+              nr=[{str(k).lower().replace("_",""):v for k,v in x.items() if k} for x in r]
+              for key in nr[0]:
+                  if key in ("id","episodeid","episode") or ("episode" in key and "id" in key):
+                      vals=[]
+                      for x in nr:
+                          v=str(x.get(key,"")).strip()
+                          if not re.fullmatch(r"\d+",v):break
+                          vals.append(v)
+                      else:return len(set(vals))
+              return len(r)
+          out={"latest_two":latest,"pair_drift":latest!=ids,"episode_counts":{i:count(i) for i in ids},"rows":rows,"read_only":True}
+          Path("artifacts/final-pair/status.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("FINAL_PAIR_STATUS",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: final-pair-readonly-status
+          path: artifacts/final-pair/**
+          retention-days: 7
