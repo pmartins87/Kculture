@@ -1,0 +1,152 @@
+name: v31c-confirmed-hedge-hosted-submit
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v31c-confirmed-hedge-hosted-submit.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      V30B_ID: '56509591'
+      V47_ID: '56466970'
+      DESCRIPTION: PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4
+      EXPECTED_ARCHIVE_SHA256: bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880
+      EXPECTED_MAIN_SHA256: 178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a
+
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+
+      - name: Install authenticated Kaggle runtime
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7'
+
+      - name: Download exact V31D validated package
+        uses: actions/download-artifact@v4
+        with:
+          name: v31d-confirmed-hedge-package-preflight
+          path: v31d
+          repository: pmartins87/Kculture
+          run-id: 36011748849
+          github-token: ${{ github.token }}
+
+      - name: Verify frozen bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f v31d/V31D_CONFIRMED_HEDGE.tar.gz
+          cp v31d/V31D_CONFIRMED_HEDGE.tar.gz V31C_CONFIRMED_HEDGE.tar.gz
+          SHA="$(sha256sum V31C_CONFIRMED_HEDGE.tar.gz | awk '{print $1}')"
+          test "$SHA" = "$EXPECTED_ARCHIVE_SHA256"
+          rm -rf smoke && mkdir smoke
+          tar -xzf V31C_CONFIRMED_HEDGE.tar.gz -C smoke
+          test -f smoke/main.py
+          MAIN_SHA="$(sha256sum smoke/main.py | awk '{print $1}')"
+          test "$MAIN_SHA" = "$EXPECTED_MAIN_SHA256"
+          echo "ARCHIVE_SHA=$SHA"
+          echo "MAIN_SHA=$MAIN_SHA"
+
+      - name: Final current-pair and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          python - <<'PY'
+          import csv,io,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+          txt=Path("before.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          if not rows:raise SystemExit("cannot parse submissions")
+          def norm(r):return {str(k).lower():v for k,v in r.items() if k}
+          rows=[norm(r) for r in rows]
+          rows.sort(key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[os.environ["V30B_ID"],os.environ["V47_ID"]]
+          if latest!=expected:raise SystemExit(f"latest-two drifted: {latest} != {expected}")
+          if any(str(r.get("description",""))==os.environ["DESCRIPTION"] for r in rows):
+              raise SystemExit("duplicate description already exists")
+          today=datetime.now(timezone.utc).date().isoformat()
+          count=sum(str(r.get("date","")).startswith(today) for r in rows)
+          if count+1>5:raise SystemExit(f"daily cap exceeded: {count+1}>5")
+          print({"latest_two_before":latest,"submissions_today":count,"projected":count+1,"will_displace":os.environ["V47_ID"],"will_retain":os.environ["V30B_ID"]})
+          PY
+
+      - name: Submit exact confirmed hedge once
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_start_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f V31C_CONFIRMED_HEDGE.tar.gz -m "$DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_return_utc.txt
+
+      - name: Verify registration and latest-two
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 30); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after.csv
+            if grep -Fq "$DESCRIPTION" after.csv; then ok=1; break; fi
+            sleep 5
+          done
+          test "$ok" = "1"
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("after.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          def norm(r):return {str(k).lower():v for k,v in r.items() if k}
+          rows=[norm(r) for r in rows]
+          rows.sort(key=lambda r:str(r.get("date","")),reverse=True)
+          target=next((r for r in rows if str(r.get("description",""))==os.environ["DESCRIPTION"]),None)
+          if not target:raise SystemExit("new submission row missing")
+          new_id=str(target.get("ref",""))
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[new_id,os.environ["V30B_ID"]]
+          if latest!=expected:raise SystemExit(f"unexpected latest-two: {latest} != {expected}")
+          if os.environ["V47_ID"] in latest:raise SystemExit("V47 still present unexpectedly")
+          out={"decision":"V31C_CONFIRMED_HEDGE_HOSTED_REGISTERED","submission_id":new_id,
+               "status":str(target.get("status","")),"public_score":str(target.get("publicscore","")),
+               "latest_two_after":latest,"retained_v30b":os.environ["V30B_ID"],
+               "displaced_v47":os.environ["V47_ID"],"description":os.environ["DESCRIPTION"],
+               "archive_sha256":os.environ["EXPECTED_ARCHIVE_SHA256"],"main_sha256":os.environ["EXPECTED_MAIN_SHA256"]}
+          Path("hosted_result.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V31C_HOSTED_RESULT",json.dumps(out,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v31c-confirmed-hedge-hosted-submit-provenance
+          path: |
+            before.csv
+            after.csv
+            submit_start_utc.txt
+            submit_return_utc.txt
+            hosted_result.json
+          retention-days: 30
+          if-no-files-found: warn
