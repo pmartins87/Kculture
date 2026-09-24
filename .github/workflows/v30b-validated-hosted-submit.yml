@@ -1,0 +1,198 @@
+name: v30b-validated-hosted-submit
+'on':
+  push:
+    branches:
+      - research/prize-solver-v0
+    paths:
+      - '.github/workflows/v30b-validated-hosted-submit.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  submit-v30b:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      MAX_DAILY: '5'
+      V47_ID: '56466970'
+      ALL3_ID: '56367770'
+      V30B_DESCRIPTION: PS_V30B_HERDSAFE_VALIDATED_70D93426
+      V30B_EXPECTED_ARCHIVE_SHA256: 70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b
+      V30B_EXPECTED_MAIN_SHA256: 4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/prize-solver-v0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install authenticated Kaggle runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$KAGGLE_API_TOKEN"
+          python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7'
+          kaggle competitions list --group entered -v | tee entered.csv
+          grep -qi "$COMPETITION" entered.csv
+
+      - name: Download exact validated V30B artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b_artifact
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+
+      - name: Verify exact validated bytes and official loader
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f v30b_artifact/V30B_CANDIDATE.tar.gz
+          cp v30b_artifact/V30B_CANDIDATE.tar.gz V30B_HERDSAFE_VALIDATED.tar.gz
+          SHA="$(sha256sum V30B_HERDSAFE_VALIDATED.tar.gz | awk '{print $1}')"
+          echo "V30B_ARCHIVE_SHA=$SHA" | tee SHA256SUMS.txt
+          test "$SHA" = "$V30B_EXPECTED_ARCHIVE_SHA256"
+
+          rm -rf smoke
+          mkdir smoke
+          tar -xzf V30B_HERDSAFE_VALIDATED.tar.gz -C smoke
+          test -f smoke/main.py
+          MAIN_SHA="$(sha256sum smoke/main.py | awk '{print $1}')"
+          echo "V30B_MAIN_SHA=$MAIN_SHA" | tee -a SHA256SUMS.txt
+          test "$MAIN_SHA" = "$V30B_EXPECTED_MAIN_SHA256"
+
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+          p=Path("smoke/main.py")
+          fn=get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          argc=getattr(getattr(fn,"__code__",None),"co_argcount",None)
+          if not callable(fn) or argc not in (1,2):
+              raise SystemExit(f"invalid official loader callable={fn!r} argc={argc}")
+          print({"entrypoint":getattr(fn,"__name__",None),"argc":argc})
+          PY
+
+      - name: Strict current-pair and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q | tee before_submissions.csv
+          python - <<'PY'
+          import csv,io,json,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+
+          txt=Path("before_submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if "," not in line: continue
+              cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              if cand and any(k and "ref" in k.lower() for k in cand[0]):
+                  rows=cand;break
+          if not rows: raise SystemExit("could not parse submissions CSV")
+          def get(r,n): return next((str(v) for k,v in r.items() if k and n in k.lower()),"")
+          rows=sorted(rows,key=lambda r:get(r,"date"),reverse=True)
+          latest=[get(r,"ref") for r in rows[:2]]
+          expected=[os.environ["V47_ID"],os.environ["ALL3_ID"]]
+          if latest!=expected:
+              raise SystemExit(f"latest-two drifted: observed={latest} expected={expected}")
+          wanted=os.environ["V30B_DESCRIPTION"]
+          if any(get(r,"description")==wanted for r in rows):
+              raise SystemExit(f"duplicate description already registered: {wanted}")
+          today=datetime.now(timezone.utc).date().isoformat()
+          today_rows=[r for r in rows if get(r,"date").startswith(today)]
+          projected=len(today_rows)+1
+          maximum=int(os.environ["MAX_DAILY"])
+          if projected>maximum:
+              raise SystemExit(f"daily cap would be exceeded: {projected}>{maximum}")
+          out={"latest_two_before":latest,"today_utc":today,"observed_today":len(today_rows),
+               "projected_today":projected,"maximum_daily":maximum,
+               "authorized_displacement":os.environ["ALL3_ID"],
+               "retained_submission":os.environ["V47_ID"]}
+          Path("preflight.json").write_text(json.dumps(out,indent=2,sort_keys=True))
+          print(json.dumps(out,sort_keys=True))
+          PY
+
+      - name: Submit exact validated V30B once
+        shell: bash
+        run: |
+          set -euo pipefail
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_start_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f V30B_HERDSAFE_VALIDATED.tar.gz -m "$V30B_DESCRIPTION"
+          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee submit_return_utc.txt
+
+      - name: Verify registration and new latest-two pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          ok=0
+          for i in $(seq 1 30); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after_submissions.csv
+            if grep -Fq "$V30B_DESCRIPTION" after_submissions.csv; then ok=1; break; fi
+            sleep 5
+          done
+          test "$ok" = "1"
+
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("after_submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i,line in enumerate(lines):
+              if "," not in line: continue
+              cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              if cand and any(k and "ref" in k.lower() for k in cand[0]):
+                  rows=cand;break
+          if not rows: raise SystemExit("could not parse post-submit CSV")
+          def get(r,n): return next((str(v) for k,v in r.items() if k and n in k.lower()),"")
+          rows=sorted(rows,key=lambda r:get(r,"date"),reverse=True)
+          target=next((r for r in rows if get(r,"description")==os.environ["V30B_DESCRIPTION"]),None)
+          if target is None: raise SystemExit("V30B registered row missing")
+          new_id=get(target,"ref")
+          latest=[get(r,"ref") for r in rows[:2]]
+          expected=[new_id,os.environ["V47_ID"]]
+          if latest!=expected:
+              raise SystemExit(f"post-submit latest-two invalid: observed={latest} expected={expected}")
+          if os.environ["ALL3_ID"] in latest:
+              raise SystemExit("ALL3 still appears in latest-two unexpectedly")
+          out={
+            "decision":"V30B_VALIDATED_HOSTED_REGISTERED",
+            "new_submission_id":new_id,
+            "status":get(target,"status"),
+            "public_score":get(target,"publicscore"),
+            "latest_two_after":latest,
+            "retained_v47_submission_id":os.environ["V47_ID"],
+            "displaced_all3_submission_id":os.environ["ALL3_ID"],
+            "description":os.environ["V30B_DESCRIPTION"],
+            "archive_sha256":os.environ["V30B_EXPECTED_ARCHIVE_SHA256"],
+            "main_sha256":os.environ["V30B_EXPECTED_MAIN_SHA256"]
+          }
+          Path("v30b_hosted_result.json").write_text(json.dumps(out,indent=2,sort_keys=True))
+          print("V30B_HOSTED_RESULT",json.dumps(out,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v30b-validated-hosted-submit-provenance
+          path: |
+            entered.csv
+            before_submissions.csv
+            after_submissions.csv
+            preflight.json
+            SHA256SUMS.txt
+            submit_start_utc.txt
+            submit_return_utc.txt
+            v30b_hosted_result.json
+          retention-days: 30
+          if-no-files-found: warn
