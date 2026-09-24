@@ -1,6 +1,90 @@
 # ROADMAP — Kculture live plan
 
 
+
+## Binding update — 2026-09-24 — V30B MATURE CHECKPOINT / V31A CLOSED / V31C ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+### Hosted V30B — current mature checkpoint
+
+Submission:
+**`56509591`**.
+
+Latest verified read-only snapshot:
+`2026-09-24T12:26:53Z`.
+
+- status: **COMPLETE**;
+- listed public episodes: **100**;
+- public rating: **2438.9**;
+- latest-two remains exactly [`56509591`, `56466970`].
+
+Comparators at the same snapshot:
+- exact V47 `56466970`: 243 episodes / **1739.8**;
+- displaced ALL3 `56367770`: 529 episodes / **1827.7**.
+
+V30C leaderboard checkpoint workflow:
+**`35999271631`**.
+
+Current full leaderboard:
+- teams: **9966**;
+- V30B exact-score team row: **rank 592**, score **2438.9**;
+- #1: **3108.4**;
+- #10 threshold: **2967.3**;
+- gap V30B -> #10: **528.4**;
+- gap V30B -> #1: **669.5**.
+
+Interpretation:
+V30B is materially stronger hosted than V47/ALL3 and no longer looks like an immediate hosted failure, but it is still far outside prize range.
+
+### V31A — COMPLETE / RETAIN V47 BY FROZEN GATE
+
+Binding corrected workflow:
+**`35957233638`**.
+
+Decision:
+**`V31A_RETAIN_V47_SECOND_SLOT`**.
+
+Mechanics PASS after purely mechanical correction of the frozen semantic population:
+- binding V30B primary had 20 non-win contexts, not 13;
+- best-of-two aggregation is `max(primary_score, hedge_score)` per context.
+
+Exact V47 on the 20 residual contexts:
+- hedge wins 0;
+- loss->hedge-win conversions 0;
+- pair score rate remains **0.9097222222**;
+- pair delta vs V30B = **0**.
+
+No hedge passed the frozen material-replacement gate.
+
+Two near-misses reached pair score rate **0.9375**:
+- `prvsiyan/kaggriculture-frontier-the-moon-counts-melons`, SHA `178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a`;
+- `ahmedberatozer/kaggriculture-v53-opening-signature`, SHA `20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e`.
+
+Neither passed V31A; V31A is closed.
+
+### V31C — ACTIVE / INDEPENDENT NEAR-MISS CONFIRMATION
+
+Protocol:
+`docs/strategy/V31C_NEAR_MISS_SECOND_SLOT_CONFIRMATION_PROTOCOL_2026-09-24.md`.
+
+Workflow:
+**`35999484379`**.
+
+V31C is a new independent confirmation experiment, not reinterpretation of V31A:
+- candidates fixed to the two V31A near-misses;
+- V47 retained as control hedge;
+- new current public frontier acquired after preregistration;
+- seeds `80701..80706`;
+- both seats;
+- identical full panel;
+- same material +0.03 best-of-two replacement threshold;
+- no Kaggle mutation.
+
+If V31C confirms replacement, explicit user authorization is still required before any slot change.
+
+**Immediate action:** let V31C resolve. In parallel, final-week research may scan current public persistent policies for a candidate materially stronger than V30B itself. No Kaggle mutation without new explicit user authorization.
+
 ## Binding update — 2026-09-24 — V30B HOSTED SUBMISSION REGISTERED
 
 **This block supersedes lower hosted-pair/current-action sections.**
