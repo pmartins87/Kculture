@@ -2,6 +2,97 @@
 
 
 
+
+## Binding update — 2026-09-24 — V31C HEDGE REPLACEMENT CONFIRMED / V32A CLOSED / V32C ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+### V31C — COMPLETE / SECOND-SLOT REPLACEMENT CONFIRMED
+
+Binding workflow:
+**`35999484379`**.
+
+Decision:
+**`V31C_SECOND_SLOT_REPLACEMENT_CONFIRMED`**.
+
+Fresh independent panel:
+- 12 opponents;
+- 144 total contexts;
+- seeds `80701..80706`;
+- both seats;
+- mechanics PASS.
+
+Exact V30B primary score rate on this panel:
+**0.8263888889**.
+
+Retained V47 hedge:
+- standalone score rate **0.7013888889**;
+- best-of-two pair score rate **0.8368055556**;
+- pair delta vs V30B **+0.0104166667**;
+- V30B loss->V47 win conversions **1**;
+- rescue source breadth 2;
+- rescue seed breadth 1;
+- both seats.
+
+Confirmed replacement candidate:
+- ref `prvsiyan/kaggriculture-frontier-the-moon-counts-melons`;
+- SHA `178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a`;
+- standalone score rate **0.8194444444**;
+- best-of-two pair score rate **0.9027777778**;
+- pair delta vs V30B **+0.0763888889**;
+- V30B loss->hedge-win conversions **6**;
+- V30B nonwin->hedge-win conversions **16**;
+- rescue source breadth 3;
+- rescue seed breadth 5/6;
+- both seats.
+
+This passes the frozen V31C replacement gate versus V47.
+
+No Kaggle mutation has occurred. Exact package/parity + read-only slot preflight is running in **V31D workflow `36011538979`**. A new explicit user authorization remains mandatory before replacing V47.
+
+### V32A — COMPLETE / NO FORMAL ADVANTAGE, ONE STRONG NEAR-MISS
+
+Binding workflow:
+**`35999814456`**.
+
+Decision:
+**`V32A_NEW_PUBLIC_POLICIES_NO_ADVANTAGE`**.
+
+Fresh public delta found exactly two executable policy SHAs absent from immutable V30A.
+
+Strong near-miss:
+- ref `abhinav0370/kaggriculture-cha22-agent`;
+- SHA `127ed3e62988c0474d386db6527ae8ca9de9bb1fe7004128557ddef67126c652`;
+- CHA22 score rate **0.9583333333**;
+- exact V30B baseline **0.8541666667**;
+- mean paired score delta **+0.1041666667**;
+- 18 positive / 0 negative contexts;
+- positive seed breadth 4/4;
+- both seats;
+- positive source breadth **3**, below frozen V32A threshold 4.
+
+Therefore V32A remains a formal NO_ADVANTAGE decision. No threshold was lowered.
+
+### V32C — ACTIVE / INDEPENDENT CHA22 CONFIRMATION
+
+Protocol:
+`docs/strategy/V32C_CHA22_INDEPENDENT_PRIMARY_CONFIRMATION_PROTOCOL_2026-09-24.md`.
+
+Workflow:
+**`36011461813`**.
+
+This is a new independent confirmation, not reinterpretation of V32A:
+- exact CHA22 SHA fixed above;
+- exact V30B baseline;
+- newly acquired current frontier after preregistration;
+- seeds `80811..80816`;
+- both seats;
+- confirmation requires again >= +0.08 score-rate advantage, >= +0.08 paired score delta, source breadth >=4, seed breadth >=4/6, positive>negative contexts, both seats.
+
+If V32C confirms, package parity + read-only slot preflight may be prepared, but hosted submission still requires explicit user authorization.
+
+**Immediate route:** resolve V31D and V32C. Do not mutate Kaggle slots without explicit user authorization.
+
 ## Binding update — 2026-09-24 — V30B MATURE CHECKPOINT / V31A CLOSED / V31C ACTIVE
 
 **This block supersedes lower current-action sections.**
