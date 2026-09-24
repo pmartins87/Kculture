@@ -1,0 +1,172 @@
+name: v31c-near-miss-second-slot-confirmation
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v31c-near-miss-second-slot-confirmation.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install acquisition runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - name: Recover exact V47
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p v47_public_output artifacts/v31c-v47
+          python - <<'PY'
+          import hashlib,tarfile
+          from pathlib import Path
+          import kagglehub
+          ea="08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01"
+          em="f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+          out=Path("v47_public_output")
+          kagglehub.notebook_output_download("ahmedberatozer/kaggriculture-v47-reactive-market-coordination",output_dir=str(out),force_download=True)
+          hits=[]
+          for p in sorted(out.rglob("*")):
+              if not p.is_file() or not p.name.lower().endswith((".tar.gz",".tgz",".tar")):continue
+              try:
+                  ah=hashlib.sha256(p.read_bytes()).hexdigest()
+                  with tarfile.open(p,"r:*") as tf:
+                      names=sorted(m.name for m in tf.getmembers() if m.isfile())
+                      if names!=["main.py"]:continue
+                      data=tf.extractfile("main.py").read()
+              except Exception:continue
+              if ah==ea and hashlib.sha256(data).hexdigest()==em:hits.append(data)
+          if len(hits)!=1:raise SystemExit(f"exact V47 hits={len(hits)}")
+          Path("artifacts/v31c-v47/main.py").write_bytes(hits[0])
+          PY
+      - name: Acquire fresh V31C frontier
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v31c-frontier artifacts/v31c-frontier-result
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v31c-frontier-result/V31C_FRONTIER_RESULT.json             --raw artifacts/v31c-frontier-result/TOP30_RAW.csv             --snapshot-dir artifacts/v31c-frontier
+          python - <<'PY'
+          import json
+          d=json.load(open('artifacts/v31c-frontier-result/V31C_FRONTIER_RESULT.json'))
+          assert d.get('decision')=='V28B_FRONTIER_SNAPSHOT_READY',d
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v31c-v47
+          path: artifacts/v31c-v47/main.py
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v31c-frontier
+          path: artifacts/v31c-frontier/**
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v31c-frontier-result
+          path: artifacts/v31c-frontier-result/**
+          retention-days: 14
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v31c-frontier
+          path: artifacts/v31c-frontier
+      - uses: actions/download-artifact@v4
+        with:
+          name: v31c-v47
+          path: artifacts/v31c-v47
+      - name: Run V31C shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v31c
+          python tools/v31c_near_miss_confirmation_shard.py             --v30a-snapshot artifacts/v30a-snapshot             --frontier artifacts/v31c-frontier             --primary-main artifacts/v30b-package/package/main.py             --v47-main artifacts/v31c-v47/main.py             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v31c/V31C_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v31c-shard-${{ matrix.shard_index }}
+          path: artifacts/v31c/*.json
+          retention-days: 14
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v31c-shard-*
+          path: artifacts/v31c-shards
+          merge-multiple: false
+      - name: Aggregate V31C
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v31c-final
+          python tools/aggregate_v31c_near_miss_confirmation.py             --input-dir artifacts/v31c-shards             --out artifacts/v31c-final/V31C_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v31c-near-miss-second-slot-confirmation
+          path: artifacts/v31c-final/*.json
+          retention-days: 14
+          if-no-files-found: error
