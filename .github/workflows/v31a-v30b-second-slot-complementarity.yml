@@ -1,4 +1,5 @@
 name: v31a-v30b-second-slot-complementarity
+# V31A R2 semantic-population mechanics repair
 'on':
   push:
     branches: [research/prize-solver-v0]
