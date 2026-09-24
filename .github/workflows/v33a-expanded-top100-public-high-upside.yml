@@ -1,0 +1,140 @@
+name: v33a-expanded-top100-public-high-upside
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v33a-expanded-top100-public-high-upside.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install acquisition runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a
+          repository: pmartins87/Kculture
+          run-id: 35999814456
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Acquire expanded Top-100 and fresh opponent panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v33a-candidates artifacts/v33a-meta artifacts/v33a-opponents artifacts/v33a-opponents-meta
+          python tools/v33a_expanded_public_census.py             --v30a artifacts/v30a             --v32a artifacts/v32a             --snapshot artifacts/v33a-candidates             --out artifacts/v33a-meta/V33A_CENSUS.json             --raw artifacts/v33a-meta/TOP100_RAW.csv
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v33a-opponents-meta/V33A_OPPONENT_RESULT.json             --raw artifacts/v33a-opponents-meta/TOP30_RAW.csv             --snapshot-dir artifacts/v33a-opponents
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v33a-expanded-candidates
+          path: artifacts/v33a-candidates/**
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v33a-meta
+          path: artifacts/v33a-meta/**
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v33a-opponents
+          path: artifacts/v33a-opponents/**
+          retention-days: 14
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3,4,5,6,7]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12'
+      - uses: actions/download-artifact@v4
+        with: {name: v33a-expanded-candidates, path: artifacts/v33a-candidates}
+      - uses: actions/download-artifact@v4
+        with: {name: v33a-opponents, path: artifacts/v33a-opponents}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Run V33A shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v33a
+          python tools/v33a_expanded_public_shard.py             --candidates artifacts/v33a-candidates             --opponents artifacts/v33a-opponents             --primary-main artifacts/v30b/package/main.py             --shard-index ${{ matrix.shard_index }}             --num-shards 8             --out artifacts/v33a/V33A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v33a-shard-${{ matrix.shard_index }}
+          path: artifacts/v33a/*.json
+          retention-days: 14
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v33a-shard-*
+          path: artifacts/v33a-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with: {name: v33a-meta, path: artifacts/v33a-meta}
+      - name: Aggregate V33A
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v33a-final
+          python tools/aggregate_v33a_expanded_public.py             --input-dir artifacts/v33a-shards             --census artifacts/v33a-meta/V33A_CENSUS.json             --out artifacts/v33a-final/V33A_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v33a-expanded-top100-public-high-upside
+          path: artifacts/v33a-final/*.json
+          retention-days: 14
+          if-no-files-found: error
