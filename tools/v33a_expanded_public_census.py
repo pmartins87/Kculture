@@ -102,13 +102,11 @@ def main():
         p=snap(x["main"],root/"sources"/x["sha"])
         if sha256_bytes(p.read_bytes())!=x["sha"]:raise RuntimeError("snapshot SHA mismatch")
         srcs.append({"sha":x["sha"],"representative_rank":x["representative_rank"],"representative_ref":x["representative_ref"],"path":f"sources/{x['sha']}/main.py"})
-      (root/"MANIFEST.json").write_text(json.dumps({"schema":"kculture-v33a-expanded-public-snapshot-v1","sources":srcs},indent=2,sort_keys=True)+"
-")
+      (root/"MANIFEST.json").write_text(json.dumps({"schema":"kculture-v33a-expanded-public-snapshot-v1","sources":srcs},indent=2,sort_keys=True)+"\n")
     mech=len(refs)>=80
     out={"schema":"kculture-v33a-expanded-public-census-v1","mechanical_pass":mech,"listed_refs":len(refs),"acquired_unique":len(unique),
          "known_sha_count":len(known),"new_executable_unique":len(eligible),"selected_count":len(srcs),"sources":srcs,"failures":fail}
-    Path(a.out).parent.mkdir(parents=True,exist_ok=True);Path(a.out).write_text(json.dumps(out,indent=2,sort_keys=True)+"
-")
+    Path(a.out).parent.mkdir(parents=True,exist_ok=True);Path(a.out).write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
     print("V33A_CENSUS",json.dumps({k:v for k,v in out.items() if k not in ("sources","failures")},sort_keys=True))
     if not mech:raise SystemExit(2)
 if __name__=="__main__":main()
