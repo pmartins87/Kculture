@@ -1,0 +1,171 @@
+name: v31d-confirmed-hedge-package-preflight
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v31d-confirmed-hedge-package-preflight.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      COMPETITION: kaggriculture
+      V30B_ID: '56509591'
+      V47_ID: '56466970'
+      HEDGE_SHA: '178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a'
+      HEDGE_REF: 'prvsiyan/kaggriculture-frontier-the-moon-counts-melons'
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-snapshot
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v31c-frontier
+          path: artifacts/v31c-frontier
+          repository: pmartins87/Kculture
+          run-id: 35999484379
+          github-token: ${{ github.token }}
+      - name: Build exact deterministic package and verify 8-of-8 parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v31d
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          python - <<'PY'
+          import copy,gzip,hashlib,json,math,os,shutil,sys,tarfile
+          from pathlib import Path
+          from kaggle_environments import make
+          ROOT=Path.cwd()
+          sys.path.insert(0,str(ROOT))
+          from tools.programme_adaptive_expert_gate import load_public_agent,purge_package_modules,sha256_bytes
+          from tools.bounded_transaction_oracle_v1 import call_agent,score
+
+          sha=os.environ["HEDGE_SHA"];ref=os.environ["HEDGE_REF"]
+          root=Path("artifacts/v30a-snapshot")
+          man=json.loads((root/"MANIFEST.json").read_text())
+          srcmeta=next((s for s in man["sources"] if str(s["sha"])==sha),None)
+          if not srcmeta: raise SystemExit("confirmed hedge missing from immutable V30A snapshot")
+          src=root/srcmeta["path"]
+          if sha256_bytes(src.read_bytes())!=sha: raise SystemExit("source SHA mismatch")
+          if str(srcmeta["representative_ref"])!=ref: raise SystemExit("source ref mismatch")
+
+          pkg=Path("artifacts/v31d/package")
+          if pkg.exists():shutil.rmtree(pkg)
+          shutil.copytree(src.parent,pkg)
+          pmain=pkg/src.name
+          if pmain.name!="main.py":
+              target=pkg/"main.py"
+              if target.exists():raise SystemExit("main.py collision")
+              pmain.rename(target);pmain=target
+          if sha256_bytes(pmain.read_bytes())!=sha:raise SystemExit("packaged main SHA mismatch")
+
+          archive=Path("artifacts/v31d/V31D_CONFIRMED_HEDGE.tar.gz")
+          with open(archive,"wb") as raw:
+            with gzip.GzipFile(filename="",mode="wb",fileobj=raw,mtime=0) as gz:
+              with tarfile.open(fileobj=gz,mode="w") as tf:
+                for p in sorted(pkg.rglob("*"),key=lambda x:x.as_posix()):
+                  rel=p.relative_to(pkg).as_posix()
+                  info=tf.gettarinfo(str(p),arcname=rel)
+                  info.uid=0;info.gid=0;info.uname="";info.gname="";info.mtime=0
+                  if p.is_file():
+                    with open(p,"rb") as f:tf.addfile(info,f)
+                  else:tf.addfile(info)
+          archive_sha=hashlib.sha256(archive.read_bytes()).hexdigest()
+
+          froot=Path("artifacts/v31c-frontier")
+          fman=json.loads((froot/"MANIFEST.json").read_text())
+          opps=[]
+          for s in sorted(fman["sources"],key=lambda x:(int(x["representative_rank"]),str(x["sha"]))):
+              p=froot/s["path"]
+              if sha256_bytes(p.read_bytes())!=str(s["sha"]):raise SystemExit("frontier SHA mismatch")
+              opps.append((s,p))
+              if len(opps)==2:break
+          if len(opps)!=2:raise SystemExit("need two parity opponents")
+
+          def run(main,opp,seed,seat):
+              purge_package_modules(main.parent);purge_package_modules(opp.parent)
+              ag=load_public_agent(main);op=load_public_agent(opp)
+              env=make("kaggriculture",configuration={"episodeSteps":720,"seed":seed},debug=False)
+              env.run([ag,op] if seat==0 else [op,ag])
+              rep=env.toJSON();st=[str(x) for x in rep.get("statuses",[])]
+              rw=[float(x) for x in rep.get("rewards",[])];steps=len(rep.get("steps") or [])
+              if st!=["DONE","DONE"] or len(rw)!=2 or steps<720 or not all(math.isfinite(x) for x in rw):
+                  raise RuntimeError(f"invalid terminal {st} {rw} {steps}")
+              mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+              return {"rewards":rw,"score":float(score(mine-other)),"margin":float(mine-other),"steps":steps}
+
+          rows=[];fails=[]
+          for s,opp in opps:
+            for seed in (80709,80710):
+              for seat in (0,1):
+                try:
+                  d=run(src,opp,seed,seat);p=run(pmain,opp,seed,seat)
+                  ok=d==p
+                  rows.append({"opponent_sha":s["sha"],"seed":seed,"seat":seat,"direct":d,"packaged":p,"exact_parity":ok})
+                  if not ok:fails.append({"opponent_sha":s["sha"],"seed":seed,"seat":seat,"error":"parity mismatch"})
+                except Exception as e:
+                  fails.append({"opponent_sha":s["sha"],"seed":seed,"seat":seat,"error":f"{type(e).__name__}: {e}"})
+          exact=sum(bool(r["exact_parity"]) for r in rows)
+          out={"schema":"kculture-v31d-confirmed-hedge-package-preflight-v1","candidate_ref":ref,"candidate_sha":sha,
+               "archive_sha256":archive_sha,"package_parity_exact":exact,"package_parity_pass":(exact==8 and not fails),
+               "parity_rows":rows,"failures":fails,"automatic_kaggle_submission":False}
+          Path("artifacts/v31d/V31D_PACKAGE_PREFLIGHT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V31D_PACKAGE",json.dumps({k:v for k,v in out.items() if k not in ("parity_rows","failures")},sort_keys=True))
+          if not out["package_parity_pass"]:raise SystemExit(2)
+          PY
+      - name: Read-only hosted slot and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > artifacts/v31d/submissions.csv
+          python - <<'PY'
+          import csv,io,json,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+          txt=Path("artifacts/v31d/submissions.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+            try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+            except Exception:continue
+            if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          def norm(r):return {str(k).lower():v for k,v in r.items() if k}
+          rows=[norm(r) for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[os.environ["V30B_ID"],os.environ["V47_ID"]]
+          if latest!=expected:raise SystemExit(f"latest-two drift {latest} != {expected}")
+          today=datetime.now(timezone.utc).date().isoformat()
+          today_count=sum(str(r.get("date","")).startswith(today) for r in rows)
+          out={"latest_two":latest,"would_displace":os.environ["V47_ID"],"would_retain":os.environ["V30B_ID"],
+               "today_utc":today,"submissions_today":today_count,"daily_maximum":5,"projected_after_one":today_count+1,
+               "read_only":True}
+          Path("artifacts/v31d/V31D_SLOT_PREFLIGHT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V31D_SLOT_PREFLIGHT",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v31d-confirmed-hedge-package-preflight
+          path: artifacts/v31d/**
+          retention-days: 14
+          if-no-files-found: error
