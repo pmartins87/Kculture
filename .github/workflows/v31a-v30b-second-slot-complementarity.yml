@@ -79,7 +79,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install -U pip
-          python -m pip install 'kaggle-environments==1.32.7'
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7'
       - uses: actions/download-artifact@v4
         with:
           name: v30a-immutable-public-policy-snapshot
