@@ -1,0 +1,134 @@
+name: v32a-fresh-public-policy-delta-scan
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v32a-fresh-public-policy-delta-scan.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install acquisition runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a-old
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Acquire fresh public snapshot and compute delta
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v32a-new artifacts/v32a-meta
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v32a-meta/V32A_FRONTIER_RESULT.json             --raw artifacts/v32a-meta/TOP30_RAW.csv             --snapshot-dir artifacts/v32a-new
+          python tools/v32a_public_delta_census.py             --old artifacts/v30a-old             --new artifacts/v32a-new             --out artifacts/v32a-meta/V32A_DELTA.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a-new/**
+          retention-days: 14
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v32a-meta
+          path: artifacts/v32a-meta/**
+          retention-days: 14
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b-package
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a-new
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-meta
+          path: artifacts/v32a-meta
+      - name: Run V32A shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v32a
+          python tools/v32a_public_delta_shard.py             --snapshot artifacts/v32a-new             --delta artifacts/v32a-meta/V32A_DELTA.json             --primary-main artifacts/v30b-package/package/main.py             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v32a/V32A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v32a-shard-${{ matrix.shard_index }}
+          path: artifacts/v32a/*.json
+          retention-days: 14
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v32a-shard-*
+          path: artifacts/v32a-shards
+          merge-multiple: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-meta
+          path: artifacts/v32a-meta
+      - name: Aggregate V32A
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v32a-final
+          python tools/aggregate_v32a_public_delta.py             --input-dir artifacts/v32a-shards             --delta artifacts/v32a-meta/V32A_DELTA.json             --out artifacts/v32a-final/V32A_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v32a-fresh-public-policy-delta-scan
+          path: artifacts/v32a-final/*.json
+          retention-days: 14
+          if-no-files-found: error
