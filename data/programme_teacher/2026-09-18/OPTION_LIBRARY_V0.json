@@ -1774,7 +1774,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V31C 35999484379. In parallel scan fresh current public persistent policies for a candidate materially stronger than hosted V30B. Never mutate Kaggle slots without explicit user authorization.",
+  "next_stage": "Resolve V31D package/slot preflight and V32C independent CHA22 confirmation. Any Kaggle mutation still requires explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2910,13 +2910,60 @@
     "eligible_candidates": []
   },
   "v31c": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 35999484379,
-    "protocol": "docs/strategy/V31C_NEAR_MISS_SECOND_SLOT_CONFIRMATION_PROTOCOL_2026-09-24.md",
-    "candidates": [
-      "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
-      "20fe549dd4573b9fd1dfb32a1782c205fa74f0edfdfd6cbe935079533e0a9d0e"
-    ],
+    "decision": "V31C_SECOND_SLOT_REPLACEMENT_CONFIRMED",
+    "mechanical_pass": true,
+    "selected_candidate": {
+      "ref": "prvsiyan/kaggriculture-frontier-the-moon-counts-melons",
+      "sha": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "standalone_score_rate": 0.8194444444444444,
+      "pair_score_rate": 0.9027777777777778,
+      "pair_score_delta_vs_primary": 0.07638888888888895,
+      "loss_to_hedge_win_conversions": 6,
+      "nonwin_to_hedge_win_conversions": 16,
+      "rescue_source_breadth": 3,
+      "rescue_seed_breadth": 5,
+      "rescue_seats": [
+        0,
+        1
+      ]
+    },
+    "retained_v47_pair_score_rate": 0.8368055555555556,
+    "kaggle_mutation_authorized": false
+  },
+  "v31d": {
+    "status": "ACTIVE",
+    "workflow": 36011538979,
+    "purpose": "Exact confirmed hedge package parity and read-only hosted slot/quota preflight",
+    "kaggle_mutation_authorized": false
+  },
+  "v32a": {
+    "status": "COMPLETE",
+    "workflow": 35999814456,
+    "decision": "V32A_NEW_PUBLIC_POLICIES_NO_ADVANTAGE",
+    "mechanical_pass": true,
+    "new_candidate_count": 2,
+    "cha22_near_miss": {
+      "ref": "abhinav0370/kaggriculture-cha22-agent",
+      "sha": "127ed3e62988c0474d386db6527ae8ca9de9bb1fe7004128557ddef67126c652",
+      "score_rate": 0.9583333333333334,
+      "primary_score_rate": 0.8541666666666666,
+      "mean_paired_score_delta": 0.10416666666666667,
+      "positive_contexts": 18,
+      "negative_contexts": 0,
+      "positive_source_breadth": 3,
+      "positive_seed_breadth": 4,
+      "positive_seats": [
+        0,
+        1
+      ]
+    }
+  },
+  "v32c": {
+    "status": "ACTIVE",
+    "workflow": 36011461813,
+    "protocol": "docs/strategy/V32C_CHA22_INDEPENDENT_PRIMARY_CONFIRMATION_PROTOCOL_2026-09-24.md",
     "kaggle_mutation_authorized": false
   }
 }
