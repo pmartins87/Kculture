@@ -1774,7 +1774,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V31D package/slot preflight and V32C independent CHA22 confirmation. Any Kaggle mutation still requires explicit user authorization.",
+  "next_stage": "Await explicit user decision whether to replace V47 56466970 with confirmed V31C hedge package SHA bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880. CHA22 path closed. No Kaggle mutation without explicit authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2913,7 +2913,7 @@
     "status": "COMPLETE",
     "workflow": 35999484379,
     "decision": "V31C_SECOND_SLOT_REPLACEMENT_CONFIRMED",
-    "mechanical_pass": true,
+    "result_doc": "docs/strategy/V31C_NEAR_MISS_SECOND_SLOT_CONFIRMATION_RESULT_2026-09-24.md",
     "selected_candidate": {
       "ref": "prvsiyan/kaggriculture-frontier-the-moon-counts-melons",
       "sha": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
@@ -2929,13 +2929,21 @@
         1
       ]
     },
-    "retained_v47_pair_score_rate": 0.8368055555555556,
     "kaggle_mutation_authorized": false
   },
   "v31d": {
-    "status": "ACTIVE",
-    "workflow": 36011538979,
-    "purpose": "Exact confirmed hedge package parity and read-only hosted slot/quota preflight",
+    "status": "COMPLETE",
+    "workflow": 36011748849,
+    "decision": "PACKAGE_AND_SLOT_PREFLIGHT_PASS",
+    "result_doc": "docs/strategy/V31D_CONFIRMED_HEDGE_PACKAGE_PREFLIGHT_RESULT_2026-09-24.md",
+    "candidate_sha": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+    "archive_sha256": "bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880",
+    "package_parity": "8/8",
+    "would_retain_submission": 56509591,
+    "would_displace_submission": 56466970,
+    "submissions_today_before": 1,
+    "projected_after_one": 2,
+    "daily_maximum": 5,
     "kaggle_mutation_authorized": false
   },
   "v32a": {
@@ -2961,9 +2969,17 @@
     }
   },
   "v32c": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 36011461813,
-    "protocol": "docs/strategy/V32C_CHA22_INDEPENDENT_PRIMARY_CONFIRMATION_PROTOCOL_2026-09-24.md",
+    "decision": "V32C_CHA22_PRIMARY_NOT_CONFIRMED",
+    "result_doc": "docs/strategy/V32C_CHA22_INDEPENDENT_PRIMARY_CONFIRMATION_RESULT_2026-09-24.md",
+    "candidate_score_rate": 0.9305555555555556,
+    "primary_score_rate": 0.8611111111111112,
+    "mean_paired_score_delta": 0.06944444444444445,
+    "positive_source_breadth": 3,
+    "positive_seed_breadth": 5,
+    "positive_contexts": 24,
+    "negative_contexts": 6,
     "kaggle_mutation_authorized": false
   }
 }
