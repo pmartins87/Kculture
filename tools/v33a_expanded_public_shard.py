@@ -52,8 +52,7 @@ def main():
                 fails.append({"candidate_sha":cand["sha"],"candidate_key":key,"opponent_sha":oppm["sha"],"seed":seed,"seat":seat,"error":f"{type(e).__name__}: {e}"})
     out={"schema":"kculture-v33a-expanded-public-shard-v1","mechanical_pass":not fails,"shard_index":a.shard_index,
          "candidate_count":len(selected),"rows":rows,"failures":fails}
-    p=Path(a.out);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(out,indent=2,sort_keys=True)+"
-")
+    p=Path(a.out);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
     print("V33A_SHARD",json.dumps({"shard":a.shard_index,"candidates":len(selected),"rows":len(rows),"failures":len(fails)},sort_keys=True))
     if fails:raise SystemExit(2)
 if __name__=="__main__":main()
