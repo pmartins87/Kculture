@@ -20,6 +20,16 @@
     "tw1_score_rate": 0.8392857142857143
   },
   "current_hosted_pair": {
+    "v31c_hedge": {
+      "submission_id": 56528406,
+      "status": "PENDING",
+      "role": "hedge",
+      "latest_observed_rating": null,
+      "description": "PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4",
+      "candidate_ref": "prvsiyan/kaggriculture-frontier-the-moon-counts-melons",
+      "candidate_sha": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+      "archive_sha256": "bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880"
+    },
     "v30b": {
       "submission_id": 56509591,
       "status": "COMPLETE",
@@ -28,23 +38,12 @@
       "latest_observed_rating": 2404.6,
       "description": "PS_V30B_HERDSAFE_VALIDATED_70D93426"
     },
-    "v47": {
-      "submission_id": 56466970,
-      "status": "COMPLETE",
-      "role": "hedge",
-      "episodes_at_snapshot": 260,
-      "latest_observed_rating": 1704.8
-    },
     "latest_two": [
-      56509591,
-      56466970
+      56528406,
+      56509591
     ],
-    "displaced_all3": {
-      "submission_id": 56367770,
-      "episodes_at_snapshot": 529,
-      "latest_observed_rating": 1827.7
-    },
-    "snapshot_utc": "2026-09-24T17:54:22Z"
+    "displaced_v47_submission_id": 56466970,
+    "snapshot_utc": "2026-09-24T18:01:46Z"
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -1774,7 +1773,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Await explicit user authorization to replace V47 56466970 with confirmed V31C hedge package archive SHA bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880. V30B remains primary. CHA22 path closed.",
+  "next_stage": "Monitor hosted V31C hedge 56528406 and V30B primary 56509591 read-only. No further Kaggle mutation without explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2981,5 +2980,20 @@
     "positive_contexts": 24,
     "negative_contexts": 6,
     "kaggle_mutation_authorized": false
+  },
+  "v31c_hosted_submission": {
+    "workflow": 36038249614,
+    "decision": "V31C_CONFIRMED_HEDGE_HOSTED_REGISTERED",
+    "submission_id": 56528406,
+    "initial_status": "PENDING",
+    "explicit_user_authorization": true,
+    "latest_two_after": [
+      56528406,
+      56509591
+    ],
+    "displaced_v47_submission_id": 56466970,
+    "archive_sha256": "bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880",
+    "main_sha256": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
+    "automatic_kaggle_submission": false
   }
 }
