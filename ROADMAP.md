@@ -5,6 +5,83 @@
 
 
 
+
+## Binding update — 2026-09-24 — FINAL-WEEK HIGH-UPSIDE OFFENSIVE ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+Current hosted latest-two remains:
+1. V31C confirmed hedge `56528406`;
+2. V30B primary `56509591`.
+
+Latest synchronized hosted checkpoint before this offensive:
+- V30B: 136 episodes / 2391.3;
+- V31C hedge: 52 episodes / 2279.7;
+- current V30B leaderboard row: rank 739 of 9982;
+- Top-10 threshold: 2924.5;
+- V30B gap to Top 10: 533.2.
+
+No hosted mutation is authorized.
+
+### V33A — ACTIVE / EXPANDED TOP-100 PUBLIC SWEEP
+
+Protocol:
+`docs/strategy/V33A_EXPANDED_TOP100_PUBLIC_HIGH_UPSIDE_PROTOCOL_2026-09-24.md`.
+
+R2 workflow:
+**`36061384282`**.
+
+Purpose:
+expand discovery beyond V30A's Top-30/12-representative public population to the first 100 current public Kaggriculture kernels, exact-SHA deduplicate, two-seat smoke, remove already tested V30A/V32A SHAs, and benchmark up to 40 genuinely new executable unique policies against exact V30B on a fresh current opponent panel.
+
+Frozen stage-A seeds:
+`80901..80903`, both seats.
+
+High-upside gate:
+- score rate >= V30B +0.10;
+- paired score delta >= +0.10;
+- positive source breadth >=4;
+- positive seed breadth 3/3;
+- positive contexts > negative;
+- both seats.
+
+The first V33A workflow `36060974575` failed before acquisition because generated Python contained malformed newline string literals. No candidate outcome was observed. R2 changes only this syntax mechanic; scientific population, thresholds and seeds are unchanged.
+
+### V34A — ACTIVE / PERSISTENT CROSS-DOMAIN RECOMBINATION
+
+Protocol:
+`docs/strategy/V34A_PERSISTENT_CROSS_DOMAIN_RECOMBINATION_PROTOCOL_2026-09-24.md`.
+
+Workflow:
+**`36061131119`**.
+
+Frozen policy set:
+- P0 V30B herd-safe risk-aware feed;
+- P1 V31C Moon/Melons;
+- P2 CHA22;
+- P3 herd-safe sale-window lb-2700.
+
+V34A evaluates all 12 ordered cross-domain hybrids:
+- MARKET from one persistent policy;
+- FARMER + HANDS from another;
+- both donor policies evaluated every turn to preserve their own internal state.
+
+Four full policies are controls. No opponent/source identity is used at runtime.
+
+Fresh public opponent panel; seeds `80911..80914`; both seats.
+
+High-upside hybrid gate:
+- hybrid score rate >= V30B +0.10;
+- paired score delta >= +0.10;
+- positive source breadth >=4;
+- seed breadth >=3/4;
+- positive contexts > negative;
+- both seats.
+
+If V33A or V34A produces a READY decision, launch exactly one independent fresh validation for that candidate before any hosted request. No Kaggle slot mutation without explicit user authorization.
+
+**Immediate action:** resolve V33A R2 and V34A. Do not open additional research families until these high-upside gates resolve.
+
 ## Binding update — 2026-09-24 — V31C CONFIRMED HEDGE HOSTED / NEW FINAL-WEEK PAIR
 
 **This block supersedes lower hosted-pair/current-action sections.**
