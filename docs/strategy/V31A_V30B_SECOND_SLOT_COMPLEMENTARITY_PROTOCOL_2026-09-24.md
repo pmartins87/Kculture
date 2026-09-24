@@ -36,14 +36,20 @@ No hedge may be selected or removed based on V31A outcomes.
 
 ## Frozen opponent/context panel
 
-Reuse the exact immutable binding V30B-R2 fresh frontier from workflow `35906418993`.
+Reuse the exact immutable binding V30B-R2 fresh frontier and exact binding primary rows from workflow `35906418993`.
 
-Contexts:
+Full primary panel:
 - all frozen frontier opponents;
 - seeds exactly `80511..80516`;
 - both seats.
 
-This reuses the exact already-binding V30B-R2 contexts so the primary's terminal results must reproduce exactly.
+### Pre-run compute clarification
+
+Because the decision target is **best-of-two W/L complementarity**, every context where V30B already wins is algebraically fixed as a pair win regardless of the hedge. Therefore, before observing any V31A hedge result, hedge execution is frozen to the exact V30B-R2 **primary non-win residual contexts only**.
+
+The full 144-context V30B binding rows remain the denominator for pair score-rate calculations. For V30B-win contexts, pair score is fixed to the binding V30B score and no hedge episode is executed.
+
+This is a deterministic compute reduction, not context selection based on hedge outcomes.
 
 No live opponent reacquisition.
 
@@ -59,14 +65,14 @@ No live opponent reacquisition.
 ## Metrics
 
 For each hedge H:
-- standalone W/L/T and score rate;
+- hedge W/L/T on the frozen V30B non-win residual set;
 - V30B residual-nonwin -> hedge-win conversions;
 - V30B loss -> hedge-win conversions;
 - V30B loss -> hedge-tie conversions;
 - hedge regressions on contexts V30B already wins (reported but do not hurt best-of-two mathematically);
 - best-of-two pair score rate;
 - pair score delta versus V30B alone;
-- pair mean margin using max(primary margin, hedge margin);
+- residual rescue margin statistics on executed non-win contexts;
 - rescue source breadth;
 - rescue seed breadth;
 - rescue support in both seats.
@@ -89,7 +95,7 @@ Among candidates satisfying the material-replacement gate, select by:
 2. highest V30B loss->hedge-win conversions;
 3. highest rescue source breadth;
 4. highest rescue seed breadth;
-5. highest pair mean max-margin;
+5. highest mean residual hedge margin;
 6. lower frozen V30A representative rank when available;
 7. lexical SHA.
 
