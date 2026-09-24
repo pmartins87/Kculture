@@ -46,7 +46,7 @@ def load_primary_rows(root):
     total=sum(float(r["score"]) for r in rows)
     if abs(total-131.0)>1e-9: raise RuntimeError(f"binding primary score total drift {total}")
     residual=[r for r in rows if float(r["score"])<1.0]
-    if len(residual)!=13: raise RuntimeError(f"binding primary residual count {len(residual)} != 13")
+    if len(residual)!=20: raise RuntimeError(f"binding primary residual count {len(residual)} != 20")
     return rows,residual
 
 def load_pool(v30a_root,v47_main):
