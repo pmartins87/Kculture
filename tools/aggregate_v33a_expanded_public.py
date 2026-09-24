@@ -43,8 +43,7 @@ def main():
         selected=eligible[0];decision="V33A_EXPANDED_PUBLIC_CHALLENGER_READY"
       else:selected=None;decision="V33A_EXPANDED_PUBLIC_NO_HIGH_UPSIDE"
       out={"schema":"kculture-v33a-expanded-public-result-v1","mechanical_pass":mech,"decision":decision,"selected_count":n,"summaries":summaries,"selected_candidate":selected,"failures":fails,"automatic_kaggle_submission":False}
-    p=Path(a.out);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(out,indent=2,sort_keys=True)+"
-")
+    p=Path(a.out);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
     print("V33A_RESULT",json.dumps(out,sort_keys=True))
     if not out["mechanical_pass"]:raise SystemExit(2)
 if __name__=="__main__":main()
