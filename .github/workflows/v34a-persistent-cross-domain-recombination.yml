@@ -1,0 +1,139 @@
+name: v34a-persistent-cross-domain-recombination
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v34a-persistent-cross-domain-recombination.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install acquisition runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7' 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a
+          repository: pmartins87/Kculture
+          run-id: 35999814456
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Acquire fresh V34A opponent frontier
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v34a-opponents artifacts/v34a-meta
+          python tools/v28b_current_frontier_snapshot.py             --out artifacts/v34a-meta/V34A_OPPONENT_RESULT.json             --raw artifacts/v34a-meta/TOP30_RAW.csv             --snapshot-dir artifacts/v34a-opponents
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v34a-opponents
+          path: artifacts/v34a-opponents/**
+          retention-days: 14
+
+  shard:
+    needs: prepare
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    strategy:
+      fail-fast: false
+      matrix:
+        shard_index: [0,1,2,3]
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kagglehub>=0.3.12'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30a-immutable-public-policy-snapshot
+          path: artifacts/v30a
+          repository: pmartins87/Kculture
+          run-id: 35877442921
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v32a-fresh-snapshot
+          path: artifacts/v32a
+          repository: pmartins87/Kculture
+          run-id: 35999814456
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: artifacts/v30b
+          repository: pmartins87/Kculture
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with: {name: v34a-opponents, path: artifacts/v34a-opponents}
+      - name: Run V34A shard
+        shell: bash
+        run: |
+          set -euo pipefail
+          for k in KAGGLE_API_TOKEN KAGGLE_USERNAME KAGGLE_KEY; do unset "$k" || true; done
+          mkdir -p artifacts/v34a
+          python tools/v34a_cross_domain_shard.py             --v30b-main artifacts/v30b/package/main.py             --v30a artifacts/v30a             --v32a artifacts/v32a             --opponents artifacts/v34a-opponents             --shard-index ${{ matrix.shard_index }}             --num-shards 4             --out artifacts/v34a/V34A_SHARD_${{ matrix.shard_index }}.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v34a-shard-${{ matrix.shard_index }}
+          path: artifacts/v34a/*.json
+          retention-days: 14
+
+  aggregate:
+    needs: [prepare,shard]
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v34a-shard-*
+          path: artifacts/v34a-shards
+          merge-multiple: false
+      - name: Aggregate V34A
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v34a-final
+          python tools/aggregate_v34a_cross_domain.py             --input-dir artifacts/v34a-shards             --out artifacts/v34a-final/V34A_RESULT.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v34a-persistent-cross-domain-recombination
+          path: artifacts/v34a-final/*.json
+          retention-days: 14
+          if-no-files-found: error
