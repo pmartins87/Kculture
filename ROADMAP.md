@@ -6,6 +6,81 @@
 
 
 
+
+## Binding update — 2026-09-25 — HOSTED PAIR DETERIORATED / V34A CLOSED / V33A R2 ACTIVE
+
+**This block supersedes lower current-action sections.**
+
+Current hosted latest-two remains:
+1. V31C confirmed hedge `56528406`;
+2. V30B primary `56509591`.
+
+Latest verified read-only snapshot:
+`2026-09-25T23:34:06Z`.
+
+- V30B `56509591`: **261 episodes / 2223.5 / COMPLETE**;
+- V31C hedge `56528406`: **198 episodes / 2140.2 / COMPLETE**;
+- latest-two drift: **false**.
+
+This is a material deterioration from the 2026-09-24 checkpoints around 2390–2440 for V30B. Neither hosted submission is currently near prize range. No hosted mutation is authorized.
+
+### V34A — COMPLETE / NO HIGH-UPSIDE CROSS-DOMAIN HYBRID
+
+Binding workflow:
+**`36061131119`**.
+
+Decision:
+**`V34A_NO_HIGH_UPSIDE_CROSS_DOMAIN_HYBRID`**.
+
+Mechanics PASS over 96 fresh contexts.
+
+Exact V30B baseline:
+- score rate **0.875**.
+
+Best full-policy control:
+- CHA22 `FULL_P2`: **0.9583333333**;
+- paired score delta **+0.0833333333**;
+- positive source breadth 2.
+
+Best cross-domain hybrid:
+- `M_P0__P_P3` = MARKET from V30B + FARMER/HANDS from herd-safe-sale-window-lb-2700;
+- score rate **0.90625**;
+- paired score delta **+0.03125**;
+- positive source breadth 2;
+- seed breadth 1/4.
+
+No hybrid passed the frozen +0.10 high-upside gate. This composition family is closed.
+
+Result:
+`docs/strategy/V34A_PERSISTENT_CROSS_DOMAIN_RECOMBINATION_RESULT_2026-09-24.md`.
+
+### V33A R2 — ACTIVE / EXPANDED TOP-100 PUBLIC SWEEP
+
+Original workflow `36060974575` failed before acquisition on a generated Python newline syntax error. No candidate result was observed.
+
+Mechanical repair commit:
+`a26572b823be374d8f795395d4c360a7c9090b5d`.
+
+Rerun is currently active in the acquisition stage using the unchanged frozen design:
+- first 100 current public Kaggriculture kernels;
+- exact SHA deduplication;
+- both-seat smoke;
+- exclude V30A/V32A tested SHAs;
+- up to 40 genuinely new executable policies;
+- exact V30B baseline;
+- fresh opponent frontier;
+- seeds `80901..80903`, both seats;
+- high-upside gate >= +0.10 score rate and paired score delta, source breadth >=4, seed breadth 3/3, positive>negative contexts, both seats.
+
+### V33B — PRE-REGISTERED BEFORE V33A R2 OUTCOME
+
+Protocol:
+`docs/strategy/V33B_EXPANDED_PUBLIC_INDEPENDENT_VALIDATION_PROTOCOL_2026-09-25.md`.
+
+If and only if V33A returns `V33A_EXPANDED_PUBLIC_CHALLENGER_READY`, V33B freezes that exact single selected ref/SHA/package and validates on a newly acquired frontier, seeds `80921..80926`, both seats, plus deterministic package parity 8/8. No second-best fallback is allowed.
+
+**Immediate action:** resolve V33A R2. If READY, launch V33B automatically. Do not mutate Kaggle slots without explicit user authorization.
+
 ## Binding update — 2026-09-24 — FINAL-WEEK HIGH-UPSIDE OFFENSIVE ACTIVE
 
 **This block supersedes lower current-action sections.**
