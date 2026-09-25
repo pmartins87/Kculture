@@ -1770,7 +1770,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V33A R2 expanded Top-100 acquisition/benchmark. If READY, launch exact V33B independent validation automatically. No Kaggle mutation without explicit user authorization.",
+  "next_stage": "Resolve active V33A R2 expanded Top-100 sweep. If READY, automatically launch preregistered V33B independent validation. Do not mutate Kaggle slots without explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -3015,5 +3015,15 @@
     "status": "PRE_REGISTERED",
     "protocol": "docs/strategy/V33B_EXPANDED_PUBLIC_INDEPENDENT_VALIDATION_PROTOCOL_2026-09-25.md",
     "kaggle_mutation_authorized": false
+  },
+  "current_leaderboard_checkpoint": {
+    "snapshot_utc": "2026-09-25T23:35:11Z",
+    "team_rank": 1019,
+    "teams": 10022,
+    "v30b_score": 2223.5,
+    "top10_threshold": 2886,
+    "gap_to_top10": 662.5,
+    "top1": 3072.2,
+    "gap_to_top1": 848.7
   }
 }
