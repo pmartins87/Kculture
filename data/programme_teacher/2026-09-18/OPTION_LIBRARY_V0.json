@@ -22,28 +22,25 @@
   "current_hosted_pair": {
     "v31c_hedge": {
       "submission_id": 56528406,
-      "status": "PENDING",
+      "status": "COMPLETE",
       "role": "hedge",
-      "latest_observed_rating": null,
-      "description": "PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4",
-      "candidate_ref": "prvsiyan/kaggriculture-frontier-the-moon-counts-melons",
-      "candidate_sha": "178ae0f727641cf4b618ebb98ade7aa1a1bed7517281aab9849de82a59d8ed3a",
-      "archive_sha256": "bbafaad4481a76307b93b08cf7fb1b289819677fa842ef91afeb9e0f051ae880"
+      "episodes_at_snapshot": 198,
+      "latest_observed_rating": 2140.2,
+      "description": "PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4"
     },
     "v30b": {
       "submission_id": 56509591,
       "status": "COMPLETE",
       "role": "primary",
-      "episodes_at_snapshot": 120,
-      "latest_observed_rating": 2404.6,
+      "episodes_at_snapshot": 261,
+      "latest_observed_rating": 2223.5,
       "description": "PS_V30B_HERDSAFE_VALIDATED_70D93426"
     },
     "latest_two": [
       56528406,
       56509591
     ],
-    "displaced_v47_submission_id": 56466970,
-    "snapshot_utc": "2026-09-24T18:01:46Z"
+    "snapshot_utc": "2026-09-25T23:34:06Z"
   },
   "current_offline_host": "exact V47 + O-RW1 + O-TW1 + O-LQ2 (ALL3)",
   "date": "2026-09-18",
@@ -1773,7 +1770,7 @@
     "name": "exact_public_v47"
   },
   "last_binding_update_utc": "2026-09-20",
-  "next_stage": "Resolve V33A R2 36061384282 and V34A 36061131119. If either is READY, launch one independent fresh validation automatically. Preserve hosted pair 56528406 + 56509591 until explicit user authorization.",
+  "next_stage": "Resolve V33A R2 expanded Top-100 acquisition/benchmark. If READY, launch exact V33B independent validation automatically. No Kaggle mutation without explicit user authorization.",
   "no_automatic_kaggle_submission": true,
   "option_value_v2": {
     "failures": 0,
@@ -2997,31 +2994,26 @@
     "automatic_kaggle_submission": false
   },
   "v33a": {
-    "status": "ACTIVE",
-    "workflow": 36061384282,
+    "status": "ACTIVE_R2",
+    "workflow": 36060974575,
+    "repair_commit": "a26572b823be374d8f795395d4c360a7c9090b5d",
     "protocol": "docs/strategy/V33A_EXPANDED_TOP100_PUBLIC_HIGH_UPSIDE_PROTOCOL_2026-09-24.md",
-    "prior_mechanical_failure_workflow": 36060974575,
-    "prior_failure": "generated newline syntax only; no candidate outcome observed",
-    "top_n": 100,
-    "max_new_candidates": 40,
-    "seeds": [
-      80901,
-      80902,
-      80903
-    ],
     "kaggle_mutation_authorized": false
   },
   "v34a": {
-    "status": "ACTIVE",
+    "status": "COMPLETE",
     "workflow": 36061131119,
-    "protocol": "docs/strategy/V34A_PERSISTENT_CROSS_DOMAIN_RECOMBINATION_PROTOCOL_2026-09-24.md",
-    "modes": "12 ordered cross-domain hybrids + 4 full-policy controls",
-    "seeds": [
-      80911,
-      80912,
-      80913,
-      80914
-    ],
+    "decision": "V34A_NO_HIGH_UPSIDE_CROSS_DOMAIN_HYBRID",
+    "result_doc": "docs/strategy/V34A_PERSISTENT_CROSS_DOMAIN_RECOMBINATION_RESULT_2026-09-24.md",
+    "primary_score_rate": 0.875,
+    "best_hybrid": "M_P0__P_P3",
+    "best_hybrid_score_rate": 0.90625,
+    "best_hybrid_paired_score_delta": 0.03125,
+    "kaggle_mutation_authorized": false
+  },
+  "v33b": {
+    "status": "PRE_REGISTERED",
+    "protocol": "docs/strategy/V33B_EXPANDED_PUBLIC_INDEPENDENT_VALIDATION_PROTOCOL_2026-09-25.md",
     "kaggle_mutation_authorized": false
   }
 }
