@@ -68,10 +68,10 @@ The previous local-evaluator-heavy strategy is no longer the best final-week dec
 
 If explicitly authorized, execute a two-submission replacement in this exact order:
 
-1. Barnyard V7 first — evicts older V30B while retaining V31C temporarily.
-2. Kaito V2 second — evicts V31C and leaves **Kaito V2 + Barnyard V7** as latest-two.
+1. Kaito V2 first — evicts older V30B while retaining V31C temporarily.
+2. Barnyard V7 second — evicts V31C and leaves **Barnyard V7 + Kaito V2** as latest-two, with Barnyard newest.
 
-Barnyard is the higher-confidence primary because its 3034.8 evidence is current. Kaito V2 carries version-age/meta-drift risk, but preserving V30B/V31C at ~2143/~2055 has materially lower upside.
+Barnyard is the higher-confidence primary because its 3034.8 evidence is current. It is therefore the keeper and must be submitted last. Kaito V2 carries version-age/meta-drift risk, but preserving V30B/V31C at ~2143/~2055 has materially lower upside.
 
 Before any mutation, repeat a read-only slot/quota check. Abort on drift.
 
