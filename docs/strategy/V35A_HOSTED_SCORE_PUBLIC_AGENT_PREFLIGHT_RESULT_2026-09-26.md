@@ -79,17 +79,17 @@ The Barnyard V7 hosted score is current high-confidence evidence. Kaito V2's 300
 
 Submit exactly in this order:
 
-1. **Barnyard Economist V7** first.
-   - This makes Barnyard newest and evicts older V30B `56509591`.
-   - Interim pair: Barnyard + V31C.
+1. **Kaito Fast Routes V2** first.
+   - This makes Kaito newest and evicts older V30B `56509591`.
+   - Interim pair: Kaito V2 + V31C.
 
-2. **Kaito Fast Routes V2** second.
-   - This makes Kaito newest and evicts V31C `56528406`.
-   - Final pair: Kaito V2 + Barnyard V7.
+2. **Barnyard Economist V7** second.
+   - This makes Barnyard newest and evicts V31C `56528406`.
+   - Final pair: Barnyard V7 + Kaito V2.
 
 This consumes 2 of the currently available 5 daily submissions.
 
-The order protects Barnyard through the second submission and leaves the two hosted-score-backed candidates as the latest two.
+Barnyard is the higher-confidence keeper, so it is deliberately submitted **last**. If a later third experiment becomes justified, the older Kaito slot would be displaced while Barnyard remains active.
 
 A fresh read-only latest-two/quota check must occur immediately before mutation. Any slot drift aborts submission and returns to review.
 
