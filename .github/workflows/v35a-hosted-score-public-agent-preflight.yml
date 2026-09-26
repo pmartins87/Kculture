@@ -1,0 +1,208 @@
+name: v35a-hosted-score-public-agent-preflight
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v35a-hosted-score-public-agent-preflight.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+  COMPETITION: kaggriculture
+  EXPECTED_NEWEST: '56528406'
+  EXPECTED_OLDER: '56509591'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install pinned runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kaggle>=2.2.3' 'kagglehub>=1.0.0'
+      - name: Acquire exact published packages and run mechanical smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v35a
+          python - <<'PY'
+          import hashlib,json,math,os,shutil,sys,tempfile,time
+          from pathlib import Path
+          from kaggle_environments import make
+
+          ROOT=Path.cwd()
+          sys.path.insert(0,str(ROOT))
+          from tools.programme_adaptive_expert_gate import (
+              find_public_package,unpack_package,load_public_agent,purge_package_modules,sha256_bytes
+          )
+
+          CANDIDATES=[
+            {
+              'key':'BARNYARD_V7',
+              'handle':'romanrozen/strong-barnyard-economist/versions/7',
+              'notebook':'romanrozen/strong-barnyard-economist',
+              'version':7,
+              'script_version_id':'341074820',
+              'observed_public_score':3034.8,
+              'license':'Apache-2.0',
+            },
+            {
+              'key':'KAITO_V2',
+              'handle':'kaitofukami/40-40-early-floor-39-46-top-10-v48-fast-routes/versions/2',
+              'notebook':'kaitofukami/40-40-early-floor-39-46-top-10-v48-fast-routes',
+              'version':2,
+              'script_version_id':'341206423',
+              'observed_public_score':3009.0,
+              'license':'Apache-2.0',
+            },
+          ]
+          SEEDS=(81001,81002)
+
+          import kaggle_environments
+          if str(getattr(kaggle_environments,'__version__',''))!='1.32.7':
+              raise SystemExit(f"engine mismatch {getattr(kaggle_environments,'__version__','')}")
+
+          def smoke(main,seed,seat):
+              purge_package_modules(main.parent)
+              ag=load_public_agent(main)
+              env=make('kaggriculture',configuration={'episodeSteps':720,'seed':int(seed)},debug=False)
+              t0=time.perf_counter()
+              env.run([ag,'starter'] if seat==0 else ['starter',ag])
+              secs=time.perf_counter()-t0
+              rep=env.toJSON()
+              statuses=[str(x) for x in rep.get('statuses',[])]
+              rewards=[float(x) for x in rep.get('rewards',[])]
+              steps=len(rep.get('steps') or [])
+              ok=(statuses==['DONE','DONE'] and len(rewards)==2 and steps>=720 and all(math.isfinite(x) for x in rewards))
+              return {'seed':seed,'seat':seat,'ok':ok,'statuses':statuses,'rewards':rewards,'steps':steps,'wall_seconds':secs}
+
+          out={'schema':'kculture-v35a-hosted-score-public-agent-preflight-v1','engine':'1.32.7','candidates':[],'automatic_kaggle_submission':False}
+          with tempfile.TemporaryDirectory(prefix='v35a-') as td:
+              td=Path(td)
+              for c in CANDIDATES:
+                  rec={k:v for k,v in c.items()}
+                  rec['failures']=[]
+                  try:
+                      dl=td/c['key']/'download'
+                      archive,receipt=find_public_package(c['handle'],dl)
+                      pkg=td/c['key']/'package'
+                      main=unpack_package(archive,pkg)
+                      main_sha=sha256_bytes(main.read_bytes())
+                      archive_sha=sha256_bytes(archive.read_bytes())
+                      if archive_sha!=receipt.get('archive_sha256'):
+                          raise RuntimeError('archive SHA mismatch against acquisition receipt')
+                      preserved=Path('artifacts/v35a')/f"{c['key']}_ORIGINAL.tar.gz"
+                      shutil.copy2(archive,preserved)
+                      if sha256_bytes(preserved.read_bytes())!=archive_sha:
+                          raise RuntimeError('preserved archive SHA mismatch')
+                      rows=[]
+                      for seed in SEEDS:
+                          for seat in (0,1):
+                              try:
+                                  row=smoke(main,seed,seat)
+                              except Exception as e:
+                                  row={'seed':seed,'seat':seat,'ok':False,'error':f'{type(e).__name__}: {e}'}
+                              finally:
+                                  purge_package_modules(main.parent)
+                              rows.append(row)
+                      rec.update({
+                          'acquisition':'exact_versioned_notebook_output',
+                          'archive_sha256':archive_sha,
+                          'archive_bytes':archive.stat().st_size,
+                          'members':receipt.get('members',[]),
+                          'main_sha256':main_sha,
+                          'main_bytes':main.stat().st_size,
+                          'smoke_rows':rows,
+                          'smoke_pass_count':sum(bool(r.get('ok')) for r in rows),
+                          'mechanical_pass':len(rows)==4 and all(bool(r.get('ok')) for r in rows),
+                          'preserved_archive':preserved.name,
+                      })
+                  except Exception as e:
+                      rec['failures'].append(f'{type(e).__name__}: {e}')
+                      rec['mechanical_pass']=False
+                  out['candidates'].append(rec)
+                  print('V35A_CANDIDATE',json.dumps({k:v for k,v in rec.items() if k not in ('smoke_rows','failures')},sort_keys=True),flush=True)
+
+          out['ready_count']=sum(bool(c.get('mechanical_pass')) for c in out['candidates'])
+          Path('artifacts/v35a/V35A_PACKAGES.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Read-only hosted slots and quota
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > artifacts/v35a/submissions.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > artifacts/v35a/submission-limits.json || true
+          python - <<'PY'
+          import csv,io,json,os
+          from datetime import datetime,timezone
+          from pathlib import Path
+          txt=Path('artifacts/v35a/submissions.csv').read_text(encoding='utf-8',errors='replace')
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try: cand=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
+              except Exception: continue
+              if cand and any(k and 'ref' in k.lower() for k in cand[0]):
+                  rows=cand;break
+          def norm(r): return {str(k).lower():v for k,v in r.items() if k}
+          rows=[norm(r) for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get('date','')),reverse=True)
+          latest=[str(r.get('ref','')) for r in rows[:2]]
+          expected=[os.environ['EXPECTED_NEWEST'],os.environ['EXPECTED_OLDER']]
+          today=datetime.now(timezone.utc).date().isoformat()
+          today_count=sum(str(r.get('date','')).startswith(today) for r in rows)
+          limtxt=Path('artifacts/v35a/submission-limits.json').read_text(encoding='utf-8',errors='replace') if Path('artifacts/v35a/submission-limits.json').exists() else ''
+          try: limits=json.loads(limtxt) if limtxt.strip() else None
+          except Exception: limits={'raw':limtxt[:4000]}
+          out={
+            'read_only':True,
+            'latest_two':latest,
+            'expected_latest_two':expected,
+            'latest_two_match':latest==expected,
+            'today_utc':today,
+            'submissions_today':today_count,
+            'projected_after_two':today_count+2,
+            'submission_limits':limits,
+          }
+          Path('artifacts/v35a/V35A_SLOT_PREFLIGHT.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V35A_SLOT',json.dumps({k:v for k,v in out.items() if k!='submission_limits'},sort_keys=True))
+          PY
+      - name: Resolve V35A decision
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('artifacts/v35a/V35A_PACKAGES.json').read_text())
+          s=json.loads(Path('artifacts/v35a/V35A_SLOT_PREFLIGHT.json').read_text())
+          ready=[c['key'] for c in p['candidates'] if c.get('mechanical_pass')]
+          if ready and not s.get('latest_two_match'):
+              decision='V35A_PACKAGE_READY_SLOT_DRIFT_REVIEW_REQUIRED'
+          elif len(ready)==2:
+              decision='V35A_BOTH_HOSTED_STRONG_PACKAGES_READY_FOR_USER_DECISION'
+          elif len(ready)==1:
+              decision='V35A_ONE_HOSTED_STRONG_PACKAGE_READY_FOR_USER_DECISION'
+          else:
+              decision='V35A_NO_PACKAGE_READY'
+          out={'schema':'kculture-v35a-result-v1','decision':decision,'ready_candidates':ready,'package_preflight':p,'slot_preflight':s,'automatic_kaggle_submission':False}
+          Path('artifacts/v35a/V35A_RESULT.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V35A_RESULT',json.dumps({'decision':decision,'ready_candidates':ready,'latest_two':s.get('latest_two'),'submissions_today':s.get('submissions_today')},sort_keys=True))
+          if not ready: raise SystemExit(2)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v35a-hosted-score-public-agent-preflight
+          path: artifacts/v35a/**
+          retention-days: 14
+          if-no-files-found: error
