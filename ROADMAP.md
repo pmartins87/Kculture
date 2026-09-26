@@ -1,6 +1,84 @@
 # ROADMAP — Kculture live plan
 
 
+## Binding update — 2026-09-26 — V35A BOTH HOSTED-STRONG PACKAGES READY / USER SLOT DECISION
+
+**This block supersedes lower current-action sections.**
+
+### Hosted state — materially deteriorated
+
+Read-only preflight from binding V35A workflow `36222809676`, approximately 2026-09-26 06:09 UTC:
+
+1. newest active: V31C `56528406` — **2055.2 / COMPLETE**;
+2. older active: V30B `56509591` — **2143.3 / COMPLETE**.
+
+Latest-two drift: **false**.
+
+UTC-day submission state:
+- submissions today before V35 mutation: **0**;
+- currently allowed now: **5**;
+- projected after two: **2**.
+
+### V33A — CLOSED WITH SCOPED CONCLUSION
+
+Binding workflow `36061384282`:
+**`V33A_EXPANDED_PUBLIC_NO_HIGH_UPSIDE`**.
+
+Mechanical PASS; 40 frozen new executable policies were evaluated and none passed the preregistered +0.10 high-upside gate.
+
+Important correction: V33A's source population was the ordering returned by
+`kaggle kernels list --competition kaggriculture --sort-by scoreDescending`.
+It was **not** a hosted-ladder Top-100 agent population and did not include later-discovered hosted-strong public packages such as Barnyard V7.
+
+V33B is therefore not activated.
+
+Result:
+`docs/strategy/V33A_EXPANDED_TOP100_PUBLIC_HIGH_UPSIDE_RESULT_2026-09-25.md`.
+
+### V35A — COMPLETE / BOTH EXACT PACKAGES READY
+
+Binding workflow:
+**`36222809676`**.
+
+Decision:
+**`V35A_BOTH_HOSTED_STRONG_PACKAGES_READY_FOR_USER_DECISION`**.
+
+Barnyard Economist V7:
+- exact public version `romanrozen/strong-barnyard-economist/versions/7`;
+- observed hosted Public Score **3034.8**;
+- Apache-2.0;
+- archive SHA `1573dd58af311c6448640fb89380b63f88b0d63a10e788d516fb928f005be968`;
+- main.py SHA `997e6bfc5234534e246e945bc61c87858ebf997ab85b0a5c9427dd4ed710f1b6`;
+- exact-engine mechanical smoke **4/4 PASS**.
+
+Kaito Fast Routes V2:
+- exact public version `kaitofukami/40-40-early-floor-39-46-top-10-v48-fast-routes/versions/2`;
+- observed hosted score for exact V2 **3009.0**;
+- Apache-2.0;
+- archive SHA `1425ce1071d0872cc507660a39278a078cd9be276dcd4e900ecc41ff8b23daf2`;
+- main.py SHA `9bdfbafb6755067182d88ce594fd46fb1d712713ffd6931e83d5d50e84bc6fb2`;
+- exact-engine mechanical smoke **4/4 PASS**.
+
+Result:
+`docs/strategy/V35A_HOSTED_SCORE_PUBLIC_AGENT_PREFLIGHT_RESULT_2026-09-26.md`.
+
+### Binding recommendation
+
+The previous local-evaluator-heavy strategy is no longer the best final-week decision rule: repeated offline-to-hosted transfer failures plus direct hosted-score evidence justify prioritizing exact public packages with demonstrated ladder strength.
+
+If explicitly authorized, execute a two-submission replacement in this exact order:
+
+1. Barnyard V7 first — evicts older V30B while retaining V31C temporarily.
+2. Kaito V2 second — evicts V31C and leaves **Kaito V2 + Barnyard V7** as latest-two.
+
+Barnyard is the higher-confidence primary because its 3034.8 evidence is current. Kaito V2 carries version-age/meta-drift risk, but preserving V30B/V31C at ~2143/~2055 has materially lower upside.
+
+Before any mutation, repeat a read-only slot/quota check. Abort on drift.
+
+**Immediate action: await explicit user authorization for this exact two-submission mutation. Do not submit anything manually.**
+
+
+
 
 
 
