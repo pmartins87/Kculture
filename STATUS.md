@@ -1,6 +1,73 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-27 — V35B AUTHORIZED HOSTED PAIR SUBMITTED
+
+**This block supersedes lower current-action sections.**
+
+User authorization was executed exactly after a fresh no-drift preflight.
+
+Binding workflow:
+**`36284057319`**.
+
+Decision:
+**`V35B_AUTHORIZED_PAIR_SUBMITTED`**.
+
+### Final preflight
+
+UTC:
+`2026-09-27T00:57:41Z`.
+
+Pre-mutation latest-two:
+1. V31C `56528406`;
+2. V30B `56509591`.
+
+Latest-two drift: **false**.
+
+UTC-day submissions before V35B:
+**0**.
+
+Exact archive SHA verification PASS immediately before submission:
+- Kaito V2: `1425ce1071d0872cc507660a39278a078cd9be276dcd4e900ecc41ff8b23daf2`;
+- Barnyard V7: `1573dd58af311c6448640fb89380b63f88b0d63a10e788d516fb928f005be968`.
+
+### Submission 1 — Kaito V2
+
+Registered:
+**`56593613`**.
+
+Description:
+`PS_V35_KAITO_V2_3009_1425CE10`.
+
+Post-registration pair check PASS:
+1. Kaito V2;
+2. V31C.
+
+V30B was displaced as intended.
+
+### Submission 2 — Barnyard V7 keeper
+
+Registered:
+**`56593614`**.
+
+Description:
+`PS_V35_BARNYARD_V7_3034_1573DD58`.
+
+Final latest-two check PASS:
+1. **Barnyard V7 `56593614` — PENDING**;
+2. **Kaito V2 `56593613` — PENDING**.
+
+V31C was displaced as intended.
+
+Barnyard is newest and therefore remains the protected keeper if a future third submission is ever justified.
+
+Result:
+`docs/strategy/V35B_AUTHORIZED_HOSTED_PAIR_SUBMISSION_RESULT_2026-09-27.md`.
+
+**Immediate action:** monitor both new submissions read-only. No further Kaggle mutation is authorized. First meaningful gate is a validation anomaly or the first non-empty hosted score/episode checkpoint.
+
+
+
 ## Binding update — 2026-09-26 — V35A BOTH HOSTED-STRONG PACKAGES READY / USER SLOT DECISION
 
 **This block supersedes lower current-action sections.**
