@@ -1,6 +1,22 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-27 — V37 OWN CONTROLLER PIVOT
+
+The V36 plan to use Ahmed/Tetsutani/Rayk as direct submission candidates is superseded. **Do not submit those public packages merely for their public scores.** They are now reference/opponent policies only.
+
+Inspection of exact V30B confirms that it is itself heavily descended from public lineages. Therefore the project is pivoting away from whole-policy remixing.
+
+Next intended hosted candidate: **V37, our own observation-driven economic controller**, retaining only mechanically reliable chassis components where necessary for engine correctness.
+
+Core V37 layers: marginal portfolio allocation, labour-vs-Fibonacci-cost controller, market marginal-price/demand controller, shed/cash hard constraints, opponent public-pressure response, and explicit terminal cash realization.
+
+The remaining daily submission budget is to be used sequentially on materially different V37 hypotheses; Barnyard/Kaito are not protected. Public agents are opponents/references, not the final strategy.
+
+Canonical design: `docs/strategy/V37_OWN_ECONOMIC_CONTROLLER_FINAL_WEEK_PIVOT_2026-09-27.md`.
+
+
+
 ## Binding update — 2026-09-27 — V36A FINAL-WEEK AGGRESSIVE MODE
 
 V35 hosted transfer failed: Barnyard V7 `56593614` = **740.4**, Kaito V2 `56593613` = **809.9** at read-only snapshot `2026-09-27T01:50:44Z`. These slots are **not protected**.
