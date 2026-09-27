@@ -1,6 +1,23 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-27 — V36A FINAL-WEEK AGGRESSIVE MODE
+
+V35 hosted transfer failed: Barnyard V7 `56593614` = **740.4**, Kaito V2 `56593613` = **809.9** at read-only snapshot `2026-09-27T01:50:44Z`. These slots are **not protected**.
+
+Today UTC: **2/5 submissions used; 3 remain**.
+
+V36A workflow `36286643137` SUCCESS froze three exact current public candidates, all mechanical smoke PASS 4/4:
+- Ahmed V45 V1 — current public score **2765.5**, archive SHA `b8c2f5aab88faf2332e45f721ec83e5f9e7bec3d0a995cc0dce318badd884ed0`;
+- Tetsutani V23 — current public score **2750.4**, archive SHA `2b3ada6a797f713a1ebb25149ae307882562f191dead8ba498ca8661f47e3ba2`;
+- Rayk V22 — current public score **2837.0**, archive SHA `312e4f02b22bb9587d62ffcb56592883bc539338aad2dcc7fea0f19c4d6cc931`.
+
+Final-week policy: **spend slots aggressively; do not preserve failed active agents.** Do not submit all three simultaneously because only latest-two remain active; use hosted feedback adaptively. Recommended authorization scope/order: Ahmed V45 first, Tetsutani V23 second, Rayk V22 last.
+
+Canonical detail: `docs/strategy/V36A_FINAL_WEEK_AGGRESSIVE_CANDIDATE_PREFLIGHT_2026-09-27.md`.
+
+
+
 ## Binding update — 2026-09-27 — V35B AUTHORIZED HOSTED PAIR SUBMITTED
 
 **This block supersedes lower current-action sections.**
