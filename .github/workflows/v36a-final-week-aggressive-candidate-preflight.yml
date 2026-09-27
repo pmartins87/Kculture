@@ -1,0 +1,166 @@
+name: v36a-final-week-aggressive-candidate-preflight
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v36a-final-week-aggressive-candidate-preflight.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+  COMPETITION: kaggriculture
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U pip
+          python -m pip install 'kaggle-environments==1.32.7' 'kaggle>=2.2.3' 'kagglehub>=1.0.0'
+      - name: Acquire exact current public candidates and mechanical smoke
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts/v36a
+          python - <<'PY'
+          import json,math,shutil,sys,tempfile,time
+          from pathlib import Path
+          from kaggle_environments import make
+          ROOT=Path.cwd()
+          sys.path.insert(0,str(ROOT))
+          from tools.programme_adaptive_expert_gate import (
+              find_public_package,unpack_package,load_public_agent,purge_package_modules,sha256_bytes
+          )
+
+          CANDIDATES=[
+            {
+              'key':'TETSUTANI_V23',
+              'handle':'tetsutani/market-smart-farming-kaggriculture/versions/23',
+              'notebook':'tetsutani/market-smart-farming-kaggriculture',
+              'version':23,
+              'observed_public_score':2750.4,
+              'observed_freshness':'2026-09-26 web snapshot; notebook ~7h old',
+              'license':'Apache-2.0',
+            },
+            {
+              'key':'AHMED_V45',
+              'handle':'ahmedberatozer/kaggriculture-v45-first-turn-wheat-round-trip/versions/1',
+              'notebook':'ahmedberatozer/kaggriculture-v45-first-turn-wheat-round-trip',
+              'version':1,
+              'observed_public_score':2765.5,
+              'observed_freshness':'2026-09-26 web snapshot',
+              'license':'Apache-2.0',
+            },
+            {
+              'key':'RAYK_V22',
+              'handle':'raykkretzschmar/kaggriculture-findings-from-zero-to-top-meta/versions/22',
+              'notebook':'raykkretzschmar/kaggriculture-findings-from-zero-to-top-meta',
+              'version':22,
+              'observed_public_score':2837.0,
+              'observed_freshness':'2026-09-26 web snapshot',
+              'license':'Apache-2.0',
+            },
+          ]
+          SEEDS=(81101,81102)
+
+          def smoke(main,seed,seat):
+              purge_package_modules(main.parent)
+              ag=load_public_agent(main)
+              env=make('kaggriculture',configuration={'episodeSteps':720,'seed':int(seed)},debug=False)
+              t0=time.perf_counter()
+              env.run([ag,'starter'] if seat==0 else ['starter',ag])
+              secs=time.perf_counter()-t0
+              rep=env.toJSON()
+              statuses=[str(x) for x in rep.get('statuses',[])]
+              rewards=[float(x) for x in rep.get('rewards',[])]
+              steps=len(rep.get('steps') or [])
+              ok=(statuses==['DONE','DONE'] and len(rewards)==2 and steps>=720 and all(math.isfinite(x) for x in rewards))
+              return {'seed':seed,'seat':seat,'ok':ok,'statuses':statuses,'rewards':rewards,'steps':steps,'wall_seconds':secs}
+
+          out={'schema':'kculture-v36a-final-week-aggressive-preflight-v1','candidates':[],'automatic_submission':False}
+          with tempfile.TemporaryDirectory(prefix='v36a-') as td:
+              td=Path(td)
+              for c in CANDIDATES:
+                  rec=dict(c); rec['failures']=[]
+                  try:
+                      dl=td/c['key']/'download'
+                      archive,receipt=find_public_package(c['handle'],dl)
+                      pkg=td/c['key']/'package'
+                      main=unpack_package(archive,pkg)
+                      archive_sha=sha256_bytes(archive.read_bytes())
+                      main_sha=sha256_bytes(main.read_bytes())
+                      preserved=Path('artifacts/v36a')/f"{c['key']}_ORIGINAL.tar.gz"
+                      shutil.copy2(archive,preserved)
+                      if sha256_bytes(preserved.read_bytes())!=archive_sha:
+                          raise RuntimeError('preserved archive SHA mismatch')
+                      rows=[]
+                      for seed in SEEDS:
+                          for seat in (0,1):
+                              try: row=smoke(main,seed,seat)
+                              except Exception as e: row={'seed':seed,'seat':seat,'ok':False,'error':f'{type(e).__name__}: {e}'}
+                              finally: purge_package_modules(main.parent)
+                              rows.append(row)
+                      rec.update({
+                        'archive_sha256':archive_sha,
+                        'archive_bytes':archive.stat().st_size,
+                        'members':receipt.get('members',[]),
+                        'main_sha256':main_sha,
+                        'main_bytes':main.stat().st_size,
+                        'smoke_rows':rows,
+                        'mechanical_pass':len(rows)==4 and all(bool(r.get('ok')) for r in rows),
+                        'preserved_archive':preserved.name,
+                      })
+                  except Exception as e:
+                      rec['failures'].append(f'{type(e).__name__}: {e}')
+                      rec['mechanical_pass']=False
+                  out['candidates'].append(rec)
+                  print('V36A_CANDIDATE',json.dumps({k:v for k,v in rec.items() if k not in ('smoke_rows','failures')},sort_keys=True),flush=True)
+          out['ready']=[c['key'] for c in out['candidates'] if c.get('mechanical_pass')]
+          Path('artifacts/v36a/V36A_CANDIDATES.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          PY
+      - name: Read-only live Kaggle snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q | tee artifacts/v36a/submissions.csv
+          kaggle competitions submission-limits "$COMPETITION" --json | tee artifacts/v36a/submission-limits.json || true
+          python - <<'PY'
+          import csv,io,json
+          from datetime import datetime,timezone
+          from pathlib import Path
+          txt=Path('artifacts/v36a/submissions.csv').read_text(encoding='utf-8',errors='replace')
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try: cand=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
+              except Exception: continue
+              if cand and any(k and 'ref' in k.lower() for k in cand[0]):
+                  rows=cand;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get('date','')),reverse=True)
+          today=datetime.now(timezone.utc).date().isoformat()
+          out={
+            'utc':datetime.now(timezone.utc).isoformat(),
+            'today_utc':today,
+            'submissions_today':sum(str(r.get('date','')).startswith(today) for r in rows),
+            'latest_five':rows[:5],
+          }
+          Path('artifacts/v36a/V36A_LIVE.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V36A_LIVE',json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: artifacts/v36a/**
+          retention-days: 10
+          if-no-files-found: error
