@@ -1,0 +1,89 @@
+name: v37d-warehouse-unresolved-forensics
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v37d-warehouse-unresolved-forensics.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download current reference
+        uses: actions/download-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: v36
+          run-id: 36286643137
+          github-token: ${{ github.token }}
+      - name: Trace unresolved warehouse events
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,tarfile,tempfile,copy
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          def load(pkg,root):
+            with tarfile.open(pkg,"r:*") as tf: tf.extractall(root)
+            p=Path(root)/"main.py"
+            return get_last_callable(p.read_text(),path=str(p.resolve()))
+
+          events=[]
+          with tempfile.TemporaryDirectory() as a,tempfile.TemporaryDirectory() as b:
+            A=load(Path("v30b/V30B_CANDIDATE.tar.gz"),a)
+            B=load(Path("v36/AHMED_V45_ORIGINAL.tar.gz"),b)
+            g=A.__globals__
+            orig=g["_r51_close_warehouse"]
+            report=g["_R51_WAREHOUSE_REPORT"]
+
+            def wrapped(obs,action):
+                before=int(report.get("warehouse_projected_unresolved",0) or 0)
+                result=orig(obs,action)
+                after=int(report.get("warehouse_projected_unresolved",0) or 0)
+                if after>before:
+                    player=int(obs["player"])
+                    farm=obs["farms"][player]
+                    private=obs["private"]
+                    events.append({
+                      "step":int(obs["step"]),
+                      "delta_unresolved":after-before,
+                      "money":farm.get("money"),
+                      "shed":copy.deepcopy(private.get("shed") or {}),
+                      "inventories":copy.deepcopy(private.get("inventories") or []),
+                      "prices":copy.deepcopy((obs.get("market") or {}).get("prices") or {}),
+                      "parent_market":copy.deepcopy(action.get("market") or []),
+                      "result_market":copy.deepcopy(result.get("market") or []),
+                    })
+                return result
+            g["_r51_close_warehouse"]=wrapped
+
+            for seed in (81502,81503,81504):
+              events.clear()
+              env=make("kaggriculture",configuration={"episodeSteps":720,"seed":seed},debug=False)
+              env.run([A,B])
+              print("WAREHOUSE_TRACE",json.dumps({"seed":seed,"rewards":env.toJSON().get("rewards"),"events":copy.deepcopy(events)},sort_keys=True))
+              Path(f"warehouse_{seed}.json").write_text(json.dumps(events,indent=2,sort_keys=True)+"\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v37d-warehouse-unresolved-forensics
+          path: warehouse_*.json
+          retention-days: 7
