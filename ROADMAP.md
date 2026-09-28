@@ -1,6 +1,31 @@
 # ROADMAP — Kculture live plan
 
 
+## Binding update — 2026-09-28 — V37 HOSTED SHOT 1 REGISTERED
+
+Authorized adaptive Sep-28 UTC campaign is active, one shot at a time.
+
+V37-C hosted submission registered:
+- submission id **`56626986`**;
+- description `PS_V37_SHOT1_IDLE_HARVEST_895149D9`;
+- initial status **PENDING**;
+- archive SHA `895149d9f8f8558873062d6b4ce71e487cb0035ea6891e1a324b1ea9d30c9b34`;
+- workflow `36371732845`.
+
+Binding preflight immediately before submission: latest-two exact Ahmed `56619409` + Barnyard `56593614`; `numAllowedNow=5`; 0 Sep-28 UTC submissions used; no drift.
+
+Post-registration latest-two:
+1. V37-C `56626986` — PENDING;
+2. Ahmed `56619409` — 1400.8.
+
+Barnyard displaced as intended. **4 Sep-28 UTC submissions remain.**
+
+Do not fire shot 2 immediately; read hosted trajectory first. Shot 2 is already authorized adaptively. Default comparator/keeper remains fresh exact V30B unless V37-C evidence justifies a different materially distinct candidate.
+
+Canonical detail: `docs/strategy/V37_HOSTED_SHOT1_V37C_2026-09-28.md`.
+
+
+
 ## Binding update — 2026-09-28 — V37C SELECTED FOR FIRST HOSTED SHOT
 
 Warehouse forensic run `36371202895` completed. The prior `warehouse_projected_unresolved=8` was duplicated instrumentation around only two real overflow contexts (steps 599 and 623 in seed 81502), amounting to roughly four physical units; seeds 81503 and 81504 had no unresolved event. The overflow sits in carried inventories while the shed is empty, so no safe append-only market sale can recover it without changing physical trajectory. **Do not open V37-D for this minor leak.**
