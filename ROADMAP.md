@@ -1,6 +1,20 @@
 # ROADMAP — Kculture live plan
 
 
+## Binding update — 2026-09-28 — V37B/C READY FOR HOSTED CALIBRATION
+
+V37-B run `36370387010` SUCCESS. Package main SHA `d21ad4b1516e9bac120d7da5e5d421b4c269fddfac255c94b14e18bae3d71244`; archive SHA `4af9912dd1d9e500885dbab3574a32df8a4071e4295cecde3aea682a4f25ee3f`. Append-only surplus monetization preserved 12/12 base wins; overall mean own-reward delta -95.5, no mechanical failures. Decision: `V37B_MECHANICALLY_ELIGIBLE_FOR_HOSTED_CALIBRATION`.
+
+V37-C run `36370602453` SUCCESS. Package main SHA `be14d7122f3824fc94ab2fa06ec3f46f521cfab7f00e34152d1f4d1747a925a2`; archive SHA `895149d9f8f8558873062d6b4ce71e487cb0035ea6891e1a324b1ea9d30c9b34`. PASS-only late-day harvest rescue preserved 12/12 base wins and increased own reward by +12,466.5 on average, while relative margin delta was negative (-1,388 to -3,266 by opponent). No failures. Decision: `V37C_MECHANICALLY_ELIGIBLE_FOR_HOSTED_CALIBRATION`.
+
+Offline W/L/margin is a catastrophe filter only, not hosted-strength proof. Current preference is V37-C for first hosted calibration because it tests a materially different production/execution mechanism; V37-B remains a conservative alternative.
+
+Deep V30B telemetry run `36370940920`: feed_skips=36 are deliberate economic skips, not a defect. `warehouse_projected_unresolved=8` is under targeted forensic run `36371202895` before opening V37-D.
+
+Current UTC quota remains 5 available at snapshot; no Sep-28 UTC submission has been spent by this V37 work.
+
+
+
 ## Binding update — 2026-09-28 — V37A CLOSED / V37B-C IN FLIGHT
 
 V37-A run `36369508576` was mechanically clean but strategically catastrophic: 0/16, mean margins roughly -154k to -179k. Forensic run `36370099982` proved cashflow destruction: final bank only 671–745 versus exact V30B 78,732–89,616 on matched Ahmed contexts. Root cause: V37-A removed parent SELL orders while retaining downstream economic assumptions. **Do not retune or submit V37-A.**
