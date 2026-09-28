@@ -1,6 +1,22 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-28 — V37A CLOSED / V37B-C IN FLIGHT
+
+V37-A run `36369508576` was mechanically clean but strategically catastrophic: 0/16, mean margins roughly -154k to -179k. Forensic run `36370099982` proved cashflow destruction: final bank only 671–745 versus exact V30B 78,732–89,616 on matched Ahmed contexts. Root cause: V37-A removed parent SELL orders while retaining downstream economic assumptions. **Do not retune or submit V37-A.**
+
+Live Kaggle snapshot `36370420608`: active latest-two are Ahmed `56619409` = **1400.8** and Barnyard `56593614` = **750.4**; Kaito = 761.0; historical V30B `56509591` = **2010.0**. Current daily quota reset: **numAllowedNow=5**. No active slot is protected.
+
+V37-B run `36370387010`: append-only surplus monetization; preserve every parent order and queue position.
+
+V37-C run `36370602453`: late-day PASS-only harvest rescue; no market changes.
+
+Offline screens are catastrophe filters only. First mechanically eligible V37 candidate should move to hosted calibration; fresh exact V30B control is a useful keeper/control after the first V37 shot.
+
+Canonical detail: `docs/strategy/V37A_OWN_ECONOMIC_CONTROLLER_RESULT_2026-09-28.md`.
+
+
+
 ## Binding update — 2026-09-27 — V37 OWN CONTROLLER PIVOT
 
 The V36 plan to use Ahmed/Tetsutani/Rayk as direct submission candidates is superseded. **Do not submit those public packages merely for their public scores.** They are now reference/opponent policies only.
