@@ -1,0 +1,56 @@
+name: v37a-economic-failure-forensics
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - 'tools/v37a_forensic_trace.py'
+      - '.github/workflows/v37a-economic-failure-forensics.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  trace:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V37A
+        uses: actions/download-artifact@v4
+        with:
+          name: v37a-own-economic-controller
+          path: v37a
+          run-id: 36369508576
+          github-token: ${{ github.token }}
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download current-meta refs
+        uses: actions/download-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: v36
+          run-id: 36286643137
+          github-token: ${{ github.token }}
+      - name: Trace V37A against Ahmed with V30B control
+        run: |
+          set -euo pipefail
+          python tools/v37a_forensic_trace.py             --v37 v37a/V37A_OWN_ECONOMIC_CONTROLLER.tar.gz             --base v30b/V30B_CANDIDATE.tar.gz             --opp v36/AHMED_V45_ORIGINAL.tar.gz             --out V37A_FORENSIC.json | tee forensic.log
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v37a-economic-failure-forensics
+          path: |
+            V37A_FORENSIC.json
+            forensic.log
+          retention-days: 10
