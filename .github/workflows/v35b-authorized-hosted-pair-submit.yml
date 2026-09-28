@@ -1,4 +1,4 @@
-name: v35b-authorized-hosted-pair-submit
+name: v37-hosted-shot1-v37c
 'on':
   push:
     branches: [research/prize-solver-v0]
@@ -11,210 +11,132 @@ permissions:
 env:
   KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
   COMPETITION: kaggriculture
-  EXPECTED_NEWEST_ID: '56528406'
-  EXPECTED_OLDER_ID: '56509591'
-  EXPECTED_NEWEST_DESC: PS_V31C_HEDGE_MOON_MELONS_BBAFAAD4
-  EXPECTED_OLDER_DESC: PS_V30B_HERDSAFE_VALIDATED_70D93426
-  KAITO_DESC: PS_V35_KAITO_V2_3009_1425CE10
-  BARNYARD_DESC: PS_V35_BARNYARD_V7_3034_1573DD58
-  KAITO_SHA: 1425ce1071d0872cc507660a39278a078cd9be276dcd4e900ecc41ff8b23daf2
-  BARNYARD_SHA: 1573dd58af311c6448640fb89380b63f88b0d63a10e788d516fb928f005be968
+  EXPECTED_NEWEST_ID: '56619409'
+  EXPECTED_OLDER_ID: '56593614'
+  DESC: PS_V37_SHOT1_IDLE_HARVEST_895149D9
+  EXPECTED_SHA: 895149d9f8f8558873062d6b4ce71e487cb0035ea6891e1a324b1ea9d30c9b34
 
 jobs:
   submit:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: research/prize-solver-v0
-
+        with: {ref: research/prize-solver-v0}
       - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
+        with: {python-version: '3.11'}
 
-      - name: Require authenticated Kaggle access
+      - name: Authenticate Kaggle
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$KAGGLE_API_TOKEN"
           python -m pip install -U 'kaggle>=2.2.3'
           kaggle competitions list --group entered -v > entered.csv
-          grep -qi 'kaggriculture' entered.csv
+          grep -qi kaggriculture entered.csv
 
-      - name: Download exact V35A frozen packages
+      - name: Download frozen V37C
         uses: actions/download-artifact@v4
         with:
-          name: v35a-hosted-score-public-agent-preflight
-          path: v35a_artifact
-          run-id: 36222809676
+          name: v37c-idle-harvest
+          path: v37c
+          run-id: 36370602453
           github-token: ${{ github.token }}
 
-      - name: Verify exact frozen bytes
+      - name: Verify exact V37C bytes
         shell: bash
         run: |
           set -euo pipefail
-          test -f v35a_artifact/KAITO_V2_ORIGINAL.tar.gz
-          test -f v35a_artifact/BARNYARD_V7_ORIGINAL.tar.gz
-          cp v35a_artifact/KAITO_V2_ORIGINAL.tar.gz KAITO_V2.tar.gz
-          cp v35a_artifact/BARNYARD_V7_ORIGINAL.tar.gz BARNYARD_V7.tar.gz
-          K="$(sha256sum KAITO_V2.tar.gz | awk '{print $1}')"
-          B="$(sha256sum BARNYARD_V7.tar.gz | awk '{print $1}')"
-          printf 'KAITO_SHA=%s\nBARNYARD_SHA=%s\n' "$K" "$B" | tee SHA256SUMS.txt
-          test "$K" = "$KAITO_SHA"
-          test "$B" = "$BARNYARD_SHA"
-          tar -tzf KAITO_V2.tar.gz | grep -qx 'main.py'
-          tar -tzf BARNYARD_V7.tar.gz | grep -qx 'main.py'
+          cp v37c/V37C_IDLE_HARVEST.tar.gz V37C_IDLE_HARVEST.tar.gz
+          SHA="$(sha256sum V37C_IDLE_HARVEST.tar.gz | awk '{print $1}')"
+          echo "V37C_SHA=$SHA" | tee SHA256SUMS.txt
+          test "$SHA" = "$EXPECTED_SHA"
+          tar -tzf V37C_IDLE_HARVEST.tar.gz | grep -qx 'main.py'
 
-      - name: Final binding slot and quota preflight
+      - name: Binding live slot and quota preflight
         shell: bash
         run: |
           set -euo pipefail
-          kaggle competitions submissions "$COMPETITION" -v -q > before_submissions.csv
-          kaggle competitions submission-limits "$COMPETITION" --json > submission-limits-before.json || true
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > limits.json
           python - <<'PY'
           import csv,io,json,os
           from datetime import datetime,timezone
           from pathlib import Path
-
-          text=Path("before_submissions.csv").read_text(encoding="utf-8",errors="replace")
-          lines=[x for x in text.splitlines() if x.strip()]
+          txt=Path('before.csv').read_text(encoding='utf-8',errors='replace')
+          lines=[x for x in txt.splitlines() if x.strip()]
           rows=[]
           for i in range(len(lines)):
-              try: cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              try: cand=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
               except Exception: continue
-              if cand and any(k and "ref" in k.lower() for k in cand[0]):
-                  rows=cand;break
-          if len(rows)<2: raise SystemExit("cannot resolve at least two submission rows")
+              if cand and any(k and 'ref' in k.lower() for k in cand[0]):
+                  rows=cand; break
           rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
-          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
-          latest=rows[:2]
-          refs=[str(r.get("ref","")) for r in latest]
-          descs=[str(r.get("description","")) for r in latest]
-          expected_refs=[os.environ["EXPECTED_NEWEST_ID"],os.environ["EXPECTED_OLDER_ID"]]
-          expected_descs=[os.environ["EXPECTED_NEWEST_DESC"],os.environ["EXPECTED_OLDER_DESC"]]
-          if refs!=expected_refs:
-              raise SystemExit(f"ABORT_SLOT_DRIFT refs={refs} expected={expected_refs}")
-          if descs!=expected_descs:
-              raise SystemExit(f"ABORT_DESCRIPTION_DRIFT descs={descs} expected={expected_descs}")
-          all_desc={str(r.get("description","")) for r in rows}
-          for d in (os.environ["KAITO_DESC"],os.environ["BARNYARD_DESC"]):
-              if d in all_desc: raise SystemExit(f"ABORT_ALREADY_SUBMITTED {d}")
+          rows=sorted(rows,key=lambda r:str(r.get('date','')),reverse=True)
+          refs=[str(r.get('ref','')) for r in rows[:2]]
+          exp=[os.environ['EXPECTED_NEWEST_ID'],os.environ['EXPECTED_OLDER_ID']]
+          if refs!=exp: raise SystemExit(f'ABORT_SLOT_DRIFT refs={refs} expected={exp}')
+          if any(str(r.get('description',''))==os.environ['DESC'] for r in rows):
+              raise SystemExit('ABORT_ALREADY_SUBMITTED')
+          lim=json.loads(Path('limits.json').read_text())
+          allowed=int(lim.get('numAllowedNow',0))
+          if allowed<1: raise SystemExit(f'ABORT_NO_QUOTA allowed={allowed}')
           today=datetime.now(timezone.utc).date().isoformat()
-          today_count=sum(str(r.get("date","")).startswith(today) for r in rows)
-          if today_count+2>5:
-              raise SystemExit(f"ABORT_DAILY_CAP observed_today={today_count} projected={today_count+2}")
-          out={"utc":datetime.now(timezone.utc).isoformat(),"latest_refs":refs,"latest_descs":descs,
-               "today_utc":today,"submissions_today":today_count,"projected_after_two":today_count+2,
-               "decision":"V35B_PREFLIGHT_PASS"}
-          Path("V35B_PREFLIGHT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
-          print("V35B_PREFLIGHT",json.dumps(out,sort_keys=True))
+          used=sum(str(r.get('date','')).startswith(today) for r in rows)
+          print('V37C_PREFLIGHT',json.dumps({'latest_two':refs,'today_utc':today,'observed_today':used,'numAllowedNow':allowed},sort_keys=True))
           PY
 
-      - name: Submit Kaito V2 first
+      - name: Submit V37C shot 1
         shell: bash
         run: |
           set -euo pipefail
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee kaito_submit_start_utc.txt
-          kaggle competitions submit -c "$COMPETITION" -f KAITO_V2.tar.gz -m "$KAITO_DESC"
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee kaito_submit_return_utc.txt
+          kaggle competitions submit -c "$COMPETITION" -f V37C_IDLE_HARVEST.tar.gz -m "$DESC"
 
-      - name: Verify Kaito registered and Barnyard keeper still safe
+      - name: Verify registration
         shell: bash
         run: |
           set -euo pipefail
-          for i in $(seq 1 18); do
-            kaggle competitions submissions "$COMPETITION" -v -q > after_kaito.csv
-            if grep -Fq "$KAITO_DESC" after_kaito.csv; then
-              python - <<'PY'
-          import csv,io,os
-          from pathlib import Path
-          text=Path("after_kaito.csv").read_text(encoding="utf-8",errors="replace")
-          lines=[x for x in text.splitlines() if x.strip()]
-          rows=[]
-          for i in range(len(lines)):
-              try: cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
-              except Exception: continue
-              if cand and any(k and "ref" in k.lower() for k in cand[0]): rows=cand;break
-          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
-          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
-          descs=[str(r.get("description","")) for r in rows[:2]]
-          expected=[os.environ["KAITO_DESC"],os.environ["EXPECTED_NEWEST_DESC"]]
-          if descs!=expected:
-              raise SystemExit(f"ABORT_AFTER_KAITO_DRIFT descs={descs} expected={expected}")
-          print({"after_kaito_latest_two":descs})
-          PY
-              exit 0
-            fi
-            sleep 5
-          done
-          cat after_kaito.csv
-          exit 93
-
-      - name: Submit Barnyard V7 second as keeper
-        shell: bash
-        run: |
-          set -euo pipefail
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee barnyard_submit_start_utc.txt
-          kaggle competitions submit -c "$COMPETITION" -f BARNYARD_V7.tar.gz -m "$BARNYARD_DESC"
-          date -u +'%Y-%m-%dT%H:%M:%SZ' | tee barnyard_submit_return_utc.txt
-
-      - name: Verify final latest-two exactly Barnyard plus Kaito
-        shell: bash
-        run: |
-          set -euo pipefail
-          for i in $(seq 1 18); do
-            kaggle competitions submissions "$COMPETITION" -v -q > after_barnyard.csv
-            if grep -Fq "$BARNYARD_DESC" after_barnyard.csv; then
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after.csv
+            if grep -Fq "$DESC" after.csv; then
               python - <<'PY'
           import csv,io,json,os
-          from datetime import datetime,timezone
           from pathlib import Path
-          text=Path("after_barnyard.csv").read_text(encoding="utf-8",errors="replace")
-          lines=[x for x in text.splitlines() if x.strip()]
+          txt=Path('after.csv').read_text(encoding='utf-8',errors='replace')
+          lines=[x for x in txt.splitlines() if x.strip()]
           rows=[]
           for i in range(len(lines)):
-              try: cand=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              try: cand=list(csv.DictReader(io.StringIO('\n'.join(lines[i:]))))
               except Exception: continue
-              if cand and any(k and "ref" in k.lower() for k in cand[0]): rows=cand;break
+              if cand and any(k and 'ref' in k.lower() for k in cand[0]):
+                  rows=cand; break
           rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
-          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          rows=sorted(rows,key=lambda r:str(r.get('date','')),reverse=True)
+          target=next(r for r in rows if str(r.get('description',''))==os.environ['DESC'])
           latest=rows[:2]
-          descs=[str(r.get("description","")) for r in latest]
-          expected=[os.environ["BARNYARD_DESC"],os.environ["KAITO_DESC"]]
-          if descs!=expected:
-              raise SystemExit(f"FINAL_PAIR_INVALID descs={descs} expected={expected}")
-          out={"utc":datetime.now(timezone.utc).isoformat(),
-               "decision":"V35B_AUTHORIZED_PAIR_SUBMITTED",
-               "latest_two":[{"ref":str(r.get("ref","")),"description":str(r.get("description","")),
-                              "status":str(r.get("status","")),"public_score":str(r.get("publicscore",""))}
+          out={'decision':'V37C_SHOT1_REGISTERED','submission_id':str(target.get('ref','')),
+               'status':str(target.get('status','')),'public_score':str(target.get('publicscore','')),
+               'latest_two':[{'ref':str(r.get('ref','')),'description':str(r.get('description','')),
+                              'status':str(r.get('status','')),'public_score':str(r.get('publicscore',''))}
                              for r in latest]}
-          Path("V35B_FINAL.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
-          print("V35B_FINAL",json.dumps(out,sort_keys=True))
+          Path('V37C_HOSTED.json').write_text(json.dumps(out,indent=2,sort_keys=True)+'\n')
+          print('V37C_HOSTED',json.dumps(out,sort_keys=True))
           PY
               exit 0
             fi
             sleep 5
           done
-          cat after_barnyard.csv
-          exit 94
+          exit 93
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: v35b-authorized-hosted-pair-submit-provenance
+          name: v37-hosted-shot1-v37c
           path: |
             entered.csv
+            before.csv
+            after.csv
+            limits.json
             SHA256SUMS.txt
-            before_submissions.csv
-            submission-limits-before.json
-            V35B_PREFLIGHT.json
-            kaito_submit_start_utc.txt
-            kaito_submit_return_utc.txt
-            after_kaito.csv
-            barnyard_submit_start_utc.txt
-            barnyard_submit_return_utc.txt
-            after_barnyard.csv
-            V35B_FINAL.json
-          retention-days: 30
+            V37C_HOSTED.json
+          retention-days: 10
           if-no-files-found: warn
