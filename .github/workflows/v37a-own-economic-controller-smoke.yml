@@ -1,0 +1,105 @@
+name: v37a-own-economic-controller-smoke
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - 'tools/v37_build_own_economic_controller.py'
+      - '.github/workflows/v37a-own-economic-controller-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: |
+          python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download exact V30B base package
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download V36 current-meta opponents
+        uses: actions/download-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: v36
+          run-id: 36286643137
+          github-token: ${{ github.token }}
+      - name: Build V37-A
+        run: |
+          set -euo pipefail
+          python tools/v37_build_own_economic_controller.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --output V37A_OWN_ECONOMIC_CONTROLLER.tar.gz | tee build.txt
+      - name: Smoke and paired-seat panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,math,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          specs=[
+            ("V30B",Path("v30b/V30B_CANDIDATE.tar.gz")),
+            ("AHMED",Path("v36/AHMED_V45_ORIGINAL.tar.gz")),
+            ("TETSU",Path("v36/TETSUTANI_V23_ORIGINAL.tar.gz")),
+            ("RAYK",Path("v36/RAYK_V22_ORIGINAL.tar.gz")),
+          ]
+          cand=Path("V37A_OWN_ECONOMIC_CONTROLLER.tar.gz")
+          seeds=[81201,81202]
+          rows=[]
+          failures=[]
+          def unpack_load(path,root):
+            with tarfile.open(path,"r:*") as tf:tf.extractall(root)
+            p=Path(root)/"main.py"
+            return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          for key,opp_path in specs:
+            for seed in seeds:
+              for seat in (0,1):
+                with tempfile.TemporaryDirectory() as a, tempfile.TemporaryDirectory() as b:
+                  try:
+                    ag=unpack_load(cand,a);opp=unpack_load(opp_path,b)
+                    env=make("kaggriculture",configuration={"episodeSteps":720,"seed":seed},debug=False)
+                    env.run([ag,opp] if seat==0 else [opp,ag])
+                    rep=env.toJSON();st=[str(x) for x in rep.get("statuses",[])]
+                    rw=[float(x) for x in rep.get("rewards",[])];steps=len(rep.get("steps") or [])
+                    if st!=["DONE","DONE"] or len(rw)!=2 or steps<720 or not all(math.isfinite(x) for x in rw):
+                      raise RuntimeError(f"invalid terminal {st} {rw} {steps}")
+                    mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                    rows.append({"opponent":key,"seed":seed,"seat":seat,"margin":mine-other,"win":mine>other,"tie":mine==other})
+                  except Exception as e:
+                    failures.append({"opponent":key,"seed":seed,"seat":seat,"error":f"{type(e).__name__}: {e}"})
+          out={"decision":"V37A_MECHANICAL_PASS" if not failures and len(rows)==16 else "V37A_MECHANICAL_FAIL",
+               "rows":rows,"failures":failures}
+          by={}
+          for key,_ in specs:
+            rr=[r for r in rows if r["opponent"]==key]
+            by[key]={"games":len(rr),"wins":sum(r["win"] for r in rr),"ties":sum(r["tie"] for r in rr),
+                     "mean_margin":sum(r["margin"] for r in rr)/len(rr) if rr else None}
+          out["by_opponent"]=by
+          Path("V37A_SMOKE.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V37A_RESULT",json.dumps({"decision":out["decision"],"by_opponent":by,"failures":len(failures)},sort_keys=True))
+          if failures or len(rows)!=16:raise SystemExit(2)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v37a-own-economic-controller
+          path: |
+            V37A_OWN_ECONOMIC_CONTROLLER.tar.gz
+            V37A_SMOKE.json
+            build.txt
+          retention-days: 10
+          if-no-files-found: warn
