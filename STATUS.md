@@ -1,6 +1,23 @@
 # STATUS — Kculture live source of truth
 
 
+## Binding update — 2026-09-28 — V37C SELECTED FOR FIRST HOSTED SHOT
+
+Warehouse forensic run `36371202895` completed. The prior `warehouse_projected_unresolved=8` was duplicated instrumentation around only two real overflow contexts (steps 599 and 623 in seed 81502), amounting to roughly four physical units; seeds 81503 and 81504 had no unresolved event. The overflow sits in carried inventories while the shed is empty, so no safe append-only market sale can recover it without changing physical trajectory. **Do not open V37-D for this minor leak.**
+
+First hosted-calibration candidate is therefore **V37-C**:
+- package `V37C_IDLE_HARVEST.tar.gz`;
+- main SHA `be14d7122f3824fc94ab2fa06ec3f46f521cfab7f00e34152d1f4d1747a925a2`;
+- archive SHA `895149d9f8f8558873062d6b4ce71e487cb0035ea6891e1a324b1ea9d30c9b34`;
+- mechanism: late-day PASS-only harvest rescue, no market changes, no replacement of planned non-PASS actions, capacity guard;
+- paired catastrophe screen: 12/12 candidate wins matching 12/12 V30B control wins; mean own-reward delta +12,466.5; no failures. Relative margin was lower, so this is **not** offline proof of hosted superiority.
+
+V37-B remains the conservative fallback, archive SHA `4af9912dd1d9e500885dbab3574a32df8a4071e4295cecde3aea682a4f25ee3f`.
+
+Proposed hosted sequence for the new UTC day: V37-C first -> observe ladder -> fresh exact V30B control/keeper second -> use later shots adaptively for materially different V37 hypotheses. Never fire multiple submissions simultaneously.
+
+
+
 ## Binding update — 2026-09-28 — V37B/C READY FOR HOSTED CALIBRATION
 
 V37-B run `36370387010` SUCCESS. Package main SHA `d21ad4b1516e9bac120d7da5e5d421b4c269fddfac255c94b14e18bae3d71244`; archive SHA `4af9912dd1d9e500885dbab3574a32df8a4071e4295cecde3aea682a4f25ee3f`. Append-only surplus monetization preserved 12/12 base wins; overall mean own-reward delta -95.5, no mechanical failures. Decision: `V37B_MECHANICALLY_ELIGIBLE_FOR_HOSTED_CALIBRATION`.
