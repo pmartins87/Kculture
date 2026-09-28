@@ -1,0 +1,67 @@
+name: v37d-v30b-telemetry-probe
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v37d-v30b-telemetry-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download Ahmed
+        uses: actions/download-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: v36
+          run-id: 36286643137
+          github-token: ${{ github.token }}
+      - name: Probe telemetry
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          def load(pkg,root):
+            with tarfile.open(pkg,"r:*") as tf:tf.extractall(root)
+            p=Path(root)/"main.py";return get_last_callable(p.read_text(),path=str(p.resolve()))
+          with tempfile.TemporaryDirectory() as a,tempfile.TemporaryDirectory() as b:
+            A=load(Path("v30b/V30B_CANDIDATE.tar.gz"),a);B=load(Path("v36/AHMED_V45_ORIGINAL.tar.gz"),b)
+            env=make("kaggriculture",configuration={"episodeSteps":720,"seed":81501},debug=False)
+            env.run([A,B])
+            rep=env.toJSON()
+            print("REWARDS",rep.get("rewards"))
+            tele=getattr(A,"telemetry",{})
+            def nonzero(x):
+                if isinstance(x,dict):
+                    out={}
+                    for k,v in x.items():
+                        q=nonzero(v)
+                        if q not in ({},0,0.0,None,False,[]):out[k]=q
+                    return out
+                return x
+            nz=nonzero(tele)
+            Path("V30B_TELEMETRY.json").write_text(json.dumps(nz,indent=2,sort_keys=True,default=str)+"\n")
+            print("V30B_TELEMETRY",json.dumps(nz,sort_keys=True,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v37d-v30b-telemetry
+          path: V30B_TELEMETRY.json
+          retention-days: 7
