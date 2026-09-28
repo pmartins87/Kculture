@@ -1,0 +1,90 @@
+name: v37c-idle-harvest-smoke
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - 'tools/v37c_build_idle_harvest.py'
+      - '.github/workflows/v37c-idle-harvest-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download refs
+        uses: actions/download-artifact@v4
+        with:
+          name: v36a-final-week-aggressive-candidate-preflight
+          path: v36
+          run-id: 36286643137
+          github-token: ${{ github.token }}
+      - name: Build V37C
+        run: |
+          python tools/v37c_build_idle_harvest.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --output V37C_IDLE_HARVEST.tar.gz | tee build.txt
+      - name: Paired panel
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,math,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          cand=Path("V37C_IDLE_HARVEST.tar.gz");base=Path("v30b/V30B_CANDIDATE.tar.gz")
+          opps=[("AHMED",Path("v36/AHMED_V45_ORIGINAL.tar.gz")),("TETSU",Path("v36/TETSUTANI_V23_ORIGINAL.tar.gz")),("RAYK",Path("v36/RAYK_V22_ORIGINAL.tar.gz"))]
+          seeds=[81401,81402]
+          def load(pkg,root):
+            with tarfile.open(pkg,"r:*") as tf:tf.extractall(root)
+            p=Path(root)/"main.py";return get_last_callable(p.read_text(),path=str(p.resolve()))
+          def game(me,opp,seed,seat):
+            with tempfile.TemporaryDirectory() as a,tempfile.TemporaryDirectory() as b:
+              A=load(me,a);B=load(opp,b);env=make("kaggriculture",configuration={"episodeSteps":720,"seed":seed},debug=False)
+              env.run([A,B] if seat==0 else [B,A]);rep=env.toJSON();st=[str(x) for x in rep.get("statuses",[])];rw=[float(x) for x in rep.get("rewards",[])]
+              if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):raise RuntimeError((st,rw))
+              return (rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+          rows=[];fails=[]
+          for key,opp in opps:
+            for seed in seeds:
+              for seat in (0,1):
+                try:
+                  c,co=game(cand,opp,seed,seat);b,bo=game(base,opp,seed,seat)
+                  rows.append({"opponent":key,"seed":seed,"seat":seat,"cand_reward":c,"base_reward":b,"reward_delta":c-b,"cand_margin":c-co,"base_margin":b-bo,"margin_delta":(c-co)-(b-bo)})
+                except Exception as e:fails.append({"opponent":key,"seed":seed,"seat":seat,"error":f"{type(e).__name__}: {e}"})
+          md=sum(r["reward_delta"] for r in rows)/len(rows) if rows else -1e18
+          catastrophic=bool(fails) or len(rows)!=12 or md<-15000
+          by={}
+          for key,_ in opps:
+            rr=[r for r in rows if r["opponent"]==key]
+            by[key]={"games":len(rr),"mean_reward_delta":sum(r["reward_delta"] for r in rr)/len(rr) if rr else None,"mean_margin_delta":sum(r["margin_delta"] for r in rr)/len(rr) if rr else None,"candidate_wins":sum(r["cand_margin"]>0 for r in rr),"base_wins":sum(r["base_margin"]>0 for r in rr)}
+          out={"decision":"V37C_REJECT_CATASTROPHIC" if catastrophic else "V37C_MECHANICALLY_ELIGIBLE_FOR_HOSTED_CALIBRATION","mean_reward_delta":md,"by_opponent":by,"rows":rows,"failures":fails}
+          Path("V37C_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n");print("V37C_RESULT",json.dumps({k:v for k,v in out.items() if k!="rows"},sort_keys=True))
+          if fails or len(rows)!=12:raise SystemExit(2)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v37c-idle-harvest
+          path: |
+            V37C_IDLE_HARVEST.tar.gz
+            V37C_RESULT.json
+            build.txt
+          retention-days: 10
+          if-no-files-found: warn
