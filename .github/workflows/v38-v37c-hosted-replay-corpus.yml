@@ -1,0 +1,71 @@
+name: v38-v37c-hosted-replay-corpus
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - '.github/workflows/v38-v37c-hosted-replay-corpus.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install authenticated replay runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7'
+          kaggle --version
+      - name: Collect newest V37C hosted episodes
+        run: |
+          set -euo pipefail
+          python tools/collect_submission_replays_cli_v2.py             --submission v37c:56626986             --output-dir artifacts/v38-v37c-hosted             --selection newest             --max-per-submission 30             --delay-seconds 0.4             --retries 4             --retry-backoff-seconds 1.0
+      - name: Summarize seeds outcomes and replay identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json,glob
+          from pathlib import Path
+          rows=[]
+          for fn in sorted(glob.glob('artifacts/v38-v37c-hosted/v37c/replays/*.json')):
+              p=Path(fn); d=json.loads(p.read_text())
+              info=d.get('info') or {}
+              steps=d.get('steps') or []
+              rewards=d.get('rewards')
+              if rewards is None and steps:
+                  rewards=[x.get('reward') for x in steps[-1]]
+              row={
+                'file':p.name,
+                'episode_id':info.get('EpisodeId') or info.get('episodeId'),
+                'seed':info.get('seed'),
+                'team_names':info.get('TeamNames') or info.get('teamNames'),
+                'rewards':rewards,
+                'info_keys':sorted(info.keys()),
+              }
+              # Preserve useful identity/rating fields without assuming exact schema.
+              for k,v in info.items():
+                  lk=str(k).lower()
+                  if any(tok in lk for tok in ('submission','agent','team','rating','score')):
+                      row[k]=v
+              rows.append(row)
+          out={'count':len(rows),'rows':rows}
+          Path('artifacts/v38-v37c-hosted/summary.json').write_text(json.dumps(out,indent=2,sort_keys=True,default=str)+'\n')
+          print('V38_REPLAY_SUMMARY',json.dumps(out,sort_keys=True,default=str))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v38-v37c-hosted-replay-corpus
+          path: artifacts/v38-v37c-hosted/**
+          retention-days: 10
+          if-no-files-found: warn
