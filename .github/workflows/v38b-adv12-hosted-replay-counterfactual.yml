@@ -1,0 +1,111 @@
+name: v38b-adv12-hosted-replay-counterfactual
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - 'tools/v38b_build_adv12.py'
+      - '.github/workflows/v38b-adv12-hosted-replay-counterfactual.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v37c-idle-harvest
+          path: v37c
+          run-id: 36370602453
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v38-v37c-hosted-replay-corpus
+          path: replays
+          run-id: 36519927553
+          github-token: ${{ github.token }}
+      - name: Build V38B ADV12
+        run: |
+          python tools/v38b_build_adv12.py --base-package v30b/V30B_CANDIDATE.tar.gz --output V38B_ADV12.tar.gz | tee build.txt
+      - name: Replay parity and ADV12 counterfactual
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob,json,math,statistics,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          PAULO="Paulo Martins"; BASE=Path("v30b/V30B_CANDIDATE.tar.gz"); V37=Path("v37c/V37C_IDLE_HARVEST.tar.gz"); CAND=Path("V38B_ADV12.tar.gz")
+          def load(pkg,root):
+            with tarfile.open(pkg,"r:*") as tf:tf.extractall(root)
+            p=Path(root)/"main.py";return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          def tape_agent(acts):
+            def f(obs,config=None):
+                s=max(0,min(len(acts)-1,int(obs.get("step",0) or 0)));return acts[s]
+            return f
+          def run(pkg,d,seat):
+            opp=1-seat;acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+            with tempfile.TemporaryDirectory() as td:
+                A=load(pkg,td);O=tape_agent(acts);cfg=dict(d.get("configuration") or {});cfg["seed"]=int(d["info"]["seed"])
+                env=make("kaggriculture",configuration=cfg,debug=False);env.run([A,O] if seat==0 else [O,A])
+                rep=env.toJSON();rw=[float(x) for x in rep.get("rewards",[])];st=[str(x) for x in rep.get("statuses",[])]
+                if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):raise RuntimeError((st,rw))
+                mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                tele={}
+                try:tele=dict(getattr(A,"telemetry",{}) or {})
+                except Exception:pass
+                return mine,other,tele
+          rows=[];fails=[]
+          files=sorted(glob.glob("replays/v37c/replays/*-replay.json"))
+          if len(files)!=30:raise SystemExit(f"expected30 got{len(files)}")
+          for fn in files:
+            d=json.loads(Path(fn).read_text());names=d["info"]["TeamNames"];seat=names.index(PAULO);opp=names[1-seat]
+            hr=d.get("rewards") or [x.get("reward") for x in d["steps"][-1]];hr=[float(x) for x in hr];hm,ho=(hr[seat],hr[1-seat])
+            vm,vo,_=run(V37,d,seat)
+            if (vm,vo)!=(hm,ho):fails.append({"file":Path(fn).name,"hosted":[hm,ho],"replay":[vm,vo]});continue
+            bm,bo,_=run(BASE,d,seat);cm,co,tele=run(CAND,d,seat)
+            rows.append({"episode_id":d["info"].get("EpisodeId"),"seed":d["info"]["seed"],"opponent":opp,
+                         "base_margin":bm-bo,"cand_margin":cm-co,"base_win":bm>bo,"cand_win":cm>co,
+                         "base_tie":bm==bo,"cand_tie":cm==co,"margin_delta":(cm-co)-(bm-bo),
+                         "adv_turns":int(tele.get("adv_turns",0) or 0),"adv_units":int(tele.get("adv_units",0) or 0),
+                         "adv_errors":int(tele.get("adv_errors",0) or 0)})
+          if fails:
+            out={"decision":"ABORT_REPLAY_PARITY_FAIL","fails":fails};Path("V38B_RESULT.json").write_text(json.dumps(out,indent=2)+"\n");print("V38B_RESULT",json.dumps({"decision":out["decision"],"fails":len(fails)}));raise SystemExit(5)
+          def pts(r,p):return 1 if r[p+"_win"] else .5 if r[p+"_tie"] else 0
+          bp=sum(pts(r,"base") for r in rows);cp=sum(pts(r,"cand") for r in rows)
+          lw=sum((not r["base_win"] and not r["base_tie"]) and r["cand_win"] for r in rows)
+          wl=sum(r["base_win"] and (not r["cand_win"] and not r["cand_tie"]) for r in rows)
+          ds=[r["margin_delta"] for r in rows];err=sum(r["adv_errors"] for r in rows)
+          out={"decision":"V38B_REPLAY_PANEL_PASS" if cp>bp and lw>wl and err==0 else "V38B_REPLAY_PANEL_NO_PROMOTION",
+               "replay_parity":"30/30 exact","games":len(rows),"base_points":bp,"cand_points":cp,
+               "base_score_rate":bp/len(rows),"cand_score_rate":cp/len(rows),"score_rate_delta":(cp-bp)/len(rows),
+               "loss_to_win_flips":lw,"win_to_loss_flips":wl,"mean_margin_delta":statistics.mean(ds),"median_margin_delta":statistics.median(ds),
+               "positive_margin_contexts":sum(x>0 for x in ds),"negative_margin_contexts":sum(x<0 for x in ds),
+               "adv_fire_games":sum(r["adv_turns"]>0 for r in rows),"adv_total_turns":sum(r["adv_turns"] for r in rows),
+               "adv_total_units":sum(r["adv_units"] for r in rows),"adv_errors":err,"rows":rows}
+          Path("V38B_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V38B_RESULT",json.dumps({k:v for k,v in out.items() if k!="rows"},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v38b-adv12-hosted-replay-counterfactual
+          path: |
+            V38B_ADV12.tar.gz
+            V38B_RESULT.json
+            build.txt
+          retention-days: 10
+          if-no-files-found: warn
