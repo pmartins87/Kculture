@@ -1,0 +1,197 @@
+name: v38a-mpx-hosted-replay-counterfactual
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths:
+      - 'tools/v38a_build_mpx.py'
+      - '.github/workflows/v38a-mpx-hosted-replay-counterfactual.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact engine
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+
+      - name: Download V30B base
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+
+      - name: Download V37C exact hosted bytes
+        uses: actions/download-artifact@v4
+        with:
+          name: v37c-idle-harvest
+          path: v37c
+          run-id: 36370602453
+          github-token: ${{ github.token }}
+
+      - name: Download real V37C hosted replays
+        uses: actions/download-artifact@v4
+        with:
+          name: v38-v37c-hosted-replay-corpus
+          path: replays
+          run-id: 36519927553
+          github-token: ${{ github.token }}
+
+      - name: Build V38A MPX
+        run: |
+          set -euo pipefail
+          python tools/v38a_build_mpx.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --output V38A_MPX.tar.gz | tee build.txt
+
+      - name: Exact replay parity then matched counterfactual
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob,json,math,statistics,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          PAULO="Paulo Martins"
+          P_BASE=Path("v30b/V30B_CANDIDATE.tar.gz")
+          P_V37=Path("v37c/V37C_IDLE_HARVEST.tar.gz")
+          P_MPX=Path("V38A_MPX.tar.gz")
+
+          def load(pkg,root):
+              with tarfile.open(pkg,"r:*") as tf: tf.extractall(root)
+              p=Path(root)/"main.py"
+              return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+
+          def tape_agent(actions):
+              def agent(obs,config=None):
+                  s=max(0,min(len(actions)-1,int(obs.get("step",0) or 0)))
+                  return actions[s]
+              return agent
+
+          def run(pkg, replay, our_seat):
+              steps=replay["steps"]
+              opp=1-our_seat
+              # Replay alignment: frame t+1 stores the action selected from state t.
+              opp_actions=[steps[t+1][opp].get("action") for t in range(len(steps)-1)]
+              with tempfile.TemporaryDirectory() as td:
+                  me=load(pkg,td)
+                  oa=tape_agent(opp_actions)
+                  seed=int((replay.get("info") or {})["seed"])
+                  cfg=dict(replay.get("configuration") or {})
+                  cfg["seed"]=seed
+                  env=make("kaggriculture",configuration=cfg,debug=False)
+                  env.run([me,oa] if our_seat==0 else [oa,me])
+                  rep=env.toJSON()
+                  rw=[float(x) for x in rep.get("rewards",[])]
+                  st=[str(x) for x in rep.get("statuses",[])]
+                  if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):
+                      raise RuntimeError(f"invalid terminal {st} {rw}")
+                  mine,other=(rw[0],rw[1]) if our_seat==0 else (rw[1],rw[0])
+                  tele={}
+                  try:
+                      tele=dict(getattr(me,"telemetry",{}) or {})
+                  except Exception: pass
+                  return mine,other,tele
+
+          rows=[];parity_fail=[]
+          files=sorted(glob.glob("replays/v37c/replays/*-replay.json"))
+          if len(files)!=30: raise SystemExit(f"expected 30 replays, got {len(files)}")
+          for fn in files:
+              d=json.loads(Path(fn).read_text(encoding="utf-8"))
+              names=list((d.get("info") or {}).get("TeamNames") or [])
+              if names.count(PAULO)!=1: raise RuntimeError(f"Paulo seat ambiguous {fn}: {names}")
+              seat=names.index(PAULO);opp_name=names[1-seat]
+              hosted=d.get("rewards")
+              if hosted is None: hosted=[x.get("reward") for x in d["steps"][-1]]
+              hosted=[float(x) for x in hosted]
+              hm,ho=(hosted[seat],hosted[1-seat])
+              # First prove this tape+seed harness reconstructs the actual hosted V37C game.
+              vm,vo,vtele=run(P_V37,d,seat)
+              parity=(vm==hm and vo==ho)
+              if not parity:
+                  parity_fail.append({"file":Path(fn).name,"hosted":[hm,ho],"replayed":[vm,vo]})
+                  continue
+              bm,bo,btele=run(P_BASE,d,seat)
+              mm,mo,mtele=run(P_MPX,d,seat)
+              rows.append({
+                "file":Path(fn).name,
+                "episode_id":(d.get("info") or {}).get("EpisodeId"),
+                "seed":(d.get("info") or {}).get("seed"),
+                "seat":seat,"opponent":opp_name,
+                "hosted_v37_margin":hm-ho,
+                "base_margin":bm-bo,
+                "mpx_margin":mm-mo,
+                "base_win":bm>bo,"mpx_win":mm>mo,
+                "base_tie":bm==bo,"mpx_tie":mm==mo,
+                "margin_delta":(mm-mo)-(bm-bo),
+                "mpx_fires":int(mtele.get("mpx_fires",0) or 0),
+                "mpx_units":int(mtele.get("mpx_units",0) or 0),
+                "mpx_errors":int(mtele.get("mpx_errors",0) or 0),
+              })
+              print("V38_MATCH",json.dumps({k:v for k,v in rows[-1].items() if k not in ("file",)},sort_keys=True),flush=True)
+
+          if parity_fail:
+              Path("V38A_RESULT.json").write_text(json.dumps({"decision":"ABORT_REPLAY_PARITY_FAIL","parity_fail":parity_fail},indent=2)+"\n")
+              print("V38A_RESULT",json.dumps({"decision":"ABORT_REPLAY_PARITY_FAIL","fails":len(parity_fail)}))
+              raise SystemExit(5)
+
+          def score(r,prefix):
+              return 1.0 if r[prefix+"_win"] else 0.5 if r[prefix+"_tie"] else 0.0
+          base_score=sum(score(r,"base") for r in rows)
+          mpx_score=sum(score(r,"mpx") for r in rows)
+          flips_lw=sum((not r["base_win"] and not r["base_tie"]) and r["mpx_win"] for r in rows)
+          flips_wl=sum(r["base_win"] and (not r["mpx_win"] and not r["mpx_tie"]) for r in rows)
+          flips_tw=sum(r["base_tie"] and r["mpx_win"] for r in rows)
+          flips_wt=sum(r["base_win"] and r["mpx_tie"] for r in rows)
+          deltas=[r["margin_delta"] for r in rows]
+          fires=[r["mpx_fires"] for r in rows]
+          units=[r["mpx_units"] for r in rows]
+          errors=sum(r["mpx_errors"] for r in rows)
+          out={
+            "schema":"v38a-mpx-real-hosted-replay-counterfactual-v1",
+            "decision":"V38A_REPLAY_PANEL_PASS" if mpx_score>base_score and flips_lw>flips_wl and errors==0 else "V38A_REPLAY_PANEL_NO_PROMOTION",
+            "replay_parity":"30/30 exact",
+            "games":len(rows),
+            "base_points":base_score,
+            "mpx_points":mpx_score,
+            "base_score_rate":base_score/len(rows),
+            "mpx_score_rate":mpx_score/len(rows),
+            "score_rate_delta":(mpx_score-base_score)/len(rows),
+            "loss_to_win_flips":flips_lw,
+            "win_to_loss_flips":flips_wl,
+            "tie_to_win_flips":flips_tw,
+            "win_to_tie_flips":flips_wt,
+            "mean_margin_delta":statistics.mean(deltas),
+            "median_margin_delta":statistics.median(deltas),
+            "positive_margin_contexts":sum(x>0 for x in deltas),
+            "negative_margin_contexts":sum(x<0 for x in deltas),
+            "mpx_fire_games":sum(x>0 for x in fires),
+            "mpx_total_fires":sum(fires),
+            "mpx_total_units":sum(units),
+            "mpx_errors":errors,
+            "rows":rows,
+          }
+          Path("V38A_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V38A_RESULT",json.dumps({k:v for k,v in out.items() if k!="rows"},sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v38a-mpx-hosted-replay-counterfactual
+          path: |
+            V38A_MPX.tar.gz
+            V38A_RESULT.json
+            build.txt
+          retention-days: 10
+          if-no-files-found: warn
