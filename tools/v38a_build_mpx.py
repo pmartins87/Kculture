@@ -4,7 +4,7 @@ import argparse,gzip,hashlib,io,tarfile
 from pathlib import Path
 
 BASE_MAIN_SHA="4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01"
-CXD_MARKER="# ==== F4: Layer D - exact best-response ordering (_CXD from elo_2615 order-book) ===="
+CXD_MARKER="_CXD_HOST = [v for v in list(globals().values()) if callable(v)][-1]"
 
 # Apache-2.0 MODELPX mechanism ported from the public Kaggriculture lineage
 # documented by Wangyh666-ust and originally attributed there to tetsutani.
