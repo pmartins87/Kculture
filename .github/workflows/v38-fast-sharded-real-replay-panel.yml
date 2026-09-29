@@ -1,0 +1,144 @@
+name: v38-fast-sharded-real-replay-panel
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v38-fast-sharded-real-replay-panel.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 70
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v37c-idle-harvest
+          path: v37c
+          run-id: 36370602453
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v38-v37c-hosted-replay-corpus
+          path: replays
+          run-id: 36519927553
+          github-token: ${{ github.token }}
+      - name: Build candidates
+        run: |
+          python tools/v38a2_build_mpx.py --base-package v30b/V30B_CANDIDATE.tar.gz --output V38A2_MPX.tar.gz
+          python tools/v38b_build_adv12.py --base-package v30b/V30B_CANDIDATE.tar.gz --output V38B_ADV12.tar.gz
+      - name: Evaluate shard
+        env:
+          SHARD: ${{ matrix.shard }}
+        run: |
+          python - <<'PY'
+          import glob,json,math,os,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          SH=int(os.environ["SHARD"]);N=5;PAULO="Paulo Martins"
+          PKGS={"v37":Path("v37c/V37C_IDLE_HARVEST.tar.gz"),"base":Path("v30b/V30B_CANDIDATE.tar.gz"),"mpx":Path("V38A2_MPX.tar.gz"),"adv":Path("V38B_ADV12.tar.gz")}
+          def load(pkg,root):
+              with tarfile.open(pkg,"r:*") as tf:tf.extractall(root)
+              p=Path(root)/"main.py";return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+          def tape(acts):
+              def f(obs,config=None):
+                  s=max(0,min(len(acts)-1,int(obs.get("step",0) or 0)));return acts[s]
+              return f
+          def run(pkg,d,seat):
+              opp=1-seat;acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+              with tempfile.TemporaryDirectory() as td:
+                  A=load(pkg,td);O=tape(acts);cfg=dict(d.get("configuration") or {});cfg["seed"]=int(d["info"]["seed"])
+                  env=make("kaggriculture",configuration=cfg,debug=False);env.run([A,O] if seat==0 else [O,A])
+                  rep=env.toJSON();rw=[float(x) for x in rep.get("rewards",[])];st=[str(x) for x in rep.get("statuses",[])]
+                  if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):raise RuntimeError((st,rw))
+                  me,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                  tele={}
+                  try:tele=dict(getattr(A,"telemetry",{}) or {})
+                  except Exception:pass
+                  return me,other,tele
+          files=sorted(glob.glob("replays/v37c/replays/*-replay.json"))
+          selected=[f for i,f in enumerate(files) if i%N==SH]
+          rows=[];fails=[]
+          for fn in selected:
+              d=json.loads(Path(fn).read_text());names=d["info"]["TeamNames"];seat=names.index(PAULO)
+              hr=[float(x) for x in (d.get("rewards") or [x.get("reward") for x in d["steps"][-1]])];hm,ho=(hr[seat],hr[1-seat])
+              vm,vo,_=run(PKGS["v37"],d,seat)
+              if (vm,vo)!=(hm,ho):
+                  fails.append({"episode_id":d["info"].get("EpisodeId"),"hosted":[hm,ho],"replay":[vm,vo]});continue
+              bm,bo,_=run(PKGS["base"],d,seat);mm,mo,mt=run(PKGS["mpx"],d,seat);am,ao,at=run(PKGS["adv"],d,seat)
+              rows.append({"episode_id":d["info"].get("EpisodeId"),"seed":d["info"]["seed"],"opponent":names[1-seat],
+                 "base_margin":bm-bo,"mpx_margin":mm-mo,"adv_margin":am-ao,
+                 "base_point":1 if bm>bo else .5 if bm==bo else 0,
+                 "mpx_point":1 if mm>mo else .5 if mm==mo else 0,
+                 "adv_point":1 if am>ao else .5 if am==ao else 0,
+                 "mpx_fires":int(mt.get("mpx_fires",0) or 0),"mpx_units":int(mt.get("mpx_units",0) or 0),"mpx_errors":int(mt.get("mpx_errors",0) or 0),
+                 "adv_turns":int(at.get("adv_turns",0) or 0),"adv_units":int(at.get("adv_units",0) or 0),"adv_errors":int(at.get("adv_errors",0) or 0)})
+              print("V38FAST_ROW",json.dumps(rows[-1],sort_keys=True),flush=True)
+          out={"shard":SH,"selected":len(selected),"parity_pass":not fails and len(rows)==len(selected),"rows":rows,"fails":fails}
+          Path(f"shard-{SH}.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          if fails:raise SystemExit(5)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v38fast-shard-${{ matrix.shard }}
+          path: shard-${{ matrix.shard }}.json
+          retention-days: 10
+  aggregate:
+    needs: shard
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v38fast-shard-*
+          path: shards
+          merge-multiple: true
+      - name: Aggregate
+        run: |
+          python - <<'PY'
+          import glob,json,statistics
+          from pathlib import Path
+          rows=[];fails=[];shards=[]
+          for f in sorted(glob.glob("shards/shard-*.json")):
+              d=json.loads(Path(f).read_text());shards.append(d["shard"]);rows+=d["rows"];fails+=d["fails"]
+          if fails or len(rows)!=30:raise SystemExit(f"invalid shards rows={len(rows)} fails={len(fails)}")
+          def result(key):
+              points=sum(r[key+"_point"] for r in rows)
+              base=sum(r["base_point"] for r in rows)
+              md=[r[key+"_margin"]-r["base_margin"] for r in rows]
+              lw=sum(r["base_point"]==0 and r[key+"_point"]==1 for r in rows)
+              wl=sum(r["base_point"]==1 and r[key+"_point"]==0 for r in rows)
+              return {"points":points,"score_rate":points/30,"delta_points":points-base,"score_rate_delta":(points-base)/30,
+                      "loss_to_win":lw,"win_to_loss":wl,"mean_margin_delta":statistics.mean(md),"median_margin_delta":statistics.median(md),
+                      "positive_margin":sum(x>0 for x in md),"negative_margin":sum(x<0 for x in md),
+                      "fire_games":sum(r[(key+"_fires") if key=="mpx" else "adv_turns"]>0 for r in rows),
+                      "units":sum(r[(key+"_units")] for r in rows),
+                      "errors":sum(r[key+"_errors"] for r in rows)}
+          out={"schema":"v38-fast-real-replay-panel-v1","replay_parity":"30/30 exact","shards":sorted(shards),
+               "base_points":sum(r["base_point"] for r in rows),"base_score_rate":sum(r["base_point"] for r in rows)/30,
+               "mpx":result("mpx"),"adv":result("adv"),"rows":rows}
+          out["decision"]="MPX" if out["mpx"]["points"]>out["adv"]["points"] and out["mpx"]["points"]>out["base_points"] else "ADV" if out["adv"]["points"]>out["base_points"] else "NO_PROMOTION"
+          Path("V38_FAST_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V38_FAST_RESULT",json.dumps({k:v for k,v in out.items() if k!="rows"},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v38-fast-real-replay-panel
+          path: V38_FAST_RESULT.json
+          retention-days: 10
