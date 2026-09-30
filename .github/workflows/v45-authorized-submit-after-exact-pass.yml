@@ -1,0 +1,152 @@
+name: v45-authorized-submit-after-exact-pass
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v45-authorized-submit-after-exact-pass.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+  COMPETITION: kaggriculture
+  EXPECTED_NEWEST_ID: '56693642'
+  EXPECTED_OLDER_ID: '56693641'
+  DESC: PS_V45_ADAPTIVE_CF_META_FINAL
+  EXPECTED_SHA: 163c2db397f3e4a44bdad0b72b535d841c3771a44a2f2096bc844d741dc40b99
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Download the five already-passed exact shards
+        uses: actions/download-artifact@v4
+        with:
+          pattern: v45-exact-shard-*
+          path: shards
+          run-id: 36780286556
+          github-token: ${{ github.token }}
+
+      - name: Rebind exact gate and package SHA
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob,hashlib,json,shutil,os
+          from pathlib import Path
+          rows=[];hashes={}
+          for fn in glob.glob("shards/*/shard-*.json"):
+              rows += json.loads(Path(fn).read_text())
+          for fn in glob.glob("shards/*/V45_ADAPTIVE_CF_META.tar.gz"):
+              h=hashlib.sha256(Path(fn).read_bytes()).hexdigest()
+              hashes.setdefault(h,[]).append(fn)
+          if len(rows)!=15: raise SystemExit(f"ABORT_ROWS {len(rows)}")
+          if not all(x.get("ok") for x in rows): raise SystemExit("ABORT_NONEXACT_ROW")
+          if len(hashes)!=1: raise SystemExit(f"ABORT_HASH_DRIFT {hashes}")
+          h=next(iter(hashes))
+          if h!=os.environ["EXPECTED_SHA"]: raise SystemExit(f"ABORT_EXPECTED_SHA {h}")
+          shutil.copy2(hashes[h][0],"V45_ADAPTIVE_CF_META.tar.gz")
+          out={"decision":"V45_EXACT_15_OF_15_PASS","games":15,"exact":15,"archive_sha":h}
+          Path("V45_EXACT_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V45_REBOUND",json.dumps(out,sort_keys=True))
+          PY
+          tar -tzf V45_ADAPTIVE_CF_META.tar.gz | grep -qx 'main.py'
+          test "$(sha256sum V45_ADAPTIVE_CF_META.tar.gz | awk '{print $1}')" = "$EXPECTED_SHA"
+
+      - name: Authenticate and live binding preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install -U 'kaggle>=2.2.3'
+          kaggle competitions list --group entered -v > entered.csv
+          grep -qi "$COMPETITION" entered.csv
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > limits.json
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("before.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]): rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          exp=[os.environ["EXPECTED_NEWEST_ID"],os.environ["EXPECTED_OLDER_ID"]]
+          if latest!=exp: raise SystemExit(f"ABORT_SLOT_DRIFT observed={latest} expected={exp}")
+          if any(str(r.get("description",""))==os.environ["DESC"] for r in rows):
+              raise SystemExit("ABORT_ALREADY_SUBMITTED")
+          lim=json.loads(Path("limits.json").read_text())
+          allowed=int(lim.get("numAllowedNow",0))
+          if allowed<1: raise SystemExit(f"ABORT_NO_QUOTA {allowed}")
+          print("V45_PREFLIGHT",json.dumps({"latest_two":latest,"numAllowedNow":allowed},sort_keys=True))
+          PY
+
+      - name: Submit the single authorized V45 candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION" -f V45_ADAPTIVE_CF_META.tar.gz -m "$DESC"
+
+      - name: Verify registration and final pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after.csv
+            if grep -Fq "$DESC" after.csv; then
+              kaggle competitions submission-limits "$COMPETITION" --json > limits_after.json
+              python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("after.csv").read_text();lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          target=next(r for r in rows if str(r.get("description",""))==os.environ["DESC"])
+          refs=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[str(target.get("ref","")),os.environ["EXPECTED_NEWEST_ID"]]
+          if refs!=expected:raise SystemExit(f"FINAL_PAIR_MISMATCH {refs} expected {expected}")
+          lim=json.loads(Path("limits_after.json").read_text())
+          out={"decision":"V45_SINGLE_AUTHORIZED_SUBMITTED",
+               "submission_id":str(target.get("ref","")),
+               "status":str(target.get("status","")),
+               "public_score":str(target.get("publicscore","")),
+               "archive_sha":os.environ["EXPECTED_SHA"],
+               "latest_two":refs,
+               "kept_v30b":os.environ["EXPECTED_NEWEST_ID"],
+               "displaced_v47":os.environ["EXPECTED_OLDER_ID"],
+               "numAllowedNow_after":lim.get("numAllowedNow")}
+          Path("V45_HOSTED_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V45_HOSTED",json.dumps(out,sort_keys=True))
+          PY
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 93
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v45-authorized-hosted-result
+          path: |
+            V45_EXACT_RESULT.json
+            before.csv
+            after.csv
+            limits.json
+            limits_after.json
+            V45_HOSTED_RESULT.json
+          retention-days: 10
+          if-no-files-found: warn
