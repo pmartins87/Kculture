@@ -117,3 +117,5 @@ jobs:
 # rerun after passive-feature fix
 
 # rerun after brace fix
+
+# rerun after same-step history fix
