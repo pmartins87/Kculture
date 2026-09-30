@@ -1,6 +1,34 @@
 # ROADMAP — Kculture live plan
 
 
+## FINAL ADAPTIVE UPDATE — 2026-09-30 — V45 + V30B
+
+The user-authorized single adaptive submission has been consumed. No additional Kaggle mutations are authorized.
+
+**Active latest-two pair:**
+1. V45 adaptive counterfactual meta-controller — submission **`56719341`**, description `PS_V45_ADAPTIVE_CF_META_FINAL`, initial status PENDING;
+2. V30B exact — submission **`56693642`**.
+
+V47 `56693641` was displaced by the single authorized new submission.
+
+V45 binding evidence:
+- exact V30B counterfactual feature corpus: 75 contexts, V30B step216 parity 25/25;
+- training score rate: 37.5/60 -> 45.0/60 (+12.5pp);
+- temporal holdout: 10/15 -> 11/15 (+6.67pp), 1 loss->win, 0 win->loss, mean-margin delta +112.33;
+- packaged-agent holdout reproduction: **15/15 exact** across five shards;
+- archive SHA `163c2db397f3e4a44bdad0b72b535d841c3771a44a2f2096bc844d741dc40b99`;
+- submission workflow `36780686155` SUCCESS;
+- binding preflight before mutation: latest-two V30B `56693642` + V47 `56693641`, quota=3, no drift;
+- post-registration quota=2, intentionally unused.
+
+V43 is rejected because its rich features mixed original-agent replay state with counterfactual V30B arm outcomes. V44 (similarity+lead only) failed temporal holdout. V45 fixes both issues by measuring all rich features inside the actual V30B counterfactual before training the tree.
+
+Binding state: **KCULTURE_FINAL_PAIR_V45_ADAPTIVE_PLUS_V30B_NO_MORE_SUBMISSIONS_WITHOUT_NEW_AUTHORIZATION**.
+
+Canonical detail: `docs/strategy/V45_ADAPTIVE_FINAL_HOSTED_SUBMISSION_2026-09-30.md`.
+
+
+
 ## FINAL LOCK — 2026-09-30 — V39 V30B + V47
 
 Final Kaggle pair is locked. No further submissions are authorized.
