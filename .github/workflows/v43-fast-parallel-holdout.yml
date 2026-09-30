@@ -119,3 +119,5 @@ jobs:
 # rerun after brace fix
 
 # rerun after same-step history fix
+
+# rerun after official-entrypoint bind fix
