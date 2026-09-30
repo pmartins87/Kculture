@@ -1,6 +1,27 @@
 # ROADMAP — Kculture live plan
 
 
+## FINAL LOCK — 2026-09-30 — V39 V30B + V47
+
+Final Kaggle pair is locked. No further submissions are authorized.
+
+- newest: V30B exact `56693642`, description `PS_V39_FINAL_V30B_EXACT_70D93426`, initial status PENDING;
+- second: V47 exact `56693641`, description `PS_V39_FINAL_V47_EXACT_08E56C43`, initial status PENDING.
+
+Binding workflow `36655869236` SUCCESS. Preflight saw latest-two V37-C `56626986` + Ahmed `56619409`, `numAllowedNow=5`, no drift. Post-submit quota is `numAllowedNow=3`, but those three submissions are intentionally unused.
+
+Exact hashes:
+- V30B archive `70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b`; main `4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01`;
+- V47 archive `08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01`; main `f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842`.
+
+V37-C closed at 1490.3; Ahmed closed at 1364.9. V38-A MPX is not promoted because its replay-panel delta appeared while MPX telemetry recorded zero fires, so mechanism attribution is invalid.
+
+Binding state: **KCULTURE_FINAL_PAIR_LOCKED_V30B_PLUS_V47_NO_MORE_SUBMISSIONS**.
+
+Canonical detail: `docs/strategy/V39_FINAL_PAIR_SUBMISSION_2026-09-30.md`.
+
+
+
 ## Binding update — 2026-09-28 — V37 HOSTED SHOT 1 REGISTERED
 
 Authorized adaptive Sep-28 UTC campaign is active, one shot at a time.
