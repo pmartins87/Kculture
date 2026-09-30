@@ -80,5 +80,5 @@ agent=globals().pop("agent")
     src=base.decode("utf-8")+"\n\n"+block+"\n"
     compile(src,"v41_adaptive_main.py","exec")
     out=Path(a.output);out.parent.mkdir(parents=True,exist_ok=True);pack(out,src.encode())
-    print(json.dumps({{"decision":"V41_ADAPTIVE_PACKAGE_BUILT","rule":rule,"main_sha":sha(src.encode()),"archive_sha":sha(out.read_bytes()),"bytes":out.stat().st_size}},sort_keys=True))
+    print(json.dumps({"decision":"V41_ADAPTIVE_PACKAGE_BUILT","rule":rule,"main_sha":sha(src.encode()),"archive_sha":sha(out.read_bytes()),"bytes":out.stat().st_size},sort_keys=True))
 if __name__=="__main__":main()
