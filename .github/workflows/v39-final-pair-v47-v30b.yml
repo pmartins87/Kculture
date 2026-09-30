@@ -1,0 +1,225 @@
+name: v39-final-pair-v47-v30b
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v39-final-pair-v47-v30b.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+  COMPETITION: kaggriculture
+  EXPECTED_NEWEST_ID: '56626986'
+  EXPECTED_OLDER_ID: '56619409'
+  V47_DESC: PS_V39_FINAL_V47_EXACT_08E56C43
+  V30B_DESC: PS_V39_FINAL_V30B_EXACT_70D93426
+  V47_ARCHIVE_SHA: 08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01
+  V47_MAIN_SHA: f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842
+  V30B_ARCHIVE_SHA: 70d93426baa309e3a13a6c837504e4d73b177cd05d7d2865c024844e1d2abe7b
+  V30B_MAIN_SHA: 4f8637a3e33348b98f531de246d353f5d2955b2f85480e3fd02bf4a7874f0d01
+
+jobs:
+  submit-final-pair:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+
+      - name: Install authenticated runtime
+        run: |
+          set -euo pipefail
+          python -m pip install -U 'kaggle>=2.2.3' 'kagglehub>=0.3.12' 'kaggle-environments==1.32.7'
+          kaggle competitions list --group entered -v > entered.csv
+          grep -qi "$COMPETITION" entered.csv
+
+      - name: Download exact V30B artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+
+      - name: Recover exact historical V47
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p frozen/v47 frozen/v30b v47_public
+          cp v30b/V30B_CANDIDATE.tar.gz frozen/v30b/V30B_EXACT.tar.gz
+          python - <<'PY'
+          import hashlib,shutil,tarfile
+          from pathlib import Path
+          import kagglehub
+          expected_archive="08e56c43ecf28253605b61066dd769334d96262056b8cd337489f1f4f909ad01"
+          expected_main="f4ecd4876fde93a14e3381993283f3b6a1afa023b48dd57217f4d90794d39842"
+          handle="ahmedberatozer/kaggriculture-v47-reactive-market-coordination"
+          out=Path("v47_public")
+          kagglehub.notebook_output_download(handle,output_dir=str(out),force_download=True)
+          hits=[]
+          for p in out.rglob("*"):
+              if not p.is_file() or not p.name.lower().endswith((".tar.gz",".tgz",".tar")): continue
+              try:
+                  ah=hashlib.sha256(p.read_bytes()).hexdigest()
+                  with tarfile.open(p,"r:*") as tf:
+                      fs=[m for m in tf.getmembers() if m.isfile()]
+                      if len(fs)!=1 or fs[0].name!="main.py": continue
+                      data=tf.extractfile(fs[0]).read()
+                  mh=hashlib.sha256(data).hexdigest()
+              except Exception: continue
+              if ah==expected_archive and mh==expected_main:hits.append(p)
+          if len(hits)!=1: raise SystemExit(f"exact V47 recovery failed: {hits}")
+          shutil.copyfile(hits[0],"frozen/v47/V47_EXACT.tar.gz")
+          print({"v47_source":str(hits[0]),"archive_sha":expected_archive,"main_sha":expected_main})
+          PY
+
+      - name: Verify both exact packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(sha256sum frozen/v47/V47_EXACT.tar.gz | awk '{print $1}')" = "$V47_ARCHIVE_SHA"
+          test "$(sha256sum frozen/v30b/V30B_EXACT.tar.gz | awk '{print $1}')" = "$V30B_ARCHIVE_SHA"
+          mkdir -p smoke47 smoke30
+          tar -xzf frozen/v47/V47_EXACT.tar.gz -C smoke47
+          tar -xzf frozen/v30b/V30B_EXACT.tar.gz -C smoke30
+          test "$(sha256sum smoke47/main.py | awk '{print $1}')" = "$V47_MAIN_SHA"
+          test "$(sha256sum smoke30/main.py | awk '{print $1}')" = "$V30B_MAIN_SHA"
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+          for label,p in (("V47",Path("smoke47/main.py")),("V30B",Path("smoke30/main.py"))):
+              fn=get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+              argc=getattr(getattr(fn,"__code__",None),"co_argcount",None)
+              if argc not in (1,2): raise SystemExit(f"{label} bad entry argc {argc}")
+              print(label, getattr(fn,"__name__",None), argc)
+          PY
+          printf '%s  V47_EXACT.tar.gz\n%s  V30B_EXACT.tar.gz\n' "$V47_ARCHIVE_SHA" "$V30B_ARCHIVE_SHA" | tee SHA256SUMS.txt
+
+      - name: Binding preflight current pair and quota
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > limits.json
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("before.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]): rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[os.environ["EXPECTED_NEWEST_ID"],os.environ["EXPECTED_OLDER_ID"]]
+          if latest!=expected: raise SystemExit(f"ABORT_SLOT_DRIFT observed={latest} expected={expected}")
+          descs={str(r.get("description","")) for r in rows}
+          if os.environ["V47_DESC"] in descs or os.environ["V30B_DESC"] in descs:
+              raise SystemExit("ABORT_DUPLICATE_FINAL_DESCRIPTION")
+          lim=json.loads(Path("limits.json").read_text())
+          allowed=int(lim.get("numAllowedNow",0))
+          if allowed<2: raise SystemExit(f"ABORT_NEED_TWO_SLOTS numAllowedNow={allowed}")
+          print("V39_PREFLIGHT",json.dumps({"latest_two":latest,"numAllowedNow":allowed,"numTotal":lim.get("numTotal")},sort_keys=True))
+          PY
+
+      - name: Submit final hedge V47 first
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION" -f frozen/v47/V47_EXACT.tar.gz -m "$V47_DESC"
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after_v47.csv
+            grep -Fq "$V47_DESC" after_v47.csv && exit 0
+            sleep 5
+          done
+          exit 91
+
+      - name: Verify V47 displaced Ahmed
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import csv,io,os
+          from pathlib import Path
+          txt=Path("after_v47.csv").read_text();lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]): rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          target=next(r for r in rows if str(r.get("description",""))==os.environ["V47_DESC"])
+          refs=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[str(target.get("ref","")),os.environ["EXPECTED_NEWEST_ID"]]
+          if refs!=expected: raise SystemExit(f"bad intermediate latest-two {refs} expected {expected}")
+          print("V39_V47_REGISTERED",target.get("ref"),target.get("status"),target.get("publicscore"))
+          PY
+
+      - name: Submit final primary V30B second
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION" -f frozen/v30b/V30B_EXACT.tar.gz -m "$V30B_DESC"
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > final.csv
+            grep -Fq "$V30B_DESC" final.csv && exit 0
+            sleep 5
+          done
+          exit 92
+
+      - name: Verify final pair exactly V30B plus V47
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submission-limits "$COMPETITION" --json > limits_after.json
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("final.csv").read_text();lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]): rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          v47=next(r for r in rows if str(r.get("description",""))==os.environ["V47_DESC"])
+          v30=next(r for r in rows if str(r.get("description",""))==os.environ["V30B_DESC"])
+          latest=rows[:2]
+          refs=[str(r.get("ref","")) for r in latest]
+          expected=[str(v30.get("ref","")),str(v47.get("ref",""))]
+          if refs!=expected: raise SystemExit(f"FINAL_PAIR_MISMATCH {refs} expected {expected}")
+          lim=json.loads(Path("limits_after.json").read_text())
+          out={
+            "decision":"V39_FINAL_PAIR_SUBMITTED",
+            "v30b":{"ref":str(v30.get("ref","")),"status":str(v30.get("status","")),"score":str(v30.get("publicscore",""))},
+            "v47":{"ref":str(v47.get("ref","")),"status":str(v47.get("status","")),"score":str(v47.get("publicscore",""))},
+            "latest_two":refs,
+            "numAllowedNow_after":lim.get("numAllowedNow"),
+            "numTotal_after":lim.get("numTotal")
+          }
+          Path("V39_FINAL_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V39_FINAL",json.dumps(out,sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v39-final-pair-v47-v30b
+          path: |
+            entered.csv
+            before.csv
+            limits.json
+            after_v47.csv
+            final.csv
+            limits_after.json
+            SHA256SUMS.txt
+            V39_FINAL_RESULT.json
+          retention-days: 30
+          if-no-files-found: warn
