@@ -37,3 +37,5 @@ jobs:
           assert fn.__name__=="agent"
           assert fn.__code__.co_argcount in (1,2)
           PY
+
+# rerun after builder serialization fix
