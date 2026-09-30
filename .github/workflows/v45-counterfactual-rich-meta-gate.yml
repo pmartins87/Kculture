@@ -1,0 +1,41 @@
+name: v45-counterfactual-rich-meta-gate
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v45-counterfactual-rich-meta-gate.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U scikit-learn numpy
+      - uses: actions/download-artifact@v4
+        with:
+          name: v45-counterfactual-feature-corpus
+          path: features
+          run-id: 36779746548
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v42-shard-*
+          path: arms
+          merge-multiple: true
+          run-id: 36738813734
+          github-token: ${{ github.token }}
+      - name: Train shallow rich meta-controller with temporal holdout
+        run: |
+          python tools/v45_train_cf_rich_meta.py             --features features/V45_FEATURE_CORPUS.json             --arms-dir arms             --holdout-per-label 5             --output V45_MODEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v45-model
+          path: V45_MODEL.json
+          retention-days: 3
+          if-no-files-found: warn
