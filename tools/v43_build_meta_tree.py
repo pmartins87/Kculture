@@ -163,7 +163,7 @@ def _v43_apply(obs,action,look):
 def agent(observation,configuration=None):
     p=int(observation["player"]);step=int(observation["step"])
     st=_V43_STATE.get(p)
-    if st is None or step<=int(st.get("step",-1)):
+    if st is None or step<int(st.get("step",-1)):
         st=_V43_STATE[p]={{"step":-1,"decided":False,"look":0,"active":False}}
         _V43_HISTORY[p]={{}}
         if step==0:_V43_REPORT.update(meta_decisions=0,look0=0,look4=0,look8=0,look12=0,adv_turns=0,adv_units=0,errors=0)
