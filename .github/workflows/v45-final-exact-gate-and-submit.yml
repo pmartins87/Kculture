@@ -1,0 +1,282 @@
+name: v45-final-exact-gate-and-submit
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v45-final-exact-gate-and-submit.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  COMPETITION: kaggriculture
+  EXPECTED_NEWEST_ID: '56693642'
+  EXPECTED_OLDER_ID: '56693641'
+  DESC: PS_V45_ADAPTIVE_CF_META_FINAL
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v45-model
+          path: model
+          run-id: 36780002763
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+
+      - name: Build deterministic V45 package
+        run: |
+          python tools/v45_build_cf_rich_meta.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --model model/V45_MODEL.json             --output V45_ADAPTIVE_CF_META.tar.gz | tee build.txt
+          tar -tzf V45_ADAPTIVE_CF_META.tar.gz | grep -qx 'main.py'
+
+      - name: Exact holdout shard
+        shell: bash
+        run: |
+          SHARD=${{ matrix.shard }} python - <<'PY'
+          import glob,json,math,os,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          shard=int(os.environ["SHARD"])
+          model=json.loads(Path("model/V45_MODEL.json").read_text())
+          todo=sorted(model["holdout_rows"],key=lambda x:int(x["episode"]))
+          todo=[r for i,r in enumerate(todo) if i%5==shard]
+          if len(todo)!=3: raise SystemExit(f"bad shard size {len(todo)}")
+
+          replay={}
+          for fn in glob.glob("corpus/*/replays/*-replay.json"):
+              d=json.loads(Path(fn).read_text())
+              replay[int((d.get("info") or {}).get("EpisodeId") or 0)]=d
+
+          def load(root):
+              with tarfile.open("V45_ADAPTIVE_CF_META.tar.gz","r:*") as tf:tf.extractall(root)
+              p=Path(root)/"main.py"
+              return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+
+          def tape(actions):
+              def f(obs,c=None):
+                  s=max(0,min(len(actions)-1,int(obs.get("step",0) or 0)))
+                  return actions[s]
+              return f
+
+          rows=[]
+          for r in todo:
+              ep=int(r["episode"]);d=replay[ep]
+              names=list((d.get("info") or {}).get("TeamNames") or [])
+              seat=names.index("Paulo Martins");opp=1-seat
+              acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+              with tempfile.TemporaryDirectory() as td:
+                  me=load(td)
+                  cfg=dict(d.get("configuration") or {})
+                  cfg["seed"]=int((d.get("info") or {})["seed"])
+                  env=make("kaggriculture",configuration=cfg,debug=False)
+                  env.run([me,tape(acts)] if seat==0 else [tape(acts),me])
+                  rep=env.toJSON()
+                  st=[str(x) for x in rep.get("statuses",[])]
+                  rw=[float(x) for x in rep.get("rewards",[])]
+                  if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):
+                      raise SystemExit({"episode":ep,"terminal":st,"rewards":rw})
+                  mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                  margin=mine-other;want=float(r["cand_margin"])
+                  tele=dict(getattr(me,"telemetry",{}) or {})
+                  ok=(margin==want and int(tele.get("errors",0) or 0)==0)
+                  row={"episode":ep,"pred":int(r["pred"]),"margin":margin,
+                       "expected":want,"ok":ok,"telemetry":tele}
+                  rows.append(row)
+                  if not ok: raise SystemExit(f"V45_MISMATCH {row}")
+          Path(f"shard-{shard}.json").write_text(json.dumps(rows,indent=2,sort_keys=True,default=str)+"\n")
+          print("V45_EXACT_SHARD",json.dumps({"shard":shard,"games":len(rows),"exact":sum(x["ok"] for x in rows)},sort_keys=True))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v45-exact-shard-${{ matrix.shard }}
+          path: |
+            shard-${{ matrix.shard }}.json
+            V45_ADAPTIVE_CF_META.tar.gz
+            build.txt
+          retention-days: 3
+
+  aggregate:
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    outputs:
+      archive_sha: ${{ steps.bind.outputs.archive_sha }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v45-exact-shard-*
+          path: shards
+      - id: bind
+        name: Bind exact 15 of 15 package
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob,hashlib,json,shutil
+          from pathlib import Path
+          rows=[];hashes={}
+          for fn in glob.glob("shards/*/shard-*.json"):
+              rows += json.loads(Path(fn).read_text())
+          for fn in glob.glob("shards/*/V45_ADAPTIVE_CF_META.tar.gz"):
+              h=hashlib.sha256(Path(fn).read_bytes()).hexdigest()
+              hashes.setdefault(h,[]).append(fn)
+          if len(rows)!=15 or not all(x.get("ok") for x in rows):
+              raise SystemExit(f"ABORT_NOT_15_EXACT rows={len(rows)}")
+          if len(hashes)!=1: raise SystemExit(f"ABORT_PACKAGE_HASH_DRIFT {hashes}")
+          h=next(iter(hashes))
+          src=Path(hashes[h][0])
+          shutil.copy2(src,"V45_ADAPTIVE_CF_META.tar.gz")
+          out={"decision":"V45_EXACT_15_OF_15_PASS","games":15,"exact":15,"archive_sha":h}
+          Path("V45_EXACT_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V45_EXACT_RESULT",json.dumps(out,sort_keys=True))
+          with open(os.environ["GITHUB_OUTPUT"],"a") as f:f.write(f"archive_sha={h}\n")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v45-validated-final
+          path: |
+            V45_ADAPTIVE_CF_META.tar.gz
+            V45_EXACT_RESULT.json
+          retention-days: 10
+
+  submit:
+    needs: aggregate
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+      BOUND_SHA: ${{ needs.aggregate.outputs.archive_sha }}
+    steps:
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle>=2.2.3'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v45-validated-final
+          path: final
+      - name: Verify exact validated package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat final/V45_EXACT_RESULT.json
+          SHA="$(sha256sum final/V45_ADAPTIVE_CF_META.tar.gz | awk '{print $1}')"
+          test "$SHA" = "$BOUND_SHA"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads(Path("final/V45_EXACT_RESULT.json").read_text())
+          assert r["decision"]=="V45_EXACT_15_OF_15_PASS"
+          assert r["exact"]==15 and r["games"]==15
+          assert r["archive_sha"]==os.environ["BOUND_SHA"]
+          PY
+
+      - name: Binding live slot and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > limits.json
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("before.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          exp=[os.environ["EXPECTED_NEWEST_ID"],os.environ["EXPECTED_OLDER_ID"]]
+          if latest!=exp:raise SystemExit(f"ABORT_SLOT_DRIFT observed={latest} expected={exp}")
+          if any(str(r.get("description",""))==os.environ["DESC"] for r in rows):
+              raise SystemExit("ABORT_ALREADY_SUBMITTED")
+          lim=json.loads(Path("limits.json").read_text())
+          allowed=int(lim.get("numAllowedNow",0))
+          if allowed<1:raise SystemExit(f"ABORT_NO_QUOTA {allowed}")
+          print("V45_PREFLIGHT",json.dumps({"latest_two":latest,"numAllowedNow":allowed},sort_keys=True))
+          PY
+
+      - name: Submit the one authorized adaptive candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION"             -f final/V45_ADAPTIVE_CF_META.tar.gz -m "$DESC"
+
+      - name: Verify registration and new final pair
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after.csv
+            if grep -Fq "$DESC" after.csv; then
+              python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("after.csv").read_text();lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          target=next(r for r in rows if str(r.get("description",""))==os.environ["DESC"])
+          refs=[str(r.get("ref","")) for r in rows[:2]]
+          expected=[str(target.get("ref","")),os.environ["EXPECTED_NEWEST_ID"]]
+          if refs!=expected:raise SystemExit(f"FINAL_PAIR_MISMATCH {refs} expected {expected}")
+          out={"decision":"V45_SINGLE_AUTHORIZED_SUBMITTED",
+               "submission_id":str(target.get("ref","")),
+               "status":str(target.get("status","")),
+               "public_score":str(target.get("publicscore","")),
+               "archive_sha":os.environ["BOUND_SHA"],
+               "latest_two":refs,
+               "kept_v30b":os.environ["EXPECTED_NEWEST_ID"],
+               "displaced_v47":os.environ["EXPECTED_OLDER_ID"]}
+          Path("V45_HOSTED_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V45_HOSTED",json.dumps(out,sort_keys=True))
+          PY
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 93
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v45-hosted-submit
+          path: |
+            before.csv
+            after.csv
+            limits.json
+            V45_HOSTED_RESULT.json
+          retention-days: 10
+          if-no-files-found: warn
