@@ -30,8 +30,7 @@ def main():
 # observes public state + recent public market flow and selects ADV lookahead
 # 0/4/8/12. The ADV action remains gated by the existing similarity/lead signal.
 # ===========================================================================
-_V43_PARENT=agent
-del agent
+_V43_PARENT=[v for v in list(globals().values()) if callable(v)][-1]
 _V43_NAMES={names!r}
 _V43_TREE={tree!r}
 _V43_ITEMS={ITEMS!r}
