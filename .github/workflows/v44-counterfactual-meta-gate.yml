@@ -1,0 +1,35 @@
+name: v44-counterfactual-meta-gate
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v44-counterfactual-meta-gate.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U scikit-learn numpy
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v42-shard-*
+          path: shards
+          merge-multiple: true
+          run-id: 36738813734
+          github-token: ${{ github.token }}
+      - name: Train on counterfactual-safe features
+        run: |
+          python tools/v44_train_cf_meta.py --shards-dir shards --holdout-per-label 5 --output V44_MODEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v44-model
+          path: V44_MODEL.json
+          retention-days: 3
+          if-no-files-found: warn
