@@ -168,18 +168,16 @@ def agent(observation,configuration=None):
         _V43_HISTORY[p]={{}}
         if step==0:_V43_REPORT.update(meta_decisions=0,look0=0,look4=0,look8=0,look12=0,adv_turns=0,adv_units=0,errors=0)
     st["step"]=step
+    action=_V43_PARENT(observation,configuration)
     try:
         vals=_v43_features(observation)
         if step==216 and not st["decided"]:
             look=_v43_predict(vals);active=_v43_gate(observation)
             st.update(decided=True,look=int(look),active=active)
             _V43_REPORT["meta_decisions"]+=1;_V43_REPORT["look"+str(int(look))]+=1
+        if st["active"] and st["look"]>0:action=_v43_apply(observation,action,st["look"])
     except Exception:
         _V43_REPORT["errors"]+=1
-    action=_V43_PARENT(observation,configuration)
-    try:
-        if st["active"] and st["look"]>0:action=_v43_apply(observation,action,st["look"])
-    except Exception:_V43_REPORT["errors"]+=1
     return action
 
 import collections as _v43_collections
