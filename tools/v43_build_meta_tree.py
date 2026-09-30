@@ -159,7 +159,7 @@ def _v43_apply(obs,action,look):
     _V43_REPORT["adv_turns"]+=1;_V43_REPORT["adv_units"]+=added
     return dict(action,market=(extra+market)[:10])
 
-def agent(observation,configuration=None):
+def v43_adaptive_agent(observation,configuration=None):
     p=int(observation["player"]);step=int(observation["step"])
     st=_V43_STATE.get(p)
     if st is None or step<int(st.get("step",-1)):
@@ -184,8 +184,7 @@ def agent(observation,configuration=None):
     return action
 
 import collections as _v43_collections
-agent.telemetry=_v43_collections.ChainMap(_V43_REPORT,getattr(_V43_PARENT,"telemetry",{{}}))
-agent=globals().pop("agent")
+v43_adaptive_agent.telemetry=_v43_collections.ChainMap(_V43_REPORT,getattr(_V43_PARENT,"telemetry",{{}}))
 '''
     src=base.decode("utf-8")+"\n\n"+block+"\n";compile(src,"v43_main.py","exec")
     out=Path(a.output);out.parent.mkdir(parents=True,exist_ok=True);pack(out,src.encode())
