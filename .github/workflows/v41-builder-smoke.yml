@@ -1,0 +1,39 @@
+name: v41-builder-smoke
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v41-builder-smoke.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install loader
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Build and loader smoke
+        run: |
+          printf '%s\n' '{"decision":"V41_ADAPTIVE_GATE_PASS","best_rule":{"low":12,"sim":0.95,"lead":8}}' > model.json
+          python tools/v41_build_adaptive_meta.py --base-package v30b/V30B_CANDIDATE.tar.gz --model model.json --output V41_SMOKE.tar.gz
+          mkdir x && tar -xzf V41_SMOKE.tar.gz -C x
+          python - <<'PY'
+          from pathlib import Path
+          from kaggle_environments.agent import get_last_callable
+          p=Path("x/main.py")
+          fn=get_last_callable(p.read_text(),path=str(p.resolve()))
+          print("V41_ENTRY",fn.__name__,fn.__code__.co_argcount)
+          assert fn.__name__=="agent"
+          assert fn.__code__.co_argcount in (1,2)
+          PY
