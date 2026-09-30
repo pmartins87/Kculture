@@ -174,7 +174,8 @@ def agent(observation,configuration=None):
         _V43_HISTORY.setdefault(p,{{}})[step]=_v43_market_snapshot(observation)
         if step==216 and not st["decided"]:
             vals=_v43_features(observation)
-            look=_v43_predict(vals);active=_v43_gate(observation)
+            look=_v43_predict(vals)
+            active=bool(float(vals.get("similarity",0.0))>=0.95 or float(vals.get("lead",-12.0))>=4.0)
             st.update(decided=True,look=int(look),active=active)
             _V43_REPORT["meta_decisions"]+=1;_V43_REPORT["look"+str(int(look))]+=1
         if st["active"] and st["look"]>0:action=_v43_apply(observation,action,st["look"])
