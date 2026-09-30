@@ -170,8 +170,11 @@ def agent(observation,configuration=None):
     st["step"]=step
     action=_V43_PARENT(observation,configuration)
     try:
-        vals=_v43_features(observation)
+        # Passive public-market history: no strategic/helper functions are called
+        # before the single decision point, preserving exact V30B behavior.
+        _V43_HISTORY.setdefault(p,{})[step]=_v43_market_snapshot(observation)
         if step==216 and not st["decided"]:
+            vals=_v43_features(observation)
             look=_v43_predict(vals);active=_v43_gate(observation)
             st.update(decided=True,look=int(look),active=active)
             _V43_REPORT["meta_decisions"]+=1;_V43_REPORT["look"+str(int(look))]+=1
