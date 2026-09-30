@@ -1,0 +1,64 @@
+name: v42-adaptive-adv-fast-gate
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v42-adaptive-adv-fast-gate.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  eval:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+      - run: |
+          mkdir -p out
+          python tools/v42_adaptive_adv_eval.py eval --corpus-root corpus --base-package v30b/V30B_CANDIDATE.tar.gz --shard ${{ matrix.shard }} --num-shards 15 --max-per-label 25 --output out/shard-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v42-fast-shard-${{ matrix.shard }}
+          path: out/*.json
+          retention-days: 2
+  train:
+    needs: eval
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v42-fast-shard-*
+          path: shards
+          merge-multiple: true
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - run: python tools/v42_adaptive_adv_eval.py train --shards-dir shards --holdout-per-label 5 --output V42_MODEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v42-fast-model
+          path: V42_MODEL.json
+          retention-days: 2
+          if-no-files-found: warn
