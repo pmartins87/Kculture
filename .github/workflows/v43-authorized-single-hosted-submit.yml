@@ -1,0 +1,136 @@
+name: v43-authorized-single-hosted-submit
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/v43-submit-authorized.flag']
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+  COMPETITION: kaggriculture
+  EXPECTED_NEWEST_ID: '56693642'
+  EXPECTED_OLDER_ID: '56693641'
+  DESC: PS_V43_ADAPTIVE_META_TREE_FINAL
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Authenticate
+        run: |
+          set -euo pipefail
+          python -m pip install -U 'kaggle>=2.2.3'
+          kaggle competitions list --group entered -v > entered.csv
+          grep -qi "$COMPETITION" entered.csv
+      - name: Download passed V43 package
+        uses: actions/download-artifact@v4
+        with:
+          name: v43-fast-final
+          path: v43
+          run-id: 36778224177
+          github-token: ${{ github.token }}
+      - name: Verify validation and exact package
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat v43/V43_FAST_RESULT.json
+          python - <<'PY'
+          import json,hashlib
+          from pathlib import Path
+          r=json.loads(Path("v43/V43_FAST_RESULT.json").read_text())
+          if r.get("decision")!="V43_FAST_EXACT_15_OF_15_PASS" or r.get("exact")!=15:
+              raise SystemExit(f"ABORT_V43_NOT_VALIDATED {r}")
+          hits=list(Path("v43").rglob("V43_ADAPTIVE_META_TREE.tar.gz"))
+          if len(hits)!=1: raise SystemExit(f"ABORT_PACKAGE_COUNT {hits}")
+          p=hits[0]
+          h=hashlib.sha256(p.read_bytes()).hexdigest()
+          if h!=r.get("archive_sha"): raise SystemExit(f"ABORT_SHA {h} != {r.get('archive_sha')}")
+          Path("V43_ADAPTIVE_META_TREE.tar.gz").write_bytes(p.read_bytes())
+          Path("V43_SHA.txt").write_text(h+"\n")
+          print("V43_SUBMIT_SHA",h)
+          PY
+          tar -tzf V43_ADAPTIVE_META_TREE.tar.gz | grep -qx 'main.py'
+      - name: Binding slot and quota preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          kaggle competitions submissions "$COMPETITION" -v -q > before.csv
+          kaggle competitions submission-limits "$COMPETITION" --json > limits.json
+          python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("before.csv").read_text(encoding="utf-8",errors="replace")
+          lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          latest=[str(r.get("ref","")) for r in rows[:2]]
+          exp=[os.environ["EXPECTED_NEWEST_ID"],os.environ["EXPECTED_OLDER_ID"]]
+          if latest!=exp:raise SystemExit(f"ABORT_SLOT_DRIFT observed={latest} expected={exp}")
+          if any(str(r.get("description",""))==os.environ["DESC"] for r in rows):raise SystemExit("ABORT_DUPLICATE")
+          lim=json.loads(Path("limits.json").read_text())
+          allowed=int(lim.get("numAllowedNow",0))
+          if allowed<1:raise SystemExit(f"ABORT_NO_QUOTA {allowed}")
+          print("V43_PREFLIGHT",json.dumps({"latest_two":latest,"numAllowedNow":allowed},sort_keys=True))
+          PY
+      - name: Submit authorized V43
+        run: |
+          set -euo pipefail
+          kaggle competitions submit -c "$COMPETITION" -f V43_ADAPTIVE_META_TREE.tar.gz -m "$DESC"
+      - name: Verify final registration
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 24); do
+            kaggle competitions submissions "$COMPETITION" -v -q > after.csv
+            if grep -Fq "$DESC" after.csv; then
+              python - <<'PY'
+          import csv,io,json,os
+          from pathlib import Path
+          txt=Path("after.csv").read_text();lines=[x for x in txt.splitlines() if x.strip()]
+          rows=[]
+          for i in range(len(lines)):
+              try:c=list(csv.DictReader(io.StringIO("\n".join(lines[i:]))))
+              except Exception:continue
+              if c and any(k and "ref" in k.lower() for k in c[0]):rows=c;break
+          rows=[{str(k).lower():v for k,v in r.items() if k} for r in rows]
+          rows=sorted(rows,key=lambda r:str(r.get("date","")),reverse=True)
+          target=next(r for r in rows if str(r.get("description",""))==os.environ["DESC"])
+          refs=[str(r.get("ref","")) for r in rows[:2]]
+          exp=[str(target.get("ref","")),os.environ["EXPECTED_NEWEST_ID"]]
+          if refs!=exp:raise SystemExit(f"FINAL_PAIR_MISMATCH {refs} != {exp}")
+          out={"decision":"V43_SINGLE_AUTHORIZED_SUBMITTED","submission_id":str(target.get("ref","")),
+               "status":str(target.get("status","")),"public_score":str(target.get("publicscore","")),
+               "latest_two":refs,"displaced_v47":os.environ["EXPECTED_OLDER_ID"]}
+          Path("V43_HOSTED_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V43_HOSTED",json.dumps(out,sort_keys=True))
+          PY
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 93
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v43-single-hosted-submit
+          path: |
+            before.csv
+            after.csv
+            limits.json
+            V43_SHA.txt
+            V43_HOSTED_RESULT.json
+          retention-days: 10
+          if-no-files-found: warn
