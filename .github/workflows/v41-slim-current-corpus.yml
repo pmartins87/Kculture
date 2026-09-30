@@ -1,0 +1,45 @@
+name: v41-slim-current-corpus
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v41-slim-current-corpus.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  slim:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-adaptive-training-corpus
+          path: full
+          run-id: 36735734239
+          github-token: ${{ github.token }}
+      - name: Freeze 25 newest per family
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import glob,json,shutil
+          from pathlib import Path
+          out=Path("slim")
+          counts={}
+          for label in ("v30b_final","v47_final","v37c"):
+              fs=glob.glob(f"full/{label}/replays/*-replay.json")
+              def ep(fn):
+                  try:return int(Path(fn).name.split("-")[1])
+                  except Exception:return 0
+              fs=sorted(fs,key=ep,reverse=True)[:25]
+              dest=out/label/"replays";dest.mkdir(parents=True,exist_ok=True)
+              for fn in fs: shutil.copy2(fn,dest/Path(fn).name)
+              counts[label]=len(fs)
+          if any(v<25 for v in counts.values()): raise SystemExit(counts)
+          (out/"manifest.json").write_text(json.dumps(counts,indent=2,sort_keys=True)+"\n")
+          print("V41_SLIM",json.dumps(counts,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: slim/**
+          retention-days: 3
