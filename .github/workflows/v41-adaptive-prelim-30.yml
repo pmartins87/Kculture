@@ -1,0 +1,75 @@
+name: v41-adaptive-prelim-30
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v41-adaptive-prelim-30.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  eval:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2]
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install engine
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download 30-real-replay corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: v38-v37c-hosted-replay-corpus
+          path: corpus
+          run-id: 36519927553
+          github-token: ${{ github.token }}
+      - name: Evaluate horizon arms
+        run: |
+          mkdir -p out
+          python tools/v41_adaptive_race_meta.py eval             --corpus-root corpus             --base-package v30b/V30B_CANDIDATE.tar.gz             --shard ${{ matrix.shard }} --num-shards 3             --max-per-label 30             --output out/shard-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v41-prelim-shard-${{ matrix.shard }}
+          path: out/*.json
+          retention-days: 3
+
+  aggregate:
+    needs: eval
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v41-prelim-shard-*
+          path: shards
+          merge-multiple: true
+      - name: Train simple adaptive rule on preliminary panel
+        run: |
+          python -m pip install -U 'kaggle-environments==1.32.7'
+          python tools/v41_adaptive_race_meta.py train             --shards-dir shards             --holdout-per-label 8             --output V41_PRELIM_MODEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v41-prelim-model
+          path: V41_PRELIM_MODEL.json
+          retention-days: 3
+          if-no-files-found: warn
