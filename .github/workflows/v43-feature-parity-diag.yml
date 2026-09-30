@@ -1,0 +1,73 @@
+name: v43-feature-parity-diag
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v43-feature-parity-diag.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v43-model
+          path: model
+          run-id: 36757971136
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+      - name: Build instrumented package
+        run: python tools/v43_build_meta_tree.py --base-package v30b/V30B_CANDIDATE.tar.gz --model model/V43_MODEL.json --output V43.tar.gz
+      - name: Diagnose episode 115482060
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob,json,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          ep=115482060
+          fn=next(x for x in glob.glob("corpus/*/replays/*-replay.json") if f"episode-{ep}-" in x)
+          d=json.loads(Path(fn).read_text());names=(d.get("info") or {}).get("TeamNames") or [];seat=names.index("Paulo Martins");opp=1-seat
+          def obs_at(step):
+              return d["steps"][step][seat]["observation"]
+          o216=obs_at(216);o168=obs_at(168)
+          farms=o216["farms"];other=farms[opp]
+          replay_features={
+            "inv_WHEAT_lag0":float(o216["market"]["inventory"].get("WHEAT",10000)),
+            "inv_WHEAT_lag48":float(o168["market"]["inventory"].get("WHEAT",10000)),
+            "inv_delta48_WHEAT":float(o216["market"]["inventory"].get("WHEAT",10000))-float(o168["market"]["inventory"].get("WHEAT",10000)),
+            "opp_money":float(other.get("money",0)),
+            "money_diff":float(farms[seat].get("money",0))-float(other.get("money",0)),
+            "price_WOOL_lag48":float(o168["market"]["prices"].get("WOOL",0)),
+          }
+          acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+          def tape(obs,c=None):
+              s=max(0,min(len(acts)-1,int(obs.get("step",0) or 0)));return acts[s]
+          with tempfile.TemporaryDirectory() as td:
+              with tarfile.open("V43.tar.gz","r:*") as tf:tf.extractall(td)
+              p=Path(td)/"main.py";me=get_last_callable(p.read_text(),path=str(p.resolve()))
+              cfg=dict(d.get("configuration") or {});cfg["seed"]=int((d.get("info") or {})["seed"])
+              env=make("kaggriculture",configuration=cfg,debug=False);env.run([me,tape] if seat==0 else [tape,me])
+              rep=env.toJSON();rw=[float(x) for x in rep["rewards"]];mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+              tele=dict(getattr(me,"telemetry",{}) or {})
+              print("V43_DIAG",json.dumps({"replay_features":replay_features,"runtime_telemetry":tele,"margin":mine-other},sort_keys=True,default=str))
+          PY
