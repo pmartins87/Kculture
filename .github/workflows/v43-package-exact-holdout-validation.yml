@@ -1,0 +1,107 @@
+name: v43-package-exact-holdout-validation
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v43-package-exact-holdout-validation.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v43-model
+          path: model
+          run-id: 36757971136
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+      - name: Build exact V43 package
+        run: |
+          python tools/v43_build_meta_tree.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --model model/V43_MODEL.json             --output V43_ADAPTIVE_META_TREE.tar.gz | tee build.txt
+      - name: Reproduce every untouched holdout decision with packaged agent
+        shell: bash
+        run: |
+          python - <<'PY'
+          import glob,json,math,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+
+          model=json.loads(Path("model/V43_MODEL.json").read_text())
+          expected={int(r["episode"]):r for r in model["holdout_rows"]}
+          if len(expected)!=15: raise SystemExit(f"expected 15 holdout rows, got {len(expected)}")
+
+          replay_by_ep={}
+          for fn in glob.glob("corpus/*/replays/*-replay.json"):
+              d=json.loads(Path(fn).read_text())
+              ep=int((d.get("info") or {}).get("EpisodeId") or 0)
+              replay_by_ep[ep]=d
+
+          def load(pkg,root):
+              with tarfile.open(pkg,"r:*") as tf: tf.extractall(root)
+              p=Path(root)/"main.py"
+              return get_last_callable(p.read_text(encoding="utf-8"),path=str(p.resolve()))
+
+          def tape_agent(actions):
+              def agent(obs,config=None):
+                  s=max(0,min(len(actions)-1,int(obs.get("step",0) or 0)))
+                  return actions[s]
+              return agent
+
+          rows=[];fails=[]
+          for ep,r in sorted(expected.items()):
+              d=replay_by_ep.get(ep)
+              if d is None: raise SystemExit(f"missing replay {ep}")
+              seat=int(r.get("seat", next((i for i,n in enumerate((d.get('info') or {}).get('TeamNames') or []) if n=='Paulo Martins'),0)))
+              opp=1-seat
+              acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+              with tempfile.TemporaryDirectory() as td:
+                  me=load(Path("V43_ADAPTIVE_META_TREE.tar.gz"),td)
+                  cfg=dict(d.get("configuration") or {}); cfg["seed"]=int((d.get("info") or {})["seed"])
+                  env=make("kaggriculture",configuration=cfg,debug=False)
+                  env.run([me,tape_agent(acts)] if seat==0 else [tape_agent(acts),me])
+                  rep=env.toJSON(); st=[str(x) for x in rep.get("statuses",[])]; rw=[float(x) for x in rep.get("rewards",[])]
+                  if st!=["DONE","DONE"] or len(rw)!=2 or not all(math.isfinite(x) for x in rw):
+                      fails.append({"episode":ep,"reason":"terminal","status":st,"rewards":rw});continue
+                  mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                  margin=mine-other
+                  want=float(r["cand_margin"])
+                  tele=dict(getattr(me,"telemetry",{}) or {})
+                  ok=(margin==want and int(tele.get("errors",0) or 0)==0)
+                  rows.append({"episode":ep,"margin":margin,"expected":want,"ok":ok,"telemetry":tele})
+                  if not ok:fails.append(rows[-1])
+          out={"decision":"V43_PACKAGE_EXACT_HOLDOUT_PASS" if not fails and len(rows)==15 else "V43_PACKAGE_EXACT_HOLDOUT_FAIL",
+               "games":len(rows),"exact":sum(r["ok"] for r in rows),"failures":fails,"rows":rows}
+          Path("V43_PACKAGE_VALIDATION.json").write_text(json.dumps(out,indent=2,sort_keys=True,default=str)+"\n")
+          print("V43_PACKAGE_VALIDATION",json.dumps({k:v for k,v in out.items() if k!="rows"},sort_keys=True,default=str))
+          if fails or len(rows)!=15: raise SystemExit(9)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v43-adaptive-meta-tree-package
+          path: |
+            V43_ADAPTIVE_META_TREE.tar.gz
+            V43_PACKAGE_VALIDATION.json
+            build.txt
+          retention-days: 5
+          if-no-files-found: warn
