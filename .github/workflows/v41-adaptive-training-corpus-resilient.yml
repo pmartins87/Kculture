@@ -1,0 +1,51 @@
+name: v41-adaptive-training-corpus-resilient
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v41-adaptive-training-corpus-resilient.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    env:
+      KAGGLE_API_TOKEN: ${{ secrets.KAGGLE_API_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install runtime
+        run: python -m pip install -U 'kaggle>=2.2.3' 'kaggle-environments==1.32.7'
+      - name: Collect recent hosted episodes from our three relevant agents
+        run: |
+          set -euo pipefail
+          python tools/collect_submission_replays_cli_v2.py             --submission v30b_final:56693642             --submission v47_final:56693641             --submission v37c:56626986             --output-dir artifacts/v41-corpus             --selection newest             --max-per-submission 100             --delay-seconds 0.2             --retries 4             --retry-backoff-seconds 1.0
+      - name: Summarize corpus
+        run: |
+          python - <<'PY'
+          import glob,json
+          from pathlib import Path
+          out={}
+          for label in ("v30b_final","v47_final","v37c"):
+              files=sorted(glob.glob(f"artifacts/v41-corpus/{label}/replays/*-replay.json"))
+              rows=[]
+              for fn in files:
+                  d=json.loads(Path(fn).read_text())
+                  info=d.get("info") or {}
+                  rows.append({"episode":info.get("EpisodeId"),"seed":info.get("seed"),"teams":info.get("TeamNames")})
+              out[label]={"n":len(rows),"rows":rows}
+          Path("artifacts/v41-corpus/summary.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n")
+          print("V41_CORPUS",json.dumps({k:v["n"] for k,v in out.items()},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v41-adaptive-training-corpus
+          path: artifacts/v41-corpus/**
+          retention-days: 5
+          if-no-files-found: warn
