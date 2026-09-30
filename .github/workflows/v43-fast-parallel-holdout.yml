@@ -1,0 +1,115 @@
+name: v43-fast-parallel-holdout
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v43-fast-parallel-holdout.yml']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4]
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v43-model
+          path: model
+          run-id: 36757971136
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+      - name: Build deterministic V43
+        run: |
+          python tools/v43_build_meta_tree.py             --base-package v30b/V30B_CANDIDATE.tar.gz             --model model/V43_MODEL.json             --output V43_ADAPTIVE_META_TREE.tar.gz > build.txt
+      - name: Validate holdout shard
+        shell: bash
+        run: |
+          SHARD=${{ matrix.shard }} python - <<'PY'
+          import glob,json,math,os,tarfile,tempfile
+          from pathlib import Path
+          from kaggle_environments import make
+          from kaggle_environments.agent import get_last_callable
+          shard=int(os.environ["SHARD"]);model=json.loads(Path("model/V43_MODEL.json").read_text())
+          todo=sorted(model["holdout_rows"],key=lambda x:int(x["episode"]))
+          todo=[r for i,r in enumerate(todo) if i%5==shard]
+          if len(todo)!=3:raise SystemExit(f"bad shard size {len(todo)}")
+          replay={}
+          for fn in glob.glob("corpus/*/replays/*-replay.json"):
+              d=json.loads(Path(fn).read_text());replay[int((d.get("info") or {}).get("EpisodeId") or 0)]=d
+          def load(root):
+              with tarfile.open("V43_ADAPTIVE_META_TREE.tar.gz","r:*") as tf:tf.extractall(root)
+              p=Path(root)/"main.py";return get_last_callable(p.read_text(),path=str(p.resolve()))
+          def tape(a):
+              def f(obs,c=None):
+                  s=max(0,min(len(a)-1,int(obs.get("step",0) or 0)));return a[s]
+              return f
+          out=[]
+          for r in todo:
+              ep=int(r["episode"]);d=replay[ep];names=(d.get("info") or {}).get("TeamNames") or [];seat=names.index("Paulo Martins");opp=1-seat
+              acts=[d["steps"][t+1][opp].get("action") for t in range(len(d["steps"])-1)]
+              with tempfile.TemporaryDirectory() as td:
+                  me=load(td);cfg=dict(d.get("configuration") or {});cfg["seed"]=int((d.get("info") or {})["seed"])
+                  env=make("kaggriculture",configuration=cfg,debug=False);env.run([me,tape(acts)] if seat==0 else [tape(acts),me])
+                  rep=env.toJSON();rw=[float(x) for x in rep.get("rewards",[])];mine,other=(rw[0],rw[1]) if seat==0 else (rw[1],rw[0])
+                  margin=mine-other;want=float(r["cand_margin"]);tele=dict(getattr(me,"telemetry",{}) or {})
+                  ok=margin==want and int(tele.get("errors",0) or 0)==0
+                  out.append({"episode":ep,"margin":margin,"expected":want,"ok":ok,"telemetry":tele})
+                  if not ok:raise SystemExit(f"mismatch {out[-1]}")
+          Path(f"shard-{shard}.json").write_text(json.dumps(out,indent=2,sort_keys=True,default=str)+"\n")
+          print("V43_FAST_SHARD",json.dumps({"shard":shard,"exact":sum(x["ok"] for x in out),"games":len(out)},sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v43-fast-shard-${{ matrix.shard }}
+          path: |
+            shard-${{ matrix.shard }}.json
+            V43_ADAPTIVE_META_TREE.tar.gz
+            build.txt
+          retention-days: 3
+  aggregate:
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v43-fast-shard-*
+          path: shards
+      - name: Require 15 of 15 exact
+        run: |
+          python - <<'PY'
+          import glob,json,hashlib
+          from pathlib import Path
+          rows=[];hashes=set()
+          for fn in glob.glob("shards/*/shard-*.json"):rows+=json.loads(Path(fn).read_text())
+          for fn in glob.glob("shards/*/V43_ADAPTIVE_META_TREE.tar.gz"):hashes.add(hashlib.sha256(Path(fn).read_bytes()).hexdigest())
+          if len(rows)!=15 or not all(x["ok"] for x in rows) or len(hashes)!=1:raise SystemExit({"rows":len(rows),"hashes":hashes})
+          out={"decision":"V43_FAST_EXACT_15_OF_15_PASS","games":15,"exact":15,"archive_sha":next(iter(hashes))}
+          Path("V43_FAST_RESULT.json").write_text(json.dumps(out,indent=2,sort_keys=True)+"\n");print("V43_FAST_RESULT",json.dumps(out,sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v43-fast-final
+          path: |
+            V43_FAST_RESULT.json
+            shards/0/V43_ADAPTIVE_META_TREE.tar.gz
+          retention-days: 3
