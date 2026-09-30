@@ -1,0 +1,76 @@
+name: v41-adaptive-final-replay-gate
+'on':
+  push:
+    branches: [research/prize-solver-v0]
+    paths: ['.github/workflows/v41-adaptive-final-replay-gate.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  eval:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard: [0,1,2,3,4,5]
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Install exact engine
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Download V30B
+        uses: actions/download-artifact@v4
+        with:
+          name: v30b-binding-package
+          path: v30b
+          run-id: 35906418993
+          github-token: ${{ github.token }}
+      - name: Download frozen current corpus
+        uses: actions/download-artifact@v4
+        with:
+          name: v41-slim-current-corpus
+          path: corpus
+          run-id: 36737975801
+          github-token: ${{ github.token }}
+      - name: Evaluate four adaptive floors on real hosted contexts
+        run: |
+          mkdir -p out
+          python tools/v41_adaptive_race_meta.py eval             --corpus-root corpus             --base-package v30b/V30B_CANDIDATE.tar.gz             --shard ${{ matrix.shard }} --num-shards 6             --max-per-label 25             --output out/shard-${{ matrix.shard }}.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v41-final-shard-${{ matrix.shard }}
+          path: out/*.json
+          retention-days: 3
+
+  train:
+    needs: eval
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: research/prize-solver-v0}
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: v41-final-shard-*
+          path: shards
+          merge-multiple: true
+      - name: Install import dependency
+        run: python -m pip install -U 'kaggle-environments==1.32.7'
+      - name: Select rule on older games and judge untouched recent holdout
+        run: |
+          python tools/v41_adaptive_race_meta.py train             --shards-dir shards             --holdout-per-label 5             --output V41_MODEL.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: v41-final-model
+          path: V41_MODEL.json
+          retention-days: 3
+          if-no-files-found: warn
