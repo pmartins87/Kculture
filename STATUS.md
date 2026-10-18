@@ -1,6 +1,7 @@
 # STATUS — Kculture live source of truth
 
 
+
 ## FINAL ADAPTIVE UPDATE — 2026-09-30 — V45 + V30B
 
 The user-authorized single adaptive submission has been consumed. No additional Kaggle mutations are authorized.
@@ -5185,3 +5186,20 @@ CR078/079, CR080 replay stitching, CR081 static market-prefix transplant, CR082 
 ## Hosted policy
 
 No CR092 outcome automatically authorizes a Kaggle submission. Hosted slots remain high-information population sensors, used only after a mechanically exact state-adaptive or multi-option candidate survives broad fresh-seed evaluation without a major catastrophe edge.
+## RESULTADO FINAL INFORMADO — 2026-10-17 — AGUARDA VERIFICAÇÃO EXATA
+
+**Fonte:** relato direto do participante em 2026-10-17; o e-mail do Kaggle de 2026-10-16 confirmou que o leaderboard foi finalizado. Estes números ainda não foram confrontados com a linha individual do CSV oficial.
+
+- Competição: Kaggriculture, encerrada; leaderboard finalizado em 2026-10-16.
+- Colocação final relatada: **além da 2000ª posição** (número exato pendente).
+- Score final relatado: **aproximadamente 4300** (valor exato pendente).
+- Premiação: **fora do Top 10**, portanto sem prêmio de colocação.
+- Último par elegível registrado neste repositório: **V45**, submission `56719341`, e **V30B**, submission `56693642`. **Não foi verificado qual dos dois determinou o score final da equipe.**
+- O score Bradley–Terry final não deve ser comparado diretamente com checkpoints hosted anteriores (escala e conjunto de partidas considerados podem diferir).
+
+**Veredito provisório:** objetivo financeiro da competição não atingido. O histórico já evidencia falhas de transferência entre validação local e ranking hosted; a causa específica da colocação final não está demonstrada e requer uma auditoria de episódios e da avaliação final, evitando atribuições especulativas.
+
+**Gate de encerramento:** (1) capturar posição/score exatos e agente vencedor de fonte oficial; (2) elaborar pós-mortem curto, distinguindo evidências de hipóteses; (3) encerrar esforço específico do Kaggriculture e transferir somente lições testáveis para futuras competições. Sem novas submissões ou rodada de otimização desta competição encerrada.
+
+---
+
