@@ -1,6 +1,7 @@
 # ROADMAP — Kculture live plan
 
 
+
 ## FINAL ADAPTIVE UPDATE — 2026-09-30 — V45 + V30B
 
 The user-authorized single adaptive submission has been consumed. No additional Kaggle mutations are authorized.
@@ -5224,3 +5225,13 @@ CR080 replay stitching; CR081 static market-prefix transplant; CR082 1-NN imitat
 ## Immediate action
 
 Let CR092 workflow `35015135956` complete. On the next status check, read its aggregate result once and obey the frozen branch. No manual Kaggle submission.
+## ENCERRAMENTO DA COMPETIÇÃO — 2026-10-17 (RESULTADO REPORTADO, PENDENTE DE CONFERÊNCIA EXATA)
+
+- O participante informou colocação **pior que 2000º** e score final **~4300**; o Kaggle anunciou a finalização do ranking em 2026-10-16.
+- **Meta Top 10/prêmio não alcançada.** Os números exatos ainda precisam ser lidos do leaderboard final. A razão de score final/score hosted anterior não mede ganho real da estratégia.
+- Últimos agentes ativos registrados: V45 `56719341` e V30B `56693642`; identidade do agente que determinou o score final pendente.
+- **Próximo gate:** confirmação de resultado oficial -> pós-mortem causal curto com limite explícito de esforço -> fechamento da competição; não iniciar novas iterações de solver Kaggriculture.
+- Fonte de verdade resumida: `STATUS.md`, seção mais recente. Preservar todos os experimentos e decisões históricos abaixo.
+
+---
+
